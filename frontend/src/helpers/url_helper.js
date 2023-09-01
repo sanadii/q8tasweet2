@@ -1,13 +1,13 @@
-// AuthenticationsUu
+// Authentications
 export const POST_LOGIN = "/auth/signin";
-export const POST_JWT_LOGIN = "/auth/userJWTLogin";
+export const POST_JWT_LOGIN = "/auth/userLogin";
 export const POST_PASSWORD_FORGET = "/auth/forgot-password";
-export const POST_JWT_PASSWORD_FORGET = "/jwt-forget-pwd";
-export const SOCIAL_LOGIN = "/social-login";
+export const POST_JWT_PASSWORD_FORGET = "/auth/forget-pwd";
+export const SOCIAL_LOGIN = "/auth/social-login";
 export const POST_REGISTER = "/auth/signup";
 
 // Proterm
-export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile";
+export const POST_EDIT_JWT_PROFILE = "/postProfile";
 export const POST_EDIT_PROFILE = "/user";
 
 

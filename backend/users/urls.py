@@ -11,8 +11,8 @@ app_name = "users"
 urlpatterns = [
     # Authentication
     path("", include("restapi.urls", namespace="restapi")),
-    path("auth/userJWTLogin", userJWTLogin.as_view(), name="userJWTLogin"),
-    path("post-jwt-profile/", UserProfileUpdateAPIView.as_view(), name="user_profile_update"),
+    path("auth/userLogin", userJWTLogin.as_view(), name="userJWTLogin"),
+    path("auth/postProfile/", UserProfileUpdateAPIView.as_view(), name="user_profile_update"),
     # path("user/", UserCreate.as_view(), name="listpost"),
     path("auth/", include("rest_framework.urls", namespace="rest_framework")),
 

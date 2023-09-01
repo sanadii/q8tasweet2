@@ -1,0 +1,75 @@
+# =================
+# Django & Extensions
+# =================
+Django==4.2.2
+django-cors-headers==4.1.0
+django-oauth-toolkit==2.3.0
+django-oauth2-provider==0.2.6.1
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.2.2
+drf-social-oauth2==2.1.3
+social-auth-app-django==5.2.0
+social-auth-core==4.4.2
+djangorestframework==3.14.0
+django-cors-headers==4.1.0
+djangorestframework-simplejwt==5.2.2
+coreapi==2.3.3
+
+# =================
+# Flask & Extensions
+# =================
+# flask: Its key dependencies are Werkzeug, Jinja2, and itsdangerous, among others. Jinja2 is already in your list.
+flask
+gunicorn
+
+
+# =================
+# PostgreSQL
+# =================
+# psycopg2: When installing from source, it requires pg_config from PostgreSQL to be available. As we've seen earlier, if you face challenges with it, you can opt for psycopg2-binary.
+psycopg2==2.9.6
+
+
+# =================
+# Cryptography & Auth
+# =================
+cryptography==41.0.1
+PyJWT==2.7.0
+python-jose==3.3.0
+python3-openid==3.2.0
+oauthlib==3.2.2
+requests-oauthlib==1.3.1
+
+# =================
+# Other Libraries
+# =================
+Pillow==9.5.0
+uritemplate==4.1.1
+requests==2.31.0
+
+# =================
+# Testing & Development
+# =================
+pytest==7.4.0
+pytest-django==4.5.2
+
+# =================
+# Utilities & Miscellaneous
+# =================
+asgiref==3.7.2
+colorama==0.4.6
+coreapi==2.3.3
+coreschema==0.0.4
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+pytz==2023.3
+shortuuid==1.0.11
+sqlparse==0.4.4
+
+
+
+# 
+Pillow==9.5.0
+
+
+# yarn add react-scripts

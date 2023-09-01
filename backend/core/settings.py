@@ -1,23 +1,21 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+import dotenv
+dotenv.load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "apuvicmef^(!j8gx&clu0u(!8m0r^etok^l0)kc!---#(i5=dt"
-JWT_SECRET_KEY = "a23b8ac92bba1d38510e45332780f4a65ac33f4a5a6efa17ecd38330e9a3e29f"
-
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = os.environ.get("SECRET_KEY")
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "139.59.86.129",
+    "127.0.0.1",
+    ]
 
 # Application definition
 INSTALLED_APPS = [
@@ -111,7 +109,6 @@ REST_FRAMEWORK = {
 #     "http://127.0.0.1:8000",  # And this
 #     "http://127.0.0.1:3000",  # And this
 #     "http://127.0.0.2:3000",  # And this
-
 #     "http://localhost:3000",
 #     "http://localhost:3001",
 #     "http://q8election.com",
