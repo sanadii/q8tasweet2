@@ -20,7 +20,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     "rest_framework",
     "django.contrib.admin",
@@ -40,7 +39,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -51,7 +50,9 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        # "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [os.path.join(BASE_DIR, "../frontend/build")],
+
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -68,8 +69,6 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -77,10 +76,7 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
+# Password Validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -96,22 +92,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
-
-LANGUAGE_CODE = "en-us"
-TIME_ZONE = "Asia/Kuwait"
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = "/static/"
-
+# Rest Framework
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",  # Secure by default
@@ -124,21 +105,24 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
-# Permissions:
-# AllowAny
-# IsAuthenticated
-# IsAdminUser
-# IsAuthenticatedOrReadOnly
+# CORS settings 
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8000",  # Add this
+#     "http://127.0.0.1:8000",  # And this
+#     "http://127.0.0.1:3000",  # And this
+#     "http://127.0.0.2:3000",  # And this
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://q8election.com",
-]
+#     "http://localhost:3000",
+#     "http://localhost:3001",
+#     "http://q8election.com",
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Custom user model
 AUTH_USER_MODEL = "users.User"
 
+# JWT settings
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
@@ -157,5 +141,20 @@ SIMPLE_JWT = {
     "TOKEN_TYPE_CLAIM": "token_type",
 }
 
+# Internationalization
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "Asia/Kuwait"
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
+
+# Static files (CSS, JavaScript, Images)
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "../frontend/build/static")
+    # os.path.join(BASE_DIR, './env/Lib/site-packages/django/contrib/admin/static'),
+]

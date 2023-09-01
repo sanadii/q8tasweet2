@@ -17,7 +17,10 @@ import jwt, datetime
 from datetime import datetime, timedelta
 from django.contrib.auth.models import Group
 
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
+@method_decorator(csrf_exempt, name='dispatch')
 class userJWTLogin(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -26,9 +29,9 @@ class userJWTLogin(APIView):
         user = User.objects.filter(email=email).first() # Assuming your User model has an email field
 
         if user is None:
-            raise AuthenticationFailed('User not found!')
+            return Response({'error': 'User not found!'}, status=status.HTTP_404_NOT_FOUND)
         if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect password!')
+            return Response({'error': 'Incorrect password!'}, status=status.HTTP_401_UNAUTHORIZED)
 
         refresh = RefreshToken.for_user(user)
         access_token = str(AccessToken().for_user(user))
