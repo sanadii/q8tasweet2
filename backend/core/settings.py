@@ -15,7 +15,21 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "139.59.86.129",
     "127.0.0.1",
+    "q8tasweet.com",  # Add this line
     ]
+
+# CORS settings 
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8000",  # Add this
+#     "http://127.0.0.1:8000",  # And this
+#     "http://127.0.0.1:3000",  # And this
+#     "http://127.0.0.2:3000",  # And this
+#     "http://localhost:3000",
+#     "http://localhost:3001",
+#     "http://q8election.com",
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -103,18 +117,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
-# CORS settings 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:8000",  # Add this
-#     "http://127.0.0.1:8000",  # And this
-#     "http://127.0.0.1:3000",  # And this
-#     "http://127.0.0.2:3000",  # And this
-#     "http://localhost:3000",
-#     "http://localhost:3001",
-#     "http://q8election.com",
-# ]
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 # Custom user model
 AUTH_USER_MODEL = "users.User"
