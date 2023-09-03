@@ -449,7 +449,7 @@ const ProfileSettings = () => {
                                                                         Name</Label>
                                                                     <Input type="text" className="form-control"
                                                                         id="companyName" placeholder="Company name"
-                                                                        defaultValue="Themesbrand" />
+                                                                        defaultValue="Q8Vision" />
                                                                 </div>
                                                             </Col>
 

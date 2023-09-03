@@ -55,7 +55,7 @@ document.title="Cover SignIn | Q8Tasweet - React Admin & Dashboard Template";
 
                                                         <div className="mt-4 text-center">
                                                             <div className="signin-other-title">
-                                                                <h5 className="fs-13 mb-4 title">Sign In with</h5>
+                                                                <h5 className="fs-13 mb-4 title">Cover Login</h5>
                                                             </div>
 
                                                             <div>
@@ -86,7 +86,7 @@ document.title="Cover SignIn | Q8Tasweet - React Admin & Dashboard Template";
                         <Row>
                             <Col lg={12}>
                                 <div className="text-center">
-                                    <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                                    <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Q8Vision</p>
                                 </div>
                             </Col>
                         </Row>

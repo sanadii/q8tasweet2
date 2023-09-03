@@ -17,7 +17,7 @@ const Offlinepage = () => {
                                 <Card className="overflow-hidden">
                                     <CardBody className="p-4">
                                         <div className="text-center">
-                                            <img src="https://img.themesbrand.com/velzon/images/auth-offline.gif" alt="" height="210" />
+                                            <img src="https://img.Q8Vision.com/velzon/images/auth-offline.gif" alt="" height="210" />
                                             <h3 className="mt-4 fw-semibold">We're currently offline</h3>
                                             <p className="text-muted mb-4 fs-14">We can't show you this images because you aren't connected to the internet. When you’re back online refresh the page or hit the button below</p>
                                             <Button color="success" className="btn-border"
