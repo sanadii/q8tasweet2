@@ -66,7 +66,7 @@ document.title="Basic SignIn | Q8Tasweet - React Admin & Dashboard Template";
 
                                                 <div className="mt-4 text-center">
                                                     <div className="signin-other-title">
-                                                        <h5 className="fs-13 mb-4 title">Basic Login</h5>
+                                                        <h5 className="fs-13 mb-4 title">Sign In with</h5>
                                                     </div>
                                                     <div>
                                                         <Button color="primary" className="btn-icon"><i className="ri-facebook-fill fs-16"></i></Button>{" "}

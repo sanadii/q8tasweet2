@@ -61,8 +61,8 @@ const Login = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      email: userLogin.email || "" || "",
-      password: userLogin.password || "" || "",
+      email: userLogin.email || "esanad@gmail.com" || "",
+      password: userLogin.password || "I4ksb@11782" || "",
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your Email"),
@@ -243,7 +243,7 @@ const Login = (props) => {
 
                         <div className="mt-4 text-center">
                           <div className="signin-other-title">
-                            <h5 className="fs-13 mb-4 title">Login</h5>
+                            <h5 className="fs-13 mb-4 title">Sign In with</h5>
                           </div>
                           <div>
                             <Link

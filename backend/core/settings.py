@@ -1,53 +1,15 @@
-# TODO
-# move sercret keys
-# Directory
-# CORS_ALLOW_ALL_ORIGINS  = True, to change
-# Database - PostgreSQL
-
-
-# Tokens:
-# In the token generation, str(AccessToken().for_user(user)), it seems like you're creating an access token directly,
-# but you've also created a refresh token above it.
-# Normally, the access token is derived from the refresh token, like str(refresh.access_token). This ensures consistency in token generation.
-# Error Handling:
-
-# Good error handling is important for API views. Your view currently checks for missing users and incorrect passwords,
-# but other potential issues could arise. Consider wrapping parts of your view in try-except blocks and provide meaningful error messages.
-# Environment Variables:
-
-# While you've commented out the dotenv imports and usages, consider using python-decouple or django-environ
-# for better management of environment variables in Django.
-# Middleware:
-
-# You've commented out the django.middleware.csrf.CsrfViewMiddleware middleware,
-# which means CSRF protection might not be active for your traditional Django views.
-# If you're relying solely on JWT and API views, this might be fine, but be very cautious if you have regular Django views that handle POST data.
-# CSRF is a significant security concern.
-# Static Files:
-
-# Ensure that when deploying to a production environment, you have a robust system for serving static files and media.
-# Django's built-in static file serving is not suitable for production.
-# You might need a solution like WhiteNoise for static files or serve them via a web server like Nginx or a cloud solution.
-
-
 from pathlib import Path
 from datetime import timedelta
 import os
-# import dotenv
-# dotenv.load_dotenv()
+import dotenv
+dotenv.load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECRET_KEY = os.environ.get("SECRET_KEY")
-# JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "apuvicmef^(!j8gx&clu0u(!8m0r^etok^l0)kc!---#(i5=dt"
-JWT_SECRET_KEY = "a23b8ac92bba1d38510e45332780f4a65ac33f4a5a6efa17ecd38330e9a3e29f"
-
-
+SECRET_KEY = os.environ.get("SECRET_KEY")
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -87,9 +49,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -100,7 +62,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "DIRS": [os.path.join(BASE_DIR, "../frontend/build")],
 
         "APP_DIRS": True,
@@ -147,11 +109,11 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",  # Secure by default
     ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
+    "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",  # JWT authentication
-        # "rest_framework.authentication.SessionAuthentication",  # Keep session auth if you still need it
+        "rest_framework.authentication.SessionAuthentication",  # Keep session auth if you still need it
         "rest_framework.authentication.TokenAuthentication",
-    ],
+ ),
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
