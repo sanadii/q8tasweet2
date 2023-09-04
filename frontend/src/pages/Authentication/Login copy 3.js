@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 export default function SignIn() {
   const navigate = useNavigate();
   const initialFormData = Object.freeze({
-    email: "esanad@gmail.com",
-    password: "I4ksb@11782",
+    email: "",
+    password: "",
   });
 
   const [formData, setFormData] = useState(initialFormData);
