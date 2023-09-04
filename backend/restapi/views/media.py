@@ -42,28 +42,34 @@ class UploadImage(APIView):
 
         return JsonResponse({'success': False, 'code': 400})
 
-class GetImage(APIView):
-    def get(self, request):
-        queryprms = request.GET
-        img = request.GET.get('imagePath','')
-        print("abcd ",img)
-        print("____",queryprms)
-    
-        print('='*10)
-       
-        path = queryprms.get('images', img)
-        if path == '':
-            print('NUL'*10)
-        else:
-            print('not NULL'*10)
-            print("11",path)
-        if type(img) == str:
-            image_path = os.path.join(settings.MEDIA_ROOT, path)
-        else:
-            image_path = os.path.join(settings.MEDIA_ROOT, 'path')
 
-        print('image path : ', image_path)
-        with open(image_path, "rb") as image_file:
-            encoded_string = base64.b64encode(open(image_path, "rb").read())
-        return JsonResponse({'data': encoded_string.decode("utf-8")})
+# Remove GetImage APIView:
+# If you've set up media serving in Django's urls.py as discussed, then you do not need an APIView to serve images.
+# This can simplify things and avoid potential errors in the APIView code.
+
+
+# class GetImage(APIView):
+#     def get(self, request):
+#         queryprms = request.GET
+#         img = request.GET.get('imagePath','')
+#         print("abcd ",img)
+#         print("____",queryprms)
+    
+#         print('='*10)
+       
+#         path = queryprms.get('images', img)
+#         if path == '':
+#             print('NUL'*10)
+#         else:
+#             print('not NULL'*10)
+#             print("11",path)
+#         if type(img) == str:
+#             image_path = os.path.join(settings.MEDIA_ROOT, path)
+#         else:
+#             image_path = os.path.join(settings.MEDIA_ROOT, 'path')
+
+#         print('image path : ', image_path)
+#         with open(image_path, "rb") as image_file:
+#             encoded_string = base64.b64encode(open(image_path, "rb").read())
+#         return JsonResponse({'data': encoded_string.decode("utf-8")})
 
