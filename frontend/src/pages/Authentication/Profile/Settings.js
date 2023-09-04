@@ -449,7 +449,11 @@ const ProfileSettings = () => {
                                                                         Name</Label>
                                                                     <Input type="text" className="form-control"
                                                                         id="companyName" placeholder="Company name"
+<<<<<<< HEAD
                                                                         defaultValue="Q8Vision" />
+=======
+                                                                        defaultValue="Themesbrand" />
+>>>>>>> parent of 90da27f (almost ready first trial)
                                                                 </div>
                                                             </Col>
 

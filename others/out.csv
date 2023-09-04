@@ -1,0 +1,16 @@
+id,title,description,status,duedate,location,category,candidates,moderators,del_flag,created_by,created_date,image,updated_by,updated_date,priority
+1,Sabah Alsalem,this is sabah alsalem,New,2023-07-09,,High,,[],,,,,,,
+2,Al Surrah,This is Al Raqqah,Inprogress,2023-07-11,,High,,[],,,,,,,High
+4,Al Raqqah,This is Al Raqqah,Inprogress,2023-07-08,,High,,[],0,,,,,,
+5,Pending,This is Al Raqqah,Inprogress,2023-07-10,,,,[],0,,,,,,High
+9,Farwaniya,This is Al Raqqah,Inprogress,2023-07-10,,,,[],0,,,,,,Low
+16,Qadsiya,,Pending,2023-07-10,,,,[],,,,elections/sabah-alsalem_WBVoyKH.jpg,,,Medium
+21,Al Yarmouk,This is Al Yarmouk,Inprogress,2023-11-11,, ??? ,,[],0,,,C:\fakepath\kuwait.jpg,,,Medium
+22,Al Mansouriya,This is Al Mansouriya,Inprogress,2023-07-10,,,,[],0,,,C:\fakepath\kuwait.jpg,,,High
+23,Farwaniya,This is Al Raqqah,Inprogress,2023-07-10,,,,[],0,,,sanad.jpg,,,High
+27,Qurtuba,This is Qurtuba,Pending,2023-03-14,, ??? ,,[],0,,,C:\fakepath\kuwait.jpg,,,High
+46,Al Manqaf,,New,2023-07-11,, ??? ,,[],0,,,,,,High
+47,Hawalli,,New,2023-10-13,, ??? ,,[],0,,,,,,High
+48,Bayan,,New,2023-07-25,, ??? ,,[],0,,,,,,High
+49,Sabahiya,We are in al sabahiya city,New,2023-07-28,, ??? ,,[],0,,,,,,High
+50,Farwaniya,This is Al Raqqah,Completed,2023-07-12,, ??? ,,[],0,,,,,,Low

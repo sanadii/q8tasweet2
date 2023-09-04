@@ -127,7 +127,11 @@ const SimplePage = () => {
                     </div>
                     <div>
                       <i className="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>
+<<<<<<< HEAD
                       Q8Vision
+=======
+                      Themesbrand
+>>>>>>> parent of 90da27f (almost ready first trial)
                     </div>
                   </div>
                 </div>

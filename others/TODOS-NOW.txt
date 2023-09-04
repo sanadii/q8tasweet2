@@ -1,0 +1,144 @@
+
+[eslint]
+src\Components\Hooks\UserHooks.js
+  Line 19:6:  React Hook useEffect has a missing dependency: 'userSession'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Admin\Settings\Categories\index.js
+  Line 52:6:  React Hook useEffect has a missing dependency: 'subCategories'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Campaigns\CampaignDetails\AttendeesTab.js
+  Line 81:9:   The 'toggle' function makes the dependencies of useCallback Hook (at line 104) change on every render. To fix this, wrap the definition of 'toggle' in its own useCallback() Hook  react-hooks/exhaustive-deps
+  Line 283:5:  React Hook useMemo has missing dependencies: 'findCommitteeById' and 'findUserById'. Either include them or remove the dependency array                  
+                          react-hooks/exhaustive-deps
+
+src\pages\Campaigns\CampaignDetails\ElectorsTab.js
+  Line 105:5:  React Hook useCallback has a missing dependency: 'campaignDetails.id'. Either include it or remove the dependency array                                  
+                                                                                                                                                                        
+              react-hooks/exhaustive-deps
+  Line 228:5:  React Hook useMemo has missing dependencies: 'campaignDetails.election.id', 'campaignDetails.id', 'campaignGuarantees', 'currentCampaignMember.committee', 'currentCampaignMember.id', 'currentCampaignMember.rank', 'currentCampaignMember.user.id', 'dispatch', and 'electionAttendees'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Campaigns\CampaignDetails\GuaranteesTab.js
+  Line 75:9:   The 'toggle' function makes the dependencies of useCallback Hook (at line 100) change on every render. To fix this, wrap the definition of 'toggle' in its own useCallback() Hook  react-hooks/exhaustive-deps
+  Line 335:5:  React Hook useMemo has a missing dependency: 'campaignMembers'. Either include it or remove the dependency array                                         
+                          react-hooks/exhaustive-deps
+
+src\pages\Campaigns\CampaignDetails\MembersTab.js
+  Line 421:6:  React Hook useMemo has missing dependencies: 'campaignGuarantees.length', 'campaignMembers', 'currentCampaignMember.rank', 'electionCommittees', 'getAttendeeCountForMember', and 'getGuaranteeCountForMember'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Campaigns\CampaignDetails\Modals\CampaignGuaranteesModalUpdate.js
+  Line 54:6:  React Hook useEffect has missing dependencies: 'handleUpdateButton' and 'setOnModalSubmit'. Either include them or remove the dependency array. If 'setOnModalSubmit' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+src\pages\Campaigns\CampaignDetails\Modals\CampaignMembersModal.js
+  Line 58:7:  Duplicate key 'campaignId'  no-dupe-keys
+
+src\pages\Campaigns\CampaignDetails\Modals\CampaignMembersUpdateModal.js
+  Line 59:6:  React Hook useEffect has missing dependencies: 'validation.values.committee' and 'validation.values.supervisor'. Either include them or remove the dependency array                                                                                                         react-hooks/exhaustive-deps
+  Line 65:6:  React Hook useEffect has missing dependencies: 'handleUpdateButton' and 'setOnModalSubmit'. Either include them or remove the dependency array. If 'setOnModalSubmit' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+src\pages\Campaigns\CampaignDetails\Modals\ElectionAttendeesModal.js
+  Line 153:6:  React Hook useEffect has missing dependencies: 'handleUpdateButton' and 'setOnModalSubmit'. Either include them or remove the dependency array. If 'setOnModalSubmit' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+
+src\pages\Campaigns\CampaignDetails\Section.js
+  Line 32:3:  Duplicate key 'members'  no-dupe-keys
+
+src\pages\Campaigns\CampaignDetails\index.js
+  Line 23:5:  Duplicate key 'electionCommittees'  no-dupe-keys
+
+src\pages\Candidates\CandidateDetails\Modals\CandidateCampaignModal.js
+  Line 175:6:  React Hook useEffect has a missing dependency: 'candidateElectionList'. Either include it or remove the dependency array. You can also do a functional update 'setCandidateList(c => ...)' if you only need 'candidateElectionList' in the 'setCandidateList' call  react-hooks/exhaustive-deps
+
+src\pages\Elections\ElectionDetails\Modals\ElectionCampaignModal.js
+  Line 175:6:  React Hook useEffect has a missing dependency: 'electionCandidateList'. Either include it or remove the dependency array. You can also do a functional update 'setCandidateList(e => ...)' if you only need 'electionCandidateList' in the 'setCandidateList' call  react-hooks/exhaustive-deps
+
+src\pages\Elections\ElectionList\ElectionModal.js
+  Line 193:6:  React Hook useEffect has missing dependencies: 'activeParentCategoryId' and 'subCategoryOptions'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Users\UserList\AllUsers.js
+  Line 128:9:  Duplicate key 'image'        no-dupe-keys
+  Line 130:9:  Duplicate key 'description'  no-dupe-keys
+  Line 132:9:  Duplicate key 'gender'       no-dupe-keys
+
+src\pages\Users\UserList\UsersModal.js
+  Line 74:7:    Duplicate key 'password'   no-dupe-keys
+  Line 75:7:    Duplicate key 'username'   no-dupe-keys
+  Line 76:7:    Duplicate key 'firstName'  no-dupe-keys
+  Line 129:11:  Duplicate key 'gender'     no-dupe-keys
+  Line 156:11:  Duplicate key 'gender'     no-dupe-keys
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+File sizes after gzip:
+
+  925.89 kB  build\static\js\main.ddce61e3.js
+  190.89 kB  build\static\css\main.577d3482.css
+  2.54 kB    build\static\js\522.c8bee863.chunk.js
+
+The bundle size is significantly larger than recommended.
+Consider reducing it with code splitting: https://goo.gl/9VhYWB
+You can also analyze the project dependencies: https://goo.gl/LeUzfb
+
+The project was built assuming it is hosted at /.
+You can control this with the homepage field in your package.json.
+
+The build folder is ready to be deployed.
+You may serve it with a static server:
+
+  yarn global add serve
+  serve -s build
+
+Find out more about deployment here:
+
+  https://cra.link/deployment
+
+Done in 66.94s.
+(venv) PS C:\Users\SANAD\projects\elections\frontend>
+
+Alright, considering that you're using JWT with both `access_token` and `refresh_token`, let's go step by step:
+
+**1. Update Session Storage Key**
+Currently, you're trying to get the token from `sessionStorage` with a key named `authUser`. But based on the provided session storage data, you should be referencing `access_token` inside it:
+
+```javascript
+const token = JSON.parse(sessionStorage.getItem("status")) ? JSON.parse(sessionStorage.getItem("status")).access_token : null;
+```
+
+**2. Set Authorization Header Dynamically**
+When the user logs in successfully, set the `Authorization` header dynamically. After the login API call and once you receive the JWT token, call the `setAuthorization` method:
+
+```javascript
+import { setAuthorization } from './api_helper';
+
+// After a successful login:
+setAuthorization(response.data.access_token);
+```
+
+Make sure to also store both the `access_token` and `refresh_token` in the `sessionStorage`:
+
+```javascript
+sessionStorage.setItem('status', JSON.stringify(response.data));
+```
+
+**3. Handle Token Expiry (Optional, but Recommended)**
+JWT `access_token` often has a short expiration time for security reasons. You can use axios interceptors to handle token expiration. If a request results in a 401 (unauthorized) error, you should attempt to refresh the token using the `refresh_token` and then retry the failed request.
+
+To achieve this, you can set up an axios response interceptor in `api_helper.js`. When a request returns a 401, use the `refresh_token` to get a new `access_token`, set this new token as the default authorization header, and then retry the original request.
+
+**4. Review User Authentication Checks**
+In `backend_helper.js`, you have the `isUserAuthenticated` function which checks the existence of a user in `localStorage`. Ensure that this check is consistent with where you store user data. If you plan to store user info in `sessionStorage`, then your check should also be against `sessionStorage`.
+
+**5. Cleanup**
+Currently, you have two functions `getLoggedinUser` in `api_helper.js` and `getLoggedInUser` in `backend_helper.js` which essentially do the same thing. It's better to keep just one and use it consistently.
+
+**6. Refresh Token Logic**
+Later on, when you handle token expiration, you'd need to use the `refresh_token` to obtain a new `access_token`. When you do this, ensure that the new `access_token` is saved to `sessionStorage` and also set as the default authorization header for axios. You can call `setAuthorization` again with the new token.
+
+To sum up:
+
+- Adjust how you retrieve the token from session storage.
+- Ensure you're setting the Authorization header dynamically after login.
+- Consider implementing logic to refresh the token when it expires.
+- Be consistent in how and where you check for authenticated users.
+- Clean up redundant functions.
+
+By following these steps and ensuring that every authenticated API request carries the valid `access_token` in its headers, you should be able to resolve the authentication error.
