@@ -65,7 +65,7 @@ urlpatterns = [
     # Media
     path("uploadImage", UploadImage.as_view(), name="uploadImage"),
     # path("getImage", GetImage.as_view(), name="getImage"),
-    path("media/getImage/", GetImage.as_view(), name="get_image"),
+    # path("media/getImage/", GetImage.as_view(), name="get_image"),
 
     # Terms
     path("getCategories", GetCategories.as_view(), name="GetCategories"),

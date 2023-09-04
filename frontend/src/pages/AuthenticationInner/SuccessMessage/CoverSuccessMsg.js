@@ -48,7 +48,7 @@ document.title ="Success Message | Q8Tasweet - React Admin & Dashboard Template"
                         <Row>
                             <Col lg={12}>
                                 <div className="text-center">
-                                    <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                                    <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Q8Vision</p>
                                 </div>
                             </Col>
                         </Row>

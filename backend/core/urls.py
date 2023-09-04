@@ -20,8 +20,11 @@ urlpatterns = [
     path("", include("users.urls", namespace="users")), #TODOS
     path("elections/", include(("restapi.urls", "elections"), namespace="elections")),
 
+<<<<<<< HEAD
     # React
     re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
+=======
+>>>>>>> 082f608defd05a4e30824e23975b0efb10b5dd62
 
     # Schema & Documentation
     path("docs/", include_docs_urls(title="WorkspaceAPI")),
@@ -32,6 +35,17 @@ urlpatterns = [
         ),
         name="openapi-schema",
     ),
+
+    # # React
+    # re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
+
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Make sure this is at the very end
+urlpatterns.append(re_path(r'^.*', TemplateView.as_view(template_name='index.html')))
+

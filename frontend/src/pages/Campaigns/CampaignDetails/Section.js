@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { Link } from "react-router-dom";
 import {
   Col,
@@ -23,6 +25,7 @@ import OverviewTab from "./OverviewTab";
 import MembersTab from "./MembersTab";
 import GuaranteesTab from "./GuaranteesTab";
 import AttendeesTab from "./AttendeesTab";
+import SortingTab from "./SortingTab";
 import ElectorsTab from "./ElectorsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
@@ -57,6 +60,10 @@ const Section = ({
   const currentCampaignMemberRank = MemberRankOptions.find(
     (option) => option.id === rankId
   );
+
+  const { currentUser } = useSelector((state) => ({
+    currentUser: state.Users.currentUser,
+  }));
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
@@ -163,24 +170,41 @@ const Section = ({
                     </NavLink>
                   </NavItem>
                 )}
+                {isTabVisible("attendees", currentCampaignMember.rank) && (
+
+                  <NavItem>
+                    <NavLink
+                      href="#attendees"
+                      className={classnames({ active: activeTab === "4" })}
+                      onClick={() => {
+                        toggleTab("4");
+                      }}
+                    >
+                      <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
+                      <span className="d-none d-md-inline-block">Attendees</span>
+                    </NavLink>
+                  </NavItem>
+                )}
+                {isTabVisible("sorting", currentCampaignMember.rank) && (
+                  <NavItem>
+                    <NavLink
+                      href="#sorting"
+                      className={classnames({ active: activeTab === "5" })}
+                      onClick={() => {
+                        toggleTab("5");
+                      }}
+                    >
+                      <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
+                      <span className="d-none d-md-inline-block">Sorting</span>
+                    </NavLink>
+                  </NavItem>
+                )}
                 <NavItem>
                   <NavLink
-                    href="#attendees"
-                    className={classnames({ active: activeTab === "4" })}
+                    href="#electors"
+                    className={classnames({ active: activeTab === "6" })}
                     onClick={() => {
-                      toggleTab("4");
-                    }}
-                  >
-                    <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                    <span className="d-none d-md-inline-block">Attendees</span>
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    href="#attendees"
-                    className={classnames({ active: activeTab === "5" })}
-                    onClick={() => {
-                      toggleTab("5");
+                      toggleTab("6");
                     }}
                     style={{ backgroundColor: 'black' }}
                   >
@@ -189,22 +213,27 @@ const Section = ({
                   </NavLink>
                 </NavItem>
               </Nav>
-              {/* <div className="flex-shrink-0">
-                <NavItem className="btn btn-success">
-                  <NavLink
-                    href="#electors"
-                    className={classnames({ active: activeTab === "5" })}
-                    onClick={() => {
-                      toggleTab("5");
-                    }}
-                  >
-                    <i className="ri-edit-box-line align-bottom"></i>
-                    <span className="d-none d-md-inline-block">
-                      Search Electors
-                    </span>
-                  </NavLink>
-                </NavItem>
-              </div> */}
+
+              {currentUser && currentUser.is_staff === true && (
+
+                <div className="flex-shrink-0">
+                  <NavItem className="btn btn-success">
+                    <NavLink
+                      href="#edit"
+                      className={classnames({ active: activeTab === "9" })}
+                      onClick={() => {
+                        toggleTab("9");
+                      }}
+                    >
+                      <i className="ri-edit-box-line align-bottom"></i>
+                      <span className="d-none d-md-inline-block">
+                        Edit
+                      </span>
+                    </NavLink>
+                  </NavItem>
+                </div>
+              )}
+
             </div>
 
             <TabContent activeTab={activeTab} className="pt-4">
@@ -226,9 +255,14 @@ const Section = ({
               <TabPane tabId="4">
                 <AttendeesTab />
               </TabPane>
-
               <TabPane tabId="5">
+                <SortingTab />
+              </TabPane>
+              <TabPane tabId="6">
                 <ElectorsTab />
+              </TabPane>
+              <TabPane tabId="9">
+                <EditTab />
               </TabPane>
             </TabContent>
           </div>
