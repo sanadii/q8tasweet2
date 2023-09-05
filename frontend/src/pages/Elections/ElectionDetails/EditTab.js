@@ -66,7 +66,7 @@ const EditTab = ({ election }) => {
   //       id: electionDetails.id,
   //       name: electionDetails.name,
   //       image: electionDetails.image
-  //         ? "http://127.0.0.1:8000/" + electionDetails.image
+  //         ? "http://q8tasweet.com/" + electionDetails.image
   //         : "",
   //       duedate: electionDetails.duedate,
   //       canidates: electionDetails.canidates,
@@ -117,7 +117,7 @@ const EditTab = ({ election }) => {
       // id: (election && election.id) || "",
       name: (election && election.name) || "",
       // image: (election && election.image) || "",
-      image: election.image ? "http://127.0.0.1:8000/" + election.image : "",
+      image: election.image ? "http://q8tasweet.com/" + election.image : "",
       selectedImage: selectedImage,
       description: (election && election.description) || "",
       dueDate: (election && election.dueDate) || "",

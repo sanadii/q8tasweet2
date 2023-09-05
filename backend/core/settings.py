@@ -15,6 +15,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "139.59.86.129",
     "127.0.0.1",
+    "localhost",
+    "www.q8tasweet.com",
+    "q8tasweet.com",
+    "*",
     ]
 
 # Application definition
@@ -112,6 +116,11 @@ REST_FRAMEWORK = {
 #     "http://q8election.com",
 # ]
 
+# CORS_ALLOWED_ORIGINS = [
+#     "*",
+# ]
+
+# CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -149,6 +158,7 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # Adjust the path as needed
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "../frontend/build/static")

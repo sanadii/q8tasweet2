@@ -3,7 +3,7 @@ import * as url from "./url_helper";
 import axios from "axios";
 
 const restapi = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
+  baseURL: "http://q8tasweet.com/",
   headers: { "Content-Type": "multipart/form-data" },
 });
 
