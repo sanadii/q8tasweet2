@@ -72,7 +72,7 @@ yarn-error.log*
 # Things to include at a later stage
 # The decision of what to include in the .gitignore file depends on the specifics of your project, its architecture, and your deployment workflow. However, I can provide some general guidance:
 
-# node_modules/:
+node_modules/:
 
 # This directory contains all the Node.js dependencies of your project. These dependencies are usually large, and they can be reinstalled at any time using the yarn install or npm install command.
 # Recommendation: Include in .gitignore.
