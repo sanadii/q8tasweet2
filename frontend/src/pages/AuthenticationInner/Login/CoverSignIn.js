@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Col, Container, Input, Label, Row ,Button} from 'reactstrap';
+import { Card, Col, Container, Input, Label, Row, Button } from 'reactstrap';
 import AuthSlider from '../authCarousel';
 
 
 const CoverSignIn = () => {
-document.title="Cover SignIn | Q8Tasweet - React Admin & Dashboard Template";
+    document.title = "Cover SignIn | Q8Tasweet - React Admin & Dashboard Template";
     return (
         <React.Fragment>
             <div className="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
@@ -86,11 +86,7 @@ document.title="Cover SignIn | Q8Tasweet - React Admin & Dashboard Template";
                         <Row>
                             <Col lg={12}>
                                 <div className="text-center">
-<<<<<<< HEAD
                                     <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Q8Vision</p>
-=======
-                                    <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
->>>>>>> parent of 90da27f (almost ready first trial)
                                 </div>
                             </Col>
                         </Row>

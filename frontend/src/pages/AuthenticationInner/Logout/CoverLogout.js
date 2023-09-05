@@ -48,11 +48,7 @@ const CoverLogout = () => {
                         <Row>
                             <Col lg={12}>
                                 <div className="text-center">
-<<<<<<< HEAD
                                     <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Q8Vision</p>
-=======
-                                    <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
->>>>>>> parent of 90da27f (almost ready first trial)
                                 </div>
                             </Col>
                         </Row>

@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.577d3482.css",
-    "main.js": "/static/js/main.c272ec04.js",
-    "static/js/522.c8bee863.chunk.js": "/static/js/522.c8bee863.chunk.js",
+    "main.css": "/static/css/main.99903239.css",
+    "main.js": "/static/js/main.9ab06727.js",
+    "static/js/522.c3deeb7e.chunk.js": "/static/js/522.c3deeb7e.chunk.js",
     "static/media/kuwait-bg.png": "/static/media/kuwait-bg.859ab5d5fe5a98c8520d.png",
     "static/media/remixicon.svg?t=1590207869815": "/static/media/remixicon.1664a258a7e7714f6f8d.svg",
-    "static/media/boxicons.svg": "/static/media/boxicons.17f6cb4eef77f07f2caa.svg",
+    "static/media/boxicons.svg": "/static/media/boxicons.f80cc694af79b88fde78.svg",
     "static/media/materialdesignicons-webfont.eot": "/static/media/materialdesignicons-webfont.e044ed23c047e571c550.eot",
     "static/media/materialdesignicons-webfont.ttf?v=6.5.95": "/static/media/materialdesignicons-webfont.5d42b4e60858731e7b65.ttf",
     "static/media/la-brands-400.svg": "/static/media/la-brands-400.331115337bc9be66667a.svg",
@@ -74,7 +74,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.577d3482.css",
-    "static/js/main.c272ec04.js"
+    "static/css/main.99903239.css",
+    "static/js/main.9ab06727.js"
   ]
 }

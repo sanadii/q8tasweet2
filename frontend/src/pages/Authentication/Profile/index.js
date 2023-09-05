@@ -52,7 +52,7 @@ import smallImage7 from "../../../assets/images/small/img-7.jpg";
 import smallImage9 from "../../../assets/images/small/img-9.jpg";
 
 const SimplePage = () => {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   // Getting the user data from Redux state
   const { user } = useSelector((state) => ({
@@ -127,11 +127,7 @@ const SimplePage = () => {
                     </div>
                     <div>
                       <i className="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>
-<<<<<<< HEAD
                       Q8Vision
-=======
-                      Themesbrand
->>>>>>> parent of 90da27f (almost ready first trial)
                     </div>
                   </div>
                 </div>

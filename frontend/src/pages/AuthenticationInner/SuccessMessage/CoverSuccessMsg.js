@@ -5,11 +5,11 @@ import { Card, Col, Container, Row } from 'reactstrap';
 import AuthSlider from '../authCarousel';
 
 const CoverSuccessMsg = () => {
-document.title ="Success Message | Q8Tasweet - React Admin & Dashboard Template";
+    document.title = "Success Message | Q8Tasweet - React Admin & Dashboard Template";
     return (
         <React.Fragment>
-            
-            
+
+
             <div className="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
                 <div className="bg-overlay"></div>
                 <div className="auth-page-content overflow-hidden pt-lg-5">
@@ -48,11 +48,7 @@ document.title ="Success Message | Q8Tasweet - React Admin & Dashboard Template"
                         <Row>
                             <Col lg={12}>
                                 <div className="text-center">
-<<<<<<< HEAD
                                     <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Q8Vision</p>
-=======
-                                    <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
->>>>>>> parent of 90da27f (almost ready first trial)
                                 </div>
                             </Col>
                         </Row>

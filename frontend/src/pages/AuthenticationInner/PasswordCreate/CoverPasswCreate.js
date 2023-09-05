@@ -12,7 +12,7 @@ const CoverPasswCreate = () => {
     document.title = "Create New Password | Q8Tasweet - React Admin & Dashboard Template";
 
     const [passwordShow, setPasswordShow] = useState(false);
-    const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);   
+    const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -101,7 +101,7 @@ const CoverPasswCreate = () => {
                                                                     <FormFeedback type="invalid">{validation.errors.confrim_password}</FormFeedback>
                                                                 ) : null}
                                                                 <Button color="link" onClick={() => setConfrimPasswordShow(!confrimPasswordShow)} className="position-absolute end-0 top-0 text-decoration-none text-muted password-addon">
-                                                                <i className="ri-eye-fill align-middle"></i></Button>
+                                                                    <i className="ri-eye-fill align-middle"></i></Button>
                                                             </div>
                                                         </div>
 
@@ -140,11 +140,7 @@ const CoverPasswCreate = () => {
                         <Row>
                             <Col lg={12}>
                                 <div className="text-center">
-<<<<<<< HEAD
                                     <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Q8Vision</p>
-=======
-                                    <p className="mb-0">&copy; {new Date().getFullYear()} Q8Tasweet. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
->>>>>>> parent of 90da27f (almost ready first trial)
                                 </div>
                             </Col>
                         </Row>
