@@ -60,16 +60,6 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
     initialValues: {
-      // username: "",
-      // password: "",
-      // passwordConfirm: (user && user.passwordConfirm) || "",
-
-      username: "dfghjkfghjkl",
-      password: 123,
-      passwordConfirm: 123,
-      firstName: "sanad",
-
-      // name: (user && user.name) || "",
       email: (user && user.email) || "",
       password: (user && user.password) || "",
       username: (user && user.username) || "",
@@ -126,7 +116,6 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
 
           description: values.description,
           civil: values.civil,
-          gender: 1,
           dateOfBirth: values.dateOfBirth,
 
           // Contact
@@ -153,7 +142,6 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
 
           description: values.description,
           civil: values.civil,
-          gender: 1,
           dateOfBirth: values.dateOfBirth,
 
           // Contact

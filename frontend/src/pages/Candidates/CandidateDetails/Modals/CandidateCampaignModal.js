@@ -154,25 +154,28 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
     electionCampaigns: state.Elections.electionCampaigns,
   }));
 
-  const [candidateElectionList, setCandidateList] =
-    useState(candidateElections);
-  const [electionCampaignList, setElectionCampaignList] =
-    useState(electionCampaigns);
+  // State for candidateElectionList
+  const [candidateElectionList, setCandidateElectionList] = useState(candidateElections);
 
-  //   Add New ElectionCampaign Search & Filter
-  const [searchCandidateElectionInput, setSearchCandidateElectionInput] =
-    useState("");
-  const [campaignList, setCandidateElectionList] = useState(electionCampaigns);
+  // State for electionCampaignList
+  const [electionCampaignList, setElectionCampaignList] = useState(electionCampaigns);
 
+  // State for candidateElection search input
+  const [searchCandidateElectionInput, setSearchCandidateElectionInput] = useState('');
+
+  // Filtered list of candidateElections
+  const [filteredCandidateElectionList, setFilteredCandidateElectionList] = useState(electionCampaigns);
+
+  // Update the filtered list when candidateElections or search input changes
   useEffect(() => {
-    setCandidateList(
+    setFilteredCandidateElectionList(
       candidateElectionList.filter((candidateElection) =>
         candidateElection.name
           .toLowerCase()
           .includes(searchCandidateElectionInput.toLowerCase())
       )
     );
-  }, [candidateElections, searchCandidateElectionInput]);
+  }, [candidateElectionList, searchCandidateElectionInput]);
 
   return (
     <>

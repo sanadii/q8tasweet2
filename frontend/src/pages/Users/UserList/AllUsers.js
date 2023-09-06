@@ -117,7 +117,7 @@ const AllUsers = () => {
         id: user.id,
         name: user.name,
         image:
-          user && user.image ? process.env.REACT_APP_API_URL + user.image : "",
+          user && user.image ? process.env.MEDIA_URL + user.image : "",
 
         userCount: user.userCount,
         description: user.description,
@@ -125,11 +125,8 @@ const AllUsers = () => {
         firstName: user.firstName,
         lastName: user.lastName,
         gender: user.gender,
-        image: user.image,
 
-        description: user.description,
         civil: user.civil,
-        gender: user.gender,
         dateOfBirth: user.dateOfBirth,
 
         // Contact

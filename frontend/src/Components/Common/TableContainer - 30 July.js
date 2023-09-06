@@ -13,11 +13,6 @@ import {
 
 import { Table, Row, Col, Button, Input, CardBody } from "reactstrap";
 import { Filter, DefaultColumnFilter, SelectColumnFilter } from "./filters";
-import {
-  ElectionListGlobalFilter,
-} from "../../Components/Common/GlobalSearchFilter";
-
-import { ElectionSelectionFilter } from "./SelectionFilter";
 
 
 // Define a default UI for filtering
@@ -57,12 +52,6 @@ function GlobalFilter({
                 <i className="bx bx-search-alt search-icon"></i>
               </div>
             </Col>
-            {isElectionListFilter && (
-              <ElectionListGlobalFilter
-                // globalFilter={globalFilter}
-                // setGlobalFilter={setGlobalFilter}
-              />
-            )}
           </Row>
         </form>
       </CardBody>

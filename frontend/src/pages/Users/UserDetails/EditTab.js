@@ -47,52 +47,16 @@ import {
 } from "../../../Components/constants";
 
 const EditTab = ({ user }) => {
-  // const { id } = useParams(); // Access the id parameter from the URL
   const dispatch = useDispatch();
 
-  // const [user, setElection] = useState({});
-  // console.log("THE ELECTIONS IS:", user);
-  // useEffect(() => {
-  //   dispatch(getElectionDetails({ id: id })); // Dispatch the action with the 'id' parameter
-  // }, [dispatch, id]);
 
   const { electionDetails } = useSelector((state) => ({
     electionDetails: state.Elections.electionDetails,
   }));
 
-  // useEffect(() => {
-  //   if (!isEmpty(electionDetails)) {
-  //     setElection({
-  //       id: electionDetails.id,
-  //       name: electionDetails.name,
-  //       image: electionDetails.image
-  //         ? "http://q8tasweet.com/" + electionDetails.image
-  //         : "",
-  //       duedate: electionDetails.duedate,
-  //       canidates: electionDetails.canidates,
-  //       description: electionDetails.description,
-  //       category: electionDetails.category,
-  //       subCategory: electionDetails.subCategory,
 
-  //       // Admin
-  //       status: electionDetails.status,
-  //       priority: electionDetails.priority,
-
-  //       // Specifications
-  //       type: electionDetails.type,
-  //       result: electionDetails.result,
-  //       votes: electionDetails.votes,
-  //       seats: electionDetails.seats,
-
-  //       // System
-  //       delet: electionDetails.delet,
-  //       updatedBy: electionDetails.updatedBy,
-  //       updatedDate: electionDetails.updatedDate,
-  //     });
-  //   }
-  // }, [electionDetails]);
-
-  //   Image Upload
+  // Media
+  const MEDIA_URL = process.env.MEDIA_URL;
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageSelect = (e) => {
@@ -116,8 +80,7 @@ const EditTab = ({ user }) => {
     initialValues: {
       // id: (user && user.id) || "",
       name: (user && user.name) || "",
-      // image: (user && user.image) || "",
-      image: user.image ? "http://q8tasweet.com/" + user.image : "",
+      image: user.image ? `${MEDIA_URL}${user.image}` : "",
       selectedImage: selectedImage,
       description: (user && user.description) || "",
       dueDate: (user && user.dueDate) || "",

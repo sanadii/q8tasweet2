@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-
-
-import {
-    Col,
-    Row,
-    Button,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownItem,
-    DropdownMenu,
-} from "reactstrap";
+import { Col, Row, Button, UncontrolledDropdown, DropdownToggle, DropdownItem, DropdownMenu } from "reactstrap";
 import { Link } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import Select from "react-select";
@@ -18,23 +8,7 @@ import Select from "react-select";
 import { StatusOptions, PriorityOptions } from "../../Components/constants";
 
 
-const ProductsGlobalFilter = () => {
-    return (
-        <React.Fragment>
-            <div className="col-sm-auto ms-auto">
-                <div>
-                    <Link
-                        to="/apps-ecommerce-add-product"
-                        className="btn btn-success"
-                    >
-                        <i className="ri-add-line align-bottom me-1"></i> Add
-                        Product
-                    </Link>
-                </div>
-            </div>
-        </React.Fragment>
-    );
-};
+
 const CustomersGlobalFilter = () => {
     const [customerStatus, setcustomerStatus] = useState("");
 
@@ -428,92 +402,7 @@ const NFTRankingGlobalFilter = () => {
     );
 };
 
-// const electionStatus = (e) => {
-//     if (e) {
-//         setElectionList(elections.filter((item) => item.status === e));
-//     } else {
-//         setElectionList(elections.filter((item) => item.status !== e));
-//     }
 
-const ElectionListGlobalFilter = ({ setElectionList }) => {
-    const elections = useSelector(state => state.Elections.elections);
-
-
-
-    const electionStatus = (e) => {
-        console.log("e value:", e); // This will output the value of e
-        if (e) {
-            let filteredList = elections.filter((item) => item.status === e);
-            console.log("Filtered list when e is truthy:", filteredList); // This will output the filtered list when e is truthy
-            setElectionList(filteredList);
-        } else {
-            let filteredList = elections.filter((item) => item.status !== e);
-            console.log("Filtered list when e is falsy:", filteredList); // This will output the filtered list when e is falsy
-            setElectionList(filteredList);
-        }
-    };
-
-    return (
-        <React.Fragment>
-            <div className="col-xxl-3 col-sm-4">
-                <div className="input-light">
-                    <select
-                        className="form-control"
-                        name="choices-select-status"
-                        id="choices-select-status"
-                        onChange={(e) => electionStatus(e.target.value)}
-                    >
-                        {StatusOptions.map((status) => (
-                            <option key={status.label} value={status.value}>
-                                {status.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-            <div className="col-xxl-1 col-sm-4">
-                <button type="button" className="btn btn-primary w-100"> <i className="ri-equalizer-fill me-1 align-bottom"></i>
-                    Filters
-                </button>
-            </div>
-        </React.Fragment>
-    );
-};
-
-// const ElectionListGlobalFilter = () => {
-//     return (
-//         <React.Fragment>
-//             <div className="col-xxl-3 col-sm-4">
-//                 <Flatpickr
-//                     placeholder="Select date range"
-//                     className="form-control bg-light border-light"
-//                     options={{
-//                         mode: "range",
-//                         dateFormat: "d M, Y"
-//                     }}
-//                 />
-//             </div>
-
-//             <div className="col-xxl-3 col-sm-4">
-//                 <div className="input-light">
-//                     <select className="form-control" data-choices data-choices-search-false name="status" id="idStatus">
-//                         <option value="">Status</option>
-//                         <option defaultValue="all"  >All</option>
-//                         <option value="New">New</option>
-//                         <option value="Pending">Pending</option>
-//                         <option value="Inprogress">Inprogress</option>
-//                         <option value="Completed">Completed</option>
-//                     </select>
-//                 </div>
-//             </div>
-//             <div className="col-xxl-1 col-sm-4">
-//                 <button type="button" className="btn btn-primary w-100"> <i className="ri-equalizer-fill me-1 align-bottom"></i>
-//                     Filters
-//                 </button>
-//             </div>
-//         </React.Fragment>
-//     );
-// };
 const LeadsGlobalFilter = ({ onClickDelete }) => {
     return (
         <React.Fragment>
@@ -582,7 +471,6 @@ const LeadsGlobalFilter = ({ onClickDelete }) => {
 };
 
 export {
-    ProductsGlobalFilter,
     CustomersGlobalFilter,
     OrderGlobalFilter,
     ContactsGlobalFilter,
@@ -591,6 +479,5 @@ export {
     InvoiceListGlobalSearch,
     TicketsListGlobalFilter,
     NFTRankingGlobalFilter,
-    ElectionListGlobalFilter,
     LeadsGlobalFilter
 };

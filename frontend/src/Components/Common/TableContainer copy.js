@@ -23,7 +23,6 @@ import {
   InvoiceListGlobalSearch,
   TicketsListGlobalFilter,
   NFTRankingGlobalFilter,
-  ElectionListGlobalFilter,
 } from "../../Components/Common/GlobalSearchFilter";
 
 // Define a default UI for filtering
@@ -100,9 +99,6 @@ function GlobalFilter({
             )}
             {isNFTRankingFilter && (
               <NFTRankingGlobalFilter />
-            )}
-            {isElectionListFilter && (
-              <ElectionListGlobalFilter />
             )}
           </Row>
         </form>

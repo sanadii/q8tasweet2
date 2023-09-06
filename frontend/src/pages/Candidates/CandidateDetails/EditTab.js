@@ -49,48 +49,12 @@ import {
 const EditTab = ({ candidate }) => {
   // const { id } = useParams(); // Access the id parameter from the URL
   const dispatch = useDispatch();
-
-  // const [candidate, setElection] = useState({});
-  // console.log("THE ELECTIONS IS:", candidate);
-  // useEffect(() => {
-  //   dispatch(getElectionDetails({ id: id })); // Dispatch the action with the 'id' parameter
-  // }, [dispatch, id]);
+  const MEDIA_URL = process.env.MEDIA_URL;
 
   const { electionDetails } = useSelector((state) => ({
     electionDetails: state.Elections.electionDetails,
   }));
 
-  // useEffect(() => {
-  //   if (!isEmpty(electionDetails)) {
-  //     setElection({
-  //       id: electionDetails.id,
-  //       name: electionDetails.name,
-  //       image: electionDetails.image
-  //         ? "http://q8tasweet.com/" + electionDetails.image
-  //         : "",
-  //       duedate: electionDetails.duedate,
-  //       canidates: electionDetails.canidates,
-  //       description: electionDetails.description,
-  //       category: electionDetails.category,
-  //       subCategory: electionDetails.subCategory,
-
-  //       // Admin
-  //       status: electionDetails.status,
-  //       priority: electionDetails.priority,
-
-  //       // Specifications
-  //       type: electionDetails.type,
-  //       result: electionDetails.result,
-  //       votes: electionDetails.votes,
-  //       seats: electionDetails.seats,
-
-  //       // System
-  //       delet: electionDetails.delet,
-  //       updatedBy: electionDetails.updatedBy,
-  //       updatedDate: electionDetails.updatedDate,
-  //     });
-  //   }
-  // }, [electionDetails]);
 
   //   Image Upload
   const [selectedImage, setSelectedImage] = useState(null);
@@ -98,26 +62,25 @@ const EditTab = ({ candidate }) => {
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedImage(e.target.files[0]);
-      console.log("handleImageSelect called");
     }
   };
 
   const formData = new FormData();
 
-  if (!selectedImage) {
-    console.log("no selected image");
-  } else {
+  if (selectedImage) {
     formData.append("image", selectedImage);
-    formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
+    formData.append("folder", "elections"); // Replace "elections" with the actual folder name
+  } else {
+    console.log("No selected image");
   }
-
+  
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
       // id: (candidate && candidate.id) || "",
       name: (candidate && candidate.name) || "",
-      // image: (candidate && candidate.image) || "",
-      image: candidate.image ? "http://q8tasweet.com/" + candidate.image : "",
+      image: candidate.image ? `${MEDIA_URL}${candidate.image}` : "",
+
       selectedImage: selectedImage,
       description: (candidate && candidate.description) || "",
       dueDate: (candidate && candidate.dueDate) || "",

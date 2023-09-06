@@ -12,7 +12,7 @@ import CampaignMembersModal from "./Modals/CampaignMembersModal";
 import { deleteCampaignMember } from "../../../store/actions";
 
 // --------------- Utility imports ---------------
-import { Col, Row, Card, CardBody } from "reactstrap";
+import { Col, Row, Card, CardBody, CardHeader, CardFooter } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -448,13 +448,14 @@ const MembersTab = () => {
               <div>
                 {campaignMemberList ? (
                   <TableContainer
-                    // Header
+                    // Global Header -------------------------
                     isGlobalHeader={true}
+                    GlobalHeaderTitle="Campaign Members"
+
                     AddButtonText="Add New Member"
                     setDeleteModalMulti={setDeleteModalMulti}
                     setIsEdit={setIsEdit}
                     isMultiDeleteButton={isMultiDeleteButton}
-                    GlobalHeader="Campaign Members"
                     campaignMember={campaignMember}
                     modal={modal}
                     setModal={setModal}
@@ -463,21 +464,23 @@ const MembersTab = () => {
                     handleAddButtonClick={handleCampaignMemberClicks}
                     toggle={toggle}
 
-                    // Filters
+                    // Filters -------------------------
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
                     isCampaignRankFilter={true}
                     onTabChange={handleTabChange}
                     isFieldFilter={true}
                     SearchPlaceholder="Search for Campaign Members..."
-                    // Data
+
+                    // Data -------------------------
                     columns={columns}
                     data={campaignMemberList || []}
                     setCampaignMemberList={setCampaignMemberList}
                     customPageSize={50}
                     // TODO: to find out what is this for and how to be used with the table
                     // handleItemClick={() => handleCampaignMemberClick(campaignMember, "AddModal")}
-                    // Styling
+
+                    // Styling -------------------------
                     className="custom-header-css"
                     divClass="table-responsive table-card mb-2"
                     tableClass="align-middle table-nowrap"
@@ -489,6 +492,7 @@ const MembersTab = () => {
               </div>
               <ToastContainer closeButton={false} limit={1} />
             </CardBody>
+
           </Card>
         </Col>
       </Row>

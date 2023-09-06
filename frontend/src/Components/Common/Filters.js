@@ -618,14 +618,6 @@ const ResetFilters = () => {
   );
 };
 
-const TestFilter = () => {
-  return (
-    <React.Fragment>
-      <h6>This Test Filter in Filters.js</h6>
-    </React.Fragment>
-  );
-};
-
 export {
   DefaultColumnFilter,
   SelectColumnFilter,
@@ -644,6 +636,5 @@ export {
   GuarantorFilter,
   // Reset Filters
   ResetFilters,
-  TestFilter,
   ElectionCommitteeFilter,
 };

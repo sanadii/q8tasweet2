@@ -2,8 +2,9 @@ import { APIClient } from "./api_helper";
 import * as url from "./url_helper";
 import axios from "axios";
 
+
 const restapi = axios.create({
-  baseURL: "http://q8tasweet.com/",
+  baseURL: process.env.REACT_APP_API_URL,
   headers: { "Content-Type": "multipart/form-data" },
 });
 

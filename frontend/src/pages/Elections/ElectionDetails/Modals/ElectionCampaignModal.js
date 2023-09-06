@@ -42,15 +42,6 @@ export const ElectionCampaignModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  //   const { campaign_id } = useSelector((state) => ({
-  //     campaign_id: state.Elections.Campaigns.id,
-  //   }));
-
-  //   const openModal = () => setCampaignModal(!campaignModal);
-  //   const toggleModal = () => {
-  //     setCampaignModal(!campaignModal);
-  //   };
-
   const openModal = () => setModal(!modal);
   const toggleModal = () => {
     setModal(!modal);
@@ -154,25 +145,22 @@ const AddElectionCampaignModal = ({ election_id, dispatch }) => {
     electionCampaigns: state.Elections.electionCampaigns,
   }));
 
-  const [electionCandidateList, setCandidateList] =
-    useState(electionCandidates);
-  const [electionCampaignList, setElectionCampaignList] =
-    useState(electionCampaigns);
+  // States
+  const [electionCandidateList, setElectionCandidateList] = useState(electionCandidates);
+  const [electionCampaignList, setElectionCampaignList] = useState(electionCampaigns);
+  const [searchElectionCandidateInput, setSearchElectionCandidateInput] = useState('');
+  const [filteredElectionCandidateList, setFilteredElectionCandidateList] = useState(electionCampaigns);
 
-  //   Add New ElectionCampaign Search & Filter
-  const [searchElectionCandidateInput, setSearchElectionCandidateInput] =
-    useState("");
-  const [campaignList, setElectionCandidateList] = useState(electionCampaigns);
-
+  // Update the filtered list when electionCandidates or search input changes
   useEffect(() => {
-    setCandidateList(
+    setFilteredElectionCandidateList(
       electionCandidateList.filter((electionCandidate) =>
         electionCandidate.name
           .toLowerCase()
           .includes(searchElectionCandidateInput.toLowerCase())
       )
     );
-  }, [electionCandidates, searchElectionCandidateInput]);
+  }, [electionCandidateList, searchElectionCandidateInput]);
 
   return (
     <>

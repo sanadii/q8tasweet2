@@ -1,32 +1,14 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import {
-  useTable,
-  useGlobalFilter,
-  useAsyncDebounce,
-  useSortBy,
-  useFilters,
-  useExpanded,
-  usePagination,
-  useRowSelect,
-} from "react-table";
-import {
-  Table,
-  Row,
-  Col,
-  Button,
-  Input,
-  CardBody,
-  CardHeader,
-} from "reactstrap";
+import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
+import { Table, Row, Col, Button, Input, CardBody, CardHeader } from "reactstrap";
 
 import {
   Filter,
-  DefaultColumnFilter,
+  DefaultColumnFilter,    // Can be removed, review the codes that can be used
   ResetFilters,
   StatusFilter,
   PriorityFilter,
-  TestFilter,
   ElectionCategoryFilter,
   CandidateGenderFilter,
   CampaignRankFilter,
@@ -36,16 +18,10 @@ import {
   GuarantorFilter,
   ElectionCommitteeFilter,
   GuaranteeAttendanceFilter,
-  // Others
-  modal,
-  setModal,
-  modalMode,
-  setModalMode,
-  handleAddButtonClick,
-  toggle,
 } from "./Filters";
 
 import { CustomersGlobalFilter } from "../../Components/Common/GlobalSearchFilter";
+import { GlobalHeader } from "./GlobalHeader";
 
 // Define a default UI for filtering
 function GlobalFilter({
@@ -84,9 +60,9 @@ function GlobalFilter({
             <div
               className={
                 isProductsFilter ||
-                isContactsFilter ||
-                isCompaniesFilter ||
-                isNFTRankingFilter
+                  isContactsFilter ||
+                  isCompaniesFilter ||
+                  isNFTRankingFilter
                   ? "search-box me-2 mb-2 d-inline-block"
                   : "search-box me-2 mb-2 d-inline-block col-12"
               }
@@ -113,38 +89,40 @@ function GlobalFilter({
 }
 
 const TableContainer = ({
-  // Global Header
+  // Global Header -------------------------
   isGlobalHeader,
   isElectionHeader,
   isElectionCategoryFilter,
   isCampaignRankFilter,
   SearchPlaceholder,
-  GlobalHeader,
+  GlobalHeaderTitle,
 
   // Button
   isAddButton,
   AddButtonText,
   handleItemClick,
 
-  // For all component
+  // Actions
+  handleAddButtonClick,
+  handleEntryClick,
+  onTabChange,
+
+  // Constants
   setIsEdit,
   toggle,
   setDeleteModalMulti,
-  handleAddButtonClick,
   campaignMember,
-  // Table
-  columns,
-  data,
-  isGlobalSearch,
-  isGlobalFilter,
+  setElectionList,
+  setCampaignMemberList,
+  setElectionCandidateList,
+  setCampaignGuaranteeList,
+  setElectionAttendeeList,
+  isMultiDeleteButton,
 
-  // Election
-  handleEntryClick,
-  // Field Filters
+  // Filters -------------------------
   isStatusFilter,
   isPriorityFilter,
   isCandidateGenderFilter,
-
   isGuaranteeGenderFilter,
   isGuaranteeAttendanceFilter,
   isAttendeesGenderFilter,
@@ -152,24 +130,25 @@ const TableContainer = ({
   isGuaranteeStatusFilter,
   isGuarantorFilter,
   isResetFilters,
-  onTabChange,
   isTestFilter,
 
-  setElectionList,
-  setCampaignMemberList,
-  setElectionCandidateList,
-  setCampaignGuaranteeList,
-  setElectionAttendeeList,
-  isMultiDeleteButton,
   // Other Filters
   isCustomerFilter,
 
+  // Table -------------------------
+  columns,
+  data,
+  isGlobalSearch,
+  isGlobalFilter,
+
+  // Table Styling
   customPageSize,
   tableClass,
   theadClass,
   trClass,
   thClass,
   divClass,
+
 }) => {
   const {
     getTableProps,
@@ -227,12 +206,25 @@ const TableContainer = ({
   return (
     <Fragment>
       {isGlobalHeader && (
-        <div className="card-header border-0">
-          <Row className="g-3 mb-4">
+
+        <CardHeader>
+          <Row>
+            <GlobalHeader
+              GlobalHeaderTitle={GlobalHeaderTitle}
+              AddButtonText={AddButtonText}
+              handleEntryClick={handleEntryClick}
+              handleAddButtonClick={handleAddButtonClick}
+              onTabChange={onTabChange}
+            />
+          </Row>
+          {/* <Row>
+            <GlobalFilter />
+          </Row> */}
+          <Row className="g-4 mb-4">
             <div className="d-flex align-items-center">
               <Col>
                 <h4>
-                  <b>{GlobalHeader}</b>
+                  <b>{GlobalHeaderTitle}</b>
                 </h4>
               </Col>
               <div className="flex-shrink-0">
@@ -287,9 +279,8 @@ const TableContainer = ({
               <div className="flex-shrink-0"></div>
             </div>
           </Row>
-        </div>
+        </CardHeader>
       )}
-
       {isGlobalFilter && (
         <CardBody className="border border-dashed border-end-0 border-start-0">
           <Row className="mb-3">
