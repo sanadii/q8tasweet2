@@ -21,7 +21,8 @@ import {
 } from "./Filters";
 
 import { CustomersGlobalFilter } from "../../Components/Common/GlobalSearchFilter";
-import { GlobalHeader } from "./GlobalHeader";
+import TableContainerHeader from "./TableContainerHeader";
+import TableContainerFooter from "./TableContainerFooter";
 
 // Define a default UI for filtering
 function GlobalFilter({
@@ -209,7 +210,7 @@ const TableContainer = ({
 
         <CardHeader>
           <Row>
-            <GlobalHeader
+            <TableContainerHeader
               GlobalHeaderTitle={GlobalHeaderTitle}
               AddButtonText={AddButtonText}
               handleEntryClick={handleEntryClick}

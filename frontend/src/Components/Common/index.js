@@ -4,6 +4,8 @@
 export { ExportCSVModal } from "./ExportCSVModal";
 export { default as TableContainer } from "./TableContainer";
 export { default as TableHeaderContainer } from "./TableHeaderContainer";
+export { default as TableContainerHeader } from "./TableContainerHeader";
+export { default as TableContainerFooter } from "./TableContainerFooter";
 
 // Modals
 export { DeleteModal } from "./DeleteModal";
