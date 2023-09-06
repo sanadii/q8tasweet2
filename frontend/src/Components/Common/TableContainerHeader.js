@@ -16,7 +16,7 @@ import {
     GuaranteeAttendanceFilter,
 } from "./Filters";
 
-const GlobalHeader = ({
+const TableContainerHeader = ({
     // Title
     GlobalHeaderTitle,
 
@@ -112,11 +112,6 @@ const GlobalFilter = ({
     )
 }
 
-const GlobalFooter = ({ }) => {
-}
 
-export {
-    GlobalHeader,
-    GlobalFilter,
-    GlobalFooter,
-}
+
+export default TableContainerHeader
