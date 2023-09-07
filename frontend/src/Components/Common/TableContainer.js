@@ -1,102 +1,25 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
-import { Table, Row, Col, Button, Input, CardBody, CardHeader } from "reactstrap";
+import { Table, Row, Col, Button, Input, CardBody, CardHeader, CardFooter } from "reactstrap";
 
 import {
-  Filter,
   DefaultColumnFilter,    // Can be removed, review the codes that can be used
-  ResetFilters,
-  StatusFilter,
-  PriorityFilter,
-  ElectionCategoryFilter,
-  CandidateGenderFilter,
-  CampaignRankFilter,
-  GuaranteeGenderFilter,
-  AttendeeGenderFilter,
-  GuaranteeStatusFilter,
-  GuarantorFilter,
-  ElectionCommitteeFilter,
-  GuaranteeAttendanceFilter,
 } from "./Filters";
 
-import { CustomersGlobalFilter } from "../../Components/Common/GlobalSearchFilter";
-import TableContainerHeader from "./TableContainerHeader";
-import TableContainerFooter from "./TableContainerFooter";
+import { TableContainerHeader, TableContainerFooter, TableContainerFilters } from "../Common";
 
 // Define a default UI for filtering
-function GlobalFilter({
-  preGlobalFilteredRows,
-  globalFilter,
-  setGlobalFilter,
-  isCustomerFilter,
-  isContactsFilter,
-  isCompaniesFilter,
 
-  isMultiDeleteButton,
-  isNFTRankingFilter,
-  isProductsFilter,
-  SearchPlaceholder,
-  GlobalHeader,
-  AddButtonText,
-  handleItemClick,
-  modal,
-  setModal,
-  setModalMode,
-  handleAddButtonClick,
-  toggle,
-  campaignMember,
-}) {
-  const count = preGlobalFilteredRows.length;
-  const [value, setValue] = React.useState(globalFilter);
-  const onChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 200);
-
-  return (
-    <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <form>
-          <Col>
-            <div
-              className={
-                isProductsFilter ||
-                  isContactsFilter ||
-                  isCompaniesFilter ||
-                  isNFTRankingFilter
-                  ? "search-box me-2 mb-2 d-inline-block"
-                  : "search-box me-2 mb-2 d-inline-block col-12"
-              }
-            >
-              <input
-                onChange={(e) => {
-                  setValue(e.target.value);
-                  onChange(e.target.value);
-                }}
-                id="search-bar-0"
-                type="text"
-                className="form-control search /"
-                placeholder={SearchPlaceholder}
-                value={value || ""}
-              />
-              <i className="bx bx-search-alt search-icon"></i>
-            </div>
-            {isCustomerFilter && <CustomersGlobalFilter />}
-          </Col>
-        </form>
-      </div>
-    </React.Fragment>
-  );
-}
 
 const TableContainer = ({
   // Global Header -------------------------
-  isGlobalHeader,
+  isTableContainerHeader,
   isElectionHeader,
   isElectionCategoryFilter,
   isCampaignRankFilter,
-  SearchPlaceholder,
-  GlobalHeaderTitle,
+  ContainerHeaderTitle,
+  isMultiDeleteButton,
 
   // Button
   isAddButton,
@@ -108,7 +31,7 @@ const TableContainer = ({
   handleEntryClick,
   onTabChange,
 
-  // Constants
+  // Constants, going where?
   setIsEdit,
   toggle,
   setDeleteModalMulti,
@@ -118,9 +41,9 @@ const TableContainer = ({
   setElectionCandidateList,
   setCampaignGuaranteeList,
   setElectionAttendeeList,
-  isMultiDeleteButton,
 
   // Filters -------------------------
+  SearchPlaceholder,
   isStatusFilter,
   isPriorityFilter,
   isCandidateGenderFilter,
@@ -132,6 +55,9 @@ const TableContainer = ({
   isGuarantorFilter,
   isResetFilters,
   isTestFilter,
+  isGlobalSearch,
+  customPageSize,
+
 
   // Other Filters
   isCustomerFilter,
@@ -139,11 +65,9 @@ const TableContainer = ({
   // Table -------------------------
   columns,
   data,
-  isGlobalSearch,
   isGlobalFilter,
 
   // Table Styling
-  customPageSize,
   tableClass,
   theadClass,
   trClass,
@@ -206,159 +130,68 @@ const TableContainer = ({
 
   return (
     <Fragment>
-      {isGlobalHeader && (
+      {isTableContainerHeader && (
+        <CardBody>
+          <TableContainerHeader
+            // Title
+            ContainerHeaderTitle={ContainerHeaderTitle}
 
-        <CardHeader>
-          <Row>
-            <TableContainerHeader
-              GlobalHeaderTitle={GlobalHeaderTitle}
-              AddButtonText={AddButtonText}
-              handleEntryClick={handleEntryClick}
-              handleAddButtonClick={handleAddButtonClick}
+            // Add Button
+            AddButtonText={AddButtonText}
+            handleEntryClick={handleEntryClick}
+            handleAddButtonClick={handleAddButtonClick}
+            onTabChange={onTabChange}
+
+            // Delete Button
+            isMultiDeleteButton={isMultiDeleteButton}
+            setDeleteModalMulti={setDeleteModalMulti}
+          />
+
+          {isGlobalFilter && (
+            <TableContainerFilters
+              // Upper Filters -------------------------
+              isElectionCategoryFilter={isElectionCategoryFilter}
+              isCampaignRankFilter={isCampaignRankFilter}
+
+              // Filters -------------------------
+              SearchPlaceholder={SearchPlaceholder}
+              isStatusFilter={isStatusFilter}
+              isPriorityFilter={isPriorityFilter}
+              isCandidateGenderFilter={isCandidateGenderFilter}
+              isGuaranteeGenderFilter={isGuaranteeGenderFilter}
+              isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
+              isAttendeesGenderFilter={isAttendeesGenderFilter}
+              isCommitteeFilter={isCommitteeFilter}
+              isGuaranteeStatusFilter={isGuaranteeStatusFilter}
+              isGuarantorFilter={isGuarantorFilter}
+              isResetFilters={isResetFilters}
+              isTestFilter={isTestFilter}
+
+              // Other Filters
+              isCustomerFilter={isCustomerFilter}
+
+              // Constant  -------------------------
+              campaignMember={campaignMember}
+              setElectionList={setElectionList}
+              setCampaignMemberList={setCampaignMemberList}
+              setElectionCandidateList={setElectionCandidateList}
+              setCampaignGuaranteeList={setCampaignGuaranteeList}
+              setElectionAttendeeList={setElectionAttendeeList}
+
+              // Actions
               onTabChange={onTabChange}
+
+              // From useTable
+              preGlobalFilteredRows={preGlobalFilteredRows}
+              setPageSize={setPageSize}
+              gotoPage={gotoPage}
+              setGlobalFilter={setGlobalFilter}
             />
-          </Row>
-          {/* <Row>
-            <GlobalFilter />
-          </Row> */}
-          <Row className="g-4 mb-4">
-            <div className="d-flex align-items-center">
-              <Col>
-                <h4>
-                  <b>{GlobalHeaderTitle}</b>
-                </h4>
-              </Col>
-              <div className="flex-shrink-0">
-                <div className="d-flex flex-wrap gap-2">
-                  {isAddButton ? (
-                    <Button
-                      type="button"
-                      className="btn btn-primary add-btn me-1"
-                      onClick={() => {
-                        handleEntryClick();
-                      }}
-                    >
-                      <i className="mdi mdi-plus-circle-outline me-1" />
-                      {AddButtonText}
-                    </Button>
-                  ) : (
-                    <Button
-                      className="btn btn-primary add-btn me-1"
-                      onClick={() => {
-                        handleAddButtonClick("AddModal");
-                      }}
-                    >
-                      <i className="ri-add-line align-bottom me-1"></i>
-                      {AddButtonText}
-                    </Button>
-                  )}
-                  {isMultiDeleteButton && (
-                    <button
-                      className="btn btn-soft-danger"
-                      onClick={() => setDeleteModalMulti(true)}
-                    >
-                      <i className="ri-delete-bin-2-line"></i>
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </Row>
-          <Row>
-            <div className="d-flex align-items-center ">
-              <div className="col">
-                {isElectionCategoryFilter && (
-                  <ElectionCategoryFilter setElectionList={setElectionList} />
-                )}
-                {isCampaignRankFilter && (
-                  <CampaignRankFilter
-                    setCampaignMemberList={setCampaignMemberList}
-                    onTabChange={onTabChange}
-                  />
-                )}
-              </div>
-              <div className="flex-shrink-0"></div>
-            </div>
-          </Row>
-        </CardHeader>
-      )}
-      {isGlobalFilter && (
-        <CardBody className="border border-dashed border-end-0 border-start-0">
-          <Row className="mb-3">
-            <div className="d-flex align-items-center ">
-              <div className="col d-flex g-2 row">
-                {isGlobalSearch && (
-                  <select
-                    className="form-select"
-                    value={pageSize}
-                    onChange={onChangeInSelect}
-                  >
-                    {[10, 20, 30, 40, 50].map((pageSize) => (
-                      <option key={pageSize} value={pageSize}>
-                        Show {pageSize}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                {isGlobalFilter && (
-                  <GlobalFilter
-                    preGlobalFilteredRows={preGlobalFilteredRows}
-                    globalFilter={state.globalFilter}
-                    setGlobalFilter={setGlobalFilter}
-                    isCustomerFilter={isCustomerFilter}
-                    // isElectionListFilter={isElectionListFilter}
-                    SearchPlaceholder={SearchPlaceholder}
-                  />
-                )}
-                {isStatusFilter && (
-                  <StatusFilter setElectionList={setElectionList} />
-                )}
-                {isPriorityFilter && (
-                  <PriorityFilter setElectionList={setElectionList} />
-                )}
-                {isCandidateGenderFilter && (
-                  <CandidateGenderFilter
-                    setElectionCandidateList={setElectionCandidateList}
-                  />
-                )}
-                {isGuaranteeAttendanceFilter && (
-                  <GuaranteeAttendanceFilter
-                    setCampaignGuaranteeList={setCampaignGuaranteeList}
-                  />
-                )}
-                {isGuaranteeGenderFilter && (
-                  <GuaranteeGenderFilter
-                    setCampaignGuaranteeList={setCampaignGuaranteeList}
-                  />
-                )}
-                {isAttendeesGenderFilter && (
-                  <AttendeeGenderFilter
-                    setElectionAttendeeList={setElectionAttendeeList}
-                  />
-                )}
-                {isCommitteeFilter && (
-                  <ElectionCommitteeFilter
-                    setElectionAttendeeList={setElectionAttendeeList}
-                  />
-                )}
-                {isGuaranteeStatusFilter && (
-                  <GuaranteeStatusFilter
-                    setCampaignGuaranteeList={setCampaignGuaranteeList}
-                  />
-                )}
-                {isGuarantorFilter && (
-                  <GuarantorFilter
-                    setCampaignGuaranteeList={setCampaignGuaranteeList}
-                  />
-                )}
-              </div>
-              <div className="flex-shrink-0">
-                {isResetFilters && <ResetFilters />}
-              </div>
-            </div>
-          </Row>
+          )}
         </CardBody>
       )}
+
+
 
       <div className="card-body pt-0">
         <div className={divClass}>
@@ -444,6 +277,9 @@ const TableContainer = ({
           </div>
         </Col>
       </Row>
+      <CardFooter>
+        <TableContainerFooter />
+      </CardFooter>
     </Fragment>
   );
 };
