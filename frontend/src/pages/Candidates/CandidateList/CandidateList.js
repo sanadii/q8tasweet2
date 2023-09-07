@@ -634,8 +634,8 @@ const ElectionList = () => {
             {isElectionSuccess && elections.length ? (
               <TableContainer
                 // Header
-                isGlobalHeader={true}
-                GlobalHeader="Candidate Guarantees"
+                isTableContainerHeader={true}
+                ContainerHeaderTitle="Candidate Guarantees"
                 AddButtonText="Add New Candidate"
                 setDeleteModalMulti={setDeleteModalMulti}
                 setIsEdit={setIsEdit}

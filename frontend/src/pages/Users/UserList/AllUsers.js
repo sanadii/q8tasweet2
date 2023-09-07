@@ -309,13 +309,13 @@ const AllUsers = () => {
             {isUserSuccess && users.length ? (
               <TableContainer
                 // Header
-                isGlobalHeader={true}
-                GlobalHeader="User Guarantees"
+                isTableContainerHeader={true}
+                ContainerHeaderTitle="User Guarantees"
                 setDeleteModalMulti={setDeleteModalMulti}
                 setIsEdit={setIsEdit}
                 toggle={toggle}
                 isMultiDeleteButton={isMultiDeleteButton}
-                isAddButton={true}
+                isContainerAddButton={true}
                 AddButtonText="Add New User"
                 isEdit={isEdit}
                 // Filters

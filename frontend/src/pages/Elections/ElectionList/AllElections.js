@@ -375,14 +375,14 @@ const AllElections = () => {
             {isElectionSuccess && elections.length ? (
               <TableContainer
                 // Header
-                isGlobalHeader={true}
-                GlobalHeader="Election Guarantees"
+                isTableContainerHeader={true}
+                ContainerHeaderTitle="Election Guarantees"
                 setDeleteModalMulti={setDeleteModalMulti}
                 setIsEdit={setIsEdit}
                 toggle={toggle}
                 isMultiDeleteButton={isMultiDeleteButton}
 
-                isAddButton={true}
+                isContainerAddButton={true}
                 AddButtonText="Add New Election"
                 isEdit={isEdit}
 

@@ -449,8 +449,8 @@ const MembersTab = () => {
                 {campaignMemberList ? (
                   <TableContainer
                     // Global Header -------------------------
-                    isGlobalHeader={true}
-                    GlobalHeaderTitle="Campaign Members"
+                    isTableContainerHeader={true}
+                    ContainerHeaderTitle="Campaign Members"
 
                     AddButtonText="Add New Member"
                     setDeleteModalMulti={setDeleteModalMulti}
@@ -465,11 +465,13 @@ const MembersTab = () => {
                     toggle={toggle}
 
                     // Filters -------------------------
-                    isGlobalFilter={true}
-                    preGlobalFilteredRows={true}
                     isCampaignRankFilter={true}
                     onTabChange={handleTabChange}
                     isFieldFilter={true}
+
+                    // Global Filters
+                    isGlobalFilter={true}
+                    preGlobalFilteredRows={true}
                     SearchPlaceholder="Search for Campaign Members..."
 
                     // Data -------------------------

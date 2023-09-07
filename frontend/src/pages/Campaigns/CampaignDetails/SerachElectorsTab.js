@@ -371,7 +371,7 @@ const GuaranteesTab = ({ campaignGuarantees }) => {
                     <TableContainer
                       //
                       // Header
-                      isGlobalHeader={true}
+                      isTableContainerHeader={true}
                       AddButtonText="Add New Member"
                       setDeleteModalMulti={setDeleteModalMulti}
                       setIsEdit={setIsEdit}

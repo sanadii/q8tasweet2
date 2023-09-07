@@ -348,8 +348,8 @@ const CandidatesTab = () => {
                         customPageSize={50}
 
                         // Header
-                        isGlobalHeader={true}
-                        GlobalHeader="Candidate Candidates"
+                        isTableContainerHeader={true}
+                        ContainerHeaderTitle="Candidate Candidates"
                         AddButton="Add Candidate Candidate"
                         setDeleteModalMulti={setDeleteModalMulti}
                         setIsEdit={setIsEdit}

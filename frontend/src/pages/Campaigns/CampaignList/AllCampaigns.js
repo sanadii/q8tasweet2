@@ -638,7 +638,7 @@ const AllCampaigns = () => {
                 setDeleteModalMulti={setDeleteModalMulti}
                 setIsEdit={setIsEdit}
                 toggle={toggle}
-                isGlobalHeader={true}
+                isTableContainerHeader={true}
 
                 // Filters
                 isGlobalFilter={true}

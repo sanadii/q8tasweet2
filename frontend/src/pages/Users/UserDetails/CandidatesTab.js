@@ -348,8 +348,8 @@ const UsersTab = () => {
                         customPageSize={50}
 
                         // Header
-                        isGlobalHeader={true}
-                        GlobalHeader="User Users"
+                        isTableContainerHeader={true}
+                        ContainerHeaderTitle="User Users"
                         AddButton="Add User User"
                         setDeleteModalMulti={setDeleteModalMulti}
                         setIsEdit={setIsEdit}

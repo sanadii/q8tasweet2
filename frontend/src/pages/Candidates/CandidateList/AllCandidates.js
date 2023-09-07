@@ -318,14 +318,14 @@ const AllCandidates = () => {
             {isCandidateSuccess && candidates.length ? (
               <TableContainer
                 // Header
-                isGlobalHeader={true}
-                GlobalHeader="Candidate Guarantees"
+                isTableContainerHeader={true}
+                ContainerHeaderTitle="Candidate Guarantees"
                 setDeleteModalMulti={setDeleteModalMulti}
                 setIsEdit={setIsEdit}
                 toggle={toggle}
                 isMultiDeleteButton={isMultiDeleteButton}
 
-                isAddButton={true}
+                isContainerAddButton={true}
                 AddButtonText="Add New Candidate"
                 isEdit={isEdit}
 
