@@ -1,32 +1,24 @@
+// --------------- React & Redux imports ---------------
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignGuarantee } from "../../../../store/actions";
+
+// --------------- Component & Constants imports ---------------
+import { GuaranteeStatusOptions } from "../../../../Components/constants";
+
+// --------------- Form & Validation imports ---------------
 import * as Yup from "yup";
 import { useFormik } from "formik";
+
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  Card,
-  CardBody,
-  Col,
-  Row,
-  Table,
-  Label,
-  Input,
-  Form,
-  FormFeedback,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "reactstrap";
-import { GuaranteeStatusOptions } from "../../../../Components/constants";
+
+// --------------- Reactstrap (UI) imports ---------------
+import { Col, Row, Table, Label, Input, Form, FormFeedback } from "reactstrap";
+
 
 const CampaignGuaranteesModalUpdate = ({
   campaignGuarantee,
-  toggle,
   setOnModalSubmit,
   campaignMembers,
 }) => {
@@ -53,6 +45,7 @@ const CampaignGuaranteesModalUpdate = ({
     return () => setOnModalSubmit(null); // Cleanup on unmount
   }, []);
 
+  // Initial Values ---------------
   const initialValues = {
     id: campaignGuarantee?.id || "",
     campaign: campaign,
@@ -62,12 +55,15 @@ const CampaignGuaranteesModalUpdate = ({
     notes: campaignGuarantee?.notes || "",
   };
 
+  // Validation ---------------
+
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: initialValues,
     validationSchema: Yup.object({
       status: Yup.number().integer().required("Status is required"),
     }),
+
     onSubmit: (values) => {
       const updatedCampaignGuarantee = {
         id: campaignGuarantee ? campaignGuarantee.id : 0,
@@ -80,7 +76,6 @@ const CampaignGuaranteesModalUpdate = ({
       };
       dispatch(updateCampaignGuarantee(updatedCampaignGuarantee));
       validation.resetForm();
-      toggle();
     },
   });
 

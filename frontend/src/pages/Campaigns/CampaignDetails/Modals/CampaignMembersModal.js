@@ -29,23 +29,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 // --------------- Reactstrap (UI) imports ---------------
 import {
-  Col,
-  Row,
   ModalBody,
-  Label,
-  Input,
   Modal,
   ModalHeader,
-  Form,
   ModalFooter,
   Button,
-  FormFeedback,
 } from "reactstrap";
 
 export const CampaignMembersModal = ({
   modal,
   toggle,
-  setModal,
   modalMode,
   campaignMember,
 }) => {
@@ -53,13 +46,16 @@ export const CampaignMembersModal = ({
 
   // --------------- Define States ---------------
   const { currentCampaignMember, campaignMembers, campaignId } = useSelector(
-    (state) => ({
-      campaignId: state.Campaigns.campaignDetails.id,
-      campaignId: state.Campaigns.campaignDetails.id,
-      currentCampaignMember: state.Campaigns.currentCampaignMember,
-      campaignMembers: state.Campaigns.campaignMembers,
-    })
+    (state) => {
+      console.log("Redux state for Campaigns:", state.Campaigns);
+      return {
+        campaignId: state.Campaigns.campaignDetails.id,
+        currentCampaignMember: state.Campaigns.currentCampaignMember,
+        campaignMembers: state.Campaigns.campaignMembers,
+      };
+    }
   );
+  
 
   // --------------- Set Constants ---------------
   const [onModalSubmit, setOnModalSubmit] = useState(null);
@@ -69,6 +65,10 @@ export const CampaignMembersModal = ({
   let ModalButtonText;
   let modalName = "Campaign Member";
 
+  useEffect(() => {
+    console.log("CampaignMembersModal - campaignMember prop:", campaignMember);
+  }, [campaignMember]);
+  
   switch (modalMode) {
     case "CallModal":
       ModalTitle = modalName + " Call";
@@ -116,6 +116,7 @@ export const CampaignMembersModal = ({
         <ModalContent
           campaignMember={campaignMember}
           setOnModalSubmit={setOnModalSubmit}
+          toggle={toggle}
         />
       </ModalBody>
       <ModalFooter>

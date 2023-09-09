@@ -32,12 +32,12 @@ const MyCartDropdown = () => {
         setCartItem(cartData.length);
     };
 
-    const removeItem = (ele) => {
-        var price = ele.closest(".dropdown-item-cart").querySelector('.cart-item-price').innerHTML;
+    const removeItem = (checkedEntry) => {
+        var price = checkedEntry.closest(".dropdown-item-cart").querySelector('.cart-item-price').innerHTML;
         var subTotal = cardItemTotal.current.innerHTML;
         cardItemTotal.current.innerHTML = subTotal - price;
 
-        ele.closest(".dropdown-item-cart").remove();
+        checkedEntry.closest(".dropdown-item-cart").remove();
         const element = document.querySelectorAll(".dropdown-item-cart").length;
         const ecart = document.getElementById("empty-cart");
 

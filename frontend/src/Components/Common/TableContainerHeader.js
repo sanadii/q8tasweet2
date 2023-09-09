@@ -5,10 +5,14 @@ const TableContainerHeader = ({
     ContainerHeaderTitle,
 
     // Add Button
+    isAddButton,
     isContainerAddButton,
     AddButtonText,
     handleEntryClick,
     handleAddButtonClick,
+
+    // Add Elector Button
+    isAddElectorButton,
 
     // Delete Button
     isMultiDeleteButton,
@@ -25,7 +29,7 @@ const TableContainerHeader = ({
                 </Col>
                 <div className="flex-shrink-0">
                     <div className="d-flex flex-wrap gap-2">
-                        {isContainerAddButton ? (
+                        {isContainerAddButton && (
                             <Button
                                 type="button"
                                 className="btn btn-primary add-btn me-1"
@@ -36,7 +40,8 @@ const TableContainerHeader = ({
                                 <i className="mdi mdi-plus-circle-outline me-1" />
                                 {AddButtonText}
                             </Button>
-                        ) : (
+                        )}
+                        {isAddButton && (
                             <Button
                                 className="btn btn-primary add-btn me-1"
                                 onClick={() => {
@@ -47,6 +52,17 @@ const TableContainerHeader = ({
                                 {AddButtonText}
                             </Button>
                         )}
+                        {/* {isAddElectorButton && (
+                            <Button
+                                className="btn btn-primary add-btn me-1"
+                                onClick={() => {
+                                    // I want to go to 
+                                }}
+                            >
+                                <i className="ri-add-line align-bottom me-1"></i>
+                                {AddButtonText}
+                            </Button>
+                        )} */}
                         {isMultiDeleteButton && (
                             <button
                                 className="btn btn-soft-danger"

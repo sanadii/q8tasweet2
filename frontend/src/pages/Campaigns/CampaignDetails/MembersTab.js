@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 // --------------- Component & Constants imports ---------------
-import { ImageCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
+import { ImageCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import { MemberRankOptions, MemberStatusOptions } from "../../../Components/constants";
+import useUserRoles from "../../../Components/Hooks/useUserRoles";
 import CampaignMembersModal from "./Modals/CampaignMembersModal";
 
 // --------------- Store imports ---------------
@@ -30,8 +31,10 @@ const MembersTab = () => {
     error: state.Campaigns.error,
   }));
 
+  // --------------- Constants ---------------
   const [campaignMember, setCampaignMember] = useState([]);
   const [campaignMemberList, setCampaignMemberList] = useState(campaignMembers);
+  const { isAdmin, isSubscriber } = useUserRoles();
 
   useEffect(() => {
     setCampaignMemberList(campaignMembers);
@@ -92,8 +95,7 @@ const MembersTab = () => {
   };
 
   const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(
-      ".campaignMemberCheckBox:checked"
+    const checkedEntry = document.querySelectorAll(".campaignMemberCheckBox:checked"
     );
     checkedEntry.length > 0
       ? setIsMultiDeleteButton(true)
@@ -111,16 +113,12 @@ const MembersTab = () => {
   // Modal Constants
   const [modal, setModal] = useState(false);
   const [modalMode, setModalMode] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Toggle
-  const toggle = useCallback(() => {
-    if (modal) {
-      setModal(false);
-      setCampaignMember(null);
-    } else {
-      setModal(true);
-    }
-  }, [modal]);
+  const toggle = () => {
+    setIsModalVisible(!isModalVisible);
+  };
 
   const handleCampaignMemberClicks = () => {
     setCampaignMember("");
@@ -160,7 +158,7 @@ const MembersTab = () => {
   );
 
   const columns = useMemo(() => {
-    const memberColumn = [
+    const checkColumn = [
       {
         Header: (
           <input
@@ -180,8 +178,10 @@ const MembersTab = () => {
             />
           );
         },
-        id: "id",
-      },
+        id: "#",
+      }
+    ];
+    const memberColumn = [
       {
         Header: "ID",
         Cell: (cellProps) => {
@@ -408,6 +408,7 @@ const MembersTab = () => {
 
     // concatenate in the order you prefer
     return memberColumn.concat(
+      // memberColumn,
       rankColumn,
       mobileColumn,
       teamColumn,
@@ -419,6 +420,8 @@ const MembersTab = () => {
       actionColumn
     );
   }, [handleCampaignMemberClick, checkedAll, activeTab]);
+
+
 
   return (
     <React.Fragment>
@@ -436,7 +439,7 @@ const MembersTab = () => {
         onCloseClick={() => setDeleteModalMulti(false)}
       />
       <CampaignMembersModal
-        modal={modal}
+        modal={isModalVisible}
         modalMode={modalMode}
         toggle={toggle}
         campaignMember={campaignMember}
@@ -444,25 +447,33 @@ const MembersTab = () => {
       <Row>
         <Col lg={12}>
           <Card id="memberList">
-            <CardBody className="pt-0">
+            <CardBody>
               <div>
+                <TableContainerHeader
+                  // Title
+                  ContainerHeaderTitle="Campaign Members"
+
+                  // Add Button
+                  isAddButton={true}
+                  AddButtonText="Add New Member"
+                  handleAddButtonClick={handleCampaignMemberClicks}
+                  toggle={toggle}
+
+                  // Delete Button
+                  isMultiDeleteButton={isMultiDeleteButton}
+                  setDeleteModalMulti={setDeleteModalMulti}
+                />
+
                 {campaignMemberList ? (
                   <TableContainer
-                    // Global Header -------------------------
-                    isTableContainerHeader={true}
-                    ContainerHeaderTitle="Campaign Members"
-
-                    AddButtonText="Add New Member"
-                    setDeleteModalMulti={setDeleteModalMulti}
-                    setIsEdit={setIsEdit}
-                    isMultiDeleteButton={isMultiDeleteButton}
-                    campaignMember={campaignMember}
+                    // Others to be investigateed
                     modal={modal}
                     setModal={setModal}
                     modalMode="AddModal"
                     setModalMode={setModalMode}
-                    handleAddButtonClick={handleCampaignMemberClicks}
                     toggle={toggle}
+                    isTableContainerFilter={true}
+                    campaignMember={campaignMember}
 
                     // Filters -------------------------
                     isCampaignRankFilter={true}

@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  deleteElectionAttendee,
-  updateElectionAttendee,
-} from "../../../store/actions";
+import { deleteElectionAttendee, updateElectionAttendee } from "../../../store/actions";
 
 // Component imports
 import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
-import {
-  Loader,
-  DeleteModal,
-  TableHeaderContainer,
-  TableContainer,
-} from "../../../Components/Common";
+import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../Components/Common";
+
 import ElectionAttendeesModal from "./Modals/ElectionAttendeesModal";
 import { GuaranteeStatusOptions } from "../../../Components/constants";
 
@@ -25,15 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AttendeesList = () => {
   const dispatch = useDispatch();
 
-  const {
-    electionId,
-    // userId,
-    electionAttendees,
-    electionCommittees,
-    campaignMembers,
-    isElectionAttendeeSuccess,
-    error,
-  } = useSelector((state) => ({
+  const { electionId, electionAttendees, electionCommittees, campaignMembers, isElectionAttendeeSuccess, error } = useSelector((state) => ({
     electionId: state.Campaigns.campaignDetails.election_id,
     // userId: state.Users.userDetails.user_id,
     electionAttendees: state.Campaigns.electionAttendees,
@@ -174,27 +159,27 @@ const AttendeesList = () => {
 
   const columns = useMemo(
     () => [
-      {
-        Header: (
-          <input
-            type="checkbox"
-            id="checkBoxAll"
-            className="form-check-input"
-            onClick={() => checkedAll()}
-          />
-        ),
-        Cell: (cellProps) => {
-          return (
-            <input
-              type="checkbox"
-              className="electionAttendeeCheckBox form-check-input"
-              value={cellProps.row.original.id}
-              onChange={() => deleteCheckbox()}
-            />
-          );
-        },
-        id: "id",
-      },
+      // {
+      //   Header: (
+      //     <input
+      //       type="checkbox"
+      //       id="checkBoxAll"
+      //       className="form-check-input"
+      //       onClick={() => checkedAll()}
+      //     />
+      //   ),
+      //   Cell: (cellProps) => {
+      //     return (
+      //       <input
+      //         type="checkbox"
+      //         className="electionAttendeeCheckBox form-check-input"
+      //         value={cellProps.row.original.id}
+      //         onChange={() => deleteCheckbox()}
+      //       />
+      //     );
+      //   },
+      //   id: "#",
+      // },
       {
         Header: "Name",
         Cell: (cellProps) => {
@@ -307,36 +292,44 @@ const AttendeesList = () => {
       />
       <Row>
         <Col lg={12}>
-          <Card>
-            <CardHeader>
-              <Row className="mb-2">
-                <h4>
-                  <b>Campaign Attendees</b>
-                </h4>
-              </Row>
-            </CardHeader>
-            <CardBody className="pt-0">
+          <Card id="memberList">
+            <CardBody>
               <div>
+                <TableContainerHeader
+                  // Title
+                  ContainerHeaderTitle="Election Attendees"
+
+                  // Add Elector Button
+                  // isAddElectorButton={true}
+                  // AddButtonText="Add New Guarantee"
+                  // handleAddButtonClick={handleCampaignMemberClicks}
+                  toggle={toggle}
+
+                  // Delete Button
+                  isMultiDeleteButton={isMultiDeleteButton}
+                  setDeleteModalMulti={setDeleteModalMulti}
+                />
                 {electionAttendeeList ? (
                   <TableContainer
-                    // Data
+                    // Filters -------------------------
+                    isTableContainerFilter={true}
+                    isAttendeesGenderFilter={true}
+                    isCommitteeFilter={true}
+
+                    // Global Filters
+                    isGlobalFilter={true}
+                    preGlobalFilteredRows={true}
+                    SearchPlaceholder="Search for Campaign Guarantees..."
+                    onTabChange={handleTabChange}
+
+                    // Data -------------------------
                     columns={columns}
                     data={electionAttendeeList || []}
                     customPageSize={50}
-                    // Header
-                    setDeleteModalMulti={setDeleteModalMulti}
                     setElectionAttendeeList={setElectionAttendeeList}
-                    toggle={toggle}
-                    isMultiDeleteButton={isMultiDeleteButton}
-                    // Filters
-                    preGlobalFilteredRows={true}
-                    isGlobalFilter={true}
-                    isFieldFilter={true}
-                    isAttendeesGenderFilter={true}
-                    isCommitteeFilter={true}
-                    onTabChange={handleTabChange}
-                    SearchPlaceholder="Search for Campaign Guarantees..."
-                    // Styling
+
+
+                    // Styling -------------------------
                     className="custom-header-css"
                     divClass="table-responsive table-card mb-2"
                     tableClass="align-middle table-nowrap"

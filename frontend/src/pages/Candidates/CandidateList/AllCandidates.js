@@ -138,15 +138,15 @@ const AllCandidates = () => {
   // Checked All
   const checkedAll = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
-    const ele = document.querySelectorAll(".candidateCheckBox");
+    const checkedEntry = document.querySelectorAll(".candidateCheckBox");
 
     if (checkall.checked) {
-      ele.forEach((ele) => {
-        ele.checked = true;
+      checkedEntry.forEach((checkedEntry) => {
+        checkedEntry.checked = true;
       });
     } else {
-      ele.forEach((ele) => {
-        ele.checked = false;
+      checkedEntry.forEach((checkedEntry) => {
+        checkedEntry.checked = false;
       });
     }
     deleteCheckbox();
@@ -169,11 +169,11 @@ const AllCandidates = () => {
   };
 
   const deleteCheckbox = () => {
-    const ele = document.querySelectorAll(".candidateCheckBox:checked");
-    ele.length > 0
+    const checkedEntry = document.querySelectorAll(".candidateCheckBox:checked");
+    checkedEntry.length > 0
       ? setIsMultiDeleteButton(true)
       : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(ele);
+    setSelectedCheckBoxDelete(checkedEntry);
   };
 
   const columns = useMemo(

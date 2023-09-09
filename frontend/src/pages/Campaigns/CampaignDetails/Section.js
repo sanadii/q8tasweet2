@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  Col,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  TabContent,
-  TabPane,
-} from "reactstrap";
+import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import classnames from "classnames";
 
-import {
-  ImageLargeCircle,
-  ImageCampaignBackground,
-} from "../../../Components/Common/ImageFrames";
+// --------------- Component, Constants, Hooks Imports ---------------
+import { ImageLargeCircle, ImageCampaignBackground } from "../../../Components/Common";
 import { MemberRankOptions } from "../../../Components/constants";
+import useUserRoles from "../../../Components/Hooks/useUserRoles";
 
 import SwiperCore, { Autoplay } from "swiper";
 
@@ -52,8 +43,10 @@ const Section = ({
 }) => {
   SwiperCore.use([Autoplay]);
 
+  // --------------- Constants ---------------
   const [activeTab, setActiveTab] = useState("1");
   const [activityTab, setActivityTab] = useState("1");
+  const { isAdmin, isSubscriber } = useUserRoles();
 
   const rankId = currentCampaignMember.rank;
   const currentCampaignMemberRank = MemberRankOptions.find(
@@ -217,8 +210,7 @@ const Section = ({
                 </NavItem>
               </Nav >
 
-              {currentUser && currentUser.is_staff === true && (
-
+              {isAdmin && (
                 <div className="flex-shrink-0">
                   <NavItem className="btn btn-success">
                     <NavLink
@@ -228,7 +220,7 @@ const Section = ({
                         toggleTab("9");
                       }}
                     >
-                      <i className="ri-edit-box-line align-bottom"></i>
+                      <i className="ri-edit-box-line align-bottom me-2"></i>
                       <span className="d-none d-md-inline-block">
                         Edit
                       </span>

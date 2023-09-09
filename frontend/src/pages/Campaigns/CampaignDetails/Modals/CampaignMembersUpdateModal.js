@@ -1,9 +1,9 @@
-// --------------- React & Redux imports ---------------
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+// React & Redux
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "../../../../store/actions";
 
-// --------------- Component & Constants imports ---------------
+// Component & Constants imports 
 import { MemberRankOptions } from "../../../../Components/constants";
 
 // --------------- Form validation imports ---------------
@@ -11,29 +11,15 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // --------------- Reactstrap (UI) imports ---------------
-import {
-  Col,
-  Row,
-  ModalBody,
-  Label,
-  Input,
-  Form,
-  FormFeedback,
-} from "reactstrap";
+import { Col, Row, ModalBody, Label, Input, Form, FormFeedback } from "reactstrap";
 
 const CampaignMembersUpdateModal = ({
   campaignMember,
-  toggle,
   setOnModalSubmit,
 }) => {
   const dispatch = useDispatch();
 
-  const {
-    currentCampaignMember,
-    currentUser,
-    campaignMembers,
-    electionCommittees,
-  } = useSelector((state) => ({
+  const { currentCampaignMember, currentUser, campaignMembers, electionCommittees } = useSelector((state) => ({
     currentUser: state.Users.currentUser,
     currentCampaignMember: state.Campaigns.currentCampaignMember,
     electionCommittees: state.Campaigns.electionCommittees,
@@ -53,10 +39,6 @@ const CampaignMembersUpdateModal = ({
   const handleUpdateButton = () => {
     validation.submitForm();
   };
-  useEffect(() => {
-    console.log("Initial Supervisor:", validation.values.supervisor);
-    console.log("Initial Committee:", validation.values.committee);
-  }, []);
 
   useEffect(() => {
     // Set the callback action for the update modal
@@ -64,23 +46,20 @@ const CampaignMembersUpdateModal = ({
     return () => setOnModalSubmit(null); // Cleanup on unmount
   }, []);
 
+
   // validation
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
       id: (campaignMember && campaignMember.id) || "",
       campaignId: (campaignMember && campaignMember.campaignId) || "",
-      userId: (campaignMember && campaignMember.userId) || "",
-      name: (campaignMember && campaignMember.name) || "",
       rank: (campaignMember && campaignMember.rank) || 0,
       committee: (campaignMember && campaignMember.committee) || 0,
       supervisor: (campaignMember && campaignMember.supervisor) || 0,
       mobile: (campaignMember && campaignMember.mobile) || "",
       notes: (campaignMember && campaignMember.notes) || "",
-      status: (campaignMember && campaignMember.status) || 0,
     },
     validationSchema: Yup.object({
-      status: Yup.number().integer().required("Status is required"),
       rank: Yup.number().integer().required("rank is required"),
       supervisor: Yup.number().integer().required("supervisor is required"),
       committee: Yup.number().integer().required("committee is required"),
@@ -90,6 +69,7 @@ const CampaignMembersUpdateModal = ({
       const updatedCampaignMember = {
         id: values.id,
         // status: parseInt(values.status, 10),
+        campaignId: parseInt(values.campaignId, 10),
         rank: parseInt(values.rank, 10),
         committee: parseInt(values.committee, 10),
         supervisor: parseInt(values.supervisor, 10),
@@ -98,7 +78,6 @@ const CampaignMembersUpdateModal = ({
       };
       dispatch(updateCampaignMember(updatedCampaignMember));
       validation.resetForm();
-      toggle();
     },
   });
 
@@ -198,7 +177,7 @@ const CampaignMembersUpdateModal = ({
                     value={validation.values[field.name] || ""}
                     invalid={
                       validation.touched[field.name] &&
-                      validation.errors[field.name]
+                        validation.errors[field.name]
                         ? true
                         : false
                     }
@@ -229,7 +208,7 @@ const CampaignMembersUpdateModal = ({
                 )}
 
                 {validation.touched[field.name] &&
-                validation.errors[field.name] ? (
+                  validation.errors[field.name] ? (
                   <FormFeedback type="invalid">
                     {validation.errors[field.name]}
                   </FormFeedback>

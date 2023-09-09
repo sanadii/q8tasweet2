@@ -158,6 +158,7 @@ class GetCampaignDetails(APIView):
                 "email": user.email,
             }
 
+            # TODO: add admin to work here
             # Filter the campaign members based on the current user's rank
             rank = current_campaign_member_data["rank"]
             if rank < 3:
@@ -272,7 +273,7 @@ class DeleteCampaignMember(APIView):
 
 class AddNewCampaignMember(APIView):
     def post(self, request):
-        campaign_id = request.data.get("campaign")
+        campaign_id = request.data.get("campaignId")
         user_id = request.data.get("userId")
 
         # Fetch the user details based on userId
@@ -362,8 +363,8 @@ class UpdateCampaignMember(APIView):
         updated_campaign_member_data = {
             # Basic Information
             "id": campaign_member.id,
-            # "campaign_id": campaign_member.campaign.id,  # Extracted from the campaign_member instance
-            # "user_id": campaign_member.user.id,          # Extracted from the campaign_member instance
+            "campaignId": campaign_member.campaign.id,  # Extracted from the campaign_member instance
+            "userId": campaign_member.user.id,          # Extracted from the campaign_member instance
 
             # Election Data
             "rank": campaign_member.rank,

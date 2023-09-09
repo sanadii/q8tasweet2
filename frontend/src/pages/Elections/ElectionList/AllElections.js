@@ -1,13 +1,13 @@
 // ------------ React & Redux ------------
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col } from "reactstrap";
+import { Col, Row, Card, CardBody } from "reactstrap";
 
 // ------------ Actions ------------
 import { getElections, addElection, updateElection, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
 
 // ------------ Custom Components & ConstantsImports ------------
-import { ImageLargeCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
+import { ImageLargeCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import ElectionModal from "./ElectionModal"
 import { Id, Name, CandidateCount, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
@@ -58,7 +58,7 @@ const AllElections = () => {
       dispatch(getCategories());
     }
   }, [dispatch, categories]);
-  
+
   useEffect(() => {
     setElectionList(elections);
   }, [elections]);
@@ -165,15 +165,15 @@ const AllElections = () => {
   // Checked All
   const checkedAll = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
-    const ele = document.querySelectorAll(".electionCheckBox");
+    const checkedEntry = document.querySelectorAll(".electionCheckBox");
 
     if (checkall.checked) {
-      ele.forEach((ele) => {
-        ele.checked = true;
+      checkedEntry.forEach((checkedEntry) => {
+        checkedEntry.checked = true;
       });
     } else {
-      ele.forEach((ele) => {
-        ele.checked = false;
+      checkedEntry.forEach((checkedEntry) => {
+        checkedEntry.checked = false;
       });
     }
     deleteCheckbox();
@@ -196,11 +196,11 @@ const AllElections = () => {
   };
 
   const deleteCheckbox = () => {
-    const ele = document.querySelectorAll(".electionCheckBox:checked");
-    ele.length > 0
+    const checkedEntry = document.querySelectorAll(".electionCheckBox:checked");
+    checkedEntry.length > 0
       ? setIsMultiDeleteButton(true)
       : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(ele);
+    setSelectedCheckBoxDelete(checkedEntry);
   };
 
   const columns = useMemo(
@@ -369,66 +369,80 @@ const AllElections = () => {
         isEdit={isEdit}
         setModal={setModal}
       />
-      <div className="row">
+      <Row>
         <Col lg={12}>
-          <div className="card" id="electionsList">
-            {isElectionSuccess && elections.length ? (
-              <TableContainer
-                // Header
-                isTableContainerHeader={true}
-                ContainerHeaderTitle="Election Guarantees"
-                setDeleteModalMulti={setDeleteModalMulti}
-                setIsEdit={setIsEdit}
-                toggle={toggle}
-                isMultiDeleteButton={isMultiDeleteButton}
+          <Card id="memberList">
+            <CardBody>
+              <div>
+                <TableContainerHeader
+                  // Title
+                  ContainerHeaderTitle="Election Guarantees"
 
-                isContainerAddButton={true}
-                AddButtonText="Add New Election"
-                isEdit={isEdit}
+                  // Add Elector Button
+                  isContainerAddButton={true}
+                  AddButtonText="Add New Election"
+                  isEdit={isEdit}
+                  handleEntryClick={handleElectionClicks}
+                  toggle={toggle}
 
-                // Filters
-                isGlobalFilter={true}
-                preGlobalFilteredRows={true}
-                isElectionCategoryFilter={true}
+                  // Delete Button
+                  isMultiDeleteButton={isMultiDeleteButton}
+                  setDeleteModalMulti={setDeleteModalMulti}
+                />
+                {isElectionSuccess && elections.length ? (
+                  <TableContainer
+                    // Header
+                    ContainerHeaderTitle="Election Guarantees"
 
-                // isGlobalSearch={true}
-                // isElectionListFilter={true}
-                // isCustomerFilter={isCustomerFilter}
-                // FieldFiters
-                isFieldFilter={true}
-                isResetFilters={true}
-                isSelectionFilter={true}
-                isStatusFilter={true}
-                isPriorityFilter={true}
-                // isTestFilter={true}
 
-                // Table
-                columns={columns}
-                data={electionList || []}
-                setElectionList={setElectionList}
-                // isStatusFilter={true}
-                // isGlobalPagination={true}
-                // isColumnFilter={true} // Change the prop name
-                // isElectionSelectionFilter={true}
-                // isSelectionFilter={true}
+                    // Filters -------------------------
+                    isTableContainerFilter={true}
+                    isGlobalFilter={true}
+                    preGlobalFilteredRows={true}
+                    isElectionCategoryFilter={true}
+                    isStatusFilter={true}
+                    isPriorityFilter={true}
 
-                SearchPlaceholder="Search for elections or something..."
-                // useFilters={true}
-                customPageSize={20}
-                className="custom-header-css"
-                divClass="table-responsive table-card mb-3"
-                tableClass="align-middle table-nowrap mb-0"
-                theadClass="table-light table-nowrap"
-                thClass="table-light text-muted"
-                handleEntryClick={handleElectionClicks}
-              />
-            ) : (
-              <Loader error={error} />
-            )}
-            <ToastContainer closeButton={false} limit={1} />
-          </div>
+                    // isGlobalSearch={true}
+                    // isElectionListFilter={true}
+                    // isCustomerFilter={isCustomerFilter}
+                    // FieldFiters
+                    // isTestFilter={true}
+
+                    // Data -------------------------
+                    columns={columns}
+                    data={electionList || []}
+                    setElectionList={setElectionList}
+                    customPageSize={20}
+
+                    // isStatusFilter={true}
+                    // isGlobalPagination={true}
+                    // isColumnFilter={true} // Change the prop name
+                    // isElectionSelectionFilter={true}
+                    // isSelectionFilter={true}
+
+                    SearchPlaceholder="Search for elections or something..."
+                    // useFilters={true}
+
+                    // Styling -------------------------
+                    className="custom-header-css"
+                    divClass="table-responsive table-card mb-2"
+                    tableClass="align-middle table-nowrap"
+                    theadClass="table-light"
+                    thClass="table-light text-muted"
+
+
+                  />
+                ) : (
+                  <Loader error={error} />
+                )}
+              </div>
+
+              <ToastContainer closeButton={false} limit={1} />
+            </CardBody>
+          </Card>
         </Col>
-      </div>
+      </Row>
     </React.Fragment>
   );
 };

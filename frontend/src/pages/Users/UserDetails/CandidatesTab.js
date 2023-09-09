@@ -106,15 +106,15 @@ const UsersTab = () => {
   // Checked All
   const checkedAll = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
-    const ele = document.querySelectorAll(".userElectionCheckBox");
+    const checkedEntry = document.querySelectorAll(".userElectionCheckBox");
 
     if (checkall.checked) {
-      ele.forEach((ele) => {
-        ele.checked = true;
+      checkedEntry.forEach((checkedEntry) => {
+        checkedEntry.checked = true;
       });
     } else {
-      ele.forEach((ele) => {
-        ele.checked = false;
+      checkedEntry.forEach((checkedEntry) => {
+        checkedEntry.checked = false;
       });
     }
     deleteCheckbox();
@@ -137,11 +137,11 @@ const UsersTab = () => {
   };
 
   const deleteCheckbox = () => {
-    const ele = document.querySelectorAll(".userElectionCheckBox:checked");
-    ele.length > 0
+    const checkedEntry = document.querySelectorAll(".userElectionCheckBox:checked");
+    checkedEntry.length > 0
       ? setIsMultiDeleteButton(true)
       : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(ele);
+    setSelectedCheckBoxDelete(checkedEntry);
   };
 
   const columns = useMemo(

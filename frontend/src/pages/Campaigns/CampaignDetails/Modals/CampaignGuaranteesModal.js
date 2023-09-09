@@ -18,10 +18,13 @@ const CampaignGuaranteesModal = ({
   modalMode,
   campaignGuarantee,
 }) => {
+
+  // --------------- Define States ---------------
   const { campaignMembers } = useSelector((state) => ({
     campaignMembers: state.Campaigns.campaignMembers,
   }));
 
+  // --------------- Set Constants ---------------F
   const [onModalSubmit, setOnModalSubmit] = useState(null);
 
   let ModalTitle;
@@ -58,7 +61,6 @@ const CampaignGuaranteesModal = ({
   return (
     <Modal
       isOpen={modal}
-      toggle={toggle}
       centered
       className="border-0"
       size="lg"

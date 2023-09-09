@@ -1,6 +1,6 @@
 {
-  "name": "velzon-react",
-  "version": "2.4.0",
+  "name": "q8tasweet",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^36.0.1",

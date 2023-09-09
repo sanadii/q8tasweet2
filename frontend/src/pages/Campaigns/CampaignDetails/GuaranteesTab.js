@@ -1,17 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  deleteCampaignGuarantee,
-  updateCampaignGuarantee,
-} from "../../../store/actions";
+import { deleteCampaignGuarantee, updateCampaignGuarantee } from "../../../store/actions";
 
 // Component imports
 import { Col, Row, Card, CardHeader, CardBody } from "reactstrap";
-import {
-  Loader,
-  DeleteModal,
-  TableContainer,
-} from "../../../Components/Common";
+import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../Components/Common";
+
 import CampaignGuaranteesModal from "./Modals/CampaignGuaranteesModal";
 import { GuaranteeStatusOptions } from "../../../Components/constants";
 
@@ -25,12 +19,7 @@ const GuaranteesTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const {
-    campaignGuarantees,
-    campaignMembers,
-    isCampaignGuaranteeSuccess,
-    error,
-  } = useSelector((state) => ({
+  const { campaignGuarantees, campaignMembers, isCampaignGuaranteeSuccess, error } = useSelector((state) => ({
     campaignGuarantees: state.Campaigns.campaignGuarantees,
     campaignMembers: state.Campaigns.campaignMembers,
     isCampaignGuaranteeSuccess: state.Campaigns.isCampaignGuaranteeSuccess,
@@ -39,8 +28,7 @@ const GuaranteesTab = () => {
 
   // CampaignGuarantees Constants
   const [campaignGuarantee, setCampaignGuarantee] = useState(null);
-  const [campaignGuaranteeList, setCampaignGuaranteeList] =
-    useState(campaignGuarantees);
+  const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
 
   useEffect(() => {
     setCampaignGuaranteeList(campaignGuarantees);
@@ -162,32 +150,26 @@ const GuaranteesTab = () => {
   }, {});
   const columns = useMemo(
     () => [
-      {
-        Header: (
-          <input
-            type="checkbox"
-            id="checkBoxAll"
-            className="form-check-input"
-            onClick={() => checkedAll()}
-          />
-        ),
-        Cell: (cellProps) => {
-          return (
-            <input
-              type="checkbox"
-              className="campaignGuaranteeCheckBox form-check-input"
-              value={cellProps.row.original.id}
-              onChange={() => deleteCheckbox()}
-            />
-          );
-        },
-        id: "id",
-      },
       // {
-      //   Header: "ID",
+      //   Header: (
+      //     <input
+      //       type="checkbox"
+      //       id="checkBoxAll"
+      //       className="form-check-input"
+      //       onClick={() => checkedAll()}
+      //     />
+      //   ),
       //   Cell: (cellProps) => {
-      //     return <p> {cellProps.row.original.id}</p>;
+      //     return (
+      //       <input
+      //         type="checkbox"
+      //         className="campaignGuaranteeCheckBox form-check-input"
+      //         value={cellProps.row.original.id}
+      //         onChange={() => deleteCheckbox()}
+      //       />
+      //     );
       //   },
+      //   id: "#",
       // },
       {
         Header: "Name",
@@ -222,13 +204,12 @@ const GuaranteesTab = () => {
         filterable: false,
         Cell: (cellProps) => {
           if (cellProps.row.original.attended) {
-            return <p style={{ color: "green" }}>✔️</p>; // Green check circle
+            return <p style={{ color: "blue" }}>✔️</p>; // Green check circle
           } else {
             return <p style={{ color: "red" }}>❌</p>; // Red X
           }
         },
       },
-
       {
         Header: "Status",
         accessor: "status",
@@ -359,38 +340,47 @@ const GuaranteesTab = () => {
       />
       <Row>
         <Col lg={12}>
-          <Card>
-            <CardHeader>
-              <Row className="mb-2">
-                <h4>
-                  <b>Campaign Guarantees</b>
-                </h4>
-              </Row>
-            </CardHeader>
-            <CardBody className="pt-0">
+          <Card id="memberList">
+            <CardBody>
               <div>
+                <TableContainerHeader
+                  // Title
+                  ContainerHeaderTitle="Campaign Guarantees"
+
+                  // Add Elector Button
+                  // isAddElectorButton={true}
+                  // AddButtonText="Add New Guarantee"
+                  // handleAddButtonClick={handleCampaignMemberClicks}
+                  toggle={toggle}
+
+                  // Delete Button
+                  isMultiDeleteButton={isMultiDeleteButton}
+                  setDeleteModalMulti={setDeleteModalMulti}
+                />
+
                 {campaignGuaranteeList ? (
                   //  <TableHeader />
                   <TableContainer
-                    // Data
-                    columns={columns}
-                    data={campaignGuaranteeList || []}
-                    customPageSize={50}
-                    // Header
-                    setDeleteModalMulti={setDeleteModalMulti}
-                    setCampaignGuaranteeList={setCampaignGuaranteeList}
-                    toggle={toggle}
-                    isMultiDeleteButton={isMultiDeleteButton}
-                    // Filters
-                    preGlobalFilteredRows={true}
-                    isGlobalFilter={true}
+                    // Filters -------------------------
+                    isTableContainerFilter={true}
                     isGuaranteeGenderFilter={true}
                     isGuaranteeAttendanceFilter={true}
                     isGuaranteeStatusFilter={true}
                     isGuarantorFilter={true}
                     onTabChange={handleTabChange}
+
+                    // Global Filters
+                    isGlobalFilter={true}
+                    preGlobalFilteredRows={true}
                     SearchPlaceholder="Search for Campaign Guarantees..."
-                    // Styling
+
+                    // Data -------------------------
+                    columns={columns}
+                    data={campaignGuaranteeList || []}
+                    customPageSize={50}
+                    setCampaignGuaranteeList={setCampaignGuaranteeList}
+
+                    // Styling -------------------------
                     className="custom-header-css"
                     divClass="table-responsive table-card mb-2"
                     tableClass="align-middle table-nowrap"

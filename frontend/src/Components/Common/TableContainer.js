@@ -14,7 +14,7 @@ import { TableContainerHeader, TableContainerFooter, TableContainerFilters } fro
 
 const TableContainer = ({
   // Global Header -------------------------
-  isTableContainerHeader,
+  isTableContainerFilter,
   isElectionHeader,
   isElectionCategoryFilter,
   isCampaignRankFilter,
@@ -130,64 +130,47 @@ const TableContainer = ({
 
   return (
     <Fragment>
-      {isTableContainerHeader && (
+      {isTableContainerFilter && (
         <CardBody>
-          <TableContainerHeader
-            // Title
-            ContainerHeaderTitle={ContainerHeaderTitle}
+          <TableContainerFilters
+            // Upper Filters -------------------------
+            isElectionCategoryFilter={isElectionCategoryFilter}
+            isCampaignRankFilter={isCampaignRankFilter}
 
-            // Add Button
-            AddButtonText={AddButtonText}
-            handleEntryClick={handleEntryClick}
-            handleAddButtonClick={handleAddButtonClick}
+            // Filters -------------------------
+            SearchPlaceholder={SearchPlaceholder}
+            isStatusFilter={isStatusFilter}
+            isPriorityFilter={isPriorityFilter}
+            isCandidateGenderFilter={isCandidateGenderFilter}
+            isGuaranteeGenderFilter={isGuaranteeGenderFilter}
+            isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
+            isAttendeesGenderFilter={isAttendeesGenderFilter}
+            isCommitteeFilter={isCommitteeFilter}
+            isGuaranteeStatusFilter={isGuaranteeStatusFilter}
+            isGuarantorFilter={isGuarantorFilter}
+            isResetFilters={isResetFilters}
+            isTestFilter={isTestFilter}
+
+            // Other Filters
+            isCustomerFilter={isCustomerFilter}
+
+            // Constant  -------------------------
+            campaignMember={campaignMember}
+            setElectionList={setElectionList}
+            setCampaignMemberList={setCampaignMemberList}
+            setElectionCandidateList={setElectionCandidateList}
+            setCampaignGuaranteeList={setCampaignGuaranteeList}
+            setElectionAttendeeList={setElectionAttendeeList}
+
+            // Actions
             onTabChange={onTabChange}
 
-            // Delete Button
-            isMultiDeleteButton={isMultiDeleteButton}
-            setDeleteModalMulti={setDeleteModalMulti}
+            // From useTable
+            preGlobalFilteredRows={preGlobalFilteredRows}
+            setPageSize={setPageSize}
+            gotoPage={gotoPage}
+            setGlobalFilter={setGlobalFilter}
           />
-
-          {isGlobalFilter && (
-            <TableContainerFilters
-              // Upper Filters -------------------------
-              isElectionCategoryFilter={isElectionCategoryFilter}
-              isCampaignRankFilter={isCampaignRankFilter}
-
-              // Filters -------------------------
-              SearchPlaceholder={SearchPlaceholder}
-              isStatusFilter={isStatusFilter}
-              isPriorityFilter={isPriorityFilter}
-              isCandidateGenderFilter={isCandidateGenderFilter}
-              isGuaranteeGenderFilter={isGuaranteeGenderFilter}
-              isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
-              isAttendeesGenderFilter={isAttendeesGenderFilter}
-              isCommitteeFilter={isCommitteeFilter}
-              isGuaranteeStatusFilter={isGuaranteeStatusFilter}
-              isGuarantorFilter={isGuarantorFilter}
-              isResetFilters={isResetFilters}
-              isTestFilter={isTestFilter}
-
-              // Other Filters
-              isCustomerFilter={isCustomerFilter}
-
-              // Constant  -------------------------
-              campaignMember={campaignMember}
-              setElectionList={setElectionList}
-              setCampaignMemberList={setCampaignMemberList}
-              setElectionCandidateList={setElectionCandidateList}
-              setCampaignGuaranteeList={setCampaignGuaranteeList}
-              setElectionAttendeeList={setElectionAttendeeList}
-
-              // Actions
-              onTabChange={onTabChange}
-
-              // From useTable
-              preGlobalFilteredRows={preGlobalFilteredRows}
-              setPageSize={setPageSize}
-              gotoPage={gotoPage}
-              setGlobalFilter={setGlobalFilter}
-            />
-          )}
         </CardBody>
       )}
 
