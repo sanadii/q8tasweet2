@@ -44,6 +44,7 @@ const TableContainer = ({
 
   // Filters -------------------------
   SearchPlaceholder,
+  isSearchFilter,
   isStatusFilter,
   isPriorityFilter,
   isCandidateGenderFilter,
@@ -57,6 +58,8 @@ const TableContainer = ({
   isTestFilter,
   isGlobalSearch,
   customPageSize,
+  filters,
+  setFilters,
 
 
   // Other Filters
@@ -137,8 +140,11 @@ const TableContainer = ({
             isElectionCategoryFilter={isElectionCategoryFilter}
             isCampaignRankFilter={isCampaignRankFilter}
 
+            filters={filters}
+            setFilters={setFilters}
             // Filters -------------------------
             SearchPlaceholder={SearchPlaceholder}
+            isSearchFilter={isSearchFilter}
             isStatusFilter={isStatusFilter}
             isPriorityFilter={isPriorityFilter}
             isCandidateGenderFilter={isCandidateGenderFilter}

@@ -4,10 +4,23 @@ import { useSelector } from 'react-redux';  // Assuming you're using Redux
 
 const useUserRoles = () => {
     const currentUser = useSelector(state => state.Users.currentUser);
+    const currentMember = useSelector(state => state.Campaigns.currentCampaignMember);
 
     return {
+        // Staff Roles
         isAdmin: currentUser?.is_staff === true,
-        isSubscriber: currentUser?.is_staff === false
+        isSubscriber: currentUser?.is_staff === false,
+
+        // Subscriber Roles
+        isModerator: currentMember?.rank === 10,
+        isParty: currentMember?.rank === 1,
+        isCandidate: currentMember?.rank === 2,
+        isSupervisor: currentMember?.rank === 3,
+        isGuarantor: currentMember?.rank === 4,
+        isAttendant: currentMember?.rank === 5,
+        isSorter: currentMember?.rank === 6,
+        isBelowSupervisor: currentMember?.rank > 3,
+        isAttendantOrSorter: currentMember?.rank === 5 || currentMember?.rank === 6,
     };
 }
 

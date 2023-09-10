@@ -1,4 +1,6 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
+
 import PropTypes from "prop-types";
 import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
 import { Table, Row, Col, Button, Input, CardBody, CardHeader, CardFooter } from "reactstrap";
@@ -6,6 +8,7 @@ import { CustomersGlobalFilter } from "../../Components/Common/GlobalSearchFilte
 
 import {
     ResetFilters,
+    SearchFilter,
     StatusFilter,
     PriorityFilter,
     ElectionCategoryFilter,
@@ -61,13 +64,16 @@ const TableContainerFilters = ({
 
     // Global Filter -------------------------
     setGlobalFilter,
-
+    filters,
+    setFilters,
     // Upper Filters -------------------------
     isElectionCategoryFilter,
     isCampaignRankFilter,
 
     // Filters -------------------------
     SearchPlaceholder,
+    isSearchFilter,
+    searchField,
     isStatusFilter,
     isPriorityFilter,
     isCandidateGenderFilter,
@@ -111,13 +117,24 @@ const TableContainerFilters = ({
         gotoPage(page);
     };
 
+    // Fetching the elections (assuming you have them in some state or context)
+    const elections = useSelector((state) => state.Elections.elections);
+
+
+    // Then, use 'filteredElections' to render your table or list.
+    const [activeTab, setActiveTab] = useState("0");
+
     return (
         <React.Fragment>
             <Row className="g-4 mb-4">
                 <div className="d-flex align-items-center ">
                     <div className="col">
                         {isElectionCategoryFilter && (
-                            <ElectionCategoryFilter setElectionList={setElectionList} />
+                            <ElectionCategoryFilter
+                                setFilters={setFilters}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
                         )}
                         {isCampaignRankFilter && (
                             <CampaignRankFilter
@@ -155,11 +172,15 @@ const TableContainerFilters = ({
                             SearchPlaceholder={SearchPlaceholder}
                         />
                         {/* )} */}
+                        {isSearchFilter && (
+                            <SearchFilter filters={filters} setFilters={setFilters} searchField={searchField} />
+                        )}
+
                         {isStatusFilter && (
-                            <StatusFilter setElectionList={setElectionList} />
+                            <StatusFilter filters={filters} setFilters={setFilters} />
                         )}
                         {isPriorityFilter && (
-                            <PriorityFilter setElectionList={setElectionList} />
+                            <PriorityFilter filters={filters} setFilters={setFilters} />
                         )}
                         {isCandidateGenderFilter && (
                             <CandidateGenderFilter
@@ -196,9 +217,16 @@ const TableContainerFilters = ({
                                 setCampaignGuaranteeList={setCampaignGuaranteeList}
                             />
                         )}
+
                     </div>
                     <div className="flex-shrink-0">
-                        {isResetFilters && <ResetFilters />}
+                        {isResetFilters && (
+                            <ResetFilters
+                                setFilters={setFilters}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
+                        )}
                     </div>
                 </div>
             </Row>

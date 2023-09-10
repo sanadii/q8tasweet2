@@ -37,7 +37,6 @@ const AllElections = () => {
     error: state.Elections.error,
   }));
 
-  const [electionList, setElectionList] = useState(elections);
   const [election, setElection] = useState([]);
   const [category, setCategory] = useState([]);
   const [electionCandidates, setElectionCandidates] = useState([]);
@@ -58,10 +57,6 @@ const AllElections = () => {
       dispatch(getCategories());
     }
   }, [dispatch, categories]);
-
-  useEffect(() => {
-    setElectionList(elections);
-  }, [elections]);
 
   // Moderators
   useEffect(() => {
@@ -347,6 +342,33 @@ const AllElections = () => {
 
   const [dueDate, setDate] = useState(defaultdate());
 
+
+  const [filters, setFilters] = useState({
+    status: null,
+    priority: null,
+    category: null, // Newly added
+  });
+
+
+  const electionList = elections.filter(election => {
+    let isValid = true;
+
+    if (filters.status !== null) {
+      isValid = isValid && election.status === filters.status;
+    }
+
+    if (filters.priority !== null) {
+      isValid = isValid && election.priority === filters.priority;
+    }
+
+    if (filters.category !== null) {
+      isValid = isValid && election.category === filters.category;
+    }
+
+    return isValid;
+  });
+
+  // ... add other filter checks similarly ...
   return (
     <React.Fragment>
       <DeleteModal
@@ -391,17 +413,23 @@ const AllElections = () => {
                 />
                 {isElectionSuccess && elections.length ? (
                   <TableContainer
+                    filters={filters}
+                    setFilters={setFilters}
+
                     // Header
                     ContainerHeaderTitle="Election Guarantees"
 
 
                     // Filters -------------------------
                     isTableContainerFilter={true}
+                    isSearchFilter={true}
+                    searchField="name"
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
                     isElectionCategoryFilter={true}
                     isStatusFilter={true}
                     isPriorityFilter={true}
+                    isResetFilters={true}
 
                     // isGlobalSearch={true}
                     // isElectionListFilter={true}
@@ -412,7 +440,6 @@ const AllElections = () => {
                     // Data -------------------------
                     columns={columns}
                     data={electionList || []}
-                    setElectionList={setElectionList}
                     customPageSize={20}
 
                     // isStatusFilter={true}

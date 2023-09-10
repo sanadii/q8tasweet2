@@ -1,3 +1,4 @@
+// --------------- React, Redux & Store imports ---------------
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteElectionAttendee, updateElectionAttendee } from "../../../store/actions";
@@ -5,9 +6,9 @@ import { deleteElectionAttendee, updateElectionAttendee } from "../../../store/a
 // Component imports
 import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
 import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../Components/Common";
-
 import ElectionAttendeesModal from "./Modals/ElectionAttendeesModal";
 import { GuaranteeStatusOptions } from "../../../Components/constants";
+import useUserRoles from "../../../Components/Hooks/useUserRoles";
 
 // Utility imports
 import { toast, ToastContainer } from "react-toastify";
@@ -27,6 +28,8 @@ const AttendeesList = () => {
     isElectionAttendeeSuccess: state.Campaigns.isElectionAttendeeSuccess,
     error: state.Campaigns.error,
   }));
+
+  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   // ElectionAttendees Constants
   const [electionAttendee, setElectionAttendee] = useState(null);
@@ -237,29 +240,33 @@ const AttendeesList = () => {
               >
                 <i className="ri-eye-fill align-bottom" />
               </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-info edit-list"
-                onClick={() => {
-                  const electionAttendee = cellProps.row.original;
-                  handleElectionAttendeeClick(
-                    electionAttendee,
-                    "GuaranteeUpdateModal"
-                  );
-                }}
-              >
-                <i className="ri-pencil-fill align-bottom" />
-              </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-danger remove-list"
-                onClick={() => {
-                  const electionAttendee = cellProps.row.original;
-                  onClickDelete(electionAttendee);
-                }}
-              >
-                <i className="ri-delete-bin-5-fill align-bottom" />
-              </button>
+              {(isAdmin || isAttendant) && (
+                <>
+                  <button
+                    to="#"
+                    className="btn btn-sm btn-soft-info edit-list"
+                    onClick={() => {
+                      const electionAttendee = cellProps.row.original;
+                      handleElectionAttendeeClick(
+                        electionAttendee,
+                        "GuaranteeUpdateModal"
+                      );
+                    }}
+                  >
+                    <i className="ri-pencil-fill align-bottom" />
+                  </button>
+                  <button
+                    to="#"
+                    className="btn btn-sm btn-soft-danger remove-list"
+                    onClick={() => {
+                      const electionAttendee = cellProps.row.original;
+                      onClickDelete(electionAttendee);
+                    }}
+                  >
+                    <i className="ri-delete-bin-5-fill align-bottom" />
+                  </button>
+                </>
+              )}
             </div>
           );
         },

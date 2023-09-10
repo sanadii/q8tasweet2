@@ -1,16 +1,13 @@
-// --------------- React & Redux imports ---------------
+// --------------- React, Redux & Store imports ---------------
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { deleteCampaignMember } from "../../../store/actions";
 
 // --------------- Component & Constants imports ---------------
 import { ImageCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import { MemberRankOptions, MemberStatusOptions } from "../../../Components/constants";
-import useUserRoles from "../../../Components/Hooks/useUserRoles";
 import CampaignMembersModal from "./Modals/CampaignMembersModal";
-
-// --------------- Store imports ---------------
-import { deleteCampaignMember } from "../../../store/actions";
+import useUserRoles from "../../../Components/Hooks/useUserRoles";
 
 // --------------- Utility imports ---------------
 import { Col, Row, Card, CardBody, CardHeader, CardFooter } from "reactstrap";
@@ -31,10 +28,11 @@ const MembersTab = () => {
     error: state.Campaigns.error,
   }));
 
+  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+
   // --------------- Constants ---------------
   const [campaignMember, setCampaignMember] = useState([]);
   const [campaignMemberList, setCampaignMemberList] = useState(campaignMembers);
-  const { isAdmin, isSubscriber } = useUserRoles();
 
   useEffect(() => {
     setCampaignMemberList(campaignMembers);
@@ -190,7 +188,7 @@ const MembersTab = () => {
       },
       {
         Header: "Member",
-        filterable: true,
+        accessor: "user.name",
         Cell: (campaignMember) => (
           <>
             <div className="d-flex align-items-center">
@@ -380,26 +378,30 @@ const MembersTab = () => {
               >
                 <i className="ri-eye-fill align-bottom" />
               </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-info edit-list"
-                onClick={() => {
-                  const campaignMember = cellProps.row.original;
-                  handleCampaignMemberClick(campaignMember, "UpdateModal");
-                }}
-              >
-                <i className="ri-pencil-fill align-bottom" />
-              </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-danger remove-list"
-                onClick={() => {
-                  const campaignMember = cellProps.row.original;
-                  onClickDelete(campaignMember);
-                }}
-              >
-                <i className="ri-delete-bin-5-fill align-bottom" />
-              </button>
+              {isAdmin && (
+                <>
+                  <button
+                    to="#"
+                    className="btn btn-sm btn-soft-info edit-list"
+                    onClick={() => {
+                      const campaignMember = cellProps.row.original;
+                      handleCampaignMemberClick(campaignMember, "UpdateModal");
+                    }}
+                  >
+                    <i className="ri-pencil-fill align-bottom" />
+                  </button>
+                  <button
+                    to="#"
+                    className="btn btn-sm btn-soft-danger remove-list"
+                    onClick={() => {
+                      const campaignMember = cellProps.row.original;
+                      onClickDelete(campaignMember);
+                    }}
+                  >
+                    <i className="ri-delete-bin-5-fill align-bottom" />
+                  </button>
+                </>
+              )}
             </div>
           );
         },

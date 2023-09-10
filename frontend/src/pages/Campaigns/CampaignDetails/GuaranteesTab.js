@@ -173,6 +173,7 @@ const GuaranteesTab = () => {
       // },
       {
         Header: "Name",
+        accessor: "full_name",
         Cell: (cellProps) => {
           return (
             <div>
@@ -184,15 +185,8 @@ const GuaranteesTab = () => {
           );
         },
       },
-      // {
-      //   Header: "CID",
-      //   Cell: (cellProps) => {
-      //     return <p> {cellProps.row.original.civil}</p>;
-      //   },
-      // },
       {
         Header: "Mobile",
-        accessor: "mobile",
         filterable: false,
         Cell: (cellProps) => {
           return <p>{cellProps.row.original.mobile}</p>;
@@ -200,7 +194,6 @@ const GuaranteesTab = () => {
       },
       {
         Header: "Attended",
-        accessor: "attended",
         filterable: false,
         Cell: (cellProps) => {
           if (cellProps.row.original.attended) {
@@ -212,7 +205,6 @@ const GuaranteesTab = () => {
       },
       {
         Header: "Status",
-        accessor: "status",
         filterable: false,
         Cell: (cellProps) => {
           const statusId = cellProps.row.original.status;
@@ -238,7 +230,6 @@ const GuaranteesTab = () => {
       },
       {
         Header: "Guarantor",
-        accessor: "member",
         filterable: false,
         Cell: (cellProps) => {
           const memberId = cellProps.row.original.member;
@@ -359,7 +350,6 @@ const GuaranteesTab = () => {
                 />
 
                 {campaignGuaranteeList ? (
-                  //  <TableHeader />
                   <TableContainer
                     // Filters -------------------------
                     isTableContainerFilter={true}
