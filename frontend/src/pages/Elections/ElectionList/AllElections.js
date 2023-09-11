@@ -342,16 +342,25 @@ const AllElections = () => {
 
   const [dueDate, setDate] = useState(defaultdate());
 
-
+  // Filters -------------------------
   const [filters, setFilters] = useState({
+    global: "",
     status: null,
     priority: null,
     category: null, // Newly added
   });
 
-
   const electionList = elections.filter(election => {
     let isValid = true;
+
+    if (filters.category !== null) {
+      isValid = isValid && election.category === filters.category;
+    }
+
+    if (filters.global) {
+      isValid = isValid && election.name && typeof election.name === 'string' && election.name.toLowerCase().includes(filters.global.toLowerCase());
+
+    }
 
     if (filters.status !== null) {
       isValid = isValid && election.status === filters.status;
@@ -361,14 +370,10 @@ const AllElections = () => {
       isValid = isValid && election.priority === filters.priority;
     }
 
-    if (filters.category !== null) {
-      isValid = isValid && election.category === filters.category;
-    }
-
     return isValid;
   });
 
-  // ... add other filter checks similarly ...
+
   return (
     <React.Fragment>
       <DeleteModal
@@ -413,8 +418,6 @@ const AllElections = () => {
                 />
                 {isElectionSuccess && elections.length ? (
                   <TableContainer
-                    filters={filters}
-                    setFilters={setFilters}
 
                     // Header
                     ContainerHeaderTitle="Election Guarantees"
@@ -422,8 +425,6 @@ const AllElections = () => {
 
                     // Filters -------------------------
                     isTableContainerFilter={true}
-                    isSearchFilter={true}
-                    searchField="name"
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
                     isElectionCategoryFilter={true}
@@ -431,11 +432,10 @@ const AllElections = () => {
                     isPriorityFilter={true}
                     isResetFilters={true}
 
-                    // isGlobalSearch={true}
-                    // isElectionListFilter={true}
-                    // isCustomerFilter={isCustomerFilter}
-                    // FieldFiters
-                    // isTestFilter={true}
+                    // Settings
+                    filters={filters}
+                    setFilters={setFilters}
+                    SearchPlaceholder="Search for elections or something..."
 
                     // Data -------------------------
                     columns={columns}
@@ -448,7 +448,6 @@ const AllElections = () => {
                     // isElectionSelectionFilter={true}
                     // isSelectionFilter={true}
 
-                    SearchPlaceholder="Search for elections or something..."
                     // useFilters={true}
 
                     // Styling -------------------------

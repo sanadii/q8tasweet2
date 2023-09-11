@@ -73,29 +73,29 @@ const Status = ({ status }) => {
   let statusName;
 
   switch (status) {
-    case 0:
-      statusName = "New";
-      badgeClass = "badge-soft-info";
-      break;
     case 1:
-      statusName = "Inprogress";
-      statusName = "Inprogress";
+      statusName = "Published";
+      badgeClass = "badge-soft-success";
       break;
     case 2:
-      statusName = "Missing Data";
-      badgeClass = "badge-soft-warning";
+      statusName = "Private";
+      badgeClass = "badge-soft-secondary";
       break;
     case 3:
       statusName = "Pending Approval";
       badgeClass = "badge-soft-warning";
       break;
-    case 7:
-      statusName = "Private";
-      badgeClass = "badge-soft-secondary";
+    case 4:
+      statusName = "Missing Data";
+      badgeClass = "badge-soft-warning";
       break;
-    case 8:
-      statusName = "Published";
-      badgeClass = "badge-soft-success";
+    case 5:
+      statusName = "Inprogress";
+      statusName = "Inprogress";
+      break;
+    case 6:
+      statusName = "New";
+      badgeClass = "badge-soft-info";
       break;
     case 9:
       statusName = "Deleted";

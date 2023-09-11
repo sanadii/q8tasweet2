@@ -15,26 +15,12 @@ import { TableContainerHeader, TableContainerFooter, TableContainerFilters } fro
 const TableContainer = ({
   // Global Header -------------------------
   isTableContainerFilter,
-  isElectionHeader,
   isElectionCategoryFilter,
   isCampaignRankFilter,
-  ContainerHeaderTitle,
-  isMultiDeleteButton,
 
-  // Button
-  isAddButton,
-  AddButtonText,
-  handleItemClick,
 
-  // Actions
-  handleAddButtonClick,
-  handleEntryClick,
-  onTabChange,
 
   // Constants, going where?
-  setIsEdit,
-  toggle,
-  setDeleteModalMulti,
   campaignMember,
   setElectionList,
   setCampaignMemberList,
@@ -43,10 +29,11 @@ const TableContainer = ({
   setElectionAttendeeList,
 
   // Filters -------------------------
-  SearchPlaceholder,
+  isGlobalFilter,
   isSearchFilter,
   isStatusFilter,
   isPriorityFilter,
+  isMemberRankFilter,
   isCandidateGenderFilter,
   isGuaranteeGenderFilter,
   isGuaranteeAttendanceFilter,
@@ -56,10 +43,16 @@ const TableContainer = ({
   isGuarantorFilter,
   isResetFilters,
   isTestFilter,
-  isGlobalSearch,
-  customPageSize,
+
+  // Settings
   filters,
   setFilters,
+  customPageSize,
+  SearchPlaceholder,
+
+  // Actions
+  onTabChange,
+
 
 
   // Other Filters
@@ -68,7 +61,6 @@ const TableContainer = ({
   // Table -------------------------
   columns,
   data,
-  isGlobalFilter,
 
   // Table Styling
   tableClass,
@@ -93,7 +85,6 @@ const TableContainer = ({
     setPageSize,
     state,
     preGlobalFilteredRows,
-    setGlobalFilter,
     state: { pageIndex, pageSize },
   } = useTable(
     {
@@ -136,12 +127,15 @@ const TableContainer = ({
       {isTableContainerFilter && (
         <CardBody>
           <TableContainerFilters
+
+            isGlobalFilter={isGlobalFilter}
             // Upper Filters -------------------------
             isElectionCategoryFilter={isElectionCategoryFilter}
             isCampaignRankFilter={isCampaignRankFilter}
 
             filters={filters}
             setFilters={setFilters}
+
             // Filters -------------------------
             SearchPlaceholder={SearchPlaceholder}
             isSearchFilter={isSearchFilter}
@@ -151,6 +145,7 @@ const TableContainer = ({
             isGuaranteeGenderFilter={isGuaranteeGenderFilter}
             isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
             isAttendeesGenderFilter={isAttendeesGenderFilter}
+            isMemberRankFilter={isMemberRankFilter}
             isCommitteeFilter={isCommitteeFilter}
             isGuaranteeStatusFilter={isGuaranteeStatusFilter}
             isGuarantorFilter={isGuarantorFilter}
@@ -175,7 +170,6 @@ const TableContainer = ({
             preGlobalFilteredRows={preGlobalFilteredRows}
             setPageSize={setPageSize}
             gotoPage={gotoPage}
-            setGlobalFilter={setGlobalFilter}
           />
         </CardBody>
       )}

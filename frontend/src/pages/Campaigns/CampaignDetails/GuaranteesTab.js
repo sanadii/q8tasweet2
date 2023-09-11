@@ -28,11 +28,11 @@ const GuaranteesTab = () => {
 
   // CampaignGuarantees Constants
   const [campaignGuarantee, setCampaignGuarantee] = useState(null);
-  const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
+  // const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
 
-  useEffect(() => {
-    setCampaignGuaranteeList(campaignGuarantees);
-  }, [campaignGuarantees]);
+  // useEffect(() => {
+  //   setCampaignGuaranteeList(campaignGuarantees);
+  // }, [campaignGuarantees]);
 
   // Delete Modal Constants
   const [deleteModal, setDeleteModal] = useState(false);
@@ -187,6 +187,7 @@ const GuaranteesTab = () => {
       },
       {
         Header: "Mobile",
+        accessor: "civil",
         filterable: false,
         Cell: (cellProps) => {
           return <p>{cellProps.row.original.mobile}</p>;
@@ -307,6 +308,28 @@ const GuaranteesTab = () => {
     [handleCampaignGuaranteeClick, checkedAll]
   );
 
+  // Filters -------------------------
+  const [filters, setFilters] = useState({
+    global: "",
+    rank: null,
+  });
+
+  const campaignGuaranteeList = campaignGuarantees.filter(campaignGuarantee => {
+    let isValid = true;
+
+    if (filters.rank !== null) {
+      isValid = isValid && campaignGuarantee.rank === filters.rank;
+    }
+
+
+    if (filters.global) {
+      isValid = isValid && campaignGuarantee.name && typeof campaignGuarantee.user.name === 'string' && campaignGuarantee.name.toLowerCase().includes(filters.global.toLowerCase());
+    }
+
+    return isValid;
+  });
+
+
   return (
     <React.Fragment>
       <DeleteModal
@@ -353,22 +376,25 @@ const GuaranteesTab = () => {
                   <TableContainer
                     // Filters -------------------------
                     isTableContainerFilter={true}
+                    isGlobalFilter={true}
+                    preGlobalFilteredRows={true}
+
                     isGuaranteeGenderFilter={true}
                     isGuaranteeAttendanceFilter={true}
                     isGuaranteeStatusFilter={true}
                     isGuarantorFilter={true}
                     onTabChange={handleTabChange}
 
-                    // Global Filters
-                    isGlobalFilter={true}
-                    preGlobalFilteredRows={true}
+                    // Settings
+                    filters={filters}
+                    setFilters={setFilters}
                     SearchPlaceholder="Search for Campaign Guarantees..."
 
                     // Data -------------------------
                     columns={columns}
                     data={campaignGuaranteeList || []}
                     customPageSize={50}
-                    setCampaignGuaranteeList={setCampaignGuaranteeList}
+                    // setCampaignGuaranteeList={setCampaignGuaranteeList}
 
                     // Styling -------------------------
                     className="custom-header-css"
