@@ -1,19 +1,15 @@
 import React, { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
-
-import PropTypes from "prop-types";
-import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
-import { Table, Row, Col, Button, Input, CardBody, CardHeader, CardFooter } from "reactstrap";
-import { CustomersGlobalFilter } from "../../Components/Common/GlobalSearchFilter";
+import { Row } from "reactstrap";
 
 import {
+    GlobalFilter,
     ResetFilters,
-    SearchFilter,
     StatusFilter,
     PriorityFilter,
     ElectionCategoryFilter,
     CandidateGenderFilter,
-    CampaignRankFilter,
+    MemberRankFilter,
     GuaranteeGenderFilter,
     AttendeeGenderFilter,
     GuaranteeStatusFilter,
@@ -22,61 +18,24 @@ import {
     GuaranteeAttendanceFilter,
 } from "./Filters";
 
-function GlobalFilter({
-    preGlobalFilteredRows,
-    globalFilter,
-    setGlobalFilter,
-    SearchPlaceholder,
-}) {
-    const count = preGlobalFilteredRows.length;
-    const [value, setValue] = React.useState(globalFilter);
-    const onChange = useAsyncDebounce((value) => {
-        setGlobalFilter(value || undefined);
-    }, 200);
 
-    return (
-        <React.Fragment>
-            <div className="col-xxl-3 col-sm-4">
-                <form>
-                    <Col>
-                        <div className="search-box me-2 mb-2 d-inline-block col-12">
-                            <input
-                                onChange={(e) => {
-                                    setValue(e.target.value);
-                                    onChange(e.target.value);
-                                }}
-                                id="search-bar-0"
-                                type="text"
-                                className="form-control search /"
-                                placeholder={SearchPlaceholder}
-                                value={value || ""}
-                            />
-                            <i className="bx bx-search-alt search-icon"></i>
-                        </div>
-                    </Col>
-                </form>
-            </div>
-        </React.Fragment>
-    );
-}
 
 const TableContainerFilters = ({
 
-    // Global Filter -------------------------
-    setGlobalFilter,
-    filters,
-    setFilters,
-    // Upper Filters -------------------------
+    // Tab Filters -------------------------
     isElectionCategoryFilter,
     isCampaignRankFilter,
 
-    // Filters -------------------------
-    SearchPlaceholder,
-    isSearchFilter,
-    searchField,
+    // Global Filter -------------------------
+    isGlobalFilter,
+
+    globalFilter,
+
+    // Select Filters -------------------------
     isStatusFilter,
     isPriorityFilter,
     isCandidateGenderFilter,
+    isMemberRankFilter,
     isGuaranteeGenderFilter,
     isGuaranteeAttendanceFilter,
     isAttendeesGenderFilter,
@@ -86,14 +45,15 @@ const TableContainerFilters = ({
     isResetFilters,
     isTestFilter,
     isGlobalSearch,
+
+
+    // Settings
+    filters,
+    setFilters,
     customPageSize,
+    SearchPlaceholder,
 
     // Constants
-    setIsEdit,
-    toggle,
-    setDeleteModalMulti,
-    campaignMember,
-    setElectionList,
     setCampaignMemberList,
     setElectionCandidateList,
     setCampaignGuaranteeList,
@@ -106,8 +66,6 @@ const TableContainerFilters = ({
     preGlobalFilteredRows,
     setPageSize,
     gotoPage,
-
-
 }) => {
     const onChangeInSelect = (event) => {
         setPageSize(Number(event.target.value));
@@ -136,10 +94,11 @@ const TableContainerFilters = ({
                                 setActiveTab={setActiveTab}
                             />
                         )}
-                        {isCampaignRankFilter && (
-                            <CampaignRankFilter
-                                setCampaignMemberList={setCampaignMemberList}
-                                onTabChange={onTabChange}
+                        {isMemberRankFilter && (
+                            <MemberRankFilter
+                                setFilters={setFilters}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
                             />
                         )}
                     </div>
@@ -163,25 +122,28 @@ const TableContainerFilters = ({
                                 ))}
                             </select>
                         )} */}
-                        {/* {isGlobalFilter && ( */}
-                        <GlobalFilter
-                            preGlobalFilteredRows={preGlobalFilteredRows}
-                            // globalFilter={state.globalFilter}
-                            setGlobalFilter={setGlobalFilter}
-                            // isElectionListFilter={isElectionListFilter}
-                            SearchPlaceholder={SearchPlaceholder}
-                        />
-                        {/* )} */}
-                        {isSearchFilter && (
-                            <SearchFilter filters={filters} setFilters={setFilters} searchField={searchField} />
+                        {isGlobalFilter && (
+                            <GlobalFilter
+                                preGlobalFilteredRows={preGlobalFilteredRows}
+                                setFilters={setFilters}
+                                SearchPlaceholder={SearchPlaceholder}
+                                globalFilter={filters?.global}
+
+                            />
                         )}
 
                         {isStatusFilter && (
-                            <StatusFilter filters={filters} setFilters={setFilters} />
+                            <StatusFilter
+                                filters={filters}
+                                setFilters={setFilters} />
                         )}
                         {isPriorityFilter && (
-                            <PriorityFilter filters={filters} setFilters={setFilters} />
+                            <PriorityFilter
+                                filters={filters}
+                                setFilters={setFilters} />
                         )}
+
+
                         {isCandidateGenderFilter && (
                             <CandidateGenderFilter
                                 setElectionCandidateList={setElectionCandidateList}
@@ -225,6 +187,7 @@ const TableContainerFilters = ({
                                 setFilters={setFilters}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}
+                                globalFilter={globalFilter}
                             />
                         )}
                     </div>

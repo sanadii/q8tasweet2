@@ -32,11 +32,11 @@ const MembersTab = () => {
 
   // --------------- Constants ---------------
   const [campaignMember, setCampaignMember] = useState([]);
-  const [campaignMemberList, setCampaignMemberList] = useState(campaignMembers);
+  // const [campaignMemberList, setCampaignMemberList] = useState(campaignMembers);
 
-  useEffect(() => {
-    setCampaignMemberList(campaignMembers);
-  }, [campaignMembers]);
+  // useEffect(() => {
+  //   setCampaignMemberList(campaignMembers);
+  // }, [campaignMembers]);
 
   const [isEdit, setIsEdit] = useState(false);
 
@@ -155,6 +155,8 @@ const MembersTab = () => {
     [toggle]
   );
 
+
+  // Columns -------------------------
   const columns = useMemo(() => {
     const checkColumn = [
       {
@@ -219,7 +221,6 @@ const MembersTab = () => {
     const rankColumn = [
       {
         Header: "Rank",
-        accessor: "rank",
         filterable: false,
         Cell: (cellProps) => {
           const rankId = cellProps.row.original.rank;
@@ -237,7 +238,6 @@ const MembersTab = () => {
     const mobileColumn = [
       {
         Header: "Mobile",
-        accessor: "mobile",
         filterable: false,
         Cell: (cellProps) => {
           return <p>{cellProps.row.original.mobile}</p>;
@@ -250,7 +250,6 @@ const MembersTab = () => {
       teamColumn = [
         {
           Header: "Team",
-          // accessor: "team",
           filterable: false,
           Cell: () => <p>{campaignMembers.length}</p>,
         },
@@ -263,7 +262,6 @@ const MembersTab = () => {
       guaranteesColumn = [
         {
           Header: "Guarantees",
-          accessor: "guarantees",  // Changed accessor to avoid conflict
           filterable: false,
           Cell: (cellProps) => <p>{getGuaranteeCountForMember(cellProps.row.original.id)}</p>,
           // Use row.original.id to access the original row data's 'id' value
@@ -276,7 +274,6 @@ const MembersTab = () => {
       committeeColumns = [
         {
           Header: "Committee",
-          accessor: "committee",
           filterable: false,
           Cell: (cellProps) => {
             const committeeId = cellProps.row.original.committee;
@@ -307,7 +304,6 @@ const MembersTab = () => {
       attendantColumns = [
         {
           Header: "Attendees",
-          // accessor: "Attendees",
           filterable: false,
           Cell: (cellProps) => <p>{getAttendeeCountForMember(cellProps.row.original.id)}</p>,
         },
@@ -318,7 +314,6 @@ const MembersTab = () => {
       attendantColumns = [
         {
           Header: "Sorted",
-          // accessor: "Sorted",
           filterable: false,
           Cell: () => (
             <p>
@@ -334,7 +329,6 @@ const MembersTab = () => {
       SupervisorColumns = [
         {
           Header: "Supervisor",
-          accessor: "supervisor",
           filterable: false,
           Cell: (cellProps) => {
             const supervisorId = cellProps.row.original.supervisor;
@@ -424,7 +418,27 @@ const MembersTab = () => {
   }, [handleCampaignMemberClick, checkedAll, activeTab]);
 
 
+  // Filters -------------------------
+  const [filters, setFilters] = useState({
+    global: "",
+    rank: null,
+  });
 
+  const campaignMemberList = campaignMembers.filter(campaignMember => {
+    let isValid = true;
+
+    if (filters.rank !== null) {
+      isValid = isValid && campaignMember.rank === filters.rank;
+    }
+
+
+    if (filters.global) {
+      isValid = isValid && campaignMember.user.name && typeof campaignMember.user.name === 'string' && campaignMember.user.name.toLowerCase().includes(filters.global.toLowerCase());
+    }
+
+    return isValid;
+  });
+  
   return (
     <React.Fragment>
       <DeleteModal
@@ -474,23 +488,30 @@ const MembersTab = () => {
                     modalMode="AddModal"
                     setModalMode={setModalMode}
                     toggle={toggle}
-                    isTableContainerFilter={true}
                     campaignMember={campaignMember}
 
                     // Filters -------------------------
-                    isCampaignRankFilter={true}
-                    onTabChange={handleTabChange}
-                    isFieldFilter={true}
-
-                    // Global Filters
+                    isTableContainerFilter={true}
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
+
+                    isMemberRankFilter={true}
+                    isResetFilters={true}
+
+                    // Settings
+                    filters={filters}
+                    setFilters={setFilters}
+                    // preGlobalFilteredRows={true}
                     SearchPlaceholder="Search for Campaign Members..."
+
+                    // Actions
+                    onTabChange={handleTabChange}
+
 
                     // Data -------------------------
                     columns={columns}
                     data={campaignMemberList || []}
-                    setCampaignMemberList={setCampaignMemberList}
+                    // setCampaignMemberList={setCampaignMemberList}
                     customPageSize={50}
                     // TODO: to find out what is this for and how to be used with the table
                     // handleItemClick={() => handleCampaignMemberClick(campaignMember, "AddModal")}
