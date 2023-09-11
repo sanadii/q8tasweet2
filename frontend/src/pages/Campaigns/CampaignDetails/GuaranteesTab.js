@@ -311,23 +311,32 @@ const GuaranteesTab = () => {
   // Filters -------------------------
   const [filters, setFilters] = useState({
     global: "",
-    rank: null,
+    attended: null,
+    gender: null,
+    status: null,
+    member: null,
   });
 
   const campaignGuaranteeList = campaignGuarantees.filter(campaignGuarantee => {
     let isValid = true;
-
-    if (filters.rank !== null) {
-      isValid = isValid && campaignGuarantee.rank === filters.rank;
-    }
-
-
     if (filters.global) {
       isValid = isValid && campaignGuarantee.name && typeof campaignGuarantee.user.name === 'string' && campaignGuarantee.name.toLowerCase().includes(filters.global.toLowerCase());
     }
-
+    if (filters.attended !== null) {
+      isValid = isValid && campaignGuarantee.attended === filters.attended;
+    }
+    if (filters.gender !== null) {
+      isValid = isValid && campaignGuarantee.gender === filters.gender;
+    }
+    if (filters.status !== null) {
+      isValid = isValid && campaignGuarantee.status === filters.status;
+    }
+    if (filters.member !== null) {
+      isValid = isValid && campaignGuarantee.member === filters.member;
+    }
     return isValid;
   });
+
 
 
   return (
@@ -379,10 +388,11 @@ const GuaranteesTab = () => {
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
 
-                    isGuaranteeGenderFilter={true}
+                    isGenderFilter={true}
                     isGuaranteeAttendanceFilter={true}
                     isGuaranteeStatusFilter={true}
                     isGuarantorFilter={true}
+                    isResetFilters={true}
                     onTabChange={handleTabChange}
 
                     // Settings

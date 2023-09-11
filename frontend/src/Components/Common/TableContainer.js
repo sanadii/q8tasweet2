@@ -26,7 +26,6 @@ const TableContainer = ({
   setCampaignMemberList,
   setElectionCandidateList,
   setCampaignGuaranteeList,
-  setElectionAttendeeList,
 
   // Filters -------------------------
   isGlobalFilter,
@@ -35,7 +34,7 @@ const TableContainer = ({
   isPriorityFilter,
   isMemberRankFilter,
   isCandidateGenderFilter,
-  isGuaranteeGenderFilter,
+  isGenderFilter,
   isGuaranteeAttendanceFilter,
   isAttendeesGenderFilter,
   isCommitteeFilter,
@@ -142,7 +141,7 @@ const TableContainer = ({
             isStatusFilter={isStatusFilter}
             isPriorityFilter={isPriorityFilter}
             isCandidateGenderFilter={isCandidateGenderFilter}
-            isGuaranteeGenderFilter={isGuaranteeGenderFilter}
+            isGenderFilter={isGenderFilter}
             isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
             isAttendeesGenderFilter={isAttendeesGenderFilter}
             isMemberRankFilter={isMemberRankFilter}
@@ -161,7 +160,6 @@ const TableContainer = ({
             setCampaignMemberList={setCampaignMemberList}
             setElectionCandidateList={setElectionCandidateList}
             setCampaignGuaranteeList={setCampaignGuaranteeList}
-            setElectionAttendeeList={setElectionAttendeeList}
 
             // Actions
             onTabChange={onTabChange}

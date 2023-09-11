@@ -33,8 +33,7 @@ const AttendeesList = () => {
 
   // ElectionAttendees Constants
   const [electionAttendee, setElectionAttendee] = useState(null);
-  const [electionAttendeeList, setElectionAttendeeList] =
-    useState(electionAttendees);
+  useState(electionAttendees);
 
   // Delete Modal Constants
   const [deleteModal, setDeleteModal] = useState(false);
@@ -44,9 +43,6 @@ const AttendeesList = () => {
   const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
   const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
 
-  useEffect(() => {
-    setElectionAttendeeList(electionAttendees);
-  }, [electionAttendees]);
 
   // Delete Data
   const handleDeleteElectionAttendee = () => {
@@ -275,6 +271,30 @@ const AttendeesList = () => {
     [handleElectionAttendeeClick, checkedAll]
   );
 
+  // Filters -------------------------
+  const [filters, setFilters] = useState({
+    global: "",
+    gender: null,
+    committee: null,
+    member: null,
+  });
+
+  const electionAttendeeList = electionAttendees.filter(electionAttendee => {
+    let isValid = true;
+    if (filters.global) {
+      isValid = isValid && electionAttendee.name && typeof electionAttendee.user.name === 'string' && electionAttendee.name.toLowerCase().includes(filters.global.toLowerCase());
+    }
+    if (filters.gender !== null) {
+      isValid = isValid && electionAttendee.gender === filters.gender;
+    }
+    if (filters.committee !== null) {
+      isValid = isValid && electionAttendee.committee === filters.committee;
+    }
+    return isValid;
+  });
+
+
+
   return (
     <React.Fragment>
       <DeleteModal
@@ -320,8 +340,10 @@ const AttendeesList = () => {
                   <TableContainer
                     // Filters -------------------------
                     isTableContainerFilter={true}
-                    isAttendeesGenderFilter={true}
+                    isGenderFilter={true}
                     isCommitteeFilter={true}
+                    filters={filters}
+                    setFilters={setFilters}
 
                     // Global Filters
                     isGlobalFilter={true}
@@ -333,7 +355,6 @@ const AttendeesList = () => {
                     columns={columns}
                     data={electionAttendeeList || []}
                     customPageSize={50}
-                    setElectionAttendeeList={setElectionAttendeeList}
 
 
                     // Styling -------------------------

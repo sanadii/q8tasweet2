@@ -260,7 +260,7 @@ const SelectColumnFilter = ({
 };
 
 
-// Select Filter
+// Select Filter -------------------------
 const PriorityFilter = ({ filters, setFilters }) => {
   const ChangeSelectedPriority = (e) => {
     const selectedPriorityId = parseInt(e, 10);
@@ -331,31 +331,29 @@ const StatusFilter = ({ filters, setFilters }) => {
   );
 };
 
-const GuaranteeStatusFilter = ({ setCampaignGuaranteeList }) => {
-  const campaignGuarantees = useSelector(
-    (state) => state.Campaigns.campaignGuarantees
-  );
+const GuaranteeStatusFilter = ({ filters, setFilters }) => {
 
   const ChangeCampaignGuaranteeStatus = (e) => {
-    const selectedStatusId = parseInt(e, 10); // Convert string to integer
-    if (selectedStatusId || selectedStatusId === 0) {
-      setCampaignGuaranteeList(
-        campaignGuarantees.filter((item) => item.status === selectedStatusId)
-      );
-    } else {
-      setCampaignGuaranteeList(campaignGuarantees);
-    }
+    const selectedStatusId = e ? parseInt(e, 10) : null; // Convert string to integer, if no value is provided it will become null
+
+    // Update the filters
+    setFilters(prev => ({
+      ...prev,
+      status: selectedStatusId,
+    }));
   };
 
   return (
     <React.Fragment>
       <div className="col-xxl-3 col-sm-4">
+        <strong>Status</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
             name="choices-select-status"
             id="choices-select-status"
             onChange={(e) => ChangeCampaignGuaranteeStatus(e.target.value)}
+            value={filters.status || ''}
           >
             <option value="">- All Statuses - </option>
             {GuaranteeStatusOptions.map((status) => (
@@ -369,6 +367,7 @@ const GuaranteeStatusFilter = ({ setCampaignGuaranteeList }) => {
     </React.Fragment>
   );
 };
+
 
 const CandidateGenderFilter = ({ setElectionCandidateList }) => {
   const electionCandidates = useSelector(
@@ -410,7 +409,7 @@ const CandidateGenderFilter = ({ setElectionCandidateList }) => {
   );
 };
 
-const GuaranteeGenderFilter = ({ setCampaignGuaranteeList }) => {
+const GenderFilter = ({ filters, setFilters }) => {
   const campaignGuarantees = useSelector(
     (state) => state.Campaigns.campaignGuarantees
   );
@@ -418,24 +417,24 @@ const GuaranteeGenderFilter = ({ setCampaignGuaranteeList }) => {
   const ChangeGuaranteeGender = (e) => {
     const selectedGender = e ? Number(e) : null; // Convert to number
 
-    if (selectedGender) {
-      setCampaignGuaranteeList(
-        campaignGuarantees.filter((item) => item.gender === selectedGender)
-      );
-    } else {
-      setCampaignGuaranteeList(campaignGuarantees); // Reset to original list if no gender selected
-    }
+    // Update the filters
+    setFilters(prev => ({
+      ...prev,
+      gender: selectedGender,
+    }));
   };
 
   return (
     <React.Fragment>
       <div className="col-xxl-3 col-sm-4">
+        <strong>Gender</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
             name="choices-select-gender"
             id="choices-select-gender"
             onChange={(e) => ChangeGuaranteeGender(e.target.value)}
+            value={filters.gender || ''}
           >
             <option value="">- All Genders - </option>
             {GenderOptions.map((gender) => (
@@ -450,14 +449,15 @@ const GuaranteeGenderFilter = ({ setCampaignGuaranteeList }) => {
   );
 };
 
-const GuaranteeAttendanceFilter = ({ setCampaignGuaranteeList }) => {
+
+const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
   const campaignGuarantees = useSelector(
     (state) => state.Campaigns.campaignGuarantees
   );
 
   const AttendanceOptions = [
-    { id: true, name: "Attended" },
-    { id: false, name: "Not Attended" },
+    { id: 'true', name: "Attended" },
+    { id: 'false', name: "Not Attended" },
   ];
 
   const ChangeGuaranteeAttendance = (e) => {
@@ -465,33 +465,29 @@ const GuaranteeAttendanceFilter = ({ setCampaignGuaranteeList }) => {
 
     console.log("Selected Attendance:", selectedAttendance);
 
-    if (selectedAttendance !== null) {
-      console.log("Filtering campaignGuarantees based on attendance:", selectedAttendance);
-      setCampaignGuaranteeList(
-        campaignGuarantees.filter((item) => item.attended === selectedAttendance)
-      );
-    } else {
-      console.log("Resetting campaignGuarantees to original list.");
-      setCampaignGuaranteeList(campaignGuarantees); // Reset to original list if no attendance selected
-    }
+    // Update the filters
+    setFilters(prev => ({
+      ...prev,
+      attended: selectedAttendance,
+    }));
   };
-
-
 
   return (
     <React.Fragment>
       <div className="col-xxl-3 col-sm-4">
+        <strong>Attendance</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
             name="choices-select-attendeed"
             id="choices-select-attendeed"
             onChange={(e) => ChangeGuaranteeAttendance(e.target.value)}
+            value={filters.attended === null ? '' : String(filters.attended)}
           >
             <option value="">- All Attendances - </option>
-            {AttendanceOptions.map((attendeed) => (
-              <option key={attendeed.id} value={attendeed.id}>
-                {attendeed.name}
+            {AttendanceOptions.map((attendance) => (
+              <option key={attendance.id} value={attendance.id}>
+                {attendance.name}
               </option>
             ))}
           </select>
@@ -501,91 +497,141 @@ const GuaranteeAttendanceFilter = ({ setCampaignGuaranteeList }) => {
   );
 };
 
-const AttendeeGenderFilter = ({ setElectionAttendeeList }) => {
-  const electionAttendees = useSelector(
-    (state) => state.Campaigns.electionAttendees
-  );
 
-  const ChangeAttendeeGender = (e) => {
-    const selectedGender = e ? Number(e) : null; // Convert to number
+// const AttendeeGenderFilter = ({ filters, setFilters }) => {
+//   const electionAttendees = useSelector(
+//     (state) => state.Campaigns.electionAttendees
+//   );
 
-    if (selectedGender) {
-      setElectionAttendeeList(
-        electionAttendees.filter((item) => item.gender === selectedGender)
-      );
-    } else {
-      setElectionAttendeeList(electionAttendees); // Reset to original list if no gender selected
-    }
-  };
+//   const ChangeAttendeeGender = (e) => {
+//     const selectedGender = e ? Number(e) : null; // Convert to number
 
-  return (
-    <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <div className="input-light">
-          <select
-            className="form-select form-control"
-            name="choices-select-gender"
-            id="choices-select-gender"
-            onChange={(e) => ChangeAttendeeGender(e.target.value)}
-          >
-            <option value="">- All Genders - </option>
-            {GenderOptions.map((gender) => (
-              <option key={gender.id} value={gender.id}>
-                {gender.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-    </React.Fragment>
-  );
-};
+//     // Update the filters
+//     setFilters(prev => ({
+//       ...prev,
+//       gender: selectedGender,
+//     }));
+//   };
 
-const GuarantorFilter = ({ setCampaignGuaranteeList }) => {
-  const { campaignMembers, campaignGuarantees } = useSelector((state) => ({
+//   return (
+//     <React.Fragment>
+//       <div className="col-xxl-3 col-sm-4">
+//         <strong>Gender</strong>
+//         <div className="input-light">
+//           <select
+//             className="form-select form-control"
+//             name="choices-select-gender"
+//             id="choices-select-gender"
+//             onChange={(e) => ChangeAttendeeGender(e.target.value)}
+//             value={filters.gender || ''}
+//           >
+//             <option value="">- All Genders - </option>
+//             {GenderOptions.map((gender) => (
+//               <option key={gender.id} value={gender.id}>
+//                 {gender.name}
+//               </option>
+//             ))}
+//           </select>
+//         </div>
+//       </div>
+//     </React.Fragment>
+//   );
+// };
+
+// const AttendeeGenderFilter = ({ setElectionAttendeeList }) => {
+//   const electionAttendees = useSelector(
+//     (state) => state.Campaigns.electionAttendees
+//   );
+
+//   const ChangeAttendeeGender = (e) => {
+//     const selectedGender = e ? Number(e) : null; // Convert to number
+
+//     if (selectedGender) {
+//       setElectionAttendeeList(
+//         electionAttendees.filter((item) => item.gender === selectedGender)
+//       );
+//     } else {
+//       setElectionAttendeeList(electionAttendees); // Reset to original list if no gender selected
+//     }
+//   };
+
+//   return (
+//     <React.Fragment>
+//       <div className="col-xxl-3 col-sm-4">
+//         <div className="input-light">
+//           <select
+//             className="form-select form-control"
+//             name="choices-select-gender"
+//             id="choices-select-gender"
+//             onChange={(e) => ChangeAttendeeGender(e.target.value)}
+//           >
+//             <option value="">- All Genders - </option>
+//             {GenderOptions.map((gender) => (
+//               <option key={gender.id} value={gender.id}>
+//                 {gender.name}
+//               </option>
+//             ))}
+//           </select>
+//         </div>
+//       </div>
+//     </React.Fragment>
+//   );
+// };
+
+const GuarantorFilter = ({ filters, setFilters }) => {
+  const { campaignMembers, } = useSelector((state) => ({
     campaignMembers: state.Campaigns.campaignMembers,
-    campaignGuarantees: state.Campaigns.campaignGuarantees,
   }));
 
   const [sortedGurantorOptions, setSortedGuarantorOptions] = useState([]);
+
+  useEffect(() => {
+    console.log('Initial campaignMembers:', campaignMembers);
+    console.log('Initial filters:', filters);
+  }, []);
+
 
   useEffect(() => {
     const GurantorOptions = campaignMembers.filter(
       (member) => member.rank === 2 || member.rank === 3 || member.rank === 4
     );
 
-    // console.log("Filtered Gurantor Options:", GurantorOptions); // Check the filtered guarantor options
+    console.log('Filtered GuarantorOptions:', GurantorOptions);
 
     setSortedGuarantorOptions(GurantorOptions.sort((a, b) => a.rank - b.rank));
   }, [campaignMembers]);
 
-  const ChangeGuaranteeRank = (selectedRank) => {
-    // console.log("Selected Rank:", selectedRank); // Check which rank is selected
 
-    if (selectedRank) {
-      const filteredGuarantees = campaignGuarantees.filter(
-        (item) => item.member === parseInt(selectedRank)
-      );
-      // console.log("Filtered Guarantees:", filteredGuarantees); // Check the results of the filtering
-      setCampaignGuaranteeList(filteredGuarantees);
-    } else {
-      setCampaignGuaranteeList(campaignGuarantees);
-    }
+  const ChangeGuaranteeRank = (e) => {
+    const selectedRank = e.target.value ? parseInt(e.target.value, 10) : null;
+    console.log('Selected Rank:', selectedRank);
+
+    // Update the filters
+    setFilters(prev => ({
+      ...prev,
+      member: selectedRank,
+    }));
+
+    console.log('Updated Filters:', filters);
   };
+
+
   return (
     <React.Fragment>
       <div className="col-xxl-3 col-sm-4">
+        <strong>Guarantor</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
             name="choices-select-guarantor"
             id="choices-select-guarantor"
-            onChange={(e) => ChangeGuaranteeRank(e.target.value)}
+            onChange={ChangeGuaranteeRank}
+            value={filters.member || ''}
           >
             <option value="">- All Ranks - </option>
-            {sortedGurantorOptions.map((guarantor) => (
-              <option key={guarantor.id} value={guarantor.id}>
-                {guarantor.user.name}
+            {sortedGurantorOptions.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.user.name}
               </option>
             ))}
           </select>
@@ -594,6 +640,7 @@ const GuarantorFilter = ({ setCampaignGuaranteeList }) => {
     </React.Fragment>
   );
 };
+
 
 
 
@@ -624,15 +671,16 @@ const ElectionCommitteeFilter = ({ setElectionAttendeeList }) => {
     electionCommittees: state.Campaigns.electionCommittees,
   }));
 
-  // We removed useMemo, sorting directly
+  // Directly sorting the committees
   const sortedCommitteeOptions = [...electionCommittees].sort((a, b) =>
     a.name.localeCompare(b.name)
   );
 
-  const ChangeCommitteeOption = (selectedCommittee) => {
+  const ChangeCommitteeOption = (e) => {
+    const selectedCommittee = e.target.value;
     if (selectedCommittee) {
       const filteredAttendees = electionAttendees.filter(
-        (item) => item.committee === parseInt(selectedCommittee)
+        (item) => item.committee === parseInt(selectedCommittee, 10)
       );
       setElectionAttendeeList(filteredAttendees);
     } else {
@@ -644,12 +692,13 @@ const ElectionCommitteeFilter = ({ setElectionAttendeeList }) => {
   return (
     <React.Fragment>
       <div className="col-xxl-3 col-sm-4">
+        <strong>Committee</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
             name="choices-select-committee"
             id="choices-select-committee"
-            onChange={(e) => ChangeCommitteeOption(e.target.value)}
+            onChange={ChangeCommitteeOption}
           >
             <option value="">- All Committees - </option>
             {sortedCommitteeOptions.map((committee) => (
@@ -664,6 +713,7 @@ const ElectionCommitteeFilter = ({ setElectionAttendeeList }) => {
   );
 };
 
+
 const ResetFilters = ({ setFilters, activeTab, setActiveTab }) => {
 
   return (
@@ -677,6 +727,10 @@ const ResetFilters = ({ setFilters, activeTab, setActiveTab }) => {
             priority: null,
             category: null,
             rank: null,
+            gender: null,
+            member: null,
+            attended: null,
+            guaranteeStatus: null,
             global: ""
           });
 
@@ -701,8 +755,8 @@ export {
   PriorityFilter,
   ElectionCategoryFilter,
   CandidateGenderFilter,
-  GuaranteeGenderFilter,
-  AttendeeGenderFilter,
+  GenderFilter,
+  // AttendeeGenderFilter,
   GuaranteeAttendanceFilter,
   GuaranteeStatusFilter,
   // MemberRankFilter,
