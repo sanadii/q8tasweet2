@@ -10,8 +10,8 @@ import {
     ElectionCategoryFilter,
     CandidateGenderFilter,
     MemberRankFilter,
-    GuaranteeGenderFilter,
-    AttendeeGenderFilter,
+    GenderFilter,
+    // AttendeeGenderFilter,
     GuaranteeStatusFilter,
     GuarantorFilter,
     ElectionCommitteeFilter,
@@ -36,7 +36,7 @@ const TableContainerFilters = ({
     isPriorityFilter,
     isCandidateGenderFilter,
     isMemberRankFilter,
-    isGuaranteeGenderFilter,
+    isGenderFilter,
     isGuaranteeAttendanceFilter,
     isAttendeesGenderFilter,
     isCommitteeFilter,
@@ -57,7 +57,7 @@ const TableContainerFilters = ({
     setCampaignMemberList,
     setElectionCandidateList,
     setCampaignGuaranteeList,
-    setElectionAttendeeList,
+    // setElectionAttendeeList,
 
     // Actions
     onTabChange,
@@ -135,12 +135,14 @@ const TableContainerFilters = ({
                         {isStatusFilter && (
                             <StatusFilter
                                 filters={filters}
-                                setFilters={setFilters} />
+                                setFilters={setFilters}
+                            />
                         )}
                         {isPriorityFilter && (
                             <PriorityFilter
                                 filters={filters}
-                                setFilters={setFilters} />
+                                setFilters={setFilters}
+                            />
                         )}
 
 
@@ -151,32 +153,38 @@ const TableContainerFilters = ({
                         )}
                         {isGuaranteeAttendanceFilter && (
                             <GuaranteeAttendanceFilter
-                                setCampaignGuaranteeList={setCampaignGuaranteeList}
+                                filters={filters}
+                                setFilters={setFilters}
                             />
                         )}
-                        {isGuaranteeGenderFilter && (
-                            <GuaranteeGenderFilter
-                                setCampaignGuaranteeList={setCampaignGuaranteeList}
+                        {isGenderFilter && (
+                            <GenderFilter
+                                filters={filters}
+                                setFilters={setFilters}
                             />
                         )}
-                        {isAttendeesGenderFilter && (
+                        {/* {isAttendeesGenderFilter && (
                             <AttendeeGenderFilter
-                                setElectionAttendeeList={setElectionAttendeeList}
+                                filters={filters}
+                                setFilters={setFilters}
                             />
-                        )}
+                        )} */}
                         {isCommitteeFilter && (
                             <ElectionCommitteeFilter
-                                setElectionAttendeeList={setElectionAttendeeList}
+                                filters={filters}
+                                setFilters={setFilters}
                             />
                         )}
                         {isGuaranteeStatusFilter && (
                             <GuaranteeStatusFilter
-                                setCampaignGuaranteeList={setCampaignGuaranteeList}
+                                filters={filters}
+                                setFilters={setFilters}
                             />
                         )}
                         {isGuarantorFilter && (
                             <GuarantorFilter
-                                setCampaignGuaranteeList={setCampaignGuaranteeList}
+                                filters={filters}
+                                setFilters={setFilters}
                             />
                         )}
 
