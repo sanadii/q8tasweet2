@@ -417,7 +417,8 @@ class AddNewCampaignGuarantee(APIView):
             "campaign": campaign.id,
             "member": member.id,
             "civil": elector.civil,
-            "full_name": elector.full_name(),
+            # "full_name": elector.full_name(),
+            "full_name": elector.full_name,
             "gender": elector.gender,
             "status": campaign_guarantee.status,
             # ... other fields you want to return

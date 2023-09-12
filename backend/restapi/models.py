@@ -31,6 +31,8 @@ class ProjectInfo(models.Model):
     def __str__(self):
         return str(self.id)
 
+
+
 class Categories(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -51,8 +53,11 @@ class Categories(models.Model):
 
     class Meta:
         db_table = "category"
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
-    # Categories
+    def __str__(self):
+        return self.name
 
 
 # Database
@@ -95,6 +100,12 @@ class Elections(models.Model):
     class Meta:
         # managed = False
         db_table = "election"
+        verbose_name = "Election"
+        verbose_name_plural = "Elections"
+
+    def __str__(self):
+        return self.name
+
 
 class Candidates(models.Model):
     # Basic Information
@@ -136,7 +147,12 @@ class Candidates(models.Model):
 
     class Meta:
         db_table = "candidate"
+        verbose_name = "Candidate"
+        verbose_name_plural = "Candidates"
 
+    def __str__(self):
+        return self.name
+    
 class ElectionCandidates(models.Model):
     id = models.BigAutoField(primary_key=True)
     election = models.ForeignKey(Elections, on_delete=models.SET_NULL, null=True, blank=True, default=1)
@@ -165,7 +181,13 @@ class ElectionCandidates(models.Model):
 
     class Meta:
         db_table = "election_candidate"
+        verbose_name = "Election Candidate"
+        verbose_name_plural = "Election Candidates"
 
+    def __str__(self):
+        return str(self.candidate.name)
+
+    
 class ElectionCommittees(models.Model):
     # Basic Information
     id = models.BigAutoField(primary_key=True)
@@ -184,6 +206,11 @@ class ElectionCommittees(models.Model):
 
     class Meta:
         db_table = "election_committee"
+        verbose_name = "Election Committe"
+        verbose_name_plural = "Election Committes"
+
+    def __str__(self):
+        return self.name
 
 class Campaigns(models.Model):
     # Basic Information
@@ -197,14 +224,16 @@ class Campaigns(models.Model):
     # video = models.FileField(upload_to='campaign/videos/', blank=True, null=True)
 
     # Contacts
-    social_media_handles = models.CharField(max_length=255, blank=True, null=True)
-    website = models.URLField(max_length=200, blank=True, null=True)
+    twitter = models.CharField(max_length=120, blank=True, null=True)
+    instagram = models.CharField(max_length=120, blank=True, null=True)
+    website = models.URLField(max_length=120, blank=True, null=True)
 
     # Activities
     events = models.PositiveIntegerField(blank=True, null=True)
     attendees = models.PositiveIntegerField(blank=True, null=True)
     media_coverage = models.PositiveIntegerField(blank=True, null=True)
-    results = models.TextField(blank=True, null=True)
+    results = models.IntegerField(blank=True, null=True)
+
 
     # Administration
     moderators = models.CharField(max_length=255, blank=True, null=True)
@@ -222,6 +251,11 @@ class Campaigns(models.Model):
 
     class Meta:
         db_table = "campaign"
+        verbose_name = "Campaign"
+        verbose_name_plural = "Campaigns"
+
+    def __str__(self):
+        return f"{self.election_candidate.candidate.name} - {self.title}"  # Assuming the candidate's name is accessible through the relation
 
 
 civil_validator = RegexValidator(regex=r'^\d{12}$', message="Civil must be exactly 12 digits.")
@@ -251,8 +285,35 @@ class CampaignMembers(models.Model):
     class Meta:
         # managed = False
         db_table = 'campaign_member'
+        verbose_name = "Campaign Member"
+        verbose_name_plural = "Campaign Members"
 
+    class Rank(models.TextChoices):
+        PARTY = '1', 'Party'
+        CANDIDATE = '2', 'Candidate'
+        SUPERVISOR = '3', 'Supervisor'
+        GUARANTOR = '4', 'Guarantor'
+        ATTENDANT = '5', 'Attendant'
+        SORTER = '6', 'Sorter'
+        # OTHER = '7', 'Other'  # Commented out as per your code.
+        MODERATOR = '10', 'Moderator'
+        
+    # Your other fields here...
+    
+    rank = models.CharField(
+        max_length=2,
+        choices=Rank.choices,
+        blank=True, 
+        null=True
+    )
 class Electors(models.Model):
+    MALE = 1
+    FEMALE = 2
+    GENDER_CHOICES = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+    )
+
     civil = models.BigAutoField(primary_key=True)
     
     # Name fields
@@ -277,7 +338,7 @@ class Electors(models.Model):
     # last_4 = models.CharField(max_length=255, blank=True, null=True)
     # last_name = models.CharField(max_length=255, blank=True, null=True)
     
-    gender = models.IntegerField(blank=True, null=True)
+    gender = models.IntegerField(choices=GENDER_CHOICES, blank=True, null=True)
     serial_number = models.CharField(max_length=255, blank=True, null=True)
     membership_no = models.CharField(max_length=255, blank=True, null=True)
     box_no = models.CharField(max_length=255, blank=True, null=True)
@@ -299,6 +360,8 @@ class Electors(models.Model):
     class Meta:
         # managed = False
         db_table = 'electors'
+        verbose_name = "Elector"
+        verbose_name_plural = "Electors"
 
 class CampaignGuarantees(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -321,6 +384,8 @@ class CampaignGuarantees(models.Model):
     class Meta:
         # managed = False
         db_table = 'campaign_guarantee'
+        verbose_name = "Campaign Guarantee"
+        verbose_name_plural = "Campaign Guarantees"
 
 class ElectionAttendees(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -343,7 +408,8 @@ class ElectionAttendees(models.Model):
     class Meta:
         # managed = False
         db_table = 'election_attendee'
-
+        verbose_name = "Election Attendee"
+        verbose_name_plural = "Election Attendees"
 
 # Categories
 
@@ -367,8 +433,12 @@ class Areas(models.Model):
 
     class Meta:
         db_table = "area"
+        verbose_name = "Area"
+        verbose_name_plural = "Areas"
 
-
+    def __str__(self):
+        return self.name
+    
 # Categories
 class Tags(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -386,6 +456,11 @@ class Tags(models.Model):
 
     class Meta:
         db_table = "Tags"
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
+
+    def __str__(self):
+        return self.name
 
 
 # voting_system:, voter_turnout, result, winning_candidate, campaign_budget, voting_committees, registration_deadline, special_instructions:

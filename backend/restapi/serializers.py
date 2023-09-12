@@ -393,26 +393,46 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
     #     return None
 
     def get_full_name(self, obj):
-        return obj.civil.full_name if obj.civil else None
-
+        try:
+            return obj.civil.full_name if obj.civil else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_gender(self, obj):
-        return obj.civil.gender if obj.civil else None
+        try:
+            return obj.civil.gender if obj.civil else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_membership_no(self, obj):
-        return obj.civil.membership_no if obj.civil else None
+        try:
+            return obj.civil.membership_no if obj.civil else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_box_no(self, obj):
-        return obj.civil.box_no if obj.civil else None
+        try:
+            return obj.civil.box_no if obj.civil else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_enrollment_date(self, obj):
-        return obj.civil.enrollment_date if obj.civil else None
+        try:
+            return obj.civil.enrollment_date if obj.civil else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_relationship(self, obj):
-        return obj.civil.relationship if obj.civil else None
+        try:
+            return obj.civil.relationship if obj.civil else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_elector_notes(self, obj):
-        return obj.civil.notes if obj.civil else None
+        try:
+            return obj.civil.notes if obj.civil else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
 
 
@@ -454,30 +474,52 @@ class ElectionAttendeesSerializer(serializers.ModelSerializer):
     #     return None
 
     def get_full_name(self, obj):
-        return obj.elector.full_name if obj.elector else None
-    
+        try:
+            return obj.elector.full_name if obj.elector else None
+        except Electors.DoesNotExist:
+            return "Not Found"
+
     def get_gender(self, obj):
-        return obj.elector.gender if obj.elector else None
+        try:
+            return obj.elector.gender if obj.elector else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_membership_no(self, obj):
-        return obj.elector.membership_no if obj.elector else None
+        try:
+            return obj.elector.membership_no if obj.elector else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_box_no(self, obj):
-        return obj.elector.box_no if obj.elector else None
+        try:
+            return obj.elector.box_no if obj.elector else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_enrollment_date(self, obj):
-        return obj.elector.enrollment_date if obj.elector else None
+        try:
+            return obj.elector.enrollment_date if obj.elector else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_relationship(self, obj):
-        return obj.elector.relationship if obj.elector else None
+        try:
+            return obj.elector.relationship if obj.elector else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 
     def get_elector_notes(self, obj):
-        return obj.elector.notes if obj.elector else None
-    
+        try:
+            return obj.elector.notes if obj.elector else None
+        except Electors.DoesNotExist:
+            return "Not Found"
+        
     def get_civil(self, obj):
-        return obj.elector.civil if obj.elector else None
-
-
+        try:
+            return obj.elector.civil if obj.elector else None
+        except Electors.DoesNotExist:
+            return "Not Found"
 # CampainDetails
 class CampaignDetailsSerializer(serializers.ModelSerializer):
     election = ElectionsSerializer(read_only=True)

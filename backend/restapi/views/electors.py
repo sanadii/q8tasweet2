@@ -13,6 +13,7 @@ from datetime import date
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import NotFound
 
 from restapi.serializers import *
 from restapi.models import *
@@ -120,15 +121,15 @@ class GetElectors(APIView):
         
         if query.isdigit():
             electors = Electors.objects.filter(civil=query)
+            if not electors.exists():
+                raise NotFound(detail="Name was not found.", code=404)
         else:
-            # Get all electors and filter them in Python based on full_name
             all_electors = Electors.objects.all()
             if len(query) >= 3:
-                electors = [elector for elector in all_electors if query.lower() in elector.full_name().lower()]
+                electors = [elector for elector in all_electors if query.lower() in elector.full_name.lower()]
             else:
                 electors = all_electors
 
-        # Pagination
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(electors, request)
         serialized = ElectorsSerializer(result_page, many=True)
@@ -142,6 +143,8 @@ class GetElectors(APIView):
         }
 
         return Response(response_data)
+
+
 
 
 class AddNewElectionAttendee(APIView):
