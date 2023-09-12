@@ -74,7 +74,7 @@ const GuaranteesTab = () => {
         civil: campaignGuarantee.civil,
         full_name: campaignGuarantee.full_name,
         box_no: campaignGuarantee.box_no,
-        member_no: campaignGuarantee.member_no,
+        membership_no: campaignGuarantee.membership_no,
         enrollment_date: campaignGuarantee.enrollment_date,
         mobile: campaignGuarantee.mobile,
         status: campaignGuarantee.status,
@@ -320,7 +320,12 @@ const GuaranteesTab = () => {
   const campaignGuaranteeList = campaignGuarantees.filter(campaignGuarantee => {
     let isValid = true;
     if (filters.global) {
-      isValid = isValid && campaignGuarantee.name && typeof campaignGuarantee.user.name === 'string' && campaignGuarantee.name.toLowerCase().includes(filters.global.toLowerCase());
+      const globalSearch = filters.global.toLowerCase();
+
+      const nameIncludes = campaignGuarantee.full_name && typeof campaignGuarantee.full_name === 'string' && campaignGuarantee.full_name.toLowerCase().includes(globalSearch);
+      const civilIncludes = campaignGuarantee.civil && typeof campaignGuarantee.civil === 'number' && String(campaignGuarantee.civil).includes(globalSearch);
+
+      isValid = isValid && (nameIncludes || civilIncludes);
     }
     if (filters.attended !== null) {
       isValid = isValid && campaignGuarantee.attended === filters.attended;

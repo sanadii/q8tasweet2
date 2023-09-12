@@ -57,7 +57,6 @@ const TableContainerFilters = ({
     setCampaignMemberList,
     setElectionCandidateList,
     setCampaignGuaranteeList,
-    // setElectionAttendeeList,
 
     // Actions
     onTabChange,

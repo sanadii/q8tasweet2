@@ -125,7 +125,7 @@ export const CampaignElectorViewModal = ({
             </tr>
             <tr>
               <td className="fw-medium">Member Number</td>
-              <td>{elector.member_no}</td>
+              <td>{elector.membership_no}</td>
             </tr>
             <tr>
               <td className="fw-medium">Enrolment Date</td>

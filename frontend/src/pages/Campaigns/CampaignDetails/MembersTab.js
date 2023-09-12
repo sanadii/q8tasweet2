@@ -431,7 +431,6 @@ const MembersTab = () => {
       isValid = isValid && campaignMember.rank === filters.rank;
     }
 
-
     if (filters.global) {
       isValid = isValid && campaignMember.user.name && typeof campaignMember.user.name === 'string' && campaignMember.user.name.toLowerCase().includes(filters.global.toLowerCase());
     }

@@ -110,7 +110,7 @@ const CampaignGuaranteesModalUpdate = ({
               </tr>
               <tr>
                 <td className="fw-medium">Member Number</td>
-                <td>{campaignGuarantee.member_no}</td>
+                <td>{campaignGuarantee.membership_no}</td>
               </tr>
               <tr>
                 <td className="fw-medium">Enrolment Date</td>

@@ -314,7 +314,7 @@ class ElectorsSerializer(serializers.ModelSerializer):
             'civil',
             'full_name',
             'gender',
-            # 'member_no',
+            # 'membership_no',
             # 'box_no',
             # 'enrollment_date',
             # 'relationship',
@@ -354,7 +354,7 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
 class CampaignGuaranteesSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
-    member_no = serializers.SerializerMethodField()
+    membership_no = serializers.SerializerMethodField()
     box_no = serializers.SerializerMethodField()
     enrollment_date = serializers.SerializerMethodField()
     relationship = serializers.SerializerMethodField()
@@ -370,7 +370,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
             "full_name",
             "mobile",
             "gender",
-            "member_no",
+            "membership_no",
             "box_no",
             "enrollment_date",
             "relationship",
@@ -385,19 +385,22 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
             # "deleted_date",
             "deleted",
         ]
+    # def get_full_name(self, obj):
+    #     if obj.civil:
+    #         elector = obj.civil
+    #         names = [elector.name_1, elector.name_2, elector.name_3, elector.name_4, elector.last_name]
+    #         return ' '.join([name for name in names if name])  # concatenate non-empty names
+    #     return None
+
     def get_full_name(self, obj):
-        if obj.civil:
-            elector = obj.civil
-            names = [elector.name_1, elector.name_2, elector.name_3, elector.name_4, elector.last_name]
-            return ' '.join([name for name in names if name])  # concatenate non-empty names
-        return None
+        return obj.civil.full_name if obj.civil else None
 
 
     def get_gender(self, obj):
         return obj.civil.gender if obj.civil else None
 
-    def get_member_no(self, obj):
-        return obj.civil.member_no if obj.civil else None
+    def get_membership_no(self, obj):
+        return obj.civil.membership_no if obj.civil else None
 
     def get_box_no(self, obj):
         return obj.civil.box_no if obj.civil else None
@@ -417,7 +420,7 @@ class ElectionAttendeesSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     civil = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
-    member_no = serializers.SerializerMethodField()
+    membership_no = serializers.SerializerMethodField()
     box_no = serializers.SerializerMethodField()
     enrollment_date = serializers.SerializerMethodField()
     relationship = serializers.SerializerMethodField()
@@ -433,7 +436,7 @@ class ElectionAttendeesSerializer(serializers.ModelSerializer):
             "civil",
             "full_name",
             "gender",
-            "member_no",
+            "membership_no",
             "box_no",
             "enrollment_date",
             "relationship",
@@ -443,18 +446,21 @@ class ElectionAttendeesSerializer(serializers.ModelSerializer):
             "deleted",
         ]
 
-    def get_full_name(self, obj):
-        if obj.elector:
-            elector = obj.elector
-            names = [elector.name_1, elector.name_2, elector.name_3, elector.name_4, elector.last_name]
-            return ' '.join([name for name in names if name])  # concatenate non-empty names
-        return None
+    # def get_full_name(self, obj):
+    #     if obj.elector:
+    #         elector = obj.elector
+    #         names = [elector.name_1, elector.name_2, elector.name_3, elector.name_4, elector.last_name]
+    #         return ' '.join([name for name in names if name])  # concatenate non-empty names
+    #     return None
 
+    def get_full_name(self, obj):
+        return obj.elector.full_name if obj.elector else None
+    
     def get_gender(self, obj):
         return obj.elector.gender if obj.elector else None
 
-    def get_member_no(self, obj):
-        return obj.elector.member_no if obj.elector else None
+    def get_membership_no(self, obj):
+        return obj.elector.membership_no if obj.elector else None
 
     def get_box_no(self, obj):
         return obj.elector.box_no if obj.elector else None

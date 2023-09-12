@@ -75,7 +75,7 @@ const AttendeesList = () => {
         civil: electionAttendee.civil,
         full_name: electionAttendee.full_name,
         box_no: electionAttendee.box_no,
-        member_no: electionAttendee.member_no,
+        membership_no: electionAttendee.membership_no,
         enrollment_date: electionAttendee.enrollment_date,
         status: electionAttendee.status,
         notes: electionAttendee.notes,
@@ -194,8 +194,7 @@ const AttendeesList = () => {
       },
       {
         Header: "Committee",
-        accessor: "committee",
-        filterable: false,
+        accessor: "civil",
         Cell: (cellProps) => {
           const committeeId = cellProps.row.original.committee; // Directly access the user ID from original data
           const committeeName = findCommitteeById(committeeId);
@@ -204,7 +203,6 @@ const AttendeesList = () => {
       },
       {
         Header: "Attendant",
-        accessor: "attendantUserId",
         filterable: false,
         Cell: (cellProps) => {
           const userId = cellProps.row.original.user; // Directly access the user ID from original data
@@ -282,7 +280,12 @@ const AttendeesList = () => {
   const electionAttendeeList = electionAttendees.filter(electionAttendee => {
     let isValid = true;
     if (filters.global) {
-      isValid = isValid && electionAttendee.name && typeof electionAttendee.user.name === 'string' && electionAttendee.name.toLowerCase().includes(filters.global.toLowerCase());
+      const globalSearch = filters.global.toLowerCase();
+
+      const nameIncludes = electionAttendee.full_name && typeof electionAttendee.full_name === 'string' && electionAttendee.full_name.toLowerCase().includes(globalSearch);
+      const civilIncludes = electionAttendee.civil && typeof electionAttendee.civil === 'number' && String(electionAttendee.civil).includes(globalSearch);
+
+      isValid = isValid && (nameIncludes || civilIncludes);
     }
     if (filters.gender !== null) {
       isValid = isValid && electionAttendee.gender === filters.gender;
@@ -342,6 +345,9 @@ const AttendeesList = () => {
                     isTableContainerFilter={true}
                     isGenderFilter={true}
                     isCommitteeFilter={true}
+                    isResetFilters={true}
+
+                    // Settings
                     filters={filters}
                     setFilters={setFilters}
 

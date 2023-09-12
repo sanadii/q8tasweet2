@@ -665,7 +665,7 @@ const SearchFilter = ({ filters, setFilters, searchField }) => {
   );
 };
 
-const ElectionCommitteeFilter = ({ setElectionAttendeeList }) => {
+const ElectionCommitteeFilter = ({ filters, setFilters }) => {
   const { electionAttendees, electionCommittees } = useSelector((state) => ({
     electionAttendees: state.Campaigns.electionAttendees,
     electionCommittees: state.Campaigns.electionCommittees,
@@ -677,16 +677,13 @@ const ElectionCommitteeFilter = ({ setElectionAttendeeList }) => {
   );
 
   const ChangeCommitteeOption = (e) => {
-    const selectedCommittee = e.target.value;
-    if (selectedCommittee) {
-      const filteredAttendees = electionAttendees.filter(
-        (item) => item.committee === parseInt(selectedCommittee, 10)
-      );
-      setElectionAttendeeList(filteredAttendees);
-    } else {
-      // Reset to all attendees when no committee is selected
-      setElectionAttendeeList(electionAttendees);
-    }
+    const selectedCommittee = e.target.value ? parseInt(e.target.value, 10) : null;
+
+    // Update the filters
+    setFilters(prev => ({
+      ...prev,
+      committee: selectedCommittee,
+    }));
   };
 
   return (
@@ -699,6 +696,7 @@ const ElectionCommitteeFilter = ({ setElectionAttendeeList }) => {
             name="choices-select-committee"
             id="choices-select-committee"
             onChange={ChangeCommitteeOption}
+            value={filters.committee || ''}
           >
             <option value="">- All Committees - </option>
             {sortedCommitteeOptions.map((committee) => (
@@ -712,6 +710,7 @@ const ElectionCommitteeFilter = ({ setElectionAttendeeList }) => {
     </React.Fragment>
   );
 };
+
 
 
 const ResetFilters = ({ setFilters, activeTab, setActiveTab }) => {

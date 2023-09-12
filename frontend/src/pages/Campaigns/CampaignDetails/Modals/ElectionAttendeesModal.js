@@ -208,7 +208,7 @@ const ElectionAttendeeUpdateModal = ({
               </tr>
               <tr>
                 <td className="fw-medium">Member Number</td>
-                <td>{electionAttendee.member_no}</td>
+                <td>{electionAttendee.membership_no}</td>
               </tr>
               <tr>
                 <td className="fw-medium">Enrolment Date</td>
