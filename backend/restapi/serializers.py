@@ -334,6 +334,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CampaignMembersSerializer(serializers.ModelSerializer):
     user = UserSerializer()  # Removed source="user"
+    rank = serializers.IntegerField()
 
     class Meta:
         model = CampaignMembers

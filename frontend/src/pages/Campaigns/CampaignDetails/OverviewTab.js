@@ -69,26 +69,26 @@ const OverviewTab = () => {
 
           <Card>
             <CardBody>
-              <h5 className="card-title mb-3">Member Info</h5>
+              <h5 className="card-title mb-3">MEMBER INFO</h5>
               <ul>
-                <li><i className="ri-barcode-line"></i> {currentCampaignMember.id}</li>
-                <li><i className="ri-user-line"></i> {currentCampaignMember.fullName}</li>
-                <li><i className="ri-badge-line"></i> {rankName}</li>
-                <li><i className="ri-group-line"></i> {committeeName}</li>
+                <li>Member ID: <strong>{currentCampaignMember.id}</strong></li>
+                <li>Name: <strong>{currentCampaignMember.fullName}</strong></li>
+                <li>Rank: <strong>{rankName}</strong></li>
+                <li>Committee: <strong> {committeeName}</strong></li>
               </ul>
             </CardBody>
           </Card>
 
           <Card>
             <CardBody>
-              <h5 className="card-title mb-3"><strong>Election Info</strong></h5>
+              <h5 className="card-title mb-3"><strong>ELECTION INFO</strong></h5>
               <ul>
-                <li><i className="ri-barcode-line"></i> {campaignDetails.election.id}</li>
-                <li><i className="ri-file-text-line"></i> {campaignDetails.election.name}</li>
-                <li><i className="ri-user-3-line"></i> {electionCandidates.length} Candidates</li>
-                <li><i className="ri-seat-line"></i> {campaignDetails.election.seats} Seats</li>
-                <li><i className="ri-ballot-line"></i> {campaignDetails.election.votes} Votes</li>
-                <li><i className="ri-building-2-line"></i> {electionCommittees.length} Committees</li>
+                <li>Election ID: <strong>{campaignDetails.election.id}</strong></li>
+                <li>Election: <strong>{campaignDetails.election.name}</strong></li>
+                <li>Candidates: <strong>{electionCandidates.length} Candidates</strong></li>
+                <li>Seats: <strong>{campaignDetails.election.seats} Seats</strong></li>
+                <li>Votes: <strong>{campaignDetails.election.votes} Votes</strong></li>
+                <li>Committees: <strong>{electionCommittees.length} Committees</strong></li>
               </ul>
             </CardBody>
           </Card>
@@ -98,7 +98,7 @@ const OverviewTab = () => {
         <Col lg={9}>
           <Card>
             <CardBody>
-              <h5 className="card-title mb-3">About</h5>
+              <h5 className="card-title mb-3">ABOUT</h5>
               {campaignDetails.candidate.description}
               <Row>
                 <Col xs={6} md={4}>
@@ -136,7 +136,7 @@ const OverviewTab = () => {
             </CardBody>
           </Card>
 
-          <Row>
+          {/* <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader className="align-items-center d-flex">
@@ -315,7 +315,7 @@ const OverviewTab = () => {
                 </CardBody>
               </Card>
             </Col>
-          </Row>
+          </Row> */}
         </Col>
       </Row>
     </React.Fragment>

@@ -1,13 +1,13 @@
 // ------------ React & Redux ------------
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col } from "reactstrap";
+import { Col, Row, Card, CardBody } from "reactstrap";
 
 // ------------ Actions ------------
 import { getCandidates, deleteCandidate, getModeratorUsers } from "../../../store/actions";
 
 // ------------ Custom Components & ConstantsImports ------------
-import { ImageLargeCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
+import { ImageLargeCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import CandidateModal from "./CandidateModal"
 import { Id, Name, Status, Priority, CreateBy, Moderators, Actions } from "./CandidateListCol";
 
@@ -34,7 +34,6 @@ const AllCandidates = () => {
     error: state.Candidates.error,
   }));
 
-  const [candidateList, setCandidateList] = useState(candidates);
   const [candidate, setCandidate] = useState([]);
   const [candidateElections, setCandidateElections] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
@@ -45,10 +44,6 @@ const AllCandidates = () => {
       dispatch(getCandidates());
     }
   }, [dispatch, candidates]);
-
-  useEffect(() => {
-    setCandidateList(candidates);
-  }, [candidates]);
 
   // Moderators
   useEffect(() => {
@@ -176,6 +171,12 @@ const AllCandidates = () => {
     setSelectedCheckBoxDelete(checkedEntry);
   };
 
+  // Add Data
+  const handleElectionClicks = () => {
+    setCandidate("");
+    setIsEdit(false);
+    toggle();
+  };
   const columns = useMemo(
     () => [
       {
@@ -290,6 +291,39 @@ const AllCandidates = () => {
 
   const [dueDate, setDate] = useState(defaultdate());
 
+
+  // Filters -------------------------
+  const [filters, setFilters] = useState({
+    global: "",
+    gender: null,
+    status: null,
+    priority: null,
+  });
+
+  const candidateList = candidates.filter(candidate => {
+    let isValid = true;
+
+     if (filters.global) {
+      isValid = isValid && candidate.name && typeof candidate.name === 'string' && candidate.name.toLowerCase().includes(filters.global.toLowerCase());
+
+    }
+
+    if (filters.gender !== null) {
+      isValid = isValid && candidate.gender === filters.gender;
+    }
+
+    if (filters.status !== null) {
+      isValid = isValid && candidate.status === filters.status;
+    }
+
+    if (filters.priority !== null) {
+      isValid = isValid && candidate.priority === filters.priority;
+    }
+
+    return isValid;
+  });
+
+
   return (
     <React.Fragment>
       <DeleteModal
@@ -312,66 +346,77 @@ const AllCandidates = () => {
         isEdit={isEdit}
         setModal={setModal}
       />
-      <div className="row">
+      <Row>
         <Col lg={12}>
-          <div className="card" id="candidatesList">
-            {isCandidateSuccess && candidates.length ? (
-              <TableContainer
-                // Header
-                isTableContainerHeader={true}
-                ContainerHeaderTitle="Candidate Guarantees"
-                setDeleteModalMulti={setDeleteModalMulti}
-                setIsEdit={setIsEdit}
-                toggle={toggle}
-                isMultiDeleteButton={isMultiDeleteButton}
+          <Card id="memberList">
+            <CardBody>
+              <div>
+                <TableContainerHeader
+                  // Title
+                  ContainerHeaderTitle="Candidates"
 
-                isContainerAddButton={true}
-                AddButtonText="Add New Candidate"
-                isEdit={isEdit}
+                  // Add Elector Button
+                  isContainerAddButton={true}
+                  AddButtonText="Add New Candidate"
+                  isEdit={isEdit}
+                  handleEntryClick={handleElectionClicks}
+                  toggle={toggle}
 
-                // Filters
-                isGlobalFilter={true}
-                preGlobalFilteredRows={true}
-                isCandidateGenderFilter={true}
+                  // Delete Button
+                  isMultiDeleteButton={isMultiDeleteButton}
+                  setDeleteModalMulti={setDeleteModalMulti}
+                />
 
-                // isGlobalSearch={true}
-                // isCandidateListFilter={true}
-                // isCustomerFilter={isCustomerFilter}
-                // FieldFiters
-                isFieldFilter={true}
-                isResetFilters={true}
-                isScandidateFilter={true}
-                isStatusFilter={true}
-                isPriorityFilter={true}
-                // isTestFilter={true}
+                {isCandidateSuccess && candidates.length ? (
+                  <TableContainer
+                    // Header
+                    isTableContainerHeader={true}
+                    setDeleteModalMulti={setDeleteModalMulti}
+                    setIsEdit={setIsEdit}
+                    toggle={toggle}
+                    isMultiDeleteButton={isMultiDeleteButton}
 
-                // Table
-                columns={columns}
-                data={candidateList || []}
-                setCandidateList={setCandidateList}
-                // isStatusFilter={true}
-                // isGlobalPagination={true}
-                // isColumnFilter={true} // Change the prop name
-                // isCandidateScandidateFilter={true}
-                // isScandidateFilter={true}
+                    isContainerAddButton={true}
+                    AddButtonText="Add New Candidate"
+                    isEdit={isEdit}
 
-                SearchPlaceholder="Search for candidates or something..."
-                // useFilters={true}
-                customPageSize={20}
-                className="custom-header-css"
-                divClass="table-responsive table-card mb-3"
-                tableClass="align-middle table-nowrap mb-0"
-                theadClass="table-light table-nowrap"
-                thClass="table-light text-muted"
-                handleEntryClick={handleCandidateClicks}
-              />
-            ) : (
-              <Loader error={error} />
-            )}
-            <ToastContainer closeButton={false} limit={1} />
-          </div>
+                    // Filters -------------------------
+                    isTableContainerFilter={true}
+                    isGlobalFilter={true}
+                    preGlobalFilteredRows={true}
+                    isGenderFilter={true}
+                    isStatusFilter={true}
+                    isPriorityFilter={true}
+                    isResetFilters={true}
+
+                    // FilterSettings
+                    filters={filters}
+                    setFilters={setFilters}
+                    SearchPlaceholder="Search for elections or something..."
+
+                    // Table
+                    columns={columns}
+                    data={candidateList || []}
+
+
+                    // useFilters={true}
+                    customPageSize={20}
+                    className="custom-header-css"
+                    divClass="table-responsive table-card mb-3"
+                    tableClass="align-middle table-nowrap mb-0"
+                    theadClass="table-light table-nowrap"
+                    thClass="table-light text-muted"
+                    handleEntryClick={handleCandidateClicks}
+                  />
+                ) : (
+                  <Loader error={error} />
+                )}
+                <ToastContainer closeButton={false} limit={1} />
+              </div>
+            </CardBody>
+          </Card>
         </Col>
-      </div>
+      </Row>
     </React.Fragment>
   );
 };

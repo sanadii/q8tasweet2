@@ -403,7 +403,7 @@ const AllElections = () => {
               <div>
                 <TableContainerHeader
                   // Title
-                  ContainerHeaderTitle="Election Guarantees"
+                  ContainerHeaderTitle="Elections"
 
                   // Add Elector Button
                   isContainerAddButton={true}
@@ -419,10 +419,6 @@ const AllElections = () => {
                 {isElectionSuccess && elections.length ? (
                   <TableContainer
 
-                    // Header
-                    ContainerHeaderTitle="Election Guarantees"
-
-
                     // Filters -------------------------
                     isTableContainerFilter={true}
                     isGlobalFilter={true}
@@ -432,7 +428,7 @@ const AllElections = () => {
                     isPriorityFilter={true}
                     isResetFilters={true}
 
-                    // Settings
+                    // Filter Settings
                     filters={filters}
                     setFilters={setFilters}
                     SearchPlaceholder="Search for elections or something..."

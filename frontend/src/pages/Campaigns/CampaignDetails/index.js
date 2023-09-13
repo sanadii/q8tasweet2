@@ -14,7 +14,7 @@ const CampaignDetails = () => {
   document.title =
     "Campaign Details | Q8Tasweet - React Admin & Dashboard Template";
 
-  const { currentCampaignMember, campaign, campaignMembers, campaignGuarantees, electionCommittees, isCampaignSuccess} = useSelector((state) => ({
+  const { currentCampaignMember, campaign, campaignMembers, campaignGuarantees, electionCommittees, isCampaignSuccess } = useSelector((state) => ({
     currentCampaignMember: state.Campaigns.currentCampaignMember,
     campaign: state.Campaigns.campaignDetails,
     campaignMembers: state.Campaigns.campaignMembers,
@@ -30,11 +30,17 @@ const CampaignDetails = () => {
     }
   }, [dispatch, campaignId]);
 
+  useEffect(() => {
+    console.log('Campaign:', campaign);
+    console.log('Campaign Members:', campaignMembers);
+  }, [campaign, campaignMembers]);
+
+
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {!campaign || !campaignMembers ? (
+          {!campaign.election || !campaignMembers ? (
             <div>Loading...</div> // or some loading component
           ) : (
             <Section

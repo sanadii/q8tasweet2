@@ -84,7 +84,7 @@ class GetCampaignDetails(APIView):
             # 5. Get campaign members data
             campaign_members, current_campaign_member_data = self.get_campaign_members_data(id, current_user_id)
 
-            # 6. Fetch CampaignGuarantees
+            # 6. Fetch Guarantees & Attendees
             campaign_guarantees = self.get_campaign_guarantees(campaign_members, election_id)
             election_attendees = self.get_election_attendees(election_id)
 
@@ -160,7 +160,7 @@ class GetCampaignDetails(APIView):
 
             # TODO: add admin to work here
             # Filter the campaign members based on the current user's rank
-            rank = current_campaign_member_data["rank"]
+            rank = int(current_campaign_member_data.get("rank", 0))  # Safely get and convert rank
             if rank < 3:
                 # If the rank is less than 3, show all members. So, no changes needed.
                 pass
@@ -171,6 +171,7 @@ class GetCampaignDetails(APIView):
                 # Show only the current member and their supervisor.
                 supervisor_id = current_campaign_member_data["supervisor"]
                 campaign_members = [member for member in campaign_members if member["id"] == current_campaign_member_data["id"] or member["id"] == supervisor_id]
+            # ...
 
         return campaign_members, current_campaign_member_data
 

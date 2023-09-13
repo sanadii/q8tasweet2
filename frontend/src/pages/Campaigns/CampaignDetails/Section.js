@@ -46,7 +46,7 @@ const Section = ({
   // --------------- Constants ---------------
   const [activeTab, setActiveTab] = useState("1");
   const [activityTab, setActivityTab] = useState("1");
-  const { isAdmin, isSubscriber } = useUserRoles();
+  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   const rankId = currentCampaignMember.rank;
   const currentCampaignMemberRank = MemberRankOptions.find(
@@ -131,7 +131,7 @@ const Section = ({
                   </NavLink>
                 </NavItem>
 
-                {isTabVisible("members", currentCampaignMember.rank) && (
+                {(isModerator || isParty || isCandidate || isSupervisor) && (
                   <NavItem>
                     <NavLink
                       href="#members"

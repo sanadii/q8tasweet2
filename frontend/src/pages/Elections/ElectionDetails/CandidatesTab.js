@@ -18,6 +18,7 @@ import {
   DeleteModal,
   ExportCSVModal,
   TableContainer,
+  TableContainerHeader,
 } from "../../../Components/Common";
 
 // Reactstrap (UI) imports
@@ -142,6 +143,12 @@ const CandidatesTab = () => {
       ? setIsMultiDeleteButton(true)
       : setIsMultiDeleteButton(false);
     setSelectedCheckBoxDelete(checkedEntry);
+  };
+
+  const handleElectionCandidateClicks = () => {
+    setElectionCandidate("");
+    setIsEdit(false);
+    toggle();
   };
 
   const columns = useMemo(
@@ -324,18 +331,34 @@ const CandidatesTab = () => {
       />
 
       <Row>
-        <Col>
-          <div>
+        <Col lg={12}>
+          {/* <div>
             <button
               className="btn btn-soft-success"
               onClick={() => setIsExportCSV(true)}
             >
               Export
             </button>
-          </div>
+          </div> */}
           <Card id="electionCandidateList">
-            <CardBody className="pt-0">
+            <CardBody>
               <div>
+                <TableContainerHeader
+                  // Title
+                  ContainerHeaderTitle="Election Candidates"
+
+                  // Add Elector Button
+                  isContainerAddButton={true}
+                  AddButtonText="Add New Election Candidate"
+                  isEdit={isEdit}
+                  handleEntryClick={handleElectionCandidateClicks}
+                  toggle={toggle}
+
+                  // Delete Button
+                  isMultiDeleteButton={isMultiDeleteButton}
+                  setDeleteModalMulti={setDeleteModalMulti}
+                />
+
                 {electionCandidateList && electionCandidateList.length ? (
                   // Log the electionCandidateList array to the console
                   (console.log(electionCandidateList),

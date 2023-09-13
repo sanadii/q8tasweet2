@@ -27,7 +27,7 @@ import {
 } from "reactstrap";
 
 // ------------ Custom Components & ConstantsImports ------------
-import { PriorityOptions, StatusOptions } from "../../../Components/constants";
+import { GenderOptions, PriorityOptions, StatusOptions } from "../../../Components/constants";
 import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";
 
@@ -65,7 +65,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       name: (candidate && candidate.name) || "",
       image: (candidate && candidate.image) || "",
       selectedImage: selectedImage,
-      gender: (candidate && candidate.gender) || "",
+      gender: (candidate && candidate.gender) || 1,
       phone: (candidate && candidate.phone) || "",
       email: (candidate && candidate.email) || "",
       twitter: (candidate && candidate.twitter) || "",
@@ -95,7 +95,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
         const updatedCandidate = {
           id: candidate ? candidate.id : 0,
           name: values.name,
-          gender: values.gender,
+          gender: parseInt(values.gender, 10),
           image: values.image,
           selectedImage: selectedImage,
           description: values.description,
@@ -192,6 +192,31 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
                 {validation.touched.name && validation.errors.name ? (
                   <FormFeedback type="invalid">
                     {validation.errors.name}
+                  </FormFeedback>
+                ) : null}
+              </div>
+              <div>
+                <Label for="gender-field" className="form-label">
+                  Gender
+                </Label>
+                <Input
+                  name="gender"
+                  type="select"
+                  className="form-select"
+                  id="gender-field"
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.gender || 0}
+                >
+                  {GenderOptions.map((gender) => (
+                    <option key={gender.id} value={gender.id}>
+                      {gender.name}
+                    </option>
+                  ))}
+                </Input>
+                {validation.touched.gender && validation.errors.gender ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.gender}
                   </FormFeedback>
                 ) : null}
               </div>
