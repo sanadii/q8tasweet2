@@ -40,6 +40,12 @@ import CampaignDetails from "../pages/Campaigns/CampaignDetails";
 // User Pages
 import UserList from "../pages/Users/UserList";
 
+
+
+// Public Pages ---------------
+// Elections
+import Results from "../pages/Results";
+
 // //AuthenticationInner pages
 import BasicSignIn from "../pages/AuthenticationInner/Login/BasicSignIn";
 import CoverSignIn from "../pages/AuthenticationInner/Login/CoverSignIn";
@@ -139,6 +145,10 @@ const publicRoutes = [
   { path: "/login", component: <Login /> },
   { path: "/forgot-password", component: <ForgetPasswordPage /> },
   { path: "/register", component: <Register /> },
+
+
+  // Election Pages
+  { path: "/results", component: <Results /> },
 
   //AuthenticationInner pages
   { path: "/auth-signin-basic", component: <BasicSignIn /> },
