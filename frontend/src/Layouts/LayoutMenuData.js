@@ -145,358 +145,358 @@ const Navdata = () => {
         setIscurrentState("adminUsers");
       },
     },
-    {
-      label: "Menu",
-      isHeader: true,
-    },
-    {
-      id: "dashboard",
-      label: "Dashboards",
-      icon: "ri-dashboard-2-line",
-      link: "/#",
-      stateVariables: isDashboard,
-      click: function (e) {
-        e.preventDefault();
-        setIsDashboard(!isDashboard);
-        setIscurrentState("Dashboard");
-        updateIconSidebar(e);
-      },
-      subItems: [
-        // {
-        //   id: "elections",
-        //   label: "Elections List",
-        //   link: "/elections-list",
-        //   parentId: "dashboard",
-        // },
-        // {
-        //   id: "candidates",
-        //   label: "Candidates List",
-        //   link: "/#",
-        //   parentId: "dashboard",
-        // },
-        // {
-        //   id: "electionCandidate",
-        //   label: "Election Candidate",
-        //   link: "/election-candidates",
-        //   parentId: "dashboard",
-        // },
-        // {
-        //   id: "campaigns",
-        //   label: "Campaigns",
-        //   link: "/campaigns",
-        //   parentId: "dashboard",
-        // },
-        {
-          id: "One More",
-          label: "One More",
-          link: "/#",
-          parentId: "dashboard",
-        },
-        // {
-        //   id: "alphabet",
-        //   label: "Alphabet",
-        //   link: "/alphabet",
-        //   parentId: "dashboard",
-        // },
-      ],
-    },
-    {
-      id: "apps",
-      label: "Apps",
-      icon: "ri-apps-2-line",
-      link: "/#",
-      click: function (e) {
-        e.preventDefault();
-        setIsApps(!isApps);
-        setIscurrentState("Apps");
-        updateIconSidebar(e);
-      },
-      stateVariables: isApps,
-      subItems: [
-        {
-          id: "elections",
-          label: "Elections",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsElections(!isElections);
-          },
-          parentId: "apps",
-          stateVariables: isElections,
-          childItems: [
-            {
-              id: 1,
-              label: "List View",
-              link: "/apps-elections-list-view",
-              parentId: "apps",
-            },
-            // {
-            //   id: 2,
-            //   label: "Election Details",
-            //   link: "/apps-elections-details",
-            //   parentId: "apps",
-            // },
-          ],
-        },
-      ],
-    },
-    {
-      label: "Admin",
-      isHeader: true,
-    },
-    {
-      id: "admin",
-      label: "Admin",
-      icon: "ri-apps-2-line",
-      link: "/#",
-      click: function (e) {
-        e.preventDefault();
-        setIsAdmin(!isAdmin);
-        setIscurrentState("Admin");
-        updateIconSidebar(e);
-      },
-      stateVariables: isAdmin,
-      subItems: [
-        {
-          id: "elections",
-          label: "Elections",
-          link: "/#",
-          parentId: "Admin",
-        },
-        {
-          id: "candidates",
-          label: "Candidates",
-          link: "/#",
-          parentId: "Admin",
-        },
-        // {
-        //   id: "users",
-        //   label: "Users",
-        //   link: "/#",
-        //   parentId: "Admin",
-        //   badgeColor: "success",
-        //   badgeName: "New",
-        // },
-        {
-          id: "subscription",
-          label: "Subscription",
-          link: "/#",
-          parentId: "Admin",
-          badgeColor: "success",
-          badgeName: "New",
-        },
-      ],
-    },
-    {
-      id: "settings",
-      label: "Setting",
-      icon: "ri-apps-2-line",
-      link: "/#",
-      click: function (e) {
-        e.preventDefault();
-        setIsSetting(!isSetting);
-        setIscurrentState("Setting");
-        updateIconSidebar(e);
-      },
-      stateVariables: isSetting,
-      subItems: [
-        {
-          id: "settings",
-          label: "Setting",
-          link: "/settings",
-          parentId: "Setting",
-        },
-        {
-          id: "categories",
-          label: "Categories",
-          link: "/settings/categories",
-          parentId: "Setting",
-        },
-        // {
-        //   id: "PrivecyPolicy",
-        //   label: "Ecommerce",
-        //   link: "/ecommerce",
-        //   parentId: "Setting",
-        //   badgeColor: "success",
-        //   badgeName: "New",
-        // },
-        {
-          id: "terms-conditions",
-          label: "Terms & Condition",
-          link: "/#",
-          parentId: "Setting",
-          badgeColor: "success",
-          badgeName: "New",
-        },
-      ],
-    },
-    {
-      label: "pages",
-      isHeader: true,
-    },
-    {
-      id: "authentication",
-      label: "Authentication",
-      icon: "ri-account-circle-line",
-      link: "/#",
-      click: function (e) {
-        e.preventDefault();
-        setIsAuth(!isAuth);
-        setIscurrentState("Auth");
-        updateIconSidebar(e);
-      },
-      stateVariables: isAuth,
-      subItems: [
-        {
-          id: "signIn",
-          label: "Sign In",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsSignIn(!isSignIn);
-          },
-          parentId: "authentication",
-          stateVariables: isSignIn,
-          childItems: [
-            { id: 1, label: "Basic", link: "/auth-signin-basic" },
-            { id: 2, label: "Cover", link: "/auth-signin-cover" },
-          ],
-        },
-        {
-          id: "signUp",
-          label: "Sign Up",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsSignUp(!isSignUp);
-          },
-          parentId: "authentication",
-          stateVariables: isSignUp,
-          childItems: [
-            { id: 1, label: "Basic", link: "/auth-signup-basic" },
-            { id: 2, label: "Cover", link: "/auth-signup-cover" },
-          ],
-        },
-        {
-          id: "passwordReset",
-          label: "Password Reset",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsPasswordReset(!isPasswordReset);
-          },
-          parentId: "authentication",
-          stateVariables: isPasswordReset,
-          childItems: [
-            { id: 1, label: "Basic", link: "/auth-pass-reset-basic" },
-            { id: 2, label: "Cover", link: "/auth-pass-reset-cover" },
-          ],
-        },
-        {
-          id: "passwordCreate",
-          label: "Password Create",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsPasswordCreate(!isPasswordCreate);
-          },
-          parentId: "authentication",
-          stateVariables: isPasswordCreate,
-          childItems: [
-            { id: 1, label: "Basic", link: "/auth-pass-change-basic" },
-            { id: 2, label: "Cover", link: "/auth-pass-change-cover" },
-          ],
-        },
-        {
-          id: "lockScreen",
-          label: "Lock Screen",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsLockScreen(!isLockScreen);
-          },
-          parentId: "authentication",
-          stateVariables: isLockScreen,
-          childItems: [
-            { id: 1, label: "Basic", link: "/auth-lockscreen-basic" },
-            { id: 2, label: "Cover", link: "/auth-lockscreen-cover" },
-          ],
-        },
-        {
-          id: "logout",
-          label: "Logout",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsLogout(!isLogout);
-          },
-          parentId: "authentication",
-          stateVariables: isLogout,
-          childItems: [
-            { id: 1, label: "Basic", link: "/auth-logout-basic" },
-            { id: 2, label: "Cover", link: "/auth-logout-cover" },
-          ],
-        },
-        {
-          id: "successMessage",
-          label: "Success Message",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsSuccessMessage(!isSuccessMessage);
-          },
-          parentId: "authentication",
-          stateVariables: isSuccessMessage,
-          childItems: [
-            { id: 1, label: "Basic", link: "/auth-success-msg-basic" },
-            { id: 2, label: "Cover", link: "/auth-success-msg-cover" },
-          ],
-        },
-        {
-          id: "twoStepVerification",
-          label: "Two Step Verification",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsVerification(!isVerification);
-          },
-          parentId: "authentication",
-          stateVariables: isVerification,
-          childItems: [
-            { id: 1, label: "Basic", link: "/auth-twostep-basic" },
-            { id: 2, label: "Cover", link: "/auth-twostep-cover" },
-          ],
-        },
-        {
-          id: "errors",
-          label: "Errors",
-          link: "/#",
-          isChildItem: true,
-          click: function (e) {
-            e.preventDefault();
-            setIsError(!isError);
-          },
-          parentId: "authentication",
-          stateVariables: isError,
-          childItems: [
-            { id: 1, label: "404 Basic", link: "/auth-404-basic" },
-            { id: 2, label: "404 Cover", link: "/auth-404-cover" },
-            { id: 3, label: "404 Alt", link: "/auth-404-alt" },
-            { id: 4, label: "500", link: "/auth-500" },
-            { id: 5, label: "Offline Page", link: "/auth-offline" },
-          ],
-        },
-      ],
-    },
+    // {
+    //   label: "Menu",
+    //   isHeader: true,
+    // },
+    // {
+    //   id: "dashboard",
+    //   label: "Dashboards",
+    //   icon: "ri-dashboard-2-line",
+    //   link: "/#",
+    //   stateVariables: isDashboard,
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsDashboard(!isDashboard);
+    //     setIscurrentState("Dashboard");
+    //     updateIconSidebar(e);
+    //   },
+    //   subItems: [
+    //     // {
+    //     //   id: "elections",
+    //     //   label: "Elections List",
+    //     //   link: "/elections-list",
+    //     //   parentId: "dashboard",
+    //     // },
+    //     // {
+    //     //   id: "candidates",
+    //     //   label: "Candidates List",
+    //     //   link: "/#",
+    //     //   parentId: "dashboard",
+    //     // },
+    //     // {
+    //     //   id: "electionCandidate",
+    //     //   label: "Election Candidate",
+    //     //   link: "/election-candidates",
+    //     //   parentId: "dashboard",
+    //     // },
+    //     // {
+    //     //   id: "campaigns",
+    //     //   label: "Campaigns",
+    //     //   link: "/campaigns",
+    //     //   parentId: "dashboard",
+    //     // },
+    //     {
+    //       id: "One More",
+    //       label: "One More",
+    //       link: "/#",
+    //       parentId: "dashboard",
+    //     },
+    //     // {
+    //     //   id: "alphabet",
+    //     //   label: "Alphabet",
+    //     //   link: "/alphabet",
+    //     //   parentId: "dashboard",
+    //     // },
+    //   ],
+    // },
+    // {
+    //   id: "apps",
+    //   label: "Apps",
+    //   icon: "ri-apps-2-line",
+    //   link: "/#",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsApps(!isApps);
+    //     setIscurrentState("Apps");
+    //     updateIconSidebar(e);
+    //   },
+    //   stateVariables: isApps,
+    //   subItems: [
+    //     {
+    //       id: "elections",
+    //       label: "Elections",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsElections(!isElections);
+    //       },
+    //       parentId: "apps",
+    //       stateVariables: isElections,
+    //       childItems: [
+    //         {
+    //           id: 1,
+    //           label: "List View",
+    //           link: "/apps-elections-list-view",
+    //           parentId: "apps",
+    //         },
+    //         // {
+    //         //   id: 2,
+    //         //   label: "Election Details",
+    //         //   link: "/apps-elections-details",
+    //         //   parentId: "apps",
+    //         // },
+    //       ],
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: "Admin",
+    //   isHeader: true,
+    // },
+    // {
+    //   id: "admin",
+    //   label: "Admin",
+    //   icon: "ri-apps-2-line",
+    //   link: "/#",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsAdmin(!isAdmin);
+    //     setIscurrentState("Admin");
+    //     updateIconSidebar(e);
+    //   },
+    //   stateVariables: isAdmin,
+    //   subItems: [
+    //     {
+    //       id: "elections",
+    //       label: "Elections",
+    //       link: "/#",
+    //       parentId: "Admin",
+    //     },
+    //     {
+    //       id: "candidates",
+    //       label: "Candidates",
+    //       link: "/#",
+    //       parentId: "Admin",
+    //     },
+    //     // {
+    //     //   id: "users",
+    //     //   label: "Users",
+    //     //   link: "/#",
+    //     //   parentId: "Admin",
+    //     //   badgeColor: "success",
+    //     //   badgeName: "New",
+    //     // },
+    //     {
+    //       id: "subscription",
+    //       label: "Subscription",
+    //       link: "/#",
+    //       parentId: "Admin",
+    //       badgeColor: "success",
+    //       badgeName: "New",
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "settings",
+    //   label: "Setting",
+    //   icon: "ri-apps-2-line",
+    //   link: "/#",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsSetting(!isSetting);
+    //     setIscurrentState("Setting");
+    //     updateIconSidebar(e);
+    //   },
+    //   stateVariables: isSetting,
+    //   subItems: [
+    //     {
+    //       id: "settings",
+    //       label: "Setting",
+    //       link: "/settings",
+    //       parentId: "Setting",
+    //     },
+    //     {
+    //       id: "categories",
+    //       label: "Categories",
+    //       link: "/settings/categories",
+    //       parentId: "Setting",
+    //     },
+    //     // {
+    //     //   id: "PrivecyPolicy",
+    //     //   label: "Ecommerce",
+    //     //   link: "/ecommerce",
+    //     //   parentId: "Setting",
+    //     //   badgeColor: "success",
+    //     //   badgeName: "New",
+    //     // },
+    //     {
+    //       id: "terms-conditions",
+    //       label: "Terms & Condition",
+    //       link: "/#",
+    //       parentId: "Setting",
+    //       badgeColor: "success",
+    //       badgeName: "New",
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: "pages",
+    //   isHeader: true,
+    // },
+    // {
+    //   id: "authentication",
+    //   label: "Authentication",
+    //   icon: "ri-account-circle-line",
+    //   link: "/#",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsAuth(!isAuth);
+    //     setIscurrentState("Auth");
+    //     updateIconSidebar(e);
+    //   },
+    //   stateVariables: isAuth,
+    //   subItems: [
+    //     {
+    //       id: "signIn",
+    //       label: "Sign In",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsSignIn(!isSignIn);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isSignIn,
+    //       childItems: [
+    //         { id: 1, label: "Basic", link: "/auth-signin-basic" },
+    //         { id: 2, label: "Cover", link: "/auth-signin-cover" },
+    //       ],
+    //     },
+    //     {
+    //       id: "signUp",
+    //       label: "Sign Up",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsSignUp(!isSignUp);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isSignUp,
+    //       childItems: [
+    //         { id: 1, label: "Basic", link: "/auth-signup-basic" },
+    //         { id: 2, label: "Cover", link: "/auth-signup-cover" },
+    //       ],
+    //     },
+    //     {
+    //       id: "passwordReset",
+    //       label: "Password Reset",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsPasswordReset(!isPasswordReset);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isPasswordReset,
+    //       childItems: [
+    //         { id: 1, label: "Basic", link: "/auth-pass-reset-basic" },
+    //         { id: 2, label: "Cover", link: "/auth-pass-reset-cover" },
+    //       ],
+    //     },
+    //     {
+    //       id: "passwordCreate",
+    //       label: "Password Create",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsPasswordCreate(!isPasswordCreate);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isPasswordCreate,
+    //       childItems: [
+    //         { id: 1, label: "Basic", link: "/auth-pass-change-basic" },
+    //         { id: 2, label: "Cover", link: "/auth-pass-change-cover" },
+    //       ],
+    //     },
+    //     {
+    //       id: "lockScreen",
+    //       label: "Lock Screen",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsLockScreen(!isLockScreen);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isLockScreen,
+    //       childItems: [
+    //         { id: 1, label: "Basic", link: "/auth-lockscreen-basic" },
+    //         { id: 2, label: "Cover", link: "/auth-lockscreen-cover" },
+    //       ],
+    //     },
+    //     {
+    //       id: "logout",
+    //       label: "Logout",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsLogout(!isLogout);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isLogout,
+    //       childItems: [
+    //         { id: 1, label: "Basic", link: "/auth-logout-basic" },
+    //         { id: 2, label: "Cover", link: "/auth-logout-cover" },
+    //       ],
+    //     },
+    //     {
+    //       id: "successMessage",
+    //       label: "Success Message",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsSuccessMessage(!isSuccessMessage);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isSuccessMessage,
+    //       childItems: [
+    //         { id: 1, label: "Basic", link: "/auth-success-msg-basic" },
+    //         { id: 2, label: "Cover", link: "/auth-success-msg-cover" },
+    //       ],
+    //     },
+    //     {
+    //       id: "twoStepVerification",
+    //       label: "Two Step Verification",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsVerification(!isVerification);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isVerification,
+    //       childItems: [
+    //         { id: 1, label: "Basic", link: "/auth-twostep-basic" },
+    //         { id: 2, label: "Cover", link: "/auth-twostep-cover" },
+    //       ],
+    //     },
+    //     {
+    //       id: "errors",
+    //       label: "Errors",
+    //       link: "/#",
+    //       isChildItem: true,
+    //       click: function (e) {
+    //         e.preventDefault();
+    //         setIsError(!isError);
+    //       },
+    //       parentId: "authentication",
+    //       stateVariables: isError,
+    //       childItems: [
+    //         { id: 1, label: "404 Basic", link: "/auth-404-basic" },
+    //         { id: 2, label: "404 Cover", link: "/auth-404-cover" },
+    //         { id: 3, label: "404 Alt", link: "/auth-404-alt" },
+    //         { id: 4, label: "500", link: "/auth-500" },
+    //         { id: 5, label: "Offline Page", link: "/auth-offline" },
+    //       ],
+    //     },
+    //   ],
+    // },
   ]
 
   const menuItems = [

@@ -20,11 +20,12 @@ const ElectionDetails = () => {
     id: useParams().id,
   });
 
-  const { electionDetails, electionCandidates, electionCampaigns } =
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } =
     useSelector((state) => ({
       electionDetails: state.Elections.electionDetails,
       electionCandidates: state.Elections.electionCandidates,
       electionCampaigns: state.Elections.electionCampaigns,
+      electionCommittees: state.Elections.electionCommittees,
       // error: state.Elections.error,
     }));
 
@@ -36,7 +37,7 @@ const ElectionDetails = () => {
     }
   }, [dispatch, election, election.id]);
 
-  
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -45,6 +46,7 @@ const ElectionDetails = () => {
             election={electionDetails}
             electionCandidates={electionCandidates}
             electionCampaigns={electionCampaigns}
+            electionCommittees={electionCommittees}
           />
         </Container>
       </div>

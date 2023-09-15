@@ -305,6 +305,12 @@ class ElectionCommitteesSerializer(serializers.ModelSerializer):
         model = ElectionCommittees
         fields = "__all__"
 
+class ElectionCommitteeResultsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommitteeResults
+        fields = ['id', 'election', 'committee', 'votes']  # Add or remove fields as appropriate
+
+
 class ElectorsSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(read_only=True)
 

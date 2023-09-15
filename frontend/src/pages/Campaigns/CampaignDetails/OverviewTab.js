@@ -1,41 +1,23 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Row,
-  TabContent,
-  Table,
-  UncontrolledCollapse,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Row, TabContent, Table, UncontrolledCollapse } from "reactstrap";
 import { MemberRankOptions } from "../../../Components/constants";
+import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../Components/Common";
 
-//Images
-import avatar2 from "../../../assets/images/users/avatar-2.jpg";
-import avatar5 from "../../../assets/images/users/avatar-5.jpg";
-import avatar7 from "../../../assets/images/users/avatar-7.jpg";
 
 const OverviewTab = () => {
+
   const {
-    campaignDetails,
-    currentCampaignMember,
-    campaignMembers,
-    campaignGuarantees,
-    campaignAttendees,
-    electionCommittees,
-    electionCandidates,
-  } = useSelector((state) => ({
-    currentCampaignMember: state.Campaigns.currentCampaignMember,
-    campaignDetails: state.Campaigns.campaignDetails,
-    campaignMembers: state.Campaigns.campaignMembers,
-    campaignGuarantees: state.Campaigns.campaignGuarantees,
-    campaignAttendees: state.Campaigns.campaignAttendees,
-    electionCandidates: state.Campaigns.electionCandidates,
-    electionCommittees: state.Campaigns.electionCommittees,
-  }));
+    campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, campaignAttendees, electionCommittees, electionCandidates } = useSelector((state) => ({
+      currentCampaignMember: state.Campaigns.currentCampaignMember,
+      campaignDetails: state.Campaigns.campaignDetails,
+      campaignMembers: state.Campaigns.campaignMembers,
+      campaignGuarantees: state.Campaigns.campaignGuarantees,
+      campaignAttendees: state.Campaigns.campaignAttendees,
+      electionCandidates: state.Campaigns.electionCandidates,
+      electionCommittees: state.Campaigns.electionCommittees,
+    }));
 
   document.title = "Campaign Overview | Q8Tasweet";
 
@@ -48,6 +30,151 @@ const OverviewTab = () => {
     (rank) => rank.id === currentCampaignMember.rank
   );
   const rankName = rankObj ? rankObj.name : "Unknown";
+  const getGenderIcon = (gender) => {
+    if (gender === 2) {
+      return <i className="mdi mdi-circle align-middle text-danger me-2"></i>;
+    } else if (gender === 1) {
+      return <i className="mdi mdi-circle align-middle text-info me-2"></i>;
+    }
+    return null;
+  };
+
+  function getGuaranteeCount(memberId) {
+    // Assuming `campaignGuarantees` is an array of all guarantees:
+    return campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
+  }
+
+  function getStatusCount(memberId, status) {
+    let statusMap = {
+      "New": 1,
+      "Contacted": 2,
+      "Confirmed": 3,
+      "Not Confirmed": 4
+    };
+    return campaignGuarantees.filter(guarantee => guarantee.member === memberId && guarantee.status === statusMap[status]).length;
+  }
+
+
+  function getStatusCountsForMember(campaignGuarantees, memberId) {
+    const guaranteesForMember = campaignGuarantees.filter(item => item.member === memberId);
+
+    let statusCounts = {
+      "New": 0,
+      "Contacted": 0,
+      "Confirmed": 0,
+      "Not Confirmed": 0
+    };
+
+    guaranteesForMember.forEach(guarantee => {
+      switch (guarantee.status) {
+        case 1:
+          statusCounts["New"] += 1;
+          break;
+        case 2:
+          statusCounts["Contacted"] += 1;
+          break;
+        case 3:
+          statusCounts["Confirmed"] += 1;
+          break;
+        case 4:
+          statusCounts["Not Confirmed"] += 1;
+          break;
+        default:
+          break;
+      }
+    });
+
+    return statusCounts;
+  }
+
+  // First, aggregate the guarantees based on the guarantor
+  const aggregatedGuarantors = campaignGuarantees.reduce((acc, curr) => {
+    const memberInfo = campaignMembers.find(member => member.id === curr.member);
+    const guarantorName = memberInfo ? memberInfo.user.name : 'Unknown';
+
+    if (curr.member in acc) {
+      acc[curr.member].count += 1;
+    } else {
+      acc[curr.member] = {
+        name: guarantorName,
+        count: 1,
+        member: curr.member  // Add this line
+      };
+    }
+    return acc;
+  }, {});
+
+
+
+  // Transform the aggregated object back to an array
+  const guarantorData = Object.values(aggregatedGuarantors);
+
+  // Then, when displaying in your table, you can loop through `guarantorData` 
+
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "name",
+        Cell: (cellProps) => {
+          const guarantor = cellProps.row.original;
+          return (
+            < b > {guarantor.name}</b >
+          );
+        },
+      },
+      {
+        Header: "Total",
+        Cell: (cellProps) => {
+          const memberId = cellProps.row.original.member;
+          const counts = getStatusCountsForMember(campaignGuarantees, memberId);
+          const totalCount = counts["New"] + counts["Confirmed"] + counts["Not Confirmed"];
+
+          return (
+            <p>{totalCount}</p>
+          );
+        },
+      },
+      {
+        Header: "New",
+        // A method to count the New status for the member.
+        Cell: (cellProps) => {
+          const memberId = cellProps.row.original.member;
+          const count = getStatusCount(memberId, "New");
+          return <p>{count}</p>;
+        },
+      },
+      {
+        Header: "Contacted",
+        // A method to count the Contacted status for the member.
+        Cell: (cellProps) => {
+          const memberId = cellProps.row.original.member;
+          const count = getStatusCount(memberId, "Contacted");
+          return <p>{count}</p>;
+        },
+      },
+      {
+        Header: "Confirmed",
+        // A method to count the Contacted status for the member.
+        Cell: (cellProps) => {
+          const memberId = cellProps.row.original.member;
+          const count = getStatusCount(memberId, "Confirmed");
+          return <p>{count}</p>;
+        },
+      },
+      {
+        Header: "Not Confirmed",
+        // A method to count the Not Confirmed status for the member.
+        Cell: (cellProps) => {
+          const memberId = cellProps.row.original.member;
+          const count = getStatusCount(memberId, "Not Confirmed");
+          return <p>{count}</p>;
+        },
+      },
+
+    ], [campaignGuarantees]);
+
 
 
   return (
@@ -136,6 +263,32 @@ const OverviewTab = () => {
             </CardBody>
           </Card>
 
+          <Row>
+            <Col lg={12}>
+              <Card>
+                <CardBody>
+                  <h5 className="card-title mb-3">GUARANTEES</h5>
+                  {campaignDetails.candidate.description}
+                  <Row>
+                    <Col>
+                      <TableContainer
+                        // Data -------------------------
+                        columns={columns}
+                        data={guarantorData || []}  // Here's the change
+                        customPageSize={50}
+
+                        // Styling -------------------------
+                        className="custom-header-css"
+                        divClass="table-responsive table-card mb-2"
+                        tableClass="align-middle table-nowrap"
+                        theadClass="table-light"
+                      />
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
           {/* <Row>
             <Col lg={12}>
               <Card>

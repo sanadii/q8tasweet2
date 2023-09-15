@@ -25,6 +25,13 @@ urlpatterns = [
     path("deleteElectionCandidate/<int:id>", DeleteElectionCandidate.as_view(), name="DeleteElectionCandidate"),
     path("updateElectionCandidate/<int:id>", UpdateElectionCandidate.as_view(), name="UpdateElectionCandidate"),
 
+    # Election Committees
+    # path("getElectionCommittees/<int:election_id>", GetElectionCommittees.as_view(), name="getElectionCommittees"),
+    path("addNewElectionCommittee", AddNewElectionCommittee.as_view(), name="AddNewElectionCommittee"),
+    path("deleteElectionCommittee/<int:id>", DeleteElectionCommittee.as_view(), name="DeleteElectionCommittee"),
+    path("updateElectionCommittee/<int:id>", UpdateElectionCommittee.as_view(), name="UpdateElectionCommittee"),
+
+
     # Candidates
     path("getCandidates", GetCandidates.as_view(), name="GetCandidates"),
     path("addNewCandidate", AddNewCandidate.as_view(), name="AddNewCandidate"),

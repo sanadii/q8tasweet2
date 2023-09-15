@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
+from .model_helpers import *
 
 # MODELS with line numbers
 # Line 18 -  # class ProjectInfo
@@ -30,8 +31,6 @@ class ProjectInfo(models.Model):
 
     def __str__(self):
         return str(self.id)
-
-
 
 class Categories(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -112,7 +111,7 @@ class Candidates(models.Model):
     id = models.BigAutoField(primary_key=True)
     image = models.ImageField(upload_to="users/", blank=True, null=True)
     name = models.CharField(max_length=255, blank=False, null=False)
-    gender = models.IntegerField(blank=True, null=True)
+    gender = models.IntegerField(choices=Gender.choices, default=Gender.UNDEFINED)
 
     description = models.CharField(max_length=255, blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
@@ -193,6 +192,7 @@ class ElectionCommittees(models.Model):
     id = models.BigAutoField(primary_key=True)
     election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committees')
     name = models.CharField(max_length=255, blank=False, null=False)
+    gender = models.IntegerField(choices=Gender.choices, default=Gender.UNDEFINED)
     location = models.TextField(blank=True, null=True)
 
     # Tracking Information
@@ -211,6 +211,30 @@ class ElectionCommittees(models.Model):
 
     def __str__(self):
         return self.name
+
+class CommitteeResults(models.Model):
+    # Basic Information
+    id = models.BigAutoField(primary_key=True)
+    election_committee = models.ForeignKey(ElectionCommittees, on_delete=models.SET_NULL, null=True, blank=True)
+    election_candidate = models.ForeignKey(ElectionCandidates, on_delete=models.SET_NULL, null=True, blank=True)
+    votes = models.IntegerField(blank=True, null=True)
+
+    # Tracking Information
+    created_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_committees_results')
+    updated_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='updated_committees_results')
+    deleted_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='deleted_committees_results')
+    created_date = models.DateTimeField(auto_now_add=True, null=False)
+    updated_date = models.DateTimeField(auto_now=True, null=False)
+    deleted_date = models.DateTimeField(auto_now=True, null=False)
+    deleted = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = "committee_result"
+        verbose_name = "Committe Result"
+        verbose_name_plural = "Committe Results"
+
+    def __str__(self):
+        return self.result
 
 class Campaigns(models.Model):
     # Basic Information
@@ -265,7 +289,7 @@ class CampaignMembers(models.Model):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members')
     campaign = models.ForeignKey('Campaigns', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members')
-    rank = models.IntegerField(blank=True, null=True)
+    rank = models.IntegerField(choices=Rank.choices, blank=True, null=True)
     supervisor = models.ForeignKey('CampaignMembers', on_delete=models.SET_NULL, null=True, blank=True, related_name='supervised_members')
     committee = models.ForeignKey('ElectionCommittees', on_delete=models.SET_NULL, null=True, blank=True, related_name='members')
     civil = models.CharField(max_length=12, blank=True, null=True, validators=[civil_validator])
@@ -281,39 +305,14 @@ class CampaignMembers(models.Model):
     updated_date = models.DateTimeField(auto_now=True, null=False)
     deleted_date = models.DateTimeField(auto_now=True, null=False)
     deleted = models.BooleanField(default=False, null=True)
-
+   
     class Meta:
         # managed = False
         db_table = 'campaign_member'
         verbose_name = "Campaign Member"
         verbose_name_plural = "Campaign Members"
 
-    class Rank(models.TextChoices):
-        PARTY = '1', 'Party'
-        CANDIDATE = '2', 'Candidate'
-        SUPERVISOR = '3', 'Supervisor'
-        GUARANTOR = '4', 'Guarantor'
-        ATTENDANT = '5', 'Attendant'
-        SORTER = '6', 'Sorter'
-        # OTHER = '7', 'Other'  # Commented out as per your code.
-        MODERATOR = '10', 'Moderator'
-        
-    # Your other fields here...
-    
-    rank = models.CharField(
-        max_length=2,
-        choices=Rank.choices,
-        blank=True, 
-        null=True
-    )
 class Electors(models.Model):
-    MALE = 1
-    FEMALE = 2
-    GENDER_CHOICES = (
-        (MALE, 'Male'),
-        (FEMALE, 'Female'),
-    )
-
     civil = models.BigAutoField(primary_key=True)
     
     # Name fields
@@ -338,7 +337,7 @@ class Electors(models.Model):
     # last_4 = models.CharField(max_length=255, blank=True, null=True)
     # last_name = models.CharField(max_length=255, blank=True, null=True)
     
-    gender = models.IntegerField(choices=GENDER_CHOICES, blank=True, null=True)
+    gender = models.IntegerField(choices=Gender.choices, default=Gender.UNDEFINED)
     serial_number = models.CharField(max_length=255, blank=True, null=True)
     membership_no = models.CharField(max_length=255, blank=True, null=True)
     box_no = models.CharField(max_length=255, blank=True, null=True)
@@ -363,6 +362,8 @@ class Electors(models.Model):
         verbose_name = "Elector"
         verbose_name_plural = "Electors"
 
+
+
 class CampaignGuarantees(models.Model):
     id = models.BigAutoField(primary_key=True)
     campaign = models.ForeignKey('Campaigns', on_delete=models.SET_NULL, null=True, blank=True, related_name='guarantee_campaigns')
@@ -370,7 +371,7 @@ class CampaignGuarantees(models.Model):
     civil = models.ForeignKey('Electors', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantees')
     mobile = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
     notes = models.TextField(blank=True, null=True)
-    status = models.IntegerField(blank=True, null=True)
+    status = models.IntegerField(choices=GuaranteeStatus.choices, default=GuaranteeStatus.NEW)
 
     # Tracking Information
     created_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_guarantee_members')

@@ -12,7 +12,7 @@ import {
   DELETE_ELECTION,
   UPDATE_ELECTION,
 
-  // Election Candidates
+  // Election Candidates ---------------
   GET_ELECTION_CANDIDATES,
   ADD_NEW_ELECTION_CANDIDATE,
   DELETE_ELECTION_CANDIDATE,
@@ -20,7 +20,15 @@ import {
   // GET_ELECTION_CANDIDATE_DETAILS,
   // GET_ELECTION_CANDIDATE_COUNT,
 
-  // Election Campaign
+  // Election Committees ---------------
+  GET_ELECTION_COMMITTEES,
+  ADD_NEW_ELECTION_COMMITTEE,
+  DELETE_ELECTION_COMMITTEE,
+  UPDATE_ELECTION_COMMITTEE,
+  // GET_ELECTION_COMMITTEE_DETAILS,
+  // GET_ELECTION_COMMITTEE_COUNT,
+
+  // Election Campaign ---------------
   GET_ELECTION_CAMPAIGNS,
   ADD_NEW_ELECTION_CAMPAIGN,
   DELETE_ELECTION_CAMPAIGN,
@@ -41,7 +49,7 @@ import {
   ElectionApiResponseSuccess,
   ElectionApiResponseError,
 
-  // Elections
+  // Elections ---------------
   addElectionSuccess,
   addElectionFail,
   updateElectionSuccess,
@@ -49,7 +57,7 @@ import {
   deleteElectionSuccess,
   deleteElectionFail,
 
-  // Election Candidates
+  // Election Candidates ---------------
   addElectionCandidateSuccess,
   addElectionCandidateFail,
   updateElectionCandidateSuccess,
@@ -57,7 +65,15 @@ import {
   deleteElectionCandidateSuccess,
   deleteElectionCandidateFail,
 
-  // // Election Campaigns
+  // Election Committees ---------------
+  addElectionCommitteeSuccess,
+  addElectionCommitteeFail,
+  updateElectionCommitteeSuccess,
+  updateElectionCommitteeFail,
+  deleteElectionCommitteeSuccess,
+  deleteElectionCommitteeFail,
+
+  // // Election Campaigns ---------------
   addElectionCampaignSuccess,
   addElectionCampaignFail,
   updateElectionCampaignSuccess,
@@ -71,6 +87,7 @@ import { uploadNewImage } from "../uploadImage/action";
 
 //Include Both Helper File with needed methods
 import {
+  // Elections ---------------
   getElections as getElectionsApi,
   getElectionCount as getElectionCountApi,
   getElectionDetails as getElectionDetailsApi,
@@ -78,7 +95,7 @@ import {
   updateElection,
   deleteElection,
 
-  // Election Candidates
+  // Election Candidates ---------------
   getElectionCandidates as getElectionCandidatesApi,
   // getElectionCandidateDetails as getElectionCandidateDetailsApi,
   // getElectionCandidateCount as getElectionCandidateCountApi,
@@ -86,7 +103,15 @@ import {
   updateElectionCandidate,
   deleteElectionCandidate,
 
-  // Election Campaigns
+  // Election Committees ---------------
+  getElectionCommittees as getElectionCommitteesApi,
+  // getElectionCommitteeDetails as getElectionCommitteeDetailsApi,
+  // getElectionCommitteeCount as getElectionCommitteeCountApi,
+  addNewElectionCommittee,
+  updateElectionCommittee,
+  deleteElectionCommittee,
+
+  // Election Campaigns ---------------
   getElectionCampaigns as getElectionCampaignsApi,
   // getElectionCampaignDetails as getElectionCampaignDetailsApi,
   // getElectionCampaignCount as getElectionCampaignCountApi,
@@ -202,7 +227,7 @@ function* onUpdateElection({ payload: { election, formData } }) {
   }
 }
 
-// Election Candidates
+// Election Candidates ---------------
 function* getElectionCandidates({ payload: election }) {
   try {
     const response = yield call(getElectionCandidatesApi, election);
@@ -251,7 +276,57 @@ function* onUpdateElectionCandidate({ payload: electionCandidate }) {
   }
 }
 
-// Election Campaigns
+
+// Election Committees ---------------
+function* getElectionCommittees({ payload: election }) {
+  try {
+    const response = yield call(getElectionCommitteesApi, election);
+    yield put(
+      ElectionApiResponseSuccess(GET_ELECTION_COMMITTEES, response.data)
+    );
+  } catch (error) {
+    yield put(ElectionApiResponseError(GET_ELECTION_COMMITTEES, error));
+  }
+}
+
+function* onAddNewElectionCommittee({ payload: electionCommittee }) {
+  try {
+    const response = yield call(addNewElectionCommittee, electionCommittee);
+    yield put(addElectionCommitteeSuccess(response));
+    toast.success("ElectionCommittee Added Successfully", { autoClose: 2000 });
+  } catch (error) {
+    yield put(addElectionCommitteeFail(error));
+    toast.error("ElectionCommittee Added Failed", { autoClose: 2000 });
+  }
+}
+
+function* onDeleteElectionCommittee({ payload: electionCommittee }) {
+  try {
+    const response = yield call(deleteElectionCommittee, electionCommittee);
+    yield put(
+      deleteElectionCommitteeSuccess({ electionCommittee, ...response })
+    );
+    toast.success("ElectionCommittee Delete Successfully", { autoClose: 2000 });
+  } catch (error) {
+    yield put(deleteElectionCommitteeFail(error));
+    toast.error("ElectionCommittee Delete Failed", { autoClose: 2000 });
+  }
+}
+
+function* onUpdateElectionCommittee({ payload: electionCommittee }) {
+  try {
+    const response = yield call(updateElectionCommittee, electionCommittee);
+    yield put(updateElectionCommitteeSuccess(response));
+    toast.success("ElectionCommittee Updated Successfully", {
+      autoClose: 2000,
+    });
+  } catch (error) {
+    yield put(updateElectionCommitteeFail(error));
+    toast.error("ElectionCommittee Updated Failed", { autoClose: 2000 });
+  }
+}
+
+// Election Campaigns ---------------
 function* getElectionCampaigns({ payload: election }) {
   try {
     const response = yield call(getElectionCampaignsApi, election);
@@ -300,7 +375,7 @@ function* onUpdateElectionCampaign({ payload: electionCampaign }) {
 
 
 
-// Watchers
+// Watchers ---------------
 export function* watchGetElections() {
   yield takeEvery(GET_ELECTIONS, getElections);
 }
@@ -325,7 +400,7 @@ export function* watchGetElectionDetails() {
   yield takeEvery(GET_ELECTION_DETAILS, getElectionDetails);
 }
 
-// Election Candidates Watchers
+// Election Candidates Watchers ---------------
 export function* watchGetElectionCandidates() {
   yield takeEvery(GET_ELECTION_CANDIDATES, getElectionCandidates);
 }
@@ -342,7 +417,25 @@ export function* watchDeleteElectionCandidate() {
   yield takeEvery(DELETE_ELECTION_CANDIDATE, onDeleteElectionCandidate);
 }
 
-// Election Campaigns Watchers
+
+// Election Committees Watchers ---------------
+export function* watchGetElectionCommittees() {
+  yield takeEvery(GET_ELECTION_COMMITTEES, getElectionCommittees);
+}
+
+export function* watchAddNewElectionCommittee() {
+  yield takeEvery(ADD_NEW_ELECTION_COMMITTEE, onAddNewElectionCommittee);
+}
+
+export function* watchUpdateElectionCommittee() {
+  yield takeEvery(UPDATE_ELECTION_COMMITTEE, onUpdateElectionCommittee);
+}
+
+export function* watchDeleteElectionCommittee() {
+  yield takeEvery(DELETE_ELECTION_COMMITTEE, onDeleteElectionCommittee);
+}
+
+// Election Campaigns Watchers ---------------
 export function* watchGetElectionCampaigns() {
   yield takeEvery(GET_ELECTION_CAMPAIGNS, getElectionCampaigns);
 }
@@ -364,7 +457,7 @@ export function* watchDeleteElectionCampaign() {
 function* electionSaga() {
   yield all([
 
-    // Elections
+    // Elections ---------------
     fork(watchGetElections),
     fork(watchGetElectionCount),
     fork(watchAddNewElection),
@@ -373,7 +466,7 @@ function* electionSaga() {
     fork(watchGetElectionDetails),
     fork(watchGetElectionCount),
 
-    // ElectionCandidates
+    // ElectionCandidates ---------------
     fork(watchGetElectionCandidates),
     // fork(watchGetElectionCandidateDetails),
     // fork(watchGetElectionCandidateCount),
@@ -381,7 +474,15 @@ function* electionSaga() {
     fork(watchUpdateElectionCandidate),
     fork(watchDeleteElectionCandidate),
 
-    // ElectionCampiagns
+    // ElectionCommittees ---------------
+    fork(watchGetElectionCommittees),
+    // fork(watchGetElectionCommitteeDetails),
+    // fork(watchGetElectionCommitteeCount),
+    fork(watchAddNewElectionCommittee),
+    fork(watchUpdateElectionCommittee),
+    fork(watchDeleteElectionCommittee),
+
+    // ElectionCampiagns ---------------
     fork(watchGetElectionCampaigns),
     // fork(watchGetElectionCampiagnDetails),
     // fork(watchGetElectionCampiagnCount),

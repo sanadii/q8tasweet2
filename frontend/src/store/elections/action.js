@@ -4,7 +4,7 @@ import {
   API_RESPONSE_ERROR,
 
   // Elections
-  GET_ELECTIONS,
+  GET_ELECTIONS,  // Details, Candidates, Committees, Results, Campaigns
   ADD_ELECTION,
   ADD_ELECTION_SUCCESS,
   ADD_ELECTION_FAIL,
@@ -31,6 +31,17 @@ import {
   DELETE_ELECTION_CANDIDATE_SUCCESS,
   DELETE_ELECTION_CANDIDATE_FAIL,
 
+  // Election Committee
+  GET_ELECTION_COMMITTEES,
+  ADD_NEW_ELECTION_COMMITTEE,
+  ADD_ELECTION_COMMITTEE_SUCCESS,
+  ADD_ELECTION_COMMITTEE_FAIL,
+  UPDATE_ELECTION_COMMITTEE,
+  UPDATE_ELECTION_COMMITTEE_SUCCESS,
+  UPDATE_ELECTION_COMMITTEE_FAIL,
+  DELETE_ELECTION_COMMITTEE,
+  DELETE_ELECTION_COMMITTEE_SUCCESS,
+  DELETE_ELECTION_COMMITTEE_FAIL,
 
   // Election Campaign
   GET_ELECTION_CAMPAIGNS,
@@ -43,7 +54,7 @@ import {
   DELETE_ELECTION_CAMPAIGN,
   DELETE_ELECTION_CAMPAIGN_SUCCESS,
   DELETE_ELECTION_CAMPAIGN_FAIL,
- 
+
 } from "./actionType";
 
 // Election Success / Error
@@ -125,13 +136,11 @@ export const deleteElectionFail = (error) => ({
   payload: error,
 });
 
-// ElectionCandidates
+// ElectionCandidates ---------------
 export const getElectionCandidates = (election) => ({
   type: GET_ELECTION_CANDIDATES,
   payload: election,
 });
-
-// Election Candidates
 export const updateElectionCandidate = electionCandidate => ({
   type: UPDATE_ELECTION_CANDIDATE,
   payload: electionCandidate,
@@ -175,8 +184,57 @@ export const deleteElectionCandidateFail = error => ({
   payload: error,
 });
 
+// Election Committees ---------------
+export const getElectionCommittees = (election) => ({
+  type: GET_ELECTION_COMMITTEES,
+  payload: election,
+});
 
-// Election Campaigns
+export const updateElectionCommittee = electionCommittee => ({
+  type: UPDATE_ELECTION_COMMITTEE,
+  payload: electionCommittee,
+});
+export const updateElectionCommitteeSuccess = electionCommittee => ({
+  type: UPDATE_ELECTION_COMMITTEE_SUCCESS,
+  payload: electionCommittee,
+});
+export const updateElectionCommitteeFail = error => ({
+  type: UPDATE_ELECTION_COMMITTEE_FAIL,
+  payload: error,
+});
+
+export const addNewElectionCommittee = electionCommittee => ({
+  type: ADD_NEW_ELECTION_COMMITTEE,
+  payload: electionCommittee,
+});
+
+export const addElectionCommitteeSuccess = electionCommittee => ({
+  type: ADD_ELECTION_COMMITTEE_SUCCESS,
+  payload: electionCommittee,
+});
+
+export const addElectionCommitteeFail = error => ({
+  type: ADD_ELECTION_COMMITTEE_FAIL,
+  payload: error,
+});
+
+export const deleteElectionCommittee = electionCommittee => ({
+  type: DELETE_ELECTION_COMMITTEE,
+  payload: electionCommittee,
+});
+
+export const deleteElectionCommitteeSuccess = electionCommittee => ({
+  type: DELETE_ELECTION_COMMITTEE_SUCCESS,
+  payload: electionCommittee,
+});
+
+export const deleteElectionCommitteeFail = error => ({
+  type: DELETE_ELECTION_COMMITTEE_FAIL,
+  payload: error,
+});
+
+
+// Election Campaigns ---------------
 export const getElectionCampaigns = (election) => ({
   type: GET_ELECTION_CAMPAIGNS,
   payload: election,
