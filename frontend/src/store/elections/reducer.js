@@ -33,6 +33,9 @@ import {
   DELETE_ELECTION_COMMITTEE_SUCCESS,
   DELETE_ELECTION_COMMITTEE_FAIL,
 
+  // Election Committee Results ----------------
+  UPDATE_ELECTION_COMMITTEE_RESULTS,
+  UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL,
 
   // Election Campaigns ---------------
   GET_ELECTION_CAMPAIGNS,
@@ -59,7 +62,6 @@ const Elections = (state = IntialState, action) => {
     case API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
         case GET_ELECTIONS:
-          console.log("GET_ELECTIONS LOGGING Payload:", action.payload); // Log the payload
           return {
             ...state,
             elections: action.payload.data,
@@ -67,7 +69,6 @@ const Elections = (state = IntialState, action) => {
             isElectionSuccess: true,
           };
         case GET_ELECTION_DETAILS:
-          console.log("GET_ELECTION_DETAILS LOGGING Payload:", action.payload); // Log the payload
           return {
             ...state,
             electionDetails: action.payload.data.electionDetails,
@@ -98,6 +99,13 @@ const Elections = (state = IntialState, action) => {
             electionCommittee: action.payload.data,
             isElectionCommitteeCreated: false,
             isElectionCommitteeSuccess: true,
+          };
+        case UPDATE_ELECTION_COMMITTEE_RESULTS:
+          return {
+            ...state,
+            electionCommitteeResults: action.payload.data,
+            isElectionCampaignUpdate: true,
+            isElectionCampaignUpdateFail: false,
           };
         case GET_ELECTION_CAMPAIGNS:
           return {
@@ -350,6 +358,9 @@ const Elections = (state = IntialState, action) => {
         isElectionCommitteeDeleteFail: true,
       };
 
+    // Election Committee Results
+
+
     // Election Campaigns ---------------
     case GET_ELECTION_CAMPAIGNS: {
       return {
@@ -417,6 +428,8 @@ const Elections = (state = IntialState, action) => {
         isElectionCampaignDelete: false,
         isElectionCampaignDeleteFail: true,
       };
+
+
 
     default:
       return { ...state };

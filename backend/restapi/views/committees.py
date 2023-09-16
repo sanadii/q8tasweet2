@@ -1,5 +1,7 @@
 # from committees.models import Committees
 from django.http import JsonResponse
+from rest_framework import status
+
 from django.http.response import JsonResponse
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -159,4 +161,34 @@ class UpdateElectionCommittee(APIView):
 
         return Response({"data": serialized_data, "count": 1, "code": 200})
 
-    
+class UpdateElectionCommitteeResults(APIView):
+    permission_classes = [IsAuthenticated]  # Assuming only authenticated users can update
+
+    def patch(self, request, id):
+        # Loop through the candidates and update/insert the votes
+        for candidate_id, votes in request.data.get("data", {}).items():
+            obj, created = ElectionCommitteeResults.objects.update_or_create(
+                election_committee_id=id,
+                election_candidate_id=candidate_id,
+                defaults={
+                    'votes': votes,
+                    'updated_by': request.user
+                }
+            )
+
+        # Once the patch operation is done, fetch all relevant results
+        results = ElectionCommitteeResults.objects.all()
+
+        # Process these results into your desired structure
+        output = {}
+        for result in results:
+            committee_id = result.election_committee.id
+            candidate_id = result.election_candidate.id
+            votes = result.votes
+
+            if committee_id not in output:
+                output[committee_id] = {}
+
+            output[committee_id][candidate_id] = votes
+
+        return Response({"data": output}, status=status.HTTP_200_OK)

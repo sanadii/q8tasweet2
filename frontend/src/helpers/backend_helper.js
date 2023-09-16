@@ -89,6 +89,9 @@ export const updateElectionCommittee = (electionCommittee) => api.update(url.UPD
 export const getElectionCommitteeDetails = (electionCommittee) => api.get(url.GET_ELECTION_COMMITTEE_DETAILS + "/" + electionCommittee.id);
 export const getElectionCommitteeCount = () => api.get(url.GET_ELECTION_COUNT);
 
+// ElectionCommittees
+export const updateElectionCommitteeResults = (electionCommitteeResults) => api.update(url.UPDATE_ELECTION_COMMITTEE_RESULTS + "/" + electionCommitteeResults.id, electionCommitteeResults);
+
 // ElectionCampaigns
 export const getElectionCampaigns = (campaign) => api.get(url.GET_ELECTION_CAMPAIGNS + "/" + campaign.id);
 export const addNewElectionCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);

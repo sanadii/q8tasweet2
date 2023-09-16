@@ -182,7 +182,6 @@ const CandidatesTab = () => {
           return <p>{cellProps.row.original.position}</p>;
         },
       },
-
       {
         Header: "Candidate",
         filterable: true,

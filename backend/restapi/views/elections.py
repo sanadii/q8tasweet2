@@ -87,11 +87,21 @@ class GetElectionDetails(APIView):
         election_candidate = ElectionCandidates.objects.filter(election=id).order_by('-votes')
         candidate_serializer = ElectionCandidatesSerializer(election_candidate, many=True)
         election_candidates = candidate_serializer.data
-        # Sort and modify the candidates here as you were doing before
-        for candidate in election_candidates:
+        
+        # Determine the number of seats from the election data
+        election = Elections.objects.get(id=id)
+        number_of_seats = election.seats or 0
+        
+        # Update the candidates' position and winner status
+        for idx, candidate in enumerate(election_candidates, start=1):
             candidate['votes'] = candidate['votes'] or 0
-            candidate['position'] = "-"
-        # Rest of the code to determine the position, winner status, etc.
+            candidate['position'] = str(idx)
+            
+            # Check if the candidate is a winner
+            candidate['is_winner'] = idx <= number_of_seats
+
+        election_candidates.reverse()  # Reverse the order of the list
+
         return election_candidates
 
     def get_election_committees(self, id):

@@ -36,6 +36,9 @@ export const DELETE_ELECTION_COMMITTEE = "/elections/deleteElectionCommittee";
 export const GET_ELECTION_COMMITTEE_DETAILS = "/elections/getElectionCommitteeDetails";
 export const GET_ELECTION_COMMITTEE_COUNT = "/elections/getElectionCommitteeCount";
 
+// Election Committee Results
+export const UPDATE_ELECTION_COMMITTEE_RESULTS = "/elections/updateElectionCommitteeResults";
+
 // Election Campaign
 export const GET_ELECTION_CAMPAIGNS = "/elections/getElectionCampaigns";
 export const ADD_NEW_ELECTION_CAMPAIGN = "/elections/addNewElectionCampaign";

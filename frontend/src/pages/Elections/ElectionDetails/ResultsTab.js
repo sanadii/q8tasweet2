@@ -2,15 +2,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { deleteElectionCommittee } from "../../../store/actions";
-import ElectionCommitteeModal from "./Modals/ElectionCommitteeModal";
+import { updateElectionCommitteeResults } from "../../../store/actions";
 
 // Utility and helper imports
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { ImageGenderCircle, Loader, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 
 // Reactstrap (UI) imports
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
@@ -21,8 +20,7 @@ import SimpleBar from "simplebar-react";
 const ResultsTab = () => {
   const dispatch = useDispatch();
 
-  const { election_id, electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector((state) => ({
-    election_id: state.Elections.electionDetails.id,
+  const { electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector((state) => ({
     electionCandidates: state.Elections.electionCandidates,
     electionCommittees: state.Elections.electionCommittees,
     electionCommitteeResults: state.Elections.electionCommitteeResults,
@@ -31,33 +29,64 @@ const ResultsTab = () => {
 
   const [electionCommitteeResult, setElectionCommitteeResults] = useState(null);
 
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editedData, setEditedData] = useState({}); // Keep track of edited data
+  const [editedData, setEditedData] = useState({});
+  const [modifiedData, setModifiedData] = useState({});
 
   useEffect(() => {
-    setElectionCommitteeResults(electionCommitteeResults);
-  }, [electionCommitteeResults]);
+    // For every committee in edit mode, dispatch the changes to your backend or other desired location.
+    for (const committeeId in editedData) {
+      if (editedData[committeeId]) {
+        // Save logic
+        console.log("committeeId:", committeeId);
 
-  // Modals: Delete, Set, Edit
-  const [modal, setModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-
-  // Toggle for Add / Edit Models
-  const toggle = useCallback(() => {
-    if (modal) {
-      setModal(false);
-      setElectionCommitteeResults(null);
-    } else {
-      setModal(true);
+        // dispatch(updateElectionCommitteeResults(committeeId, modifiedData[committeeId]));
+      }
     }
-  }, [modal]);
+  }, [editedData]);
 
 
-  const handleElectionCommitteeClicks = () => {
-    setElectionCommitteeResults("");
-    setIsEdit(false);
-    toggle();
+  const toggleEditMode = (committeeId) => {
+    setEditedData(prevEditedData => ({
+      ...prevEditedData,
+      [committeeId]: !prevEditedData[committeeId]
+    }));
   };
+
+
+  const handleEditCell = (candidateId, committeeId, value) => {
+    setModifiedData(prev => ({
+      ...prev,
+      [committeeId]: {
+        ...prev[committeeId],
+        [candidateId]: value
+      }
+    }));
+  };
+
+
+  const handleSaveCommitteeResults = (committeeId) => {
+    if (modifiedData[committeeId]) {
+
+      const updatedElectionCommitteeResults = {
+        id: committeeId, // the committee ID
+        data: modifiedData[committeeId] // the candidate-votes data for the committee
+      };
+
+      dispatch(updateElectionCommitteeResults(updatedElectionCommitteeResults));
+
+      // Reset edited data for this specific committee
+      const updatedEditedData = { ...editedData };
+      delete updatedEditedData[committeeId];
+      setEditedData(updatedEditedData);
+
+      // Reset the modified data for this committee if needed
+      const updatedModifiedData = { ...modifiedData };
+      delete updatedModifiedData[committeeId];
+      setModifiedData(updatedModifiedData);
+    }
+  };
+
+
   // Function to transform the data
   const transformData = (data) => {
     const transformed = [];
@@ -72,15 +101,23 @@ const ResultsTab = () => {
 
     // Organize the data for each candidate
     allCandidates.forEach(candidateId => {
-      const row = { "candidate.id": candidateId }; // This will represent each row in the table
+      const row = { "candidate.id": candidateId };
+      let totalVotesForCandidate = 0; // Initialize the total vote counter for each candidate
+
       for (const committeeId in data) {
-        const isCellEditMode = editedData[candidateId] === committeeId; // Check if cell is in edit mode
-        if (isCellEditMode) {
+        const isColumnInEditMode = editedData[committeeId]; // Check if column is in edit mode
+
+        // Update the total vote count for this candidate
+        totalVotesForCandidate += data[committeeId][candidateId] || 0;
+
+        if (isColumnInEditMode) {
           // Render an editable input field in edit mode
           row[`committee_${committeeId}`] = (
             <input
               type="text"
-              value={data[committeeId][candidateId] || 0}
+              maxLength="3"
+              style={{ width: "3em" }}  // Setting the width to limit the size of the input box
+              value={modifiedData[committeeId] && modifiedData[committeeId][candidateId] ? modifiedData[committeeId][candidateId] : (data[committeeId][candidateId] || 0)}
               onChange={(e) => handleEditCell(candidateId, committeeId, e.target.value)}
             />
           );
@@ -89,49 +126,67 @@ const ResultsTab = () => {
           row[`committee_${committeeId}`] = data[committeeId][candidateId] || 0;
         }
       }
+
+      // Set the total vote count for this candidate to the row
+      row['total'] = totalVotesForCandidate;
+
       transformed.push(row);
     });
 
     return transformed;
-  }
-
-  // Function to handle editing a cell
-  const handleEditCell = (candidateId, committeeId, value) => {
-    // Update editedData with the edited value and set edit mode to false
-    const updatedEditedData = { ...editedData };
-    updatedEditedData[candidateId] = committeeId;
-    setEditedData(updatedEditedData);
-    setIsEditMode(false);
-
-    // Here, you can dispatch an action to update the data in your Redux store or API
-    // dispatch(yourUpdateAction(candidateId, committeeId, value));
-  }
-
-  // Function to toggle edit mode for a cell
-  const toggleEditMode = (candidateId, committeeId) => {
-    setIsEditMode(true);
-    setEditedData({ ...editedData, [candidateId]: committeeId });
-  }
+  };
 
 
 
   const createColumns = (data) => {
     const columns = [
       {
-        Header: 'Candidate',
-        accessor: 'candidate.id', // ← Adjusted this line
+        Header: "Candidate",
+        accessor: 'candidate.id',
         Cell: (cellProps) => {
-          const candidateId = cellProps.row.original['candidate.id'];  // ← Adjusted this line
+          const candidateId = cellProps.row.original['candidate.id'];
           const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
-          console.log(cellProps.row.original);  // To inspect the original row data
+      
           if (!candidate) {
             return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
           }
-          return <p className="text-success"><strong>{candidate.name}</strong></p>;
+      
+          return (
+            <>
+              <div className="d-flex align-items-center">
+                <div className="flex-shrink-0">
+                  {candidate.image ? (
+                    // Use the ImageGenderCircle component here
+                    <ImageGenderCircle
+                      genderValue={candidate.gender}
+                      imagePath={candidate.image}
+                    />
+                  ) : (
+                    <div className="flex-shrink-0 avatar-xs me-2">
+                      <div className="avatar-title bg-soft-success text-success rounded-circle fs-13">
+                        {candidate.name.charAt(0)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-grow-1 ms-2 name">
+                  {candidate.name}{" "}
+                  {candidate.is_winner ? (
+                    <Badge color="success" className="badge-label">
+                      <i className="mdi mdi-circle-medium"></i> Winner
+                    </Badge>
+                  ) : null}
+                </div>
+              </div>
+            </>
+          );
         },
-      }
-
-
+      },
+      
+      {
+        Header: 'TOTAL',
+        accessor: 'total',
+      },
     ];
 
     // Add columns for each committee
@@ -145,11 +200,18 @@ const ResultsTab = () => {
         accessor: `committee_${committeeId}`,
         Footer: () => (
           <button
-            onClick={() => handleEditCommitteeClick(committeeId)}
+            onClick={() => {
+              if (editedData[committeeId]) {
+                handleSaveCommitteeResults(committeeId);
+              } else {
+                toggleEditMode(committeeId);
+              }
+            }}
             className="btn btn-primary">
-            {committee ? committee.name : `Committee ${committeeId}`}
+            {editedData[committeeId] ? "Save" : "Edit"}
           </button>
         )
+
 
       });
     });
@@ -183,35 +245,14 @@ const ResultsTab = () => {
         onCloseClick={() => setIsExportCSV(false)}
         data={electionCommitteeResults}
       />
-      <ElectionCommitteeModal
-        modal={modal} // boolean to control modal visibility
-        setModal={setModal}
-        isEdit={isEdit} // boolean to determine if editing
-        toggle={toggle}
-        electionCommitteeResult={electionCommitteeResult}
-      />
-
       <Row>
         <Col lg={12}>
-          {/* <div>
-            <button
-              className="btn btn-soft-success"
-              onClick={() => setIsExportCSV(true)}
-            >
-              Export
-            </button>
-          </div> */}
           <Card id="electionCommitteeList">
             <CardBody>
               <div>
                 <TableContainerHeader
                   // Title
                   ContainerHeaderTitle="Election Committees"
-
-                  // Add Elector Button
-                  isEdit={isEdit}
-                  handleEntryClick={handleElectionCommitteeClicks}
-                  toggle={toggle}
                 />
 
                 <TableContainer
@@ -223,16 +264,11 @@ const ResultsTab = () => {
                   // Header
                   isTableContainerHeader={true}
                   ContainerHeaderTitle="Election Committees"
-                  AddButton="Add Election Committee"
-                  setIsEdit={setIsEdit}
-                  toggle={toggle}
-
                   // Filters
                   isGlobalFilter={true}
                   isCommitteeGenderFilter={true}
                   SearchPlaceholder="Search for Election Committees..."
                   setElectionCommitteeResults={setElectionCommitteeResults}
-                  // handleElectionCommitteeClick={handleElectionCommitteeClicks}
 
                   // Styling
                   divClass="table-responsive table-card mb-3"

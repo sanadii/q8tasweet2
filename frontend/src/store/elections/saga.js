@@ -28,6 +28,10 @@ import {
   // GET_ELECTION_COMMITTEE_DETAILS,
   // GET_ELECTION_COMMITTEE_COUNT,
 
+
+  // Election Committee Results
+  UPDATE_ELECTION_COMMITTEE_RESULTS,
+
   // Election Campaign ---------------
   GET_ELECTION_CAMPAIGNS,
   ADD_NEW_ELECTION_CAMPAIGN,
@@ -73,7 +77,11 @@ import {
   deleteElectionCommitteeSuccess,
   deleteElectionCommitteeFail,
 
-  // // Election Campaigns ---------------
+  // Election Committees ---------------
+  updateElectionCommitteeResultsSuccess,
+  updateElectionCommitteeResultsFail,
+
+  // Election Campaigns ---------------
   addElectionCampaignSuccess,
   addElectionCampaignFail,
   updateElectionCampaignSuccess,
@@ -110,6 +118,9 @@ import {
   addNewElectionCommittee,
   updateElectionCommittee,
   deleteElectionCommittee,
+
+  // Election Committee Results ---------------
+  updateElectionCommitteeResults,
 
   // Election Campaigns ---------------
   getElectionCampaigns as getElectionCampaignsApi,
@@ -326,6 +337,19 @@ function* onUpdateElectionCommittee({ payload: electionCommittee }) {
   }
 }
 
+
+function* onUpdateElectionCommitteeResults({ payload: electionCommitteeResults }) {
+  try {
+    const response = yield call(updateElectionCommitteeResults, electionCommitteeResults);
+    yield put(
+      ElectionApiResponseSuccess(UPDATE_ELECTION_COMMITTEE_RESULTS, response.data)
+    );
+  } catch (error) {
+    yield put(ElectionApiResponseError(UPDATE_ELECTION_COMMITTEE_RESULTS, error));
+  }
+}
+
+
 // Election Campaigns ---------------
 function* getElectionCampaigns({ payload: election }) {
   try {
@@ -435,6 +459,11 @@ export function* watchDeleteElectionCommittee() {
   yield takeEvery(DELETE_ELECTION_COMMITTEE, onDeleteElectionCommittee);
 }
 
+// Election Committees Results Watchers ---------------
+export function* watchUpdateElectionCommitteeResults() {
+  yield takeEvery(UPDATE_ELECTION_COMMITTEE_RESULTS, onUpdateElectionCommitteeResults);
+}
+
 // Election Campaigns Watchers ---------------
 export function* watchGetElectionCampaigns() {
   yield takeEvery(GET_ELECTION_CAMPAIGNS, getElectionCampaigns);
@@ -481,6 +510,9 @@ function* electionSaga() {
     fork(watchAddNewElectionCommittee),
     fork(watchUpdateElectionCommittee),
     fork(watchDeleteElectionCommittee),
+
+    // ElectionCommitteeResults ---------------
+    fork(watchUpdateElectionCommitteeResults),
 
     // ElectionCampiagns ---------------
     fork(watchGetElectionCampaigns),
