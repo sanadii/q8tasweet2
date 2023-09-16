@@ -42,8 +42,6 @@ const Categories = () => {
     subCategories: state.Categories.subCategories,
   }));
 
-  // console.log("Categories: ",categories, "subCategories: ",subCategories);
-
   const [categoryList, setCategoryList] = useState(categories);
   const [subCategoryList, setSubCategoryList] = useState(subCategories);
 

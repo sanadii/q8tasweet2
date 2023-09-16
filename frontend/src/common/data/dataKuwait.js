@@ -281,8 +281,6 @@ const kuwaitGovernates = [
 // });
 
 // You can now access the subCategory for each governate in the kuwaitGovernates array
-console.log(kuwaitGovernates);
-
 const kuwaitAreas = [
   // Assima  Governorate
   { id: 1, name: "مدينة الكويت", parent_id: 1, Disabled: 0 },

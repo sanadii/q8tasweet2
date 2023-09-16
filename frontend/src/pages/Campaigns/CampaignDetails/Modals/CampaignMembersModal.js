@@ -47,7 +47,6 @@ export const CampaignMembersModal = ({
   // --------------- Define States ---------------
   const { currentCampaignMember, campaignMembers, campaignId } = useSelector(
     (state) => {
-      console.log("Redux state for Campaigns:", state.Campaigns);
       return {
         campaignId: state.Campaigns.campaignDetails.id,
         currentCampaignMember: state.Campaigns.currentCampaignMember,
@@ -66,7 +65,6 @@ export const CampaignMembersModal = ({
   let modalName = "Campaign Member";
 
   useEffect(() => {
-    console.log("CampaignMembersModal - campaignMember prop:", campaignMember);
   }, [campaignMember]);
   
   switch (modalMode) {
@@ -99,7 +97,6 @@ export const CampaignMembersModal = ({
       ModalContent = DefaultModalContent;
       ModalButtonText = "Close"; // A default button text
   }
-  console.log("Modal Mode inside CampaignMembersModal:", modalMode);
 
   return (
     <Modal

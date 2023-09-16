@@ -307,8 +307,8 @@ class ElectionCommitteesSerializer(serializers.ModelSerializer):
 
 class ElectionCommitteeResultsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CommitteeResults
-        fields = ['id', 'election', 'committee', 'votes']  # Add or remove fields as appropriate
+        model = ElectionCommitteeResults
+        fields = ('id', 'election_committee', 'election_candidate', 'votes')
 
 
 class ElectorsSerializer(serializers.ModelSerializer):

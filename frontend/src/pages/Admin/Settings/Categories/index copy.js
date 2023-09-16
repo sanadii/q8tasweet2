@@ -39,17 +39,6 @@ const Terms = () => {
   const [modalTerm, setModalTerm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  // // Add a useEffect hook to log the state values whenever they change
-  // useEffect(() => {
-  //   console.log("activeParentTermId:", activeParentTermId);
-  // }, [activeParentTermId]);
-
-  // useEffect(() => {
-  //   console.log("termsList:", termsList);
-  // }, [termsList]);
-
-
-
   const changeTermStatus = (e) => {
     const activeTermId = e.target.id.replace("terms", ""); // Remove "terms" from the ID to get the active term ID
     const filteredTermsList = termList.filter(

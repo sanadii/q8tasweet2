@@ -212,7 +212,7 @@ class ElectionCommittees(models.Model):
     def __str__(self):
         return self.name
 
-class CommitteeResults(models.Model):
+class ElectionCommitteeResults(models.Model):
     # Basic Information
     id = models.BigAutoField(primary_key=True)
     election_committee = models.ForeignKey(ElectionCommittees, on_delete=models.SET_NULL, null=True, blank=True)
@@ -229,7 +229,7 @@ class CommitteeResults(models.Model):
     deleted = models.BooleanField(default=False)
 
     class Meta:
-        db_table = "committee_result"
+        db_table = "election_committee_result"
         verbose_name = "Committe Result"
         verbose_name_plural = "Committe Results"
 

@@ -12,14 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import {
-  ImageGenderCircle,
-  Loader,
-  DeleteModal,
-  ExportCSVModal,
-  TableContainer,
-  TableContainerHeader,
-} from "../../../Components/Common";
+import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 
 // Reactstrap (UI) imports
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
@@ -329,39 +322,35 @@ const CommitteesTab = () => {
                 />
 
                 {electionCommitteeList && electionCommitteeList.length ? (
-                  // Log the electionCommitteeList array to the console
-                  (console.log(electionCommitteeList),
-                    (
-                      <TableContainer
-                        // Data
-                        columns={columns}
-                        data2={electionCommitteeList}
-                        data={electionCommitteeList || []}
-                        customPageSize={50}
+                  <TableContainer
+                    // Data
+                    columns={columns}
+                    data2={electionCommitteeList}
+                    data={electionCommitteeList || []}
+                    customPageSize={50}
 
-                        // Header
-                        isTableContainerHeader={true}
-                        ContainerHeaderTitle="Election Committees"
-                        AddButton="Add Election Committee"
-                        setDeleteModalMulti={setDeleteModalMulti}
-                        setIsEdit={setIsEdit}
-                        toggle={toggle}
+                    // Header
+                    isTableContainerHeader={true}
+                    ContainerHeaderTitle="Election Committees"
+                    AddButton="Add Election Committee"
+                    setDeleteModalMulti={setDeleteModalMulti}
+                    setIsEdit={setIsEdit}
+                    toggle={toggle}
 
-                        // Filters
-                        isGlobalFilter={true}
-                        isCommitteeGenderFilter={true}
-                        isMultiDeleteButton={isMultiDeleteButton}
-                        SearchPlaceholder="Search for Election Committees..."
-                        setElectionCommitteeList={setElectionCommitteeList}
-                        // handleElectionCommitteeClick={handleElectionCommitteeClicks}
+                    // Filters
+                    isGlobalFilter={true}
+                    isCommitteeGenderFilter={true}
+                    isMultiDeleteButton={isMultiDeleteButton}
+                    SearchPlaceholder="Search for Election Committees..."
+                    setElectionCommitteeList={setElectionCommitteeList}
+                    // handleElectionCommitteeClick={handleElectionCommitteeClicks}
 
-                        // Styling
-                        divClass="table-responsive table-card mb-3"
-                        tableClass="align-middle table-nowrap mb-0"
-                        theadClass="table-light table-nowrap"
-                        thClass="table-light text-muted"
-                      />
-                    ))
+                    // Styling
+                    divClass="table-responsive table-card mb-3"
+                    tableClass="align-middle table-nowrap mb-0"
+                    theadClass="table-light table-nowrap"
+                    thClass="table-light text-muted"
+                  />
                 ) : (
                   <Loader error={error} />
                 )}

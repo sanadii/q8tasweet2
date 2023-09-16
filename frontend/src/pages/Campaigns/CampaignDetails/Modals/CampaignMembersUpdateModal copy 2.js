@@ -17,7 +17,6 @@ const CampaignMembersUpdateModal = ({
   campaignMember,
   setOnModalSubmit,
 }) => {
-  console.log("starting Campaign Member: ", campaignMember)
   const dispatch = useDispatch();
 
   const { currentCampaignMember, currentUser, campaignMembers, electionCommittees } = useSelector((state) => ({
@@ -47,7 +46,6 @@ const CampaignMembersUpdateModal = ({
     return () => setOnModalSubmit(null); // Cleanup on unmount
   }, []);
 
-  console.log("Received Campaign Member:", campaignMember);
 
   // Initial Values ---------------
   const initialValues = {
@@ -72,8 +70,6 @@ const CampaignMembersUpdateModal = ({
     }),
 
     onSubmit: (values) => {
-      // console.log("Submitted Values:", values); // Add this
-
       const updatedCampaignMember = {
         id: campaignMember?.id || "",
         campaignId: campaignMember?.campaignId ?? "",
@@ -83,7 +79,6 @@ const CampaignMembersUpdateModal = ({
         mobile: campaignMember?.mobile ?? "",
         notes: campaignMember?.notes ?? ""
       };
-      console.log("Updated Campaign Member ID:", updatedCampaignMember.id);
 
       dispatch(updateCampaignMember(updatedCampaignMember));
       validation.resetForm();

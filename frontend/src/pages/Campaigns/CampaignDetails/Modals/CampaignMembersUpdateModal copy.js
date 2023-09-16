@@ -55,7 +55,6 @@ const CampaignMembersUpdateModal = ({
     return () => setOnModalSubmit(null); // Cleanup on unmount
   }, []);
 
-  console.log("Received Campaign Member:", campaignMember);
 
   // validation
   const validation = useFormik({
@@ -76,8 +75,6 @@ const CampaignMembersUpdateModal = ({
     }),
 
     onSubmit: (values) => {
-      console.log("Submitted Values:", values); // Add this
-
       const updatedCampaignMember = {
         id: values.id,
         // status: parseInt(values.status, 10),

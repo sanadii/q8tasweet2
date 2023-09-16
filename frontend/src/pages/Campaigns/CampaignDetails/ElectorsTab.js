@@ -214,7 +214,6 @@ export const ElectorsTab = () => {
                       status: 1,
                     };
                     dispatch(addNewElectionAttendee(newElectionAttendee));
-                    console.log("newElectionAttendee::: ", newElectionAttendee);
                   }}
                 >
                   Add To Attendees

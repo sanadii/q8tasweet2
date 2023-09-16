@@ -11,6 +11,7 @@ from restapi.serializers import *
 from restapi.models import *
 import ast 
 from datetime import datetime  # Add this line to import the datetime class
+from django.db.models.query import QuerySet
 
 
 def index(request):
@@ -55,12 +56,11 @@ class GetElectionDetails(APIView):
             # 3. Fetch committees related to this election
             election_committees = self.get_election_committees(id)
             
-            # 4. Fetch campaigns for this election
+            # 4. Fetch committee results for this election
+            committee_results = self.get_election_committee_results(election_committees)
+
+            # 5. Fetch campaigns for this election
             campaigns = self.get_campaigns_for_election(id)
-
-            # 5. Fetch committee results for this election
-            committee_results = self.get_election_committee_results(id)
-
 
             # Return the structured data
             return Response({
@@ -97,16 +97,55 @@ class GetElectionDetails(APIView):
     def get_election_committees(self, id):
         election_committees = ElectionCommittees.objects.filter(election=id)
         committees_serializer = ElectionCommitteesSerializer(election_committees, many=True)
+        print("In get_election_committees, returning:", committees_serializer.data)  # Add this line
         return committees_serializer.data
 
+    # # Showing Candidate results in all Committees
+    # def get_election_committee_results(self, committees):
+    #     transformed_results = {}
+
+    #     for committee in committees:
+    #         committee_id = committee['id']
+    #         committee_results = ElectionCommitteeResults.objects.filter(election_committee=committee_id)
+    #         results_serializer = ElectionCommitteeResultsSerializer(committee_results, many=True)
+
+    #         for result in results_serializer.data:
+    #             candidate_id = result['election_candidate']
+    #             votes = result['votes']
+
+    #             # Initialize if candidate not yet in the results
+    #             if candidate_id not in transformed_results:
+    #                 transformed_results[candidate_id] = {}
+
+    #             # Store votes for the current committee
+    #             transformed_results[candidate_id][committee_id] = votes
+
+    #     return transformed_results
+
+    # Showing Committee Results for All Candidates
     def get_election_committee_results(self, committees):
-        print("Committees:", committees)  # This will print the committees to console
-        results = []
+        transformed_results = {}
+
+        # Get a list of all candidate IDs
+        all_candidates = ElectionCandidates.objects.all() # Assuming you have a model named ElectionCandidate
+        all_candidate_ids = [str(candidate.id) for candidate in all_candidates]
+
         for committee in committees:
-            committee_results = CommitteeResults.objects.filter(election_committee=committee['id'])
+            committee_id = str(committee['id'])  # Convert to string for consistency
+            committee_results = ElectionCommitteeResults.objects.filter(election_committee=committee_id)
             results_serializer = ElectionCommitteeResultsSerializer(committee_results, many=True)
-            results.append(results_serializer.data)
-        return results
+
+            # Initialize the committee in the results with default votes for each candidate
+            transformed_results[committee_id] = {candidate_id: 0 for candidate_id in all_candidate_ids}
+
+            for result in results_serializer.data:
+                candidate_id = str(result['election_candidate'])  # Convert to string
+                votes = result['votes']
+
+                # Update votes for the current candidate in the current committee
+                transformed_results[committee_id][candidate_id] = votes
+
+        return transformed_results
 
     def get_campaigns_for_election(self, id):
         election_candidate_ids = ElectionCandidates.objects.filter(election=id).values_list('id', flat=True)

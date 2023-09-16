@@ -90,10 +90,6 @@ const CampaignMembersAddModal = ({ campaignId }) => {
               className="tablelist-form"
               onSubmit={(e) => {
                 e.preventDefault(); // Prevent page refresh
-                console.log(
-                  "Submitting form for user ID:",
-                  user.id
-                );
                 const newCampaignMember = {
                   id: (
                     Math.floor(Math.random() * (100 - 20)) + 20
@@ -101,10 +97,6 @@ const CampaignMembersAddModal = ({ campaignId }) => {
                   campaignId: campaign_id,
                   userId: user.id,
                 };
-                console.log(
-                  "New campaign member:",
-                  newCampaignMember
-                );
                 dispatch(addNewCampaignMember(newCampaignMember));
               }}
             >

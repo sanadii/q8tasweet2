@@ -360,39 +360,35 @@ const CandidatesTab = () => {
                 />
 
                 {electionCandidateList && electionCandidateList.length ? (
-                  // Log the electionCandidateList array to the console
-                  (console.log(electionCandidateList),
-                    (
-                      <TableContainer
-                        // Data
-                        columns={columns}
-                        data2={electionCandidateList}
-                        data={electionCandidateList || []}
-                        customPageSize={50}
+                  <TableContainer
+                    // Data
+                    columns={columns}
+                    data2={electionCandidateList}
+                    data={electionCandidateList || []}
+                    customPageSize={50}
 
-                        // Header
-                        isTableContainerHeader={true}
-                        ContainerHeaderTitle="Election Candidates"
-                        AddButton="Add Election Candidate"
-                        setDeleteModalMulti={setDeleteModalMulti}
-                        setIsEdit={setIsEdit}
-                        toggle={toggle}
+                    // Header
+                    isTableContainerHeader={true}
+                    ContainerHeaderTitle="Election Candidates"
+                    AddButton="Add Election Candidate"
+                    setDeleteModalMulti={setDeleteModalMulti}
+                    setIsEdit={setIsEdit}
+                    toggle={toggle}
 
-                        // Filters
-                        isGlobalFilter={true}
-                        isCandidateGenderFilter={true}
-                        isMultiDeleteButton={isMultiDeleteButton}
-                        SearchPlaceholder="Search for Election Candidates..."
-                        setElectionCandidateList={setElectionCandidateList}
-                        // handleElectionCandidateClick={handleElectionCandidateClicks}
+                    // Filters
+                    isGlobalFilter={true}
+                    isCandidateGenderFilter={true}
+                    isMultiDeleteButton={isMultiDeleteButton}
+                    SearchPlaceholder="Search for Election Candidates..."
+                    setElectionCandidateList={setElectionCandidateList}
+                    // handleElectionCandidateClick={handleElectionCandidateClicks}
 
-                        // Styling
-                        divClass="table-responsive table-card mb-3"
-                        tableClass="align-middle table-nowrap mb-0"
-                        theadClass="table-light table-nowrap"
-                        thClass="table-light text-muted"
-                      />
-                    ))
+                    // Styling
+                    divClass="table-responsive table-card mb-3"
+                    tableClass="align-middle table-nowrap mb-0"
+                    theadClass="table-light table-nowrap"
+                    thClass="table-light text-muted"
+                  />
                 ) : (
                   <Loader error={error} />
                 )}

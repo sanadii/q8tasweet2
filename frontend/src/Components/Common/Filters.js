@@ -134,7 +134,6 @@ const ElectionCategoryFilter = ({ filters, setFilters, activeTab, setActiveTab }
                 "fw-semibold"
               )}
               onClick={() => {
-                // console.log("Tab 'All' clicked.");
                 ChangeElectionCategory("0", "all");
               }}
               href="#"
@@ -150,7 +149,6 @@ const ElectionCategoryFilter = ({ filters, setFilters, activeTab, setActiveTab }
                   "fw-semibold"
                 )}
                 onClick={() => {
-                  // console.log(`Tab with category ID: ${category.id} clicked.`);
                   ChangeElectionCategory(String(index + 1), category.id);
                 }}
                 href="#"
@@ -463,7 +461,6 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
   const ChangeGuaranteeAttendance = (e) => {
     const selectedAttendance = e === "true" ? true : e === "false" ? false : null;
 
-    console.log("Selected Attendance:", selectedAttendance);
 
     // Update the filters
     setFilters(prev => ({
@@ -586,17 +583,9 @@ const GuarantorFilter = ({ filters, setFilters }) => {
   const [sortedGurantorOptions, setSortedGuarantorOptions] = useState([]);
 
   useEffect(() => {
-    console.log('Initial campaignMembers:', campaignMembers);
-    console.log('Initial filters:', filters);
-  }, []);
-
-
-  useEffect(() => {
     const GurantorOptions = campaignMembers.filter(
       (member) => member.rank === 2 || member.rank === 3 || member.rank === 4
     );
-
-    console.log('Filtered GuarantorOptions:', GurantorOptions);
 
     setSortedGuarantorOptions(GurantorOptions.sort((a, b) => a.rank - b.rank));
   }, [campaignMembers]);
@@ -604,15 +593,12 @@ const GuarantorFilter = ({ filters, setFilters }) => {
 
   const ChangeGuaranteeRank = (e) => {
     const selectedRank = e.target.value ? parseInt(e.target.value, 10) : null;
-    console.log('Selected Rank:', selectedRank);
 
     // Update the filters
     setFilters(prev => ({
       ...prev,
       member: selectedRank,
     }));
-
-    console.log('Updated Filters:', filters);
   };
 
 

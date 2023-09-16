@@ -73,6 +73,8 @@ const TableContainer = ({
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
+    rows,
     page,
     prepareRow,
     canPreviousPage,
@@ -84,6 +86,7 @@ const TableContainer = ({
     setPageSize,
     state,
     preGlobalFilteredRows,
+
     state: { pageIndex, pageSize },
   } = useTable(
     {
@@ -217,6 +220,23 @@ const TableContainer = ({
                 );
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr
+                  {...footerGroup.getFooterGroupProps()}
+                  key={footerGroup.id} // Add this line
+                >
+                  {footerGroup.headers.map((column) => (
+                    <td
+                      {...column.getFooterProps()}
+                      key={column.id} // Add this line
+                    >
+                      {column.render('Footer')}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </Table>
         </div>
       </div>
