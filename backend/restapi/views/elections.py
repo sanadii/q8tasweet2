@@ -1,17 +1,19 @@
 # from elections.models import Elections
 from django.http import JsonResponse
 from django.http.response import JsonResponse
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from django.db.models.query import QuerySet
+from django.db.models import Sum
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
+
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from restapi.serializers import *
 from restapi.models import *
 import ast 
 from datetime import datetime  # Add this line to import the datetime class
-from django.db.models.query import QuerySet
+
 
 
 def index(request):
@@ -23,7 +25,7 @@ AUTH_SIZE = 16
 
 # Elections: getElection, deleteElection, addElection, updateElection, ElectionCount
 class getElections(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get(self, request):
         elections_data = Elections.objects.all()
@@ -84,17 +86,25 @@ class GetElectionDetails(APIView):
         return election_serializer.data
 
     def get_election_candidates(self, id):
-        election_candidate = ElectionCandidates.objects.filter(election=id).order_by('-votes')
+        # Fetch the election candidates
+        election_candidate = ElectionCandidates.objects.filter(election=id)
         candidate_serializer = ElectionCandidatesSerializer(election_candidate, many=True)
         election_candidates = candidate_serializer.data
         
+        # Aggregate votes for each candidate across all committees
+        for candidate in election_candidates:
+            total_votes = ElectionCommitteeResults.objects.filter(election_candidate=candidate['id']).aggregate(total_votes=Sum('votes'))['total_votes'] or 0
+            candidate['votes'] = total_votes
+
+        # Sort the candidates by their total votes
+        election_candidates.sort(key=lambda x: x['votes'], reverse=True)
+
         # Determine the number of seats from the election data
         election = Elections.objects.get(id=id)
         number_of_seats = election.seats or 0
-        
+
         # Update the candidates' position and winner status
         for idx, candidate in enumerate(election_candidates, start=1):
-            candidate['votes'] = candidate['votes'] or 0
             candidate['position'] = str(idx)
             
             # Check if the candidate is a winner
@@ -137,11 +147,14 @@ class GetElectionDetails(APIView):
         transformed_results = {}
 
         # Get a list of all candidate IDs
-        all_candidates = ElectionCandidates.objects.all() # Assuming you have a model named ElectionCandidate
+        all_candidates = ElectionCandidates.objects.all()
         all_candidate_ids = [str(candidate.id) for candidate in all_candidates]
 
+        # Create a dictionary to store total votes for each candidate
+        total_votes_per_candidate = {candidate_id: 0 for candidate_id in all_candidate_ids}
+
         for committee in committees:
-            committee_id = str(committee['id'])  # Convert to string for consistency
+            committee_id = str(committee['id'])
             committee_results = ElectionCommitteeResults.objects.filter(election_committee=committee_id)
             results_serializer = ElectionCommitteeResultsSerializer(committee_results, many=True)
 
@@ -149,13 +162,24 @@ class GetElectionDetails(APIView):
             transformed_results[committee_id] = {candidate_id: 0 for candidate_id in all_candidate_ids}
 
             for result in results_serializer.data:
-                candidate_id = str(result['election_candidate'])  # Convert to string
+                candidate_id = str(result['election_candidate'])
                 votes = result['votes']
 
                 # Update votes for the current candidate in the current committee
                 transformed_results[committee_id][candidate_id] = votes
 
-        return transformed_results
+                # Update total votes for the candidate
+                total_votes_per_candidate[candidate_id] += votes
+
+        # Sort candidates based on total votes
+        sorted_candidates_by_votes = sorted(total_votes_per_candidate, key=total_votes_per_candidate.get, reverse=True)
+
+        # Reconstruct the results based on sorted candidate order
+        sorted_transformed_results = {}
+        for committee_id, results in transformed_results.items():
+            sorted_transformed_results[committee_id] = {candidate_id: results[candidate_id] for candidate_id in sorted_candidates_by_votes}
+
+        return sorted_transformed_results
 
     def get_campaigns_for_election(self, id):
         election_candidate_ids = ElectionCandidates.objects.filter(election=id).values_list('id', flat=True)

@@ -123,7 +123,7 @@ class DeleteElectionCommittee(APIView):
             committee = ElectionCommittees.objects.get(id=id)
             committee.delete()
             return JsonResponse({"data": "Committee deleted successfully", "count": 1, "code": 200}, safe=False)
-        except Committees.DoesNotExist:
+        except ElectionCommittees.DoesNotExist:
             return JsonResponse({"data": "Committee not found", "count": 0, "code": 404}, safe=False)
 
 class UpdateElectionCommittee(APIView):

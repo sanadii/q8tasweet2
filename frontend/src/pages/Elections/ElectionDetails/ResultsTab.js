@@ -116,6 +116,8 @@ const ResultsTab = () => {
             <input
               type="text"
               maxLength="3"
+              pattern="\d*"  // Regular expression pattern to match only numbers
+              inputMode="numeric"  // Suggests a numeric input mode
               style={{ width: "3em" }}  // Setting the width to limit the size of the input box
               value={modifiedData[committeeId] && modifiedData[committeeId][candidateId] ? modifiedData[committeeId][candidateId] : (data[committeeId][candidateId] || 0)}
               onChange={(e) => handleEditCell(candidateId, committeeId, e.target.value)}
@@ -146,11 +148,11 @@ const ResultsTab = () => {
         Cell: (cellProps) => {
           const candidateId = cellProps.row.original['candidate.id'];
           const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
-      
+
           if (!candidate) {
             return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
           }
-      
+
           return (
             <>
               <div className="d-flex align-items-center">
@@ -182,9 +184,26 @@ const ResultsTab = () => {
           );
         },
       },
-      
       {
-        Header: 'TOTAL',
+        Header: 'المركز',
+        accessor: 'position',
+        Cell: (cellProps) => {
+          const candidateId = cellProps.row.original['candidate.id'];
+          const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
+
+          if (!candidate) {
+            return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
+          }
+
+          return (
+            <>
+              {candidate.position}
+            </>
+          );
+        },
+      },
+      {
+        Header: 'المجموع',
         accessor: 'total',
       },
     ];
@@ -215,16 +234,6 @@ const ResultsTab = () => {
 
       });
     });
-    const handleEditCommitteeClick = (committeeId) => {
-      // Here, you'd initiate your editing logic for the specified committee.
-      // dispatch(yourEditActionForCommittee(committeeId));
-
-      // // OR if using a modal:
-      // setIsEditModalOpen(true);
-      // setSelectedCommitteeId(committeeId);
-    }
-
-
     return columns;
   }
 

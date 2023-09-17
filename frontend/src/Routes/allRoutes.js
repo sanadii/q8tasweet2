@@ -44,7 +44,8 @@ import UserList from "../pages/Users/UserList";
 
 // Public Pages ---------------
 // Elections
-import Results from "../pages/Results";
+import ElectionGrid from "../pages/Public/ElectionGrid";
+import Results from "../pages/Public/Results";
 
 // //AuthenticationInner pages
 import BasicSignIn from "../pages/AuthenticationInner/Login/BasicSignIn";
@@ -148,7 +149,8 @@ const publicRoutes = [
 
 
   // Election Pages
-  { path: "/results", component: <Results /> },
+  { path: "/public", component: <ElectionGrid /> },
+  { path: "/elections/:id", component: <Results /> },
 
   //AuthenticationInner pages
   { path: "/auth-signin-basic", component: <BasicSignIn /> },
