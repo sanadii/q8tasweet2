@@ -7,7 +7,7 @@ from .committees import *
 from .elections import *
 from .guarantees import *
 from .members import *
-
+from .public import *
 
 
 # Taxonomies

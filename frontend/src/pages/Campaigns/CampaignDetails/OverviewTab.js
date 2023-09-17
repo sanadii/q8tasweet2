@@ -54,6 +54,20 @@ const OverviewTab = () => {
     return campaignGuarantees.filter(guarantee => guarantee.member === memberId && guarantee.status === statusMap[status]).length;
   }
 
+  function getAttendeesCountsForMember(campaignGuarantees, memberId) {
+    let counts = {
+      "Attended": 0
+    };
+
+    campaignGuarantees.forEach((guarantee) => {
+      if (guarantee.member === memberId && guarantee.status === "Attended") {
+        counts["Attended"] += 1;
+      }
+    });
+
+    return counts;
+  }
+
 
   function getStatusCountsForMember(campaignGuarantees, memberId) {
     const guaranteesForMember = campaignGuarantees.filter(item => item.member === memberId);
@@ -104,13 +118,8 @@ const OverviewTab = () => {
     return acc;
   }, {});
 
-
-
   // Transform the aggregated object back to an array
   const guarantorData = Object.values(aggregatedGuarantors);
-
-  // Then, when displaying in your table, you can loop through `guarantorData` 
-
 
   const columns = useMemo(
     () => [
@@ -130,9 +139,19 @@ const OverviewTab = () => {
           const memberId = cellProps.row.original.member;
           const counts = getStatusCountsForMember(campaignGuarantees, memberId);
           const totalCount = counts["New"] + counts["Confirmed"] + counts["Not Confirmed"];
-
           return (
-            <p>{totalCount}</p>
+            <strong>{totalCount}</strong>
+          );
+        },
+      },
+      {
+        Header: "Attended",
+        Cell: (cellProps) => {
+          const memberId = cellProps.row.original.member;
+          const counts = getAttendeesCountsForMember(campaignGuarantees, memberId);
+          const totalCount = counts["Attended"];
+          return (
+            <strong>{totalCount}</strong>
           );
         },
       },
@@ -175,6 +194,46 @@ const OverviewTab = () => {
 
     ], [campaignGuarantees]);
 
+  const [totals, setTotals] = useState({
+    totalGuarantees: 0,
+    totalNew: 0,
+    totalContacted: 0,
+    totalConfirmed: 0,
+    totalNotConfirmed: 0,
+    totalAttendees: 0,
+  });
+
+  useEffect(() => {
+    // Calculate totals
+    const totalGuarantees = campaignGuarantees.length;
+    const totalNew = getAllStatusCount(campaignGuarantees, 1);
+    const totalContacted = getAllStatusCount(campaignGuarantees, 2);
+    const totalConfirmed = getAllStatusCount(campaignGuarantees, 3);
+    const totalNotConfirmed = getAllStatusCount(campaignGuarantees, 4);
+    const totalAttendees = getAllAttendeesCount(campaignGuarantees);
+
+    const attendancePercentage = (totalAttendees / totalGuarantees) * 100;
+
+    // Set totals in state
+    setTotals({
+      totalGuarantees,
+      totalNew,
+      totalContacted,
+      totalConfirmed,
+      totalNotConfirmed,
+      totalAttendees,
+    });
+  }, [campaignGuarantees]);
+
+  // Helper function to count guarantees with a specific status
+  const getAllStatusCount = (guarantees, status) => {
+    return guarantees.filter((guarantee) => guarantee.status === status).length;
+  };
+
+  // Helper function to count attendees
+  const getAllAttendeesCount = (guarantees) => {
+    return guarantees.filter((guarantee) => guarantee.status === "Attended").length;
+  };
 
 
   return (
@@ -267,7 +326,29 @@ const OverviewTab = () => {
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <h5 className="card-title mb-3">GUARANTEES</h5>
+                  <h5 className="card-title mb-3">Guarantee</h5>
+                  <div className="px-2 py-2 mt-1">
+                    <p className="mb-1">Guarantee Attendance <span className="float-end">{totals.attendancePercentage}%</span></p>
+                    <div className="progress mt-2" style={{ height: "6px" }}>
+                      <div
+                        className="progress-bar progress-bar-striped bg-primary"
+                        role="progressbar"
+                        style={{ width: `${totals.attendancePercentage}%` }}
+                        aria-valuenow={totals.attendancePercentage}
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      >
+                        {totals.attendancePercentage}%
+                      </div>
+                    </div>
+                  </div>
+
+                  <strong>Guarantees: {totals.totalGuarantees}</strong><br />
+                  <strong>New: {totals.totalNew}</strong><br />
+                  <strong>Contacted: {totals.totalContacted}</strong><br />
+                  <strong>Confirmed: {totals.totalConfirmed}</strong><br />
+                  <strong>Not Confirmed: {totals.totalNotConfirmed}</strong><br />
+                  <strong>Attendees: {totals.totalAttendees}</strong>
                   {campaignDetails.candidate.description}
                   <Row>
                     <Col>

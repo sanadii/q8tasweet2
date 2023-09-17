@@ -5,6 +5,7 @@ export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
 
 // Get Elections
 export const GET_ELECTIONS = "GET_ELECTIONS";
+export const GET_PUBLIC_ELECTIONS = "GET_PUBLIC_ELECTIONS";
 export const GET_ELECTION_COUNT = "GET_ELECTION_COUNT";
 
 // Add Election

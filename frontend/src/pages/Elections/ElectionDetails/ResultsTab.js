@@ -99,9 +99,17 @@ const ResultsTab = () => {
       }
     }
 
+    // Sort candidates by total votes (descending order)
+    const sortedCandidates = [...allCandidates].sort((candidateId1, candidateId2) => {
+      const totalVotes1 = Object.values(data).reduce((sum, committeeVotes) => sum + (committeeVotes[candidateId1] || 0), 0);
+      const totalVotes2 = Object.values(data).reduce((sum, committeeVotes) => sum + (committeeVotes[candidateId2] || 0), 0);
+
+      return totalVotes2 - totalVotes1;
+    });
+
     // Organize the data for each candidate
-    allCandidates.forEach(candidateId => {
-      const row = { "candidate.id": candidateId };
+    sortedCandidates.forEach((candidateId, index) => {
+      const row = { "candidate.id": candidateId, position: index + 1 }; // Add position based on index
       let totalVotesForCandidate = 0; // Initialize the total vote counter for each candidate
 
       for (const committeeId in data) {
@@ -140,8 +148,27 @@ const ResultsTab = () => {
 
 
 
+
   const createColumns = (data) => {
     const columns = [
+      {
+        Header: 'المركز',
+        accessor: 'position',
+        Cell: (cellProps) => {
+          const candidateId = cellProps.row.original['candidate.id'];
+          const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
+
+          if (!candidate) {
+            return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
+          }
+
+          return (
+            <>
+              {candidate.position}
+            </>
+          );
+        },
+      },
       {
         Header: "Candidate",
         accessor: 'candidate.id',
@@ -184,24 +211,7 @@ const ResultsTab = () => {
           );
         },
       },
-      {
-        Header: 'المركز',
-        accessor: 'position',
-        Cell: (cellProps) => {
-          const candidateId = cellProps.row.original['candidate.id'];
-          const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
 
-          if (!candidate) {
-            return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
-          }
-
-          return (
-            <>
-              {candidate.position}
-            </>
-          );
-        },
-      },
       {
         Header: 'المجموع',
         accessor: 'total',
@@ -237,9 +247,6 @@ const ResultsTab = () => {
     return columns;
   }
 
-
-
-
   // Inside your component
   const transformedData = transformData(electionCommitteeResults);
   const columns = createColumns(electionCommitteeResults);
@@ -268,7 +275,6 @@ const ResultsTab = () => {
                   // Data
                   columns={columns}
                   data={transformedData}
-                  customPageSize={50}
 
                   // Header
                   isTableContainerHeader={true}

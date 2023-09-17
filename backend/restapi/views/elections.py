@@ -13,6 +13,7 @@ from restapi.serializers import *
 from restapi.models import *
 import ast 
 from datetime import datetime  # Add this line to import the datetime class
+from operator import itemgetter
 
 
 
@@ -150,8 +151,8 @@ class GetElectionDetails(APIView):
         all_candidates = ElectionCandidates.objects.all()
         all_candidate_ids = [str(candidate.id) for candidate in all_candidates]
 
-        # Create a dictionary to store total votes for each candidate
-        total_votes_per_candidate = {candidate_id: 0 for candidate_id in all_candidate_ids}
+        # Create a dictionary to store total votes and positions for each candidate
+        candidate_data = {candidate_id: {"votes": 0, "position": None} for candidate_id in all_candidate_ids}
 
         for committee in committees:
             committee_id = str(committee['id'])
@@ -169,18 +170,17 @@ class GetElectionDetails(APIView):
                 transformed_results[committee_id][candidate_id] = votes
 
                 # Update total votes for the candidate
-                total_votes_per_candidate[candidate_id] += votes
+                candidate_data[candidate_id]["votes"] += votes
 
-        # Sort candidates based on total votes
-        sorted_candidates_by_votes = sorted(total_votes_per_candidate, key=total_votes_per_candidate.get, reverse=True)
+        # Sort candidates by position and then by total votes
+        sorted_candidates = sorted(all_candidate_ids, key=lambda candidate_id: (candidate_data[candidate_id]["position"], candidate_data[candidate_id]["votes"]), reverse=True)
 
         # Reconstruct the results based on sorted candidate order
         sorted_transformed_results = {}
         for committee_id, results in transformed_results.items():
-            sorted_transformed_results[committee_id] = {candidate_id: results[candidate_id] for candidate_id in sorted_candidates_by_votes}
+            sorted_transformed_results[committee_id] = {candidate_id: results[candidate_id] for candidate_id in sorted_candidates}
 
         return sorted_transformed_results
-
     def get_campaigns_for_election(self, id):
         election_candidate_ids = ElectionCandidates.objects.filter(election=id).values_list('id', flat=True)
         campaign = Campaigns.objects.filter(election_candidate__in=election_candidate_ids)

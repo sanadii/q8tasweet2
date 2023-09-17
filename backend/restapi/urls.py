@@ -93,6 +93,12 @@ urlpatterns = [
     path("deleteElectionAttendee/<int:id>", DeleteElectionAttendee.as_view(), name="DeleteElectionAttendee"),
     path("updateElectionAttendee/<int:id>", UpdateElectionAttendee.as_view(), name="UpdateElectionAttendee"),
 
+    # Attendees
+    path("getPublicElections", GetPublicElections.as_view(), name="GetPublicElections"),
+    path("getPublicElectionDetails", GetPublicElectionDetails.as_view(), name="GetPublicElectionDetails"),
+
+
+
 ]
 
 
