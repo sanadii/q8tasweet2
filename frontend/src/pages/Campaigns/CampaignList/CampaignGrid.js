@@ -20,7 +20,7 @@ import BgPattern from "../../../assets/images/nft/bg-pattern.png";
 const CampaignGrid = () => {
   const dispatch = useDispatch();
 
-  document.title = "Campaigns - Q8 TASWEET APPS";
+  document.title = "Campaigns - Q8 TASWEET APP";
 
   const {
     campaigns,

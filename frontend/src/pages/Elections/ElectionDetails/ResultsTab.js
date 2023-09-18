@@ -87,61 +87,99 @@ const ResultsTab = () => {
   };
 
 
-  // Function to transform the data
-  const transformData = (data) => {
-    const transformed = [];
+// Function to transform the data
+const transformData = (data) => {
+  const transformed = [];
 
-    // Collect all unique candidate IDs
-    const allCandidates = new Set();
-    for (const committeeVotes of Object.values(data)) {
-      for (const candidateId of Object.keys(committeeVotes)) {
-        allCandidates.add(parseInt(candidateId));
+  // Collect all unique candidate IDs
+  const allCandidates = new Set();
+  for (const committeeVotes of Object.values(data)) {
+    for (const candidateId of Object.keys(committeeVotes)) {
+      allCandidates.add(parseInt(candidateId));
+    }
+  }
+
+  // Sort candidates by total votes (descending order)
+  const sortedCandidates = [...allCandidates].sort((candidateId1, candidateId2) => {
+    const totalVotes1 = Object.values(data).reduce(
+      (sum, committeeVotes) => sum + (committeeVotes[candidateId1] || 0),
+      0
+    );
+    const totalVotes2 = Object.values(data).reduce(
+      (sum, committeeVotes) => sum + (committeeVotes[candidateId2] || 0),
+      0
+    );
+
+    return totalVotes2 - totalVotes1;
+  });
+
+  // Organize the data for each candidate
+  sortedCandidates.forEach((candidateId, index) => {
+    const row = { "candidate.id": candidateId, position: index + 1 }; // Add position based on index
+    let totalVotesForCandidate = 0; // Initialize the total vote counter for each candidate
+
+    for (const committeeId in data) {
+      const isColumnInEditMode = editedData[committeeId]; // Check if the column is in edit mode
+
+      // Update the total vote count for this candidate
+      totalVotesForCandidate += data[committeeId][candidateId] || 0;
+
+      if (isColumnInEditMode) {
+        // Render an editable input field in edit mode
+        row[`committee_${committeeId}`] = (
+          <input
+            type="text"
+            maxLength="3"
+            pattern="\d*" // Regular expression pattern to match only numbers
+            inputMode="numeric" // Suggests a numeric input mode
+            style={{ width: "3em" }} // Setting the width to limit the size of the input box
+            value={
+              modifiedData[committeeId] && modifiedData[committeeId][candidateId]
+                ? modifiedData[committeeId][candidateId]
+                : data[committeeId][candidateId] || 0
+            }
+            onChange={(e) => handleEditCell(candidateId, committeeId, e.target.value)}
+          />
+        );
+      } else {
+        // Render cell content in view mode
+        row[`committee_${committeeId}`] = data[committeeId][candidateId] || 0;
       }
     }
 
-    // Organize the data for each candidate
-    allCandidates.forEach(candidateId => {
-      const row = { "candidate.id": candidateId };
-      let totalVotesForCandidate = 0; // Initialize the total vote counter for each candidate
+    // Set the total vote count for this candidate to the row
+    row["total"] = totalVotesForCandidate;
 
-      for (const committeeId in data) {
-        const isColumnInEditMode = editedData[committeeId]; // Check if column is in edit mode
+    transformed.push(row);
+  });
 
-        // Update the total vote count for this candidate
-        totalVotesForCandidate += data[committeeId][candidateId] || 0;
+  return transformed;
+};
 
-        if (isColumnInEditMode) {
-          // Render an editable input field in edit mode
-          row[`committee_${committeeId}`] = (
-            <input
-              type="text"
-              maxLength="3"
-              pattern="\d*"  // Regular expression pattern to match only numbers
-              inputMode="numeric"  // Suggests a numeric input mode
-              style={{ width: "3em" }}  // Setting the width to limit the size of the input box
-              value={modifiedData[committeeId] && modifiedData[committeeId][candidateId] ? modifiedData[committeeId][candidateId] : (data[committeeId][candidateId] || 0)}
-              onChange={(e) => handleEditCell(candidateId, committeeId, e.target.value)}
-            />
-          );
-        } else {
-          // Render cell content in view mode
-          row[`committee_${committeeId}`] = data[committeeId][candidateId] || 0;
-        }
-      }
 
-      // Set the total vote count for this candidate to the row
-      row['total'] = totalVotesForCandidate;
-
-      transformed.push(row);
-    });
-
-    return transformed;
-  };
 
 
 
   const createColumns = (data) => {
     const columns = [
+      {
+        Header: 'المركز',
+        accessor: 'position',
+        Cell: (cellProps) => {
+          const candidateId = cellProps.row.original['candidate.id'];
+          const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
+
+          if (!candidate) {
+            return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
+          }
+
+          return (
+            <>
+              {candidate.position}
+            </>
+          );
+        },
+      },
       {
         Header: "Candidate",
         accessor: 'candidate.id',
@@ -184,24 +222,7 @@ const ResultsTab = () => {
           );
         },
       },
-      {
-        Header: 'المركز',
-        accessor: 'position',
-        Cell: (cellProps) => {
-          const candidateId = cellProps.row.original['candidate.id'];
-          const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
 
-          if (!candidate) {
-            return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
-          }
-
-          return (
-            <>
-              {candidate.position}
-            </>
-          );
-        },
-      },
       {
         Header: 'المجموع',
         accessor: 'total',
@@ -237,23 +258,20 @@ const ResultsTab = () => {
     return columns;
   }
 
-
-
-
   // Inside your component
   const transformedData = transformData(electionCommitteeResults);
   const columns = createColumns(electionCommitteeResults);
 
   // Export Modal
-  const [isExportCSV, setIsExportCSV] = useState(false);
+  // const [isExportCSV, setIsExportCSV] = useState(false);
 
   return (
     <React.Fragment>
-      <ExportCSVModal
+      {/* <ExportCSVModal
         show={isExportCSV}
         onCloseClick={() => setIsExportCSV(false)}
         data={electionCommitteeResults}
-      />
+      /> */}
       <Row>
         <Col lg={12}>
           <Card id="electionCommitteeList">

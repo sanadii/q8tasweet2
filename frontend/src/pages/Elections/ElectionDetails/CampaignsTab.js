@@ -6,20 +6,7 @@ import {
 } from "../../../store/actions";
 import { Link } from "react-router-dom";
 
-import {
-  Button,
-  Card,
-  CardBody,
-  Col,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Row,
-  UncontrolledDropdown,
-} from "reactstrap";
+import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalHeader, ModalBody, Row, UncontrolledDropdown } from "reactstrap";
 
 import {
   ImageGenderCircle,
@@ -173,18 +160,18 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
                       <div className="team-profile-img">
                         <div className="avatar-sm rounded">
                           <ImageCandidateCampaign
-                            imagePath={campaign.candidate_image}
+                            imagePath={campaign.candidate.image}
                           />
                         </div>
 
                         <div className="team-content">
                           <Link to="#" className="d-block">
                             <h5 className="fs-16 mb-1">
-                              <b>{campaign.candidate_name}</b>
+                              <b>{campaign.candidate.name}</b>
                             </h5>
                           </Link>
                           <p className="text-muted mb-0">
-                            Candidate ID: {campaign.candidate_id}
+                            Candidate ID: {campaign.candidate.id}
                           </p>
                           <p className="text-muted mb-0 text-danger">
                             Elcand ID: {campaign.election_candidate}
@@ -214,7 +201,7 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
                     <Col lg={2} className="col" key={campaign.id}>
                       <div className="text-end">
                         <Link
-                          to="#"
+                          to={`/campaigns/${campaign.id}`} // Dynamic link to campaign details page
                           className="btn btn-soft-success me-1"
                           onClick={() => toggleProfileView(campaign.id)} // toggling the view
                         >
@@ -222,6 +209,7 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
                             ? "Hide Profile"
                             : "View Profile"}
                         </Link>
+
                       </div>
                     </Col>
                   </Row>

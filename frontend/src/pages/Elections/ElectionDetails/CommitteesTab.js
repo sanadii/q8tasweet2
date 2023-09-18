@@ -30,12 +30,6 @@ const CommitteesTab = () => {
   }));
 
   const [electionCommittee, setElectionCommittee] = useState([]);
-  const [electionCommitteeList, setElectionCommitteeList] =
-    useState(electionCommittees);
-
-  useEffect(() => {
-    setElectionCommitteeList(electionCommittees);
-  }, [electionCommittees]);
 
   // Modals: Delete, Set, Edit
   const [deleteModal, setDeleteModal] = useState(false);
@@ -85,6 +79,7 @@ const CommitteesTab = () => {
         election_id: electionCommittee.election_id,
         candidate_id: electionCommittee.candidate_id,
         name: electionCommittee.name,
+        gender: electionCommittee.gender,
         votes: electionCommittee.votes,
         remarks: electionCommittee.remarks,
       });
@@ -264,6 +259,27 @@ const CommitteesTab = () => {
   // Export Modal
   const [isExportCSV, setIsExportCSV] = useState(false);
 
+
+  // Filters -------------------------
+  const [filters, setFilters] = useState({
+    global: "",
+    gender: null,
+  });
+
+  const electionCommitteeList = electionCommittees.filter(electionCommittee => {
+    let isValid = true;
+    if (filters.global) {
+      isValid = isValid && electionCommittee.name && typeof electionCommittee.name === 'string' && electionCommittee.name.toLowerCase().includes(filters.global.toLowerCase());
+    }
+
+    if (filters.gender !== null) {
+      isValid = isValid && electionCommittee.gender === filters.gender;
+    }
+    return isValid;
+  });
+
+
+
   return (
     <React.Fragment>
       <ExportCSVModal
@@ -285,9 +301,9 @@ const CommitteesTab = () => {
         onCloseClick={() => setDeleteModalMulti(false)}
       />
       <ElectionCommitteeModal
-        modal={modal} // boolean to control modal visibility
+        modal={modal}
         setModal={setModal}
-        isEdit={isEdit} // boolean to determine if editing
+        isEdit={isEdit}
         toggle={toggle}
         electionCommittee={electionCommittee}
       />
@@ -314,6 +330,7 @@ const CommitteesTab = () => {
                   AddButtonText="Add New Election Committee"
                   isEdit={isEdit}
                   handleEntryClick={handleElectionCommitteeClicks}
+                  setIsEdit={setIsEdit}
                   toggle={toggle}
 
                   // Delete Button
@@ -321,39 +338,32 @@ const CommitteesTab = () => {
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
 
-                {electionCommitteeList && electionCommitteeList.length ? (
-                  <TableContainer
-                    // Data
-                    columns={columns}
-                    data2={electionCommitteeList}
-                    data={electionCommitteeList || []}
-                    customPageSize={50}
+                <TableContainer
+                  // Data
+                  columns={columns}
+                  data={electionCommitteeList || []}
+                  customPageSize={50}
 
-                    // Header
-                    isTableContainerHeader={true}
-                    ContainerHeaderTitle="Election Committees"
-                    AddButton="Add Election Committee"
-                    setDeleteModalMulti={setDeleteModalMulti}
-                    setIsEdit={setIsEdit}
-                    toggle={toggle}
+                  // Filters
+                  isTableContainerFilter={true}
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isGenderFilter={true}
 
-                    // Filters
-                    isGlobalFilter={true}
-                    isCommitteeGenderFilter={true}
-                    isMultiDeleteButton={isMultiDeleteButton}
-                    SearchPlaceholder="Search for Election Committees..."
-                    setElectionCommitteeList={setElectionCommitteeList}
-                    // handleElectionCommitteeClick={handleElectionCommitteeClicks}
+                  // Settings
+                  filters={filters}
+                  setFilters={setFilters}
 
-                    // Styling
-                    divClass="table-responsive table-card mb-3"
-                    tableClass="align-middle table-nowrap mb-0"
-                    theadClass="table-light table-nowrap"
-                    thClass="table-light text-muted"
-                  />
-                ) : (
-                  <Loader error={error} />
-                )}
+                  SearchPlaceholder="Search for Election Committees..."
+                  // handleElectionCommitteeClick={handleElectionCommitteeClicks}
+
+                  // Styling
+                  divClass="table-responsive table-card mb-3"
+                  tableClass="align-middle table-nowrap mb-0"
+                  theadClass="table-light table-nowrap"
+                  thClass="table-light text-muted"
+                />
+
               </div>
               <ToastContainer closeButton={false} limit={1} />
             </CardBody>

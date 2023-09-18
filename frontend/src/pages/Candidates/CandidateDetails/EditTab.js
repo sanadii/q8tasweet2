@@ -83,31 +83,16 @@ const EditTab = ({ candidate }) => {
 
       selectedImage: selectedImage,
       description: (candidate && candidate.description) || "",
-      dueDate: (candidate && candidate.dueDate) || "",
 
-      category: (candidate && candidate.category) || "",
-      subCategory: (candidate && candidate.subCategory) || "",
-      tags: (candidate && candidate.tags) || [],
-
-      // candidates: (candidate && candidate.candidates) || [],
-      // committees: (candidate && candidate.committees) || [],
+      // tags: (candidate && candidate.tags) || [],
       // moderators: (candidate && candidate.moderators) || [],
 
       status: (candidate && candidate.status) || "New",
       priority: (candidate && candidate.priority) || "High",
 
-      // Candidate Specification
-      type: (candidate && candidate.type) || "",
-      result: (candidate && candidate.result) || "",
-      votes: (candidate && candidate.votes) || 0,
-      seats: (candidate && candidate.seats) || 0,
 
       // System
       delet: (candidate && candidate.delet) || "",
-      createdBy: (candidate && candidate.createdBy) || "",
-      createdDate: (candidate && candidate.createdDate) || "",
-      updatedBy: (candidate && candidate.updatedBy) || "",
-      updatedDate: (candidate && candidate.updatedDate) || "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter Candidate Name"),
@@ -118,29 +103,14 @@ const EditTab = ({ candidate }) => {
         name: values.name,
         image: values.image,
         selectedImage: selectedImage,
-        dueDate: dueDate,
         description: values.description,
 
         // Taxonomies
-        category: values.category,
-        subCategory: values.subCategory,
         tags: Array.isArray(values.tags) ? values.tags : [],
-
-        // Candidate Spesifications
-        type: values.type,
-        result: values.result,
-        votes: values.votes,
-        seats: values.seats,
 
         // Admin
         status: values.status,
         priority: values.priority,
-
-        // System
-        createdBy: values.createdBy,
-        createdDate: values.createdDate,
-        updatedBy: values.updatedBy,
-        updatedDate: values.updatedDate,
 
         // candidates: Array.isArray(values.candidates) ? values.candidates : [],
         // committees: Array.isArray(values.committees) ? values.committees : [],

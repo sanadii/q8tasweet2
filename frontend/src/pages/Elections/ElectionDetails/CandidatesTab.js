@@ -12,14 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import {
-  ImageGenderCircle,
-  Loader,
-  DeleteModal,
-  ExportCSVModal,
-  TableContainer,
-  TableContainerHeader,
-} from "../../../Components/Common";
+import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 
 // Reactstrap (UI) imports
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";

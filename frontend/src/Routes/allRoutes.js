@@ -150,7 +150,7 @@ const publicRoutes = [
 
   // Election Pages
   { path: "/public", component: <ElectionGrid /> },
-  { path: "/elections/:id", component: <Results /> },
+  { path: "/public/elections/:id", component: <Results /> },
 
   //AuthenticationInner pages
   { path: "/auth-signin-basic", component: <BasicSignIn /> },
