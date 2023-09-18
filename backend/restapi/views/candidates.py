@@ -136,6 +136,8 @@ class UpdateCandidate(APIView):
         # Extract the desired fields from the request data
         name = request.data.get("name")
         image = request.data.get("image")
+        gender = request.data.get("gender")
+
         description = request.data.get("description")
 
         # Admin
@@ -151,6 +153,7 @@ class UpdateCandidate(APIView):
 
         # Update the candidate object with the new values
         candidate.name = name
+        candidate.gender = gender
         candidate.description = description
         if image:
             candidate.image = image
@@ -200,6 +203,7 @@ class UpdateCandidate(APIView):
         updated_candidate_data = {
             "id": candidate.id,
             "name": candidate.name,
+            "gender": candidate.gender,
             "image": candidate.image.url if candidate.image else None,
             "description": candidate.description,
             # Admin

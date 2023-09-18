@@ -70,9 +70,9 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                             </div>
                             <div className="vr"></div>
                             <div>
-                              Date :{" "}
+                              Date :
                               <span className="fw-medium">
-                                {election.duedate}
+                                {election.dueDate}
                               </span>
                             </div>
                             <div className="vr"></div>
@@ -141,7 +141,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       }}
                       href="#"
                     >
-                      Overview
+                      الملخص
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -155,7 +155,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       }}
                       href="#"
                     >
-                      Candidates
+                      المرشحين
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -169,7 +169,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       }}
                       href="#"
                     >
-                      Committees
+                      اللجان
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -183,7 +183,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       }}
                       href="#"
                     >
-                      Campaigns
+                      الحملات الإنتخابية
                     </NavLink>
                   </NavItem>
 
@@ -198,7 +198,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       }}
                       href="#"
                     >
-                      Detail Results
+                      النتائج الكاملة
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -212,7 +212,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       }}
                       href="#"
                     >
-                      Activities
+                      عمليات المستخدم
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -226,7 +226,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       }}
                       href="#"
                     >
-                      Edit
+                      تعديل
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -355,7 +355,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                 <ActivitiesTab election={election} />
               </TabPane>
               <TabPane tabId="7">
-                {/* <EditTab election={election} /> */}
+                <EditTab election={election} />
               </TabPane>
             </TabContent>
           )}

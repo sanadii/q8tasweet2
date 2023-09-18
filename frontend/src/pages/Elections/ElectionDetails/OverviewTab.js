@@ -1,32 +1,33 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Row,
-  UncontrolledDropdown,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
+import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 
 //import images
 import avatar8 from "../../../assets/images/users/avatar-8.jpg";
 import avatar10 from "../../../assets/images/users/avatar-10.jpg";
 import avatar6 from "../../../assets/images/users/avatar-6.jpg";
 import avatar2 from "../../../assets/images/users/avatar-2.jpg";
-import avatar3 from "../../../assets/images/users/avatar-3.jpg";
-import avatar4 from "../../../assets/images/users/avatar-4.jpg";
-import avatar7 from "../../../assets/images/users/avatar-7.jpg";
 import image4 from "../../../assets/images/small/img-4.jpg";
 import image5 from "../../../assets/images/small/img-5.jpg";
 
 //SimpleBar
 import SimpleBar from "simplebar-react";
 
-const OverviewTab = ({ election, electionCandidates }) => {
+const OverviewTab = ({ election }) => {
+
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } =
+    useSelector((state) => ({
+      electionDetails: state.Elections.electionDetails,
+      electionCandidates: state.Elections.electionCandidates,
+      electionCampaigns: state.Elections.electionCampaigns,
+      electionCommittees: state.Elections.electionCommittees,
+      // error: state.Elections.error,
+    }));
+
+
+
   const moderators = Array.isArray(election.moderators)
     ? election.moderators
     : [];
@@ -42,161 +43,40 @@ const OverviewTab = ({ election, electionCandidates }) => {
                   <Row>
                     <Col lg={3} sm={6}>
                       <div>
-                        <p className="mb-2 text-uppercase fw-medium">Date:</p>
-                        <h5 className="fs-15 mb-0">{election.duedate}</h5>
+                        <p className="mb-2 text-uppercase fw-medium">يوم الإقتراع:</p>
+                        <h5 className="fs-15 mb-0">{election.dueDate}</h5>
                       </div>
                     </Col>
                     <Col lg={3} sm={6}>
                       <div>
-                        <p className="mb-2 text-uppercase fw-medium">Type:</p>
+                        <p className="mb-2 text-uppercase fw-medium">نوع الإنتخابات:</p>
                         <div className="badge bg-danger fs-12">
-                          {election.priority}
+                          {/* {election.type} */}
                         </div>
                       </div>
                     </Col>
                     <Col lg={3} sm={6}>
                       <div>
-                        <p className="mb-2 text-uppercase fw-medium">Votes:</p>
+                        <p className="mb-2 text-uppercase fw-medium">عدد الأصوات:</p>
                         <div className="badge bg-warning fs-12">
-                          {election.status}
+                          {election.votes} صوت
                         </div>
                       </div>
                     </Col>
                     <Col lg={3} sm={6}>
                       <div>
                         <p className="mb-2 text-uppercase fw-medium">
-                          Winners:
+                          المقاعد:
                         </p>
-                        <h5 className="fs-15 mb-0">{election.duedate}</h5>
+                        <div className="badge bg-warning fs-12">
+                          {election.seats} مقاعد
+                        </div>
                       </div>
                     </Col>
                   </Row>
                 </div>
                 <h6 className="mb-3 fw-semibold text-uppercase">Summary</h6>
                 <p>{election.description}</p>
-
-                {/* <div>
-                                    <button type="button" className="btn btn-link link-success p-0">Read more</button>
-                                </div> */}
-
-                <div className="pt-3 border-top border-top-dashed mt-4">
-                  <h6 className="mb-3 fw-semibold text-uppercase">Resources</h6>
-                  <Row className="g-3">
-                    <Col xxl={4} lg={6}>
-                      <div className="border rounded border-dashed p-2">
-                        <div className="d-flex align-items-center">
-                          <div className="flex-shrink-0 me-3">
-                            <div className="avatar-sm">
-                              <div className="avatar-title bg-light text-secondary rounded fs-24">
-                                <i className="ri-folder-zip-line"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex-grow-1 overflow-hidden">
-                            <h5 className="fs-13 mb-1">
-                              <Link
-                                to="#"
-                                className="text-body text-truncate d-block"
-                              >
-                                App pages.zip
-                              </Link>
-                            </h5>
-                            <div>2.2MB</div>
-                          </div>
-                          <div className="flex-shrink-0 ms-2">
-                            <div className="d-flex gap-1">
-                              <button
-                                type="button"
-                                className="btn btn-icon text-muted btn-sm fs-18"
-                              >
-                                <i className="ri-download-2-line"></i>
-                              </button>
-                              <UncontrolledDropdown>
-                                <DropdownToggle
-                                  tag="button"
-                                  className="btn btn-icon text-muted btn-sm fs-18 dropdown"
-                                >
-                                  <i className="ri-more-fill"></i>
-                                </DropdownToggle>
-                                <DropdownMenu>
-                                  <li>
-                                    <DropdownItem>
-                                      <i className="ri-pencil-fill align-bottom me-2 text-muted"></i>{" "}
-                                      Rename
-                                    </DropdownItem>
-                                  </li>
-                                  <li>
-                                    <DropdownItem>
-                                      <i className="ri-delete-bin-fill align-bottom me-2 text-muted"></i>{" "}
-                                      Delete
-                                    </DropdownItem>
-                                  </li>
-                                </DropdownMenu>
-                              </UncontrolledDropdown>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-
-                    <Col xxl={4} lg={6}>
-                      <div className="border rounded border-dashed p-2">
-                        <div className="d-flex align-items-center">
-                          <div className="flex-shrink-0 me-3">
-                            <div className="avatar-sm">
-                              <div className="avatar-title bg-light text-secondary rounded fs-24">
-                                <i className="ri-file-ppt-2-line"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex-grow-1 overflow-hidden">
-                            <h5 className="fs-13 mb-1">
-                              <Link
-                                to="#"
-                                className="text-body text-truncate d-block"
-                              >
-                                Q8Tasweet admin.ppt
-                              </Link>
-                            </h5>
-                            <div>2.4MB</div>
-                          </div>
-                          <div className="flex-shrink-0 ms-2">
-                            <div className="d-flex gap-1">
-                              <button
-                                type="button"
-                                className="btn btn-icon text-muted btn-sm fs-18"
-                              >
-                                <i className="ri-download-2-line"></i>
-                              </button>
-                              <UncontrolledDropdown>
-                                <DropdownToggle
-                                  tag="button"
-                                  className="btn btn-icon text-muted btn-sm fs-18 dropdown"
-                                >
-                                  <i className="ri-more-fill"></i>
-                                </DropdownToggle>
-                                <DropdownMenu>
-                                  <li>
-                                    <DropdownItem>
-                                      <i className="ri-pencil-fill align-bottom me-2 text-muted"></i>{" "}
-                                      Rename
-                                    </DropdownItem>
-                                  </li>
-                                  <li>
-                                    <DropdownItem>
-                                      <i className="ri-delete-bin-fill align-bottom me-2 text-muted"></i>{" "}
-                                      Delete
-                                    </DropdownItem>
-                                  </li>
-                                </DropdownMenu>
-                              </UncontrolledDropdown>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
               </div>
             </CardBody>
           </Card>
@@ -514,61 +394,79 @@ const OverviewTab = ({ election, electionCandidates }) => {
                 style={{ height: "235px" }}
                 className="mx-n3 px-3"
               >
-                <div className="vstack gap-3">
-                  <div className="d-flex align-items-center">
-                    <div className="avatar-xs flex-shrink-0 me-3">
-                      <img
-                        src={avatar2}
-                        alt=""
-                        className="img-fluid rounded-circle"
-                      />
-                    </div>
-                    <div className="flex-grow-1">
-                      <h5 className="fs-13 mb-0">
-                        <Link to="#" className="text-body d-block">
-                          Nancy Martino
-                        </Link>
-                      </h5>
-                    </div>
-                    <div className="flex-shrink-0">
-                      <div className="d-flex align-items-center gap-1">
-                        <button type="button" className="btn btn-light btn-sm">
-                          Message
-                        </button>
-                        <UncontrolledDropdown>
-                          <DropdownToggle
-                            type="button"
-                            className="btn btn-icon btn-sm fs-16 text-muted dropdown"
-                            tag="button"
-                          >
-                            <i className="ri-more-fill"></i>
-                          </DropdownToggle>
-                          <DropdownMenu>
-                            <li>
-                              <DropdownItem>
-                                <i className="ri-eye-fill text-muted me-2 align-bottom"></i>
-                                View
-                              </DropdownItem>
-                            </li>
-                            <li>
-                              <DropdownItem>
-                                <i className="ri-star-fill text-muted me-2 align-bottom"></i>
-                                Favourite
-                              </DropdownItem>
-                            </li>
-                            <li>
-                              <DropdownItem>
-                                <i className="ri-delete-bin-5-fill text-muted me-2 align-bottom"></i>
-                                Delete
-                              </DropdownItem>
-                            </li>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
+                {electionCampaigns && electionCampaigns.length ? (
+                  electionCampaigns.map((campaign, index) => (
+
+                    <div className="vstack gap-3"
+                      key={campaign.id || index}  // Assuming campaign.id is a unique identifier for each campaign
+                    >
+                      <div className="d-flex align-items-center">
+                        <div className="avatar-xs flex-shrink-0 me-3">
+                          {campaign.candidate.image ? (
+                            // Use the ImageCircle component here
+                            <ImageGenderCircle
+                              genderValue={campaign.candidate.gender}
+                              imagePath={campaign.candidate.image}
+                            />
+                          ) : (
+                            <div className="flex-shrink-0 avatar-xs me-2">
+                              <div className="avatar-title bg-soft-success text-success rounded-circle fs-13">
+                                {campaign.candidate.name.charAt(0)}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-grow-1">
+                          <h5 className="fs-13 mb-0">
+                            <Link to="#" className="text-body d-block">
+                              {campaign.candidate.name}
+                            </Link>
+                          </h5>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <div className="d-flex align-items-center gap-1">
+                            <button type="button" className="btn btn-light btn-sm">
+                              Message
+                            </button>
+                            <UncontrolledDropdown>
+                              <DropdownToggle
+                                type="button"
+                                className="btn btn-icon btn-sm fs-16 text-muted dropdown"
+                                tag="button"
+                              >
+                                <i className="ri-more-fill"></i>
+                              </DropdownToggle>
+                              <DropdownMenu>
+                                <li>
+                                  <DropdownItem>
+                                    <i className="ri-eye-fill text-muted me-2 align-bottom"></i>
+                                    View
+                                  </DropdownItem>
+                                </li>
+                                <li>
+                                  <DropdownItem>
+                                    <i className="ri-star-fill text-muted me-2 align-bottom"></i>
+                                    Favourite
+                                  </DropdownItem>
+                                </li>
+                                <li>
+                                  <DropdownItem>
+                                    <i className="ri-delete-bin-5-fill text-muted me-2 align-bottom"></i>
+                                    Delete
+                                  </DropdownItem>
+                                </li>
+                              </DropdownMenu>
+                            </UncontrolledDropdown>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  ))
+                ) : (
+                  <p>No Campaigns Added</p>
+                )}
               </SimpleBar>
+
             </CardBody>
           </Card>
           <Card>

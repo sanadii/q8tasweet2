@@ -35,82 +35,36 @@ class GetCommittees(APIView):
 
 class AddNewElectionCommittee(APIView):
     def post(self, request):
-        User = get_user_model()
+        try:
+            # Get user model and authenticated user
+            User = get_user_model()
+            created_by = request.user
 
-        name = request.data.get("name")
-        image = request.data.get("image")
-        description = request.data.get("description")
+            # Deserialize the request data using a serializer (you need to define this serializer)
+            serializer = ElectionCommitteesSerializer(data=request.data)
 
-        # Committee
-        gender = request.data.get("gender")
-        phone = request.data.get("phone")
-        email = request.data.get("email")
-        twitter = request.data.get("twitter")
-        instagram = request.data.get("instagram")
+            if serializer.is_valid():
+                # Create a new committee object with the serializer's validated data
+                committee_data = serializer.validated_data
+                committee_data['election_id'] = request.data.get("election_id")
+                committee_data['created_by'] = created_by
+                committee = ElectionCommittees(**committee_data)
+                committee.save()
 
-        # Admin
-        moderators = self.get_moderators_list(request.data.get("moderators"))
-        status = request.data.get("status")
-        priority = request.data.get("priority")
-        deleted = request.data.get("deleted")
-        created_by = request.user
+                new_committee_data = self.prepare_new_committee_data(committee)
 
-        committee = self.create_committee(
-            name, image, description, gender, phone, email, twitter, instagram,
-            status, priority, moderators, created_by, deleted
-        )
+                return Response({"data": new_committee_data, "count": 1, "code": status.HTTP_201_CREATED})
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        new_committee_data = self.prepare_new_committee_data(committee, moderators)
-        
-        return Response({"data": new_committee_data, "count": 0, "code": 200})
-
-    def get_instance(self, model, id):
-        if id:
-            try:
-                return model.objects.get(id=id)
-            except model.DoesNotExist:
-                return None
-        return None
-
-    def get_moderators_list(self, moderators):
-        if isinstance(moderators, str):
-            return ast.literal_eval(moderators)
-        return []
-
-    def create_committee(self, name, image, description, gender, phone, email, twitter, instagram, status, priority, moderators, created_by, deleted):
-        committee = Committees(
-            name=name,
-            image=image,
-            gender=gender,
-            phone=phone,
-            email=email,
-            twitter=twitter,
-            instagram=instagram,
-            description=description,
-            status=status,
-            priority=priority,
-            moderators=moderators,
-            created_by=created_by,
-            deleted=deleted
-        )
-        committee.save()
-        return committee
-
-    def prepare_new_committee_data(self, committee, moderators):
+    def prepare_new_committee_data(self, committee):
         new_committee_data = {
             "id": committee.id,
+            "election_id": committee.election_id,
             "name": committee.name,
-            "image": committee.image.url if committee.image else None,
             "gender": committee.gender,
-            "phone": committee.phone,
-            "email": committee.email,
-            "twitter": committee.twitter,
-            "instagram": committee.instagram,
-
-            # Admin
-            "status": committee.status,
-            "priority": committee.priority,
-            "moderators": moderators,  # Now this includes details not just IDs
             "createdBy": committee.created_by.first_name if committee.created_by else None,
             "deleted": committee.deleted,
         }

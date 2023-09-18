@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.http.response import JsonResponse
 from django.db.models.query import QuerySet
 from django.db.models import Sum
+from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 
@@ -181,11 +182,14 @@ class GetElectionDetails(APIView):
             sorted_transformed_results[committee_id] = {candidate_id: results[candidate_id] for candidate_id in sorted_candidates}
 
         return sorted_transformed_results
+    
     def get_campaigns_for_election(self, id):
         election_candidate_ids = ElectionCandidates.objects.filter(election=id).values_list('id', flat=True)
         campaign = Campaigns.objects.filter(election_candidate__in=election_candidate_ids)
         campaign_serializer = CampaignsSerializer(campaign, many=True)
         return campaign_serializer.data
+
+
 
 # class GetElectionDetails(APIView):
 #     def get(self, request, id):

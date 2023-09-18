@@ -203,18 +203,7 @@ const ElectionList = () => {
       image: (candidate && candidate.image) || "",
       selectedImage: selectedImage,
       description: (candidate && candidate.description) || "",
-      dueDate: (candidate && candidate.dueDate) || "",
-      category: (candidate && candidate.category) || 0,
-      subCategory: (candidate && candidate.subCategory) || 0,
       tags: (candidate && candidate.tags) || [],
-
-      // Candidate Specification
-      type: (candidate && candidate.type) || "",
-      result: (candidate && candidate.result) || "",
-      votes: (candidate && candidate.votes) || 0,
-      seats: (candidate && candidate.seats) || 0,
-      electors: (candidate && candidate.electors) || 0,
-      attendees: (candidate && candidate.attendees) || 0,
 
       // Admin
       status: (candidate && candidate.status) || 0,
@@ -224,16 +213,9 @@ const ElectionList = () => {
           ? candidate.moderators.map((moderator) => moderator.id)
           : [],
 
-      // System
-      createdBy: userId,
-      updatedBy: userId,
-      createdDate: (candidate && candidate.createdDate) || "",
-      updatedDate: (candidate && candidate.updatedDate) || "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter Candidate Name"),
-      category: Yup.number().integer().required('Category is required'),
-      subCategory: Yup.number().integer().required('Sub-Category is required'),
       status: Yup.number().integer().required('Status is required'),
       priority: Yup.number().integer().required('priority is required'),
 
@@ -246,7 +228,6 @@ const ElectionList = () => {
           name: values.name,
           image: values.image,
           selectedImage: selectedImage,
-          dueDate: values.dueDate,
           description: values.description,
 
           // Taxonomies
@@ -254,19 +235,11 @@ const ElectionList = () => {
           subCategory: values.subCategory,
           tags: Array.isArray(values.tags) ? values.tags : [],
 
-          // Candidate Spesifications
-          type: values.type,
-          result: values.result,
-          votes: values.votes,
-          seats: values.seats,
-          electors: values.electors,
-          attendees: values.attendees,
 
           // Admin
           status: parseInt(values.status, 10),
           priority: parseInt(values.priority, 10),
           moderators: values.moderators,
-          updatedBy: userId,
         };
         // console.log(updatedElection); // before calling dispatch in onSubmit
 
@@ -280,7 +253,6 @@ const ElectionList = () => {
           name: values.name,
           image: values.image,
           selectedImage: selectedImage,
-          dueDate: values.dueDate,
           description: values.description,
 
           // Taxonomies
@@ -288,17 +260,11 @@ const ElectionList = () => {
           subCategory: values.subCategory,
           tags: Array.isArray(values.tags) ? values.tags : [],
 
-          // Candidate Spesifications
-          type: values.type,
-          result: values.result,
-          votes: values.votes,
-          seats: values.seats,
 
           // Admin
           status: parseInt(values.status, 10),
           priority: parseInt(values.priority, 10),
           moderators: values.moderators,
-          createdBy: userId,
         };
         // console.log(newElection); // before calling dispatch in onSubmit
         // Save new candidate
@@ -378,25 +344,11 @@ const ElectionList = () => {
             ? process.env.REACT_APP_API_URL + candidate.image
             : "",
 
-        dueDate: candidate.dueDate,
-        candidateCount: candidate.candidateCount,
         description: candidate.description,
 
         // Taxonomies
-        category: candidate.category,
-        // categoryName: candidate.categoryName,
-        subCategory: candidate.subCategory,
-        // subCategoryName: candidate.subCategoryName,
-
         tags: candidate.tags,
 
-        // Candidate Spesifications
-        type: candidate.type,
-        result: candidate.result,
-        votes: candidate.votes,
-        seats: candidate.seats,
-        electors: candidate.electors,
-        attendees: candidate.attendees,
 
         // Admin
         status: candidate.status,

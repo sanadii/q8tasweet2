@@ -9,25 +9,12 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  Card,
-  CardBody,
-  Col,
-  Row,
-  Table,
-  Label,
-  Input,
-  Form,
-  FormFeedback,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "reactstrap";
+import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
 // ------------ Custom Components & ConstantsImports ------------
 import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "../../../Components/constants";
+import useCategoryManager from "../../../Components/Hooks/CategoryHooks";
+
 import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";
 
@@ -59,6 +46,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
     formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
   }
 
+ 
+
+  
   // validation
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -164,51 +154,12 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
     },
   });
 
-  useEffect(() => {
-    setCategoryOptions(categories);
-    setSubCategoryOptions(subCategories);
-  }, [categories, subCategories]);
-
-  const [categoryOptions, setCategoryOptions] = useState(categories);
-  const [subCategoryOptions, setSubCategoryOptions] = useState([]);
-  const [activeParentCategoryId, setActiveParentCategoryId] = useState(null);
-
-  // Watch for changes in validation.values.category
-  useEffect(() => {
-    if (validation && validation.values.category) {
-      const initialCategoryId = Number(validation.values.category);
-      const relatedSubCategories = subCategories.filter(
-        subCategory => subCategory.parent === initialCategoryId
-      );
-
-      // Check if the values are different before setting them
-      if (activeParentCategoryId !== initialCategoryId) {
-        setActiveParentCategoryId(initialCategoryId);
-      }
-
-      if (JSON.stringify(subCategoryOptions) !== JSON.stringify(relatedSubCategories)) {
-        setSubCategoryOptions(relatedSubCategories);
-      }
-    }
-  }, [validation, subCategories]);
-
-  const changeSubCategoriesOptions = (e) => {
-    const activeCategoryId = Number(e.target.value);
-    const relatedSubCategories = subCategories.filter(
-      subCategory => subCategory.parent === activeCategoryId
-    );
-
-    setActiveParentCategoryId(activeCategoryId);
-    const currentSubCategoryValue = validation.values.subCategory;
-    const isCurrentSubCategoryStillValid = relatedSubCategories.some(subCategory => subCategory.id === currentSubCategoryValue);
-
-    if (!isCurrentSubCategoryStillValid) {
-      validation.setFieldValue("subCategory", relatedSubCategories[0]?.id || "");
-    }
-
-    setSubCategoryOptions(relatedSubCategories);
-  };
-
+  const {
+    categoryOptions,
+    subCategoryOptions,
+    changeSubCategoriesOptions,
+    activeParentCategoryId
+  } = useCategoryManager(categories, subCategories, validation);
 
   const dateformate = (e) => {
     const selectedDate = new Date(e);

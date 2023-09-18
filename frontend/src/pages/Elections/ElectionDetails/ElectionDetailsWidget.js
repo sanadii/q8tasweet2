@@ -1,16 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Row,
-  UncontrolledDropdown,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
+import DashboardCharts from "./DashboardCharts";
 
 const ElectionDetailsWidget = ({ election, electionCandidates }) => {
   const moderators = Array.isArray(election.moderators)
@@ -51,129 +42,174 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
   return (
     <React.Fragment>
       <Row>
-        <div className="col-md-6 col-lg-3">
-          <div className="card">
-            <div className="card-body bg-secondary">
-              <div className="d-flex align-items-center">
-                <div className="avatar-sm flex-shrink-0">
-                  <span className="avatar-title bg-light text-primary rounded-circle fs-3">
-                    <i className="align-middle ri-user-follow-line"></i>{" "}
-                  </span>
-                </div>
-                <div className="flex-grow-1 ms-3">
-                  <p className="text-uppercase fw-semibold fs-12 text-white mb-1">
-                    Candidates
-                  </p>
-                  <h4 className="mb-0">{electionCandidates.length}</h4>
-                  <p>
-                    <b className="text-white mb-1">{maleCandidates} M / </b>{" "}
-                    <b className="text-white mb-1">{femaleCandidates} F </b>
-                  </p>
-                </div>
-                <div className="flex-shrink-0 align-self-end">
-                  <span className="badge bg-white-subtle text-white">
-                    <i className="align-middle me-1 ri-arrow-up-s-fill"></i>
-                  </span>
-                </div>
-              </div>
+        <Col xl={3} md={3}>
+          <Card className="card-animate overflow-hidden">
+            <div
+              className="position-absolute start-0"
+              style={{ zIndex: "0" }}
+            >
+              <svg
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 120"
+                width="200"
+                height="120"
+              >
+                <path
+                  id="Shape 8"
+                  style={{ opacity: ".05", fill: "#0ab39c" }}
+                  d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                />
+              </svg>
             </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-lg-3">
-          <div className="card">
-            <div className="card-body bg-soft-danger">
+            <CardBody style={{ zIndex: "1" }}>
               <div className="d-flex align-items-center">
-                <div className="avatar-sm flex-shrink-0">
-                  <span className="avatar-title bg-light text-primary rounded-circle fs-3">
-                    <i className="align-middle ri-money-dollar-circle-fill"></i>
-                  </span>
-                </div>
-                <div className="flex-grow-1 ms-3">
-                  <p className="text-uppercase fw-semibold fs-12 text-muted mb-1">
-                    Electors
+                <div className="flex-grow-1 overflow-hidden">
+                  <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
+                    المرشحين
                   </p>
-                  <h4 className=" mb-0">
-                    <span>{election.electors}</span>
+                  <h4 className="fs-22 fw-semibold ff-secondary mb-0">
+                    <span className="counter-value" data-target="36894">
+                      {electionCandidates.length}
+                    </span>
                   </h4>
-                  <p>
-                    / <b className="text-danger mb-1">{election.electors}</b>
-                  </p>
                 </div>
-                <div className="flex-shrink-0 align-self-end">
-                  <span className="badge bg-success-subtle text-success">
-                    <i className="align-middle me-1 ri-arrow-up-s-fill"></i>
-                    6.24 %
-                  </span>
+                <div className="flex-shrink-0">
+                  <DashboardCharts
+                    seriesData={electionCandidates.length}
+                    colors="#09b39b"
+                  />
                 </div>
               </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={3} md={3}>
+          <Card className="card-animate overflow-hidden">
+            <div
+              className="position-absolute start-0"
+              style={{ zIndex: "0" }}
+            >
+              <svg
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 120"
+                width="200"
+                height="120"
+              >
+                <path
+                  id="Shape 8"
+                  style={{ opacity: ".05", fill: "#0ab39c" }}
+                  d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                />
+              </svg>
             </div>
-          </div>
-        </div>
-
-        <div className="col-md-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+            <CardBody style={{ zIndex: "1" }}>
               <div className="d-flex align-items-center">
-                <div className="avatar-sm flex-shrink-0">
-                  <span className="avatar-title bg-light text-primary rounded-circle fs-3">
-                    <i className="align-middle ri-money-dollar-circle-fill"></i>
-                  </span>
-                </div>
-                <div className="flex-grow-1 ms-3">
-                  <p className="text-uppercase fw-semibold fs-12 text-muted mb-1">
-                    Attendees
+                <div className="flex-grow-1 overflow-hidden">
+                  <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
+                    المرشحين
                   </p>
-                  <h4 className=" mb-0">
-                    <span>{election.attendees}</span>
+                  <h4 className="fs-22 fw-semibold ff-secondary mb-0">
+                    <span className="counter-value" data-target="36894">
+                      {electionCandidates.length}
+                    </span>
                   </h4>
-                  <p>
-                    / <b className="text-danger mb-1">{election.electors}</b>
-                  </p>
                 </div>
-                <div className="flex-shrink-0 bg-successalign-self-end">
-                  <span className="badge bg-success-subtle text-success">
-                    <i className="align-middle me-1 ri-arrow-up-s-fill"></i>
-                    {election.electors
-                      ? (
-                          (election.attendees / election.electors) *
-                          100
-                        ).toFixed(2)
-                      : 0}{" "}
-                    %
-                  </span>
+                <div className="flex-shrink-0">
+                  <DashboardCharts
+                    seriesData={electionCandidates.length}
+                    colors="#09b39b"
+                  />
                 </div>
               </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={3} md={3}>
+          <Card className="card-animate overflow-hidden">
+            <div
+              className="position-absolute start-0"
+              style={{ zIndex: "0" }}
+            >
+              <svg
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 120"
+                width="200"
+                height="120"
+              >
+                <path
+                  id="Shape 8"
+                  style={{ opacity: ".05", fill: "#0ab39c" }}
+                  d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                />
+              </svg>
             </div>
-          </div>
-        </div>
-
-        <div className="col-md-6 col-lg-3">
-          <div className="card bg-success text-white">
-            {/* Added text-white to change the text color */}
-            <div className="card-body">
+            <CardBody style={{ zIndex: "1" }}>
               <div className="d-flex align-items-center">
-                <div className="avatar-sm flex-shrink-0">
-                  <span className="avatar-title bg-light text-success rounded-circle fs-3">
-                    {/* Changed icon color to text-success */}
-                    <i className="align-middle ri-check-line"></i>{" "}
-                    {/* Changed icon to a checkmark */}
-                  </span>
-                </div>
-                <div className="flex-grow-1 ms-3">
-                  <p className="text-uppercase fw-semibold fs-12 text-white mb-1">
-                    Election Date
+                <div className="flex-grow-1 overflow-hidden">
+                  <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
+                    الناخبين
                   </p>
-                  <h4 className="mb-0">
-                    <span>{election.duedate}</span>
+                  <h4 className="fs-22 fw-semibold ff-secondary mb-0">
+                    <span className="counter-value" data-target="36894">
+                    {electionCandidates.length}
+                    </span>
                   </h4>
-                  <p>
-                    <b className="text-warning mb-1">{status}</b>
-                  </p>
+                </div>
+                <div className="flex-shrink-0">
+                  <DashboardCharts
+                    seriesData={electionCandidates.length}
+                    colors="#09b39b"
+                  />
                 </div>
               </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={3} md={3}>
+          <Card className="card-animate overflow-hidden">
+            <div
+              className="position-absolute start-0"
+              style={{ zIndex: "0" }}
+            >
+              <svg
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 120"
+                width="200"
+                height="120"
+              >
+                <path
+                  id="Shape 8"
+                  style={{ opacity: ".05", fill: "#0ab39c" }}
+                  d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                />
+              </svg>
             </div>
-          </div>
-        </div>
+            <CardBody style={{ zIndex: "1" }}>
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1 overflow-hidden">
+                  <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
+                    الحضور
+                  </p>
+                  <h4 className="fs-22 fw-semibold ff-secondary mb-0">
+                    <span className="counter-value" data-target="36894">
+                      2
+                    </span>
+                  </h4>
+                </div>
+                <div className="flex-shrink-0">
+                  <DashboardCharts
+                    seriesData={electionCandidates.length}
+                    colors="#09b39b"
+                  />
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
       </Row>
     </React.Fragment>
   );
