@@ -74,12 +74,16 @@ class Elections(models.Model):
     tags = models.CharField(max_length=255, blank=True, null=True)
     
     # Election Options and Details
-    type = models.CharField(max_length=255, blank=True, null=True)
-    result = models.CharField(max_length=255, blank=True, null=True)
-    votes = models.IntegerField(blank=True, null=True)
-    seats = models.IntegerField(blank=True, null=True)
-    electors = models.CharField(max_length=255, blank=True, null=True)
-    attendees = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=25, blank=True, null=True)
+    result = models.CharField(max_length=7, blank=True, null=True)
+    votes = models.IntegerField(max_length=7, blank=True, null=True)
+    seats = models.IntegerField(max_length=2, blank=True, null=True)
+    electors = models.CharField(max_length=7, blank=True, null=True)
+    electors_males = models.CharField(max_length=7, blank=True, null=True)
+    electors_females = models.CharField(max_length=7, blank=True, null=True)
+    attendees = models.CharField(max_length=7, blank=True, null=True)
+    attendees_males = models.CharField(max_length=7, blank=True, null=True)
+    attendees_females = models.CharField(max_length=7, blank=True, null=True)
     # committees = models.CharField(max_length=255, blank=True, null=True)
 
     # Administration

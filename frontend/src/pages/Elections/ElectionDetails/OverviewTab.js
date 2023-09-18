@@ -51,7 +51,7 @@ const OverviewTab = ({ election }) => {
                       <div>
                         <p className="mb-2 text-uppercase fw-medium">نوع الإنتخابات:</p>
                         <div className="badge bg-danger fs-12">
-                          {/* {election.type} */}
+                          {election.type}
                         </div>
                       </div>
                     </Col>
@@ -80,7 +80,7 @@ const OverviewTab = ({ election }) => {
               </div>
             </CardBody>
           </Card>
-          <Card>
+          {/* <Card>
             <CardHeader className="align-items-center d-flex">
               <h4 className="card-title mb-0 flex-grow-1">Comments</h4>
               <div className="flex-shrink-0">
@@ -281,7 +281,7 @@ const OverviewTab = ({ election }) => {
                 </Row>
               </form>
             </CardBody>
-          </Card>
+          </Card> */}
         </Col>
 
         <Col xl={3} lg={4}>

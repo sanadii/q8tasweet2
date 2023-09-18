@@ -70,6 +70,12 @@ class ElectionsSerializer(serializers.ModelSerializer):
     updatedDate = serializers.CharField(source="updated_date")  # Add this line
     deletedDate = serializers.CharField(source="deleted_date")  # Add this line
 
+    attendeesMales = serializers.CharField(source="attendees_males")  # Add this line
+    attendeesFemales = serializers.CharField(source="attendees_females")  # Add this line
+    electorsMales = serializers.CharField(source="electors_males")  # Add this line
+    electorsFemales = serializers.CharField(source="electors_females")  # Add this line
+
+    
     category = serializers.SerializerMethodField()  # New custom field for category name
     subCategory = (
         serializers.SerializerMethodField()
@@ -83,7 +89,9 @@ class ElectionsSerializer(serializers.ModelSerializer):
         model = Elections
         fields = [
             "id",  "name", "description", "dueDate", "image",
-            "type", "result", "votes", "seats", "electors", "attendees",
+            "type", "result", "votes", "seats",
+            "electors", "electorsMales", "electorsFemales",
+            "attendees", "attendeesMales", "attendeesFemales",
             "category", "subCategory", "tags",
             "status", "priority", 
             "moderators", "createdBy", "updatedBy", "deletedBy", "createdDate", "updatedDate", "deletedDate", "deleted",

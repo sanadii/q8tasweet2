@@ -30,7 +30,7 @@ const DashboardCharts = ({ seriesData, colors }) => {
           },
           value: {
             show: true,
-            fontSize: "16px",
+            fontSize: "12px",
             fontWeight: 600,
             offsetY: 8,
           },

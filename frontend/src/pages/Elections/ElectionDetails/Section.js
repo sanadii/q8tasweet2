@@ -61,7 +61,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       <div className="col-md">
                         <div>
                           <h4 className="fw-bold">
-                            {election.id}: {election.name}
+                           {election.name} [ID:  {election.id}]
                           </h4>
                           <div className="hstack gap-3 flex-wrap">
                             <div>
@@ -76,22 +76,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                               </span>
                             </div>
                             <div className="vr"></div>
-                            <div className="badge rounded-pill bg-info fs-12">
-                              <i className="ri-send-plane-2-fill me-1 align-middle fw-medium"></i>{" "}
-                              <span className="mail-list-link">Detailed</span>
-                            </div>
 
-                            <div className="badge rounded-pill bg-info fs-12">
-                              <i className="ri-send-plane-2-fill me-1 align-middle fw-medium"></i>{" "}
-                              <span className="mail-list-link">Parties</span>
-                            </div>
-
-                            <div className="badge rounded-pill bg-info fs-12">
-                              <i className="ri-send-plane-2-fill me-1 align-middle fw-medium"></i>{" "}
-                              <span className="mail-list-link">
-                                4 votes / 10 Winners
-                              </span>
-                            </div>
                           </div>
                         </div>
                       </div>

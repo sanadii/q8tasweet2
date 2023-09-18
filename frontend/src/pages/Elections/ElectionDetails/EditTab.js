@@ -78,10 +78,17 @@ const EditTab = ({ election }) => {
       priority: (election && election.priority) || "High",
 
       // Election Specification
-      // type: (election && election.type) || "",
+      type: (election && election.type) || "",
       result: (election && election.result) || "",
       votes: (election && election.votes) || 0,
       seats: (election && election.seats) || 0,
+      electors: (election && election.electors) || 0,
+      electorsMales: (election && election.electorsMales) || 0,
+      electorsFemales: (election && election.electorsFemales) || 0,
+
+      attendees: (election && election.attendees) || 0,
+      attendeesMales: (election && election.attendeesMales) || 0,
+      attendeesFemales: (election && election.attendeesFemales) || 0,
 
       // System
       delet: (election && election.delet) || "",
@@ -104,10 +111,17 @@ const EditTab = ({ election }) => {
         tags: Array.isArray(values.tags) ? values.tags : [],
 
         // Election Spesifications
-        // type: values.type,
+        type: values.type,
         result: values.result,
         votes: values.votes,
         seats: values.seats,
+        electors: values.electors,
+        electorsMales: values.electorsMales,
+        electorsFemales: values.electorsFemales,
+
+        attendees: values.attendees,
+        attendeesMales: values.attendeesMales,
+        attendeesFemales: values.attendeesFemales,
 
         // Admin
         status: values.status,
@@ -232,8 +246,8 @@ const EditTab = ({ election }) => {
                       ) : null}
                     </div>
                   </Col>
-                  <Col lg={4}>
-                    <div>
+                  <Col lg={12}>
+                    <div className="mb-3">
                       <Label
                         htmlFor="datepicker-deadline-input"
                         className="form-label"
@@ -388,14 +402,14 @@ const EditTab = ({ election }) => {
           <Col lg={4}>
             <Card>
               <CardHeader>
-                <h5>Pre Election</h5>
+                <h5>وصف الإنتخابات</h5>
               </CardHeader>
               <CardBody>
                 <Row>
                   <Col lg={6}>
                     <div className="mb-3">
                       <Label for="election-type" className="form-label">
-                        Election Type
+                        نوع الإنتخابات
                       </Label>
                       <Input
                         name="type"
@@ -404,9 +418,9 @@ const EditTab = ({ election }) => {
                         id="election-type-field"
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
-                        // value={validation.values.type || ""}
+                      // value={validation.values.type || ""}
                       >
-                        <option value="">- Select Election Type -</option>{" "}
+                        <option value="">- إختر نوع الإنتخابات -</option>{" "}
                         {/* Placeholder option */}
                         {ElectionTypeOptions.map((option) => (
                           <option key={option.name} value={option.value}>
@@ -426,7 +440,7 @@ const EditTab = ({ election }) => {
 
                     <div className="mb-3">
                       <Label for="election-type" className="form-label">
-                        Election Result Type
+                        عرض النتائج
                       </Label>
                       <Input
                         name="result"
@@ -437,7 +451,7 @@ const EditTab = ({ election }) => {
                         onBlur={validation.handleBlur}
                         value={validation.values.result || ""}
                       >
-                        <option value="">- Select Result Type -</option>{" "}
+                        <option value="">- إختر عرض النتائج -</option>{" "}
                         {/* Placeholder option */}
                         {ElectionResultOptions.map((option) => (
                           <option key={option.name} value={option.value}>
@@ -458,7 +472,7 @@ const EditTab = ({ election }) => {
                   <Col lg={6}>
                     <div className="mb-3">
                       <Label htmlFor="seats-number-input" className="form-label">
-                        Number of Seats
+                        عدد المقاعد للفائزين
                       </Label>
                       <input
                         id="seats-number-input"
@@ -474,7 +488,7 @@ const EditTab = ({ election }) => {
                   <Col lg={6}>
                     <div className="mb-3">
                       <Label htmlFor="seats-number-input" className="form-label">
-                        Number of Votes
+                        عدد الأصوات للناخبين
                       </Label>
                       <input
                         id="votes-number-input"
@@ -492,11 +506,115 @@ const EditTab = ({ election }) => {
             </Card>
             <Card>
               <CardHeader>
-                <h5>Post Election</h5>
+                <h5>الناخبين</h5>
               </CardHeader>
               <CardBody>
                 <Row>
-                  <p>Attendees:</p>
+                  <Col lg={12}>
+                    <div className="mb-3">
+                      <Label htmlFor="electors-input" className="form-label">
+                        عدد الناخبين
+                      </Label>
+                      <input
+                        id="electors-input"
+                        name="electors" // Add this
+                        type="number"
+                        className="form-control"
+                        value={validation.values.electors || ""}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                      />
+                    </div>
+                  </Col>
+                  <Col lg={6}>
+                    <div className="mb-3">
+                      <Label htmlFor="electorsMales-input" className="form-label">
+                        عدد الناخبين الرجال
+                      </Label>
+                      <input
+                        id="electors-input"
+                        name="electorsMales" // Add this
+                        type="number"
+                        className="form-control"
+                        value={validation.values.electorsMales || ""}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                      />
+                    </div>
+                  </Col>
+                  <Col lg={6}>
+                    <div className="mb-3">
+                      <Label htmlFor="electorsFemales-input" className="form-label">
+                        عدد الناخبين النساء
+                      </Label>
+                      <input
+                        id="electorsFemales-input"
+                        name="electorsFemales" // Add this
+                        type="number"
+                        className="form-control"
+                        value={validation.values.electorsFemales || ""}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                      />
+                    </div>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardHeader>
+                <h5>الحضور</h5>
+              </CardHeader>
+              <CardBody>
+                <Row>
+                  <Col lg={12}>
+                    <div className="mb-3">
+                      <Label htmlFor="attendees-input" className="form-label">
+                        عدد الحضور
+                      </Label>
+                      <input
+                        id="attendees-input"
+                        name="attendees" // Add this
+                        type="number"
+                        className="form-control"
+                        value={validation.values.attendees || ""}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                      />
+                    </div>
+                  </Col>
+                  <Col lg={6}>
+                    <div className="mb-3">
+                      <Label htmlFor="attendeesMales-input" className="form-label">
+                        حضور الرجال
+                      </Label>
+                      <input
+                        id="attendeesMales-input"
+                        name="attendeesMales" // Add this
+                        type="number"
+                        className="form-control"
+                        value={validation.values.attendeesMales || ""}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                      />
+                    </div>
+                  </Col>
+                  <Col lg={6}>
+                    <div className="mb-3">
+                      <Label htmlFor="attendeesFemales-input" className="form-label">
+                        حضور النساء
+                      </Label>
+                      <input
+                        id="attendeesFemales-input"
+                        name="attendeesFemales" // Add this
+                        type="number"
+                        className="form-control"
+                        value={validation.values.attendeesFemales || ""}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                      />
+                    </div>
+                  </Col>
                 </Row>
               </CardBody>
             </Card>
@@ -622,8 +740,8 @@ const EditTab = ({ election }) => {
             </div>
           </Col>
         </Row>
-      </Form>
-    </React.Fragment>
+      </Form >
+    </React.Fragment >
   );
 };
 

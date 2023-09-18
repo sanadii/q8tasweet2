@@ -190,103 +190,6 @@ class GetElectionDetails(APIView):
         return campaign_serializer.data
 
 
-
-# class GetElectionDetails(APIView):
-#     def get(self, request, id):
-#         try:
-#             election = Elections.objects.get(id=id)
-#             election_serializer = ElectionsSerializer(election)
-#             election_data = election_serializer.data
-
-#             # Get the candidates for the given election
-#             election_candidate = ElectionCandidates.objects.filter(election=id).order_by('-votes')
-#             candidate_serializer = ElectionCandidatesSerializer(election_candidate, many=True)
-
-#             # Assuming election_candidates is a list of dictionaries containing the candidate data
-#             election_candidates = candidate_serializer.data
-#             for candidate in election_candidates:
-#                 candidate['votes'] = candidate['votes'] or 0
-#                 candidate['position'] = "-"
-
-#             # Assuming you have a model ElectionCommittees and a serializer ElectionCommitteesSerializer
-#             election_committees = ElectionCommittees.objects.filter(election=id)
-#             committees_serializer = ElectionCommitteesSerializer(election_committees, many=True)
-#             electionCommittees = committees_serializer.data
-
-
-#             # Sort the candidates by votes in descending order
-#             election_candidates = sorted(election_candidates, key=lambda x: x['votes'], reverse=True)
-
-#             # Update the position based on the sorted order
-#             for idx, candidate in enumerate(election_candidates, start=1):
-#                 candidate['position'] = str(idx)
-
-#             # Number of Seats & Winners
-#             number_of_seats = election_data["seats"] or 0
-#             # Update the position based on the sorted order and check if the candidate is a winner
-#             for idx, candidate in enumerate(election_candidates, start=1):
-#                 candidate['position'] = str(idx)
-#                 if idx <= number_of_seats:
-#                     candidate['is_winner'] = True
-#                 else:
-#                     candidate['is_winner'] = False
-
-#             # Reverse the order of election_candidates
-#             election_candidates = list(reversed(election_candidates))
-
-#             # Get the campaigns for the given election
-#             election_candidate_ids = election_candidate.values_list('id', flat=True)
-#             campaign = Campaigns.objects.filter(election_candidate__in=election_candidate_ids)
-#             campaign_serializer = CampaignsSerializer(campaign, many=True)
-#             campaigns = campaign_serializer.data
-
-
-#             details = {
-#                 "id": election_data["id"],
-#                 "name": election_data["name"],
-#                 "image": election_data["image"],
-#                 "description": election_data["description"],
-#                 "duedate": election_data["dueDate"],
-
-#                 "moderators": election_data["moderators"],
-
-#                 # Taxonomies
-#                 "category": election_data["category"],
-#                 "sub_category": election_data["subCategory"],
-#                 "tags": election_data["tags"],
-
-#                 # Admin
-#                 "status": election_data["status"],
-#                 "priority": election_data["priority"],
-
-#                 # Spedifications
-#                 "type": election_data["type"],
-#                 "result": election_data["result"],
-#                 "votes": election_data["votes"],
-#                 "seats": election_data["seats"],
-#                 "electors": election_data["electors"],
-#                 "attendees": election_data["attendees"],
-
-#                 # System
-#                 "deleted": election_data["deleted"],
-#                 "created_by": election_data["createdBy"],
-#                 "updated_by": election_data["updatedBy"],
-#             }
-
-#             return Response({
-#                 "data": {
-#                     "electionDetails": details,
-#                     "electionCandidates": election_candidates,
-#                     "electionCampaigns": campaigns,
-#                     "electionCommittees": electionCommittees,
-#                 },
-#                 "count": 0,
-#                 "code": 200
-#             })
-#         except Elections.DoesNotExist:
-#             return JsonResponse({"error": "Election not found"}, status=404)
-
-
 class addElection(APIView):
     def post(self, request):
         User = get_user_model()
@@ -442,7 +345,11 @@ class UpdateElection(APIView):
         votes = request.data.get("votes")
         seats = request.data.get("seats")
         electors = request.data.get("electors")
+        electors_males = request.data.get("electorsMales")
+        electors_females = request.data.get("electorsFemales")
         attendees = request.data.get("attendees")
+        attendees_males = request.data.get("attendeesMales")
+        attendees_females = request.data.get("attendeesFemales")
 
         # Admin
         moderators = self.get_moderators_list(request.data.get("moderators"))
@@ -478,7 +385,11 @@ class UpdateElection(APIView):
         election.votes = votes
         election.seats = seats
         election.electors = electors
+        election.electors_males = electors_males
+        election.electors_females = electors_females
         election.attendees = attendees
+        election.attendees_males = attendees_males
+        election.attendees_females = attendees_females
 
         # System
         election.deleted = deleted
@@ -541,7 +452,13 @@ class UpdateElection(APIView):
             "votes": election.votes,
             "seats": election.seats,
             "electors": election.electors,
+            "electorsMales": election.electors_males,
+            "electorsFemales": election.electors_females,
+
             "attendees": election.attendees,
+            "attendeesMales": election.attendees_males,
+            "attendeesFemales": election.attendees_females,
+
             # Admin
             "status": election.status,
             "priority": election.priority,
@@ -550,8 +467,6 @@ class UpdateElection(APIView):
             "deleted": election.deleted,
         }
         return updated_election_data
-
-# Election Details: ElectionDetails, deleteElectionCandidate, addElectionCandidate, updateElectionCandidate, ElectionCount
 
 class AddNewElectionCandidate(APIView):
     def post(self, request):

@@ -166,29 +166,10 @@ const CommitteesTab = () => {
         Cell: (electionCommittee) => (
           <>
             <div className="d-flex align-items-center">
-              <div className="flex-shrink-0">
-                {electionCommittee.row.original.image ? (
-                  // Use the ImageCircle component here
-                  <ImageGenderCircle
-                    genderValue={electionCommittee.row.original.gender}
-                    imagePath={electionCommittee.row.original.image}
-                  />
-                ) : (
-                  <div className="flex-shrink-0 avatar-xs me-2">
-                    <div className="avatar-title bg-soft-success text-success rounded-circle fs-13">
-                      {electionCommittee.row.original.name.charAt(0)}
-                    </div>
-                  </div>
-                )}
-              </div>
               <div className="flex-grow-1 ms-2 name">
-                {electionCommittee.row.original.name}{" "}
-                {electionCommittee.row.original.is_winner ? (
-                  <Badge color="success" className="badge-label">
-                    {" "}
-                    <i className="mdi mdi-circle-medium"></i> Winner{" "}
-                  </Badge>
-                ) : null}
+                <strong>
+                  {electionCommittee.row.original.name}
+                </strong>
               </div>
             </div>
           </>
