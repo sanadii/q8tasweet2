@@ -41,7 +41,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -162,5 +162,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # Adjust the path as needed
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "../frontend/build/static")
-    # os.path.join(BASE_DIR, './env/Lib/site-packages/django/contrib/admin/static'),
 ]

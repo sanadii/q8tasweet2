@@ -44,7 +44,7 @@ const OverviewTab = () => {
     return campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
   }
 
-  function getStatusCount(memberId, status) {
+  const getStatusCount = useCallback((memberId, status) => {
     let statusMap = {
       "New": 1,
       "Contacted": 2,
@@ -52,7 +52,8 @@ const OverviewTab = () => {
       "Not Confirmed": 4
     };
     return campaignGuarantees.filter(guarantee => guarantee.member === memberId && guarantee.status === statusMap[status]).length;
-  }
+  }, [campaignGuarantees]);
+
 
   function getAttendeesCountsForMember(campaignGuarantees, memberId) {
     let counts = {
@@ -192,8 +193,9 @@ const OverviewTab = () => {
         },
       },
 
-    ], [campaignGuarantees]);
-
+    ],
+    [campaignGuarantees, getStatusCount]
+  );
   const [totals, setTotals] = useState({
     totalGuarantees: 0,
     totalNew: 0,

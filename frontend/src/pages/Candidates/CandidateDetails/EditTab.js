@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-
 import { useParams } from "react-router-dom";
 
 // Redux
@@ -15,18 +14,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Input,
-  Label,
-  Row,
-  FormFeedback,
-  Form,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Input, Label, Row, FormFeedback, Form } from "reactstrap";
 
 import { getModeratorUsers } from "../../../store/actions";
 //Import Flatepicker
@@ -49,7 +37,7 @@ import {
 const EditTab = ({ candidate }) => {
   // const { id } = useParams(); // Access the id parameter from the URL
   const dispatch = useDispatch();
-  const MEDIA_URL = process.env.MEDIA_URL;
+  const MEDIA_URL = process.env.REACT_APP_MEDIA_URL;
 
   const { electionDetails } = useSelector((state) => ({
     electionDetails: state.Elections.electionDetails,
@@ -73,7 +61,7 @@ const EditTab = ({ candidate }) => {
   } else {
     console.log("No selected image");
   }
-  
+
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {

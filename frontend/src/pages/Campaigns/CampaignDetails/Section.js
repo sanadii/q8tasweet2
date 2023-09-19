@@ -21,7 +21,6 @@ import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
 const TAB_VISIBILITY_RULES = {
-  members: [1, 2, 3, 4, 5, 6, 0],
   members: [1, 2, 3, 0],
   guarantees: [1, 2, 3, 4, 0],
   attendees: [1, 2, 3, 5, 0],

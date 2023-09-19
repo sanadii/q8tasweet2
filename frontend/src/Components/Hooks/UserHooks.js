@@ -16,7 +16,7 @@ const useProfile = () => {
       setUserProfile(null);
       setLoading(true);
     }
-  }, [token]);
+  }, [token, userSession]);
 
   return { userProfile, loading, token };
 };

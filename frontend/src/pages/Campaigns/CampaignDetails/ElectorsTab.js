@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getElectors,
-  addNewCampaignGuarantee,
-  addNewElectionAttendee,
-} from "../../../store/actions";
+import { getElectors, addNewCampaignGuarantee, addNewElectionAttendee } from "../../../store/actions";
 import SimpleBar from "simplebar-react";
 import { Loader, TableContainer } from "../../../Components/Common";
 
@@ -79,9 +75,10 @@ export const ElectorsTab = () => {
   const [modalMode, setModalMode] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const toggle = () => {
-    setIsModalVisible(!isModalVisible);
-  };
+  const toggle = useCallback(() => {
+    setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
+  }, []);
+
 
   // View Elector Info
   const [elector, setElector] = useState(null);
@@ -90,7 +87,7 @@ export const ElectorsTab = () => {
     (arg, modalMode) => {
       const elector = arg;
       setElector({
-        // id: elector.id,
+        // Elector Fields
         civil: elector.civil,
         campaignId: campaignDetails.id,
         gender: elector.gender,
@@ -102,7 +99,7 @@ export const ElectorsTab = () => {
       setModalMode(modalMode);
       toggle();
     },
-    [toggle]
+    [toggle, campaignDetails.id]
   );
 
   const getGenderIcon = (gender) => {
@@ -171,7 +168,7 @@ export const ElectorsTab = () => {
           return (
             <div className="flex-shrink-0">
               {currentCampaignMember.rank >= 2 &&
-              currentCampaignMember.rank <= 4 ? (
+                currentCampaignMember.rank <= 4 ? (
                 campaignGuarantees.some(
                   (item) => item.civil === cellProps.row.original.civil
                 ) ? (
@@ -196,8 +193,8 @@ export const ElectorsTab = () => {
                   </button>
                 )
               ) : electionAttendees.some(
-                  (item) => item.civil === cellProps.row.original.civil
-                ) ? (
+                (item) => item.civil === cellProps.row.original.civil
+              ) ? (
                 <span className="text-success">Added</span>
               ) : (
                 <button
@@ -224,8 +221,20 @@ export const ElectorsTab = () => {
         },
       },
     ],
-    [handleElectorClick, elector]
-  );
+    [
+      handleElectorClick,
+      campaignDetails.election.id,
+      campaignDetails.id,
+      campaignGuarantees,
+      currentCampaignMember.committee,
+      currentCampaignMember.id,
+      currentCampaignMember.rank,
+      currentCampaignMember.user.id,
+      dispatch,
+      electionAttendees,
+      elector,
+
+    ]);
   return (
     <React.Fragment>
       <CampaignElectorsModal

@@ -36,14 +36,7 @@ const CampaignGuaranteesModalUpdate = ({
   );
   const sortedGurantorOptions = GurantorOptions.sort((a, b) => a.rank - b.rank);
 
-  const handleUpdateButton = () => {
-    validation.submitForm();
-  };
-  useEffect(() => {
-    // Set the callback action for the update modal
-    setOnModalSubmit(() => handleUpdateButton);
-    return () => setOnModalSubmit(null); // Cleanup on unmount
-  }, []);
+
 
   // Initial Values ---------------
   const initialValues = {
@@ -78,6 +71,16 @@ const CampaignGuaranteesModalUpdate = ({
       validation.resetForm();
     },
   });
+
+  const handleUpdateButton = useCallback(() => {
+    validation.submitForm();
+  }, [validation.submitForm]);
+
+  useEffect(() => {
+    // Set the callback action for the update modal
+    setOnModalSubmit(() => handleUpdateButton);
+    return () => setOnModalSubmit(null); // Cleanup on unmount
+  }, [handleUpdateButton, setOnModalSubmit]);
 
   return (
     <React.Fragment>

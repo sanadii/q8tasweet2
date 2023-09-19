@@ -42,7 +42,7 @@ const EditTab = ({ election }) => {
   }, [dispatch, categories]);
 
   // Media
-  const MEDIA_URL = process.env.MEDIA_URL;
+  const MEDIA_URL = process.env.REACT_APP_MEDIA_URL;
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageSelect = (e) => {

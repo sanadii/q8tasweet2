@@ -19,15 +19,21 @@ const useCategoryManager = (categories, subCategories, validation) => {
       );
 
       // Check if the values are different before setting them
+      let updatedSubCategories = subCategoryOptions;
+      let updatedCategoryId = activeParentCategoryId;
+
       if (activeParentCategoryId !== initialCategoryId) {
-        setActiveParentCategoryId(initialCategoryId);
+        updatedCategoryId = initialCategoryId;
       }
 
       if (JSON.stringify(subCategoryOptions) !== JSON.stringify(relatedSubCategories)) {
-        setSubCategoryOptions(relatedSubCategories);
+        updatedSubCategories = relatedSubCategories;
       }
+
+      setActiveParentCategoryId(updatedCategoryId);
+      setSubCategoryOptions(updatedSubCategories);
     }
-  }, [validation, subCategories]);
+  }, [validation, subCategories, activeParentCategoryId, subCategoryOptions]);
 
   const changeSubCategoriesOptions = (e) => {
     const activeCategoryId = Number(e.target.value);

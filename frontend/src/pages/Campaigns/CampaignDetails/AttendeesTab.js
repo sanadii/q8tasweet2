@@ -62,9 +62,9 @@ const AttendeesList = () => {
   const [modalMode, setModalMode] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const toggle = () => {
-    setIsModalVisible(!isModalVisible);
-  };
+  const toggle = useCallback(() => {
+    setIsModalVisible(prev => !prev);
+  }, []);
 
   const handleElectionAttendeeClick = useCallback(
     (arg, modalMode) => {
@@ -142,22 +142,21 @@ const AttendeesList = () => {
     return null;
   };
 
-  function findUserById(userId) {
+  const findUserById = useCallback((userId) => {
     const member = campaignMembers.find(
       (member) => member.user && member.user.id === userId
     );
     return member?.user?.name || "User not found";
-  }
+  }, [campaignMembers]); // campaignMembers as dependency
 
-  function findCommitteeById(committeeId) {
+  const findCommitteeById = useCallback((committeeId) => {
     const committee = electionCommittees.find(
       (committee) => committee && committee.id === committeeId
     );
     return committee?.name || "Committee not found";
-  }
+  }, [electionCommittees]); // electionCommittees as dependency
 
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => [
       // {
       //   Header: (
       //     <input
@@ -266,7 +265,8 @@ const AttendeesList = () => {
         },
       },
     ],
-    [handleElectionAttendeeClick, checkedAll]
+    // [handleElectionAttendeeClick, checkedAll, findCommitteeById, findUserById, isAdmin, isAttendant]
+    [handleElectionAttendeeClick, findCommitteeById, findUserById, isAdmin, isAttendant]
   );
 
   // Filters -------------------------

@@ -60,9 +60,10 @@ const GuaranteesTab = () => {
   const [modalMode, setModalMode] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const toggle = () => {
-    setIsModalVisible(!isModalVisible);
-  };
+  const toggle = useCallback(() => {
+    setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
+  }, []);
+
 
   const handleCampaignGuaranteeClick = useCallback(
     (arg, modalMode) => {
@@ -89,23 +90,23 @@ const GuaranteesTab = () => {
   );
 
   // Checked All
-  const checkedAll = useCallback(() => {
-    const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(
-      ".campaignGuaranteeCheckBox"
-    );
+  // const checkedAll = useCallback(() => {
+  //   const checkall = document.getElementById("checkBoxAll");
+  //   const checkedEntry = document.querySelectorAll(
+  //     ".campaignGuaranteeCheckBox"
+  //   );
 
-    if (checkall.checked) {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = true;
-      });
-    } else {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = false;
-      });
-    }
-    deleteCheckbox();
-  }, []);
+  //   if (checkall.checked) {
+  //     checkedEntry.forEach((checkedEntry) => {
+  //       checkedEntry.checked = true;
+  //     });
+  //   } else {
+  //     checkedEntry.forEach((checkedEntry) => {
+  //       checkedEntry.checked = false;
+  //     });
+  //   }
+  //   deleteCheckbox();
+  // }, []);
 
   const deleteMultiple = () => {
     const checkall = document.getElementById("checkBoxAll");
@@ -304,9 +305,8 @@ const GuaranteesTab = () => {
           );
         },
       },
-    ],
-    [handleCampaignGuaranteeClick, checkedAll]
-  );
+    ], [handleCampaignGuaranteeClick, campaignMembers]);
+
 
   // Filters -------------------------
   const [filters, setFilters] = useState({

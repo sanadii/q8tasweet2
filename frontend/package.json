@@ -2,6 +2,7 @@
   "name": "q8tasweet",
   "version": "1.0.1",
   "private": true,
+  "homepage": "http://127.0.0.1:8001/",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^36.0.1",
     "@ckeditor/ckeditor5-react": "^5.1.0",
@@ -162,6 +163,7 @@
     "autoprefixer": "10.4.5"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "babel-plugin-prismjs": "^2.1.0"
   }
 }

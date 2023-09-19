@@ -1,16 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  Col,
-  Container,
-  Form,
-  FormFeedback,
-  Input,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Row,
-  Label,
-} from "reactstrap";
+import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeader, Row, Label } from "reactstrap";
 import SimpleBar from "simplebar-react";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -47,7 +36,7 @@ const Categories = () => {
 
   useEffect(() => {
     setSubCategoryList(subCategories);
-  }, [subCategoryList]);
+  }, [subCategories]);
 
   useEffect(() => {
     setCategoryList(categories);
@@ -332,41 +321,41 @@ const Categories = () => {
                             // Filter the child Categories based on the active parent category ID
                             !activeParentCategoryId ||
                             (item.parent === activeParentCategoryId && (
-                            <tr key={key}>
-                              <td>
-                                <div className="d-flex align-items-start">
-                                  <div className="flex-grow-1">
-                                    <div className="form-check">
-                                      <label
-                                        className="form-check-label"
-                                        htmlFor={"category" + item.id}
-                                      >
-                                        {item.name}{" "}
-                                      </label>
+                              <tr key={key}>
+                                <td>
+                                  <div className="d-flex align-items-start">
+                                    <div className="flex-grow-1">
+                                      <div className="form-check">
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor={"category" + item.id}
+                                        >
+                                          {item.name}{" "}
+                                        </label>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td>Hello !</td>
-                              <td>
-                                <div className="hstack gap-2">
-                                  <button
-                                    className="btn btn-sm btn-soft-danger remove-list"
-                                    onClick={() => onClickCategoryDelete(item)}
-                                  >
-                                    <i className="ri-delete-bin-5-fill align-bottom" />
-                                  </button>
-                                  <button
-                                    className="btn btn-sm btn-soft-info edit-list"
-                                    onClick={() => handleCategoryClick(item)}
-                                  >
-                                    <i className="ri-pencil-fill align-bottom" />
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                          ))
+                                </td>
+                                <td>Hello !</td>
+                                <td>
+                                  <div className="hstack gap-2">
+                                    <button
+                                      className="btn btn-sm btn-soft-danger remove-list"
+                                      onClick={() => onClickCategoryDelete(item)}
+                                    >
+                                      <i className="ri-delete-bin-5-fill align-bottom" />
+                                    </button>
+                                    <button
+                                      className="btn btn-sm btn-soft-info edit-list"
+                                      onClick={() => handleCategoryClick(item)}
+                                    >
+                                      <i className="ri-pencil-fill align-bottom" />
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            )
+                            ))
                         )}
                       </tbody>
                     </table>

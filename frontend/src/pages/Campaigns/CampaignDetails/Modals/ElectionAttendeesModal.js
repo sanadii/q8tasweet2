@@ -137,9 +137,7 @@ const ElectionAttendeeUpdateModal = ({
     (state) => state.Campaigns.electionCommittees
   ); // Directly use without redundant useState
 
-  const handleUpdateButton = () => {
-    validation.submitForm();
-  };
+
 
   const GurantorOptions = campaignMembers.filter(
     (member) => member.rank === 2 || member.rank === 3 || member.rank === 4
@@ -150,7 +148,7 @@ const ElectionAttendeeUpdateModal = ({
     // Set the callback action for the update modal
     setOnModalSubmit(() => handleUpdateButton);
     return () => setOnModalSubmit(null); // Cleanup on unmount
-  }, []);
+  }, [handleUpdateButton, setOnModalSubmit]);
 
 
   const initialValues = {
@@ -182,6 +180,12 @@ const ElectionAttendeeUpdateModal = ({
       toggle(); // Use only toggle instead of having multiple functions for the same purpose
     },
   });
+
+  const handleUpdateButton = useCallback(() => {
+    validation.submitForm();
+  }, [validation]);
+
+
 
   return (
     <React.Fragment>

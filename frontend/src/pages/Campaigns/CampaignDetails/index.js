@@ -20,7 +20,6 @@ const CampaignDetails = () => {
     campaignMembers: state.Campaigns.campaignMembers,
     campaignGuarantees: state.Campaigns.campaignGuarantees,
     electionCommittees: state.Campaigns.electionCommittees,
-    electionCommittees: state.Campaigns.electionCommittees,
     isCampaignSuccess: state.Campaigns.isCampaignSuccess,
   }));
 

@@ -86,13 +86,6 @@ const Elections = (state = IntialState, action) => {
             isElectionCandidateCreated: false,
             isElectionCandidateSuccess: true,
           };
-        case GET_ELECTION_CANDIDATES:
-          return {
-            ...state,
-            electionCandidates: action.payload.data,
-            isElectionCandidateCreated: false,
-            isElectionCandidateSuccess: true,
-          };
         case GET_ELECTION_COMMITTEES:
           return {
             ...state,

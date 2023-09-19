@@ -114,9 +114,9 @@ const MembersTab = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Toggle
-  const toggle = () => {
-    setIsModalVisible(!isModalVisible);
-  };
+  const toggle = useCallback(() => {
+    setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
+}, []);
 
   const handleCampaignMemberClicks = () => {
     setCampaignMember("");
@@ -124,13 +124,14 @@ const MembersTab = () => {
     toggle();
   };
 
-  const getGuaranteeCountForMember = (memberId) => {
+  const getGuaranteeCountForMember = useCallback((memberId) => {
     return campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
-  }
+}, [campaignGuarantees]);
 
-  const getAttendeeCountForMember = (memberId) => {
+const getAttendeeCountForMember = useCallback((memberId) => {
     return electionAttendees.filter(attendee => attendee.member === memberId).length;
-  }
+}, [electionAttendees]);
+
 
   const handleCampaignMemberClick = useCallback(
     (arg, modalMode) => {
@@ -415,7 +416,7 @@ const MembersTab = () => {
       currentCampaignMember.rank !== 3 ? SupervisorColumns : [],
       actionColumn
     );
-  }, [handleCampaignMemberClick, checkedAll, activeTab]);
+  }, [handleCampaignMemberClick, checkedAll, activeTab, campaignGuarantees.length, campaignMembers, currentCampaignMember.rank, electionCommittees, getAttendeeCountForMember, getGuaranteeCountForMember, isAdmin]);
 
 
   // Filters -------------------------
