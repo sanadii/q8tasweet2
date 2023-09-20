@@ -1,27 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateelector } from "../../../../store/actions";
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  Card,
-  CardBody,
-  Col,
-  Row,
-  Table,
-  Label,
-  Input,
-  Form,
-  FormFeedback,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "reactstrap";
+import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
 // ---------------- Components & Constants imports ----------------
 import CandidateModalUpdate from "./CandidateModalUpdate";
@@ -29,9 +11,7 @@ import CandidateModalAdd from "./CandidateModalAdd";
 import { GuaranteeStatusOptions } from "../../../../Components/constants";
 
 const CandidateModal = ({ modal, toggle, modalMode, elector }) => {
-  const { campaignMembers } = useSelector((state) => ({
-    campaignMembers: state.Campaigns.campaignMembers,
-  }));
+  const { campaignMembers } = useSelector(electionsSelector);
 
   const [modalSubmit, setModalSubmit] = useState(null);
 

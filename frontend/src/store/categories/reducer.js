@@ -58,7 +58,7 @@ const Categories = (state = initialState, action) => {
     case UPDATE_CATEGORY_SUCCESS:
       return {
         ...state,
-        categoryList: state.categoryList.map(category =>
+        categories: state.categories.map(category =>
           category.id.toString() === action.payload.id.toString()
             ? { ...category, ...action.payload }
             : category
@@ -74,7 +74,7 @@ const Categories = (state = initialState, action) => {
     case DELETE_CATEGORY_SUCCESS:
       return {
         ...state,
-        categoryList: state.categoryList.filter(
+        categories: state.categories.filter(
           category => category.id.toString() !== action.payload.id.toString()
         ),
       };

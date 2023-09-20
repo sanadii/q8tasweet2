@@ -63,7 +63,6 @@ const Campaigns = (state = IntialState, action) => {
     case API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
         case GET_CAMPAIGNS:
-          console.log("GET_CAMPAIGNS LOGGING Payload:", action.payload); // Log the payload
           return {
             ...state,
             campaigns: action.payload.data,

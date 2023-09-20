@@ -45,7 +45,8 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
 
 export const ImageLargeCircle = ({ imagePath }) => {
   const apiUrl = api.API_URL;
-  const imageUrl = `${apiUrl}${imagePath}`;
+  const defaultImagePath = 'media/candidates/default.jpg';
+  const imageUrl = imagePath ? `${apiUrl}${imagePath}` : `${apiUrl}${defaultImagePath}`;
 
   return (
     <div className="avatar-lg">
@@ -57,6 +58,7 @@ export const ImageLargeCircle = ({ imagePath }) => {
     </div>
   );
 };
+
 
 export const ImageCampaignBackground = ({ imagePath }) => {
   const apiUrl = api.API_URL;
@@ -102,7 +104,7 @@ export const ImageCampaignCard = ({ urlPath, imagePath }) => {
 
   return (
     <Card className="mb-4">
-      <Row noGutters={true} className="h-100">
+      <Row className="g-0 h-100">
         <Col className="position-relative">
           <Link to={urlPath} className="d-block">
             <CardImg top src={imageUrl} alt="" className="w-100" />

@@ -73,8 +73,7 @@ export const GET_CANDIDATE_CAMPAIGN_DETAILS = "/elections/getCandidateCampaignDe
 export const GET_CANDIDATE_CAMPAIGN_COUNT = "/elections/getCandidateCampaignCount";
 
 
-// --------------- Campaigns ---------------
-// Campaigns
+// Campaigns ---------------
 export const GET_CAMPAIGNS = "/elections/getCampaigns";
 export const ADD_NEW_CAMPAIGN = "/elections/addNewCampaign";
 export const UPDATE_CAMPAIGN = "/elections/updateCampaign";

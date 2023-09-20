@@ -214,3 +214,4 @@ class UpdateCandidate(APIView):
             "deleted": candidate.deleted,
         }
         return updated_candidate_data
+    

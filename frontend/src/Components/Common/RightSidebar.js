@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-    Offcanvas,
-    OffcanvasHeader,
-    OffcanvasBody,
-    Collapse,
-} from "reactstrap";
+import { Offcanvas, OffcanvasHeader, OffcanvasBody, Collapse } from "reactstrap";
 import withRouter from '../Common/withRouter';
+import { layoutSelector } from '../selectors/layoutSelector';
 
 //redux
 import {
@@ -78,19 +74,7 @@ const RightSidebar = (props) => {
         leftSidebarImageType,
         preloader,
         sidebarVisibilitytype
-    } = useSelector(state => ({
-        layoutType: state.Layout.layoutType,
-        leftSidebarType: state.Layout.leftSidebarType,
-        layoutModeType: state.Layout.layoutModeType,
-        layoutWidthType: state.Layout.layoutWidthType,
-        layoutPositionType: state.Layout.layoutPositionType,
-        topbarThemeType: state.Layout.topbarThemeType,
-        leftsidbarSizeType: state.Layout.leftsidbarSizeType,
-        leftSidebarViewType: state.Layout.leftSidebarViewType,
-        leftSidebarImageType: state.Layout.leftSidebarImageType,
-        preloader: state.Layout.preloader,
-        sidebarVisibilitytype: state.Layout.sidebarVisibilitytype,
-    }));
+    } = useSelector(layoutSelector);
 
     // open offcanvas
     const [open, setOpen] = useState(true);
@@ -290,25 +274,25 @@ const RightSidebar = (props) => {
                                                     }
                                                 }}
                                                 className="form-check-input" />
-                                                <label className="form-check-label p-0 avatar-md w-100" htmlFor="customizer-layout04">
-                                                    <span className="d-flex gap-1 h-100">
-                                                        <span className="flex-shrink-0 p-1">
-                                                            <span className="bg-light d-flex h-100 flex-column gap-1 p-1">
-                                                                <span className="d-block p-1 px-2 bg-soft-primary rounded mb-2"></span>
-                                                                <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
-                                                                <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
-                                                                <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
-                                                            </span>
-                                                        </span>
-                                                        <span className="flex-grow-1">
-                                                            <span className="d-flex h-100 flex-column pt-1 pe-2">
-                                                                <span className="bg-light d-block p-1"></span>
-                                                                <span className="bg-light d-block p-1 mt-auto"></span>
-                                                            </span>
+                                            <label className="form-check-label p-0 avatar-md w-100" htmlFor="customizer-layout04">
+                                                <span className="d-flex gap-1 h-100">
+                                                    <span className="flex-shrink-0 p-1">
+                                                        <span className="bg-light d-flex h-100 flex-column gap-1 p-1">
+                                                            <span className="d-block p-1 px-2 bg-soft-primary rounded mb-2"></span>
+                                                            <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
+                                                            <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
+                                                            <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
                                                         </span>
                                                     </span>
-                                                </label>
-                                            </div>
+                                                    <span className="flex-grow-1">
+                                                        <span className="d-flex h-100 flex-column pt-1 pe-2">
+                                                            <span className="bg-light d-block p-1"></span>
+                                                            <span className="bg-light d-block p-1 mt-auto"></span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                            </label>
+                                        </div>
                                         <h5 className="fs-13 text-center mt-2">Semi Box</h5>
                                     </div>
                                 </div>
@@ -395,86 +379,86 @@ const RightSidebar = (props) => {
                                 </div>
 
                                 {layoutType === layoutTypes.SEMIBOX && (
-                                <div>
-                                    <h6 className="mt-4 mb-0 fw-semibold text-uppercase">Sidebar Visibility</h6>
-                                    <p className="text-muted">Choose show or Hidden sidebar.</p>
-
                                     <div>
-                                        <div className="row">
-                                            <div className="col-4">
-                                                <div className="form-check card-radio">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="data-sidebar-visibility"
-                                                        // name="data-layout-mode"
-                                                        id="sidebar-visibility-show"
-                                                        value={sidebarVisibilitytypes.SHOW}
-                                                        checked={sidebarVisibilitytype === sidebarVisibilitytypes.SHOW}
-                                                        onChange={e => {
-                                                            if (e.target.checked) {
-                                                                dispatch(changeSidebarVisibility(e.target.value));
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label className="form-check-label p-0 avatar-md w-100" htmlFor="sidebar-visibility-show">
-                                                        <span className="d-flex gap-1 h-100">
-                                                            <span className="flex-shrink-0 p-1">
-                                                                <span className="bg-light d-flex h-100 flex-column gap-1 p-1">
-                                                                    <span className="d-block p-1 px-2 bg-soft-primary rounded mb-2"></span>
-                                                                    <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
-                                                                    <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
-                                                                    <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
+                                        <h6 className="mt-4 mb-0 fw-semibold text-uppercase">Sidebar Visibility</h6>
+                                        <p className="text-muted">Choose show or Hidden sidebar.</p>
+
+                                        <div>
+                                            <div className="row">
+                                                <div className="col-4">
+                                                    <div className="form-check card-radio">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="radio"
+                                                            name="data-sidebar-visibility"
+                                                            // name="data-layout-mode"
+                                                            id="sidebar-visibility-show"
+                                                            value={sidebarVisibilitytypes.SHOW}
+                                                            checked={sidebarVisibilitytype === sidebarVisibilitytypes.SHOW}
+                                                            onChange={e => {
+                                                                if (e.target.checked) {
+                                                                    dispatch(changeSidebarVisibility(e.target.value));
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label className="form-check-label p-0 avatar-md w-100" htmlFor="sidebar-visibility-show">
+                                                            <span className="d-flex gap-1 h-100">
+                                                                <span className="flex-shrink-0 p-1">
+                                                                    <span className="bg-light d-flex h-100 flex-column gap-1 p-1">
+                                                                        <span className="d-block p-1 px-2 bg-soft-primary rounded mb-2"></span>
+                                                                        <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
+                                                                        <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
+                                                                        <span className="d-block p-1 px-2 pb-0 bg-soft-primary"></span>
+                                                                    </span>
+                                                                </span>
+                                                                <span className="flex-grow-1">
+                                                                    <span className="d-flex h-100 flex-column pt-1 pe-2">
+                                                                        <span className="bg-light d-block p-1"></span>
+                                                                        <span className="bg-light d-block p-1 mt-auto"></span>
+                                                                    </span>
                                                                 </span>
                                                             </span>
-                                                            <span className="flex-grow-1">
-                                                                <span className="d-flex h-100 flex-column pt-1 pe-2">
-                                                                    <span className="bg-light d-block p-1"></span>
-                                                                    <span className="bg-light d-block p-1 mt-auto"></span>
-                                                                </span>
-                                                            </span>
-                                                        </span>
-                                                    </label>
+                                                        </label>
+                                                    </div>
+                                                    <h5 className="fs-13 text-center mt-2">Show</h5>
                                                 </div>
-                                                <h5 className="fs-13 text-center mt-2">Show</h5>
-                                            </div>
-                                            <div className="col-4">
-                                                <div className="form-check card-radio">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="radio"
-                                                        name="data-sidebar-visibility"
-                                                        // name="data-layout-mode"
-                                                        id="sidebar-visibility-hidden"
-                                                        // id="layout-mode-hidden"
-                                                        value={sidebarVisibilitytypes.HIDDEN}
-                                                        checked={sidebarVisibilitytype === sidebarVisibilitytypes.HIDDEN}
-                                                        onChange={e => {
-                                                            if (e.target.checked) {
-                                                                dispatch(changeSidebarVisibility(e.target.value));
-                                                            }
-                                                        }}
-                                                    />
-                                                    <label className="form-check-label p-0 avatar-md w-100 px-2" htmlFor="sidebar-visibility-hidden">
-                                                        <span className="d-flex gap-1 h-100">
-                                                            <span className="flex-grow-1">
-                                                                <span className="d-flex h-100 flex-column pt-1 px-2">
-                                                                    <span className="bg-light d-block p-1"></span>
-                                                                    <span className="bg-light d-block p-1 mt-auto"></span>
+                                                <div className="col-4">
+                                                    <div className="form-check card-radio">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="radio"
+                                                            name="data-sidebar-visibility"
+                                                            // name="data-layout-mode"
+                                                            id="sidebar-visibility-hidden"
+                                                            // id="layout-mode-hidden"
+                                                            value={sidebarVisibilitytypes.HIDDEN}
+                                                            checked={sidebarVisibilitytype === sidebarVisibilitytypes.HIDDEN}
+                                                            onChange={e => {
+                                                                if (e.target.checked) {
+                                                                    dispatch(changeSidebarVisibility(e.target.value));
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label className="form-check-label p-0 avatar-md w-100 px-2" htmlFor="sidebar-visibility-hidden">
+                                                            <span className="d-flex gap-1 h-100">
+                                                                <span className="flex-grow-1">
+                                                                    <span className="d-flex h-100 flex-column pt-1 px-2">
+                                                                        <span className="bg-light d-block p-1"></span>
+                                                                        <span className="bg-light d-block p-1 mt-auto"></span>
+                                                                    </span>
                                                                 </span>
                                                             </span>
-                                                        </span>
-                                                    </label>
+                                                        </label>
+                                                    </div>
+                                                    <h5 className="fs-13 text-center mt-2">Hidden</h5>
                                                 </div>
-                                                <h5 className="fs-13 text-center mt-2">Hidden</h5>
                                             </div>
                                         </div>
-                                    </div>
 
-                                </div>
+                                    </div>
                                 )}
-                                
-                                {(layoutType !== layoutTypes.TWOCOLUMN && layoutType !== layoutTypes.SEMIBOX)  && (
+
+                                {(layoutType !== layoutTypes.TWOCOLUMN && layoutType !== layoutTypes.SEMIBOX) && (
                                     <React.Fragment>
                                         <div id="layout-width">
                                             <h6 className="mt-4 mb-0 fw-semibold text-uppercase">Layout Width</h6>

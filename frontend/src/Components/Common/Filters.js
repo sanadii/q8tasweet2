@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
 import { StatusOptions, PriorityOptions, MemberRankOptions, GenderOptions, GuaranteeStatusOptions } from "../../Components/constants";
 import classnames from "classnames";
+import { electionsSelector } from '../../selectors/electionsSelector';
+
 import { Nav, NavItem, NavLink, Input } from "reactstrap";
 
 export const Filter = ({ column }) => {
@@ -16,8 +18,8 @@ export const Filter = ({ column }) => {
 
 // Tab Filters
 const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
-  const campaignMembers = useSelector((state) => state.Campaigns.campaignMembers);
-  const currentCampaignMemberRank = useSelector((state) => state.Campaigns.currentCampaignMember.rank);
+  const { campaignMembers, currentCampaignMember } = useSelector(electionsSelector);
+  const currentCampaignMemberRank = currentCampaignMember.rank.id;
 
   const ranks = MemberRankOptions.filter((rank) =>
     rank.showTo.includes(currentCampaignMemberRank)
@@ -106,7 +108,7 @@ const ElectionCategoryFilter = ({ filters, setFilters, activeTab, setActiveTab }
   const ChangeElectionCategory = (tab, type) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
-      if (type !== "all") {
+      if (type !== "الكل") {
         setFilters(prevFilters => ({
           ...prevFilters,
           category: type
@@ -134,11 +136,11 @@ const ElectionCategoryFilter = ({ filters, setFilters, activeTab, setActiveTab }
                 "fw-semibold"
               )}
               onClick={() => {
-                ChangeElectionCategory("0", "all");
+                ChangeElectionCategory("0", "الكل");
               }}
               href="#"
             >
-              All
+              الكل
             </NavLink>
           </NavItem>
           {categories.map((category, index) => (
@@ -186,9 +188,9 @@ const GlobalFilter = ({
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
+      <div className="col-lg-3 col-sm-2">
         <form>
-          <strong>Search</strong>
+          <strong>البحث</strong>
           <div className="search-box me-2 mb-2 d-inline-block col-12">
             <input
               onChange={(e) => {
@@ -201,7 +203,7 @@ const GlobalFilter = ({
               placeholder={SearchPlaceholder}
               value={value || ""}
             />
-            <i className="bx bx-search-alt search-icon"></i>
+            {/* <i className="bx bx-search-alt search-icon"></i> */}
           </div>
         </form>
       </div>
@@ -247,7 +249,7 @@ const SelectColumnFilter = ({
         setFilter(e.target.value || undefined);
       }}
     >
-      <option value="">All</option>
+      <option value="">الكل</option>
       {options.map((option) => (
         <option key={option} value={option}>
           {option}
@@ -270,8 +272,8 @@ const PriorityFilter = ({ filters, setFilters }) => {
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <strong>Priority</strong>
+      <div className="col-lg-3 col-sm-2">
+        <strong>الأوليات</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
@@ -281,7 +283,7 @@ const PriorityFilter = ({ filters, setFilters }) => {
             onChange={(e) => ChangeSelectedPriority(e.target.value)}
             value={filters.priority || ''}  // <-- This is the key change
           >
-            <option value="">- All Priorities - </option>
+            <option value="">- جميع الأوليات - </option>
             {PriorityOptions.map((priority) => (
               <option key={priority.id} value={priority.id}>
                 {priority.name}
@@ -306,8 +308,8 @@ const StatusFilter = ({ filters, setFilters }) => {
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <strong>Status</strong>
+      <div className="col-lg-3 col-sm-2">
+        <strong>الحالة</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
@@ -316,7 +318,7 @@ const StatusFilter = ({ filters, setFilters }) => {
             onChange={(e) => ChangeSelectedStatus(e.target.value)}
             value={filters.status || ''}  // <-- This is the key change
           >
-            <option value="">- All Statuses - </option>
+            <option value="">- جميع الحالات - </option>
             {StatusOptions.map((status) => (
               <option key={status.id} value={status.id}>
                 {status.name}
@@ -343,8 +345,8 @@ const GuaranteeStatusFilter = ({ filters, setFilters }) => {
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <strong>Status</strong>
+      <div className="col-lg-3 col-sm-2">
+        <strong>الحالة</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
@@ -353,7 +355,7 @@ const GuaranteeStatusFilter = ({ filters, setFilters }) => {
             onChange={(e) => ChangeCampaignGuaranteeStatus(e.target.value)}
             value={filters.status || ''}
           >
-            <option value="">- All Statuses - </option>
+            <option value="">- الكل - </option>
             {GuaranteeStatusOptions.map((status) => (
               <option key={status.id} value={status.id}>
                 {status.name}
@@ -386,7 +388,7 @@ const CandidateGenderFilter = ({ setElectionCandidateList }) => {
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
+      <div className="col-lg-3 col-sm-2">
         <div className="input-light">
           <select
             className="form-select form-control"
@@ -394,7 +396,7 @@ const CandidateGenderFilter = ({ setElectionCandidateList }) => {
             id="choices-select-gender"
             onChange={(e) => ChangeCandidateGender(e.target.value)}
           >
-            <option value="">- All Genders - </option>
+            <option value="">- الكل - </option>
             {GenderOptions.map((gender) => (
               <option key={gender.id} value={gender.id}>
                 {gender.name}
@@ -424,8 +426,8 @@ const GenderFilter = ({ filters, setFilters }) => {
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <strong>Gender</strong>
+      <div className="col-lg-3 col-sm-2">
+        <strong>النوع</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
@@ -434,7 +436,7 @@ const GenderFilter = ({ filters, setFilters }) => {
             onChange={(e) => ChangeGuaranteeGender(e.target.value)}
             value={filters.gender || ''}
           >
-            <option value="">- All Genders - </option>
+            <option value="">- الكل - </option>
             {GenderOptions.map((gender) => (
               <option key={gender.id} value={gender.id}>
                 {gender.name}
@@ -454,8 +456,8 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
   );
 
   const AttendanceOptions = [
-    { id: 'true', name: "Attended" },
-    { id: 'false', name: "Not Attended" },
+    { id: 'true', name: "حضر" },
+    { id: 'false', name: "لم يحضر" },
   ];
 
   const ChangeGuaranteeAttendance = (e) => {
@@ -471,8 +473,8 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <strong>Attendance</strong>
+      <div className="col-lg-3 col-sm-2">
+        <strong>التحضير</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
@@ -481,7 +483,7 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
             onChange={(e) => ChangeGuaranteeAttendance(e.target.value)}
             value={filters.attended === null ? '' : String(filters.attended)}
           >
-            <option value="">- All Attendances - </option>
+            <option value="">- الكل - </option>
             {AttendanceOptions.map((attendance) => (
               <option key={attendance.id} value={attendance.id}>
                 {attendance.name}
@@ -512,7 +514,7 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
 
 //   return (
 //     <React.Fragment>
-//       <div className="col-xxl-3 col-sm-4">
+//       <div className="col-lg-3 col-sm-2">
 //         <strong>Gender</strong>
 //         <div className="input-light">
 //           <select
@@ -554,7 +556,7 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
 
 //   return (
 //     <React.Fragment>
-//       <div className="col-xxl-3 col-sm-4">
+//       <div className="col-lg-3 col-sm-2">
 //         <div className="input-light">
 //           <select
 //             className="form-select form-control"
@@ -576,9 +578,7 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
 // };
 
 const GuarantorFilter = ({ filters, setFilters }) => {
-  const { campaignMembers, } = useSelector((state) => ({
-    campaignMembers: state.Campaigns.campaignMembers,
-  }));
+  const { campaignMembers } = useSelector(electionsSelector);
 
   const [sortedGurantorOptions, setSortedGuarantorOptions] = useState([]);
 
@@ -604,8 +604,8 @@ const GuarantorFilter = ({ filters, setFilters }) => {
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <strong>Guarantor</strong>
+      <div className="col-lg-3 col-sm-2">
+        <strong>الضامن</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
@@ -614,7 +614,7 @@ const GuarantorFilter = ({ filters, setFilters }) => {
             onChange={ChangeGuaranteeRank}
             value={filters.member || ''}
           >
-            <option value="">- All Ranks - </option>
+            <option value="">- الكل - </option>
             {sortedGurantorOptions.map((member) => (
               <option key={member.id} value={member.id}>
                 {member.user.name}
@@ -652,10 +652,7 @@ const SearchFilter = ({ filters, setFilters, searchField }) => {
 };
 
 const ElectionCommitteeFilter = ({ filters, setFilters }) => {
-  const { electionAttendees, electionCommittees } = useSelector((state) => ({
-    electionAttendees: state.Campaigns.electionAttendees,
-    electionCommittees: state.Campaigns.electionCommittees,
-  }));
+  const { electionAttendees, electionCommittees } = useSelector();
 
   // Directly sorting the committees
   const sortedCommitteeOptions = [...electionCommittees].sort((a, b) =>
@@ -674,8 +671,8 @@ const ElectionCommitteeFilter = ({ filters, setFilters }) => {
 
   return (
     <React.Fragment>
-      <div className="col-xxl-3 col-sm-4">
-        <strong>Committee</strong>
+      <div className="col-lg-3 col-sm-2">
+        <strong>اللجان</strong>
         <div className="input-light">
           <select
             className="form-select form-control"
@@ -684,7 +681,7 @@ const ElectionCommitteeFilter = ({ filters, setFilters }) => {
             onChange={ChangeCommitteeOption}
             value={filters.committee || ''}
           >
-            <option value="">- All Committees - </option>
+            <option value="">- جميع اللجان - </option>
             {sortedCommitteeOptions.map((committee) => (
               <option key={committee.id} value={committee.id}>
                 {committee.name}
@@ -703,6 +700,7 @@ const ResetFilters = ({ setFilters, activeTab, setActiveTab }) => {
 
   return (
     <React.Fragment>
+      <p></p>
       <button
         type="button"
         className="btn btn-danger"
@@ -722,7 +720,7 @@ const ResetFilters = ({ setFilters, activeTab, setActiveTab }) => {
           setActiveTab("0");
         }}
       >
-        <i className="ri-filter-2-line me-1 align-bottom"></i> Reset
+        <i className="ri-filter-2-line me-1 align-bottom"></i> إعادة
       </button>
     </React.Fragment>
   );

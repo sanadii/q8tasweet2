@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteElectionAttendee, updateElectionAttendee } from "../../../store/actions";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // Component imports
 import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
@@ -19,16 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AttendeesList = () => {
   const dispatch = useDispatch();
 
-  const { electionId, electionAttendees, electionCommittees, campaignMembers, isElectionAttendeeSuccess, error } = useSelector((state) => ({
-    electionId: state.Campaigns.campaignDetails.election_id,
-    // userId: state.Users.userDetails.user_id,
-    electionAttendees: state.Campaigns.electionAttendees,
-    electionCommittees: state.Campaigns.electionCommittees,
-    campaignMembers: state.Campaigns.campaignMembers,
-    isElectionAttendeeSuccess: state.Campaigns.isElectionAttendeeSuccess,
-    error: state.Campaigns.error,
-  }));
-
+  const { electionId, electionAttendees, electionCommittees, campaignMembers, isElectionAttendeeSuccess, error  } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   // ElectionAttendees Constants
@@ -179,7 +171,7 @@ const AttendeesList = () => {
       //   id: "#",
       // },
       {
-        Header: "Name",
+        Header: "الاسم",
         Cell: (cellProps) => {
           return (
             <div>
@@ -192,7 +184,7 @@ const AttendeesList = () => {
         },
       },
       {
-        Header: "Committee",
+        Header: "اللجنة",
         accessor: "civil",
         Cell: (cellProps) => {
           const committeeId = cellProps.row.original.committee; // Directly access the user ID from original data
@@ -201,7 +193,7 @@ const AttendeesList = () => {
         },
       },
       {
-        Header: "Attendant",
+        Header: "الحضور",
         filterable: false,
         Cell: (cellProps) => {
           const userId = cellProps.row.original.user; // Directly access the user ID from original data
@@ -216,7 +208,7 @@ const AttendeesList = () => {
 
       // Only for Attendants
       {
-        Header: "Action",
+        Header: "إجراءات",
         Cell: (cellProps) => {
           return (
             <div className="list-inline hstack gap-2 mb-0">
@@ -327,7 +319,7 @@ const AttendeesList = () => {
               <div>
                 <TableContainerHeader
                   // Title
-                  ContainerHeaderTitle="Election Attendees"
+                  ContainerHeaderTitle="تحضير الناخبين"
 
                   // Add Elector Button
                   // isAddElectorButton={true}
@@ -354,7 +346,7 @@ const AttendeesList = () => {
                     // Global Filters
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
-                    SearchPlaceholder="Search for Campaign Guarantees..."
+                    SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
                     onTabChange={handleTabChange}
 
                     // Data -------------------------

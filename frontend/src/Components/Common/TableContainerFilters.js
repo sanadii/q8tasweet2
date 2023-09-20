@@ -186,7 +186,6 @@ const TableContainerFilters = ({
                                 setFilters={setFilters}
                             />
                         )}
-
                     </div>
                     <div className="flex-shrink-0">
                         {isResetFilters && (

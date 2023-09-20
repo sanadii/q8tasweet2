@@ -36,7 +36,7 @@ class Categories(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
-    image = models.ImageField(upload_to="categories/", null=True, blank=True)
+    image = models.ImageField(upload_to="elections/", null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
     description = models.TextField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -257,10 +257,11 @@ class Campaigns(models.Model):
     website = models.URLField(max_length=120, blank=True, null=True)
 
     # Activities
-    events = models.PositiveIntegerField(blank=True, null=True)
-    attendees = models.PositiveIntegerField(blank=True, null=True)
-    media_coverage = models.PositiveIntegerField(blank=True, null=True)
+    target_score = models.PositiveIntegerField(blank=True, null=True)
+    target_score = models.PositiveIntegerField(blank=True, null=True)
     results = models.IntegerField(blank=True, null=True)
+    events = models.PositiveIntegerField(blank=True, null=True)
+    media_coverage = models.PositiveIntegerField(blank=True, null=True)
 
 
     # Administration

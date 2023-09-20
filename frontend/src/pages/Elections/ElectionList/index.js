@@ -11,7 +11,7 @@ const ElectionList = () => {
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="Elections List" pageTitle="Elections" />
-          <Widgets />
+          {/* <Widgets /> */}
           <AllElections />
         </Container>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownMenu, DropdownToggle, Form } from 'reactstrap';
+import { layoutSelector } from '../selectors/layoutSelector';
 
 //import images
 import logoSm from "../assets/images/logo-sm.png";
@@ -27,9 +28,8 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
     };
 
     const dispatch = useDispatch();
-    const { sidebarVisibilitytype } = useSelector(state => ({
-        sidebarVisibilitytype: state.Layout.sidebarVisibilitytype
-    }));
+    const { sidebarVisibilitytype } = useSelector(layoutSelector);
+
 
     const toogleMenuBtn = () => {
         var windowSize = document.documentElement.clientWidth;

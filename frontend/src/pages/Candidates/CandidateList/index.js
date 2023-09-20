@@ -5,12 +5,12 @@ import AllCandidates from "./AllCandidates";
 import Widgets from "./Widgets";
 
 const ElectionList = () => {
-  document.title = "Elections List | Q8Tasweet - React Admin & Dashboard Template";
+  document.title = "قائمة الإنتخابات | كويت تصويت";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Elections List" pageTitle="Elections" />
+          <BreadCrumb title="قائمة الإنتخابات" pageTitle="قائمة الإنتخابات" />
           <Widgets />
           <AllCandidates />
         </Container>

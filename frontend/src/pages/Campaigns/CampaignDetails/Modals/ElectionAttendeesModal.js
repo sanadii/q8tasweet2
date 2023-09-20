@@ -1,39 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { electionsSelector } from '../../../../selectors/electionsSelector';
+
 import { updateElectionAttendee } from "../../../../store/actions";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  Card,
-  CardBody,
-  Col,
-  Row,
-  Table,
-  Label,
-  Input,
-  Form,
-  FormFeedback,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from "reactstrap";
+import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { GuaranteeStatusOptions } from "../../../../Components/constants";
 
-const ElectionAttendeesModal = ({
-  modal,
-  toggle,
-  modalMode,
-  electionAttendee,
-}) => {
+const ElectionAttendeesModal = ({ modal, toggle, modalMode, electionAttendee }) => {
 
-  const { campaignMembers } = useSelector((state) => ({
-    campaignMembers: state.Campaigns.campaignMembers,
-  }));
+  const { campaignMembers } = useSelector(electionsSelector);
 
   const [onModalSubmit, setOnModalSubmit] = useState(null);
 
@@ -133,9 +113,7 @@ const ElectionAttendeeUpdateModal = ({
   const { campaignId } = useSelector((state) => ({
     campaignId: state.Campaigns.campaignDetails.id,
   }));
-  const electionCommittees = useSelector(
-    (state) => state.Campaigns.electionCommittees
-  ); // Directly use without redundant useState
+  const electionCommittees = useSelector(electionsSelector); // Directly use without redundant useState
 
 
 

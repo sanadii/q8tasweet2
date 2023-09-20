@@ -3,39 +3,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { ImageCampaignCard } from "../../../Components/Common";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 import { Link } from "react-router-dom";
 
-import {
-  getCampaigns,
-  addNewCampaign,
-  updateCampaign,
-  deleteCampaign,
-  getModeratorUsers,
-  getCategories,
-} from "../../../store/actions";
+import { getCampaigns, getModeratorUsers, getCategories } from "../../../store/actions";
 
-import BgPattern from "../../../assets/images/nft/bg-pattern.png";
 
 const CampaignGrid = () => {
   const dispatch = useDispatch();
 
   document.title = "Campaigns - Q8 TASWEET APP";
 
-  const {
-    campaigns,
-    moderators,
-    categories,
-    subCategories,
-    isCampaignSuccess,
-    user,
-    error,
-  } = useSelector((state) => ({
-    campaigns: state.Campaigns.campaigns,
-    isCampaignSuccess: state.Campaigns.isCampaignSuccess,
-    user: state.Users.Currentuser,
-    error: state.Campaigns.error,
-  }));
+  const { campaigns, moderators, categories, subCategories, isCampaignSuccess, user, error } = useSelector(electionsSelector);
 
   const [campaignList, setCampaignList] = useState(campaigns);
   const [campaign, setCampaign] = useState([]);
@@ -128,10 +108,10 @@ const CampaignGrid = () => {
                   <ImageCampaignCard
                     imagePath={item.candidate.image}
                     urlPath={`/campaigns/${item.id}`}
-                    />
+                  />
                   <CardBody>
                     <h2 className="mb-1">
-                    <Link to={`/campaigns/${item.id}`}>
+                      <Link to={`/campaigns/${item.id}`}>
                         {item.candidate.name}
                       </Link>
                     </h2>

@@ -5,6 +5,8 @@ import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import DeleteModal from "../../../../Components/Common/DeleteModal";
 import BreadCrumb from "../../../../Components/Common/BreadCrumb";
+import { electionsSelector } from '../../../../selectors/electionsSelector';
+import useCategoryManager from "../../../../Components/Hooks/CategoryHooks";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -16,21 +18,34 @@ import * as Yup from "yup";
 // Store actions
 import {
   getCategories as onGetCategories,
-  updateCategory as onupdateCategory,
+  updateCategory as onUpdateCategory,
   deleteCategory as onDeleteCategory,
   addNewCategory as onAddNewCategory,
 } from "../../../../store/actions";
 
 const Categories = () => {
-  document.title = "To Do Lists | Q8Tasweet - React Admin & Dashboard Template";
+  document.title = "المجموعات | Q8Tasweet - React Admin & Dashboard Template";
 
   const dispatch = useDispatch();
 
-  const { categories, subCategories } = useSelector((state) => ({
-    categories: state.Categories.categories,
-    subCategories: state.Categories.subCategories,
-  }));
+  // ------------ Image Upload Helper ------------
+  const [selectedImage, setSelectedImage] = useState(null);
+  const handleImageSelect = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedImage(e.target.files[0]);
+      // console.log("handleImageSelect called");
+    }
+  };
+  const formData = new FormData();
+  if (!selectedImage) {
+    // console.log("no selected image");
+  } else {
+    formData.append("image", selectedImage);
+    formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
+  }
 
+
+  const { categories, subCategories } = useSelector(electionsSelector);
   const [categoryList, setCategoryList] = useState(categories);
   const [subCategoryList, setSubCategoryList] = useState(subCategories);
 
@@ -42,24 +57,15 @@ const Categories = () => {
     setCategoryList(categories);
   }, [categories]);
 
-  const [activeParentCategoryId, setActiveCategoryId] = useState(null);
-
   const [deleteModal, setDeleteModal] = useState(false);
+
+
 
   // Add / Edit / Modals
   const [category, setCategory] = useState(null);
   const [modalCategory, setModalCategory] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
-  const changeCategoriestatus = (e) => {
-    const activeCategoryId = e.target.id;
-    const filteredSubCategoryList = categoryList.filter(
-      (item) => item.parent === Number(activeCategoryId)
-    );
-
-    setActiveCategoryId(Number(activeCategoryId));
-    setSubCategoryList(filteredSubCategoryList);
-  };
 
   useEffect(() => {
     dispatch(onGetCategories());
@@ -88,6 +94,7 @@ const Categories = () => {
         id: category.id,
         name: category.name,
         parent: category.parent,
+        image: category.image,
         is_active: category.is_active,
       });
 
@@ -137,6 +144,7 @@ const Categories = () => {
       document.getElementById("category-category").style.display = "block";
     }
   };
+  console.log(categories, subCategories);
 
   const [isMainCategory, setIsMainCategory] = useState(false);
 
@@ -158,27 +166,32 @@ const Categories = () => {
     initialValues: {
       name: (category && category.name) || "",
       parent: (category && category.parent) || "",
+      image: (category && category.image) || "",
+      selectedImage: selectedImage,
       // status: (category && category.status) || '',
       // priority: (category && category.priority) || '',
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter Category"),
-      parent: Yup.string().required("Please Enter Parent"),
+      // name: Yup.string().required("Please Enter Category"),
+      // parent: Yup.string().required("Please Enter Parent"),
     }),
     onSubmit: (values) => {
       if (isEdit) {
-        const updateCategory = {
+        const updatedCategory = {
           id: category ? category.id : 0,
           name: values.name,
+          image: values.image,
+          selectedImage: selectedImage,
           parent: values.parent,
         };
         // save edit Folder
-        dispatch(onupdateCategory(updateCategory));
+        dispatch(onUpdateCategory({cateogy: updatedCategory, formData: formData}));
         validation.resetForm();
       } else {
         const newCategory = {
-          id: (Math.floor(Math.random() * (30 - 20)) + 20).toString(),
           name: values.name,
+          image: values.image,
+          selectedImage: selectedImage,
           parent: values.parent,
         };
         // save new Folder
@@ -188,6 +201,15 @@ const Categories = () => {
       toggle();
     },
   });
+
+  const {
+    categoryOptions,
+    subCategoryOptions,
+    changeSubCategoriesOptions,
+    activeParentCategoryId
+  } = useCategoryManager(categories, subCategories, validation);
+
+  console.log("activeParentCategoryId:", activeParentCategoryId);
 
   return (
     <React.Fragment>
@@ -221,36 +243,36 @@ const Categories = () => {
                     className="to-do-menu list-unstyled"
                     id="CategoryList-data"
                   >
-                    {(categoryList || []).map((item, index) => (
+                    {(categoryOptions || []).map((item, index) => (
                       // Add a conditional check for parent === 0 and id !== 0
                       <li key={item.id}>
                         <Link
                           to="#"
                           className="nav-link fs-13"
                           id={item.id}
-                          onClick={changeCategoriestatus}
+                          onClick={(e) => changeSubCategoriesOptions({ ...e, target: { ...e.target, value: item.id } })}
                         >
                           {item.name}
                         </Link>
-                        {/* <div className="sub-menu list-unstyled ps-3 vstack gap-2 mb-2">
-                              {(categoryList || []).map(
-                                (nestedItem) =>
-                                  nestedItem.parent === item.id && (
-                                    <li
-                                      key={nestedItem.id}
-                                      onClick={changeCategoriestatus}
-                                    >
-                                      <Link
-                                        to="#"
-                                        className="nav-link fs-13"
-                                        id={"Categories" + nestedItem.id}
-                                      >
-                                        {nestedItem.name}
-                                      </Link>
-                                    </li>
-                                  )
-                              )}
-                            </div> */}
+                        <div className="sub-menu list-unstyled ps-3 vstack gap-2 mb-2">
+                          {(categoryOptions || []).map(
+                            (nestedItem) =>
+                              nestedItem.parent === item.id && (
+                                <li
+                                  key={nestedItem.id}
+                                  onClick={changeSubCategoriesOptions}
+                                >
+                                  <Link
+                                    to="#"
+                                    className="nav-link fs-13"
+                                    id={"Categories" + nestedItem.id}
+                                  >
+                                    {nestedItem.name}
+                                  </Link>
+                                </li>
+                              )
+                          )}
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -316,7 +338,7 @@ const Categories = () => {
                       </thead>
 
                       <tbody id="category-list">
-                        {(subCategoryList || []).map(
+                        {(subCategoryOptions || []).map(
                           (item, key) => (
                             // Filter the child Categories based on the active parent category ID
                             !activeParentCategoryId ||
@@ -406,6 +428,78 @@ const Categories = () => {
               id="categoryid-input"
               className="form-control"
             />
+            <Col lg={6}>
+              <div>
+                <Label for="emage-field" className="form-label">
+                  Upload Image
+                </Label>
+                <div className="text-center">
+                  <label
+                    htmlFor="emage-field"
+                    className="mb-0"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="right"
+                    title=""
+                    data-bs-original-title="Select Image"
+                  >
+                    <div className="position-relative d-inline-block">
+                      <div className="position-absolute top-100 start-100 translate-middle">
+                        <div className="avatar-xs">
+                          <div className="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
+                            <i className="ri-image-fill"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="avatar-xl"
+                        style={{
+                          width: "250px",
+                          height: "250px",
+                          overflow: "hidden",
+                          cursor: "pointer", // Add this line
+                          backgroundImage: `url(${validation.values.image})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      ></div>
+                    </div>
+                    <input
+                      className="form-control d-none"
+                      id="emage-field"
+                      type="file"
+                      accept="image/png, image/gif, image/jpeg"
+                      onChange={(e) => {
+                        handleImageSelect(e);
+                        const selectedImage = e.target.files[0];
+                        if (selectedImage) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+
+                            const imgElement =
+                              document.querySelector(".avatar-xl");
+                            if (imgElement) {
+                              imgElement.style.backgroundImage = `url(${reader.result})`;
+                            }
+                          };
+                          reader.readAsDataURL(selectedImage);
+                        }
+                      }}
+                      onBlur={validation.handleBlur}
+                      invalid={
+                        validation.touched.image && validation.errors.image
+                          ? "true"
+                          : undefined
+                      }
+                    />
+                  </label>
+                </div>
+                {validation.touched.image && validation.errors.image ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.image}
+                  </FormFeedback>
+                ) : null}
+              </div>
+            </Col>
             <div className="mb-3">
               <label htmlFor="category-name-input" className="form-label">
                 Category Name

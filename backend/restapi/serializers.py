@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import *
 from users.models import User
 import json
+import datetime
 
 
 # PROJECT
@@ -44,7 +45,7 @@ class UserFullNameSerializer(serializers.ModelSerializer):
 class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categories
-        fields = ["id", "name"]
+        fields = ["id", "name", "image", "parent"]
 
 
 class ElectorsSerializer(serializers.ModelSerializer):
@@ -62,6 +63,9 @@ class SubCategoriesSerializer(serializers.ModelSerializer):
 
 # ELECTIONS
 class ElectionsSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()  # New custom field for name
+    image = serializers.SerializerMethodField()  # New custom field for image
+
     moderators = serializers.SerializerMethodField()  # New custom field
 
     # Change to camelCase for react State use
@@ -88,7 +92,7 @@ class ElectionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Elections
         fields = [
-            "id",  "name", "description", "dueDate", "image",
+            "id",  "name", "image", "description", "dueDate",
             "type", "result", "votes", "seats",
             "electors", "electorsMales", "electorsFemales",
             "attendees", "attendeesMales", "attendeesFemales",
@@ -96,6 +100,18 @@ class ElectionsSerializer(serializers.ModelSerializer):
             "status", "priority", 
             "moderators", "createdBy", "updatedBy", "deletedBy", "createdDate", "updatedDate", "deletedDate", "deleted",
         ]
+
+    def get_name(self, obj):
+        if obj.sub_category:
+            # Assuming you want the current year
+            year = datetime.datetime.now().year
+            return f"{obj.sub_category.name} - {year}"
+        return None  # Return None or default name if you have one
+
+    def get_image(self, obj):
+        if obj.sub_category and obj.sub_category.image:
+            return obj.sub_category.image.url
+        return None  # Return None or a default image URL if you have one
 
     def get_createdBy(self, obj):  # Updated method name
         if obj.created_by:

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import withRouter from '../Components/Common/withRouter';
+import { layoutSelector } from '../selectors/layoutSelector';
 
 //import Components
 import Header from './Header';
@@ -39,18 +40,7 @@ const Layout = (props) => {
         leftSidebarViewType,
         leftSidebarImageType,
         sidebarVisibilitytype
-    } = useSelector(state => ({
-        layoutType: state.Layout.layoutType,
-        leftSidebarType: state.Layout.leftSidebarType,
-        layoutModeType: state.Layout.layoutModeType,
-        layoutWidthType: state.Layout.layoutWidthType,
-        layoutPositionType: state.Layout.layoutPositionType,
-        topbarThemeType: state.Layout.topbarThemeType,
-        leftsidbarSizeType: state.Layout.leftsidbarSizeType,
-        leftSidebarViewType: state.Layout.leftSidebarViewType,
-        leftSidebarImageType: state.Layout.leftSidebarImageType,
-        sidebarVisibilitytype: state.Layout.sidebarVisibilitytype,
-    }));
+    } = useSelector(layoutSelector);
 
     /*
     layout settings
@@ -65,10 +55,10 @@ const Layout = (props) => {
             topbarThemeType ||
             leftsidbarSizeType ||
             leftSidebarViewType ||
-            leftSidebarImageType || 
+            leftSidebarImageType ||
             sidebarVisibilitytype
         ) {
-            window.dispatchEvent(new Event('resize')); 
+            window.dispatchEvent(new Event('resize'));
             dispatch(changeLeftsidebarViewType(leftSidebarViewType));
             dispatch(changeLeftsidebarSizeType(leftsidbarSizeType));
             dispatch(changeSidebarTheme(leftSidebarType));
