@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.99903239.css",
-    "main.js": "/static/js/main.1ba4dbf4.js",
+    "main.css": "/static/css/main.3cb3be24.css",
+    "main.js": "/static/js/main.a76168c4.js",
     "static/js/522.963fa583.chunk.js": "/static/js/522.963fa583.chunk.js",
     "static/media/kuwait-bg.png": "/static/media/kuwait-bg.859ab5d5fe5a98c8520d.png",
     "static/media/remixicon.svg?t=1590207869815": "/static/media/remixicon.1664a258a7e7714f6f8d.svg",
@@ -36,14 +36,17 @@
     "static/media/remixicon.woff2?t=1590207869815": "/static/media/remixicon.90668f6f9b3c2c18a090.woff2",
     "static/media/boxicons.woff2": "/static/media/boxicons.60f603cccbdff82a523c.woff2",
     "static/media/la-regular-400.svg": "/static/media/la-regular-400.5b8ad6f4ffe812a4eb26.svg",
-    "static/media/bg-pattern.png": "/static/media/bg-pattern.307164a3fd0cf567256d.png",
+    "static/media/bg-pattern.png": "/static/media/bg-pattern.d84a545991260916b9c9.png",
     "static/media/img-7.jpg": "/static/media/img-7.0cb45fe1a0c3f41f947f.jpg",
     "static/media/img-1.png": "/static/media/img-1.ae90cb2d4151977bff3f.png",
     "static/media/la-brands-400.woff": "/static/media/la-brands-400.925b340f49e65e8bab10.woff",
     "static/media/la-solid-900.woff2": "/static/media/la-solid-900.3efd5ba15a279377d224.woff2",
     "static/media/img-5.png": "/static/media/img-5.df1e78e39a19702de97c.png",
+    "static/media/Cairo-Bold.ttf": "/static/media/Cairo-Bold.d6131f35e4885ab019ba.ttf",
     "static/media/hkgrotesk-medium.eot": "/static/media/hkgrotesk-medium.58389f5208c2a374d476.eot",
+    "static/media/Cairo-Regular.ttf": "/static/media/Cairo-Regular.808e3fbf5cb27d719d6d.ttf",
     "static/media/hkgrotesk-light.eot": "/static/media/hkgrotesk-light.54dec9ba75b0672e5e0a.eot",
+    "static/media/Cairo-Light.ttf": "/static/media/Cairo-Light.a4c0dad2ad5c861adff9.ttf",
     "static/media/la-brands-400.woff2": "/static/media/la-brands-400.3a8109c4ac75662f8355.woff2",
     "static/media/img-2.png": "/static/media/img-2.15d985acc4605bbe2203.png",
     "static/media/file.png": "/static/media/file.7460d341c4220363ca42.png",
@@ -53,6 +56,7 @@
     "static/media/img-9.jpg": "/static/media/img-9.0b16bc91d91f179ed8f1.jpg",
     "static/media/avatar-4.jpg": "/static/media/avatar-4.ec3aaf9c6727918e3378.jpg",
     "static/media/error400-cover.png": "/static/media/error400-cover.95db4d41b85436d77ecc.png",
+    "static/media/logo-sm.png": "/static/media/logo-sm.ea4bff7880e6a2391e51.png",
     "static/media/hkgrotesk-medium.woff": "/static/media/hkgrotesk-medium.f7632bb9c315727585a3.woff",
     "static/media/hkgrotesk-light.woff": "/static/media/hkgrotesk-light.9780da4b0e23acec0b59.woff",
     "static/media/img-6.jpg": "/static/media/img-6.bebfc6a706c97269c91c.jpg",
@@ -74,7 +78,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.99903239.css",
-    "static/js/main.1ba4dbf4.js"
+    "static/css/main.3cb3be24.css",
+    "static/js/main.a76168c4.js"
   ]
 }
