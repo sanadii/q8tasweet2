@@ -215,7 +215,7 @@ const AllCandidates = () => {
         accessor: "image",
         Cell: (cellProps) => (
           <ImageLargeCircle imagePath={cellProps.row.original.image} />
-        ), // Use the CircleImage component
+        ),
       },
 
       {
@@ -303,7 +303,7 @@ const AllCandidates = () => {
   const candidateList = candidates.filter(candidate => {
     let isValid = true;
 
-     if (filters.global) {
+    if (filters.global) {
       isValid = isValid && candidate.name && typeof candidate.name === 'string' && candidate.name.toLowerCase().includes(filters.global.toLowerCase());
 
     }

@@ -4,20 +4,12 @@ import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, Row, TabContent, Table, UncontrolledCollapse } from "reactstrap";
 import { MemberRankOptions } from "../../../Components/constants";
 import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../Components/Common";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 
 const OverviewTab = () => {
 
-  const {
-    campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, campaignAttendees, electionCommittees, electionCandidates } = useSelector((state) => ({
-      currentCampaignMember: state.Campaigns.currentCampaignMember,
-      campaignDetails: state.Campaigns.campaignDetails,
-      campaignMembers: state.Campaigns.campaignMembers,
-      campaignGuarantees: state.Campaigns.campaignGuarantees,
-      campaignAttendees: state.Campaigns.campaignAttendees,
-      electionCandidates: state.Campaigns.electionCandidates,
-      electionCommittees: state.Campaigns.electionCommittees,
-    }));
+  const { campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, campaignAttendees, electionCommittees, electionCandidates } = useSelector(electionsSelector);
 
   document.title = "Campaign Overview | Q8Tasweet";
 
@@ -257,26 +249,27 @@ const OverviewTab = () => {
 
           <Card>
             <CardBody>
-              <h5 className="card-title mb-3">MEMBER INFO</h5>
+              <h5 className="card-title mb-3"><strong>معلومات المستخدم</strong></h5>
+
               <ul>
-                <li>Member ID: <strong>{currentCampaignMember.id}</strong></li>
-                <li>Name: <strong>{currentCampaignMember.fullName}</strong></li>
-                <li>Rank: <strong>{rankName}</strong></li>
-                <li>Committee: <strong> {committeeName}</strong></li>
+                <li>رقم العضوية: <strong>{currentCampaignMember.id}</strong></li>
+                <li>الإسم: <strong>{currentCampaignMember.fullName}</strong></li>
+                <li>الرتبة: <strong>{rankName}</strong></li>
+                <li>اللجنة: <strong> {committeeName}</strong></li>
               </ul>
             </CardBody>
           </Card>
 
           <Card>
             <CardBody>
-              <h5 className="card-title mb-3"><strong>ELECTION INFO</strong></h5>
+              <h5 className="card-title mb-3"><strong>معلومات الإنتخابات</strong></h5>
               <ul>
-                <li>Election ID: <strong>{campaignDetails.election.id}</strong></li>
-                <li>Election: <strong>{campaignDetails.election.name}</strong></li>
-                <li>Candidates: <strong>{electionCandidates.length} Candidates</strong></li>
-                <li>Seats: <strong>{campaignDetails.election.seats} Seats</strong></li>
-                <li>Votes: <strong>{campaignDetails.election.votes} Votes</strong></li>
-                <li>Committees: <strong>{electionCommittees.length} Committees</strong></li>
+                <li>رمز الإنتخابات: <strong>{campaignDetails.election.id}</strong></li>
+                <li>الإسم: <strong>{campaignDetails.election.name}</strong></li>
+                <li>المرشحين: <strong>{electionCandidates.length} مرشح</strong></li>
+                <li>المقاعد: <strong>{campaignDetails.election.seats} مقعد</strong></li>
+                <li>الأصوات: <strong>{campaignDetails.election.votes} صوت</strong></li>
+                <li>اللجان: <strong>{electionCommittees.length} لجنة</strong></li>
               </ul>
             </CardBody>
           </Card>
@@ -286,7 +279,7 @@ const OverviewTab = () => {
         <Col lg={9}>
           <Card>
             <CardBody>
-              <h5 className="card-title mb-3">ABOUT</h5>
+              <h5 className="card-title mb-3">عن المرشح</h5>
               {campaignDetails.candidate.description}
               <Row>
                 <Col xs={6} md={4}>
@@ -297,7 +290,7 @@ const OverviewTab = () => {
                       </div>
                     </div>
                     <div className="flex-grow-1 overflow-hidden">
-                      <p className="mb-1">Candidate :</p>
+                      <p className="mb-1">الاسم :</p>
                       <h6 className="text-truncate mb-0">
                         {campaignDetails.candidate.name}
                       </h6>
@@ -313,7 +306,7 @@ const OverviewTab = () => {
                       </div>
                     </div>
                     <div className="flex-grow-1 overflow-hidden">
-                      <p className="mb-1">Website :</p>
+                      <p className="mb-1">الموقع الإلكتروني :</p>
                       <Link to="#" className="fw-semibold">
                         www.Q8Tasweet.com
                       </Link>
@@ -328,7 +321,7 @@ const OverviewTab = () => {
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <h5 className="card-title mb-3">Guarantee</h5>
+                  <h5 className="card-title mb-3">المضامين</h5>
                   <div className="px-2 py-2 mt-1">
                     <p className="mb-1">Guarantee Attendance <span className="float-end">{totals.attendancePercentage}%</span></p>
                     <div className="progress mt-2" style={{ height: "6px" }}>
@@ -345,13 +338,14 @@ const OverviewTab = () => {
                     </div>
                   </div>
 
-                  <strong>Guarantees: {totals.totalGuarantees}</strong><br />
-                  <strong>New: {totals.totalNew}</strong><br />
-                  <strong>Contacted: {totals.totalContacted}</strong><br />
-                  <strong>Confirmed: {totals.totalConfirmed}</strong><br />
-                  <strong>Not Confirmed: {totals.totalNotConfirmed}</strong><br />
-                  <strong>Attendees: {totals.totalAttendees}</strong>
-                  {campaignDetails.candidate.description}
+                  <p>
+                    <strong>مجموع المضامين: {totals.totalGuarantees}</strong><br />
+                    <span className="text-info">جديد:</span> <strong>{totals.totalNew}</strong> &nbsp;•&nbsp;
+                    <span className="text-warning">تم التواصل:</span> <strong>{totals.totalContacted}</strong> &nbsp;•&nbsp;
+                    <span className="text-success">مؤكد:</span> <strong>{totals.totalConfirmed}</strong> &nbsp;•&nbsp;
+                    <span className="text-danger">غير مؤكد:</span> <strong>{totals.totalNotConfirmed}</strong>
+                  </p>
+                  <p><strong>الحضور: {totals.totalAttendees}</strong></p>
                   <Row>
                     <Col>
                       <TableContainer

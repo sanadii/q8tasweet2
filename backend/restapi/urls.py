@@ -77,6 +77,7 @@ urlpatterns = [
 
     # Terms
     path("getCategories", GetCategories.as_view(), name="GetCategories"),
+    path("updateCategory/<int:id>", UpdateCategory.as_view(), name="UpdateCategory"),
 
 
     # Electors

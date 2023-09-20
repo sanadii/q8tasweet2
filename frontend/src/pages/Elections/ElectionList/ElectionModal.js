@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // ------------ Import Actions ------------
 import { addElection, updateElection, getCategories } from "../../../store/actions";
@@ -22,12 +23,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
   const dispatch = useDispatch();
 
   // ------------ State Management ------------
-  const { moderators, categories, subCategories } = useSelector((state) => ({
-    // userId: state.Users.currentUser.id,
-    moderators: state.Users.moderators,
-    categories: state.Categories.categories,
-    subCategories: state.Categories.subCategories,
-  }));
+  const { moderators, categories, subCategories, isElectionSuccess, error } = useSelector(electionsSelector);
 
   // ------------ Image Upload Helper ------------
   const [selectedImage, setSelectedImage] = useState(null);
@@ -46,9 +42,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
     formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
   }
 
- 
 
-  
+
+
   // validation
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed

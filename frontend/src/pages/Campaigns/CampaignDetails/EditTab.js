@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "../../../store/actions";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // --------------- Component & Constants imports ---------------
 import { MemberRankOptions } from "../../../Components/constants";
@@ -11,16 +12,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // --------------- Reactstrap (UI) imports ---------------
-import {
-  Col,
-  Row,
-  ModalBody,
-  Label,
-  Input,
-  Form,
-  FormFeedback,
-  Card, CardHeader, CardBody, ModalFooter,
-} from "reactstrap";
+import { Col, Row, ModalBody, Label, Input, Form, FormFeedback, Card, CardHeader, CardBody, ModalFooter } from "reactstrap";
 
 
 
@@ -29,17 +21,7 @@ const EditTab = () => {
 
   document.title = "Starter | Q8Tasweet - React Admin & Dashboard Template";
 
-  const {
-    currentCampaignMember,
-    currentUser,
-    campaignMembers,
-    electionCommittees,
-  } = useSelector((state) => ({
-    currentUser: state.Users.currentUser,
-    currentCampaignMember: state.Campaigns.currentCampaignMember,
-    electionCommittees: state.Campaigns.electionCommittees,
-    campaignMembers: state.Campaigns.campaignMembers,
-  }));
+  const { currentCampaignMember, currentUser, campaignMembers, electionCommittees } = useSelector(electionsSelector);
 
   const [electionCommitteeList, setElectionCommitteeList] =
     useState(electionCommittees);
@@ -195,26 +177,27 @@ const EditTab = () => {
                             onBlur={validation.handleBlur}
                             value={validation.values[field.name] || ""}
                             invalid={
-                              validation.touched[field.name] &&
-                                validation.errors[field.name]
+                              validation.touched[field.name] && validation.errors[field.name]
                                 ? true
-                                : false
+                                : undefined
                             }
                           />
-                        ) : (
+                        ) : field.type === "select" ? (
                           <Input
                             name={field.name}
                             type={field.type}
-                            className={field.type === "select" ? "form-select" : ""}
+                            className="form-select"
                             id={field.id}
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
                             value={validation.values[field.name] || ""}
+                            invalid={
+                              validation.touched[field.name] && validation.errors[field.name]
+                                ? true
+                                : false
+                            }
                           >
-                            {field.type === "select" && (
-                              <option value="">-- Select --</option>
-                            )}
-
+                            <option value="">-- Select --</option>
                             {field.options &&
                               field.options.map((option) => (
                                 <option key={option.id} value={option.id}>
@@ -224,17 +207,32 @@ const EditTab = () => {
                                 </option>
                               ))}
                           </Input>
+                        ) : (
+                          <Input
+                            name={field.name}
+                            type={field.type}
+                            id={field.id}
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={validation.values[field.name] || ""}
+                            invalid={
+                              validation.touched[field.name] && validation.errors[field.name]
+                                ? true
+                                : undefined
+                            }
+                          />
                         )}
 
                         {validation.touched[field.name] &&
-                          validation.errors[field.name] ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors[field.name]}
-                          </FormFeedback>
-                        ) : null}
+                          validation.errors[field.name] && (
+                            <FormFeedback type="invalid">
+                              {validation.errors[field.name]}
+                            </FormFeedback>
+                          )}
                       </Col>
                     </Row>
                   ))}
+
                 </ModalBody>
                 <ModalFooter>
                   <Row className="mt-3"> {/* Adding a margin-top for some space above the button */}

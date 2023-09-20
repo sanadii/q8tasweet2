@@ -2,12 +2,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { electionsSelector } from '../../../../selectors/electionsSelector';
 
-import {
-  getUsers,
-  addNewCampaignMember,
-  updateCampaignMember,
-} from "../../../../store/actions";
+import { getUsers, addNewCampaignMember, updateCampaignMember } from "../../../../store/actions";
 
 // --------------- Component & Constants imports ---------------
 import {
@@ -28,33 +25,14 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // --------------- Reactstrap (UI) imports ---------------
-import {
-  ModalBody,
-  Modal,
-  ModalHeader,
-  ModalFooter,
-  Button,
-} from "reactstrap";
+import { ModalBody, Modal, ModalHeader, ModalFooter, Button } from "reactstrap";
 
-export const CampaignMembersModal = ({
-  modal,
-  toggle,
-  modalMode,
-  campaignMember,
-}) => {
+export const CampaignMembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
   const dispatch = useDispatch();
 
   // --------------- Define States ---------------
-  const { currentCampaignMember, campaignMembers, campaignId } = useSelector(
-    (state) => {
-      return {
-        campaignId: state.Campaigns.campaignDetails.id,
-        currentCampaignMember: state.Campaigns.currentCampaignMember,
-        campaignMembers: state.Campaigns.campaignMembers,
-      };
-    }
-  );
-  
+  const { currentCampaignMember, campaignMembers, campaignId } = useSelector(electionsSelector);
+
 
   // --------------- Set Constants ---------------
   const [onModalSubmit, setOnModalSubmit] = useState(null);
@@ -66,7 +44,7 @@ export const CampaignMembersModal = ({
 
   useEffect(() => {
   }, [campaignMember]);
-  
+
   switch (modalMode) {
     case "CallModal":
       ModalTitle = modalName + " Call";

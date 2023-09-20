@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardBody,
-  Col,
-  Container,
-  Input,
-  Label,
-  Row,
-  Button,
-  Form,
-  FormFeedback,
-  Alert,
-  Spinner,
-} from "reactstrap";
+import { Card, CardBody, Col, Container, Input, Label, Row, Button, Form, FormFeedback, Alert, Spinner } from "reactstrap";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
+import { createSelector } from 'reselect';
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-
 import { Link } from "react-router-dom";
 
 // Formik validation
@@ -33,13 +20,19 @@ import withRouter from "../../Components/Common/withRouter";
 
 const Login = (props) => {
   const dispatch = useDispatch();
-  const { user, errorMsg, loading, error } = useSelector((state) => ({
-    user: state.Account.user,
-    errorMsg: state.Login.errorMsg,
-    loading: state.Login.loading,
-    error: state.Login.error,
-  }));
 
+  const selectLayoutState = (state) => state.Account;
+  const selectLayoutProperties = createSelector(
+    selectLayoutState,
+    (layout) => ({
+      user: layout.user,
+      errorMsg: layout.errorMsg,
+      loading: layout.loading,
+      error: layout.error,
+    })
+  );
+  // Inside your component
+  const { user, errorMsg, loading, error } = useSelector(selectLayoutProperties);
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
 
@@ -93,7 +86,7 @@ const Login = (props) => {
     }
   }, [dispatch, error]);
 
-  document.title = "Basic SignIn | Q8Tasweet - React Admin & Dashboard Template";
+  document.title = "تسجيل الدخول | Q8Tasweet - React Admin & Dashboard Template";
   return (
     <React.Fragment>
       <ParticlesAuth>
@@ -108,7 +101,7 @@ const Login = (props) => {
                     </Link>
                   </div>
                   <p className="mt-3 fs-15 fw-medium">
-                    Q8Tasweet - Premium Election Dashboard
+                    كويت تصويت - مساعدك لأنتخابات موثوقة
                   </p>
                 </div>
               </Col>
@@ -119,9 +112,9 @@ const Login = (props) => {
                 <Card className="mt-4">
                   <CardBody className="p-4">
                     <div className="text-center mt-2">
-                      <h5 className="text-primary">Welcome Back !</h5>
+                      <h5 className="text-primary">أهلا بك من جديد !</h5>
                       <p className="text-muted">
-                        Sign in to continue to Q8Tasweet.
+                        سجل دخولك للمتابعة في كويت تصويت.
                       </p>
                     </div>
                     {errorMsg && errorMsg ? (
@@ -138,7 +131,7 @@ const Login = (props) => {
                       >
                         <div className="mb-3">
                           <Label htmlFor="email" className="form-label">
-                            Email
+                            الإيميل
                           </Label>
                           <Input
                             name="email"
@@ -150,13 +143,13 @@ const Login = (props) => {
                             value={validation.values.email || ""}
                             invalid={
                               validation.touched.email &&
-                              validation.errors.email
+                                validation.errors.email
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.email &&
-                          validation.errors.email ? (
+                            validation.errors.email ? (
                             <FormFeedback type="invalid">
                               {validation.errors.email}
                             </FormFeedback>
@@ -164,16 +157,16 @@ const Login = (props) => {
                         </div>
 
                         <div className="mb-3">
-                          <div className="float-end">
+                          {/* <div className="float-end">
                             <Link to="/forgot-password" className="text-muted">
                               Forgot password?
                             </Link>
-                          </div>
+                          </div> */}
                           <Label
                             className="form-label"
                             htmlFor="password-input"
                           >
-                            Password
+                            الرقم السري
                           </Label>
                           <div className="position-relative auth-pass-inputgroup mb-3">
                             <Input
@@ -186,13 +179,13 @@ const Login = (props) => {
                               onBlur={validation.handleBlur}
                               invalid={
                                 validation.touched.password &&
-                                validation.errors.password
+                                  validation.errors.password
                                   ? true
                                   : false
                               }
                             />
                             {validation.touched.password &&
-                            validation.errors.password ? (
+                              validation.errors.password ? (
                               <FormFeedback type="invalid">
                                 {validation.errors.password}
                               </FormFeedback>
@@ -220,7 +213,7 @@ const Login = (props) => {
                             className="form-check-label"
                             htmlFor="auth-remember-check"
                           >
-                            Remember me
+                            تذكرني
                           </Label>
                         </div>
 
@@ -234,45 +227,11 @@ const Login = (props) => {
                             {error ? null : loading ? (
                               <Spinner size="sm" className="me-2">
                                 {" "}
-                                Loading...{" "}
+                                تحميل...{" "}
                               </Spinner>
                             ) : null}
-                            Sign In
+                            تسجيل دخول
                           </Button>
-                        </div>
-
-                        <div className="mt-4 text-center">
-                          <div className="signin-other-title">
-                            <h5 className="fs-13 mb-4 title">Sign In with</h5>
-                          </div>
-                          <div>
-                            <Link
-                              to="#"
-                              className="btn btn-primary btn-icon me-1"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                socialResponse("facebook");
-                              }}
-                            >
-                              <i className="ri-facebook-fill fs-16" />
-                            </Link>
-                            <Link
-                              to="#"
-                              className="btn btn-danger btn-icon me-1"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                socialResponse("google");
-                              }}
-                            >
-                              <i className="ri-google-fill fs-16" />
-                            </Link>
-                            <Button color="dark" className="btn-icon">
-                              <i className="ri-github-fill fs-16"></i>
-                            </Button>{" "}
-                            <Button color="info" className="btn-icon">
-                              <i className="ri-twitter-fill fs-16"></i>
-                            </Button>
-                          </div>
                         </div>
                       </Form>
                     </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignGuarantee, updateCampaignGuarantee } from "../../../store/actions";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // Component imports
 import { Col, Row, Card, CardHeader, CardBody } from "reactstrap";
@@ -19,12 +20,7 @@ const GuaranteesTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const { campaignGuarantees, campaignMembers, isCampaignGuaranteeSuccess, error } = useSelector((state) => ({
-    campaignGuarantees: state.Campaigns.campaignGuarantees,
-    campaignMembers: state.Campaigns.campaignMembers,
-    isCampaignGuaranteeSuccess: state.Campaigns.isCampaignGuaranteeSuccess,
-    error: state.Campaigns.error,
-  }));
+  const { campaignGuarantees, campaignMembers, isCampaignGuaranteeSuccess, error  } = useSelector(electionsSelector);
 
   // CampaignGuarantees Constants
   const [campaignGuarantee, setCampaignGuarantee] = useState(null);
@@ -173,7 +169,7 @@ const GuaranteesTab = () => {
       //   id: "#",
       // },
       {
-        Header: "Name",
+        Header: "الاسم",
         accessor: "full_name",
         Cell: (cellProps) => {
           return (
@@ -187,7 +183,7 @@ const GuaranteesTab = () => {
         },
       },
       {
-        Header: "Mobile",
+        Header: "التليفون",
         accessor: "civil",
         filterable: false,
         Cell: (cellProps) => {
@@ -195,7 +191,7 @@ const GuaranteesTab = () => {
         },
       },
       {
-        Header: "Attended",
+        Header: "الحضور",
         filterable: false,
         Cell: (cellProps) => {
           if (cellProps.row.original.attended) {
@@ -206,7 +202,7 @@ const GuaranteesTab = () => {
         },
       },
       {
-        Header: "Status",
+        Header: "الحالة",
         filterable: false,
         Cell: (cellProps) => {
           const statusId = cellProps.row.original.status;
@@ -231,7 +227,7 @@ const GuaranteesTab = () => {
         },
       },
       {
-        Header: "Guarantor",
+        Header: "الضامن",
         filterable: false,
         Cell: (cellProps) => {
           const memberId = cellProps.row.original.member;
@@ -261,7 +257,7 @@ const GuaranteesTab = () => {
       // Sorter: Committee,
 
       {
-        Header: "Action",
+        Header: "إجراءات",
         Cell: (cellProps) => {
           return (
             <div className="list-inline hstack gap-2 mb-0">
@@ -373,7 +369,7 @@ const GuaranteesTab = () => {
               <div>
                 <TableContainerHeader
                   // Title
-                  ContainerHeaderTitle="Campaign Guarantees"
+                  ContainerHeaderTitle="المضامين"
 
                   // Add Elector Button
                   // isAddElectorButton={true}
@@ -403,7 +399,7 @@ const GuaranteesTab = () => {
                     // Settings
                     filters={filters}
                     setFilters={setFilters}
-                    SearchPlaceholder="Search for Campaign Guarantees..."
+                    SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
 
                     // Data -------------------------
                     columns={columns}

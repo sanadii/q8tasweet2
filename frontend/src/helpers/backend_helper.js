@@ -223,13 +223,10 @@ export const updateImage = () => api.get(url.DELETE_IMAGE);
 export const deleteImage = () => api.get(url.UPDATE_IMAGE);
 
 // Category
-export const getCategories = (category) => api.get(url.GET_CATEGORIES, category);
-export const deleteCategory = (category) =>
-  api.delete(url.DELETE_CATEGORY, { headers: { category } });
-export const addNewCategory = (category) =>
-  api.create(url.ADD_NEW_CATEGORY, category);
-export const updateCategory = (category) =>
-  api.put(url.UPDATE_CATEGORY, category);
+export const getCategories = () => api.get(url.GET_CATEGORIES);
+export const addNewCategory = (category) => api.create(url.ADD_NEW_CATEGORY, category);
+export const updateCategory = (category) => api.update(url.UPDATE_CATEGORY + "/" + category.id, category);
+export const deleteCategory = (category) => api.delete(url.DELETE_CATEGORY + "/" + category);
 
 // Elector
 export const getAllElectors = (elector) => api.get(url.GET_ALL_ELECTORS, elector);

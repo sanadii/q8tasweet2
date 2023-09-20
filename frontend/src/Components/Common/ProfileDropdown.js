@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-} from "reactstrap";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, } from "reactstrap";
 import SwiperCore, { Autoplay } from "swiper";
+import { createSelector } from 'reselect';
 
 //import images
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
 
 const ProfileDropdown = () => {
-  const { user } = useSelector((state) => ({
-    user: state.Users.currentUser,
-  }));
+
+  const selectCurrentUser = createSelector(
+    (state) => state.Users.currentUser,
+    (currentUser) => currentUser
+  );
+
+  const user = useSelector(selectCurrentUser); // Use the selector to select currentUser
+
 
   //Dropdown Toggle
   const [isProfileDropdown, setIsProfileDropdown] = useState(false);
@@ -50,25 +51,25 @@ const ProfileDropdown = () => {
             {/* <h6 className="dropdown-header">Welcome {userName}!</h6> */}
             <DropdownItem href={process.env.PUBLIC_URL + "/profile"}>
               <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
-              <span className="align-middle">Profile</span>
+              <span className="align-middle">الملف الشخصي</span>
             </DropdownItem>
             <DropdownItem href={process.env.PUBLIC_URL + "/apps-chat"}>
               <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "}
-              <span className="align-middle">Messages</span>
+              <span className="align-middle">الرسائل</span>
             </DropdownItem>
             <DropdownItem href="#">
               <i className="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i>{" "}
-              <span className="align-middle">Electionboard</span>
+              <span className="align-middle">المفضلة</span>
             </DropdownItem>
             <DropdownItem href={process.env.PUBLIC_URL + "/pages-faqs"}>
               <i className="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i>{" "}
-              <span className="align-middle">Help</span>
+              <span className="align-middle">مساعدة</span>
             </DropdownItem>
             <div className="dropdown-divider"></div>
             <DropdownItem href={process.env.PUBLIC_URL + "/pages-profile"}>
               <i className="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle">
-                Balance : <b>$5971.67</b>
+                الاشتراك : <b>أساسي</b>
               </span>
             </DropdownItem>
             <DropdownItem
@@ -78,18 +79,18 @@ const ProfileDropdown = () => {
                 New
               </span>
               <i className="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i>{" "}
-              <span className="align-middle">Settings</span>
+              <span className="align-middle">الإعدادات</span>
             </DropdownItem>
             <DropdownItem
               href={process.env.PUBLIC_URL + "/auth-lockscreen-basic"}
             >
               <i className="mdi mdi-lock text-muted fs-16 align-middle me-1"></i>{" "}
-              <span className="align-middle">Lock screen</span>
+              <span className="align-middle">قفل الشاشة</span>
             </DropdownItem>
             <DropdownItem href={process.env.PUBLIC_URL + "/logout"}>
               <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle" data-key="t-logout">
-                Logout
+                تسجيل خروج
               </span>
             </DropdownItem>
           </DropdownMenu>

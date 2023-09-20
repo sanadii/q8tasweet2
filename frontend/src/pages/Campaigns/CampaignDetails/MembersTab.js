@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignMember } from "../../../store/actions";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // --------------- Component & Constants imports ---------------
 import { ImageCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
@@ -18,16 +19,7 @@ const MembersTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const { currentCampaignMember, campaignGuarantees, campaignMembers, electionCommittees, electionAttendees, isCampaignMemberSuccess, error } = useSelector((state) => ({
-    currentCampaignMember: state.Campaigns.currentCampaignMember,
-    campaignMembers: state.Campaigns.campaignMembers,
-    campaignGuarantees: state.Campaigns.campaignGuarantees,
-    electionCommittees: state.Campaigns.electionCommittees,
-    electionAttendees: state.Campaigns.electionAttendees,
-    isCampaignMemberSuccess: state.Campaigns.isCampaignMemberSuccess,
-    error: state.Campaigns.error,
-  }));
-
+  const { currentCampaignMember, campaignGuarantees, campaignMembers, electionCommittees, electionAttendees, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   // --------------- Constants ---------------
@@ -184,13 +176,13 @@ const getAttendeeCountForMember = useCallback((memberId) => {
     ];
     const memberColumn = [
       {
-        Header: "ID",
+        Header: "م.",
         Cell: (cellProps) => {
           return <p> {cellProps.row.original.id}</p>;
         },
       },
       {
-        Header: "Member",
+        Header: "العضو",
         accessor: "user.name",
         Cell: (campaignMember) => (
           <>
@@ -221,7 +213,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
 
     const rankColumn = [
       {
-        Header: "Rank",
+        Header: "الرتبة",
         filterable: false,
         Cell: (cellProps) => {
           const rankId = cellProps.row.original.rank;
@@ -238,7 +230,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
 
     const mobileColumn = [
       {
-        Header: "Mobile",
+        Header: "التليفون",
         filterable: false,
         Cell: (cellProps) => {
           return <p>{cellProps.row.original.mobile}</p>;
@@ -250,7 +242,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
     if ([1, 2].includes(activeTab)) {
       teamColumn = [
         {
-          Header: "Team",
+          Header: "الفريق",
           filterable: false,
           Cell: () => <p>{campaignMembers.length}</p>,
         },
@@ -262,7 +254,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
     if ([1, 2, 3, 4].includes(activeTab)) {
       guaranteesColumn = [
         {
-          Header: "Guarantees",
+          Header: "المضامين",
           filterable: false,
           Cell: (cellProps) => <p>{getGuaranteeCountForMember(cellProps.row.original.id)}</p>,
           // Use row.original.id to access the original row data's 'id' value
@@ -274,7 +266,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
     if ([5, 6].includes(activeTab)) {
       committeeColumns = [
         {
-          Header: "Committee",
+          Header: "اللجان",
           filterable: false,
           Cell: (cellProps) => {
             const committeeId = cellProps.row.original.committee;
@@ -304,7 +296,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
     if ([5].includes(activeTab)) {
       attendantColumns = [
         {
-          Header: "Attendees",
+          Header: "الحضور",
           filterable: false,
           Cell: (cellProps) => <p>{getAttendeeCountForMember(cellProps.row.original.id)}</p>,
         },
@@ -314,7 +306,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
     if ([6].includes(activeTab)) {
       attendantColumns = [
         {
-          Header: "Sorted",
+          Header: "تم الفرز",
           filterable: false,
           Cell: () => (
             <p>
@@ -329,7 +321,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
     if ([0, 3, 4, 5].includes(activeTab)) {
       SupervisorColumns = [
         {
-          Header: "Supervisor",
+          Header: "المشرف",
           filterable: false,
           Cell: (cellProps) => {
             const supervisorId = cellProps.row.original.supervisor;
@@ -359,7 +351,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
 
     const actionColumn = [
       {
-        Header: "Action",
+        Header: "إجراءات",
         Cell: (cellProps) => {
           return (
             <div className="list-inline hstack gap-2 mb-0">
@@ -467,11 +459,11 @@ const getAttendeeCountForMember = useCallback((memberId) => {
               <div>
                 <TableContainerHeader
                   // Title
-                  ContainerHeaderTitle="Campaign Members"
+                  ContainerHeaderTitle="فريق العمل"
 
                   // Add Button
                   isAddButton={true}
-                  AddButtonText="Add New Member"
+                  AddButtonText="أضافة عضو"
                   handleAddButtonClick={handleCampaignMemberClicks}
                   toggle={toggle}
 
@@ -502,7 +494,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
                     filters={filters}
                     setFilters={setFilters}
                     // preGlobalFilteredRows={true}
-                    SearchPlaceholder="Search for Campaign Members..."
+                    SearchPlaceholder="البحث..."
 
                     // Actions
                     onTabChange={handleTabChange}

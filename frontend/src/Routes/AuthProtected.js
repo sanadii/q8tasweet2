@@ -6,24 +6,20 @@ import { useProfile } from "../Components/Hooks/UserHooks";
 import { getCurrentUser, logoutUser } from "../store/actions";
 
 const AuthProtected = (props) => {
-  const user = useSelector((state) => state.Users.currentUser);
-
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.Users.currentUser);
   const { userProfile, loading, token } = useProfile();
 
   // This state determines if the check for user authentication is complete.
-  const [isUserChecked, setIsUserChecked] = useState(false);
 
   useEffect(() => {
-    if (token) {
+    if (userProfile && !loading && token) {
       setAuthorization(token);
       if (!user || user.length === 0) {
         dispatch(getCurrentUser());
-      } else {
-        setIsUserChecked(true);
       }
-    } else {
-      setIsUserChecked(true);
+    } else if (!userProfile && loading && !token) {
       dispatch(logoutUser());
     }
   }, [token, loading, dispatch, user]);

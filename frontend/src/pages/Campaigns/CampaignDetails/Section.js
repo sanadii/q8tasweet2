@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import classnames from "classnames";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // --------------- Component, Constants, Hooks Imports ---------------
 import { ImageLargeCircle, ImageCampaignBackground } from "../../../Components/Common";
@@ -52,9 +53,7 @@ const Section = ({
     (option) => option.id === rankId
   );
 
-  const { currentUser } = useSelector((state) => ({
-    currentUser: state.Users.currentUser,
-  }));
+  const { currentUser } = useSelector(electionsSelector);
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
@@ -80,10 +79,10 @@ const Section = ({
             <div className="p-2">
               <h3 className="text-white mb-1">{campaign.candidate.name}</h3>
               <p className="text-white-75">{campaign.election.name}</p>
-              <div className="hstack text-white-50 gap-1">
+              <div className="hstack text-white gap-1">
                 <div className="me-2">
                   <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
-                  Date: {campaign.election.duedate}
+                  التاريخ: <strong >{campaign.election.duedate}</strong>
                 </div>
               </div>
             </div>
@@ -93,7 +92,7 @@ const Section = ({
               <Col lg={6} xs={4}>
                 <div className="p-2">
                   <h4 className="text-white mb-1">{campaignMembers.length}</h4>
-                  <p className="fs-14 mb-0">Team</p>
+                  <p className="fs-14 mb-0">الفريق</p>
                 </div>
               </Col>
               <Col lg={6} xs={4}>
@@ -101,7 +100,7 @@ const Section = ({
                   <h4 className="text-white mb-1">
                     {campaignGuarantees.length}
                   </h4>
-                  <p className="fs-14 mb-0">Guarantees</p>
+                  <p className="fs-14 mb-0">المضامين</p>
                 </div>
               </Col>
             </Row>
@@ -126,7 +125,7 @@ const Section = ({
                     }}
                   >
                     <i className="ri-airplay-fill d-inline-block d-md-none"></i>{" "}
-                    <span className="d-none d-md-inline-block">Overview</span>
+                    <span className="d-none d-md-inline-block">نظرة عامة</span>
                   </NavLink>
                 </NavItem>
 
@@ -140,7 +139,7 @@ const Section = ({
                       }}
                     >
                       <i className="ri-list-unordered d-inline-block d-md-none"></i>{" "}
-                      <span className="d-none d-md-inline-block">Members</span>
+                      <span className="d-none d-md-inline-block">فريق العمل</span>
                     </NavLink>
                   </NavItem>
                 )}
@@ -156,7 +155,7 @@ const Section = ({
                     >
 
                       <span className="d-none d-md-inline-block">
-                        Guarantees <i className="ri-price-tag-line d-inline-block d-md-none"></i>
+                        المضامين <i className="ri-price-tag-line d-inline-block d-md-none"></i>
                       </span>
                     </NavLink>
                   </NavItem>
@@ -173,7 +172,7 @@ const Section = ({
                         }}
                       >
                         <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">Attendees</span>
+                        <span className="d-none d-md-inline-block">الحضور</span>
                       </NavLink>
                     </NavItem>
                   )
@@ -189,7 +188,7 @@ const Section = ({
                         }}
                       >
                         <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">Sorting</span>
+                        <span className="d-none d-md-inline-block">الفرز</span>
                       </NavLink>
                     </NavItem>
                   )
@@ -204,7 +203,8 @@ const Section = ({
                     style={{ backgroundColor: 'black' }}
                   >
                     <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                    <span className="d-none d-md-inline-block">Search Electors</span>
+                    <span className="d-none d-md-inline-block">بحث الناخبين 
+                    </span>
                   </NavLink>
                 </NavItem>
               </Nav >
@@ -221,7 +221,7 @@ const Section = ({
                     >
                       <i className="ri-edit-box-line align-bottom me-2"></i>
                       <span className="d-none d-md-inline-block">
-                        Edit
+                        تعديل
                       </span>
                     </NavLink>
                   </NavItem>

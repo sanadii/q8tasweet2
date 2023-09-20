@@ -1,34 +1,15 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Col,
-  Modal,
-  ModalBody,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  Label,
-  Input,
-  Button,
-  ModalHeader,
-  FormFeedback,
-  Form,
-} from "reactstrap";
+import { Col, Modal, ModalBody, Nav, NavItem, NavLink, Row, Label, Input, Button, ModalHeader, FormFeedback, Form } from "reactstrap";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // Custom component imports
 import { GenderCircle, ImageCircle, ImageGenderCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
 // import { TableContainer, DeleteModal, ImageCircle } from "../../../Components/Common";
 
-import {
-  StatusOptions,
-  PriorityOptions,
-  ElectionTypeOptions,
-  ElectionResultOptions,
-  // TagOptions,
-} from "../../../Components/constants";
+import { StatusOptions, PriorityOptions, ElectionTypeOptions, ElectionResultOptions } from "../../../Components/constants";
 
 import SimpleBar from "simplebar-react";
 import Flatpickr from "react-flatpickr";
@@ -45,27 +26,9 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
-import {
-  getElections,
-  addElection,
-  updateElection,
-  deleteElection,
-  getModeratorUsers,
-  getCategories,
-} from "../../../store/actions";
+import { getElections, addElection, updateElection, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
 
-import {
-  Id,
-  Name,
-  CandidateCount,
-  DueDate,
-  Status,
-  Priority,
-  Category,
-  CreateBy,
-  Moderators,
-  Actions,
-} from "./ElectionListCol";
+import { Id, Name, CandidateCount, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -75,18 +38,14 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 const ElectionList = () => {
   const dispatch = useDispatch();
 
-  // Election Data
-  const { elections, moderators, categories, subCategories, isElectionSuccess, user, error } = useSelector(
-    (state) => ({
-      elections: state.Elections.elections,
-      moderators: state.Users.moderators,
-      categories: state.Categories.categories,
-      subCategories: state.Categories.subCategories,
-      isElectionSuccess: state.Elections.isElectionSuccess,
-      user: state.Profile.user,
-      error: state.Elections.error,
-    })
-  );
+  const {
+    elections,
+    moderators,
+    categories,
+    subCategories,
+    isElectionSuccess,
+    error
+  } = useSelector(electionsSelector);
 
   const [electionList, setElectionList] = useState(elections);
   const [election, setElection] = useState([]);

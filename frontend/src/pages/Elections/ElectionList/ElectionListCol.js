@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 import { Link } from "react-router-dom";
 import * as moment from "moment";
@@ -48,10 +49,10 @@ const DueDate = (cell) => {
 };
 
 const Category = ({ category, subCategory }) => {
-  const { categories, subCategories } = useSelector((state) => ({
-    categories: state.Categories.categories,
-    subCategories: state.Categories.subCategories,
-  }));
+  const {
+    categories,
+    subCategories,
+  } = useSelector(electionsSelector);
 
   const categoryName =
     categories.find((cat) => cat.id === category)?.name || "";

@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import { Collapse } from 'reactstrap';
 
+import { layoutSelector } from '../../selectors/layoutSelector';
+
+
 // Import Data
 import navdata from "../LayoutMenuData";
 //i18n
@@ -21,11 +24,8 @@ const VerticalLayout = (props) => {
     */
     const {
         leftsidbarSizeType, sidebarVisibilitytype, layoutType
-    } = useSelector(state => ({
-        leftsidbarSizeType: state.Layout.leftsidbarSizeType,
-        sidebarVisibilitytype: state.Layout.sidebarVisibilitytype,
-        layoutType: state.Layout.layoutType
-    }));
+    } = useSelector(layoutSelector);
+
 
     //vertical and semibox resize events
     const resizeSidebarMenu = useCallback(() => {
@@ -64,10 +64,10 @@ const VerticalLayout = (props) => {
             }
         }
     }, [leftsidbarSizeType, sidebarVisibilitytype, layoutType]);
-  
-      useEffect(() => {
+
+    useEffect(() => {
         window.addEventListener("resize", resizeSidebarMenu, true);
-      },[resizeSidebarMenu]);
+    }, [resizeSidebarMenu]);
 
 
     useEffect(() => {
@@ -86,7 +86,7 @@ const VerticalLayout = (props) => {
             }
         };
         // if (props.layoutType === "vertical") {
-            initMenu();
+        initMenu();
         // }
     }, [path, props.layoutType]);
 
@@ -157,7 +157,7 @@ const VerticalLayout = (props) => {
                                             <span data-key="t-apps">{t(item.label)}</span>
                                             {item.badgeName ?
                                                 <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
-                                            : null}
+                                                : null}
                                         </Link>
                                         <Collapse
                                             className="menu-dropdown"
@@ -176,7 +176,7 @@ const VerticalLayout = (props) => {
                                                                     {t(subItem.label)}
                                                                     {subItem.badgeName ?
                                                                         <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
-                                                                    : null}
+                                                                        : null}
                                                                 </Link>
                                                             </li>
                                                         ) : (
@@ -186,11 +186,11 @@ const VerticalLayout = (props) => {
                                                                     className="nav-link"
                                                                     to="/#"
                                                                     data-bs-toggle="collapse"
-                                                                > 
-                                                                {t(subItem.label)}
-                                                                {subItem.badgeName ?
-                                                                    <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
-                                                                : null}
+                                                                >
+                                                                    {t(subItem.label)}
+                                                                    {subItem.badgeName ?
+                                                                        <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
+                                                                        : null}
                                                                 </Link>
                                                                 <Collapse className="menu-dropdown" isOpen={subItem.stateVariables} id="sidebarEcommerce">
                                                                     <ul className="nav nav-sm flex-column">

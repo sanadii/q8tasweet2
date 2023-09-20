@@ -30,12 +30,12 @@ export const getCategories = () => ({
   type: GET_CATEGORIES,
 });
 
-export const updateCategory = category => ({
+export const updateCategory = (category) => ({
   type: UPDATE_CATEGORY,
   payload: category,
 });
 
-export const updateCategorySuccess = category => ({
+export const updateCategorySuccess = (category) => ({
   type: UPDATE_CATEGORY_SUCCESS,
   payload: category,
 });

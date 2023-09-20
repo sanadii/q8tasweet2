@@ -102,12 +102,12 @@ const Navdata = () => {
   const adminItems = [
 
     {
-      label: "Admin",
+      label: "قائمة الإدارة",
       isHeader: true,
     },
     {
       id: "elections",
-      label: "Election List",
+      label: "الإنتخابات",
       icon: "ri-dashboard-line",
       link: "/admin/elections",
       click: function (e) {
@@ -117,7 +117,7 @@ const Navdata = () => {
     },
     {
       id: "candidates",
-      label: "Candidate List",
+      label: "المرشحين",
       icon: "ri-account-pin-box-line",
       link: "/admin/candidates",
       click: function (e) {
@@ -127,7 +127,7 @@ const Navdata = () => {
     },
     {
       id: "campaigns",
-      label: "Campaign List",
+      label: "الحملات الإنتخابية",
       icon: "ri-honour-line",
       link: "/admin/campaigns",
       click: function (e) {
@@ -137,7 +137,7 @@ const Navdata = () => {
     },
     {
       id: "users",
-      label: "User List",
+      label: "المستخدمين",
       icon: "ri-honour-line",
       link: "/admin/users",
       click: function (e) {
@@ -145,192 +145,50 @@ const Navdata = () => {
         setIscurrentState("adminUsers");
       },
     },
-    // {
-    //   label: "Menu",
-    //   isHeader: true,
-    // },
-    // {
-    //   id: "dashboard",
-    //   label: "Dashboards",
-    //   icon: "ri-dashboard-2-line",
-    //   link: "/#",
-    //   stateVariables: isDashboard,
-    //   click: function (e) {
-    //     e.preventDefault();
-    //     setIsDashboard(!isDashboard);
-    //     setIscurrentState("Dashboard");
-    //     updateIconSidebar(e);
-    //   },
-    //   subItems: [
-    //     // {
-    //     //   id: "elections",
-    //     //   label: "Elections List",
-    //     //   link: "/elections-list",
-    //     //   parentId: "dashboard",
-    //     // },
-    //     // {
-    //     //   id: "candidates",
-    //     //   label: "Candidates List",
-    //     //   link: "/#",
-    //     //   parentId: "dashboard",
-    //     // },
-    //     // {
-    //     //   id: "electionCandidate",
-    //     //   label: "Election Candidate",
-    //     //   link: "/election-candidates",
-    //     //   parentId: "dashboard",
-    //     // },
-    //     // {
-    //     //   id: "campaigns",
-    //     //   label: "Campaigns",
-    //     //   link: "/campaigns",
-    //     //   parentId: "dashboard",
-    //     // },
-    //     {
-    //       id: "One More",
-    //       label: "One More",
-    //       link: "/#",
-    //       parentId: "dashboard",
-    //     },
-    //     // {
-    //     //   id: "alphabet",
-    //     //   label: "Alphabet",
-    //     //   link: "/alphabet",
-    //     //   parentId: "dashboard",
-    //     // },
-    //   ],
-    // },
-    // {
-    //   id: "apps",
-    //   label: "Apps",
-    //   icon: "ri-apps-2-line",
-    //   link: "/#",
-    //   click: function (e) {
-    //     e.preventDefault();
-    //     setIsApps(!isApps);
-    //     setIscurrentState("Apps");
-    //     updateIconSidebar(e);
-    //   },
-    //   stateVariables: isApps,
-    //   subItems: [
-    //     {
-    //       id: "elections",
-    //       label: "Elections",
-    //       link: "/#",
-    //       isChildItem: true,
-    //       click: function (e) {
-    //         e.preventDefault();
-    //         setIsElections(!isElections);
-    //       },
-    //       parentId: "apps",
-    //       stateVariables: isElections,
-    //       childItems: [
-    //         {
-    //           id: 1,
-    //           label: "List View",
-    //           link: "/apps-elections-list-view",
-    //           parentId: "apps",
-    //         },
-    //         // {
-    //         //   id: 2,
-    //         //   label: "Election Details",
-    //         //   link: "/apps-elections-details",
-    //         //   parentId: "apps",
-    //         // },
-    //       ],
-    //     },
-    //   ],
-    // },
-    // {
-    //   label: "Admin",
-    //   isHeader: true,
-    // },
-    // {
-    //   id: "admin",
-    //   label: "Admin",
-    //   icon: "ri-apps-2-line",
-    //   link: "/#",
-    //   click: function (e) {
-    //     e.preventDefault();
-    //     setIsAdmin(!isAdmin);
-    //     setIscurrentState("Admin");
-    //     updateIconSidebar(e);
-    //   },
-    //   stateVariables: isAdmin,
-    //   subItems: [
-    //     {
-    //       id: "elections",
-    //       label: "Elections",
-    //       link: "/#",
-    //       parentId: "Admin",
-    //     },
-    //     {
-    //       id: "candidates",
-    //       label: "Candidates",
-    //       link: "/#",
-    //       parentId: "Admin",
-    //     },
-    //     // {
-    //     //   id: "users",
-    //     //   label: "Users",
-    //     //   link: "/#",
-    //     //   parentId: "Admin",
-    //     //   badgeColor: "success",
-    //     //   badgeName: "New",
-    //     // },
-    //     {
-    //       id: "subscription",
-    //       label: "Subscription",
-    //       link: "/#",
-    //       parentId: "Admin",
-    //       badgeColor: "success",
-    //       badgeName: "New",
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: "settings",
-    //   label: "Setting",
-    //   icon: "ri-apps-2-line",
-    //   link: "/#",
-    //   click: function (e) {
-    //     e.preventDefault();
-    //     setIsSetting(!isSetting);
-    //     setIscurrentState("Setting");
-    //     updateIconSidebar(e);
-    //   },
-    //   stateVariables: isSetting,
-    //   subItems: [
-    //     {
-    //       id: "settings",
-    //       label: "Setting",
-    //       link: "/settings",
-    //       parentId: "Setting",
-    //     },
-    //     {
-    //       id: "categories",
-    //       label: "Categories",
-    //       link: "/settings/categories",
-    //       parentId: "Setting",
-    //     },
-    //     // {
-    //     //   id: "PrivecyPolicy",
-    //     //   label: "Ecommerce",
-    //     //   link: "/ecommerce",
-    //     //   parentId: "Setting",
-    //     //   badgeColor: "success",
-    //     //   badgeName: "New",
-    //     // },
-    //     {
-    //       id: "terms-conditions",
-    //       label: "Terms & Condition",
-    //       link: "/#",
-    //       parentId: "Setting",
-    //       badgeColor: "success",
-    //       badgeName: "New",
-    //     },
-    //   ],
-    // },
+
+    {
+      id: "settings",
+      label: "الإعدادات",
+      icon: "ri-apps-2-line",
+      link: "/#",
+      click: function (e) {
+        e.preventDefault();
+        setIsSetting(!isSetting);
+        setIscurrentState("Setting");
+        updateIconSidebar(e);
+      },
+      stateVariables: isSetting,
+      subItems: [
+        {
+          id: "settings",
+          label: "الإعدادات",
+          link: "/settings",
+          parentId: "Setting",
+        },
+        {
+          id: "categories",
+          label: "المجموعات",
+          link: "/settings/categories",
+          parentId: "Setting",
+        },
+        // {
+        //   id: "PrivecyPolicy",
+        //   label: "Ecommerce",
+        //   link: "/ecommerce",
+        //   parentId: "Setting",
+        //   badgeColor: "success",
+        //   badgeName: "New",
+        // },
+        {
+          id: "terms-conditions",
+          label: "سياسة الإستخدام",
+          link: "/#",
+          parentId: "Setting",
+          badgeColor: "success",
+          badgeName: "New",
+        },
+      ],
+    },
     // {
     //   label: "pages",
     //   isHeader: true,
@@ -501,12 +359,12 @@ const Navdata = () => {
 
   const menuItems = [
     {
-      label: "Subscriber",
+      label: "قائمة المستخدم",
       isHeader: true,
     },
     {
       id: "campaigns",
-      label: "Campaign List",
+      label: "الحملات الإنتخابية",
       icon: "ri-honour-line",
       link: "/campaigns",
       click: function (e) {

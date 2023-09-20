@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getElectors, addNewCampaignGuarantee, addNewElectionAttendee } from "../../../store/actions";
 import SimpleBar from "simplebar-react";
 import { Loader, TableContainer } from "../../../Components/Common";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 import CampaignElectorsModal from "./Modals/CampaignElectorsModal";
 
@@ -12,35 +13,14 @@ import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 export const ElectorsTab = () => {
   const dispatch = useDispatch();
 
-  const {
-    currentCampaignMember,
-    campaignDetails,
-    campaignMembers,
-    electors,
-    campaignGuarantees,
-    electionAttendees,
-    isCampaignGuaranteeSuccess,
-    error,
-  } = useSelector((state) => ({
-    currentCampaignMember: state.Campaigns.currentCampaignMember,
-    campaignDetails: state.Campaigns.campaignDetails,
-    campaignMembers: state.Campaigns.campaignMembers,
-    electors: state.Electors.electors,
-    campaignGuarantees: state.Campaigns.campaignGuarantees,
-    electionAttendees: state.Campaigns.electionAttendees,
-    isCampaignGuaranteeSuccess: state.Campaigns.isCampaignGuaranteeSuccess,
-    error: state.Campaigns.error,
-  }));
-
-  const [campaignGuaranteeList, setCampaignGuaranteeList] =
-    useState(campaignGuarantees);
+  const { currentCampaignMember, campaignDetails, campaignMembers, electors, campaignGuarantees, electionAttendees, isCampaignGuaranteeSuccess, error } = useSelector(electionsSelector);
+  const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
 
   useEffect(() => {
     setCampaignGuaranteeList(campaignGuarantees);
   }, [campaignGuarantees]);
 
-  const [electionAttendeeList, setElectionAttendeeList] =
-    useState(electionAttendees);
+  const [electionAttendeeList, setElectionAttendeeList] = useState(electionAttendees);
 
   useEffect(() => {
     setCampaignGuaranteeList(electionAttendees);
@@ -172,7 +152,7 @@ export const ElectorsTab = () => {
                 campaignGuarantees.some(
                   (item) => item.civil === cellProps.row.original.civil
                 ) ? (
-                  <span className="text-success">Added</span>
+                  <span className="text-success">تمت الإضافة</span>
                 ) : (
                   <button
                     type="button"
@@ -189,13 +169,13 @@ export const ElectorsTab = () => {
                       dispatch(addNewCampaignGuarantee(newCampaignGuarantee));
                     }}
                   >
-                    Add To Guarantees
+                    إضف للمضامين
                   </button>
                 )
               ) : electionAttendees.some(
                 (item) => item.civil === cellProps.row.original.civil
               ) ? (
-                <span className="text-success">Added</span>
+                <span className="text-success">تم التحضير</span>
               ) : (
                 <button
                   type="button"
@@ -213,7 +193,7 @@ export const ElectorsTab = () => {
                     dispatch(addNewElectionAttendee(newElectionAttendee));
                   }}
                 >
-                  Add To Attendees
+                  تسجيل حضور
                 </button>
               )}
             </div>
@@ -249,7 +229,7 @@ export const ElectorsTab = () => {
             <CardHeader>
               <Row className="mb-2">
                 <h4>
-                  <b>Search Electors</b>
+                  <b>البحث - الناخبين</b>
                 </h4>
               </Row>
             </CardHeader>
@@ -270,7 +250,7 @@ export const ElectorsTab = () => {
                       </Col>
                       <Col xxl={3} md={6}>
                         <button type="submit" className="btn btn-primary">
-                          Search Now
+                          إبحث
                         </button>
                       </Col>
                     </div>
@@ -288,7 +268,7 @@ export const ElectorsTab = () => {
                   theadClass="table-light"
                 />
               ) : (
-                <p>Nothing To Show, Start or refine your search</p>
+                <p>لا شيء لعرضه، ابدأ أو قم بتحسين بحثك</p>
               )}
             </CardBody>
           </Card>

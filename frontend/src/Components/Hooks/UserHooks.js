@@ -2,21 +2,21 @@ import { useEffect, useState } from "react";
 import { getLoggedinUser } from "../../helpers/api_helper";
 
 const useProfile = () => {
-  const userSession = getLoggedinUser();
-  const token = userSession?.refresh_token;
-
-  const [loading, setLoading] = useState(!token); // Set to true if no token
-  const [userProfile, setUserProfile] = useState(userSession);
+  const userProfileSession = getLoggedinUser();
+  const token = userProfileSession && userProfileSession["refresh_token"];
+  const [loading, setLoading] = useState(userProfileSession ? false : true);
+  const [userProfile, setUserProfile] = useState(
+    userProfileSession ? userProfileSession : null
+  );
 
   useEffect(() => {
-    if (token) {
-      setUserProfile(userSession);
-      setLoading(false);
-    } else {
-      setUserProfile(null);
-      setLoading(true);
-    }
-  }, [token, userSession]);
+    const userProfileSession = getLoggedinUser();
+    var token =
+      userProfileSession &&
+      userProfileSession["token"];
+    setUserProfile(userProfileSession ? userProfileSession : null);
+    setLoading(token ? false : true);
+  }, []);
 
   return { userProfile, loading, token };
 };

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { electionsSelector } from '../../../../selectors/electionsSelector';
 
 import { getUsers, addNewCampaignMember, updateCampaignMember } from "../../../../store/actions";
 
@@ -50,9 +51,7 @@ const CampaignMembersAddModal = ({ campaignId }) => {
     );
   }, [users, searchUserInput]);
 
-  const { electionCommittees } = useSelector((state) => ({
-    electionCommittees: state.Campaigns.electionCommittees,
-  }));
+  const { electionCommittees } = useSelector(electionsSelector);
 
   const [electionCommitteeList, setElectionCommitteeList] =
     useState(electionCommittees);

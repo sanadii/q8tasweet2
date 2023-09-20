@@ -1,21 +1,22 @@
-// ------------ React & Redux ------------
+// React & Redux ------------
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Row, Card, CardBody } from "reactstrap";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
-// ------------ Actions ------------
-import { getElections, addElection, updateElection, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
+// Store ------------
+import { getElections, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
 
-// ------------ Custom Components & ConstantsImports ------------
+// Custom Components & ConstantsImports ------------
 import { ImageLargeCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import ElectionModal from "./ElectionModal"
 import { Id, Name, CandidateCount, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
-// ------------ Toast & Styles ------------
+// Toast & Styles ------------
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ------------ React FilePond & Styles ------------
+// React FilePond & Styles ------------
 import { registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -26,45 +27,34 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 const AllElections = () => {
   const dispatch = useDispatch();
 
-  // ------------ State Management ------------
-  const { elections, moderators, categories, subCategories, isElectionSuccess, user, error } = useSelector((state) => ({
-    elections: state.Elections.elections,
-    moderators: state.Users.moderators,
-    categories: state.Categories.categories,
-    subCategories: state.Categories.subCategories,
-    isElectionSuccess: state.Elections.isElectionSuccess,
-    user: state.Profile.user,
-    error: state.Elections.error,
-  }));
+  // State Management ------------
+  const { elections, moderators, categories, subCategories, isElectionSuccess, error } = useSelector(electionsSelector);
 
-  const [election, setElection] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [electionCandidates, setElectionCandidates] = useState([]);
-  const [userName, setUserName] = useState("Admin");
-  const [userId, setUserId] = useState(null);
+  const [election, setElection] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
   // Election Data
   useEffect(() => {
-    if (elections && !elections.length) {
+    if (!elections || !elections.length) {
       dispatch(getElections());
     }
   }, [dispatch, elections]);
 
   // Election Categories
   useEffect(() => {
-    if (categories && !categories.length) {
+    if (!categories || !categories.length) {
       dispatch(getCategories());
     }
   }, [dispatch, categories]);
 
   // Moderators
   useEffect(() => {
-    if (moderators && !moderators.length) {
+    if (!moderators || !moderators.length) {
       dispatch(getModeratorUsers());
     }
   }, [dispatch, moderators]);
 
+  // Moderators ------------
   const [moderatorsMap, setModeratorsMap] = useState({});
 
   useEffect(() => {
@@ -79,7 +69,7 @@ const AllElections = () => {
   }, [moderators]);
 
 
-  // Delete Election
+  // Delete Election ------------
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
   const [modal, setModal] = useState(false);
@@ -94,13 +84,13 @@ const AllElections = () => {
     }
   }, [modal]);
 
-  // Delete Data
+  // Delete Data ------------
   const onClickDelete = (election) => {
     setElection(election);
     setDeleteModal(true);
   };
 
-  // Delete Data
+  // Delete Data ------------
   const handleDeleteElection = () => {
     if (election) {
       dispatch(deleteElection(election.id));
@@ -108,7 +98,7 @@ const AllElections = () => {
     }
   };
 
-  // Update Data
+  // Update Data ------------
   const handleElectionClick = useCallback(
     (arg) => {
       const election = arg;
@@ -222,7 +212,7 @@ const AllElections = () => {
         id: "#",
       },
       {
-        Header: "ID",
+        Header: "م.",
         accessor: "id",
         filterable: false,
         Cell: (cellProps) => {
@@ -240,7 +230,7 @@ const AllElections = () => {
       },
 
       {
-        Header: "Elections",
+        Header: "الإنتخابات",
         accessor: "name",
         filterable: false,
         Cell: (cellProps) => {
@@ -248,7 +238,7 @@ const AllElections = () => {
         },
       },
       {
-        Header: "Candidates",
+        Header: "المرشحين",
         accessor: "candidateCount",
         filterable: false,
         Cell: (cellProps) => {
@@ -257,7 +247,7 @@ const AllElections = () => {
       },
 
       {
-        Header: "Due Date",
+        Header: "الموعد",
         accessor: "dueDate",
         filterable: false,
         Cell: (cellProps) => {
@@ -265,7 +255,7 @@ const AllElections = () => {
         },
       },
       {
-        Header: "Category",
+        Header: "المجموعة",
         accessor: "category",
         filterable: false,
         Cell: (cellProps) => {
@@ -278,7 +268,7 @@ const AllElections = () => {
         },
       },
       {
-        Header: "Status",
+        Header: "الحالة",
         accessor: "status",
         filterable: true,
         // useFilters: true,
@@ -288,7 +278,7 @@ const AllElections = () => {
         },
       },
       {
-        Header: "Priority",
+        Header: "الأولية",
         accessor: "priority",
         filterable: true,
         Cell: (cellProps) => {
@@ -296,7 +286,7 @@ const AllElections = () => {
         },
       },
       {
-        Header: "Moderators",
+        Header: "المشرفون",
         accessor: "moderators",
         filterable: false,
         Cell: (cell) => {
@@ -304,7 +294,7 @@ const AllElections = () => {
         },
       },
       {
-        Header: "Created By",
+        Header: "بواسطة",
         accessor: "createdBy",
         filterable: false,
         useFilters: true,
@@ -314,7 +304,7 @@ const AllElections = () => {
         },
       },
       {
-        Header: "Actions",
+        Header: "إجراءات",
         accessor: "election",
         filterable: false,
         Cell: (cellProps) => {
@@ -359,7 +349,6 @@ const AllElections = () => {
 
     if (filters.global) {
       isValid = isValid && election.name && typeof election.name === 'string' && election.name.toLowerCase().includes(filters.global.toLowerCase());
-
     }
 
     if (filters.status !== null) {
@@ -403,11 +392,11 @@ const AllElections = () => {
               <div>
                 <TableContainerHeader
                   // Title
-                  ContainerHeaderTitle="Elections"
+                  ContainerHeaderTitle="الإنتخابات"
 
                   // Add Elector Button
                   isContainerAddButton={true}
-                  AddButtonText="Add New Election"
+                  AddButtonText="إضافة إنتخابات"
                   isEdit={isEdit}
                   handleEntryClick={handleElectionClicks}
                   toggle={toggle}
@@ -431,7 +420,7 @@ const AllElections = () => {
                     // Filter Settings
                     filters={filters}
                     setFilters={setFilters}
-                    SearchPlaceholder="Search for elections or something..."
+                    SearchPlaceholder="البحث بالاسم..."
 
                     // Data -------------------------
                     columns={columns}

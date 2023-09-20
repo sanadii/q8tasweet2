@@ -1,5 +1,5 @@
 // config.js
-const API_URL = process.env.REACT_APP_API_URL || 'https://default-url.com';
+const API_URL = process.env.REACT_APP_API_URL || 'http://q8tasweet.com';
 const PUBLIC_URL = process.env.REACT_APP_PUBLIC_URL;
 const MEDIA_URL = process.env.REACT_APP_MEDIA_URL;
 const DEFAULT_AUTH = process.env.REACT_APP_DEFAULTAUTH;
