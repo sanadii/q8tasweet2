@@ -99,3 +99,6 @@ __pycache__/
 # These lock files ensure that the exact versions of dependencies are installed across setups. They're important to keep consistency.
 # Recommendation: Do NOT include in .gitignore. They should be committed to the repository.
 # To directly answer your question, yes, the build output (like frontend/build/) and the node_modules directory are commonly added to .gitignore in many projects. However, always consider your specific use-case and workflow before deciding.
+db.sqlite3
+backend/media/
+db.sqlite3
