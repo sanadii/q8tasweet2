@@ -58,7 +58,7 @@ class ElectorsSerializer(serializers.ModelSerializer):
 class SubCategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categories
-        fields = ["id", "name", "parent"]
+        fields = ["id", "name", "parent", "image"]
 
 
 # ELECTIONS
@@ -103,10 +103,15 @@ class ElectionsSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         if obj.sub_category:
-            # Assuming you want the current year
-            year = datetime.datetime.now().year
-            return f"{obj.sub_category.name} - {year}"
-        return None  # Return None or default name if you have one
+            # Check if duedate exists and is not None
+            if obj.duedate:
+                # Extract the year from the duedate field of the object
+                year = obj.duedate.year  
+                return f"{obj.sub_category.name} - {year}"
+            else:
+                # Handle the case where duedate is None
+                return f"{obj.sub_category.name} - No Due Date"
+        return None  # Return None or a default name if you have one
 
     def get_image(self, obj):
         if obj.sub_category and obj.sub_category.image:

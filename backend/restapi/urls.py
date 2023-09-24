@@ -13,8 +13,8 @@ urlpatterns = [
     # path("projectInfo", ProjectInfo.as_view(), name="projectInfo"),
 
     # Elections
-    path("getElections", getElections.as_view(), name="getElections"),
-    path("addElection", addElection.as_view(), name="addElection"),
+    path("getElections", GetElections.as_view(), name="GetElections"),
+    path("addElection",AddElection.as_view(), name="AddElection"),
     path("deleteElection/<int:id>", DeleteElection.as_view(), name="DeleteElection"),
     path("updateElection/<int:id>", UpdateElection.as_view(), name="UpdateElection"),
     path("getElectionDetails/<int:id>", GetElectionDetails.as_view(), name="GetElectionDetails"),
@@ -72,8 +72,6 @@ urlpatterns = [
 
     # Media
     path("uploadImage", UploadImage.as_view(), name="uploadImage"),
-    # path("getImage", GetImage.as_view(), name="getImage"),
-    # path("media/getImage/", GetImage.as_view(), name="get_image"),
 
     # Terms
     path("getCategories", GetCategories.as_view(), name="GetCategories"),
@@ -97,17 +95,4 @@ urlpatterns = [
     # Attendees
     path("getPublicElections", GetPublicElections.as_view(), name="GetPublicElections"),
     path("getPublicElectionDetails", GetPublicElectionDetails.as_view(), name="GetPublicElectionDetails"),
-
-
-
 ]
-
-
-#
-# path('getUpElection', GetUpElection.as_view()),
-# path('getPrev5Election', GetPrev5Election.as_view()),
-# path('getElectionId', GetElectionId.as_view()),
-
-# path('updateElectionCandidate/<int:id>', UpdateElectionCandidate.as_view(), name='UpdateElectionCandidate'),
-# path('addNewElectionCandidate', addNewElectionCandidate.as_view(), name='addNewElectionCandidate'),
-# path('deleteElectionCandidate/<int:id>', DeleteElectionCandidate.as_view(), name='deleteElectionCandidate'),

@@ -129,9 +129,8 @@ class UpdateElectionCommitteeResults(APIView):
                     'updated_by': request.user
                 }
             )
-
         # Once the patch operation is done, fetch all relevant results
-        results = ElectionCommitteeResults.objects.all()
+        results = ElectionCommitteeResults.objects.filter(election_committee_id=id)
 
         # Process these results into your desired structure
         output = {}

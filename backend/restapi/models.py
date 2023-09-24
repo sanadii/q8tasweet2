@@ -258,7 +258,6 @@ class Campaigns(models.Model):
 
     # Activities
     target_score = models.PositiveIntegerField(blank=True, null=True)
-    target_score = models.PositiveIntegerField(blank=True, null=True)
     results = models.IntegerField(blank=True, null=True)
     events = models.PositiveIntegerField(blank=True, null=True)
     media_coverage = models.PositiveIntegerField(blank=True, null=True)

@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.3cb3be24.css",
-    "main.js": "/static/js/main.a76168c4.js",
+    "main.js": "/static/js/main.804d95f2.js",
     "static/js/522.963fa583.chunk.js": "/static/js/522.963fa583.chunk.js",
     "static/media/kuwait-bg.png": "/static/media/kuwait-bg.859ab5d5fe5a98c8520d.png",
     "static/media/remixicon.svg?t=1590207869815": "/static/media/remixicon.1664a258a7e7714f6f8d.svg",
@@ -79,6 +79,6 @@
   },
   "entrypoints": [
     "static/css/main.3cb3be24.css",
-    "static/js/main.a76168c4.js"
+    "static/js/main.804d95f2.js"
   ]
 }
