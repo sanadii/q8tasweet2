@@ -25,34 +25,11 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
   // ------------ State Management ------------
   const { moderators, categories, subCategories, isElectionSuccess, error } = useSelector(electionsSelector);
 
-  // ------------ Image Upload Helper ------------
-  const [selectedImage, setSelectedImage] = useState(null);
-  const handleImageSelect = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-      // console.log("handleImageSelect called");
-    }
-  };
-
-  const formData = new FormData();
-  if (!selectedImage) {
-    // console.log("no selected image");
-  } else {
-    formData.append("image", selectedImage);
-    formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
-  }
-
-
-
-
   // validation
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
     initialValues: {
-      name: (election && election.name) || "",
-      image: (election && election.image) || "",
-      selectedImage: selectedImage,
       description: (election && election.description) || "",
       dueDate: (election && election.dueDate) || null,
       category: (election && election.category) || null,
@@ -77,11 +54,8 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
 
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter Election Name"),
       category: Yup.number().integer().nullable().notRequired('Category is required'),
       subCategory: Yup.number().integer().nullable().notRequired('Sub-Category is required'),
-      status: Yup.number().integer().required('Status is required'),
-      priority: Yup.number().integer().required('priority is required'),
 
 
     }),
@@ -89,9 +63,6 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       if (isEdit) {
         const updatedElection = {
           id: election ? election.id : 0,
-          name: values.name,
-          image: values.image,
-          selectedImage: selectedImage,
           dueDate: values.dueDate,
           description: values.description,
 
@@ -116,13 +87,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
 
         // Update election
         dispatch(
-          updateElection({ election: updatedElection, formData: formData })
+          updateElection({ election: updatedElection })
         );
       } else {
         const newElection = {
-          name: values.name,
-          image: values.image,
-          selectedImage: selectedImage,
           dueDate: values.dueDate,
           description: values.description,
 
@@ -142,7 +110,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
           priority: parseInt(values.priority, 10),
           moderators: values.moderators,
         };
-        dispatch(addElection({ election: newElection, formData: formData }));
+        dispatch(addElection({ election: newElection }));
       }
 
       validation.resetForm();
@@ -190,62 +158,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       >
         <ModalBody className="modal-body">
           <Row className="g-3">
-            <Col lg={6}>
-              <div>
-                <Label for="name-field" className="form-label">
-                  Election Name
-                </Label>
-                <Input
-                  id="name-field"
-                  name="name"
-                  type="text"
-                  className="form-control"
-                  placeholder="Election Name"
-                  validate={{
-                    required: { value: true },
-                  }}
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.name || ""}
-                  invalid={
-                    validation.touched.name && validation.errors.name
-                      ? true
-                      : false
-                  }
-                />
-                {validation.touched.name && validation.errors.name ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.name}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div>
-                <Label for="dueDate-field" className="form-label">
-                  Due Date
-                </Label>
-
-                <Flatpickr
-                  name="dueDate"
-                  id="dueDate-field"
-                  className="form-control"
-                  placeholder="Select a dueDate"
-                  options={{
-                    altInput: true,
-                    altFormat: "Y-m-d",
-                    dateFormat: "Y-m-d",
-                  }}
-                  onChange={(e) => dateformate(e)}
-                  value={validation.values.dueDate || ""}
-                />
-                {validation.touched.dueDate && validation.errors.dueDate ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.dueDate}
-                  </FormFeedback>
-                ) : null}
-              </div>
+            <Col lg={4}>
               <div>
                 <Label for="category-field" className="form-label">
-                  Election Category
+                  تصنيف الانتخابات
                 </Label>
                 <Input
                   name="category"
@@ -272,9 +188,12 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                   </FormFeedback>
                 ) : null}
               </div>
+            </Col>
+
+            <Col lg={4}>
               <div>
                 <Label for="sub-category-field" className="form-label">
-                  Election Sub-Category
+                  تصنيف الإنتخابات
                 </Label>
                 <Input
                   name="subCategory"
@@ -285,7 +204,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                   onBlur={validation.handleBlur}
                   value={validation.values.subCategory || ""}
                 >
-                  <option value="">Choose Sub-Category</option>
+                  <option value="">التصنيف الفرعي</option>
                   {subCategoryOptions.map((subCategory) => (
                     <option key={subCategory.id} value={subCategory.id}>
                       {subCategory.name}
@@ -300,84 +219,34 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 ) : null}
               </div>
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <div>
-                <Label for="emage-field" className="form-label">
-                  Upload Image
+                <Label for="dueDate-field" className="form-label">
+                  الموعد
                 </Label>
-                <div className="text-center">
-                  <label
-                    htmlFor="emage-field"
-                    className="mb-0"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="right"
-                    title=""
-                    data-bs-original-title="Select Image"
-                  >
-                    <div className="position-relative d-inline-block">
-                      <div className="position-absolute top-100 start-100 translate-middle">
-                        <div className="avatar-xs">
-                          <div className="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
-                            <i className="ri-image-fill"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="avatar-xl"
-                        style={{
-                          width: "250px",
-                          height: "250px",
-                          overflow: "hidden",
-                          cursor: "pointer", // Add this line
-                          backgroundImage: `url(${validation.values.image})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }}
-                      ></div>
-                    </div>
-                    <input
-                      className="form-control d-none"
-                      id="emage-field"
-                      type="file"
-                      accept="image/png, image/gif, image/jpeg"
-                      onChange={(e) => {
-                        handleImageSelect(e);
-                        const selectedImage = e.target.files[0];
-                        if (selectedImage) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            // console.log(
-                            //   "Image loaded successfully:",
-                            //   reader.result
-                            // );
-                            const imgElement =
-                              document.querySelector(".avatar-xl");
-                            if (imgElement) {
-                              imgElement.style.backgroundImage = `url(${reader.result})`;
-                            }
-                          };
-                          reader.readAsDataURL(selectedImage);
-                        }
-                      }}
-                      onBlur={validation.handleBlur}
-                      invalid={
-                        validation.touched.image && validation.errors.image
-                          ? "true"
-                          : undefined
-                      }
-                    />
-                  </label>
-                </div>
-                {validation.touched.image && validation.errors.image ? (
+                <Flatpickr
+                  name="dueDate"
+                  id="dueDate-field"
+                  className="form-control"
+                  placeholder="Select a dueDate"
+                  options={{
+                    altInput: true,
+                    altFormat: "Y-m-d",
+                    dateFormat: "Y-m-d",
+                  }}
+                  onChange={(e) => dateformate(e)}
+                  value={validation.values.dueDate || ""}
+                />
+                {validation.touched.dueDate && validation.errors.dueDate ? (
                   <FormFeedback type="invalid">
-                    {validation.errors.image}
+                    {validation.errors.dueDate}
                   </FormFeedback>
                 ) : null}
               </div>
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Label for="election-type-field" className="form-label">
-                Election Type
+                نوع الانتخابات
               </Label>
               <Input
                 name="type"
@@ -400,9 +269,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 </FormFeedback>
               ) : null}
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Label for="election-result-field" className="form-label">
-                Result Type
+                نتائج الانتخابات
               </Label>
               <Input
                 name="result"
@@ -425,9 +294,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 </FormFeedback>
               ) : null}
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Label for="election-votes-field" className="form-label">
-                Number of Votes
+                عدد الأصوات
               </Label>
               <Input
                 id="votes-field"
@@ -443,9 +312,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 </FormFeedback>
               ) : null}
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Label for="election-seats-field" className="form-label">
-                Number of Seats
+                عدد المقاعد
               </Label>
               <Input
                 id="seats-field"
@@ -463,9 +332,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 </FormFeedback>
               ) : null}
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Label for="electors-field" className="form-label">
-                Number of Electors
+                عدد الناخبين
               </Label>
               <Input
                 id="electors-field"
@@ -483,9 +352,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 </FormFeedback>
               ) : null}
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Label for="attendees-field" className="form-label">
-                Nunber of Attendees
+                عدد الحضور
               </Label>
               <Input
                 id="attendees-field"
@@ -507,7 +376,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
 
 
             <Col lg={6}>
-              <Label className="form-label">Moderators</Label>
+              <Label className="form-label">المشرفين</Label>
               <SimpleBar style={{ maxHeight: "95px" }}>
                 <ul className="list-unstyled vstack gap-2 mb-0">
                   {moderators &&
@@ -578,7 +447,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
             <Col lg={6}>
               <div>
                 <Label for="status-field" className="form-label">
-                  Status
+                  الحالة
                 </Label>
                 <Input
                   name="status"
@@ -603,7 +472,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
               </div>
               <div>
                 <Label for="priority-field" className="form-label">
-                  Priority
+                  الأولية
                 </Label>
                 <Input
                   name="priority"
@@ -638,7 +507,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
               }}
               className="btn-light"
             >
-              Close
+              إغلاق
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
               {!!isEdit ? "Update Election" : "Add Election"}

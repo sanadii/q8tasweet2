@@ -1,49 +1,26 @@
 // React imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { updateElectionCommitteeResults } from "../../../store/actions";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // Utility and helper imports
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import { ImageGenderCircle, Loader, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { ImageCandidateWinnerCircle, Loader, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 
 // Reactstrap (UI) imports
-import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
-
-// Additional package imports
-import SimpleBar from "simplebar-react";
+import { Col, Row, Card, CardBody } from "reactstrap";
 
 const ResultsTab = () => {
   const dispatch = useDispatch();
 
-  const { electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector((state) => ({
-    electionCandidates: state.Elections.electionCandidates,
-    electionCommittees: state.Elections.electionCommittees,
-    electionCommitteeResults: state.Elections.electionCommitteeResults,
-    error: state.Elections.error,
-  }));
-
-  const [electionCommitteeResult, setElectionCommitteeResults] = useState(null);
+  const { electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector(electionsSelector);
 
   const [editedData, setEditedData] = useState({});
   const [modifiedData, setModifiedData] = useState({});
-
-  useEffect(() => {
-    // For every committee in edit mode, dispatch the changes to your backend or other desired location.
-    for (const committeeId in editedData) {
-      if (editedData[committeeId]) {
-        // Save logic
-        console.log("committeeId:", committeeId);
-
-        // dispatch(updateElectionCommitteeResults(committeeId, modifiedData[committeeId]));
-      }
-    }
-  }, [editedData]);
-
 
   const toggleEditMode = (committeeId) => {
     setEditedData(prevEditedData => ({
@@ -63,16 +40,15 @@ const ResultsTab = () => {
     }));
   };
 
-
   const handleSaveCommitteeResults = (committeeId) => {
     if (modifiedData[committeeId]) {
 
-      const updatedElectionCommitteeResults = {
+      const updatedElectionCommitteeResult = {
         id: committeeId, // the committee ID
         data: modifiedData[committeeId] // the candidate-votes data for the committee
       };
 
-      dispatch(updateElectionCommitteeResults(updatedElectionCommitteeResults));
+      dispatch(updateElectionCommitteeResults(updatedElectionCommitteeResult));
 
       // Reset edited data for this specific committee
       const updatedEditedData = { ...editedData };
@@ -87,74 +63,55 @@ const ResultsTab = () => {
   };
 
 
-// Function to transform the data
-const transformData = (data) => {
-  const transformed = [];
-
-  // Collect all unique candidate IDs
-  const allCandidates = new Set();
-  for (const committeeVotes of Object.values(data)) {
-    for (const candidateId of Object.keys(committeeVotes)) {
-      allCandidates.add(parseInt(candidateId));
+  // Function to transform the data
+  const transformData = (data) => {
+    const transformed = [];
+    const totals = {};
+  
+    // Calculate total votes for each candidate
+    for (const committeeVotes of Object.values(data)) {
+      for (const [candidateId, votes] of Object.entries(committeeVotes)) {
+        const id = parseInt(candidateId);
+        totals[id] = (totals[id] || 0) + votes;
+      }
     }
-  }
-
-  // Sort candidates by total votes (descending order)
-  const sortedCandidates = [...allCandidates].sort((candidateId1, candidateId2) => {
-    const totalVotes1 = Object.values(data).reduce(
-      (sum, committeeVotes) => sum + (committeeVotes[candidateId1] || 0),
-      0
-    );
-    const totalVotes2 = Object.values(data).reduce(
-      (sum, committeeVotes) => sum + (committeeVotes[candidateId2] || 0),
-      0
-    );
-
-    return totalVotes2 - totalVotes1;
-  });
-
-  // Organize the data for each candidate
-  sortedCandidates.forEach((candidateId, index) => {
-    const row = { "candidate.id": candidateId, position: index + 1 }; // Add position based on index
-    let totalVotesForCandidate = 0; // Initialize the total vote counter for each candidate
-
-    for (const committeeId in data) {
-      const isColumnInEditMode = editedData[committeeId]; // Check if the column is in edit mode
-
-      // Update the total vote count for this candidate
-      totalVotesForCandidate += data[committeeId][candidateId] || 0;
-
-      if (isColumnInEditMode) {
-        // Render an editable input field in edit mode
-        row[`committee_${committeeId}`] = (
+  
+    // Sort candidate IDs based on total votes
+    const sortedCandidates = Object.keys(totals)
+      .map(Number)
+      .sort((a, b) => totals[b] - totals[a]);
+  
+    // Organize the data for each sorted candidate
+    sortedCandidates.forEach((candidateId, index) => {
+      const row = { "candidate.id": candidateId, position: index + 1 };
+      let totalVotesForCandidate = totals[candidateId] || 0;
+  
+      for (const committeeId in data) {
+        const isColumnInEditMode = editedData[committeeId];
+        
+        const votes = data[committeeId][candidateId] || 0;
+        row[`committee_${committeeId}`] = isColumnInEditMode ? (
           <input
             type="text"
             maxLength="3"
-            pattern="\d*" // Regular expression pattern to match only numbers
-            inputMode="numeric" // Suggests a numeric input mode
-            style={{ width: "3em" }} // Setting the width to limit the size of the input box
-            value={
-              modifiedData[committeeId] && modifiedData[committeeId][candidateId]
-                ? modifiedData[committeeId][candidateId]
-                : data[committeeId][candidateId] || 0
-            }
+            pattern="\d*"
+            inputMode="numeric"
+            style={{ width: "3em" }}
+            value={modifiedData[committeeId]?.[candidateId] || votes}
             onChange={(e) => handleEditCell(candidateId, committeeId, e.target.value)}
           />
-        );
-      } else {
-        // Render cell content in view mode
-        row[`committee_${committeeId}`] = data[committeeId][candidateId] || 0;
+        ) : votes;
       }
-    }
-
-    // Set the total vote count for this candidate to the row
-    row["total"] = totalVotesForCandidate;
-
-    transformed.push(row);
-  });
-
-  return transformed;
-};
+  
+      // Set the total vote count for this candidate to the row
+      row["total"] = totalVotesForCandidate;
+      transformed.push(row);
+    });
+  
+    return transformed;
+  };
+  
+  
 
 
 
@@ -181,8 +138,9 @@ const transformData = (data) => {
         },
       },
       {
-        Header: "Candidate",
-        accessor: 'candidate.id',
+        Header: "المرشح",
+        accessor: 'candidate',
+        filterable: true,
         Cell: (cellProps) => {
           const candidateId = cellProps.row.original['candidate.id'];
           const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
@@ -192,37 +150,15 @@ const transformData = (data) => {
           }
 
           return (
-            <>
-              <div className="d-flex align-items-center">
-                <div className="flex-shrink-0">
-                  {candidate.image ? (
-                    // Use the ImageGenderCircle component here
-                    <ImageGenderCircle
-                      genderValue={candidate.gender}
-                      imagePath={candidate.image}
-                    />
-                  ) : (
-                    <div className="flex-shrink-0 avatar-xs me-2">
-                      <div className="avatar-title bg-soft-success text-success rounded-circle fs-13">
-                        {candidate.name.charAt(0)}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="flex-grow-1 ms-2 name">
-                  {candidate.name}{" "}
-                  {candidate.is_winner ? (
-                    <Badge color="success" className="badge-label">
-                      <i className="mdi mdi-circle-medium"></i> Winner
-                    </Badge>
-                  ) : null}
-                </div>
-              </div>
-            </>
+            <ImageCandidateWinnerCircle
+              gender={candidate.gender}
+              name={candidate.name}
+              imagePath={candidate.image}
+              is_winner={candidate.is_winner}
+            />
           );
         },
       },
-
       {
         Header: 'المجموع',
         accessor: 'total',
@@ -287,6 +223,7 @@ const transformData = (data) => {
                   columns={columns}
                   data={transformedData}
                   customPageSize={50}
+                  isTableContainerFooter={true}
 
                   // Header
                   isTableContainerHeader={true}
@@ -295,7 +232,6 @@ const transformData = (data) => {
                   isGlobalFilter={true}
                   isCommitteeGenderFilter={true}
                   SearchPlaceholder="Search for Election Committees..."
-                  setElectionCommitteeResults={setElectionCommitteeResults}
 
                   // Styling
                   divClass="table-responsive table-card mb-3"

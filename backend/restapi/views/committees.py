@@ -131,17 +131,19 @@ class UpdateElectionCommitteeResults(APIView):
             )
         # Once the patch operation is done, fetch all relevant results
         results = ElectionCommitteeResults.objects.filter(election_committee_id=id)
-
+        
         # Process these results into your desired structure
         output = {}
         for result in results:
-            committee_id = result.election_committee.id
-            candidate_id = result.election_candidate.id
+            committee_id = str(result.election_committee.id)  # Converted to string as it is key in dictionary
+            candidate_id = str(result.election_candidate.id)  # Converted to string as it is key in dictionary
             votes = result.votes
-
+            
             if committee_id not in output:
                 output[committee_id] = {}
-
+                
             output[committee_id][candidate_id] = votes
+        
+        # If 'output' is the main key in response
+        return Response({"data": output, "count": 1, "code": 200})
 
-        return Response({"data": output}, status=status.HTTP_200_OK)

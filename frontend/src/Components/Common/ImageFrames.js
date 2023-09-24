@@ -4,6 +4,7 @@ import React from "react";
 import { api } from "../../config";
 import { Row, Col, Card, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Badge } from 'reactstrap'; // Or your preferred UI library if not using reactstrap
 
 export const ImageCircle = ({ imagePath }) => {
   const apiUrl = api.API_URL;
@@ -43,21 +44,76 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
   );
 };
 
-export const ImageLargeCircle = ({ imagePath }) => {
+export const ImageMediumCircle = ({ row }) => {
+  if (!row || !row.original) return null; // If row or row.original is undefined, don't render the component
+
+  const { id, image, name } = row.original;
+  const apiUrl = api.API_URL.endsWith('/') ? api.API_URL : `${api.API_URL}/`; // Ensure apiUrl ends with '/'
+  const defaultImagePath = 'media/candidates/default.jpg';
+  const imageUrl = image ? `${apiUrl}${image}` : `${apiUrl}${defaultImagePath}`;
+
+  return (
+    <React.Fragment>
+
+      <div className="d-flex align-items-center">
+        <div className="avatar-md"> {/* To maintain the image size */}
+          <img
+            src={imageUrl}
+            alt={name}
+            className="img-thumbnail rounded-circle"
+          />
+        </div>
+        <Link to={`/elections/${id}`} className="fw-medium link-primary flex-grow-1 ms-2 name">
+          <strong>
+            {name}
+          </strong>
+        </Link>
+      </div>
+    </React.Fragment>
+  );
+};
+
+export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner }) => {
   const apiUrl = api.API_URL;
   const defaultImagePath = 'media/candidates/default.jpg';
   const imageUrl = imagePath ? `${apiUrl}${imagePath}` : `${apiUrl}${defaultImagePath}`;
 
+  let borderColor;
+
+  if (gender === 1) {
+    borderColor = "#4e8dff";
+  } else if (gender === 2) {
+    borderColor = "#ff4ef8";
+  } else {
+    borderColor = "#9e9e9e";
+  }
+
   return (
-    <div className="avatar-lg">
-      <img
-        src={imageUrl}
-        alt="user-img"
-        className="img-thumbnail rounded-circle"
-      />
+    <div className="d-flex align-items-center">
+      <div
+        className="avatar-xs"
+        style={{
+          display: "inline-block",
+          borderRadius: "50%",
+          border: `2px solid ${borderColor}`,
+        }}
+      >
+        <img src={imageUrl} alt={name} className="img-fluid rounded-circle" />
+      </div>
+      <div className="flex-grow-1 ms-2 name">
+        <strong>
+          {name}
+        </strong>
+        {is_winner && (
+          <Badge color="success" className="badge-label">
+            <i className="mdi mdi-circle-medium"></i> فائز
+          </Badge>
+        )}
+      </div>
     </div>
   );
 };
+
 
 
 export const ImageCampaignBackground = ({ imagePath }) => {

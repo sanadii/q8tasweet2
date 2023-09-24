@@ -5,8 +5,6 @@ import { Collapse, Container } from 'reactstrap';
 import withRouter from '../../Components/Common/withRouter';
 
 import logoSm from "../../assets/images/logo-sm.png";
-//i18n
-import { withTranslation } from "react-i18next";
 
 // Import Data
 import navdata from "../LayoutMenuData";
@@ -282,4 +280,4 @@ TwoColumnLayout.propTypes = {
     t: PropTypes.any,
 };
 
-export default withRouter(withTranslation()(TwoColumnLayout));
+export default withRouter(TwoColumnLayout);

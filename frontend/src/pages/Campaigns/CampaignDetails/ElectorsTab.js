@@ -212,8 +212,6 @@ export const ElectorsTab = () => {
       currentCampaignMember.user.id,
       dispatch,
       electionAttendees,
-      elector,
-
     ]);
   return (
     <React.Fragment>

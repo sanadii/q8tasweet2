@@ -161,7 +161,7 @@ const CommitteesTab = () => {
         id: "#",
       },
       {
-        Header: "Committee",
+        Header: "اللجنة",
         filterable: true,
         Cell: (electionCommittee) => (
           <>
@@ -176,7 +176,7 @@ const CommitteesTab = () => {
         ),
       },
       {
-        Header: "Gender",
+        Header: "النوع",
         filterable: true,
         Cell: (electionCommittee) => (
           <>
@@ -185,7 +185,7 @@ const CommitteesTab = () => {
         ),
       },
       {
-        Header: "Action",
+        Header: "إجراءات",
         Cell: (cellProps) => {
           return (
             <div className="list-inline hstack gap-2 mb-0">
@@ -224,7 +224,7 @@ const CommitteesTab = () => {
         },
       },
       {
-        Header: "ID",
+        Header: "رمز",
         accessor: "candidate_id",
         filterable: true,
         enableGlobalFilter: false,
@@ -304,11 +304,11 @@ const CommitteesTab = () => {
               <div>
                 <TableContainerHeader
                   // Title
-                  ContainerHeaderTitle="Election Committees"
+                  ContainerHeaderTitle="لجان الإنتخابات"
 
                   // Add Elector Button
                   isContainerAddButton={true}
-                  AddButtonText="Add New Election Committee"
+                  AddButtonText="إضافة لجنة"
                   isEdit={isEdit}
                   handleEntryClick={handleElectionCommitteeClicks}
                   setIsEdit={setIsEdit}
@@ -335,7 +335,7 @@ const CommitteesTab = () => {
                   filters={filters}
                   setFilters={setFilters}
 
-                  SearchPlaceholder="Search for Election Committees..."
+                  SearchPlaceholder="البحث..."
                   // handleElectionCommitteeClick={handleElectionCommitteeClicks}
 
                   // Styling

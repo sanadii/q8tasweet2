@@ -56,14 +56,11 @@ const Category = ({ category, subCategory }) => {
 
   const categoryName =
     categories.find((cat) => cat.id === category)?.name || "";
-  const subCategoryName =
-    subCategories.find((subCat) => subCat.id === subCategory)?.name || "";
 
   return (
     <React.Fragment>
       <p>
         <b>{categoryName}</b>
-        <br />- {subCategoryName}
       </p>
     </React.Fragment>
   );

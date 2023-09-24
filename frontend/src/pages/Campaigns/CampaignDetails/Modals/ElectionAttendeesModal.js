@@ -122,11 +122,6 @@ const ElectionAttendeeUpdateModal = ({
   );
   const sortedGurantorOptions = GurantorOptions.sort((a, b) => a.rank - b.rank);
 
-  useEffect(() => {
-    // Set the callback action for the update modal
-    setOnModalSubmit(() => handleUpdateButton);
-    return () => setOnModalSubmit(null); // Cleanup on unmount
-  }, [handleUpdateButton, setOnModalSubmit]);
 
 
   const initialValues = {
@@ -163,6 +158,11 @@ const ElectionAttendeeUpdateModal = ({
     validation.submitForm();
   }, [validation]);
 
+  useEffect(() => {
+    // Set the callback action for the update modal
+    setOnModalSubmit(() => handleUpdateButton);
+    return () => setOnModalSubmit(null); // Cleanup on unmount
+  }, [handleUpdateButton, setOnModalSubmit]);
 
 
   return (

@@ -8,21 +8,13 @@ import { electionsSelector } from '../../../selectors/electionsSelector';
 import { getElections, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
 
 // Custom Components & ConstantsImports ------------
-import { ImageLargeCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { ImageMediumCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import ElectionModal from "./ElectionModal"
 import { Id, Name, CandidateCount, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
 // Toast & Styles ------------
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// React FilePond & Styles ------------
-import { registerPlugin } from "react-filepond";
-import "filepond/dist/filepond.min.css";
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const AllElections = () => {
   const dispatch = useDispatch();
@@ -105,12 +97,6 @@ const AllElections = () => {
 
       setElection({
         id: election.id,
-        name: election.name,
-        image:
-          election && election.image
-            ? process.env.REACT_APP_API_URL + election.image
-            : "",
-
         dueDate: election.dueDate,
         candidateCount: election.candidateCount,
         description: election.description,
@@ -219,33 +205,13 @@ const AllElections = () => {
           return <Id {...cellProps} />;
         },
       },
-
       {
-        name: "Image",
-        title: "Image",
-        accessor: "image",
-        Cell: (cellProps) => (
-          <ImageLargeCircle imagePath={cellProps.row.original.image} />
-        ), // Use the CircleImage component
-      },
-
-      {
-        Header: "الإنتخابات",
+        name: "الإنتخابات",
+        title: "name",
         accessor: "name",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <Name {...cellProps} />;
-        },
-      },
-      {
-        Header: "المرشحين",
-        accessor: "candidateCount",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <CandidateCount {...cellProps} />;
-        },
-      },
+        Cell: (cellProps) => cellProps.row ? <ImageMediumCircle row={cellProps.row} /> : null,
 
+      },
       {
         Header: "الموعد",
         accessor: "dueDate",

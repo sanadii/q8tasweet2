@@ -3,11 +3,7 @@ import { Link } from "react-router-dom";
 
 // Redux and actions imports
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getCandidates,
-  addNewElectionCandidate,
-  updateElectionCandidate,
-} from "../../../../store/actions";
+import { getCandidates, addNewElectionCandidate, updateElectionCandidate } from "../../../../store/actions";
 
 // Form validation imports
 import * as Yup from "yup";
@@ -16,30 +12,12 @@ import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
 // Reactstrap (UI) imports
-import {
-  Col,
-  Row,
-  ModalBody,
-  Label,
-  Input,
-  Modal,
-  ModalHeader,
-  Form,
-  ModalFooter,
-  Button,
-  FormFeedback,
-} from "reactstrap";
+import { Col, Row, ModalBody, Label, Input, Modal, ModalHeader, Form, ModalFooter, Button, FormFeedback } from "reactstrap";
 
 // Additional package imports
 import SimpleBar from "simplebar-react";
 
-export const ElectionCandidateModal = ({
-  modal,
-  toggle,
-  setModal,
-  isEdit,
-  electionCandidate,
-}) => {
+export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electionCandidate }) => {
   const dispatch = useDispatch();
 
   const { election_id } = useSelector((state) => ({

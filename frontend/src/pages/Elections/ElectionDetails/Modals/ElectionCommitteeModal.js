@@ -67,7 +67,6 @@ export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electi
       toggle();
     },
   });
-  console.log("Initial values:", validation.initialValues);
 
   return (
     <Modal isOpen={modal} toggle={openModal} centered className="border-0">

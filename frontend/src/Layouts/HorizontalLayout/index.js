@@ -6,8 +6,6 @@ import withRouter from '../../Components/Common/withRouter';
 
 // Import Data
 import navdata from "../LayoutMenuData";
-// //i18n
-// import { withTranslation } from "react-i18next";
 
 const HorizontalLayout = (props) => {
     const [isMoreMenu, setIsMoreMenu] = useState(false);

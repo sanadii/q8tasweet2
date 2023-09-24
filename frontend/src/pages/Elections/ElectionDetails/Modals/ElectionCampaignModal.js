@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getCandidates,
-  addNewElectionCampaign,
-  updateElectionCampaign,
-} from "../../../../store/actions";
+import { getCandidates, addNewElectionCampaign, updateElectionCampaign } from "../../../../store/actions";
 
 import { ImageCircle } from "../../../../Components/Common";
 // Form validation imports
@@ -15,31 +11,13 @@ import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
 // Reactstrap (UI) imports
-import {
-  Col,
-  Row,
-  ModalBody,
-  Label,
-  Input,
-  Modal,
-  ModalHeader,
-  Form,
-  ModalFooter,
-  Button,
-  FormFeedback,
-} from "reactstrap";
+import { Col, Row, ModalBody, Label, Input, Modal, ModalHeader, Form, ModalFooter, Button, FormFeedback } from "reactstrap";
 
 // Additional package imports
 import SimpleBar from "simplebar-react";
 import Flatpickr from "react-flatpickr";
 
-export const ElectionCampaignModal = ({
-  modal,
-  toggle,
-  setModal,
-  isEdit,
-  electionCampaign,
-}) => {
+export const ElectionCampaignModal = ({ modal, toggle, setModal, isEdit, electionCampaign }) => {
   const dispatch = useDispatch();
 
   const openModal = () => setModal(!modal);

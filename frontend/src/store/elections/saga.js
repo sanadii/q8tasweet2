@@ -77,7 +77,7 @@ import {
   deleteElectionCommitteeSuccess,
   deleteElectionCommitteeFail,
 
-  // Election Committees ---------------
+  // Election Committees Results ---------------
   updateElectionCommitteeResultsSuccess,
   updateElectionCommitteeResultsFail,
 
@@ -338,17 +338,21 @@ function* onUpdateElectionCommittee({ payload: electionCommittee }) {
 }
 
 
-function* onUpdateElectionCommitteeResults({ payload: electionCommitteeResults }) {
+function* onUpdateElectionCommitteeResults({ payload: electionCommitteeResult }) {
   try {
-    const response = yield call(updateElectionCommitteeResults, electionCommitteeResults);
-    yield put(
-      ElectionApiResponseSuccess(UPDATE_ELECTION_COMMITTEE_RESULTS, response.data)
-    );
+    console.log('Payload:', electionCommitteeResult); // Add log to check the payload
+    const response = yield call(updateElectionCommitteeResults, electionCommitteeResult);
+    console.log('API Response:', response); // Add log to check the API response
+    yield put(updateElectionCommitteeResultsSuccess(response));
+    toast.success("تم تحديث النتائج بنجاح", {
+      autoClose: 2000,
+    });
   } catch (error) {
-    yield put(ElectionApiResponseError(UPDATE_ELECTION_COMMITTEE_RESULTS, error));
+    console.error('Saga Error:', error); // Log any error that occurs
+    yield put(updateElectionCommitteeResultsFail(error));
+    toast.error("خطأ في تحديث النتائج", { autoClose: 2000 });
   }
 }
-
 
 // Election Campaigns ---------------
 function* getElectionCampaigns({ payload: election }) {

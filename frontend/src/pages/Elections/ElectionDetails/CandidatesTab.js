@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 import { deleteElectionCandidate } from "../../../store/actions";
 import ElectionCandidateModal from "./Modals/ElectionCandidateModal";
@@ -12,7 +13,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { ImageCandidateWinnerCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 
 // Reactstrap (UI) imports
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
@@ -23,14 +24,9 @@ import SimpleBar from "simplebar-react";
 const CandidatesTab = () => {
   const dispatch = useDispatch();
 
-  const { election_id, electionCandidates, isElectionCandidateSuccess, isElectionSuccess, error } = useSelector((state) => ({
-    election_id: state.Elections.electionDetails.id,
-    electionCandidates: state.Elections.electionCandidates,
-    isElectionCandidateSuccess: state.Elections.isElectionCandidateSuccess,
-    isCandidatesSuccess: state.Candidates.isCandidatesSuccess,
-    error: state.Candidates.error,
-  }));
+  const { electionDetails, electionCandidates, isElectionCandidateSuccess, isElectionSuccess, error } = useSelector(electionsSelector);
 
+  const election_id = electionDetails.id;
   const [electionCandidate, setElectionCandidate] = useState([]);
   const [electionCandidateList, setElectionCandidateList] =
     useState(electionCandidates);
@@ -168,7 +164,7 @@ const CandidatesTab = () => {
         id: "id",
       },
       {
-        Header: "Position",
+        Header: "المركز",
         accessor: "position",
         filterable: false,
         Cell: (cellProps) => {
@@ -176,42 +172,19 @@ const CandidatesTab = () => {
         },
       },
       {
-        Header: "Candidate",
+        Header: "المرشح",
         filterable: true,
         Cell: (electionCandidate) => (
-          <>
-            <div className="d-flex align-items-center">
-              <div className="flex-shrink-0">
-                {electionCandidate.row.original.image ? (
-                  // Use the ImageCircle component here
-                  <ImageGenderCircle
-                    genderValue={electionCandidate.row.original.gender}
-                    imagePath={electionCandidate.row.original.image}
-                  />
-                ) : (
-                  <div className="flex-shrink-0 avatar-xs me-2">
-                    <div className="avatar-title bg-soft-success text-success rounded-circle fs-13">
-                      {electionCandidate.row.original.name.charAt(0)}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="flex-grow-1 ms-2 name">
-                {electionCandidate.row.original.name}{" "}
-                {electionCandidate.row.original.is_winner ? (
-                  <Badge color="success" className="badge-label">
-                    {" "}
-                    <i className="mdi mdi-circle-medium"></i> Winner{" "}
-                  </Badge>
-                ) : null}
-              </div>
-            </div>
-          </>
+          <ImageCandidateWinnerCircle
+            gender={electionCandidate.row.original.gender}
+            name={electionCandidate.row.original.name}
+            imagePath={electionCandidate.row.original.image}
+            is_winner={electionCandidate.row.original.is_winner}
+          />
         ),
       },
-
       {
-        Header: "Votes",
+        Header: "الأصوات",
         accessor: "votes",
         filterable: false,
         Cell: (cellProps) => {
@@ -219,7 +192,7 @@ const CandidatesTab = () => {
         },
       },
       {
-        Header: "Action",
+        Header: "إجراءات",
         Cell: (cellProps) => {
           return (
             <div className="list-inline hstack gap-2 mb-0">
@@ -278,7 +251,7 @@ const CandidatesTab = () => {
         },
       },
       {
-        Header: "ID",
+        Header: "رمز",
         accessor: "candidate_id",
         filterable: true,
         enableGlobalFilter: false,
@@ -337,11 +310,11 @@ const CandidatesTab = () => {
               <div>
                 <TableContainerHeader
                   // Title
-                  ContainerHeaderTitle="Election Candidates"
+                  ContainerHeaderTitle="المرشحين"
 
                   // Add Elector Button
                   isContainerAddButton={true}
-                  AddButtonText="Add New Election Candidate"
+                  AddButtonText="إضافة مرشح"
                   isEdit={isEdit}
                   handleEntryClick={handleElectionCandidateClicks}
                   toggle={toggle}
@@ -355,15 +328,10 @@ const CandidatesTab = () => {
                   <TableContainer
                     // Data
                     columns={columns}
-                    data2={electionCandidateList}
                     data={electionCandidateList || []}
                     customPageSize={50}
 
                     // Header
-                    isTableContainerHeader={true}
-                    ContainerHeaderTitle="Election Candidates"
-                    AddButton="Add Election Candidate"
-                    setDeleteModalMulti={setDeleteModalMulti}
                     setIsEdit={setIsEdit}
                     toggle={toggle}
 
@@ -371,7 +339,7 @@ const CandidatesTab = () => {
                     isGlobalFilter={true}
                     isCandidateGenderFilter={true}
                     isMultiDeleteButton={isMultiDeleteButton}
-                    SearchPlaceholder="Search for Election Candidates..."
+                    SearchPlaceholder="البحث...."
                     setElectionCandidateList={setElectionCandidateList}
                     // handleElectionCandidateClick={handleElectionCandidateClicks}
 

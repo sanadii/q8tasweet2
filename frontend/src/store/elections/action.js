@@ -240,13 +240,13 @@ export const deleteElectionCommitteeFail = error => ({
 });
 
 // Election Committee Results ---------------
-export const updateElectionCommitteeResults = electionCommitteeResults => ({
+export const updateElectionCommitteeResults = electionCommitteeResult => ({
   type: UPDATE_ELECTION_COMMITTEE_RESULTS,
-  payload: electionCommitteeResults,
+  payload: electionCommitteeResult,
 });
-export const updateElectionCommitteeResultsSuccess = electionCommitteeResults => ({
+export const updateElectionCommitteeResultsSuccess = electionCommitteeResult => ({
   type: UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS,
-  payload: electionCommitteeResults,
+  payload: electionCommitteeResult,
 });
 export const updateElectionCommitteeResultsFail = error => ({
   type: UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL,

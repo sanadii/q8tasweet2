@@ -34,7 +34,7 @@ import {
   DELETE_ELECTION_COMMITTEE_FAIL,
 
   // Election Committee Results ----------------
-  UPDATE_ELECTION_COMMITTEE_RESULTS,
+  UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS,
   UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL,
 
   // Election Campaigns ---------------
@@ -92,13 +92,6 @@ const Elections = (state = IntialState, action) => {
             electionCommittee: action.payload.data,
             isElectionCommitteeCreated: false,
             isElectionCommitteeSuccess: true,
-          };
-        case UPDATE_ELECTION_COMMITTEE_RESULTS:
-          return {
-            ...state,
-            electionCommitteeResults: action.payload.data,
-            isElectionCampaignUpdate: true,
-            isElectionCampaignUpdateFail: false,
           };
         case GET_ELECTION_CAMPAIGNS:
           return {
@@ -349,6 +342,37 @@ const Elections = (state = IntialState, action) => {
         error: action.payload,
         isElectionCommitteeDelete: false,
         isElectionCommitteeDeleteFail: true,
+      };
+
+    case UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS: {
+      const { data } = action.payload; // Extract data from payload
+      // Assume that your action has a committeeId which represents the id of the committee
+      // If it is nested within data, adjust it accordingly.
+      const committeeId = Object.keys(data)[0]; // Extract the first key from data object assuming it is the committeeId
+
+      // If there is no valid committeeId, just return the current state
+      if (!committeeId || !data[committeeId]) return state;
+
+      return {
+        ...state,
+        electionCommitteeResults: {
+          ...state.electionCommitteeResults,
+          [committeeId]: {
+            ...(state.electionCommitteeResults[committeeId] || {}), // Default to an empty object if it does not exist yet
+            ...data[committeeId]
+          }
+        },
+        isElectionCommitteeResultUpdate: true,
+        isElectionCommitteeResultUpdateFail: false,
+      };
+    }
+
+    case UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionCommitteeResultUpdated: false,
+        isElectionCommitteeResultUpdatedFail: true,
       };
 
     // Election Committee Results

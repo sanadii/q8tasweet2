@@ -12,6 +12,13 @@ export const electionsSelector = createSelector(
   selectCampaignsState,
   (electionsState, usersState, categoriesState, campaignsState) => ({
     elections: electionsState.elections,
+    electionDetails: electionsState.electionDetails,
+
+    electionCommittees: electionsState.electionCommittees,
+    electionCandidates: electionsState.electionCandidates,
+    electionAttendees: electionsState.electionAttendees,
+    electionCommitteeResults: electionsState.electionCommitteeResults,
+
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,
     categories: categoriesState.categories,
@@ -26,9 +33,6 @@ export const electionsSelector = createSelector(
     campaignGuarantees: campaignsState.campaignGuarantees,
     isCampaignSuccess: campaignsState.isCampaignSuccess,
 
-    electionCommittees: campaignsState.electionCommittees,
-    electionCandidates: campaignsState.electionCandidates,
-    electionAttendees: campaignsState.electionAttendees, // Added electionAttendees
 
     // Users
     moderators: usersState.moderators,

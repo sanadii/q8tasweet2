@@ -652,7 +652,7 @@ const SearchFilter = ({ filters, setFilters, searchField }) => {
 };
 
 const ElectionCommitteeFilter = ({ filters, setFilters }) => {
-  const { electionAttendees, electionCommittees } = useSelector();
+  const { electionAttendees, electionCommittees } = useSelector(electionsSelector);
 
   // Directly sorting the committees
   const sortedCommitteeOptions = [...electionCommittees].sort((a, b) =>

@@ -90,7 +90,7 @@ export const getElectionCommitteeDetails = (electionCommittee) => api.get(url.GE
 export const getElectionCommitteeCount = () => api.get(url.GET_ELECTION_COUNT);
 
 // ElectionCommittees
-export const updateElectionCommitteeResults = (electionCommitteeResults) => api.update(url.UPDATE_ELECTION_COMMITTEE_RESULTS + "/" + electionCommitteeResults.id, electionCommitteeResults);
+export const updateElectionCommitteeResults = (electionCommitteeResult) => api.update(url.UPDATE_ELECTION_COMMITTEE_RESULTS + "/" + electionCommitteeResult.id, electionCommitteeResult);
 
 // ElectionCampaigns
 export const getElectionCampaigns = (campaign) => api.get(url.GET_ELECTION_CAMPAIGNS + "/" + campaign.id);

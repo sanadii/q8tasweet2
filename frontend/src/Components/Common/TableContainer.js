@@ -94,6 +94,7 @@ const TableContainer = ({
         selectedRowIds: 0,
         sortBy: [
           {
+            id: 'total', // The ID of the accessor data in your column definition
             desc: true,
           },
         ],

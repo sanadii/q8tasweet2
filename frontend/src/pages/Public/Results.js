@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import { Badge, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Card, CardBody, } from "reactstrap";
-import classnames from "classnames";
+import { electionsSelector } from '../../selectors/electionsSelector';
 
 // --------------- Component, Constants, Hooks Imports ---------------
-import { ImageGenderCircle, ImageLargeCircle, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Components/Common";
+import { ImageGenderCircle, ImageMediumCircle, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Components/Common";
 
 import { Container } from "reactstrap";
 import { useParams } from "react-router-dom";
@@ -24,13 +23,7 @@ const ElectionDetails = () => {
     id: useParams().id,
   });
 
-  const { electionDetails, electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector((state) => ({
-    electionDetails: state.Elections.electionDetails,
-    electionCandidates: state.Elections.electionCandidates,
-    electionCommittees: state.Elections.electionCommittees,
-    electionCommitteeResults: state.Elections.electionCommitteeResults,
-    error: state.Elections.error,
-  }));
+  const { electionDetails, electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector(electionsSelector);
 
   useEffect(() => {
     if (election.id && !isEmpty(election)) {
@@ -44,7 +37,7 @@ const ElectionDetails = () => {
   // Function to transform the data
   const transformData = (data) => {
     const transformed = [];
-  
+
     // Collect all unique candidate IDs
     const allCandidates = new Set();
     for (const committeeVotes of Object.values(data)) {
@@ -52,39 +45,57 @@ const ElectionDetails = () => {
         allCandidates.add(parseInt(candidateId));
       }
     }
-  
+
     // Sort candidates by total votes (descending order)
     const sortedCandidates = [...allCandidates].sort((candidateId1, candidateId2) => {
       const totalVotes1 = Object.values(data).reduce((sum, committeeVotes) => sum + (committeeVotes[candidateId1] || 0), 0);
       const totalVotes2 = Object.values(data).reduce((sum, committeeVotes) => sum + (committeeVotes[candidateId2] || 0), 0);
-  
+
       return totalVotes2 - totalVotes1;
     });
-  
+
     // Organize the data for each candidate
     sortedCandidates.forEach(candidateId => {
       const row = { "candidate.id": candidateId };
       let totalVotesForCandidate = 0; // Initialize the total vote counter for each candidate
-  
+
       for (const committeeId in data) {
         totalVotesForCandidate += data[committeeId][candidateId] || 0;
         row[`committee_${committeeId}`] = data[committeeId][candidateId] || 0;
       }
-  
-      row['total'] = totalVotesForCandidate;
-  
+
+      row['total'] = <strong>{totalVotesForCandidate}</strong>;
+
       transformed.push(row);
     });
-  
+
     return transformed;
   };
-  
-  
+
+
 
   const createColumns = (data) => {
     const columns = [
       {
-        Header: "Candidate",
+        Header: 'المركز',
+        accessor: 'position',
+        Cell: (cellProps) => {
+          const candidateId = cellProps.row.original['candidate.id'];
+          const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
+
+          if (!candidate) {
+            return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
+          }
+
+          return (
+            <>
+              {candidate.position}
+            </>
+          );
+        },
+      },
+      {
+        Header: "المرشح",
         accessor: 'candidate.id',
         Cell: (cellProps) => {
           const candidateId = cellProps.row.original['candidate.id'];
@@ -126,24 +137,6 @@ const ElectionDetails = () => {
         },
       },
       {
-        Header: 'المركز',
-        accessor: 'position',
-        Cell: (cellProps) => {
-          const candidateId = cellProps.row.original['candidate.id'];
-          const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
-
-          if (!candidate) {
-            return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
-          }
-
-          return (
-            <>
-              {candidate.position}
-            </>
-          );
-        },
-      },
-      {
         Header: 'المجموع',
         accessor: 'total',
       },
@@ -177,7 +170,7 @@ const ElectionDetails = () => {
           <div className="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
             <Row className="g-4">
               <div className="col-auto">
-                <ImageLargeCircle imagePath={electionDetails.image} />
+                <ImageMediumCircle imagePath={electionDetails.image} />
               </div>
 
               <Col>
@@ -196,18 +189,18 @@ const ElectionDetails = () => {
                 <Row className="text text-white-50 text-center">
                   <Col lg={6} xs={4}>
                     <div className="p-2">
-                      {/* <h4 className="text-white mb-1">{campaignMembers.length}</h4> */}
-                      <p className="fs-14 mb-0">المرشحين</p>
+                      <h4 className="text-white mb-1">{electionCandidates.length}</h4>
+                      <p className="fs-14 mb-0">المرشحون</p>
                     </div>
                   </Col>
-                  <Col lg={6} xs={4}>
+                  {/* <Col lg={6} xs={4}>
                     <div className="p-2">
                       <h4 className="text-white mb-1">
-                        {/* {campaignGuarantees.length} */}
+                    
                       </h4>
                       <p className="fs-14 mb-0">الحضور</p>
                     </div>
-                  </Col>
+                  </Col> */}
                 </Row>
               </Col>
             </Row>

@@ -73,7 +73,8 @@ const CampaignGuaranteesModalUpdate = ({
 
   const handleUpdateButton = useCallback(() => {
     validation.submitForm();
-  }, [validation.submitForm]);
+  }, [validation]);
+
 
   useEffect(() => {
     // Set the callback action for the update modal

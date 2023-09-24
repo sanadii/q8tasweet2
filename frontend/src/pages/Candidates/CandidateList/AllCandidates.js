@@ -7,7 +7,7 @@ import { Col, Row, Card, CardBody } from "reactstrap";
 import { getCandidates, deleteCandidate, getModeratorUsers } from "../../../store/actions";
 
 // ------------ Custom Components & ConstantsImports ------------
-import { ImageLargeCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { ImageMediumCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import CandidateModal from "./CandidateModal"
 import { Id, Name, Status, Priority, CreateBy, Moderators, Actions } from "./CandidateListCol";
 
@@ -214,7 +214,7 @@ const AllCandidates = () => {
         title: "Image",
         accessor: "image",
         Cell: (cellProps) => (
-          <ImageLargeCircle imagePath={cellProps.row.original.image} />
+          <ImageMediumCircle imagePath={cellProps.row.original.image} />
         ),
       },
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-
-import { useParams } from "react-router-dom";
+import { electionsSelector } from '../../../selectors/electionsSelector';
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -25,14 +24,7 @@ import { StatusOptions, PriorityOptions, RankOptions, ElectionTypeOptions, Elect
 const EditTab = ({ election }) => {
   const dispatch = useDispatch();
 
-
-  const { electionDetails, categories, subCategories } = useSelector((state) => ({
-    electionDetails: state.Elections.electionDetails,
-    categories: state.Categories.categories,
-    subCategories: state.Categories.subCategories,
-  }));
-
-
+  const { electionDetails, categories, subCategories } = useSelector(electionsSelector);
 
   // Election Categories
   useEffect(() => {
@@ -41,32 +33,9 @@ const EditTab = ({ election }) => {
     }
   }, [dispatch, categories]);
 
-  // Media
-  const MEDIA_URL = process.env.REACT_APP_MEDIA_URL;
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const handleImageSelect = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-      console.log("handleImageSelect called");
-    }
-  };
-
-  const formData = new FormData();
-
-  if (selectedImage) {
-    formData.append("image", selectedImage);
-    formData.append("folder", "elections"); // Replace "elections" with the actual folder name
-  } else {
-    console.log("No selected image");
-  }
-
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: (election && election.name) || "",
-      image: election.image ? `${MEDIA_URL}${election.image}` : "",
-      selectedImage: selectedImage,
       description: (election && election.description) || "",
       dueDate: (election && election.dueDate) || "",
 
@@ -99,9 +68,6 @@ const EditTab = ({ election }) => {
     onSubmit: (values) => {
       const updatedElection = {
         id: election ? election.id : 0,
-        name: values.name,
-        image: values.image,
-        selectedImage: selectedImage,
         dueDate: dueDate,
         description: values.description,
 
@@ -128,7 +94,7 @@ const EditTab = ({ election }) => {
         priority: values.priority,
       };
       dispatch(
-        updateElection({ election: updatedElection, formData: formData })
+        updateElection({ election: updatedElection })
       );
     },
   });

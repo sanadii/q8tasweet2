@@ -12,7 +12,7 @@ import {
 
 // ------------ Custom Components & ConstantsImports ------------
 import {
-  ImageLargeCircle,
+  ImageMediumCircle,
   Loader,
   DeleteModal,
   TableContainer,

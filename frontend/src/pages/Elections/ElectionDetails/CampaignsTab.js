@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  deleteElectionCampaign,
-  addNewElectionCampaign,
-} from "../../../store/actions";
+import { deleteElectionCampaign, addNewElectionCampaign } from "../../../store/actions";
 import { Link } from "react-router-dom";
 
 import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalHeader, ModalBody, Row, UncontrolledDropdown } from "reactstrap";
 
-import {
-  ImageGenderCircle,
-  ImageCandidateCampaign,
-  DeleteModal,
-} from "../../../Components/Common";
+import { ImageGenderCircle, ImageCandidateCampaign, DeleteModal } from "../../../Components/Common";
 
 import ElectionCampaignModal from "./Modals/ElectionCampaignModal";
 
