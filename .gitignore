@@ -14,6 +14,7 @@ frontend/node_modules/.cache/
 
 # Python dependencies ---------------------------------------
 venv/
+frontend/.env
 __pycache__/
 *.pyc
 *.pyo

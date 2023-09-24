@@ -88,6 +88,7 @@
     "redux": "^4.2.1",
     "redux-saga": "^1.2.2",
     "remixicon-react": "^1.0.0",
+    "reselect": "^4.1.8",
     "save": "^2.9.0",
     "simplebar-react": "^3.2.1",
     "styled-components": "^5.3.6",
