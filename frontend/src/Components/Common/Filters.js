@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
 import { StatusOptions, PriorityOptions, MemberRankOptions, GenderOptions, GuaranteeStatusOptions } from "../../Components/constants";
 import classnames from "classnames";
-import { electionsSelector } from '../../selectors/electionsSelector';
+import { electionsSelector } from '../../Selectors/electionsSelector';
 
 import { Nav, NavItem, NavLink, Input } from "reactstrap";
 
@@ -94,8 +94,8 @@ const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
 
 
 const ElectionCategoryFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
-  const elections = useSelector((state) => state.Elections.elections);
-  const categories = useSelector((state) => state.Categories.categories);
+
+  const { elections, categories } = useSelector(electionsSelector);
 
   // Compute the count for each category
   const categoryCounts = categories.reduce((counts, category) => {
@@ -370,9 +370,7 @@ const GuaranteeStatusFilter = ({ filters, setFilters }) => {
 
 
 const CandidateGenderFilter = ({ setElectionCandidateList }) => {
-  const electionCandidates = useSelector(
-    (state) => state.Elections.electionCandidates
-  );
+  const electionCandidates = useSelector(electionsSelector);
 
   const ChangeCandidateGender = (e) => {
     const selectedGender = e ? Number(e) : null; // Convert to number
@@ -410,9 +408,7 @@ const CandidateGenderFilter = ({ setElectionCandidateList }) => {
 };
 
 const GenderFilter = ({ filters, setFilters }) => {
-  const campaignGuarantees = useSelector(
-    (state) => state.Campaigns.campaignGuarantees
-  );
+  const campaignGuarantees = useSelector(electionsSelector);
 
   const ChangeGuaranteeGender = (e) => {
     const selectedGender = e ? Number(e) : null; // Convert to number
@@ -451,9 +447,7 @@ const GenderFilter = ({ filters, setFilters }) => {
 
 
 const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
-  const campaignGuarantees = useSelector(
-    (state) => state.Campaigns.campaignGuarantees
-  );
+  const campaignGuarantees = useSelector(electionsSelector);
 
   const AttendanceOptions = [
     { id: 'true', name: "حضر" },

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import classnames from "classnames";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // --------------- Component, Constants, Hooks Imports ---------------
 import { ImageMediumCircle, ImageCampaignBackground } from "../../../Components/Common";
@@ -39,7 +39,7 @@ const Section = ({
   campaign,
   campaignMembers,
   campaignGuarantees,
-  electionCommittees,
+  campaignCommittees,
 }) => {
   SwiperCore.use([Autoplay]);
 

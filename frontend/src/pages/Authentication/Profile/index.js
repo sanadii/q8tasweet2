@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"; // Removed unnecessary impor
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCurrentUser } from "../../../store/actions";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 import {
   Card,

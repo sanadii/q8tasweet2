@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { electionsSelector } from '../../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../../Selectors/electionsSelector';
 
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import CampaignGuaranteesModalUpdate from "./CampaignGuaranteesModalUpdate";

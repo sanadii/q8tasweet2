@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 import { deleteElectionCommittee } from "../../../store/actions";
 import ElectionCommitteeModal from "./Modals/ElectionCommitteeModal";
@@ -23,11 +24,8 @@ import SimpleBar from "simplebar-react";
 const CommitteesTab = () => {
   const dispatch = useDispatch();
 
-  const { election_id, electionCommittees, error } = useSelector((state) => ({
-    election_id: state.Elections.electionDetails.id,
-    electionCommittees: state.Elections.electionCommittees,
-    error: state.Elections.error,
-  }));
+  const { electionDetails, electionCommittees, error } = useSelector(electionsSelector);
+  const election_id = electionDetails.id;
 
   const [electionCommittee, setElectionCommittee] = useState([]);
 

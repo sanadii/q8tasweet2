@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "../../../../store/actions";
-import { electionsSelector } from '../../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../../Selectors/electionsSelector';
 
 // Component & Constants imports 
 import { MemberRankOptions } from "../../../../Components/constants";
@@ -21,16 +21,16 @@ const CampaignMembersUpdateModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const { currentCampaignMember, currentUser, campaignMembers, electionCommittees } = useSelector(electionsSelector);
+  const { currentCampaignMember, currentUser, campaignMembers, campaignCommittees } = useSelector(electionsSelector);
 
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   const [electionCommitteeList, setElectionCommitteeList] =
-    useState(electionCommittees);
+    useState(campaignCommittees);
 
   useEffect(() => {
-    setElectionCommitteeList(electionCommittees);
-  }, [electionCommittees]);
+    setElectionCommitteeList(campaignCommittees);
+  }, [campaignCommittees]);
 
   const supervisorMembers = campaignMembers.filter(
     (member) => member.rank === 3

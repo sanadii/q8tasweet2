@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { electionsSelector } from '../../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../../Selectors/electionsSelector';
 
 import { getUsers, addNewCampaignMember, updateCampaignMember } from "../../../../store/actions";
 
@@ -51,14 +51,14 @@ const CampaignMembersAddModal = ({ campaignId }) => {
     );
   }, [users, searchUserInput]);
 
-  const { electionCommittees } = useSelector(electionsSelector);
+  const { campaignCommittees } = useSelector(electionsSelector);
 
   const [electionCommitteeList, setElectionCommitteeList] =
-    useState(electionCommittees);
+    useState(campaignCommittees);
 
   useEffect(() => {
-    setElectionCommitteeList(electionCommittees);
-  }, [electionCommittees]);
+    setElectionCommitteeList(campaignCommittees);
+  }, [campaignCommittees]);
 
   const supervisorMembers = campaignMembers.filter(
     (member) => member.rank === 3

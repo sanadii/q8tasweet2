@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignMember } from "../../../store/actions";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // --------------- Component & Constants imports ---------------
 import { ImageCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
@@ -19,7 +19,7 @@ const MembersTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const { currentCampaignMember, campaignGuarantees, campaignMembers, electionCommittees, electionAttendees, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
+  const { currentCampaignMember, campaignGuarantees, campaignMembers, campaignCommittees, electionsSelector, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   // --------------- Constants ---------------
@@ -121,8 +121,8 @@ const MembersTab = () => {
 }, [campaignGuarantees]);
 
 const getAttendeeCountForMember = useCallback((memberId) => {
-    return electionAttendees.filter(attendee => attendee.member === memberId).length;
-}, [electionAttendees]);
+    return electionsSelector.filter(attendee => attendee.member === memberId).length;
+}, [electionsSelector]);
 
 
   const handleCampaignMemberClick = useCallback(
@@ -279,7 +279,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
               );
             }
 
-            const committee = electionCommittees.find(
+            const committee = campaignCommittees.find(
               (committee) => committee.id === committeeId
             );
             return (
@@ -408,7 +408,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
       currentCampaignMember.rank !== 3 ? SupervisorColumns : [],
       actionColumn
     );
-  }, [handleCampaignMemberClick, checkedAll, activeTab, campaignGuarantees.length, campaignMembers, currentCampaignMember.rank, electionCommittees, getAttendeeCountForMember, getGuaranteeCountForMember, isAdmin]);
+  }, [handleCampaignMemberClick, checkedAll, activeTab, campaignGuarantees.length, campaignMembers, currentCampaignMember.rank, campaignCommittees, getAttendeeCountForMember, getGuaranteeCountForMember, isAdmin]);
 
 
   // Filters -------------------------

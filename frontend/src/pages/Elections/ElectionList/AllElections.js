@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Row, Card, CardBody } from "reactstrap";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // Store ------------
 import { getElections, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
@@ -20,7 +20,7 @@ const AllElections = () => {
   const dispatch = useDispatch();
 
   // State Management ------------
-  const { elections, moderators, categories, subCategories, isElectionSuccess, error } = useSelector(electionsSelector);
+  const { elections, isElectionSuccess, error, categories, subCategories, moderators } = useSelector(electionsSelector);
 
   const [election, setElection] = useState(null);
   const [isEdit, setIsEdit] = useState(false);

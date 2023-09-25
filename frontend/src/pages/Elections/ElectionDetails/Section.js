@@ -61,7 +61,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       <div className="col-md">
                         <div>
                           <h4 className="fw-bold">
-                           {election.name} [ID:  {election.id}]
+                            {election.name} [ID:  {election.id}]
                           </h4>
                           <div className="hstack gap-3 flex-wrap">
                             <div>
@@ -70,9 +70,11 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                             </div>
                             <div className="vr"></div>
                             <div>
-                              Date :
+                              موعد الإنتخابات :
                               <span className="fw-medium">
-                                {election.dueDate}
+                                <strong>
+                                  {election.dueDate}
+                                </strong>
                               </span>
                             </div>
                             <div className="vr"></div>
@@ -183,7 +185,7 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       }}
                       href="#"
                     >
-                      النتائج الكاملة
+                      النتائج
                     </NavLink>
                   </NavItem>
                   <NavItem>

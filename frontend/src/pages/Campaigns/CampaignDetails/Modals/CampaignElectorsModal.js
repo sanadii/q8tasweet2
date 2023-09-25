@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { electionsSelector } from '../../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../../Selectors/electionsSelector';
 import "react-toastify/dist/ReactToastify.css";
 
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";

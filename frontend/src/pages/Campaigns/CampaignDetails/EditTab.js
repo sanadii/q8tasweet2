@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "../../../store/actions";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // --------------- Component & Constants imports ---------------
 import { MemberRankOptions } from "../../../Components/constants";
@@ -21,14 +21,14 @@ const EditTab = () => {
 
   document.title = "Starter | Q8Tasweet - React Admin & Dashboard Template";
 
-  const { currentCampaignMember, currentUser, campaignMembers, electionCommittees } = useSelector(electionsSelector);
+  const { currentCampaignMember, currentUser, campaignMembers, campaignCommittees } = useSelector(electionsSelector);
 
   const [electionCommitteeList, setElectionCommitteeList] =
-    useState(electionCommittees);
+    useState(campaignCommittees);
 
   useEffect(() => {
-    setElectionCommitteeList(electionCommittees);
-  }, [electionCommittees]);
+    setElectionCommitteeList(campaignCommittees);
+  }, [campaignCommittees]);
 
   const supervisorMembers = campaignMembers.filter(
     (member) => member.rank === 3

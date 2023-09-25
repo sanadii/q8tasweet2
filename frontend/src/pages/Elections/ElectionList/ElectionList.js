@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, Modal, ModalBody, Nav, NavItem, NavLink, Row, Label, Input, Button, ModalHeader, FormFeedback, Form } from "reactstrap";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // Custom component imports
 import { GenderCircle, ImageCircle, ImageGenderCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";

@@ -8,7 +8,7 @@ const CampaignMembersViewModal = ({ campaignMember }) => {
   const currentUser = Users?.currentUser;
   const currentCampaignMember = Campaigns?.currentCampaignMember;
   const campaignMembers = Campaigns?.campaignMembers || [];
-  const electionCommittees = Campaigns?.electionCommittees || [];
+  const campaignCommittees = Campaigns?.campaignCommittees || [];
 
   const supervisorMembers = campaignMembers.filter(member => member.rank === 3);
 
@@ -37,7 +37,7 @@ const CampaignMembersViewModal = ({ campaignMember }) => {
         {displayField("Rank", campaignMember?.rank)}
         {displayField("Mobile", campaignMember?.mobile)}
         {campaignMember?.rank > 3 && displayField("Supervisor", supervisorMembers.find(supervisor => supervisor.id === campaignMember.supervisor)?.user?.name)}
-        {campaignMember?.rank > 4 && displayField("Committee", electionCommittees.find(committee => committee.id === campaignMember.committee)?.name)}
+        {campaignMember?.rank > 4 && displayField("Committee", campaignCommittees.find(committee => committee.id === campaignMember.committee)?.name)}
         {displayField("Notes", campaignMember?.notes)}
       </ModalBody>
     </div>

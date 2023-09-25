@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCampaignDetails } from "../../../store/actions";
 import { isEmpty } from "lodash";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 import Section from "./Section";
 
@@ -14,7 +14,7 @@ const CampaignDetails = () => {
 
   document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
 
-  const { currentCampaignMember, campaign, campaignMembers, campaignGuarantees, electionCommittees, isCampaignSuccess } = useSelector(electionsSelector);
+  const { currentCampaignMember, campaign, campaignMembers, campaignGuarantees, campaignCommittees, isCampaignSuccess } = useSelector(electionsSelector);
 
   useEffect(() => {
     if (campaignId && !isEmpty({ id: campaignId })) {
@@ -34,7 +34,7 @@ const CampaignDetails = () => {
               campaignMembers={campaignMembers}
               campaignGuarantees={campaignGuarantees}
               currentCampaignMember={currentCampaignMember}
-              electionCommittees={electionCommittees}
+              campaignCommittees={campaignCommittees}
             />
           )}
         </Container>

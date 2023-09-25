@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 // Redux and actions imports
 import { useSelector, useDispatch } from "react-redux";
 import { getCandidates, addNewElectionCandidate, updateElectionCandidate } from "../../../../store/actions";
+import { electionsSelector } from '../../../../Selectors/electionsSelector';
 
 // Form validation imports
 import * as Yup from "yup";
@@ -20,10 +21,9 @@ import SimpleBar from "simplebar-react";
 export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electionCandidate }) => {
   const dispatch = useDispatch();
 
-  const { election_id } = useSelector((state) => ({
-    election_id: state.Elections.electionDetails.id,
-  }));
-
+  const { electionDetails } = useSelector(electionsSelector);
+  const election_id = electionDetails.id;
+  
   const openModal = () => setModal(!modal);
   const toggleModal = () => {
     setModal(!modal);

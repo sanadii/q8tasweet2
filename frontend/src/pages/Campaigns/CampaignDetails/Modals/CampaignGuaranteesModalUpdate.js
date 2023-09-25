@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignGuarantee } from "../../../../store/actions";
-import { electionsSelector } from '../../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../../Selectors/electionsSelector';
 
 // --------------- Component & Constants imports ---------------
 import { GuaranteeStatusOptions } from "../../../../Components/constants";
@@ -28,7 +28,7 @@ const CampaignGuaranteesModalUpdate = ({
   const { campaign } = useSelector((state) => ({
     campaign: state.Campaigns.campaignDetails.id,
   }));
-  const electionCommittees = useSelector(electionsSelector); // Directly use without redundant useState
+  const campaignCommittees = useSelector(electionsSelector); // Directly use without redundant useState
 
   const GurantorOptions = campaignMembers.filter(
     (member) => member.rank === 2 || member.rank === 3 || member.rank === 4

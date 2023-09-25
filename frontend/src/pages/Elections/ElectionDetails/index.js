@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Container } from "reactstrap";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getElectionDetails,
-  // getElectionCandidates,
-  getElectionCampaigns,
-} from "../../../store/actions";
+import { getElectionDetails, getElectionCampaigns } from "../../../store/actions";
+import { electionsSelector } from '../../../Selectors/electionsSelector';
+
 import { isEmpty } from "lodash";
 import Section from "./Section";
 
@@ -20,14 +18,7 @@ const ElectionDetails = () => {
     id: useParams().id,
   });
 
-  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } =
-    useSelector((state) => ({
-      electionDetails: state.Elections.electionDetails,
-      electionCandidates: state.Elections.electionCandidates,
-      electionCampaigns: state.Elections.electionCampaigns,
-      electionCommittees: state.Elections.electionCommittees,
-      // error: state.Elections.error,
-    }));
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionsSelector);
 
   const dispatch = useDispatch();
 

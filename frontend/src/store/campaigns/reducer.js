@@ -53,9 +53,9 @@ const IntialState = {
   campaignDetails: [],
   campaignGuarantees: [],
 
-  electionCandidates: [],
-  electionCommittees: [],
-  electionAttendees: [],
+  campaignElectionCandidates: [],
+  campaignElectionCommittees: [],
+  campaignElectionAttendees: [],
 };
 
 const Campaigns = (state = IntialState, action) => {
@@ -78,9 +78,9 @@ const Campaigns = (state = IntialState, action) => {
             campaignMembers: action.payload.data.campaignMembers,
             campaignGuarantees: action.payload.data.campaignGuarantees,
 
-            electionCandidates: action.payload.data.electionCandidates,
-            electionCommittees: action.payload.data.electionCommittees,
-            electionAttendees: action.payload.data.electionAttendees,
+            campaignElectionCandidates: action.payload.data.electionCandidates,
+            campaignElectionCommittees: action.payload.data.electionCommittees,
+            campaignElectionAttendees: action.payload.data.electionAttendees,
             isCampaignCreated: false,
             isCampaignSuccess: true,
           };
@@ -101,7 +101,7 @@ const Campaigns = (state = IntialState, action) => {
         case GET_ELECTION_ATTENDEES:
           return {
             ...state,
-            electionAttendees: action.payload.data.electors,
+            campaignElectionAttendees: action.payload.data.electors,
             isElectionAttendeeCreated: false,
             isElectionAttendeeSuccess: true,
           };
@@ -364,7 +364,7 @@ const Campaigns = (state = IntialState, action) => {
       return {
         ...state,
         isElectionAttendeeCreated: true,
-        electionAttendees: [...state.electionAttendees, action.payload.data],
+        campaignElectionAttendees: [...state.campaignElectionAttendees, action.payload.data],
         isElectionAttendeeAdd: true,
         isElectionAttendeeAddFail: false,
       };
@@ -379,7 +379,7 @@ const Campaigns = (state = IntialState, action) => {
     case UPDATE_ELECTION_ATTENDEE_SUCCESS:
       return {
         ...state,
-        electionAttendees: state.electionAttendees.map((electionAttendee) =>
+        campaignElectionAttendees: state.campaignElectionAttendees.map((electionAttendee) =>
           electionAttendee.id.toString() === action.payload.data.id.toString()
             ? { ...electionAttendee, ...action.payload.data }
             : electionAttendee
@@ -397,7 +397,7 @@ const Campaigns = (state = IntialState, action) => {
     case DELETE_ELECTION_ATTENDEE_SUCCESS:
       return {
         ...state,
-        electionAttendees: state.electionAttendees.filter(
+        campaignElectionAttendees: state.campaignElectionAttendees.filter(
           (electionAttendee) =>
             electionAttendee.id.toString() !==
             action.payload.electionAttendee.toString()

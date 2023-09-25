@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteElectionAttendee, updateElectionAttendee } from "../../../store/actions";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // Component imports
 import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
@@ -20,12 +20,12 @@ import "react-toastify/dist/ReactToastify.css";
 const AttendeesList = () => {
   const dispatch = useDispatch();
 
-  const { electionId, electionAttendees, electionCommittees, campaignMembers, isElectionAttendeeSuccess, error  } = useSelector(electionsSelector);
+  const { electionId, electionsSelector, campaignCommittees, campaignMembers, isElectionAttendeeSuccess, error  } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   // ElectionAttendees Constants
   const [electionAttendee, setElectionAttendee] = useState(null);
-  useState(electionAttendees);
+  useState(electionsSelector);
 
   // Delete Modal Constants
   const [deleteModal, setDeleteModal] = useState(false);
@@ -142,11 +142,11 @@ const AttendeesList = () => {
   }, [campaignMembers]); // campaignMembers as dependency
 
   const findCommitteeById = useCallback((committeeId) => {
-    const committee = electionCommittees.find(
+    const committee = campaignCommittees.find(
       (committee) => committee && committee.id === committeeId
     );
     return committee?.name || "Committee not found";
-  }, [electionCommittees]); // electionCommittees as dependency
+  }, [campaignCommittees]); // campaignCommittees as dependency
 
   const columns = useMemo(() => [
       // {
@@ -269,7 +269,7 @@ const AttendeesList = () => {
     member: null,
   });
 
-  const electionAttendeeList = electionAttendees.filter(electionAttendee => {
+  const electionAttendeeList = electionsSelector.filter(electionAttendee => {
     let isValid = true;
     if (filters.global) {
       const globalSearch = filters.global.toLowerCase();

@@ -2,15 +2,8 @@ import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
 import { Table, Row, Col, Button, Input, CardBody, CardHeader, CardFooter } from "reactstrap";
-
-import {
-  DefaultColumnFilter,    // Can be removed, review the codes that can be used
-} from "./Filters";
-
+import { DefaultColumnFilter } from "./Filters";
 import { TableContainerHeader, TableContainerFooter, TableContainerFilters } from "../Common";
-
-// Define a default UI for filtering
-
 
 const TableContainer = ({
   // Global Header -------------------------

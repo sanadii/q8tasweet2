@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { electionsSelector } from '../../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../../Selectors/electionsSelector';
 
 import { updateElectionAttendee } from "../../../../store/actions";
 import * as Yup from "yup";
@@ -113,7 +113,7 @@ const ElectionAttendeeUpdateModal = ({
   const { campaignId } = useSelector((state) => ({
     campaignId: state.Campaigns.campaignDetails.id,
   }));
-  const electionCommittees = useSelector(electionsSelector); // Directly use without redundant useState
+  const campaignCommittees = useSelector(electionsSelector); // Directly use without redundant useState
 
 
 

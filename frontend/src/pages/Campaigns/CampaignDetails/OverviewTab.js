@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, Row, TabContent, Table, UncontrolledCollapse } from "reactstrap";
 import { MemberRankOptions } from "../../../Components/constants";
 import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../Components/Common";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 
 const OverviewTab = () => {
 
-  const { campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, campaignAttendees, electionCommittees, electionCandidates } = useSelector(electionsSelector);
+  const { campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, electionsSelector, campaignCommittees, campaignCandidates } = useSelector(electionsSelector);
 
   document.title = "Campaign Overview | Q8Tasweet";
 
-  const committeeObj = electionCommittees.find(
+  const committeeObj = campaignCommittees.find(
     (committee) => committee.id === currentCampaignMember.committee
   );
   const committeeName = committeeObj ? committeeObj.name : "Unknown";
@@ -266,10 +266,10 @@ const OverviewTab = () => {
               <ul>
                 <li>رمز الإنتخابات: <strong>{campaignDetails.election.id}</strong></li>
                 <li>الإسم: <strong>{campaignDetails.election.name}</strong></li>
-                <li>المرشحين: <strong>{electionCandidates.length} مرشح</strong></li>
+                <li>المرشحين: <strong>{campaignCandidates.length} مرشح</strong></li>
                 <li>المقاعد: <strong>{campaignDetails.election.seats} مقعد</strong></li>
                 <li>الأصوات: <strong>{campaignDetails.election.votes} صوت</strong></li>
-                <li>اللجان: <strong>{electionCommittees.length} لجنة</strong></li>
+                <li>اللجان: <strong>{campaignCommittees.length} لجنة</strong></li>
               </ul>
             </CardBody>
           </Card>

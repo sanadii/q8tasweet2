@@ -1,24 +1,23 @@
-// React imports
+// React Core and Hooks
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+
+// Redux Related Imports
 import { useSelector, useDispatch } from "react-redux";
 import { updateElectionCommitteeResults } from "../../../store/actions";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-// Utility and helper imports
+// Component and UI Library Imports
+import { Col, Row, Card, CardBody } from "reactstrap";
+import { ImageCandidateWinnerCircle, Loader, TableContainer, TableContainerHeader } from "../../../Components/Common";
+
+// Utility and Third-Party Library Imports
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Custom component imports
-import { ImageCandidateWinnerCircle, Loader, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
-
-// Reactstrap (UI) imports
-import { Col, Row, Card, CardBody } from "reactstrap";
 
 const ResultsTab = () => {
   const dispatch = useDispatch();
 
   const { electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector(electionsSelector);
-
   const [editedData, setEditedData] = useState({});
   const [modifiedData, setModifiedData] = useState({});
 
@@ -28,7 +27,6 @@ const ResultsTab = () => {
       [committeeId]: !prevEditedData[committeeId]
     }));
   };
-
 
   const handleEditCell = (candidateId, committeeId, value) => {
     setModifiedData(prev => ({
@@ -40,12 +38,11 @@ const ResultsTab = () => {
     }));
   };
 
-  const handleSaveCommitteeResults = (committeeId) => {
+  const handleSaveCommitteeResults = useCallback((committeeId) => {
     if (modifiedData[committeeId]) {
-
       const updatedElectionCommitteeResult = {
-        id: committeeId, // the committee ID
-        data: modifiedData[committeeId] // the candidate-votes data for the committee
+        id: committeeId,
+        data: modifiedData[committeeId]
       };
 
       dispatch(updateElectionCommitteeResults(updatedElectionCommitteeResult));
@@ -59,15 +56,21 @@ const ResultsTab = () => {
       const updatedModifiedData = { ...modifiedData };
       delete updatedModifiedData[committeeId];
       setModifiedData(updatedModifiedData);
-    }
-  };
 
+      // Toggle edit mode off immediately, don’t wait for the action to complete
+      toggleEditMode(committeeId);
+    } else {
+      // If no modifications are there but user still clicked save, simply toggle off the edit mode
+      toggleEditMode(committeeId);
+    }
+  }, [modifiedData, dispatch, editedData]);
 
   // Function to transform the data
   const transformData = (data) => {
+    // Initial setup
     const transformed = [];
     const totals = {};
-  
+
     // Calculate total votes for each candidate
     for (const committeeVotes of Object.values(data)) {
       for (const [candidateId, votes] of Object.entries(committeeVotes)) {
@@ -75,47 +78,98 @@ const ResultsTab = () => {
         totals[id] = (totals[id] || 0) + votes;
       }
     }
-  
-    // Sort candidate IDs based on total votes
+
+    // Check whether any column is in edit mode
+    const isEditingAnyColumn = Object.values(editedData).some(Boolean);
+
+    // Helper function to find candidate name
+    const findCandidateName = (id) => electionCandidates.find(c => c.id === id)?.name;
+
+    // Sort candidates either by name (if editing) or by total votes (if not editing)
     const sortedCandidates = Object.keys(totals)
-      .map(Number)
-      .sort((a, b) => totals[b] - totals[a]);
-  
-    // Organize the data for each sorted candidate
-    sortedCandidates.forEach((candidateId, index) => {
-      const row = { "candidate.id": candidateId, position: index + 1 };
-      let totalVotesForCandidate = totals[candidateId] || 0;
-  
-      for (const committeeId in data) {
-        const isColumnInEditMode = editedData[committeeId];
-        
-        const votes = data[committeeId][candidateId] || 0;
-        row[`committee_${committeeId}`] = isColumnInEditMode ? (
-          <input
-            type="text"
-            maxLength="3"
-            pattern="\d*"
-            inputMode="numeric"
-            style={{ width: "3em" }}
-            value={modifiedData[committeeId]?.[candidateId] || votes}
-            onChange={(e) => handleEditCell(candidateId, committeeId, e.target.value)}
-          />
-        ) : votes;
+    .map(Number)
+    .sort((a, b) => {
+      if(isEditingAnyColumn) {
+        // Sort alphabetically by name when in edit mode
+        return (findCandidateName(a) || "").localeCompare(findCandidateName(b) || "");
+      } else {
+        // Sort by position when not in edit mode
+        const candidateA = electionCandidates.find(c => c.id === a);
+        const candidateB = electionCandidates.find(c => c.id === b);
+        return (candidateA.position || 0) - (candidateB.position || 0);
       }
-  
-      // Set the total vote count for this candidate to the row
-      row["total"] = totalVotesForCandidate;
-      transformed.push(row);
     });
   
+      
+    // Organize and transform the data
+    sortedCandidates.forEach((candidateId, index) => {
+      // Creating initial row setup
+      const row = { "candidate.id": candidateId, position: index + 1 };
+
+      // Calculating and assigning total votes for each candidate
+      row["total"] = totals[candidateId] || 0;
+
+      // Assigning committee votes to each row
+      for (const committeeId in data) {
+        // Checking if column is in edit mode
+        const isColumnInEditMode = editedData[committeeId];
+        // Assigning votes or input field based on edit mode
+        row[`committee_${committeeId}`] = isColumnInEditMode
+          ? <VotesInputField candidateId={candidateId} committeeId={committeeId} votes={data[committeeId][candidateId] || 0} />
+          : data[committeeId][candidateId] || 0;
+      }
+
+      // Pushing each transformed row to the result
+      transformed.push(row);
+    });
+
+    // Returning the transformed data
     return transformed;
   };
-  
-  
 
+  // Input Field Component for readability
+  const VotesInputField = ({ candidateId, committeeId, votes }) => (
+    <input
+      key={`${candidateId}-${committeeId}`}
+      type="text"
+      maxLength="3"
+      pattern="\d*"
+      inputMode="numeric"
+      style={{ width: "3em" }}
+      value={modifiedData[committeeId]?.[candidateId] || votes}
+      onChange={(e) => handleEditCell(candidateId, committeeId, e.target.value)}
+    />
+  );
 
+  const CommitteeButton = ({ committeeId, committee }) => {
+    const isEdited = editedData[committeeId];
+    const hasChanges = modifiedData[committeeId] && Object.keys(modifiedData[committeeId]).length > 0;
+    let buttonText, buttonClass;
 
+    if (isEdited) {
+      buttonText = hasChanges ? 'Save' : 'Close';
+      buttonClass = hasChanges ? 'btn-success' : 'btn-danger';
+    } else {
+      buttonText = committee ? committee.name : `Committee ${committeeId}`;
+      buttonClass = 'btn-info';
+    }
 
+    const handleClick = () => {
+      if (isEdited) {
+        if (hasChanges) {
+          handleSaveCommitteeResults(committeeId);
+        }
+        toggleEditMode(committeeId); // <- will close the edit mode whether or not there are changes
+      } else {
+        toggleEditMode(committeeId);
+      }
+    };
+    return (
+      <button onClick={handleClick} className={`btn btn-sm ml-2 ${buttonClass}`}>
+        {buttonText}
+      </button>
+    );
+  };
 
   const createColumns = (data) => {
     const columns = [
@@ -139,16 +193,17 @@ const ResultsTab = () => {
       },
       {
         Header: "المرشح",
-        accessor: 'candidate',
-        filterable: true,
+        accessor: (row) => {
+          const candidateId = row['candidate.id'];
+          const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
+          return candidate ? candidate.name : "";
+        },
         Cell: (cellProps) => {
           const candidateId = cellProps.row.original['candidate.id'];
           const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
-
           if (!candidate) {
             return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
           }
-
           return (
             <ImageCandidateWinnerCircle
               gender={candidate.gender}
@@ -158,7 +213,9 @@ const ResultsTab = () => {
             />
           );
         },
+        filterable: true,
       },
+
       {
         Header: 'المجموع',
         accessor: 'total',
@@ -172,25 +229,11 @@ const ResultsTab = () => {
       const committee = electionCommittees.find((comm) => comm.id.toString() === committeeId);
 
       columns.push({
-        Header: committee ? committee.name : `Committee ${committeeId}`,
-        accessor: `committee_${committeeId}`,
-        Footer: () => (
-          <button
-            onClick={() => {
-              if (editedData[committeeId]) {
-                handleSaveCommitteeResults(committeeId);
-              } else {
-                toggleEditMode(committeeId);
-              }
-            }}
-            className="btn btn-primary">
-            {editedData[committeeId] ? "Save" : "Edit"}
-          </button>
-        )
-
-
+        Header: () => <CommitteeButton committeeId={committeeId} committee={committee} />,
+        accessor: `committee_${committeeId}`, // Define accessor here
       });
     });
+
     return columns;
   }
 
@@ -198,16 +241,8 @@ const ResultsTab = () => {
   const transformedData = transformData(electionCommitteeResults);
   const columns = createColumns(electionCommitteeResults);
 
-  // Export Modal
-  // const [isExportCSV, setIsExportCSV] = useState(false);
-
   return (
     <React.Fragment>
-      {/* <ExportCSVModal
-        show={isExportCSV}
-        onCloseClick={() => setIsExportCSV(false)}
-        data={electionCommitteeResults}
-      /> */}
       <Row>
         <Col lg={12}>
           <Card id="electionCommitteeList">
@@ -238,6 +273,7 @@ const ResultsTab = () => {
                   tableClass="align-middle table-nowrap mb-0"
                   theadClass="table-light table-nowrap"
                   thClass="table-light text-muted"
+                  
                 />
               </div>
               <ToastContainer closeButton={false} limit={1} />

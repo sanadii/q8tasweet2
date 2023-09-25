@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getElectors, addNewCampaignGuarantee, addNewElectionAttendee } from "../../../store/actions";
 import SimpleBar from "simplebar-react";
 import { Loader, TableContainer } from "../../../Components/Common";
-import { electionsSelector } from '../../../selectors/electionsSelector';
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 import CampaignElectorsModal from "./Modals/CampaignElectorsModal";
 
@@ -13,18 +13,18 @@ import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 export const ElectorsTab = () => {
   const dispatch = useDispatch();
 
-  const { currentCampaignMember, campaignDetails, campaignMembers, electors, campaignGuarantees, electionAttendees, isCampaignGuaranteeSuccess, error } = useSelector(electionsSelector);
+  const { currentCampaignMember, campaignDetails, campaignMembers, electors, campaignGuarantees, electionsSelector, isCampaignGuaranteeSuccess, error } = useSelector(electionsSelector);
   const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
 
   useEffect(() => {
     setCampaignGuaranteeList(campaignGuarantees);
   }, [campaignGuarantees]);
 
-  const [electionAttendeeList, setElectionAttendeeList] = useState(electionAttendees);
+  const [electionAttendeeList, setElectionAttendeeList] = useState(electionsSelector);
 
   useEffect(() => {
-    setCampaignGuaranteeList(electionAttendees);
-  }, [electionAttendees]);
+    setCampaignGuaranteeList(electionsSelector);
+  }, [electionsSelector]);
 
   // Add New CampaignGuarantee Search & Filter
   const [searchElectorInput, setSearchElectorInput] = useState("");
@@ -172,7 +172,7 @@ export const ElectorsTab = () => {
                     إضف للمضامين
                   </button>
                 )
-              ) : electionAttendees.some(
+              ) : electionsSelector.some(
                 (item) => item.civil === cellProps.row.original.civil
               ) ? (
                 <span className="text-success">تم التحضير</span>
@@ -211,7 +211,7 @@ export const ElectorsTab = () => {
       currentCampaignMember.rank,
       currentCampaignMember.user.id,
       dispatch,
-      electionAttendees,
+      electionsSelector,
     ]);
   return (
     <React.Fragment>

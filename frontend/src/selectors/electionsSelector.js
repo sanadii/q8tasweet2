@@ -11,30 +11,38 @@ export const electionsSelector = createSelector(
   selectCategoriesState,
   selectCampaignsState,
   (electionsState, usersState, categoriesState, campaignsState) => ({
+    // Election Selectors
     elections: electionsState.elections,
     electionDetails: electionsState.electionDetails,
-
     electionCommittees: electionsState.electionCommittees,
     electionCandidates: electionsState.electionCandidates,
     electionAttendees: electionsState.electionAttendees,
     electionCommitteeResults: electionsState.electionCommitteeResults,
-
+    
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,
+
+
+    // Categories
     categories: categoriesState.categories,
     subCategories: categoriesState.subCategories,
 
-    // Campaigns
+
+    // Campaign Selectors
     campaigns: campaignsState.campaigns,
     campaign: campaignsState.campaignDetails,
-
     campaignDetails: campaignsState.campaignDetails,
     campaignMembers: campaignsState.campaignMembers,
     campaignGuarantees: campaignsState.campaignGuarantees,
+    campaignCommittees: campaignsState.electionCommittees,
+    campaignCandidates: campaignsState.electionCandidates,
+    electionsSelector: campaignsState.electionAttendees, // Added electionAttendees
+
     isCampaignSuccess: campaignsState.isCampaignSuccess,
+    campaignError: campaignsState.error,
 
-
-    // Users
+    
+    // User  electors
     moderators: usersState.moderators,
     currentUser: usersState.currentUser, // Added currentUser
     currentCampaignMember: campaignsState.currentCampaignMember, // Added currentCampaignMember

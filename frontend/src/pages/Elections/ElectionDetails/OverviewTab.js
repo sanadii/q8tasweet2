@@ -3,30 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
 import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-//import images
-import avatar8 from "../../../assets/images/users/avatar-8.jpg";
-import avatar10 from "../../../assets/images/users/avatar-10.jpg";
-import avatar6 from "../../../assets/images/users/avatar-6.jpg";
-import avatar2 from "../../../assets/images/users/avatar-2.jpg";
-import image4 from "../../../assets/images/small/img-4.jpg";
-import image5 from "../../../assets/images/small/img-5.jpg";
 
 //SimpleBar
 import SimpleBar from "simplebar-react";
 
 const OverviewTab = ({ election }) => {
 
-  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } =
-    useSelector((state) => ({
-      electionDetails: state.Elections.electionDetails,
-      electionCandidates: state.Elections.electionCandidates,
-      electionCampaigns: state.Elections.electionCampaigns,
-      electionCommittees: state.Elections.electionCommittees,
-      // error: state.Elections.error,
-    }));
-
-
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionsSelector);
 
   const moderators = Array.isArray(election.moderators)
     ? election.moderators
