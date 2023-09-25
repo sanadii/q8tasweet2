@@ -1,17 +1,17 @@
 export const ElectionTypeOptions = [
     {
       id: 1,
-      name: "Party",
-      value: "Party",
+      name: "قوائم فقط",
+      value: "قوائم فقط",
     },
     {
       id: 2,
-      name: "Candidate",
-      value: "Candidate",
+      name: "مرشحين فقط",
+      value: "مرشحين فقط",
     },
     {
       id: 3,
-      name: "Mixed",
-      value: "Mixed",
+      name: "قوائم ومرشحين",
+      value: "قوائم ومرشحين",
     },
   ];

@@ -21,6 +21,7 @@ const ResultsTab = () => {
   const [editedData, setEditedData] = useState({});
   const [modifiedData, setModifiedData] = useState({});
 
+
   const toggleEditMode = (committeeId) => {
     setEditedData(prevEditedData => ({
       ...prevEditedData,
@@ -63,11 +64,10 @@ const ResultsTab = () => {
       // If no modifications are there but user still clicked save, simply toggle off the edit mode
       toggleEditMode(committeeId);
     }
-  }, [modifiedData, dispatch, editedData]);
+  }, [modifiedData, dispatch]);
 
   // Function to transform the data
   const transformData = (data) => {
-    // Initial setup
     const transformed = [];
     const totals = {};
 
@@ -79,30 +79,27 @@ const ResultsTab = () => {
       }
     }
 
+
     // Check whether any column is in edit mode
     const isEditingAnyColumn = Object.values(editedData).some(Boolean);
-    console.log('isEditingAnyColumn', isEditingAnyColumn); // Add this line to log the value
 
     // Helper function to find candidate name
     const findCandidateName = (id) => electionCandidates.find(c => c.id === id)?.name;
 
     // Sort candidates either by name (if editing) or by total votes (if not editing)
     const sortedCandidates = Object.keys(totals)
-    .map(Number)
-    .sort((a, b) => {
-      if(isEditingAnyColumn) {
-        // Log the names being compared
-        console.log(findCandidateName(a), findCandidateName(b)); 
-        return (findCandidateName(a) || "").localeCompare(findCandidateName(b) || "");
-      } else {
-        // Sort by position when not in edit mode
-        const candidateA = electionCandidates.find(c => c.id === a);
-        const candidateB = electionCandidates.find(c => c.id === b);
-        return (candidateA.position || 0) - (candidateB.position || 0);
-      }
-    });
-  
-      
+      .map(Number)
+      .sort((a, b) => {
+        const result = isEditingAnyColumn
+          ? (findCandidateName(a) || "").localeCompare(findCandidateName(b) || "")
+          : (() => {
+            const candidateA = electionCandidates.find(c => c.id === a);
+            const candidateB = electionCandidates.find(c => c.id === b);
+            return (candidateA.position || 0) - (candidateB.position || 0);
+          })();
+        return result;
+      });
+
     // Organize and transform the data
     sortedCandidates.forEach((candidateId, index) => {
       // Creating initial row setup
@@ -115,6 +112,7 @@ const ResultsTab = () => {
       for (const committeeId in data) {
         // Checking if column is in edit mode
         const isColumnInEditMode = editedData[committeeId];
+
         // Assigning votes or input field based on edit mode
         row[`committee_${committeeId}`] = isColumnInEditMode
           ? <VotesInputField candidateId={candidateId} committeeId={committeeId} votes={data[committeeId][candidateId] || 0} />
@@ -124,24 +122,37 @@ const ResultsTab = () => {
       // Pushing each transformed row to the result
       transformed.push(row);
     });
-
     // Returning the transformed data
     return transformed;
   };
 
   // Input Field Component for readability
-  const VotesInputField = ({ candidateId, committeeId, votes }) => (
-    <input
-      key={`${candidateId}-${committeeId}`}
-      type="text"
-      maxLength="3"
-      pattern="\d*"
-      inputMode="numeric"
-      style={{ width: "3em" }}
-      value={modifiedData[committeeId]?.[candidateId] || votes}
-      onChange={(e) => handleEditCell(candidateId, committeeId, e.target.value)}
-    />
-  );
+  const VotesInputField = ({ candidateId, committeeId, votes }) => {
+    const [localVote, setLocalVotes] = useState(votes);
+
+    useEffect(() => {
+      setLocalVotes(votes); // This will sync the local state with the prop when it changes
+    }, [votes]);
+
+    const handleBlur = () => {
+      handleEditCell(candidateId, committeeId, localVote);
+    };
+
+    return (
+      <input
+        key={`${candidateId}-${committeeId}`}
+        type="text"
+        maxLength="3"
+        pattern="\d*"
+        inputMode="numeric"
+        style={{ width: "3em" }}
+        value={localVote} // changed from modifiedData[committeeId]?.[candidateId] || votes to localValue
+        onChange={(e) => setLocalVotes(e.target.value)}
+        onBlur={handleBlur}
+      />
+    );
+};
+
 
   const CommitteeButton = ({ committeeId, committee }) => {
     const isEdited = editedData[committeeId];
@@ -149,7 +160,7 @@ const ResultsTab = () => {
     let buttonText, buttonClass;
 
     if (isEdited) {
-      buttonText = hasChanges ? 'Save' : 'Close';
+      buttonText = hasChanges ? 'حفظ' : 'اغلاق';
       buttonClass = hasChanges ? 'btn-success' : 'btn-danger';
     } else {
       buttonText = committee ? committee.name : `Committee ${committeeId}`;
@@ -157,6 +168,7 @@ const ResultsTab = () => {
     }
 
     const handleClick = () => {
+
       if (isEdited) {
         if (hasChanges) {
           handleSaveCommitteeResults(committeeId);
@@ -167,7 +179,7 @@ const ResultsTab = () => {
       }
     };
     return (
-      <button onClick={handleClick} className={`btn btn-sm ml-2 ${buttonClass}`}>
+      <button onClick={() => handleClick()} className={`btn btn-sm ml-2 ${buttonClass}`}>
         {buttonText}
       </button>
     );
@@ -204,7 +216,7 @@ const ResultsTab = () => {
           const candidateId = cellProps.row.original['candidate.id'];
           const candidate = electionCandidates.find((candidate) => candidate.id === candidateId);
           if (!candidate) {
-            return <p className="text-danger"><strong>Not Found (ID: {candidateId})</strong></p>;
+            return <p className="text-danger"><strong>المرشح غير موجود (الرمز: {candidateId})</strong></p>;
           }
           return (
             <ImageCandidateWinnerCircle
@@ -217,7 +229,6 @@ const ResultsTab = () => {
         },
         filterable: true,
       },
-
       {
         Header: 'المجموع',
         accessor: 'total',
@@ -240,8 +251,14 @@ const ResultsTab = () => {
   }
 
   // Inside your component
-  const transformedData = transformData(electionCommitteeResults);
-  const columns = createColumns(electionCommitteeResults);
+  const [transformedData, setTransformedData] = useState([]);
+
+  useEffect(() => {
+    setTransformedData(transformData(electionCommitteeResults));
+  }, [electionCommitteeResults, modifiedData, editedData]); // added editedData to dependencies
+  const columns = useMemo(() => createColumns(electionCommitteeResults), [electionCommitteeResults, transformedData, editedData]);
+
+  const reversedData = [...transformedData].reverse();
 
   return (
     <React.Fragment>
@@ -254,11 +271,10 @@ const ResultsTab = () => {
                   // Title
                   ContainerHeaderTitle="Election Committees"
                 />
-
                 <TableContainer
                   // Data
                   columns={columns}
-                  data={transformedData}
+                  data={reversedData}
                   customPageSize={50}
                   isTableContainerFooter={true}
 
@@ -275,6 +291,7 @@ const ResultsTab = () => {
                   tableClass="align-middle table-nowrap mb-0"
                   theadClass="table-light table-nowrap"
                   thClass="table-light text-muted"
+
                 />
               </div>
               <ToastContainer closeButton={false} limit={1} />

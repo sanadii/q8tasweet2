@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container } from "reactstrap";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getElectionDetails, getElectionCampaigns } from "../../../store/actions";
+import { getElectionDetails, getCategories } from "../../../store/actions";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 import { isEmpty } from "lodash";
@@ -18,7 +18,7 @@ const ElectionDetails = () => {
     id: useParams().id,
   });
 
-  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionsSelector);
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees, categories } = useSelector(electionsSelector);
 
   const dispatch = useDispatch();
 
@@ -28,6 +28,13 @@ const ElectionDetails = () => {
     }
   }, [dispatch, election, election.id]);
 
+
+  // Election Categories
+  useEffect(() => {
+    if (categories && !categories.length) {
+      dispatch(getCategories());
+    }
+  }, [dispatch, categories]);
 
   return (
     <React.Fragment>

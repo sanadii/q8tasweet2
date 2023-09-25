@@ -6,8 +6,15 @@ import { Row, Col, Card, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Badge } from 'reactstrap'; // Or your preferred UI library if not using reactstrap
 
+const apiUrl = api.API_URL.endsWith('/') ? api.API_URL : `${api.API_URL}/`; // Ensure apiUrl ends with '/'
+const defaultImagePath = 'media/candidates/default.jpg';
+
+const defaultCandidatePath = 'media/candidates/default.jpg';
+const defaultElectionPath = 'media/candidates/default.jpg';
+const defaultUserPath = 'media/candidates/default.jpg';
+
+
 export const ImageCircle = ({ imagePath }) => {
-  const apiUrl = api.API_URL;
   const imageUrl = `${apiUrl}${imagePath}`;
 
   return (
@@ -18,7 +25,6 @@ export const ImageCircle = ({ imagePath }) => {
 };
 
 export const ImageGenderCircle = ({ imagePath, genderValue }) => {
-  const apiUrl = api.API_URL;
   const imageUrl = `${apiUrl}${imagePath}`;
 
   let borderColor;
@@ -44,12 +50,10 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
   );
 };
 
-export const ImageMediumCircle = ({ row }) => {
+export const AvatarMedium = ({ row }) => {
   if (!row || !row.original) return null; // If row or row.original is undefined, don't render the component
 
   const { id, image, name } = row.original;
-  const apiUrl = api.API_URL.endsWith('/') ? api.API_URL : `${api.API_URL}/`; // Ensure apiUrl ends with '/'
-  const defaultImagePath = 'media/candidates/default.jpg';
   const imageUrl = image ? `${apiUrl}${image}` : `${apiUrl}${defaultImagePath}`;
 
   return (
@@ -73,9 +77,28 @@ export const ImageMediumCircle = ({ row }) => {
   );
 };
 
+
+export const ImageMedium = ({ imagePath }) => {
+  const imageUrl = imagePath ? `${apiUrl}${imagePath}` : `${apiUrl}${defaultImagePath}`;
+
+  return (
+    <React.Fragment>
+
+      <div className="d-flex align-items-center">
+        <div className="avatar-md"> {/* To maintain the image size */}
+          <img
+            src={imageUrl}
+            alt=""
+            className="img-thumbnail rounded-circle"
+          />
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
+
+
 export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner }) => {
-  const apiUrl = api.API_URL;
-  const defaultImagePath = 'media/candidates/default.jpg';
   const imageUrl = imagePath ? `${apiUrl}${imagePath}` : `${apiUrl}${defaultImagePath}`;
 
   let borderColor;
@@ -117,7 +140,6 @@ export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner 
 
 
 export const ImageCampaignBackground = ({ imagePath }) => {
-  const apiUrl = api.API_URL;
   const imageUrl = `${apiUrl}${imagePath}`;
 
   return (
@@ -129,7 +151,6 @@ export const ImageCampaignBackground = ({ imagePath }) => {
   );
 };
 export const ImageCandidateCampaign = ({ imagePath }) => {
-  const apiUrl = api.API_URL;
   const imageUrl = `${apiUrl}${imagePath}`;
 
   return (
@@ -144,7 +165,6 @@ export const ImageCandidateCampaign = ({ imagePath }) => {
 };
 
 export const ImageRoundedCircleXS = ({ imagePath }) => {
-  const apiUrl = api.API_URL;
   const imageUrl = `${apiUrl}${imagePath}`;
 
   return (
@@ -155,7 +175,6 @@ export const ImageRoundedCircleXS = ({ imagePath }) => {
 };
 
 export const ImageCampaignCard = ({ urlPath, imagePath }) => {
-  const apiUrl = api.API_URL;
   const imageUrl = `${apiUrl}${imagePath}`;
 
   return (

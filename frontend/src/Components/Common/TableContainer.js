@@ -87,8 +87,8 @@ const TableContainer = ({
         selectedRowIds: 0,
         sortBy: [
           {
-            id: 'total', // The ID of the accessor data in your column definition
-            desc: true,
+            // id: 'total', // The ID of the accessor data in your column definition
+            // desc: true,
           },
         ],
       },
@@ -100,8 +100,6 @@ const TableContainer = ({
     usePagination,
     useRowSelect
   );
-
-  console.log('TableContainer data', data); // Log the data prop
 
   const generateSortingIndicator = (column) => {
     return column.isSorted ? (column.isSortedDesc ? " " : "") : "";

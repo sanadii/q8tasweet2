@@ -4,7 +4,7 @@ import { Badge, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Card, Card
 import { electionsSelector } from '../../Selectors/electionsSelector';
 
 // --------------- Component, Constants, Hooks Imports ---------------
-import { ImageGenderCircle, ImageMediumCircle, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Components/Common";
+import { ImageGenderCircle, AvatarMedium, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Components/Common";
 
 import { Container } from "reactstrap";
 import { useParams } from "react-router-dom";
@@ -170,7 +170,7 @@ const ElectionDetails = () => {
           <div className="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
             <Row className="g-4">
               <div className="col-auto">
-                <ImageMediumCircle imagePath={electionDetails.image} />
+                <AvatarMedium imagePath={electionDetails.image} />
               </div>
 
               <Col>

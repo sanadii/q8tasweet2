@@ -17,12 +17,13 @@ export { GenderCircle } from "./GenderCircle";
 export {
   ImageCircle,
   ImageGenderCircle,
-  ImageMediumCircle,
+  AvatarMedium,
   ImageCandidateCampaign,
   ImageRoundedCircleXS,
   ImageCampaignCard,
   ImageCampaignBackground,
   ImageCandidateWinnerCircle,
+  ImageMedium,
 } from "./ImageFrames";
 
 // Fetching

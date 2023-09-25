@@ -1,20 +1,20 @@
 export const PriorityOptions = [
-    {
-      id: 3,
-      name: "High",
-      value: "High",
-      description: "Elections with high priority. (High)",
-    },
-    {
-      id: 2,
-      name: "Medium",
-      value: "Medium",
-      description: "Elections with medium priority. (Medium)",
-    },
-    {
-      id: 1,
-      name: "Low",
-      value: "Low",
-      description: "Elections with low priority. (Low)",
-    },
-  ];
+  {
+    id: 3,
+    name: "عالي",
+    value: "عالي",
+    description: "الانتخابات ذات الأولوية العالية. (عالي)",
+  },
+  {
+    id: 2,
+    name: "متوسط",
+    value: "متوسط",
+    description: "الانتخابات ذات الأولوية المتوسطة. (متوسط)",
+  },
+  {
+    id: 1,
+    name: "منخفض",
+    value: "منخفض",
+    description: "الانتخابات ذات الأولوية المنخفضة. (منخفض)",
+  },
+];

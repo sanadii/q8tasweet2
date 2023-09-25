@@ -8,7 +8,7 @@ import { electionsSelector } from '../../../Selectors/electionsSelector';
 import { getElections, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
 
 // Custom Components & ConstantsImports ------------
-import { ImageMediumCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import ElectionModal from "./ElectionModal"
 import { Id, Name, CandidateCount, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
@@ -209,7 +209,7 @@ const AllElections = () => {
         name: "الإنتخابات",
         title: "name",
         accessor: "name",
-        Cell: (cellProps) => cellProps.row ? <ImageMediumCircle row={cellProps.row} /> : null,
+        Cell: (cellProps) => cellProps.row ? <AvatarMedium row={cellProps.row} /> : null,
 
       },
       {

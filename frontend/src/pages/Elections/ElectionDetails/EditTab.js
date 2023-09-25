@@ -3,7 +3,7 @@ import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { getElectionDetails, getModeratorUsers, getCategories, updateElection } from "../../../store/actions";
+import { updateElection } from "../../../store/actions";
 import useCategoryManager from "../../../Components/Hooks/CategoryHooks";
 
 // Formik
@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 import { Link } from "react-router-dom";
+
 import { Card, CardBody, CardHeader, Col, Container, Input, Label, Row, FormFeedback, Form } from "reactstrap";
 
 //Import Flatepicker
@@ -25,13 +26,6 @@ const EditTab = ({ election }) => {
   const dispatch = useDispatch();
 
   const { electionDetails, categories, subCategories } = useSelector(electionsSelector);
-
-  // Election Categories
-  useEffect(() => {
-    if (categories && !categories.length) {
-      dispatch(getCategories());
-    }
-  }, [dispatch, categories]);
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -100,12 +94,7 @@ const EditTab = ({ election }) => {
   });
 
   // Categories ---------------
-  const {
-    categoryOptions,
-    subCategoryOptions,
-    changeSubCategoriesOptions,
-    activeParentCategoryId
-  } = useCategoryManager(categories, subCategories, validation);
+  const { categoryOptions, subCategoryOptions, changeSubCategoriesOptions, activeParentCategoryId } = useCategoryManager(categories, subCategories, validation);
 
   const [selectedMulti, setselectedMulti] = useState(null);
 
@@ -171,54 +160,28 @@ const EditTab = ({ election }) => {
         }}
       >
         <Row>
+          <div className="text-end mb-4">
+            <button type="submit" className="btn btn-success" id="add-btn">
+              تعديل
+            </button>
+          </div>
+        </Row>
+        <Row>
 
           <Col lg={4}>
             <Card>
               <CardHeader>
-                <h5>Details</h5>
+                <h5>التفاصيل</h5>
               </CardHeader>
               <CardBody>
                 <Row>
                   <Col lg={12}>
                     <div className="mb-3">
                       <Label
-                        className="form-label"
-                        htmlFor="election-name-input"
-                      >
-                        Election Name / {election.name}
-                      </Label>
-                      <Input
-                        name="name"
-                        id="election-name-field"
-                        className="form-control"
-                        placeholder="Election Name"
-                        type="text"
-                        validate={{
-                          required: { value: true },
-                        }}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.name || ""}
-                        invalid={
-                          validation.touched.name && validation.errors.name
-                            ? true
-                            : false
-                        }
-                      />
-                      {validation.touched.name && validation.errors.name ? (
-                        <FormFeedback type="invalid">
-                          {validation.errors.name}
-                        </FormFeedback>
-                      ) : null}
-                    </div>
-                  </Col>
-                  <Col lg={12}>
-                    <div className="mb-3">
-                      <Label
                         htmlFor="datepicker-deadline-input"
                         className="form-label"
                       >
-                        Date
+                        يوم الإقتراع
                       </Label>
                       <Flatpickr
                         name="dueDate"
@@ -246,7 +209,7 @@ const EditTab = ({ election }) => {
                   <Col lg={6}>
                     <div className="mb-3">
                       <Label for="category-field" className="form-label">
-                        Election Category
+                        التصنيف
                       </Label>
                       <Input
                         name="category"
@@ -260,7 +223,7 @@ const EditTab = ({ election }) => {
                         onBlur={validation.handleBlur}
                         value={validation.values.category || ""}
                       >
-                        <option value="">Choose Category</option>
+                        <option value="">- اختر التصنيف -</option>
                         {categoryOptions.map((category) => (
                           <option key={category.id} value={parseInt(category.id)}>
                             {category.name}
@@ -278,7 +241,7 @@ const EditTab = ({ election }) => {
                   <Col lg={6}>
                     <div className="mb-3">
                       <Label for="sub-category-field" className="form-label">
-                        Election Sub-Category
+                        التصنيف الفرعي
                       </Label>
                       <Input
                         name="subCategory"
@@ -289,7 +252,7 @@ const EditTab = ({ election }) => {
                         onBlur={validation.handleBlur}
                         value={validation.values.subCategory || ""}
                       >
-                        <option value="">Choose Sub-Category</option>
+                        <option value="">- اختر التصنيف الفرعي -</option>
                         {subCategoryOptions.map((subCategory) => (
                           <option key={subCategory.id} value={subCategory.id}>
                             {subCategory.name}
@@ -304,52 +267,6 @@ const EditTab = ({ election }) => {
                       ) : null}
                     </div>
                   </Col>
-                  {/* <Col lg={4}>
-                    <div>
-                      <Label
-                        htmlFor="choices-text-input"
-                        className="form-label"
-                      >
-                        Tags
-                      </Label>
-                      <Select
-                        value={selectedMulti}
-                        isMulti={true}
-                        onChange={() => {
-                          handleMulti();
-                        }}
-                        options={TagOptions}
-                      />
-                    </div>
-                  </Col> */}
-                </Row>
-                <Row>
-                  <div className="mb-3">
-                    <Label className="form-label">Election Description</Label>
-                    <Input
-                      name="description"
-                      id="description-field"
-                      className="form-control"
-                      type="textarea"
-                      placeholder="Election Description"
-                      validate={{
-                        required: { value: true },
-                      }}
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.description || ""}
-                      invalid={
-                        validation.touched.description && validation.errors.description
-                          ? true
-                          : false
-                      }
-                    />
-                    {validation.touched.description && validation.errors.description ? (
-                      <FormFeedback type="invalid">
-                        {validation.errors.description}
-                      </FormFeedback>
-                    ) : null}
-                  </div>
                 </Row>
               </CardBody>
             </Card>
@@ -358,14 +275,6 @@ const EditTab = ({ election }) => {
                 {validation.errors.priority}
               </FormFeedback>
             ) : null}
-
-            <div className="text-end mb-4">
-              <button type="submit" className="btn btn-success" id="add-btn">
-                Update Election
-              </button>
-            </div>
-          </Col>
-          <Col lg={4}>
             <Card>
               <CardHeader>
                 <h5>وصف الإنتخابات</h5>
@@ -470,6 +379,10 @@ const EditTab = ({ election }) => {
                 </Row>
               </CardBody>
             </Card>
+
+          </Col>
+          <Col lg={4}>
+
             <Card>
               <CardHeader>
                 <h5>الناخبين</h5>
@@ -588,12 +501,12 @@ const EditTab = ({ election }) => {
           <Col lg={4}>
             <div className="card">
               <CardHeader>
-                <h5>ِAdmin</h5>
+                <h5>الإدارة</h5>
               </CardHeader>
               <CardBody>
                 <div className="mb-3">
                   <Label for="priority-field" className="form-label">
-                    Priority
+                    الأولية
                   </Label>
                   <Input
                     name="priority"
@@ -619,7 +532,7 @@ const EditTab = ({ election }) => {
 
                 <div className="mb-3">
                   <Label for="status-field" className="form-label">
-                    Status
+                    الحالة
                   </Label>
                   <Input
                     name="status"

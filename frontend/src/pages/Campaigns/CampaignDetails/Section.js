@@ -6,7 +6,7 @@ import classnames from "classnames";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // --------------- Component, Constants, Hooks Imports ---------------
-import { ImageMediumCircle, ImageCampaignBackground } from "../../../Components/Common";
+import { AvatarMedium, ImageCampaignBackground } from "../../../Components/Common";
 import { MemberRankOptions } from "../../../Components/constants";
 import useUserRoles from "../../../Components/Hooks/useUserRoles";
 
@@ -72,7 +72,7 @@ const Section = ({
       <div className="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
         <Row className="g-4">
           <div className="col-auto">
-            <ImageMediumCircle imagePath={campaign.candidate.image} />
+            <AvatarMedium imagePath={campaign.candidate.image} />
           </div>
 
           <Col>

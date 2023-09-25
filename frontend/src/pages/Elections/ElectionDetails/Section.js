@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import { electionsSelector } from '../../../Selectors/electionsSelector';
+
+import { ImageMedium } from "../../../Components/Common";
 import { Card, CardBody, CardFooter, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import classnames from "classnames";
 
@@ -16,7 +20,15 @@ import ResultsTab from "./ResultsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
-const Section = ({ election, electionCampaigns, electionCandidates, electionCommittees }) => {
+const Section = () => {
+
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees, categories, subCategories } = useSelector(electionsSelector);
+
+  const election = electionDetails;
+  const categoryId = election.category; // assuming election object has a categoryId property
+  const category = categories.find(cat => cat.id === categoryId);
+  const electionCategoryName = category ? category.name : 'Category Not Found';
+
   //Tab
   const [activeTab, setActiveTab] = useState("1");
   const toggleTab = (tab) => {
@@ -48,29 +60,25 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                       <div className="col-md-auto">
                         <div className="avatar-md">
                           <div className="avatar-title bg-white rounded-circle">
-                            {/* <img
-                              src={
-                                process.env.REACT_APP_API_URL + election.image
-                              }
-                              alt=""
-                              className="avatar-xs"
-                            /> */}
+                            <ImageMedium
+                              imagePath={election.image}
+                            />
                           </div>
                         </div>
                       </div>
                       <div className="col-md">
                         <div>
                           <h4 className="fw-bold">
-                            {election.name} [ID:  {election.id}]
+                            {election.name}
                           </h4>
                           <div className="hstack gap-3 flex-wrap">
                             <div>
                               <i className="ri-building-line align-bottom me-1"></i>
-                              {election.category}
+                              {electionCategoryName}
                             </div>
                             <div className="vr"></div>
                             <div>
-                              موعد الإنتخابات :
+                              يوم الإقتراع: &nbsp;
                               <span className="fw-medium">
                                 <strong>
                                   {election.dueDate}
@@ -78,11 +86,33 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                               </span>
                             </div>
                             <div className="vr"></div>
+                            <div>
+                              الرمز: &nbsp;
+                              <span className="fw-medium">
+                                <strong>
+                                  {election.id}
+                                </strong>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="badge bg-danger fs-12 me-3">
+                            {election.type}
+                          </div>
 
+                          <div className="badge bg-warning fs-12 me-3">
+                            {election.votes} صوت
+                          </div>
+
+                          <div className="badge bg-warning fs-12 me-3">
+                            {election.seats} مقاعد
                           </div>
                         </div>
                       </div>
                     </Row>
+                   
+
                   </div>
                   <div className="col-md-auto">
                     <div className="hstack gap-1 flex-wrap">
@@ -115,7 +145,6 @@ const Section = ({ election, electionCampaigns, electionCandidates, electionComm
                     </div>
                   </div>
                 </Row>
-
                 <Nav className="nav-tabs-custom border-bottom-0" role="tablist">
                   <NavItem>
                     <NavLink

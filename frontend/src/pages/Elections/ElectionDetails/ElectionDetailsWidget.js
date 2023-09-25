@@ -80,7 +80,7 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
                       {electionCandidates.length}
                     </span>
                   </h4>
-                  <p>Males: 15 | Females: 0</p>
+                  <p>رجال: 15 | نساء: 0</p>
 
                 </div>
                 <div className="flex-shrink-0">
@@ -126,7 +126,7 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
                       {election.electors}
                     </span>
                   </h4>
-                  <p>Males: {election.electorsMales} | Females: {election.electorsFemales}</p>
+                  <p>رجال: {election.electorsMales} | نساء: {election.electorsFemales}</p>
 
                 </div>
                 <div className="flex-shrink-0">
@@ -162,13 +162,14 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
                   <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
                     <strong>
                       حضور الرجال
-                    </strong>                  </p>
+                    </strong>
+                  </p>
                   <h4 className="fs-22 fw-semibold ff-secondary mb-0">
                     <span className="counter-value" data-target="36894">
                       {election.attendeesMales}
                     </span>
                   </h4>
-                  <p>of total <strong>{election.electorsMales}</strong></p>
+                  <p>من إجمالي <strong>{election.electorsMales}</strong></p>
 
                 </div>
                 <div className="flex-shrink-0">
@@ -214,8 +215,7 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
                       {election.attendeesFemales}
                     </span>
                   </h4>
-                  <p>of total <strong>{election.electorsFemales}</strong></p>
-
+                  <p>من إجمالي <strong>{election.electorsFemales}</strong></p>
                 </div>
                 <div className="flex-shrink-0">
                   <DashboardCharts
