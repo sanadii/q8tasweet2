@@ -101,6 +101,8 @@ const TableContainer = ({
     useRowSelect
   );
 
+  console.log('TableContainer data', data); // Log the data prop
+
   const generateSortingIndicator = (column) => {
     return column.isSorted ? (column.isSortedDesc ? " " : "") : "";
   };

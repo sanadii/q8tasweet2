@@ -81,6 +81,7 @@ const ResultsTab = () => {
 
     // Check whether any column is in edit mode
     const isEditingAnyColumn = Object.values(editedData).some(Boolean);
+    console.log('isEditingAnyColumn', isEditingAnyColumn); // Add this line to log the value
 
     // Helper function to find candidate name
     const findCandidateName = (id) => electionCandidates.find(c => c.id === id)?.name;
@@ -90,7 +91,8 @@ const ResultsTab = () => {
     .map(Number)
     .sort((a, b) => {
       if(isEditingAnyColumn) {
-        // Sort alphabetically by name when in edit mode
+        // Log the names being compared
+        console.log(findCandidateName(a), findCandidateName(b)); 
         return (findCandidateName(a) || "").localeCompare(findCandidateName(b) || "");
       } else {
         // Sort by position when not in edit mode
@@ -273,7 +275,6 @@ const ResultsTab = () => {
                   tableClass="align-middle table-nowrap mb-0"
                   theadClass="table-light table-nowrap"
                   thClass="table-light text-muted"
-                  
                 />
               </div>
               <ToastContainer closeButton={false} limit={1} />
