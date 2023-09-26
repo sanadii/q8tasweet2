@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "restapi",
-    "users",
+    # "users",
     "rest_framework_simplejwt.token_blacklist",
 ]
 
@@ -125,7 +125,7 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Custom user model
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "restapi.User"
 
 # JWT settings
 SIMPLE_JWT = {

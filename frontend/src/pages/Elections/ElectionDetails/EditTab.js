@@ -30,11 +30,10 @@ const EditTab = ({ election }) => {
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      description: (election && election.description) || "",
-      dueDate: (election && election.dueDate) || "",
-
       category: (election && election.category) || "",
       subCategory: (election && election.subCategory) || "",
+      dueDate: (election && election.dueDate) || "",
+
       tags: (election && election.tags) || [],
 
       status: (election && election.status) || "New",
@@ -57,17 +56,18 @@ const EditTab = ({ election }) => {
       delet: (election && election.delet) || "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter Election Name"),
+      category: Yup.string().required("Please Enter Election Name"),
+      subCategory: Yup.string().required("Please Enter Election Name"),
+      dueDate: Yup.string().required("Please Enter Election Name"),
     }),
     onSubmit: (values) => {
       const updatedElection = {
         id: election ? election.id : 0,
-        dueDate: dueDate,
-        description: values.description,
-
-        // Taxonomies
         category: values.category,
         subCategory: values.subCategory,
+        dueDate: dueDate,
+
+        // Taxonomies
         tags: Array.isArray(values.tags) ? values.tags : [],
 
         // Election Spesifications
@@ -298,7 +298,7 @@ const EditTab = ({ election }) => {
                         <option value="">- إختر نوع الإنتخابات -</option>{" "}
                         {/* Placeholder option */}
                         {ElectionTypeOptions.map((option) => (
-                          <option key={option.name} value={option.value}>
+                          <option key={option.id} value={option.id}>
                             {option.name}
                           </option>
                         ))}
@@ -329,7 +329,7 @@ const EditTab = ({ election }) => {
                         <option value="">- إختر عرض النتائج -</option>{" "}
                         {/* Placeholder option */}
                         {ElectionResultOptions.map((option) => (
-                          <option key={option.name} value={option.value}>
+                          <option key={option.id} value={option.id}>
                             {option.name}
                           </option>
                         ))}

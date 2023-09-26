@@ -11,7 +11,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     # Applications
-    path("", include("users.urls", namespace="users")),  # This is for the users application
+    path("", include("restapi.users.urls", namespace="users")),
     path("elections/", include(("restapi.urls", "elections"), namespace="elections")),
 
     # Schema & Documentation

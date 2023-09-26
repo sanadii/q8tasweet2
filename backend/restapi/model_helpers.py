@@ -1,10 +1,26 @@
 # model_helpers.py
 from django.db import models
 
+
+class ElectionType(models.TextChoices):
+    PARTIES = 1, "قوائم"
+    CANDIDATES = 2, "مرشحين"
+    MIXED = 2, "قوائم ومرشحين"
+
+class ElectionResults(models.TextChoices):
+    FINAL = 1, "نتائج نهائية"
+    DETAILED = 2, "نتائج تفصيلية"
+
+
 class Gender(models.IntegerChoices):
     UNDEFINED = 0, 'Undefined'
-    MALE = 1, 'Male'
-    FEMALE = 2, 'Female'
+    MALE = 1, 'رجال'
+    FEMALE = 2, 'نساء'
+
+class GenderCommittee(models.IntegerChoices):
+    UNDEFINED = 0, 'Undefined'
+    MALE = 1, 'ذكور'
+    FEMALE = 2, 'إناث'
 
 class GuaranteeStatus(models.IntegerChoices):
     NEW = 1, 'New'
