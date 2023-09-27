@@ -1,7 +1,6 @@
 # Campaign Serializers
 from rest_framework import serializers
-from .models import *
-from ..models import User
+from restapi.models import *
 import json
 
 class CandidatesSerializer(serializers.ModelSerializer):

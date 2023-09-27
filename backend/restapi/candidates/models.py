@@ -1,18 +1,18 @@
 # Categories Model
 from django.db import models
 from django.utils import timezone
-from django.core.validators import RegexValidator
-from ..modelsHelper import *
+from django.core.validators import RegexValidator, MaxValueValidator
 
-class Candidates(models.Model):
+from restapi.modelsHelper import TrackedModel, GenderOptions
+from restapi.validators import today
+
+class Candidates(TrackedModel):
     # Basic Information
-    id = models.BigAutoField(primary_key=True)
-    image = models.ImageField(upload_to="users/", blank=True, null=True)
     name = models.CharField(max_length=255, blank=False, null=False)
-    gender = models.IntegerField(choices=Gender.choices, default=Gender.UNDEFINED)
-
+    gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
+    image = models.ImageField(upload_to="users/", blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
-    birthdate = models.DateField(blank=True, null=True)
+    # date_of_birth = models.DateField(null=True, blank=True, validators=[MaxValueValidator(limit_value=today)])
 
     # Contacts
     phone = models.CharField(max_length=20, blank=True, null=True)
@@ -32,16 +32,6 @@ class Candidates(models.Model):
     moderators = models.CharField(max_length=255, blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
     priority = models.IntegerField(blank=True, null=True)
-
-    # Tracking Information
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_candidates')
-    updated_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='updated_candidates')
-    deleted_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='deleted_candidates')
-    created_date = models.DateTimeField(auto_now_add=True, null=False)
-    updated_date = models.DateTimeField(auto_now=True, null=False)
-    deleted_date = models.DateTimeField(auto_now=True, null=False)
-    deleted = models.BooleanField(default=False, null=True)
-
     class Meta:
         db_table = "candidate"
         verbose_name = "Candidate"

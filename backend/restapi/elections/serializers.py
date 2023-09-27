@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import User, Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults,Campaigns, Candidates, Categories, Electors, ProjectInfo
+from restapi.models import User, Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults,Campaigns, Candidates, Categories, Electors, ProjectInfo
 import json
 
 # ELECTIONS

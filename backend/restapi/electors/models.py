@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from ..modelsHelper import *
+from restapi.modelsHelper import TrackedModel, GenderOptions
 
 
 class Electors(models.Model):
@@ -30,7 +30,7 @@ class Electors(models.Model):
     # last_4 = models.CharField(max_length=255, blank=True, null=True)
     # last_name = models.CharField(max_length=255, blank=True, null=True)
     
-    gender = models.IntegerField(choices=Gender.choices, default=Gender.UNDEFINED)
+    gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
     serial_number = models.CharField(max_length=255, blank=True, null=True)
     membership_no = models.CharField(max_length=255, blank=True, null=True)
     box_no = models.CharField(max_length=255, blank=True, null=True)

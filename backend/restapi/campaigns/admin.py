@@ -1,8 +1,7 @@
 # Campaign Admin
 from django.contrib import admin
-from .models import *
+from restapi.models import Campaigns, CampaignMembers, CampaignGuarantees, ElectionAttendees
 
-@admin.register(Campaigns)
 class CampaignsAdmin(admin.ModelAdmin):
     list_display = ['election_candidate', 'status', 'priority', 'website']
     list_filter = ['status', 'priority']
@@ -17,7 +16,6 @@ class CampaignsAdmin(admin.ModelAdmin):
         ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
     ]
 
-@admin.register(CampaignMembers)
 class CampaignMembersAdmin(admin.ModelAdmin):
     def rank_display(self, obj):
         rank_dict = {
@@ -43,7 +41,6 @@ class CampaignMembersAdmin(admin.ModelAdmin):
         ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
     ]
 
-@admin.register(CampaignGuarantees)
 class CampaignGuaranteesAdmin(admin.ModelAdmin):
     list_display = ['campaign', 'member', 'civil', 'mobile', 'notes', 'status']
     search_fields = ['campaign__title', 'member__user__username', 'civil__full_name', 'mobile']
@@ -56,7 +53,6 @@ class CampaignGuaranteesAdmin(admin.ModelAdmin):
 
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
-@admin.register(ElectionAttendees)
 class ElectionAttendeesAdmin(admin.ModelAdmin):
     list_display = ['user', 'election', 'committee', 'elector', 'notes', 'status']
     search_fields = ['user__username', 'election__title', 'committee__name', 'elector__full_name']

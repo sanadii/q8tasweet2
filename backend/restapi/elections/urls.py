@@ -1,11 +1,11 @@
+# Elections Urls: restapi/elections/urls.py
 from django.urls import path
 from .views import *
-
 
 # from .views.candidates import *
 from rest_framework.routers import DefaultRouter
 
-app_name = "restapi"
+app_name = "elections"
 
 urlpatterns = [
     # Elections

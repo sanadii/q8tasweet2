@@ -1,4 +1,4 @@
-# Users urls.py
+# Users Urls: restapi/users/urls.py
 from django.urls import path, include
 from .views import *
 from rest_framework_simplejwt.views import (

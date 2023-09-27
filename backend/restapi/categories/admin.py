@@ -1,7 +1,6 @@
 # Categories & Tags Admin
 from django.contrib import admin
-from .models import *
-
+from restapi.models import Categories, Tags, Areas
 class CategoriesInline(admin.StackedInline):  # You can also use TabularInline if you prefer
     model = Categories
     can_delete = False
@@ -21,10 +20,10 @@ class AreasAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Area Information', {'fields': ['name', 'parent', 'image', 'slug', 'description', 'is_active']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        # ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
     ]
 
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
 @admin.register(Tags)
 class TagsAdmin(admin.ModelAdmin):
@@ -34,10 +33,10 @@ class TagsAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Tag Information', {'fields': ['name', 'slug']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        # ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
     ]
 
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
 @admin.register(Categories)
 class CategoriesAdmin(admin.ModelAdmin):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from restapi.models import User
 
 # USER
 class UserSerializer(serializers.ModelSerializer):
@@ -38,7 +38,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
-
 
 
 class UserSerializer(serializers.ModelSerializer):

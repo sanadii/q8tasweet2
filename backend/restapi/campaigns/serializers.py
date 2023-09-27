@@ -1,6 +1,6 @@
 # Campaign Serializers
 from rest_framework import serializers
-from ..models import Elections, ElectionCandidates, ElectionAttendees, Candidates, Campaigns, CampaignMembers, CampaignGuarantees, Electors
+from restapi.models import Elections, ElectionCandidates, ElectionAttendees, Candidates, Campaigns, CampaignMembers, CampaignGuarantees, Electors
 
 class CampaignsSerializer(serializers.ModelSerializer):
 

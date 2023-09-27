@@ -1,6 +1,8 @@
-# Campaign Urls
+# Campaign Urls: restapi/campaigns/urls.py
 from django.urls import path
 from .views import *
+
+app_name = "campaigns"
 
 urlpatterns = [
     # Campaigns

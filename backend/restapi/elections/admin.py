@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import *
+from restapi.models import Elections, ElectionCandidates, ElectionCommittees
 
 @admin.register(Elections)
 class ElectionsAdmin(admin.ModelAdmin):
@@ -33,13 +33,13 @@ class ElectionsAdmin(admin.ModelAdmin):
 
 @admin.register(ElectionCandidates)
 class ElectionCandidatesAdmin(admin.ModelAdmin):
-    list_display = ['get_candidate_name', 'get_election_name', 'get_election_category', 'get_election_subcategory', 'votes', 'position', 'is_winner', 'status', 'priority']
-    list_filter = ['is_winner', 'status', 'priority']
-    search_fields = ['election__name', 'candidate__name', 'position']
+    list_display = ['get_candidate_name', 'get_election_name', 'get_election_category', 'get_election_subcategory', 'votes', 'status', 'priority']
+    list_filter = ['status', 'priority']
+    search_fields = ['election__name', 'candidate__name',]
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
     fieldsets = [
-        ('Basic Information', {'fields': ['election', 'candidate', 'votes', 'position', 'is_winner']}),
+        ('Basic Information', {'fields': ['election', 'candidate', 'votes']}),
         ('Administration', {'fields': ['moderators', 'status', 'priority', 'notes', 'is_active']}),
         ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
     ]

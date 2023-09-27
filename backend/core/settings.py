@@ -31,10 +31,24 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "corsheaders",
+
+    'modeladmin_reorder',
     "restapi",
     # "users",
     "rest_framework_simplejwt.token_blacklist",
 ]
+
+ADMIN_REORDER = (
+    # Define app and model order and grouping here.
+    {'app': 'restapi', 'label': 'Campaigns', 'models': (
+        'Campaigns',
+        'CampaignMembers',
+        'CampaignGuarantees',
+        'ElectionAttendees'
+    )},
+    {'app': 'auth', 'models': ('user', 'group')},
+    #... Other apps and models
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

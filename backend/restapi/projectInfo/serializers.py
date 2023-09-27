@@ -1,6 +1,6 @@
 # Campaign Serializers
 from rest_framework import serializers
-from .models import *
+from restapi.models import *
 
 # PROJECT
 class ProjectInfoSerializer(serializers.ModelSerializer):

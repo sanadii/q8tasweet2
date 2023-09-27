@@ -11,8 +11,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     # Applications
-    path("", include("restapi.users.urls", namespace="users")),
-    path("elections/", include(("restapi.urls", "elections"), namespace="elections")),
+    # path("", include("restapi.users.urls", namespace="users")),
+    path("restapi/", include(("restapi.urls", "elections"), namespace="elections")),
 
     # Schema & Documentation
     path("docs/", include_docs_urls(title="WorkspaceAPI")),
