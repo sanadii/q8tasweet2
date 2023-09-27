@@ -1,68 +1,73 @@
 from django.contrib import admin
-from restapi.models import Elections, ElectionCandidates, ElectionCommittees
+from django.contrib.admin import AdminSite
+from restapi.models import Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults
 
-@admin.register(Elections)
 class ElectionsAdmin(admin.ModelAdmin):
-    list_display = ['get_name', 'duedate', 'category', 'sub_category', 'seats', 'votes']
+    list_display = ['get_election_name', 'duedate', 'category', 'sub_category', 'seats', 'votes']
     list_filter = ['category', 'status', 'priority']
     search_fields = ['sub_category__name', 'description', 'type', 'result']
     ordering = ['-duedate', 'sub_category__name']
     date_hierarchy = 'duedate'
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']  # Keep this line
     
-    def get_name(self, obj):
-        if obj.sub_category:
-            if obj.duedate:
-                year = obj.duedate.year
-                return f"{obj.sub_category.name} - {year}"
-            else:
-                return f"{obj.sub_category.name} - No Due Date"
-        return "No Sub Category"  # Return a default name if sub_category is None
-    
-    get_name.short_description = 'Name'  # Sets the column title in the admin interface
+    def get_election_name(self, obj):
+        return obj.get_dynamic_name()  # Note: here obj is the Elections object itself
+    get_election_name.short_description = 'Election Name'
     
     # Your existing fieldsets
     fieldsets = [
-        ('Basic Information', {'fields': ['image', 'get_name', 'duedate', 'description']}),
+        ('Basic Information', {'fields': ['image', 'duedate', 'description']}),
         ('Taxonomies', {'fields': ['category', 'sub_category', 'tags']}),
         ('Election Options and Details', {'fields': ['type', 'result', 'votes', 'seats', 'electors', 'attendees']}),
         ('Administration', {'fields': ['moderators', 'status', 'priority']}),
         ('Tracking Information', {'fields': readonly_fields}),
     ]
 
-
-@admin.register(ElectionCandidates)
 class ElectionCandidatesAdmin(admin.ModelAdmin):
-    list_display = ['get_candidate_name', 'get_election_name', 'get_election_category', 'get_election_subcategory', 'votes', 'status', 'priority']
+    list_display = ['get_candidate_name', 'get_election_category', 'get_election_subcategory', 'get_election_duedate', 'votes', 'status', 'priority']
     list_filter = ['status', 'priority']
-    search_fields = ['election__name', 'candidate__name',]
+    search_fields = ['election__sub_category__name', 'candidate__name',]
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
     fieldsets = [
         ('Basic Information', {'fields': ['election', 'candidate', 'votes']}),
         ('Administration', {'fields': ['moderators', 'status', 'priority', 'notes', 'is_active']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        ('Tracking Information', {'fields': readonly_fields}),
     ]
-
-    def get_election_name(self, obj):
-        return obj.election.name
-    get_election_name.short_description = 'Election Name'
     
     def get_election_category(self, obj):
-        return obj.election.category
-    get_election_category.short_description = 'Election Category'
+        return obj.election.category.name if obj.election and obj.election.category else 'No Category'
+    get_election_category.short_description = 'Election-Category'
 
     def get_election_subcategory(self, obj):
-        return obj.election.sub_category
+        return obj.election.sub_category.name if obj.election and obj.election.sub_category else 'No Sub-Category'
     get_election_subcategory.short_description = 'Election Sub-Category'
 
+    def get_election_duedate(self, obj):
+        return obj.election.duedate if obj.election else 'No Due Date'
+    get_election_duedate.short_description = 'Election Due Date'
+    
     def get_candidate_name(self, obj):
         return obj.candidate.name
     get_candidate_name.short_description = 'Candidate Name'
-
-@admin.register(ElectionCommittees)
 class ElectionCommitteesAdmin(admin.ModelAdmin):
     list_display = ['name', 'election', 'location']
     list_filter = ['election']
     search_fields = ['name', 'election__name', 'location']
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+
+class ElectionCommitteeResultsAdmin(admin.ModelAdmin):
+    list_display = ['id']
+
+# AdminSites
+admin.site.register(Elections, ElectionsAdmin)
+admin.site.register(ElectionCandidates, ElectionCandidatesAdmin)
+admin.site.register(ElectionCommittees, ElectionCommitteesAdmin)
+admin.site.register(ElectionCommitteeResults, ElectionCommitteeResultsAdmin)
+
+class ElectionAdminSite(AdminSite):
+    site_header = 'Elections Administration'
+    site_title = 'Elections Admin'
+    index_title = 'Elections Admin'
+
+election_admin_site = ElectionAdminSite(name='election')

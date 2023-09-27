@@ -1,17 +1,7 @@
 # Categories & Tags Admin
 from django.contrib import admin
+from django.contrib.admin import AdminSite
 from restapi.models import Categories, Tags, Areas
-class CategoriesInline(admin.StackedInline):  # You can also use TabularInline if you prefer
-    model = Categories
-    can_delete = False
-    verbose_name_plural = 'Categories'
-
-class TagsInline(admin.StackedInline):  # Again, TabularInline is an alternative
-    model = Tags
-    can_delete = False
-    verbose_name_plural = 'Tags'
-
-@admin.register(Areas)
 class AreasAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent', 'is_active']
     search_fields = ['name']
@@ -25,7 +15,6 @@ class AreasAdmin(admin.ModelAdmin):
 
     # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
-@admin.register(Tags)
 class TagsAdmin(admin.ModelAdmin):
     list_display = ['name']
     search_fields = ['name']
@@ -38,7 +27,6 @@ class TagsAdmin(admin.ModelAdmin):
 
     # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
-@admin.register(Categories)
 class CategoriesAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent', 'is_active']
     search_fields = ['name']
@@ -52,3 +40,15 @@ class CategoriesAdmin(admin.ModelAdmin):
     
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
+
+# AdminSites
+admin.site.register(Categories, CategoriesAdmin)
+admin.site.register(Tags, TagsAdmin)
+admin.site.register(Areas, AreasAdmin)
+
+class CategoryAdminSite(AdminSite):
+    site_header = 'Categories Administration'
+    site_title = 'Categories Admin'
+    index_title = 'Categories Admin'
+
+category_admin_site = CategoryAdminSite(name='category')

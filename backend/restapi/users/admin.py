@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import AdminSite
 from restapi.models import User
 from django.contrib.auth.admin import UserAdmin
 from django.forms import TextInput, Textarea, CharField
@@ -46,4 +47,23 @@ class UserAdminConfig(UserAdmin):
     )
 
 
+
+# # AdminSites
+# admin.site.register(User, UserAdminConfig)
+
+# class AuthAdminSite(AdminSite):
+#     site_header = 'Authentication Administration'
+#     site_title = 'Authentication Admin'
+#     index_title = 'Authentication Admin'
+
+# auth_admin_site = AuthAdminSite(name='authentication')
+# auth_admin_site.register(User, UserAdminConfig)
+
 admin.site.register(User, UserAdminConfig)
+
+class UserAdminSite(admin.AdminSite):
+    site_header = 'User Administration'
+    site_title = 'User Admin'
+    index_title = 'User Admin'
+
+user_admin_site = UserAdminSite(name='user_admin')

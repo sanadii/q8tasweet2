@@ -40,6 +40,9 @@ class Elections(TrackedModel):
     def __str__(self):
         return f"{self.sub_category.name} - {self.duedate.year if self.duedate else 'No Date'}"
 
+    def get_dynamic_name(self):
+        return f"{self.sub_category.name} - {self.duedate.year if self.duedate else 'No Date'}"
+
 
 class ElectionCandidates(TrackedModel):
     election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True)

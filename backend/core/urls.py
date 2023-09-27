@@ -6,12 +6,26 @@ from django.views.generic import TemplateView
 from rest_framework.schemas import get_schema_view
 from rest_framework.documentation import include_docs_urls
 
+from restapi.admin import (
+    candidate_admin_site,
+    election_admin_site,
+    campaign_admin_site,
+    elector_admin_site,
+    category_admin_site,
+    user_admin_site,
+    )
+
 urlpatterns = [
     # Django Admin
     path("admin/", admin.site.urls),
+    path('admin/restapi/elections/', election_admin_site.urls, name='election-admin'),
+    path('admin/restapi/candidates/', candidate_admin_site.urls, name='candidate-admin'),
+    path('admin/restapi/campaigns/', campaign_admin_site.urls, name='campaign-admin'),
+    path('admin/restapi/electors/', elector_admin_site.urls, name='elector-admin'),
+    path('admin/restapi/categories/', category_admin_site.urls, name='category-admin'),
+    path('admin/restapi/users/', user_admin_site.urls, name='user-admin'),
 
     # Applications
-    # path("", include("restapi.users.urls", namespace="users")),
     path("restapi/", include(("restapi.urls", "elections"), namespace="elections")),
 
     # Schema & Documentation

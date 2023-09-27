@@ -1,6 +1,8 @@
 # Campaign Admin
 from django.contrib import admin
+from django.contrib.admin import AdminSite
 from restapi.models import Campaigns, CampaignMembers, CampaignGuarantees, ElectionAttendees
+
 
 class CampaignsAdmin(admin.ModelAdmin):
     list_display = ['election_candidate', 'status', 'priority', 'website']
@@ -65,3 +67,22 @@ class ElectionAttendeesAdmin(admin.ModelAdmin):
 
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
 
+
+admin.site.register(Campaigns, CampaignsAdmin)
+admin.site.register(CampaignMembers, CampaignMembersAdmin)
+admin.site.register(CampaignGuarantees, CampaignGuaranteesAdmin)
+admin.site.register(ElectionAttendees, ElectionAttendeesAdmin)
+
+# class ElectionsAdminSite(AdminSite):
+#     site_header = 'Elections Administration'
+#     site_title = 'Elections Admin'
+#     index_title = 'Elections Admin'
+
+# campaign_admin_site = ElectionsAdminSite(name='campaign_admin')
+
+class CampaignAdminSite(AdminSite):
+    site_header = 'Campaigns Administration'
+    site_title = 'Campaigns Admin'
+    index_title = 'Campaigns Admin'
+
+campaign_admin_site = CampaignAdminSite(name='campaign_admin')

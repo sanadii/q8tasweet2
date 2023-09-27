@@ -1,31 +1,13 @@
 # restapi/admin.py
 from django.contrib import admin
-from django.contrib.admin import AdminSite
 from django.contrib.auth.models import Group, User
 
-from restapi.models import Campaigns, CampaignMembers, CampaignGuarantees, ElectionAttendees
-from restapi.campaigns.admin import CampaignsAdmin, CampaignMembersAdmin, CampaignGuaranteesAdmin, ElectionAttendeesAdmin
+# from restapi.models import CampaignAdminSite
 
+from restapi.elections.admin import ElectionAdminSite, election_admin_site
+from restapi.candidates.admin import CandidateAdminSite, candidate_admin_site
+from restapi.campaigns.admin import CampaignAdminSite, campaign_admin_site
+from restapi.electors.admin import ElectorAdminSite, elector_admin_site
 
-from restapi.candidates.admin import CandidatesAdmin
-from restapi.categories.admin import CategoriesAdmin, TagsAdmin, AreasAdmin
-from restapi.elections.admin import ElectionsAdmin, ElectionCandidatesAdmin, ElectionCommitteesAdmin
-from restapi.electors.admin import ElectorsAdmin
-from restapi.users.admin import UserAdmin
-
-from restapi.models import *
-# from .projectInfo.admin import ProjectInfoAdmin
-
-
-class CampaignAdminSite(AdminSite):
-    site_header = 'Campaigns Administration'
-    site_title = 'Campaigns Admin'
-    index_title = 'Campaigns Admin'
-
-campaign_admin_site = CampaignAdminSite(name='campaign_admin')
-
-# Register models with the custom AdminSite instance
-admin.site.register(Campaigns, CampaignsAdmin)
-admin.site.register(CampaignMembers, CampaignMembersAdmin)
-admin.site.register(CampaignGuarantees, CampaignGuaranteesAdmin)
-admin.site.register(ElectionAttendees, ElectionAttendeesAdmin)
+from restapi.categories.admin import CategoryAdminSite, category_admin_site
+from restapi.users.admin import UserAdminSite, user_admin_site

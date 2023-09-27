@@ -1,8 +1,8 @@
 # Candidate Admin
 from django.contrib import admin
-from .models import *
+from django.contrib.admin import AdminSite
+from restapi.models import Candidates
 
-@admin.register(Candidates)
 class CandidatesAdmin(admin.ModelAdmin):
     list_display = ['name', 'gender', 'phone', 'email', 'position', 'party', 'status', 'priority']
     list_filter = ['gender', 'status', 'priority']
@@ -16,3 +16,11 @@ class CandidatesAdmin(admin.ModelAdmin):
         ('Administration', {'fields': ['moderators', 'status', 'priority']}),
         ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
     ]
+
+admin.site.register(Candidates, CandidatesAdmin)
+class CandidateAdminSite(AdminSite):
+    site_header = 'Candidates Administration'
+    site_title = 'Candidates Admin'
+    index_title = 'Candidates Admin'
+
+candidate_admin_site = CandidateAdminSite(name='candidate')

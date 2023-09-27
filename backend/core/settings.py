@@ -31,23 +31,54 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "corsheaders",
-
-    'modeladmin_reorder',
+    'admin_reorder',
     "restapi",
     # "users",
     "rest_framework_simplejwt.token_blacklist",
 ]
 
 ADMIN_REORDER = (
-    # Define app and model order and grouping here.
-    {'app': 'restapi', 'label': 'Campaigns', 'models': (
-        'Campaigns',
-        'CampaignMembers',
-        'CampaignGuarantees',
-        'ElectionAttendees'
+    # Keep original label and models
+    'sites',
+
+    # Elections
+    {'app': 'restapi', 'label': 'Elections', 'models': (
+        'restapi.Elections',
+        'restapi.ElectionCandidates',
+        'restapi.ElectionCommittees',
+        'restapi.ElectionCommitteeResults'
     )},
-    {'app': 'auth', 'models': ('user', 'group')},
-    #... Other apps and models
+
+    # Candidates
+    {'app': 'restapi', 'label': 'Candidates', 'models': (
+        'restapi.Candidates',
+    )},
+
+    # Campaigns
+    {'app': 'restapi', 'label': 'Campaigns', 'models': (
+        'restapi.Campaigns',
+        'restapi.CampaignMembers',
+        'restapi.CampaignGuarantees',
+        'restapi.ElectionAttendees'
+    )},
+
+    # Electors
+    {'app': 'restapi', 'label': 'Electors', 'models': (
+        'restapi.Electors',
+    )},
+
+    # Taxonomy
+    {'app': 'restapi', 'label': 'Taxonomies', 'models': (
+        'restapi.Categories',
+        'restapi.Tags',
+        'restapi.Areas',
+    )},
+    
+    # Auth
+    {'app': 'auth', 'label': 'Authorisation','models': (
+        'restapi.User',
+        'auth.Group',
+    )},
 )
 
 MIDDLEWARE = [
@@ -59,6 +90,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 ROOT_URLCONF = "core.urls"
