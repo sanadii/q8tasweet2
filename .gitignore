@@ -14,7 +14,10 @@ frontend/node_modules/.cache/
 
 # Python dependencies ---------------------------------------
 venv/
+<<<<<<< HEAD
 frontend/.env
+=======
+>>>>>>> backup-branch
 __pycache__/
 *.pyc
 *.pyo

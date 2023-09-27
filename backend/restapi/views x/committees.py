@@ -131,7 +131,11 @@ class UpdateElectionCommitteeResults(APIView):
             )
         # Once the patch operation is done, fetch all relevant results
         results = ElectionCommitteeResults.objects.filter(election_committee_id=id)
+<<<<<<< HEAD:backend/restapi/views x/committees.py
         
+=======
+
+>>>>>>> backup-branch:backend/restapi/views/committees.py
         # Process these results into your desired structure
         output = {}
         for result in results:
