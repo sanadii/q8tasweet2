@@ -16,17 +16,13 @@ from datetime import datetime  # Add this line to import the datetime class
 def index(request):
     return render(request, 'index.html')
 
-
-SECRET_KEY = b'pseudorandomly generated server secret key'
-AUTH_SIZE = 16
-
 # Candidates: getCandidate, deleteCandidate, addCandidate, updateCandidate, CandidateCount
 class GetCandidates(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
         candidates_data = Candidates.objects.all()
-        data_serializer = CandidatesSerializer(candidates_data, many=True)
+        data_serializer = CandidatesSerializer(candidates_data, many=True, context={'request': request})
 
         return Response({"data": data_serializer.data, "counts": 1, "code": 200})
 
@@ -109,7 +105,7 @@ class AddNewCandidate(APIView):
             "status": candidate.status,
             "priority": candidate.priority,
             "moderators": moderators,  # Now this includes details not just IDs
-            "createdBy": candidate.created_by.first_name if candidate.created_by else None,
+            "created_by": candidate.created_by.first_name if candidate.created_by else None,
             "deleted": candidate.deleted,
         }
         return new_candidate_data

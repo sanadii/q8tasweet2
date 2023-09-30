@@ -8,7 +8,7 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 // Request interceptor for setting the Authorization header
 axios.interceptors.request.use(
   (config) => {
-    const token = JSON.parse(sessionStorage.getItem("authUser"))?.access_token;
+    const token = JSON.parse(sessionStorage.getItem("authUser"))?.accessToken;
     if (token) {
       config.headers["Authorization"] = "Bearer " + token;
     }

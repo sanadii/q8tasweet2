@@ -3,11 +3,10 @@ from datetime import timedelta
 import os
 import dotenv
 dotenv.load_dotenv()
-
+from .adminReorder import ADMIN_REORDER
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SECRET_KEY = os.environ.get("SECRET_KEY")
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 DEBUG = True
@@ -37,50 +36,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
 ]
 
-ADMIN_REORDER = (
-    # Keep original label and models
-    'sites',
-
-    # Elections
-    {'app': 'restapi', 'label': 'Elections', 'models': (
-        'restapi.Elections',
-        'restapi.ElectionCandidates',
-        'restapi.ElectionCommittees',
-        'restapi.ElectionCommitteeResults'
-    )},
-
-    # Candidates
-    {'app': 'restapi', 'label': 'Candidates', 'models': (
-        'restapi.Candidates',
-    )},
-
-    # Campaigns
-    {'app': 'restapi', 'label': 'Campaigns', 'models': (
-        'restapi.Campaigns',
-        'restapi.CampaignMembers',
-        'restapi.CampaignGuarantees',
-        'restapi.ElectionAttendees'
-    )},
-
-    # Electors
-    {'app': 'restapi', 'label': 'Electors', 'models': (
-        'restapi.Electors',
-    )},
-
-    # Taxonomy
-    {'app': 'restapi', 'label': 'Taxonomies', 'models': (
-        'restapi.Categories',
-        'restapi.Tags',
-        'restapi.Areas',
-    )},
-    
-    # Auth
-    {'app': 'auth', 'label': 'Authorisation','models': (
-        'restapi.User',
-        'auth.Group',
-    )},
-)
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -106,6 +61,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "restapi.configs.context_processors.site_configs",
+
             ],
         },
     },
@@ -142,12 +99,20 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",  # Secure by default
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": (
+        ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",  # JWT authentication
         "rest_framework.authentication.SessionAuthentication",  # Keep session auth if you still need it
         "rest_framework.authentication.TokenAuthentication",
- ),
+        ],
+
+    "DEFAULT_RENDERER_CLASSES": [
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+        ],
+    "DEFAULT_PARSER_CLASSES": (
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    ),
+
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 

@@ -6,9 +6,9 @@ class TrackedModel(models.Model):
     created_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_created')
     updated_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_updated')
     deleted_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_deleted')
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
-    deleted_date = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
     deleted = models.BooleanField(default=False)
 
     class Meta:

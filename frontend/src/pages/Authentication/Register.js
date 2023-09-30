@@ -30,7 +30,7 @@ const Register = () => {
 
         initialValues: {
             email: '',
-            first_name: '',
+            firstName: '',
             password: '',
             confirm_password: ''
         },
@@ -38,7 +38,7 @@ const Register = () => {
             email: Yup.string()
               .email('Please enter a valid email address')
               .required('Please enter your email'),
-            first_name: Yup.string().required('Please enter your username'),
+            firstName: Yup.string().required('Please enter your username'),
             password: Yup.string()
             .min(6, 'Password must be at least 6 characters')
             .required('Password is required'),
@@ -149,18 +149,18 @@ const Register = () => {
                                                 <div className="mb-3">
                                                     <Label htmlFor="username" className="form-label">Username <span className="text-danger">*</span></Label>
                                                     <Input
-                                                        name="first_name"
+                                                        name="firstName"
                                                         type="text"
                                                         placeholder="Enter username"
                                                         onChange={validation.handleChange}
                                                         onBlur={validation.handleBlur}
-                                                        value={validation.values.first_name || ""}
+                                                        value={validation.values.firstName || ""}
                                                         invalid={
-                                                            validation.touched.first_name && validation.errors.first_name ? true : false
+                                                            validation.touched.firstName && validation.errors.firstName ? true : false
                                                         }
                                                     />
-                                                    {validation.touched.first_name && validation.errors.first_name ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.first_name}</div></FormFeedback>
+                                                    {validation.touched.firstName && validation.errors.firstName ? (
+                                                        <FormFeedback type="invalid"><div>{validation.errors.firstName}</div></FormFeedback>
                                                     ) : null}
 
                                                 </div>

@@ -1,10 +1,27 @@
-# Importing all serializers from sub-apps
-from .users.serializers import UserSerializer
-from .campaigns.serializers import CampaignsSerializer, CampaignElectionSerializer, CampaignCandidateSerializer, CampaignMembersSerializer, CampaignGuaranteesSerializer, CampaignDetailsSerializer, ElectionAttendeesSerializer
-from .candidates.serializers import CandidatesSerializer
-from .categories.serializers import CategoriesSerializer, SubCategoriesSerializer
-from .elections.serializers import ElectionsSerializer, ElectionCandidatesSerializer, ElectionCommitteesSerializer, ElectionCommitteeResultsSerializer
-from .electors.serializers import ElectorsSerializer
-from .projectInfo.serializers import ProjectInfoSerializer
+# restapi/serializers.py
+from restapi.base_serializer import TrackingSerializer, AdminControlSerializer
+from restapi.users.serializers import UserSerializer
+from .elections.serializers import (
+    ElectionsSerializer,
+    ElectionCandidatesSerializer,
+    ElectionCommitteesSerializer,
+    ElectionCommitteeResultsSerializer
+)
 
-# If needed, you can also create additional serializers in this file
+from .candidates.serializers import CandidatesSerializer
+
+from .campaigns.serializers import (
+    CampaignsSerializer,
+    CampaignElectionSerializer,
+    CampaignCandidateSerializer,
+    CampaignMembersSerializer,
+    CampaignGuaranteesSerializer,
+    CampaignDetailsSerializer,
+    ElectionAttendeesSerializer
+)
+
+from .electors.serializers import ElectorsSerializer
+
+from .categories.serializers import CategoriesSerializer, SubCategoriesSerializer
+
+from .configs.serializers import ConfigsSerializer

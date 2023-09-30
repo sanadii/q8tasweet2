@@ -8,7 +8,7 @@ class ElectionsAdmin(admin.ModelAdmin):
     search_fields = ['sub_category__name', 'description', 'type', 'result']
     ordering = ['-duedate', 'sub_category__name']
     date_hierarchy = 'duedate'
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']  # Keep this line
+    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']  # Keep this line
     
     def get_election_name(self, obj):
         return obj.get_dynamic_name()  # Note: here obj is the Elections object itself
@@ -27,7 +27,7 @@ class ElectionCandidatesAdmin(admin.ModelAdmin):
     list_display = ['get_candidate_name', 'get_election_category', 'get_election_subcategory', 'get_election_duedate', 'votes', 'status', 'priority']
     list_filter = ['status', 'priority']
     search_fields = ['election__sub_category__name', 'candidate__name',]
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
     fieldsets = [
         ('Basic Information', {'fields': ['election', 'candidate', 'votes']}),
@@ -54,7 +54,7 @@ class ElectionCommitteesAdmin(admin.ModelAdmin):
     list_display = ['name', 'election', 'location']
     list_filter = ['election']
     search_fields = ['name', 'election__name', 'location']
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
 class ElectionCommitteeResultsAdmin(admin.ModelAdmin):
     list_display = ['id']

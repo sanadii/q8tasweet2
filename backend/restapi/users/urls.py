@@ -1,4 +1,4 @@
-# Users Urls: restapi/users/urls.py
+# restapi/users/urls.py
 from django.urls import path, include
 from .views import *
 from rest_framework_simplejwt.views import (
@@ -24,9 +24,9 @@ urlpatterns = [
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
 
     # Users
-    path("users/getUsers", GetUsers.as_view(), name="GetUsers"),
-    path("users/getModeratorUsers", GetModeratorUsers.as_view(), name="GetModeratorUsers"),
-    path('users/getCurrentUser', GetCurrentUser.as_view(), name="GetCurrentUser"),
-    path('users/addNewUser', AddNewUser.as_view(), name="AddNewUser"),
-    path('users/deleteUser/<int:id>', DeleteUser.as_view(), name="DeleteUser"),
+    path("getUsers", GetUsers.as_view(), name="GetUsers"),
+    path("getModeratorUsers", GetModeratorUsers.as_view(), name="GetModeratorUsers"),
+    path('getCurrentUser', GetCurrentUser.as_view(), name="GetCurrentUser"),
+    path('addNewUser', AddNewUser.as_view(), name="AddNewUser"),
+    path('deleteUser/<int:id>', DeleteUser.as_view(), name="DeleteUser"),
 ]

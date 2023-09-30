@@ -6,7 +6,7 @@ from .candidates.models import Candidates
 from .categories.models import Categories, Tags, Areas
 from .elections.models import Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults
 from .electors.models import Electors
-from .projectInfo.models import ProjectInfo
+from .configs.models import Configs
 from .users.models import User
 
 # If you need to create overarching models, define them here.

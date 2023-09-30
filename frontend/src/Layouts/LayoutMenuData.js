@@ -97,7 +97,7 @@ const Navdata = () => {
   }, [history, iscurrentState, isDashboard, isApps, isAdmin, isAuth]);
 
   const currentUser = useSelector(state => state.Users.currentUser);
-  const isStaff = currentUser?.is_staff;
+  const isStaff = currentUser?.isStaff;
 
   const adminItems = [
 

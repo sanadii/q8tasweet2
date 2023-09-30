@@ -77,7 +77,7 @@ const Terms = () => {
         id: term.id,
         name: term.name,
         parent: term.parent,
-        is_active: term.is_active,
+        isActive: term.isActive,
       });
 
       setIsEdit(true);

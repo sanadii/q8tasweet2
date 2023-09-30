@@ -29,7 +29,7 @@ class UserAdminConfig(UserAdmin):
     form = CustomUserChangeForm
     search_fields = ('email', 'username', 'first_name', 'last_name',)
     list_filter = ('is_active', 'is_staff')
-    ordering = ('-created_date',)
+    ordering = ('-updated_at',)
     list_display = ('email', 'username', 'first_name', 'last_name', 'is_active', 'is_staff')
     fieldsets = (
         (None, {'fields': ('email', 'username', 'first_name', 'last_name', 'password')}),

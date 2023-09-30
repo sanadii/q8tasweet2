@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 // Election Redux States
 import {
   GET_ELECTIONS,
-  GET_ELECTION_COUNT,
   GET_ELECTION_DETAILS,
   ADD_ELECTION,
   DELETE_ELECTION,
@@ -17,17 +16,12 @@ import {
   ADD_NEW_ELECTION_CANDIDATE,
   DELETE_ELECTION_CANDIDATE,
   UPDATE_ELECTION_CANDIDATE,
-  // GET_ELECTION_CANDIDATE_DETAILS,
-  // GET_ELECTION_CANDIDATE_COUNT,
 
   // Election Committees ---------------
   GET_ELECTION_COMMITTEES,
   ADD_NEW_ELECTION_COMMITTEE,
   DELETE_ELECTION_COMMITTEE,
   UPDATE_ELECTION_COMMITTEE,
-  // GET_ELECTION_COMMITTEE_DETAILS,
-  // GET_ELECTION_COMMITTEE_COUNT,
-
 
   // Election Committee Results
   UPDATE_ELECTION_COMMITTEE_RESULTS,
@@ -37,9 +31,6 @@ import {
   ADD_NEW_ELECTION_CAMPAIGN,
   DELETE_ELECTION_CAMPAIGN,
   UPDATE_ELECTION_CAMPAIGN,
-  GET_ELECTION_CAMPAIGN_DETAILS,
-  GET_ELECTION_CAMPAIGN_COUNT,
-
 } from "./actionType";
 
 import {
@@ -48,7 +39,7 @@ import {
 } from "../uploadImage/actionType";
 
 import {
-  // getElections, getElectionDetails, getElectionsCount
+  // getElections, getElectionDetails, 
   // API Response
   ElectionApiResponseSuccess,
   ElectionApiResponseError,
@@ -97,7 +88,6 @@ import { uploadNewImage } from "../uploadImage/action";
 import {
   // Elections ---------------
   getElections as getElectionsApi,
-  getElectionCount as getElectionCountApi,
   getElectionDetails as getElectionDetailsApi,
   addElection,
   updateElection,
@@ -105,16 +95,12 @@ import {
 
   // Election Candidates ---------------
   getElectionCandidates as getElectionCandidatesApi,
-  // getElectionCandidateDetails as getElectionCandidateDetailsApi,
-  // getElectionCandidateCount as getElectionCandidateCountApi,
   addNewElectionCandidate,
   updateElectionCandidate,
   deleteElectionCandidate,
 
   // Election Committees ---------------
   getElectionCommittees as getElectionCommitteesApi,
-  // getElectionCommitteeDetails as getElectionCommitteeDetailsApi,
-  // getElectionCommitteeCount as getElectionCommitteeCountApi,
   addNewElectionCommittee,
   updateElectionCommittee,
   deleteElectionCommittee,
@@ -124,8 +110,6 @@ import {
 
   // Election Campaigns ---------------
   getElectionCampaigns as getElectionCampaignsApi,
-  // getElectionCampaignDetails as getElectionCampaignDetailsApi,
-  // getElectionCampaignCount as getElectionCampaignCountApi,
   addNewElectionCampaign,
   updateElectionCampaign,
   deleteElectionCampaign,
@@ -135,20 +119,11 @@ function* getElections() {
   try {
     const response = yield call(getElectionsApi);
     yield put(ElectionApiResponseSuccess(GET_ELECTIONS, response.data));
-    yield put(ElectionApiResponseSuccess(GET_ELECTION_COUNT, response.counts));
   } catch (error) {
     yield put(ElectionApiResponseError(GET_ELECTIONS, error));
   }
 }
 
-function* getElectionCount() {
-  try {
-    const response = yield call(getElectionCountApi);
-    yield put(ElectionApiResponseSuccess(GET_ELECTION_COUNT, response.data));
-  } catch (error) {
-    yield put(ElectionApiResponseError(GET_ELECTION_COUNT, error));
-  }
-}
 
 function* getElectionDetails({ payload: election }) {
   try {
@@ -420,9 +395,6 @@ export function* watchDeleteElection() {
   yield takeEvery(DELETE_ELECTION, onDeleteElection);
 }
 
-export function* watchGetElectionCount() {
-  yield takeEvery(GET_ELECTION_COUNT, getElectionCount);
-}
 
 export function* watchGetElectionDetails() {
   yield takeEvery(GET_ELECTION_DETAILS, getElectionDetails);
@@ -492,25 +464,19 @@ function* electionSaga() {
 
     // Elections ---------------
     fork(watchGetElections),
-    fork(watchGetElectionCount),
     fork(watchAddNewElection),
     fork(watchUpdateElection),
     fork(watchDeleteElection),
     fork(watchGetElectionDetails),
-    fork(watchGetElectionCount),
 
     // ElectionCandidates ---------------
     fork(watchGetElectionCandidates),
-    // fork(watchGetElectionCandidateDetails),
-    // fork(watchGetElectionCandidateCount),
     fork(watchAddNewElectionCandidate),
     fork(watchUpdateElectionCandidate),
     fork(watchDeleteElectionCandidate),
 
     // ElectionCommittees ---------------
     fork(watchGetElectionCommittees),
-    // fork(watchGetElectionCommitteeDetails),
-    // fork(watchGetElectionCommitteeCount),
     fork(watchAddNewElectionCommittee),
     fork(watchUpdateElectionCommittee),
     fork(watchDeleteElectionCommittee),
@@ -520,12 +486,9 @@ function* electionSaga() {
 
     // ElectionCampiagns ---------------
     fork(watchGetElectionCampaigns),
-    // fork(watchGetElectionCampiagnDetails),
-    // fork(watchGetElectionCampiagnCount),
     fork(watchAddNewElectionCampaign),
     fork(watchUpdateElectionCampaign),
     fork(watchDeleteElectionCampaign),
-
   ]);
 }
 

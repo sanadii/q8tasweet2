@@ -463,7 +463,7 @@ const UserModal = ({ modal, toggle, modalMode, elector }) => {
                               />
                             </span>
                             <span className="flex-grow-1 ms-2">
-                              {moderator.first_name}
+                              {moderator.firstName}
                             </span>
                           </label>
                           {validation.touched.moderators &&

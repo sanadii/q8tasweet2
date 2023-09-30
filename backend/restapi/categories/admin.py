@@ -2,6 +2,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from restapi.models import Categories, Tags, Areas
+
 class AreasAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent', 'is_active']
     search_fields = ['name']
@@ -10,10 +11,10 @@ class AreasAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Area Information', {'fields': ['name', 'parent', 'image', 'slug', 'description', 'is_active']}),
-        # ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        # ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']}),
     ]
 
-    # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
 class TagsAdmin(admin.ModelAdmin):
     list_display = ['name']
@@ -22,10 +23,10 @@ class TagsAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Tag Information', {'fields': ['name', 'slug']}),
-        # ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        # ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']}),
     ]
 
-    # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
 class CategoriesAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent', 'is_active']
@@ -35,10 +36,10 @@ class CategoriesAdmin(admin.ModelAdmin):
     
     fieldsets = [
         ('Category Information', {'fields': ['name', 'parent', 'image', 'slug', 'description', 'is_active']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']}),
     ]
     
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
 
 # AdminSites

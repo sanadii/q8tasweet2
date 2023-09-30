@@ -1,59 +1,107 @@
-# Campaign Serializers
+# restapi/campaigns/serializers.py
 from rest_framework import serializers
-from restapi.models import Elections, ElectionCandidates, ElectionAttendees, Candidates, Campaigns, CampaignMembers, CampaignGuarantees, Electors
+from restapi.models import (
+    Elections, ElectionCandidates, ElectionCommittees,
+    Candidates, 
+    Campaigns, CampaignMembers, CampaignGuarantees, ElectionAttendees,
+    Electors,
+    Categories,
+)
+
+from restapi.candidates.serializers import CandidatesSerializer
+from restapi.elections.serializers import ElectionsSerializer
 
 class CampaignsSerializer(serializers.ModelSerializer):
+    candidate = CandidatesSerializer(source='election_candidate.candidate', read_only=True)
+    election = ElectionsSerializer(source='election_candidate.election', read_only=True)
+    
+    class Meta: 
+        model = Campaigns
+        fields = "__all__"
 
-    candidate = serializers.SerializerMethodField()
-    election = serializers.SerializerMethodField()
+# class CampaignsSerializer(serializers.ModelSerializer):
+#     candidate = serializers.SerializerMethodField()
+#     election = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Campaigns
+#         fields = "__all__"
+
+#     # Candidate
+#     def get_candidate(self, instance):
+#         election_candidate = getattr(instance, 'election_candidate', None)
+#         if election_candidate:
+#             candidate = getattr(election_candidate, 'candidate', None)
+#             if candidate:
+#                 image = getattr(candidate, 'image', None)
+#                 return {
+#                     "id": getattr(candidate, 'id', None),
+#                     "name": getattr(candidate, 'name', None),
+#                     "image": image.url if image else None,
+#                     "gender": getattr(candidate, 'gender', None),
+#                     "phone": getattr(candidate, 'phone', None),
+#                     "email": getattr(candidate, 'email', None),
+#                     "twitter": getattr(candidate, 'twitter', None),
+#                     "instagram": getattr(candidate, 'instagram', None),
+#                     "description": getattr(candidate, 'description', None),
+#                 }
+#             return None  # or return a default dict if you prefer
+
+
+#     # Election
+#     def get_election(self, instance):
+#         election_candidate = getattr(instance, 'election_candidate', None)
+#         if election_candidate:
+#             election = getattr(election_candidate, 'election', None)
+#             if election:
+#                 image = getattr(election, 'image', None)
+#                 return {
+#                     "id": getattr(election, 'id', None),
+#                     "name": getattr(election, 'name', None),
+#                     "image": image.url if image else None,
+#                     "duedate": getattr(election, 'duedate', None),
+#                     "category": getattr(election, 'category', None),
+#                     "subCategory": getattr(election, 'subCategory', None),
+#                     "type": getattr(election, 'type', None),
+#                     "result": getattr(election, 'result', None),
+#                     "votes": getattr(election, 'votes', None),
+#                     "seats": getattr(election, 'seats', None),
+#                     "electors": getattr(election, 'electors', None),
+#                     "attendees": getattr(election, 'attendees', None),
+#                 }
+#             return None  # or return a default dict if you prefer
+
+class CampaignDetailsSerializer(serializers.ModelSerializer):
+
+    def get_elections_candidates(self):
+        from ..serializers import ElectionsSerializer, CandidatesSerializer
+
+        election = ElectionsSerializer(read_only=True)
+        candidate = CandidatesSerializer(read_only=True)
+        # user = UserSerializer(read_only=True)  # Assuming the user field name is 'user'
+        # image = serializers.ImageField(use_url=True)  # Ensure the image's URL is returned, not its data
 
     class Meta:
-        model = Campaigns
-        fields = "__all__"  # add 'candidate', 'election' if you want them to show explicitly
+        model = ElectionCandidates
+        fields = [
+            "id",
+            "votes",
+            "deleted",
+            "election",
+            "candidate",
+        ]
 
-    # Candidate
-    def get_candidate(self, instance):
-        election_candidate = getattr(instance, 'election_candidate', None)
-        if election_candidate:
-            candidate = getattr(election_candidate, 'candidate', None)
-            if candidate:
-                image = getattr(candidate, 'image', None)
-                return {
-                    "id": getattr(candidate, 'id', None),
-                    "name": getattr(candidate, 'name', None),
-                    "image": image.url if image else None,
-                    "gender": getattr(candidate, 'gender', None),
-                    "phone": getattr(candidate, 'phone', None),
-                    "email": getattr(candidate, 'email', None),
-                    "twitter": getattr(candidate, 'twitter', None),
-                    "instagram": getattr(candidate, 'instagram', None),
-                    "description": getattr(candidate, 'description', None),
-                }
-            return None  # or return a default dict if you prefer
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["candidate_id"] = instance.candidate_id
+        representation["name"] = instance.candidate.name
+        representation["image"] = (
+            instance.candidate.image.url if instance.candidate.image else None
+        )
+        representation["gender"] = instance.candidate.gender
+        representation["Candidate_deleted"] = instance.candidate.deleted
+        return representation
 
-
-    # Election
-    def get_election(self, instance):
-        election_candidate = getattr(instance, 'election_candidate', None)
-        if election_candidate:
-            election = getattr(election_candidate, 'election', None)
-            if election:
-                image = getattr(election, 'image', None)
-                return {
-                    "id": getattr(election, 'id', None),
-                    "name": getattr(election, 'name', None),
-                    "image": image.url if image else None,
-                    "duedate": getattr(election, 'duedate', None),
-                    "category": getattr(election, 'category', None),
-                    "subCategory": getattr(election, 'subCategory', None),
-                    "type": getattr(election, 'type', None),
-                    "result": getattr(election, 'result', None),
-                    "votes": getattr(election, 'votes', None),
-                    "seats": getattr(election, 'seats', None),
-                    "electors": getattr(election, 'electors', None),
-                    "attendees": getattr(election, 'attendees', None),
-                }
-            return None  # or return a default dict if you prefer
 
 # # Further improvement of the serializers
 # class CandidateSerializer(serializers.ModelSerializer):
@@ -147,9 +195,9 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
             # "created_by",
             # "updated_by",
             # "deleted_by",
-            # "created_date",
-            # "updated_date",
-            # "deleted_date",
+            # "updated_at",
+            # "updated_at",
+            # "updated_at",
             "deleted",
         ]
     # def get_full_name(self, obj):
@@ -201,39 +249,6 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
         except Electors.DoesNotExist:
             return "Not Found"
 
-
-class CampaignDetailsSerializer(serializers.ModelSerializer):
-
-    def get_elections_candidates(self):
-        from ..serializers import ElectionsSerializer, CandidatesSerializer
-
-        election = ElectionsSerializer(read_only=True)
-        candidate = CandidatesSerializer(read_only=True)
-        # user = UserSerializer(read_only=True)  # Assuming the user field name is 'user'
-        # image = serializers.ImageField(use_url=True)  # Ensure the image's URL is returned, not its data
-
-    class Meta:
-        model = ElectionCandidates
-        fields = [
-            "id",
-            "position",
-            "votes",
-            "is_winner",
-            "deleted",
-            "election",
-            "candidate",
-        ]
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation["candidate_id"] = instance.candidate_id
-        representation["name"] = instance.candidate.name
-        representation["image"] = (
-            instance.candidate.image.url if instance.candidate.image else None
-        )
-        representation["gender"] = instance.candidate.gender
-        representation["Candidate_deleted"] = instance.candidate.deleted
-        return representation
 
 
 class ElectionAttendeesSerializer(serializers.ModelSerializer):

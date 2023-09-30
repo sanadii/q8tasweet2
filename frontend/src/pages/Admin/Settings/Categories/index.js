@@ -95,7 +95,7 @@ const Categories = () => {
         name: category.name,
         parent: category.parent,
         image: category.image,
-        is_active: category.is_active,
+        isActive: category.isActive,
       });
 
       setIsEdit(true);

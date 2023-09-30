@@ -4,7 +4,8 @@ import {
   API_RESPONSE_ERROR,
 
   // Elections
-  GET_ELECTIONS,  // Details, Candidates, Committees, Results, Campaigns
+  GET_ELECTIONS,
+  GET_ELECTION_DETAILS,
   ADD_ELECTION,
   ADD_ELECTION_SUCCESS,
   ADD_ELECTION_FAIL,
@@ -14,10 +15,6 @@ import {
   DELETE_ELECTION,
   DELETE_ELECTION_SUCCESS,
   DELETE_ELECTION_FAIL,
-
-  // Election Details
-  GET_ELECTION_COUNT,
-  GET_ELECTION_DETAILS,
 
   // Election Candidate
   GET_ELECTION_CANDIDATES,
@@ -43,7 +40,6 @@ import {
   DELETE_ELECTION_COMMITTEE_SUCCESS,
   DELETE_ELECTION_COMMITTEE_FAIL,
 
-
   // Election Committee
   UPDATE_ELECTION_COMMITTEE_RESULTS,
   UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS,
@@ -60,7 +56,6 @@ import {
   DELETE_ELECTION_CAMPAIGN,
   DELETE_ELECTION_CAMPAIGN_SUCCESS,
   DELETE_ELECTION_CAMPAIGN_FAIL,
-
 } from "./actionType";
 
 // Election Success / Error
@@ -79,11 +74,6 @@ export const ElectionApiResponseError = (actionType, error) => ({
 export const getElections = () => ({
   type: GET_ELECTIONS,
 });
-
-export const getElectionCount = () => ({
-  type: GET_ELECTION_COUNT,
-});
-
 
 // Election Details
 export const getElectionDetails = (election) => ({

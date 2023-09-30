@@ -39,10 +39,10 @@ const ProfileDropdown = () => {
               />
               <span className="text-start ms-xl-2">
                 <span className="d-none d-xl-inline-block ms-1 fw-medium user-userId-text">
-                  {user.last_name}
+                  {user.lastName}
                 </span>
                 <span className="d-none d-xl-block ms-1 fs-12 text-muted user-userId-sub-text">
-                  {user.first_name}
+                  {user.firstName}
                 </span>
               </span>
             </span>

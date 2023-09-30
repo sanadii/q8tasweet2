@@ -228,7 +228,7 @@ const AllUsers = () => {
       },
       {
         Header: "Users",
-        accessor: "first_name",
+        accessor: "firstName",
         filterable: false,
         Cell: (cellProps) => {
           return <Name {...cellProps} />;

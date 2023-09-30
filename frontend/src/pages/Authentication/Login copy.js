@@ -31,10 +31,10 @@ export default function SignIn() {
         password: formData.password,
       })
       .then((res) => {
-        localStorage.setItem("access_token", res.data.access);
-        localStorage.setItem("refresh_token", res.data.refresh);
+        localStorage.setItem("accessToken", res.data.access);
+        localStorage.setItem("refreshToken", res.data.refresh);
         axiosInstance.defaults.headers["Authorization"] =
-          "JWT " + localStorage.getItem("access_token");
+          "JWT " + localStorage.getItem("accessToken");
         navigate("/", { replace: true });
         console.log(res);
         console.log(res.data);

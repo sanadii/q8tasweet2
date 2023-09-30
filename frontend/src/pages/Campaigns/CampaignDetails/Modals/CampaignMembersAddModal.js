@@ -46,7 +46,7 @@ const CampaignMembersAddModal = ({ campaignId }) => {
   useEffect(() => {
     setUserList(
       users.filter((users) =>
-        users.first_name.toLowerCase().includes(searchUserInput.toLowerCase())
+        users.firstName.toLowerCase().includes(searchUserInput.toLowerCase())
       )
     );
   }, [users, searchUserInput]);

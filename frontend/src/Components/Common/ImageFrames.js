@@ -6,7 +6,7 @@ import { Row, Col, Card, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Badge } from 'reactstrap'; // Or your preferred UI library if not using reactstrap
 
-const apiUrl = api.API_URL.endsWith('/') ? api.API_URL : `${api.API_URL}/`; // Ensure apiUrl ends with '/'
+const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}/`; // Ensure mediaUrl ends with '/'
 const defaultImagePath = 'media/candidates/default.jpg';
 
 const defaultCandidatePath = 'media/candidates/default.jpg';
@@ -15,7 +15,7 @@ const defaultUserPath = 'media/candidates/default.jpg';
 
 
 export const ImageCircle = ({ imagePath }) => {
-  const imageUrl = `${apiUrl}${imagePath}`;
+  const imageUrl = `${mediaUrl}${imagePath}`;
 
   return (
     <div className="avatar-xs flex-shrink-0 me-3">
@@ -25,7 +25,7 @@ export const ImageCircle = ({ imagePath }) => {
 };
 
 export const ImageGenderCircle = ({ imagePath, genderValue }) => {
-  const imageUrl = `${apiUrl}${imagePath}`;
+  const imageUrl = `${mediaUrl}${imagePath}`;
 
   let borderColor;
 
@@ -54,7 +54,7 @@ export const AvatarMedium = ({ row }) => {
   if (!row || !row.original) return null; // If row or row.original is undefined, don't render the component
 
   const { id, image, name } = row.original;
-  const imageUrl = image ? `${apiUrl}${image}` : `${apiUrl}${defaultImagePath}`;
+  const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
   return (
     <React.Fragment>
@@ -79,7 +79,7 @@ export const AvatarMedium = ({ row }) => {
 
 
 export const ImageMedium = ({ imagePath }) => {
-  const imageUrl = imagePath ? `${apiUrl}${imagePath}` : `${apiUrl}${defaultImagePath}`;
+  const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
 
   return (
     <React.Fragment>
@@ -99,7 +99,7 @@ export const ImageMedium = ({ imagePath }) => {
 
 
 export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner }) => {
-  const imageUrl = imagePath ? `${apiUrl}${imagePath}` : `${apiUrl}${defaultImagePath}`;
+  const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
 
   let borderColor;
 
@@ -140,7 +140,7 @@ export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner 
 
 
 export const ImageCampaignBackground = ({ imagePath }) => {
-  const imageUrl = `${apiUrl}${imagePath}`;
+  const imageUrl = `${mediaUrl}${imagePath}`;
 
   return (
     <div className="profile-foreground position-relative mx-n4 mt-n4">
@@ -151,7 +151,7 @@ export const ImageCampaignBackground = ({ imagePath }) => {
   );
 };
 export const ImageCandidateCampaign = ({ imagePath }) => {
-  const imageUrl = `${apiUrl}${imagePath}`;
+  const imageUrl = `${mediaUrl}${imagePath}`;
 
   return (
     <div className="avatar-sm rounded">
@@ -165,7 +165,7 @@ export const ImageCandidateCampaign = ({ imagePath }) => {
 };
 
 export const ImageRoundedCircleXS = ({ imagePath }) => {
-  const imageUrl = `${apiUrl}${imagePath}`;
+  const imageUrl = `${mediaUrl}${imagePath}`;
 
   return (
     <div className="avatar-xs flex-shrink-0 me-3">
@@ -175,7 +175,7 @@ export const ImageRoundedCircleXS = ({ imagePath }) => {
 };
 
 export const ImageCampaignCard = ({ urlPath, imagePath }) => {
-  const imageUrl = `${apiUrl}${imagePath}`;
+  const imageUrl = `${mediaUrl}${imagePath}`;
 
   return (
     <Card className="mb-4">

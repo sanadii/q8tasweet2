@@ -8,8 +8,8 @@ const useUserRoles = () => {
 
     return {
         // Staff Roles
-        isAdmin: currentUser?.is_staff === true,
-        isSubscriber: currentUser?.is_staff === false,
+        isAdmin: currentUser?.isStaff === true,
+        isSubscriber: currentUser?.isStaff === false,
 
         // Subscriber Roles
         isModerator: currentMember?.rank === 10,

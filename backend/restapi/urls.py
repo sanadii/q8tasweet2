@@ -7,7 +7,7 @@ urlpatterns = [
     path('categories/', include('restapi.categories.urls')),
     path('elections/', include('restapi.elections.urls')),
     path('electors/', include('restapi.electors.urls')),
-    path('projectInfo/', include('restapi.projectInfo.urls')),
+    path('Configs/', include('restapi.configs.urls')),
     path('users/', include('restapi.users.urls')),
     # ... additional submodules ...
 ]

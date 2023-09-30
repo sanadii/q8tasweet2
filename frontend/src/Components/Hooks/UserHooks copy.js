@@ -3,7 +3,7 @@ import { getLoggedinUser } from "../../helpers/api_helper";
 
 const useProfile = () => {
   const userSession = getLoggedinUser();
-  const token = userSession?.refresh_token;
+  const token = userSession?.refreshToken;
 
   const [loading, setLoading] = useState(!token); // Set to true if no token
   const [userProfile, setUserProfile] = useState(userSession);

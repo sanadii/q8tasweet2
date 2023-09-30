@@ -9,7 +9,7 @@ const Dashboard = () => {
     document.title = "Elections List | Q8Tasweet - React Admin & Dashboard Template";
 
     const currentUser = useSelector(state => state.Users.currentUser);
-    const isStaff = currentUser?.is_staff;
+    const isStaff = currentUser?.isStaff;
 
     return (
         <React.Fragment>

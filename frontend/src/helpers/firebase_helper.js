@@ -137,8 +137,8 @@ class FirebaseAuthBackend {
     const collection = firebase.firestore().collection("users");
     const { profile } = user.additionalUserInfo;
     const details = {
-      firstName: profile.given_name ? profile.given_name : profile.first_name,
-      lastName: profile.family_name ? profile.family_name : profile.last_name,
+      firstName: profile.given_name ? profile.given_name : profile.firstName,
+      lastName: profile.family_name ? profile.family_name : profile.lastName,
       fullName: profile.name,
       email: profile.email,
       picture: profile.picture,

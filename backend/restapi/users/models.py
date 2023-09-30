@@ -59,7 +59,7 @@ class User(TrackedModel, AbstractBaseUser, PermissionsMixin):
     # User Permissions
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    # created_date = models.DateTimeField(default=timezone.now)
+    # updated_at = models.DateTimeField(default=timezone.now)
 
     objects = CustomAccountManager()
     USERNAME_FIELD = 'email'

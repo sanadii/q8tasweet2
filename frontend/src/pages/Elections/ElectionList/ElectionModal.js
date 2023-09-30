@@ -429,7 +429,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                               />
                             </span>
                             <span className="flex-grow-1 ms-2">
-                              {moderator.first_name}
+                              {moderator.firstName}
                             </span>
                           </label>
                           {validation.touched.moderators &&

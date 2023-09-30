@@ -153,7 +153,7 @@ INSERT INTO "django_content_type" VALUES(16,'elections','tbusersrole');
 INSERT INTO "django_content_type" VALUES(17,'elections','tbvoters');
 INSERT INTO "django_content_type" VALUES(18,'token_blacklist','blacklistedtoken');
 INSERT INTO "django_content_type" VALUES(19,'token_blacklist','outstandingtoken');
-INSERT INTO "django_content_type" VALUES(20,'elections','projectinfo');
+INSERT INTO "django_content_type" VALUES(20,'elections','Configs');
 INSERT INTO "django_content_type" VALUES(21,'elections','elections');
 INSERT INTO "django_content_type" VALUES(22,'elections','guarantees');
 INSERT INTO "django_content_type" VALUES(23,'elections','menu');

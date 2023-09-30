@@ -117,7 +117,7 @@ const SimplePage = () => {
 
               <Col>
                 <div className="p-2">
-                  <h3 className="text-white mb-1">{user.first_name} {user.last_name} [{user.id}]</h3>
+                  <h3 className="text-white mb-1">{user.firstName} {user.lastName} [{user.id}]</h3>
                   <p className="text-white-75">Owner & Founder</p>
                   <div className="hstack text-white-50 gap-1">
                     <div className="me-2">

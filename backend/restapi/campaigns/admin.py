@@ -8,14 +8,14 @@ class CampaignsAdmin(admin.ModelAdmin):
     list_display = ['election_candidate', 'status', 'priority', 'website']
     list_filter = ['status', 'priority']
     search_fields = ['title', 'election_candidate__candidate__name', 'description']
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
     fieldsets = [
         ('Basic Information', {'fields': ['election_candidate', 'description', 'results']}),
         ('Contacts', {'fields': ['twitter', 'instagram', 'website']}),
         # ('Activities', {'fields': ['events', 'attendees', 'media_coverage', 'results']}),
         # ('Administration', {'fields': ['moderators', 'status', 'priority']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']}),
     ]
 
 class CampaignMembersAdmin(admin.ModelAdmin):
@@ -35,12 +35,12 @@ class CampaignMembersAdmin(admin.ModelAdmin):
 
     list_display = ['user', 'campaign', 'rank_display', 'supervisor', 'committee', 'civil', 'mobile', 'status']
     list_filter = ['campaign', 'rank']
-    search_fields = ['user__username', 'campaign__title', 'committee__name']  # Searching by user's username and campaign's title and committee's name
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    search_fields = ['user__username', 'campaign__title', 'committee__name']  
+    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']
 
     fieldsets = [
         ('Basic Information', {'fields': ['user', 'campaign', 'rank', 'supervisor', 'committee', 'civil', 'mobile', 'notes', 'status']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']}),
     ]
 
 class CampaignGuaranteesAdmin(admin.ModelAdmin):
@@ -50,10 +50,10 @@ class CampaignGuaranteesAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Basic Information', {'fields': ['campaign', 'member', 'civil', 'mobile', 'notes', 'status']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']}),
     ]
 
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']
 
 class ElectionAttendeesAdmin(admin.ModelAdmin):
     list_display = ['user', 'election', 'committee', 'elector', 'notes', 'status']
@@ -62,10 +62,10 @@ class ElectionAttendeesAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Basic Information', {'fields': ['user', 'election', 'committee', 'elector', 'notes', 'status']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']}),
+        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']}),
     ]
 
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_date', 'updated_date', 'deleted_date', 'deleted']
+    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
 
 admin.site.register(Campaigns, CampaignsAdmin)
