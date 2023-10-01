@@ -11,7 +11,7 @@ const UserList = () => {
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="Elections List" pageTitle="Elections" />
-          <Widgets />
+          {/* <Widgets /> */}
           <AllUsers />
         </Container>
       </div>

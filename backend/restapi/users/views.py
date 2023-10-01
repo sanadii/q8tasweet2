@@ -80,7 +80,6 @@ class BlacklistTokenUpdateView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
 class GetUsers(APIView):
     def get(self, request):
         data_data = User.objects.all()
@@ -121,40 +120,3 @@ class DeleteUser(APIView):
         except User.DoesNotExist:
             return JsonResponse({"data": "User not found", "count": 0, "code": 404}, safe=False)
 
-
-# class userJWTLogin(APIView):
-#     def post(self, request):
-#         email = request.data.get('email')
-#         password = request.data.get('password')
-
-#         # Assuming your User model has an email field
-#         user = User.objects.filter(email=email).first()
-
-#         if user is None:
-#             return Response({'detail': 'User not found!'}, status=status.HTTP_401_UNAUTHORIZED)
-
-#         if not user.check_password(password):
-#             return Response({'detail': 'Incorrect password!'}, status=status.HTTP_401_UNAUTHORIZED)
-
-#         payload = {
-#             'id': user.id,
-#             'exp': datetime.utcnow() + timedelta(minutes=60),
-#             'iat': datetime.utcnow()
-#         }
-
-#         # Store the secret key in settings.py and get it from there
-#         token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm='HS256')
-
-#         response = Response()
-#         response.set_cookie(key='token', value=token, httponly=True)
-        
-#         user_data = UserJWTLoginSerializer(user).data  # serialize user object to get data
-
-#         # Modify the response to include the user and token
-#         response.data = {
-#             'status': 'success',
-#             'token': token,
-#             'data': user_data
-#         }
-
-#         return response

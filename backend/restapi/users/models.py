@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.validators import RegexValidator, MaxValueValidator
 
-from restapi.modelsHelper import TrackedModel, GenderOptions
+from restapi.modelsHelper import TrackModel, GenderOptions
 from restapi.validators import today, civil_validator, mobile_validator
   
 class CustomAccountManager(BaseUserManager):
@@ -35,7 +35,7 @@ class CustomAccountManager(BaseUserManager):
         user.save()
         return user
 
-class User(TrackedModel, AbstractBaseUser, PermissionsMixin):
+class User(TrackModel, AbstractBaseUser, PermissionsMixin):
     id = models.BigAutoField(primary_key=True)
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=150, unique=True)

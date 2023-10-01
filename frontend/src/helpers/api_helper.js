@@ -4,6 +4,7 @@ import { api } from "../config";
 // Default axios settings
 axios.defaults.baseURL = api.API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.withCredentials = true;
 
 // Request interceptor for setting the Authorization header
 axios.interceptors.request.use(
@@ -12,10 +13,33 @@ axios.interceptors.request.use(
     if (token) {
       config.headers["Authorization"] = "Bearer " + token;
     }
+    
+    // Retrieve CSRF token from cookie and set it to header
+    const csrfToken = getCookie('csrftoken');
+    if (csrfToken) {
+      config.headers["X-CSRFToken"] = csrfToken;
+    }
+    
     return config;
   },
   (error) => Promise.reject(error)
 );
+
+// Utility function to get a cookie by name
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
 
 // Response interceptor to capture errors
 axios.interceptors.response.use(

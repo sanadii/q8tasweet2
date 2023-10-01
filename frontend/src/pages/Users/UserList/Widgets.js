@@ -16,13 +16,7 @@ const Widgets = () => {
   }));
 
   const electionStatuses = ["Active", "Cancelled", "Deleted", "Archived"];
-  const statusCounts = [
-    "Published",
-    "Private",
-    "Pending",
-    "Inprogress",
-    "New",
-  ].reduce((counts, status) => {
+  const statusCounts = ["Published", "Private", "Pending", "Inprogress", "New"].reduce((counts, status) => {
     counts[status] = elections.filter((item) => item.status === status).length;
     return counts;
   }, {});

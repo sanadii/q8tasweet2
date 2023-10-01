@@ -102,7 +102,7 @@ export const ADD_NEW_ELECTION_ATTENDEE = "/campaigns/addNewElectionAttendee";
 export const UPDATE_ELECTION_ATTENDEE = "/campaigns/updateElectionAttendee";
 
 // USERS
-export const GET_USERS = "//users/getUsers";
+export const GET_USERS = "/users/getUsers";
 export const GET_CURRENT_USER = "/users/getCurrentUser";
 export const GET_USER_DETAILS = "/users/getUserDetails";
 export const GET_MODERATOR_USERS = "/users/getModeratorUsers";

@@ -56,9 +56,7 @@ const Category = ({ category, subCategory }) => {
 
   return (
     <React.Fragment>
-      <p>
-        <b>{categoryName}</b>
-      </p>
+      <b>{categoryName}</b>
     </React.Fragment>
   );
 };

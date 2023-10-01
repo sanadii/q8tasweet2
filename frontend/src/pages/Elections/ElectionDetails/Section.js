@@ -16,7 +16,7 @@ import CommitteesTab from "./CommitteesTab";
 import GuaranteesTab from "./GuaranteesTab";
 import AttendeesTab from "./AttendeesTab";
 import SortingTab from "./SortingTab";
-import ResultsTab from "./ResultsTab";
+// import ResultsTab from "./ResultsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
@@ -364,9 +364,9 @@ const Section = () => {
               {/* <TabPane tabId="44">
               <SortingTab electionCandidates={electionCandidates} />
             </TabPane> */}
-              <TabPane tabId="5">
+              {/* <TabPane tabId="5">
                 <ResultsTab election={election} />
-              </TabPane>
+              </TabPane> */}
               <TabPane tabId="6">
                 <ActivitiesTab election={election} />
               </TabPane>

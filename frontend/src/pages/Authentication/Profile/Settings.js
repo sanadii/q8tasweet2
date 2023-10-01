@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, Container, Form, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 //import images
 import progileBg from '../../../assets/images/profile-bg.jpg';
 import avatar1 from '../../../assets/images/users/avatar-1.jpg';
 
 const ProfileSettings = () => {
+    const { currentUser } = useSelector(electionsSelector);
+    const user = currentUser;
     const [activeTab, setActiveTab] = useState("1");
 
     const tabChange = (tab) => {
@@ -31,7 +35,7 @@ const ProfileSettings = () => {
                                             className="profile-foreground-img-file-input" />
                                         <Label htmlFor="profile-foreground-img-file-input"
                                             className="profile-photo-edit btn btn-light">
-                                            <i className="ri-image-edit-line align-bottom me-1"></i> Change Cover
+                                            <i className="ri-image-edit-line align-bottom me-1"></i> تغيير الخلفية
                                         </Label>
                                     </div>
                                 </div>
@@ -58,7 +62,7 @@ const ProfileSettings = () => {
                                                 </Label>
                                             </div>
                                         </div>
-                                        <h5 className="fs-16 mb-1">Anna Adame</h5>
+                                        <h5 className="fs-16 mb-1">{user.fullName}</h5>
                                         <p className="text-muted mb-0">Lead Designer / Developer</p>
                                     </div>
                                 </CardBody>

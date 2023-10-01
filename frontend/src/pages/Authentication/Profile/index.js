@@ -56,18 +56,9 @@ const SimplePage = () => {
   const dispatch = useDispatch();
 
   // Getting the user data from Redux state
-  const { user } = useSelector(electionsSelector);
+  const { currentUser } = useSelector(electionsSelector);
+  const user = currentUser;
 
-  useEffect(() => {
-    const token = JSON.parse(sessionStorage.getItem("authUser"))
-      ? JSON.parse(sessionStorage.getItem("authUser")).token
-      : null;
-    if (token) {
-      dispatch(getCurrentUser(token));
-    }
-  }, [dispatch]);
-
-  // Define userName state and its setter function
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -117,8 +108,8 @@ const SimplePage = () => {
 
               <Col>
                 <div className="p-2">
-                  <h3 className="text-white mb-1">{user.firstName} {user.lastName} [{user.id}]</h3>
-                  <p className="text-white-75">Owner & Founder</p>
+                  <h3 className="text-white mb-1">{user.fullName}</h3>
+                  <p className="text-white-75">{ user.isStaff ? "مدير" : "مشترك" }</p>
                   <div className="hstack text-white-50 gap-1">
                     <div className="me-2">
                       <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
@@ -219,7 +210,7 @@ const SimplePage = () => {
                   </Nav>
                   <div className="flex-shrink-0">
                     <Link
-                      to="/pages-profile-settings"
+                      to="/profile-settings"
                       className="btn btn-success"
                     >
                       <i className="ri-edit-box-line align-bottom"></i> Edit

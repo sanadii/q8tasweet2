@@ -1,3 +1,4 @@
+# restapi/urls.py
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -39,4 +40,5 @@ if settings.DEBUG:
 
 # Catch-all route for frontend routing
 urlpatterns.append(re_path(r'^.*', TemplateView.as_view(template_name='index.html')))
+
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

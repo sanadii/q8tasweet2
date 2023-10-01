@@ -1,22 +1,13 @@
 // ------------ React & Redux ------------
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col } from "reactstrap";
+import { Col, Row, Card, CardBody } from "reactstrap";
 
 // ------------ Actions ------------
-import {
-  getUsers,
-  deleteUser,
-  getModeratorUsers,
-} from "../../../store/actions";
+import { getUsers, deleteUser, getModeratorUsers } from "../../../store/actions";
 
 // ------------ Custom Components & ConstantsImports ------------
-import {
-  AvatarMedium,
-  Loader,
-  DeleteModal,
-  TableContainer,
-} from "../../../Components/Common";
+import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import UserModal from "./UsersModal";
 import { Id, Name, Username, Status, CreateBy, Actions } from "./UsersListCol";
 
@@ -219,7 +210,7 @@ const AllUsers = () => {
         id: "#",
       },
       {
-        Header: "ID",
+        Header: "الرمز",
         accessor: "id",
         filterable: false,
         Cell: (cellProps) => {
@@ -227,15 +218,15 @@ const AllUsers = () => {
         },
       },
       {
-        Header: "Users",
-        accessor: "firstName",
+        Header: "الإسم",
+        accessor: "fullName",
         filterable: false,
         Cell: (cellProps) => {
           return <Name {...cellProps} />;
         },
       },
       {
-        Header: "Username",
+        Header: "اسم المستخدم",
         accessor: "username",
         filterable: false,
         Cell: (cellProps) => {
@@ -243,7 +234,7 @@ const AllUsers = () => {
         },
       },
       {
-        Header: "Status",
+        Header: "الحالة",
         accessor: "status",
         filterable: true,
         // useFilters: true,
@@ -253,7 +244,7 @@ const AllUsers = () => {
         },
       },
       {
-        Header: "Actions",
+        Header: "إجراءات",
         accessor: "user",
         filterable: false,
         Cell: (cellProps) => {
@@ -303,61 +294,75 @@ const AllUsers = () => {
         isEdit={isEdit}
         setModal={setModal}
       />
-      <div className="row">
+      <Row>
         <Col lg={12}>
-          <div className="card" id="usersList">
-            {isUserSuccess && users.length ? (
-              <TableContainer
-                // Header
-                isTableContainerHeader={true}
-                ContainerHeaderTitle="User Guarantees"
-                setDeleteModalMulti={setDeleteModalMulti}
-                setIsEdit={setIsEdit}
-                toggle={toggle}
-                isMultiDeleteButton={isMultiDeleteButton}
+          <Card id="memberList">
+            <CardBody>
+              <TableContainerHeader
+                // Title
+                ContainerHeaderTitle="قائمة المستخدمين"
+
+                // Add Elector Button
                 isContainerAddButton={true}
-                AddButtonText="Add New User"
+                AddButtonText="إضافة مستخدم"
                 isEdit={isEdit}
-                // Filters
-                isGlobalFilter={true}
-                preGlobalFilteredRows={true}
-                isUserGenderFilter={true}
-                // isGlobalSearch={true}
-                // isUserListFilter={true}
-                // isCustomerFilter={isCustomerFilter}
-                // FieldFiters
-                isFieldFilter={true}
-                isResetFilters={true}
-                isStatusFilter={true}
-                // isTestFilter={true}
+                // handleEntryClick={handleElectionClicks}
+                toggle={toggle}
 
-                // Table
-                columns={columns}
-                data={userList || []}
-                setUserList={setUserList}
-                // isStatusFilter={true}
-                // isGlobalPagination={true}
-                // isColumnFilter={true} // Change the prop name
-                // isUserSuserFilter={true}
-                // isSuserFilter={true}
-
-                SearchPlaceholder="Search for users or something..."
-                // useFilters={true}
-                customPageSize={20}
-                className="custom-header-css"
-                divClass="table-responsive table-card mb-3"
-                tableClass="align-middle table-nowrap mb-0"
-                theadClass="table-light table-nowrap"
-                thClass="table-light text-muted"
-                handleEntryClick={handleUserClicks}
+                // Delete Button
+                isMultiDeleteButton={isMultiDeleteButton}
+                setDeleteModalMulti={setDeleteModalMulti}
               />
-            ) : (
-              <Loader error={error} />
-            )}
-            <ToastContainer closeButton={false} limit={1} />
-          </div>
+
+              {isUserSuccess && users.length ? (
+                <TableContainer
+                  // Header
+                  isTableContainerHeader={true}
+                  setIsEdit={setIsEdit}
+                  toggle={toggle}
+                  isContainerAddButton={true}
+                  isEdit={isEdit}
+                  // Filters
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isUserGenderFilter={true}
+                  // isGlobalSearch={true}
+                  // isUserListFilter={true}
+                  // isCustomerFilter={isCustomerFilter}
+                  // FieldFiters
+                  isFieldFilter={true}
+                  isResetFilters={true}
+                  isStatusFilter={true}
+                  // isTestFilter={true}
+
+                  // Table
+                  columns={columns}
+                  data={userList || []}
+                  setUserList={setUserList}
+                  // isStatusFilter={true}
+                  // isGlobalPagination={true}
+                  // isColumnFilter={true} // Change the prop name
+                  // isUserSuserFilter={true}
+                  // isSuserFilter={true}
+
+                  SearchPlaceholder="Search for users or something..."
+                  // useFilters={true}
+                  customPageSize={20}
+                  className="custom-header-css"
+                  divClass="table-responsive table-card mb-3"
+                  tableClass="align-middle table-nowrap mb-0"
+                  theadClass="table-light table-nowrap"
+                  thClass="table-light text-muted"
+                  handleEntryClick={handleUserClicks}
+                />
+              ) : (
+                <Loader error={error} />
+              )}
+              <ToastContainer closeButton={false} limit={1} />
+            </CardBody>
+          </Card>
         </Col>
-      </div>
+      </Row>
     </React.Fragment>
   );
 };

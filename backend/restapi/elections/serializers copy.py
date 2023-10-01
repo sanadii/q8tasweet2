@@ -10,11 +10,6 @@ class ElectionsSerializer(serializers.ModelSerializer):
     subCategory = serializers.SerializerMethodField()
     dueDate = serializers.CharField(source="duedate")
 
-    attendeesMales = serializers.CharField(source="attendees_males")
-    attendeesFemales = serializers.CharField(source="attendees_females")
-    electorsMales = serializers.CharField(source="electors_males")
-    electorsFemales = serializers.CharField(source="electors_females")
-
     # Admin & Tracking Information 
     moderators = serializers.SerializerMethodField()
 
@@ -23,8 +18,8 @@ class ElectionsSerializer(serializers.ModelSerializer):
         fields = [
             "id",  "name", "image", "dueDate",
             "type", "result", "votes", "seats",
-            "electors", "electorsMales", "electorsFemales",
-            "attendees", "attendeesMales", "attendeesFemales",
+            "electors", "attendees_males", "attendees_females",
+            "attendees", "electors_males", "electors_females",
             "category", "subCategory",
             "status", "priority", 
             "moderators", "created_by", "updated_by", "deleted_by", "created_at", "updated_at", "deleted_at", "deleted",

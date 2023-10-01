@@ -1,5 +1,7 @@
 # restapi/campaigns/serializers.py
 from rest_framework import serializers
+from restapi.base_serializer import TrackingMixin, TaskingMixin
+
 from restapi.models import (
     Elections, ElectionCandidates, ElectionCommittees,
     Candidates, 
@@ -19,57 +21,6 @@ class CampaignsSerializer(serializers.ModelSerializer):
         model = Campaigns
         fields = "__all__"
 
-# class CampaignsSerializer(serializers.ModelSerializer):
-#     candidate = serializers.SerializerMethodField()
-#     election = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = Campaigns
-#         fields = "__all__"
-
-#     # Candidate
-#     def get_candidate(self, instance):
-#         election_candidate = getattr(instance, 'election_candidate', None)
-#         if election_candidate:
-#             candidate = getattr(election_candidate, 'candidate', None)
-#             if candidate:
-#                 image = getattr(candidate, 'image', None)
-#                 return {
-#                     "id": getattr(candidate, 'id', None),
-#                     "name": getattr(candidate, 'name', None),
-#                     "image": image.url if image else None,
-#                     "gender": getattr(candidate, 'gender', None),
-#                     "phone": getattr(candidate, 'phone', None),
-#                     "email": getattr(candidate, 'email', None),
-#                     "twitter": getattr(candidate, 'twitter', None),
-#                     "instagram": getattr(candidate, 'instagram', None),
-#                     "description": getattr(candidate, 'description', None),
-#                 }
-#             return None  # or return a default dict if you prefer
-
-
-#     # Election
-#     def get_election(self, instance):
-#         election_candidate = getattr(instance, 'election_candidate', None)
-#         if election_candidate:
-#             election = getattr(election_candidate, 'election', None)
-#             if election:
-#                 image = getattr(election, 'image', None)
-#                 return {
-#                     "id": getattr(election, 'id', None),
-#                     "name": getattr(election, 'name', None),
-#                     "image": image.url if image else None,
-#                     "duedate": getattr(election, 'duedate', None),
-#                     "category": getattr(election, 'category', None),
-#                     "subCategory": getattr(election, 'subCategory', None),
-#                     "type": getattr(election, 'type', None),
-#                     "result": getattr(election, 'result', None),
-#                     "votes": getattr(election, 'votes', None),
-#                     "seats": getattr(election, 'seats', None),
-#                     "electors": getattr(election, 'electors', None),
-#                     "attendees": getattr(election, 'attendees', None),
-#                 }
-#             return None  # or return a default dict if you prefer
 
 class CampaignDetailsSerializer(serializers.ModelSerializer):
 
@@ -83,13 +34,7 @@ class CampaignDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ElectionCandidates
-        fields = [
-            "id",
-            "votes",
-            "deleted",
-            "election",
-            "candidate",
-        ]
+        fields = [ "id", "votes", "deleted", "election", "candidate"]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -103,27 +48,7 @@ class CampaignDetailsSerializer(serializers.ModelSerializer):
         return representation
 
 
-# # Further improvement of the serializers
-# class CandidateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Candidate  # replace with your actual Candidate model
-#         fields = ['id', 'name', 'image', 'gender', ...]  # list all the fields you need
-
-# class ElectionSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Election  # replace with your actual Election model
-#         fields = ['id', 'name', 'image', 'duedate', ...]  # list all the fields you need
-
-# class CampaignsSerializer(serializers.ModelSerializer):
-#     candidate = CandidateSerializer(source='election_candidate.candidate', read_only=True)
-#     election = ElectionSerializer(source='election_candidate.election', read_only=True)
-
-#     class Meta:
-#         model = Campaigns
-#         fields = "__all__"  # the nested serializers are included automatically
-
-
-class CampaignElectionSerializer(serializers.ModelSerializer):
+class CampaignElectionSerializer(TrackingMixin, serializers.ModelSerializer):
     class Meta:
         model = Elections
         fields = "__all__"
@@ -133,7 +58,7 @@ class CampaignElectionSerializer(serializers.ModelSerializer):
         return {"election_" + key: value for key, value in representation.items()}
 
 
-class CampaignCandidateSerializer(serializers.ModelSerializer):
+class CampaignCandidateSerializer(TrackingMixin, serializers.ModelSerializer):
     class Meta:
         model = Candidates
         fields = "__all__"
@@ -143,7 +68,7 @@ class CampaignCandidateSerializer(serializers.ModelSerializer):
         return {"candidate_" + key: value for key, value in representation.items()}
 
 
-class CampaignMembersSerializer(serializers.ModelSerializer):
+class CampaignMembersSerializer(TrackingMixin, serializers.ModelSerializer):
 
     def get_serializers(self):
         from ..serializers import UserSerializer
@@ -152,19 +77,7 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignMembers
-        fields = [
-            # Member Data
-            "id",
-            "user",
-            "campaign",
-            "rank",
-            "supervisor",
-            "committee",
-            "notes",
-            "mobile",
-            "status",
-        ]
-
+        fields = [ "id", "user", "campaign", "rank", "supervisor", "committee", "notes", "mobile", "status"]
 
 class CampaignGuaranteesSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
@@ -177,35 +90,10 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignGuarantees
-        fields = [
-            "id",
-            "campaign",
-            "member",
-            "civil",
-            "full_name",
-            "mobile",
-            "gender",
-            "membership_no",
-            "box_no",
-            "enrollment_date",
-            "relationship",
-            "elector_notes",
-            "notes",
-            "status",
-            # "created_by",
-            # "updated_by",
-            # "deleted_by",
-            # "updated_at",
-            # "updated_at",
-            # "updated_at",
-            "deleted",
-        ]
-    # def get_full_name(self, obj):
-    #     if obj.civil:
-    #         elector = obj.civil
-    #         names = [elector.name_1, elector.name_2, elector.name_3, elector.name_4, elector.last_name]
-    #         return ' '.join([name for name in names if name])  # concatenate non-empty names
-    #     return None
+        fields = [ "id", "campaign", "member", "civil", "full_name", "mobile",
+                  "gender", "membership_no", "box_no", "enrollment_date", "relationship",
+                  "elector_notes", "notes", "status"
+                  ]
 
     def get_full_name(self, obj):
         try:
@@ -251,7 +139,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
 
 
 
-class ElectionAttendeesSerializer(serializers.ModelSerializer):
+class ElectionAttendeesSerializer(TrackingMixin, serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     civil = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
@@ -263,30 +151,10 @@ class ElectionAttendeesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ElectionAttendees
-        fields = [
-            "id",
-            "election",
-            "committee",
-            "user",
-            "civil",
-            "full_name",
-            "gender",
-            "membership_no",
-            "box_no",
-            "enrollment_date",
-            "relationship",
-            "elector_notes",
-            "notes",
-            "status",
-            "deleted",
-        ]
-
-    # def get_full_name(self, obj):
-    #     if obj.elector:
-    #         elector = obj.elector
-    #         names = [elector.name_1, elector.name_2, elector.name_3, elector.name_4, elector.last_name]
-    #         return ' '.join([name for name in names if name])  # concatenate non-empty names
-    #     return None
+        fields = ["id", "election", "committee", "user", "civil", "full_name", "gender",
+                  "membership_no", "box_no", "enrollment_date", "relationship", "elector_notes", "notes",
+                  "status"
+                  ]
 
     def get_full_name(self, obj):
         try:

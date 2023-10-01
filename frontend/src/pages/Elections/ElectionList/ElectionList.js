@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, Modal, ModalBody, Nav, NavItem, NavLink, Row, Label, Input, Button, ModalHeader, FormFeedback, Form } from "reactstrap";
-import classnames from "classnames";
-import { Link } from "react-router-dom";
+import { Col, Modal, ModalBody, Row, Label, Input, Button, ModalHeader, FormFeedback, Form } from "reactstrap";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // Custom component imports
-import { GenderCircle, ImageCircle, ImageGenderCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
+import { ImageCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
 // import { TableContainer, DeleteModal, ImageCircle } from "../../../Components/Common";
 
 import { StatusOptions, PriorityOptions, ElectionTypeOptions, ElectionResultOptions } from "../../../Components/constants";
@@ -27,7 +25,6 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
 import { getElections, addElection, updateElection, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
-
 import { Id, Name, CandidateCount, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
 import * as Yup from "yup";
@@ -38,14 +35,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 const ElectionList = () => {
   const dispatch = useDispatch();
 
-  const {
-    elections,
-    moderators,
-    categories,
-    subCategories,
-    isElectionSuccess,
-    error
-  } = useSelector(electionsSelector);
+  const { elections, moderators, categories, subCategories, isElectionSuccess, error } = useSelector(electionsSelector);
 
   const [electionList, setElectionList] = useState(elections);
   const [election, setElection] = useState([]);

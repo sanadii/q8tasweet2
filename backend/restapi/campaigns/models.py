@@ -3,13 +3,12 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
-
-from restapi.modelsHelper import TrackedModel, RankOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
+from restapi.modelsHelper import TrackModel, RankOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
 from restapi.validators import civil_validator, mobile_validator, today
 
-class Campaigns(TrackedModel):
+class Campaigns(TrackModel):
     # Basic Information
-    election_candidate = models.ForeignKey('ElectionCandidates', on_delete=models.SET_NULL, null=True, blank=True, related_name='associated_campaigns')
+    election_candidate = models.ForeignKey('ElectionCandidates', on_delete=models.SET_NULL, null=True, blank=True, related_name='candidate_campaigns')
     description = models.TextField(blank=True, null=True)
 
     # Media Coverage
@@ -35,7 +34,7 @@ class Campaigns(TrackedModel):
     def __str__(self):
         return f"{self.election_candidate.candidate.name} - Year"  # Assuming the candidate's name is accessible through the relation
 
-class CampaignMembers(TrackedModel):
+class CampaignMembers(TrackModel):
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_users')
     campaign = models.ForeignKey('Campaigns', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members')
     rank = models.IntegerField(choices=RankOptions.choices, blank=True, null=True)
@@ -51,7 +50,7 @@ class CampaignMembers(TrackedModel):
         verbose_name = "Campaign Member"
         verbose_name_plural = "Campaign Members"
 
-class CampaignGuarantees(TrackedModel):
+class CampaignGuarantees(TrackModel):
     campaign = models.ForeignKey('Campaigns', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantees')
     member = models.ForeignKey('CampaignMembers', on_delete=models.SET_NULL, null=True, blank=True, related_name='member_guarantees')
     civil = models.ForeignKey('Electors', on_delete=models.SET_NULL, null=True, blank=True, related_name='civil_guarantees')
@@ -65,7 +64,7 @@ class CampaignGuarantees(TrackedModel):
         verbose_name_plural = "Campaign Guarantees"
     
 
-class ElectionAttendees(TrackedModel):
+class ElectionAttendees(TrackModel):
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attended_elections')
     election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_attendees')
     committee = models.ForeignKey('ElectionCommittees', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_attendees')

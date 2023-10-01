@@ -350,69 +350,67 @@ const AllCandidates = () => {
         <Col lg={12}>
           <Card id="memberList">
             <CardBody>
-              <div>
-                <TableContainerHeader
-                  // Title
-                  ContainerHeaderTitle="Candidates"
+              <TableContainerHeader
+                // Title
+                ContainerHeaderTitle="Candidates"
 
-                  // Add Elector Button
+                // Add Elector Button
+                isContainerAddButton={true}
+                AddButtonText="Add New Candidate"
+                isEdit={isEdit}
+                handleEntryClick={handleElectionClicks}
+                toggle={toggle}
+
+                // Delete Button
+                isMultiDeleteButton={isMultiDeleteButton}
+                setDeleteModalMulti={setDeleteModalMulti}
+              />
+
+              {isCandidateSuccess && candidates.length ? (
+                <TableContainer
+                  // Header
+                  isTableContainerHeader={true}
+                  setDeleteModalMulti={setDeleteModalMulti}
+                  setIsEdit={setIsEdit}
+                  toggle={toggle}
+                  isMultiDeleteButton={isMultiDeleteButton}
+
                   isContainerAddButton={true}
                   AddButtonText="Add New Candidate"
                   isEdit={isEdit}
-                  handleEntryClick={handleElectionClicks}
-                  toggle={toggle}
 
-                  // Delete Button
-                  isMultiDeleteButton={isMultiDeleteButton}
-                  setDeleteModalMulti={setDeleteModalMulti}
+                  // Filters -------------------------
+                  isTableContainerFilter={true}
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isGenderFilter={true}
+                  isStatusFilter={true}
+                  isPriorityFilter={true}
+                  isResetFilters={true}
+
+                  // FilterSettings
+                  filters={filters}
+                  setFilters={setFilters}
+                  SearchPlaceholder="Search for elections or something..."
+
+                  // Table
+                  columns={columns}
+                  data={candidateList || []}
+
+
+                  // useFilters={true}
+                  customPageSize={20}
+                  className="custom-header-css"
+                  divClass="table-responsive table-card mb-3"
+                  tableClass="align-middle table-nowrap mb-0"
+                  theadClass="table-light table-nowrap"
+                  thClass="table-light text-muted"
+                  handleEntryClick={handleCandidateClicks}
                 />
-
-                {isCandidateSuccess && candidates.length ? (
-                  <TableContainer
-                    // Header
-                    isTableContainerHeader={true}
-                    setDeleteModalMulti={setDeleteModalMulti}
-                    setIsEdit={setIsEdit}
-                    toggle={toggle}
-                    isMultiDeleteButton={isMultiDeleteButton}
-
-                    isContainerAddButton={true}
-                    AddButtonText="Add New Candidate"
-                    isEdit={isEdit}
-
-                    // Filters -------------------------
-                    isTableContainerFilter={true}
-                    isGlobalFilter={true}
-                    preGlobalFilteredRows={true}
-                    isGenderFilter={true}
-                    isStatusFilter={true}
-                    isPriorityFilter={true}
-                    isResetFilters={true}
-
-                    // FilterSettings
-                    filters={filters}
-                    setFilters={setFilters}
-                    SearchPlaceholder="Search for elections or something..."
-
-                    // Table
-                    columns={columns}
-                    data={candidateList || []}
-
-
-                    // useFilters={true}
-                    customPageSize={20}
-                    className="custom-header-css"
-                    divClass="table-responsive table-card mb-3"
-                    tableClass="align-middle table-nowrap mb-0"
-                    theadClass="table-light table-nowrap"
-                    thClass="table-light text-muted"
-                    handleEntryClick={handleCandidateClicks}
-                  />
-                ) : (
-                  <Loader error={error} />
-                )}
-                <ToastContainer closeButton={false} limit={1} />
-              </div>
+              ) : (
+                <Loader error={error} />
+              )}
+              <ToastContainer closeButton={false} limit={1} />
             </CardBody>
           </Card>
         </Col>

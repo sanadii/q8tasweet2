@@ -9,7 +9,7 @@ import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 const OverviewTab = () => {
 
-  const { campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, electionsSelector, campaignCommittees, campaignCandidates } = useSelector(electionsSelector);
+  const { campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, campaignCommittees, campaignCandidates } = useSelector(electionsSelector);
 
   document.title = "Campaign Overview | Q8Tasweet";
 

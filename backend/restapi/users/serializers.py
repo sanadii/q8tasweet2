@@ -1,54 +1,21 @@
+# restapi/user/serializers.py
 from rest_framework import serializers
 from restapi.models import User
 
 # USER
 class UserSerializer(serializers.ModelSerializer):
-    full_name = (
-        serializers.SerializerMethodField()
-    )  # If you want to include a computed full name
-
-    class Meta:
-        model = User
-        fields = [
-            "id",
-            "username",
-            "full_name",
-            "email",
-        ]  # Include other fields as needed
-
-    def get_full_name(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
-
-class UserFullNameSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ["full_name"]
+        fields = ["id", "username",
+                  "first_name", "last_name", "full_name",
+                  "email", "image",
+                  "is_active", "is_staff"
+                  ]
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
-
-class UserSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
-
-    class Meta:
-        model = User
-        fields = ["id", "username", "name", "email", "image"]
-
-    def get_name(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'  # or specify the fields you want to include
-
-class EntryByUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = 'id'  # or specify the fields you want to include
 
 class UserJWTLoginSerializer(serializers.ModelSerializer):
     class Meta:

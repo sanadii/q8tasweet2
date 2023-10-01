@@ -1,16 +1,20 @@
 # restapi/serializers.py
-from restapi.base_serializer import TrackingSerializer, AdminControlSerializer
+from restapi.base_serializer import TrackingMixin, TaskingMixin
 from restapi.users.serializers import UserSerializer
-from .elections.serializers import (
+from restapi.elections.serializers import (
     ElectionsSerializer,
     ElectionCandidatesSerializer,
     ElectionCommitteesSerializer,
     ElectionCommitteeResultsSerializer
 )
 
-from .candidates.serializers import CandidatesSerializer
+from restapi.candidates.serializers import (
+    CandidatesSerializer,
+    # CandidateElectionsSerializer,
+    # CandidateCampaignsSerializer,
+)
 
-from .campaigns.serializers import (
+from restapi.campaigns.serializers import (
     CampaignsSerializer,
     CampaignElectionSerializer,
     CampaignCandidateSerializer,
@@ -20,8 +24,9 @@ from .campaigns.serializers import (
     ElectionAttendeesSerializer
 )
 
-from .electors.serializers import ElectorsSerializer
+from restapi.electors.serializers import ElectorsSerializer
 
-from .categories.serializers import CategoriesSerializer, SubCategoriesSerializer
+# Will be changed to Taxonomies
+from restapi.categories.serializers import CategoriesSerializer, SubCategoriesSerializer
 
-from .configs.serializers import ConfigsSerializer
+from restapi.configs.serializers import ConfigsSerializer

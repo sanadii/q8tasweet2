@@ -2,17 +2,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
-class TrackedModel(models.Model):
-    created_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_created')
-    updated_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_updated')
-    deleted_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_deleted')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
-    deleted = models.BooleanField(default=False)
-
-    class Meta:
-        abstract = True
 
 class StatusOptions(models.IntegerChoices):
     PUBLISHED = 1, 'منشور'
@@ -65,3 +54,22 @@ class RankOptions(models.IntegerChoices):
     # OTHER = 7, 'Other'  # Commented out as per your code.
     MODERATOR = 10, 'مدير'
 
+class TrackModel(models.Model):
+    created_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_created')
+    updated_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_updated')
+    deleted_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_deleted')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    deleted = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+# class TaskModel(models.Model):
+#     moderators = models.CharField(max_length=255, blank=True, null=True)
+#     status = models.IntegerField(choices=StatusOptions.choices, blank=True, null=True)
+#     priority = models.IntegerField(choices=PriorityOptions.choices, blank=True, null=True)
+
+#     class Meta:
+#         abstract = True

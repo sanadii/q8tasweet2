@@ -31,7 +31,7 @@ const Settings = () => {
                                             className="profile-foreground-img-file-input" />
                                         <Label htmlFor="profile-foreground-img-file-input"
                                             className="profile-photo-edit btn btn-light">
-                                            <i className="ri-image-edit-line align-bottom me-1"></i> Change Cover
+                                            <i className="ri-image-edit-line align-bottom me-1"></i> x24
                                         </Label>
                                     </div>
                                 </div>

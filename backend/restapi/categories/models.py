@@ -2,9 +2,9 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from restapi.modelsHelper import TrackedModel
+from restapi.modelsHelper import TrackModel
 
-class Categories(TrackedModel):
+class Categories(TrackModel):
     name = models.CharField(max_length=255, null=True, blank=True)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to="elections/", null=True, blank=True)
@@ -32,7 +32,7 @@ class Tags(models.Model):
     def __str__(self):
         return self.name
 
-class Areas(TrackedModel):
+class Areas(TrackModel):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)

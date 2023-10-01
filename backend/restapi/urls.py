@@ -1,4 +1,4 @@
-# RestAPI urls: restapi/urls.py
+# restapi/urls.py
 from django.urls import path, include
 
 urlpatterns = [

@@ -3,10 +3,10 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator, MaxValueValidator
 
-from restapi.modelsHelper import TrackedModel, GenderOptions
+from restapi.modelsHelper import TrackModel, GenderOptions
 from restapi.validators import today
 
-class Candidates(TrackedModel):
+class Candidates(TrackModel):
     # Basic Information
     name = models.CharField(max_length=255, blank=False, null=False)
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)

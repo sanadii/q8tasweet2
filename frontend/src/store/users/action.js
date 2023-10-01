@@ -60,7 +60,6 @@ export const getUsers = () => ({
 });
 
 export const getCurrentUser = (token) => ({
-  
   type: GET_CURRENT_USER,
   payload: token,
 });

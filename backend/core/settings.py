@@ -15,6 +15,7 @@ ALLOWED_HOSTS = [
     "139.59.86.129",
     "127.0.0.1",
     "localhost",
+    "localhost:3000",
     "www.q8tasweet.com",
     "q8tasweet.com",
     "*",
@@ -32,7 +33,6 @@ INSTALLED_APPS = [
     "corsheaders",
     'admin_reorder',
     "restapi",
-    # "users",
     "rest_framework_simplejwt.token_blacklist",
 ]
 
@@ -49,6 +49,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "core.urls"
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CORS_ALLOW_CREDENTIALS = True
 
 TEMPLATES = [
     {
@@ -117,23 +119,27 @@ REST_FRAMEWORK = {
 }
 
 # CORS settings 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:8000",  # Add this
-#     "http://127.0.0.1:8000",  # And this
-#     "http://127.0.0.1:3000",  # And this
-#     "http://127.0.0.2:3000",  # And this
-#     "http://localhost:3000",
-#     "http://localhost:3001",
-#     "http://q8election.com",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.2:3000",
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://q8election.com",
+]
 
 # CORS_ALLOWED_ORIGINS = [
 #     "*",
 # ]
 
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_COOKIE_SECURE = False  # Set to True in a production environment with HTTPS
+CSRF_COOKIE_SAMESITE = 'None'  # or 'Lax' or 'Strict' depending on your needs
 
 # Custom user model
 AUTH_USER_MODEL = "restapi.User"
