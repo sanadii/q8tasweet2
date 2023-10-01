@@ -6,18 +6,21 @@ from django.db.models import Sum
 from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
-from http import HTTPStatus
-from rest_framework.pagination import PageNumberPagination
+from django.shortcuts import get_object_or_404
 
+from http import HTTPStatus
+
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
+
 from restapi.serializers import *
 from restapi.models import *
 import ast 
 from datetime import datetime
 from operator import itemgetter
-from django.shortcuts import get_object_or_404
 
 
 def index(request):
@@ -52,20 +55,17 @@ class GetElections(APIView):
 class GetElectionDetails(APIView):
     def get(self, request, id):
         election = get_object_or_404(Elections, id=id)
-        
-        # Passing the context with the request to the serializer
         context = {"request": request}
 
-        # Getting candidats, committees and campaigns only once
-        election_candidates = ElectionCandidates.objects.filter(election=election)
-        election_committees = ElectionCommittees.objects.filter(election=election)
+        election_candidates = ElectionCandidates.objects.filter(election=election).prefetch_related('candidate').only('id')
+        election_committees = ElectionCommittees.objects.filter(election=election).select_related('election')
 
         return Response({
             "data": {
                 "electionDetails": self.get_election_data(election, context),
-                "electionCandidates": self.get_election_candidates(election, election_candidates, context),
+                "electionCandidates": self.get_election_candidates(election_candidates, context),
                 "electionCommittees": self.get_election_committees(election_committees, context),
-                "electionCampaigns": self.get_election_campaigns_for_election(election, context),
+                "electionCampaigns": self.get_election_campaigns(election, context),
             },
             "code": 200
         })
@@ -73,103 +73,16 @@ class GetElectionDetails(APIView):
     def get_election_data(self, election, context):
         return ElectionsSerializer(election, context=context).data
 
-    def get_election_candidates(self, election, election_candidates, context):
-        election_candidates_serialized = ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
-        return election_candidates_serialized
+    def get_election_candidates(self, election_candidates, context):
+        return ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
 
     def get_election_committees(self, election_committees, context):
         return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
 
-    def get_election_campaigns_for_election(self, election, context):
-        election_candidate_ids = election.electioncandidates_set.values_list("id", flat=True)
+    def get_election_campaigns(self, election, context):
+        election_candidate_ids = ElectionCandidates.objects.filter(election=election).values_list('id', flat=True)
         election_campaigns = Campaigns.objects.filter(election_candidate__in=election_candidate_ids)
         return CampaignsSerializer(election_campaigns, many=True, context=context).data
-
-
-# Before removing candidate vote calulation & commitee results (after updating the models for calcuation)
-# class GetElectionDetails(APIView):
-#     def get(self, request, id):
-#         election = get_object_or_404(Elections, id=id)
-        
-#         # Passing the context with the request to the serializer
-#         context = {"request": request}
-
-#         # Getting candidats, committees and campaigns only once
-#         election_candidates = ElectionCandidates.objects.filter(election=election)
-#         election_committees = ElectionCommittees.objects.filter(election=election)
-#         # election_campaigns = Campaigns.objects.filter(election=election)
-
-#         return Response({
-#             "data": {
-#                 "electionDetails": self.get_election_data(election, context),
-#                 "electionCandidates": self.get_election_candidates(election, election_candidates, context),
-#                 "electionCommittees": self.get_election_committees(election_committees, context),
-#                 "electionCommitteeResults": self.get_election_committee_results(election, election_committees),
-#                 "electionCampaigns": self.get_election_campaigns_for_election(election, context),
-#             },
-#             "code": 200
-#         })
-
-#     def get_election_data(self, election, context):
-#         return ElectionsSerializer(election, context=context).data
-
-#     def get_election_candidates(self, election, election_candidates, context):
-
-#         # Process the queryset object before serialization
-#         for candidate in election_candidates:
-#             related_results = candidate.committee_result_candidates.all()
-#             total_votes = sum([result.votes for result in related_results]) or 0
-#             candidate.total_votes = total_votes  # assuming total_votes is a property of ElectionCandidates
-        
-#         # sort before serialization
-#         election_candidates = sorted(election_candidates, key=lambda x: x.total_votes, reverse=True)
-        
-#         # Now serialize
-#         election_candidates_serialized = ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
-        
-#         number_of_seats = election.seats or 0
-#         for idx, candidate in enumerate(election_candidates_serialized, start=1):
-#             candidate["position"] = str(idx)
-#             candidate["is_winner"] = idx <= number_of_seats
-        
-#         return election_candidates_serialized
-
-#     def get_election_committees(self, election_committees, context):
-#         return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
-
-#     # Showing Committee Results for Candidates of This Election Only
-#     def get_election_committee_results(self, election, election_committees):
-        
-#         transformed_results = {}
-#         all_candidates = ElectionCandidates.objects.filter(election=election).prefetch_related("committee_result_candidates", "candidate_campaigns")
-
-#         candidate_data = {str(candidate.id): {"votes": 0, "position": None} for candidate in all_candidates}
-        
-#         for committee in election_committees:
-#             committee_id = str(committee.id)
-#             transformed_results[committee_id] = {candidate_id: 0 for candidate_id in candidate_data.keys()}
-            
-#             for candidate in all_candidates:
-#                 for result in candidate.committee_result_candidates.all():
-#                     if result.election_committee_id == committee_id:
-#                         candidate_id = str(result.election_candidate_id)
-#                         votes = result.votes
-#                         transformed_results[committee_id][candidate_id] = votes
-#                         candidate_data[candidate_id]["votes"] += votes
-        
-#         sorted_candidates = sorted(candidate_data.keys(), key=lambda cid: (candidate_data[cid]["position"], candidate_data[cid]["votes"]), reverse=True)
-        
-#         sorted_transformed_results = {}
-#         for committee_id, results in transformed_results.items():
-#             sorted_transformed_results[committee_id] = {candidate_id: results[candidate_id] for candidate_id in sorted_candidates}
-        
-#         return sorted_transformed_results
-
-
-#     def get_election_campaigns_for_election(self, election, context):
-#         election_candidate_ids = election.electioncandidates_set.values_list("id", flat=True)
-#         election_campaigns = Campaigns.objects.filter(election_candidate__in=election_candidate_ids)
-#         return CampaignsSerializer(election_campaigns, many=True, context=context).data
 
 class AddElection(APIView):
     permission_classes = [IsAuthenticated]
@@ -187,14 +100,13 @@ class AddElection(APIView):
 
     def extract_fields(self, request):
         return {
-            "description": request.data.get("description"),
             "duedate": self.extract_date(request.data.get("dueDate")),
             "category": self.get_instance(Categories, request.data.get("category")),
             "sub_category": self.get_instance(Categories, request.data.get("subCategory")),
-            "type": request.data.get("type"),
-            "result": request.data.get("result"),
-            "votes": request.data.get("votes"),
-            "seats": request.data.get("seats"),
+            "elect_type": request.data.get("elect_type"),
+            "elect_result": request.data.get("elect_result"),
+            "elect_votes": request.data.get("elect_votes"),
+            "elect_seats": request.data.get("elect_seats"),
             "electors": request.data.get("electors"),
             "attendees": request.data.get("attendees"),
             "status": request.data.get("status"),
@@ -238,16 +150,13 @@ class AddElection(APIView):
         # Prepare data in the same way as your original function, but cleaner
         return {
             "id": election.id,
-            "name": election.name,
-            "image": election.image.url if election.image else None,
-            "description": election.description,
             "dueDate": election.duedate,
             "category": election.category.id if election.category else None,
             "subCategory": election.sub_category.id if election.sub_category else None,
-            "type": election.type,
-            "result": election.result,
-            "votes": election.votes,
-            "seats": election.seats,
+            "elect_type": election.elect_type,
+            "elect_result": election.elect_result,
+            "elect_votes": election.elect_votes,
+            "elect_seats": election.elect_seats,
             "electors": election.electors,
             "attendees": election.attendees,
             "status": election.status,
@@ -280,7 +189,6 @@ class UpdateElection(APIView):
 
     def extract_fields_from_request(self, request, election):
         # General Info
-        election.description = request.data.get("description")
         election.duedate = self.convert_str_to_date(request.data.get("dueDate"))
 
         # Taxonomies
@@ -289,10 +197,10 @@ class UpdateElection(APIView):
         election.tags = request.data.get("tags")
 
         # Specifications & Admin
-        election.type = request.data.get("type")
-        election.result = request.data.get("result")
-        election.votes = request.data.get("votes")
-        election.seats = request.data.get("seats")
+        election.elect_type = request.data.get("elect_type")
+        election.elect_result = request.data.get("elect_result")
+        election.elect_votes = request.data.get("elect_votes")
+        election.elect_seats = request.data.get("elect_seats")
         election.electors = request.data.get("electors")
         election.electors_males = request.data.get("electorsMales")
         election.electors_females = request.data.get("electorsFemales")
@@ -363,19 +271,16 @@ class UpdateElection(APIView):
     def prepare_updated_election_data(self, election, moderators_list):
         updated_election_data = {
             "id": election.id,
-            "name": election.name,
-            "image": election.image.url if election.image else None,
-            "description": election.description,
             "dueDate": election.duedate,
             # Taxonomies
             "category": election.category.id if election.category else None,
             "subCategory": election.sub_category.id if election.sub_category else None,
             "tags": election.tags,
             # Election Specifications
-            "type": election.type,
-            "result": election.result,
-            "votes": election.votes,
-            "seats": election.seats,
+            "elect_type": election.elect_type,
+            "elect_result": election.elect_result,
+            "elect_votes": election.elect_votes,
+            "elect_seats": election.elect_seats,
             "electors": election.electors,
             "electorsMales": election.electors_males,
             "electorsFemales": election.electors_females,

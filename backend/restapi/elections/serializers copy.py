@@ -17,7 +17,7 @@ class ElectionsSerializer(serializers.ModelSerializer):
         model = Elections
         fields = [
             "id",  "name", "image", "dueDate",
-            "type", "result", "votes", "seats",
+            "elect_type", "elect_result", "elect_votes", "elect_seats",
             "electors", "attendees_males", "attendees_females",
             "attendees", "electors_males", "electors_females",
             "category", "subCategory",

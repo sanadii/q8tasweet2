@@ -3,9 +3,9 @@ from django.contrib.admin import AdminSite
 from restapi.models import Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults
 
 class ElectionsAdmin(admin.ModelAdmin):
-    list_display = ['get_election_name', 'duedate', 'category', 'sub_category', 'seats', 'votes']
+    list_display = ['get_election_name', 'duedate', 'category', 'sub_category', 'elect_seats', 'elect_votes']
     list_filter = ['category', 'status', 'priority']
-    search_fields = ['sub_category__name', 'description', 'type', 'result']
+    search_fields = ['sub_category__name', 'description', 'elect_type', 'elect_result']
     ordering = ['-duedate', 'sub_category__name']
     date_hierarchy = 'duedate'
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']  # Keep this line

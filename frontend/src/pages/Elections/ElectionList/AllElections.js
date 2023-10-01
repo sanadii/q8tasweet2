@@ -99,7 +99,6 @@ const AllElections = () => {
         id: election.id,
         dueDate: election.dueDate,
         candidateCount: election.candidateCount,
-        description: election.description,
 
         // Taxonomies
         category: election.category,

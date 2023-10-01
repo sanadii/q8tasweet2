@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from restapi.models import Candidates, User
-from restapi.base_serializer import TrackingMixin, TaskingMixin
+from restapi.base_serializer import TrackMixin, TaskMixin
 
-class CandidatesSerializer(TrackingMixin, TaskingMixin, serializers.ModelSerializer):
+class CandidatesSerializer(TrackMixin, TaskMixin, serializers.ModelSerializer):
     class Meta:
         model = Candidates
         fields = [

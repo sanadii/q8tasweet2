@@ -14,10 +14,10 @@ class Elections(TrackModel):
     # tags = models.ManyToManyField('Categories', related_name='elections')
 
     # Election Options and Details
-    type = models.IntegerField(choices=ElectionTypeOptions.choices, blank=True, null=True)
-    result = models.IntegerField(choices=ElectionResultsOptions.choices, blank=True, null=True)
-    votes = models.PositiveIntegerField(blank=True, null=True)
-    seats = models.PositiveIntegerField(blank=True, null=True)
+    elect_type = models.IntegerField(choices=ElectionTypeOptions.choices, blank=True, null=True)
+    elect_result = models.IntegerField(choices=ElectionResultsOptions.choices, blank=True, null=True)
+    elect_votes = models.PositiveIntegerField(blank=True, null=True)
+    elect_seats = models.PositiveIntegerField(blank=True, null=True)
 
     # Electors
     electors = models.PositiveIntegerField(blank=True, null=True)
@@ -48,8 +48,8 @@ class Elections(TrackModel):
 
 
 class ElectionCandidates(TrackModel):
-    election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True)
-    candidate = models.ForeignKey('Candidates', on_delete=models.SET_NULL, null=True, blank=True)
+    election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True, related_name="candidate_elections")
+    candidate = models.ForeignKey('Candidates', on_delete=models.SET_NULL, null=True, blank=True, related_name="election_candidates")
     votes = models.PositiveIntegerField(default=0)
 
     # Administration

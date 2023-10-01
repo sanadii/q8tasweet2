@@ -38,10 +38,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       tags: (election && election.tags) || [],
 
       // Election Specification
-      type: (election && election.type) || "",
-      result: (election && election.result) || "",
-      votes: (election && election.votes) || 0,
-      seats: (election && election.seats) || 0,
+      electType: (election && election.electType) || "",
+      electResult: (election && election.electResult) || "",
+      electVotes: (election && election.electVotes) || 0,
+      electSeats: (election && election.electSeats) || 0,
       electors: (election && election.electors) || 0,
       attendees: (election && election.attendees) || 0,
 
@@ -73,10 +73,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
           tags: Array.isArray(values.tags) ? values.tags : [],
 
           // Election Spesifications
-          type: values.type,
-          result: values.result,
-          votes: values.votes,
-          seats: values.seats,
+          electType: values.electType,
+          electResult: values.electResult,
+          electVotes: values.electVotes,
+          electSeats: values.electSeats,
           electors: values.electors,
           attendees: values.attendees,
 
@@ -101,10 +101,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
           tags: Array.isArray(values.tags) ? values.tags : [],
 
           // Election Spesifications
-          type: values.type,
-          result: values.result,
-          votes: values.votes,
-          seats: values.seats,
+          electType: values.electType,
+          electResult: values.electResult,
+          electVotes: values.electVotes,
+          electSeats: values.electSeats,
 
           // Admin
           status: parseInt(values.status, 10),
@@ -246,90 +246,90 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
               </div>
             </Col>
             <Col lg={4}>
-              <Label for="election-type-field" className="form-label">
+              <Label for="electType-field" className="form-label">
                 نوع الانتخابات
               </Label>
               <Input
-                name="type"
+                name="electType"
                 type="select"
                 className="form-select"
                 id="ticket-field"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.type || ""}
+                value={validation.values.electType || ""}
               >
-                {ElectionTypeOptions.map((type) => (
-                  <option key={type.id} value={type.value}>
-                    {type.name}
+                {ElectionTypeOptions.map((electType) => (
+                  <option key={electType.id} value={electType.value}>
+                    {electType.name}
                   </option>
                 ))}
               </Input>
-              {validation.touched.type && validation.errors.type ? (
+              {validation.touched.electType && validation.errors.electType ? (
                 <FormFeedback type="invalid">
                   {validation.errors.type}
                 </FormFeedback>
               ) : null}
             </Col>
             <Col lg={4}>
-              <Label for="election-result-field" className="form-label">
+              <Label for="electResult-field" className="form-label">
                 نتائج الانتخابات
               </Label>
               <Input
-                name="result"
+                id="elect-result-field"
+                name="electResult"
                 type="select"
                 className="form-select"
-                id="ticket-field"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.result || ""}
+                value={validation.values.electResult || ""}
               >
-                {ElectionResultOptions.map((result) => (
-                  <option key={result.id} value={result.value}>
-                    {result.name}
+                {ElectionResultOptions.map((electResult) => (
+                  <option key={electResult.id} value={electResult.value}>
+                    {electResult.name}
                   </option>
                 ))}
               </Input>
-              {validation.touched.result && validation.errors.result ? (
-                <FormFeedback result="invalid">
-                  {validation.errors.result}
+              {validation.touched.electResult && validation.errors.electResult ? (
+                <FormFeedback type="invalid">
+                  {validation.errors.electResult}
                 </FormFeedback>
               ) : null}
             </Col>
             <Col lg={4}>
-              <Label for="election-votes-field" className="form-label">
+              <Label for="electVotes-field" className="form-label">
                 عدد الأصوات
               </Label>
               <Input
-                id="votes-field"
-                name="votes"
+                id="elect-votes-field"
+                name="electVotes"
                 type="number"
-                value={validation.values.votes || ""}
+                value={validation.values.electVotes || ""}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               ></Input>
-              {validation.touched.votes && validation.errors.votes ? (
-                <FormFeedback votes="invalid">
-                  {validation.errors.votes}
+              {validation.touched.electVotes && validation.errors.electVotes ? (
+                <FormFeedback electVotes="invalid">
+                  {validation.errors.electVotes}
                 </FormFeedback>
               ) : null}
             </Col>
             <Col lg={4}>
-              <Label for="election-seats-field" className="form-label">
+              <Label for="electSeats-field" className="form-label">
                 عدد المقاعد
               </Label>
               <Input
-                id="seats-field"
-                name="seats"
+                id="elect-seats-field"
+                name="electSeats"
                 type="number"
                 className="form-control"
                 placeholder="0"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.seats || ""}
+                value={validation.values.electSeats || ""}
               ></Input>
-              {validation.touched.seats && validation.errors.seats ? (
-                <FormFeedback seats="invalid">
-                  {validation.errors.seats}
+              {validation.touched.electSeats && validation.errors.electSeats ? (
+                <FormFeedback electSeats="invalid">
+                  {validation.errors.electSeats}
                 </FormFeedback>
               ) : null}
             </Col>
@@ -347,7 +347,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 onBlur={validation.handleBlur}
                 value={validation.values.electors || ""}
               ></Input>
-              {validation.touched.electors && validation.errors.seats ? (
+              {validation.touched.electors && validation.errors.electSeats ? (
                 <FormFeedback electors="invalid">
                   {validation.errors.electors}
                 </FormFeedback>

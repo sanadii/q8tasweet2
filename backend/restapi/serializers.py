@@ -1,5 +1,5 @@
 # restapi/serializers.py
-from restapi.base_serializer import TrackingMixin, TaskingMixin
+from restapi.base_serializer import TrackMixin, TaskMixin
 from restapi.users.serializers import UserSerializer
 from restapi.elections.serializers import (
     ElectionsSerializer,

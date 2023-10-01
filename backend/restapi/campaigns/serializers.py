@@ -1,6 +1,6 @@
 # restapi/campaigns/serializers.py
 from rest_framework import serializers
-from restapi.base_serializer import TrackingMixin, TaskingMixin
+from restapi.base_serializer import TrackMixin, TaskMixin
 
 from restapi.models import (
     Elections, ElectionCandidates, ElectionCommittees,
@@ -48,7 +48,7 @@ class CampaignDetailsSerializer(serializers.ModelSerializer):
         return representation
 
 
-class CampaignElectionSerializer(TrackingMixin, serializers.ModelSerializer):
+class CampaignElectionSerializer(TrackMixin, serializers.ModelSerializer):
     class Meta:
         model = Elections
         fields = "__all__"
@@ -58,7 +58,7 @@ class CampaignElectionSerializer(TrackingMixin, serializers.ModelSerializer):
         return {"election_" + key: value for key, value in representation.items()}
 
 
-class CampaignCandidateSerializer(TrackingMixin, serializers.ModelSerializer):
+class CampaignCandidateSerializer(TrackMixin, serializers.ModelSerializer):
     class Meta:
         model = Candidates
         fields = "__all__"
@@ -68,7 +68,7 @@ class CampaignCandidateSerializer(TrackingMixin, serializers.ModelSerializer):
         return {"candidate_" + key: value for key, value in representation.items()}
 
 
-class CampaignMembersSerializer(TrackingMixin, serializers.ModelSerializer):
+class CampaignMembersSerializer(TrackMixin, serializers.ModelSerializer):
 
     def get_serializers(self):
         from ..serializers import UserSerializer
@@ -139,7 +139,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
 
 
 
-class ElectionAttendeesSerializer(TrackingMixin, serializers.ModelSerializer):
+class ElectionAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     civil = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()

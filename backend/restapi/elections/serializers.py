@@ -1,6 +1,6 @@
 # restapi/elections/serializers.py
 from rest_framework import serializers
-from restapi.base_serializer import TrackingMixin, TaskingMixin, AdminFieldMixin
+from restapi.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from restapi.models import (
     Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults,
     Campaigns,
@@ -12,7 +12,7 @@ import json
 
 class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Elections model. """
-    admin_serializer_classes = (TrackingMixin, TaskingMixin)  # Define the tuple of admin serializers here.
+    admin_serializer_classes = (TrackMixin, TaskMixin)  # Define the tuple of admin serializers here.
     name = serializers.SerializerMethodField('get_election_name')
     image = serializers.SerializerMethodField('get_election_image')
     
@@ -21,7 +21,7 @@ class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
         fields = [
             "id", "name", "image", "duedate",
             "category", "sub_category",
-            "type", "result", "votes", "seats",
+            "elect_type", "elect_result", "elect_votes", "elect_seats",
             "electors", "electors_males", "electors_females",
             "attendees", "attendees_males", "attendees_females",
         ]
@@ -42,19 +42,16 @@ class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
                 return image.url
         return None
  
-class ElectionCandidatesSerializer(TrackingMixin, serializers.ModelSerializer):
+class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    admin_serializer_classes = (TrackMixin,)  # Define the tuple of admin serializers here.
 
     class Meta:
         model = ElectionCandidates
         fields = [
-            "id", "election", "candidate", "votes", "is_active",
-            "deleted",
-            "candidate_id", "name", "image", "gender",
-            "created_by", "updated_by", "deleted_by",
-            "created_at", "updated_at", "deleted_at",
-            "deleted",
-]
-
+            "id",
+            "election",
+            "candidate_id", "candidate", "name", "gender", "image", "votes", "is_active"
+            ]
     name = serializers.SerializerMethodField('get_candidate_name')
     image = serializers.SerializerMethodField('get_candidate_image')
     gender = serializers.CharField(source='candidate.gender', read_only=True)
@@ -66,15 +63,19 @@ class ElectionCandidatesSerializer(TrackingMixin, serializers.ModelSerializer):
         if obj.candidate:
             from restapi.serializers import CandidatesSerializer
             candidate_serializer = CandidatesSerializer(obj.candidate)
-            return candidate_serializer.data["image"]
+            print(candidate_serializer.data)  # Check if 'image' key is present
+            return candidate_serializer.data.get("image", None)
         return None
 
-class ElectionCommitteesSerializer(TrackingMixin, serializers.ModelSerializer):
+
+class ElectionCommitteesSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    admin_serializer_classes = (TrackMixin,)  # Define the tuple of admin serializers here.
+
     class Meta:
         model = ElectionCommittees
         fields = "__all__"
 
-class ElectionCommitteeResultsSerializer(TrackingMixin, serializers.ModelSerializer):
+class ElectionCommitteeResultsSerializer(TrackMixin, serializers.ModelSerializer):
     class Meta:
         model = ElectionCommitteeResults
         fields = "__all__"
