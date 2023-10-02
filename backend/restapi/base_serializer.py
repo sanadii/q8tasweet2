@@ -23,7 +23,7 @@ class TrackMixin(serializers.BaseSerializer):  # Using BaseSerializer as it does
         return None
 
 
-class TaskMixin(serializers.BaseSerializer):  # Using BaseSerializer as it doesn’t impose a model requirement
+class TaskMixin(serializers.BaseSerializer):
     def to_representation(self, obj):
         # Implement the logic to return the serialized data for task
         moderators = self.get_moderators(obj)
@@ -35,7 +35,15 @@ class TaskMixin(serializers.BaseSerializer):  # Using BaseSerializer as it doesn
 
     def get_moderators(self, obj):
         if obj.moderators is not None:
-            moderator_ids = json.loads(obj.moderators)
+            # Check if moderators is already a list
+            if isinstance(obj.moderators, list):
+                moderator_ids = obj.moderators
+            else:  # Attempt to load JSON string
+                try:
+                    moderator_ids = json.loads(obj.moderators)
+                except (json.JSONDecodeError, TypeError):
+                    moderator_ids = []
+                    
             moderators = User.objects.filter(id__in=moderator_ids)
             return [
                 {
@@ -52,18 +60,32 @@ class TaskMixin(serializers.BaseSerializer):  # Using BaseSerializer as it doesn
     Mixin to conditionally append admin-specific fields to serialized output
     based on the user’s administrative status.
     """
+
+from rest_framework import serializers
+from collections.abc import Iterable  # Import Iterable to check if an object is iterable
+
 class AdminFieldMixin(serializers.Serializer):
-    admin_serializer_classes = (TrackMixin, TaskMixin)  # Tuple of admin serializer classes
-    
+    def __init__(self, *args, **kwargs):
+        # Initialize instances of TrackMixin and TaskMixin
+        track_mixin_instance = TrackMixin()
+        task_mixin_instance = TaskMixin()
+
+        # Store instances in a tuple so they can be iterated over
+        self.admin_serializer_instances = (track_mixin_instance, task_mixin_instance)
+        
+        super(AdminFieldMixin, self).__init__(*args, **kwargs)
+
     def to_representation(self, instance):
-        user = self.context.get('request').user
+        # Check if 'request' is in context and get the user from it
+        user = self.context.get('request').user if 'request' in self.context else None
         representation = super().to_representation(instance)
         
+        # Check if the user is set and is_staff
         if user and user.is_staff:
-            for serializer_class in self.admin_serializer_classes:
-                # Convert the serializer_class name to lowercase and use it as a key
-                key = serializer_class.__name__.lower().replace('mixin', '')
-                serializer_instance = serializer_class(instance=instance, context=self.context)
-                representation[key] = serializer_instance.data  # Correctly nesting under the derived key name
+            # Check if admin_serializer_instances is iterable before attempting to iterate
+            if isinstance(self.admin_serializer_instances, Iterable):
+                for serializer_instance in self.admin_serializer_instances:
+                    key = serializer_instance.__class__.__name__.lower().replace('mixin', '')
+                    representation[key] = serializer_instance.data  # Attach the serializer_instance data to the representation under the derived key name
         return representation
 

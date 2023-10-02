@@ -8,7 +8,7 @@ class ElectionsSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     subCategory = serializers.SerializerMethodField()
-    dueDate = serializers.CharField(source="duedate")
+    due_date = serializers.CharField(source="due_date")
 
     # Admin & Tracking Information 
     moderators = serializers.SerializerMethodField()
@@ -16,7 +16,7 @@ class ElectionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Elections
         fields = [
-            "id",  "name", "image", "dueDate",
+            "id",  "name", "image", "due_date",
             "elect_type", "elect_result", "elect_votes", "elect_seats",
             "electors", "attendees_males", "attendees_females",
             "attendees", "electors_males", "electors_females",
@@ -27,13 +27,13 @@ class ElectionsSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         if obj.sub_category:
-            # Check if duedate exists and is not None
-            if obj.duedate:
-                # Extract the year from the duedate field of the object
-                year = obj.duedate.year  
+            # Check if due_date exists and is not None
+            if obj.due_date:
+                # Extract the year from the due_date field of the object
+                year = obj.due_date.year  
                 return f"{obj.sub_category.name} - {year}"
             else:
-                # Handle the case where duedate is None
+                # Handle the case where due_date is None
                 return f"{obj.sub_category.name} - No Due Date"
         return None  # Return None or a default name if you have one
 

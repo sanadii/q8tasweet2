@@ -3,11 +3,11 @@ from django.contrib.admin import AdminSite
 from restapi.models import Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults
 
 class ElectionsAdmin(admin.ModelAdmin):
-    list_display = ['get_election_name', 'duedate', 'category', 'sub_category', 'elect_seats', 'elect_votes']
+    list_display = ['get_election_name', 'due_date', 'category', 'sub_category', 'elect_seats', 'elect_votes']
     list_filter = ['category', 'status', 'priority']
     search_fields = ['sub_category__name', 'description', 'elect_type', 'elect_result']
-    ordering = ['-duedate', 'sub_category__name']
-    date_hierarchy = 'duedate'
+    ordering = ['-due_date', 'sub_category__name']
+    date_hierarchy = 'due_date'
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']  # Keep this line
     
     def get_election_name(self, obj):
@@ -16,7 +16,7 @@ class ElectionsAdmin(admin.ModelAdmin):
     
     # Your existing fieldsets
     fieldsets = [
-        ('Basic Information', {'fields': ['image', 'duedate', 'description']}),
+        ('Basic Information', {'fields': ['image', 'due_date', 'description']}),
         ('Taxonomies', {'fields': ['category', 'sub_category', 'tags']}),
         ('Election Options and Details', {'fields': ['type', 'result', 'votes', 'seats', 'electors', 'attendees']}),
         ('Administration', {'fields': ['moderators', 'status', 'priority']}),
@@ -24,7 +24,7 @@ class ElectionsAdmin(admin.ModelAdmin):
     ]
 
 class ElectionCandidatesAdmin(admin.ModelAdmin):
-    list_display = ['get_candidate_name', 'get_election_category', 'get_election_subcategory', 'get_election_duedate', 'votes', 'status', 'priority']
+    list_display = ['get_candidate_name', 'get_election_category', 'get_election_subcategory', 'get_election_due_date', 'votes', 'status', 'priority']
     list_filter = ['status', 'priority']
     search_fields = ['election__sub_category__name', 'candidate__name',]
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
@@ -43,9 +43,9 @@ class ElectionCandidatesAdmin(admin.ModelAdmin):
         return obj.election.sub_category.name if obj.election and obj.election.sub_category else 'No Sub-Category'
     get_election_subcategory.short_description = 'Election Sub-Category'
 
-    def get_election_duedate(self, obj):
-        return obj.election.duedate if obj.election else 'No Due Date'
-    get_election_duedate.short_description = 'Election Due Date'
+    def get_election_due_date(self, obj):
+        return obj.election.due_date if obj.election else 'No Due Date'
+    get_election_due_date.short_description = 'Election Due Date'
     
     def get_candidate_name(self, obj):
         return obj.candidate.name

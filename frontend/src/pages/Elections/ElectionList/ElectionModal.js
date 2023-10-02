@@ -31,15 +31,14 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
     initialValues: {
-      description: (election && election.description) || "",
       dueDate: (election && election.dueDate) || null,
       category: (election && election.category) || null,
       subCategory: (election && election.subCategory) || null,
       tags: (election && election.tags) || [],
 
       // Election Specification
-      electType: (election && election.electType) || "",
-      electResult: (election && election.electResult) || "",
+      electType: (election && election.electType) || 1,
+      electResult: (election && election.electResult) || 1,
       electVotes: (election && election.electVotes) || 0,
       electSeats: (election && election.electSeats) || 0,
       electors: (election && election.electors) || 0,
@@ -65,7 +64,6 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
         const updatedElection = {
           id: election ? election.id : 0,
           dueDate: values.dueDate,
-          description: values.description,
 
           // Taxonomies
           category: values.category,
@@ -93,7 +91,6 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       } else {
         const newElection = {
           dueDate: values.dueDate,
-          description: values.description,
 
           // Taxonomies
           category: parseInt(values.category, 10),
@@ -256,10 +253,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 id="ticket-field"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.electType || ""}
+                value={validation.values.electType || 1}
               >
                 {ElectionTypeOptions.map((electType) => (
-                  <option key={electType.id} value={electType.value}>
+                  <option key={electType.id} value={electType.id}>
                     {electType.name}
                   </option>
                 ))}
@@ -281,10 +278,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 className="form-select"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.electResult || ""}
+                value={validation.values.electResult || 1}
               >
                 {ElectionResultOptions.map((electResult) => (
-                  <option key={electResult.id} value={electResult.value}>
+                  <option key={electResult.id} value={electResult.id}>
                     {electResult.name}
                   </option>
                 ))}
@@ -303,7 +300,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 id="elect-votes-field"
                 name="electVotes"
                 type="number"
-                value={validation.values.electVotes || ""}
+                value={validation.values.electVotes || 0}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               ></Input>
@@ -325,7 +322,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 placeholder="0"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.electSeats || ""}
+                value={validation.values.electSeats || 0}
               ></Input>
               {validation.touched.electSeats && validation.errors.electSeats ? (
                 <FormFeedback electSeats="invalid">
@@ -345,7 +342,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 placeholder="0"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.electors || ""}
+                value={validation.values.electors || 0}
               ></Input>
               {validation.touched.electors && validation.errors.electSeats ? (
                 <FormFeedback electors="invalid">
@@ -365,7 +362,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 placeholder="0"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.attendees || ""}
+                value={validation.values.attendees || 0}
               ></Input>
               {validation.touched.attendees && validation.errors.attendees ? (
                 <FormFeedback attendees="invalid">

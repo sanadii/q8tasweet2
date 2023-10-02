@@ -88,215 +88,29 @@ class AddElection(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        # Extract and process fields from the request
-        data_fields = self.extract_fields(request)
+        serializer = ElectionsSerializer(data=request.data, context={'request': request})
         
-        # Create a new election object
-        new_election = self.create_election(**data_fields)
-
-        # Prepare and return new election data
-        new_election_data = self.prepare_new_election_data(new_election, data_fields["moderators"])
-        return Response({"data": new_election_data, "count": 0, "code": 200})
-
-    def extract_fields(self, request):
-        return {
-            "duedate": self.extract_date(request.data.get("dueDate")),
-            "category": self.get_instance(Categories, request.data.get("category")),
-            "sub_category": self.get_instance(Categories, request.data.get("subCategory")),
-            "elect_type": request.data.get("elect_type"),
-            "elect_result": request.data.get("elect_result"),
-            "elect_votes": request.data.get("elect_votes"),
-            "elect_seats": request.data.get("elect_seats"),
-            "electors": request.data.get("electors"),
-            "attendees": request.data.get("attendees"),
-            "status": request.data.get("status"),
-            "priority": request.data.get("priority"),
-            "moderators": self.get_moderators_list(request.data.get("moderators")),
-            "created_by": request.user,
-            "deleted": request.data.get("deleted")
-        }
-
-    def extract_date(self, date_str):
-        if date_str:
-            return datetime.strptime(date_str, "%Y-%m-%d").date()
-        return None
-
-    def get_instance(self, model, id):
-        return model.objects.get(id=id) if id else None
-
-    def get_moderators_list(self, moderators):
-        return ast.literal_eval(moderators) if isinstance(moderators, str) else []
-
-    def create_election(self, **kwargs):
-        kwargs["name"] = self.get_name(kwargs.get("sub_category"), kwargs.get("duedate"))  # Pass "duedate" here
-        kwargs["image"] = self.get_image(kwargs.get("sub_category"))
-        new_election = Elections.objects.create(**kwargs)
-        return new_election
-
-    def get_name(self, sub_category_instance, duedate):
-        if sub_category_instance:
-            if duedate:
-                # If duedate is a datetime.date object, you can directly get the year attribute
-                year = duedate.year
-                return f"{sub_category_instance.name} - {year}"
-            else:
-                return f"{sub_category_instance.name} - No Due Date"
-        return None  # Return None or a default name if you have one
-
-    def get_image(self, sub_category):
-        return sub_category.image.url if sub_category and sub_category.image else None
-
-    def prepare_new_election_data(self, election, moderators):
-        # Prepare data in the same way as your original function, but cleaner
-        return {
-            "id": election.id,
-            "dueDate": election.duedate,
-            "category": election.category.id if election.category else None,
-            "subCategory": election.sub_category.id if election.sub_category else None,
-            "elect_type": election.elect_type,
-            "elect_result": election.elect_result,
-            "elect_votes": election.elect_votes,
-            "elect_seats": election.elect_seats,
-            "electors": election.electors,
-            "attendees": election.attendees,
-            "status": election.status,
-            "priority": election.priority,
-            "moderators": moderators,
-            "created_by": election.created_by.first_name if election.created_by else None,
-            "deleted": election.deleted,
-        }
+        if serializer.is_valid():
+            new_election = serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateElection(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, id):
-        # Fetch and validate the election object
         try:
             election = Elections.objects.get(id=id)
         except Elections.DoesNotExist:
             return Response({"error": "Election not found"}, status=404)
-
-        # Extract fields from request
-        self.extract_fields_from_request(request, election)
-
-        # Save changes to the database
-        election.save()
-
-        # Prepare and return updated election data
-        moderators_list = self.get_updated_moderators_list(election.moderators)
-        updated_election_data = self.prepare_updated_election_data(election, moderators_list)
-        return Response({"data": updated_election_data, "count": 0, "code": 200})
-
-    def extract_fields_from_request(self, request, election):
-        # General Info
-        election.duedate = self.convert_str_to_date(request.data.get("dueDate"))
-
-        # Taxonomies
-        category_id, sub_category_id = request.data.get("category"), request.data.get("subCategory")
-        election.category, election.sub_category = self.get_categories(category_id, sub_category_id)
-        election.tags = request.data.get("tags")
-
-        # Specifications & Admin
-        election.elect_type = request.data.get("elect_type")
-        election.elect_result = request.data.get("elect_result")
-        election.elect_votes = request.data.get("elect_votes")
-        election.elect_seats = request.data.get("elect_seats")
-        election.electors = request.data.get("electors")
-        election.electors_males = request.data.get("electorsMales")
-        election.electors_females = request.data.get("electorsFemales")
-        election.attendees = request.data.get("attendees")
-        election.attendees_males = request.data.get("attendeesMales")
-        election.attendees_females = request.data.get("attendeesFemales")
-        election.moderators = self.get_moderators_list(request.data.get("moderators"))
-        election.status = request.data.get("status")
-        election.priority = request.data.get("priority")
-        election.deleted = request.data.get("deleted")
-        election.updated_by = request.user
-
-        # Set Name and Image
-        if election.sub_category:
-            election.name = self.get_name(election.sub_category, election.duedate)
-            election.image = self.get_image(election.sub_category)
-
-    # Helper methods to generate name and image
-    @staticmethod
-    def convert_str_to_date(date_str):
-        return datetime.strptime(date_str, "%Y-%m-%d").date()
-
-
-    def get_name(self, sub_category_instance, duedate):
-        if sub_category_instance:
-            if duedate:
-                # If duedate is a datetime.date object, you can directly get the year attribute
-                year = duedate.year
-                return f"{sub_category_instance.name} - {year}"
-            else:
-                return f"{sub_category_instance.name} - No Due Date"
-        return None  # Return None or a default name if you have one
-
-    def get_image(self, sub_category):
-        if sub_category and sub_category.image:
-            image_url = sub_category.image.url
-            return image_url.replace("/media/", "", 1)  # remove one occurrence of "/media/"
-        return None
-
-    def get_categories(self, category_id, sub_category_id):
-        try:
-            category_instance = Categories.objects.get(id=category_id)
-            sub_category_instance = Categories.objects.get(id=sub_category_id)
-            return category_instance, sub_category_instance
-        except Categories.DoesNotExist:
-            return None, None
-
-    def get_moderators_list(self, moderators):
-        if isinstance(moderators, str):
-            return ast.literal_eval(moderators)
-        return []
-
-    def get_updated_moderators_list(self, moderators):
-        moderators_list = []
-        if moderators:
-            for moderator_id in moderators:
-                try:
-                    moderator = User.objects.get(id=moderator_id)
-                    moderators_list.append({
-                        "id": moderator.id,
-                        "image": moderator.image.url if moderator.image else None,
-                        "name": f"{moderator.first_name} {moderator.last_name}",
-                    })
-                except User.DoesNotExist:
-                    pass
-        return moderators_list
-
-    def prepare_updated_election_data(self, election, moderators_list):
-        updated_election_data = {
-            "id": election.id,
-            "dueDate": election.duedate,
-            # Taxonomies
-            "category": election.category.id if election.category else None,
-            "subCategory": election.sub_category.id if election.sub_category else None,
-            "tags": election.tags,
-            # Election Specifications
-            "elect_type": election.elect_type,
-            "elect_result": election.elect_result,
-            "elect_votes": election.elect_votes,
-            "elect_seats": election.elect_seats,
-            "electors": election.electors,
-            "electorsMales": election.electors_males,
-            "electorsFemales": election.electors_females,
-
-            "attendees": election.attendees,
-            "attendeesMales": election.attendees_males,
-            "attendeesFemales": election.attendees_females,
-
-            # Admin
-            "status": election.status,
-            "priority": election.priority,
-            "moderators": moderators_list,
-            "updatedBy": election.updated_by.first_name,
-            "deleted": election.deleted,
-        }
-        return updated_election_data
+        
+        serializer = ElectionsSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200})
+        return Response(serializer.errors, status=400)
 
 class DeleteElection(APIView):
     def delete(self, request, id):
@@ -307,42 +121,15 @@ class DeleteElection(APIView):
         except Elections.DoesNotExist:
             return JsonResponse({"data": "Election not found", "count": 0, "code": 404}, safe=False)
 
+
 # ElectionCandidates -----------------
 class AddNewElectionCandidate(APIView):
     def post(self, request):
-        election_id = request.data.get("election_id")
-        candidate_id = request.data.get("candidate_id")
-
-        # Fetch the candidate details based on candidate
-        try:
-            candidate = Candidates.objects.get(id=candidate_id)
-        except Candidates.DoesNotExist:
-            return Response({"error": "Candidate not found"}, status=404)
-
-        # Create the new election candidate with candidate details
-        election_candidate = ElectionCandidates.objects.create(
-            election_id=election_id,
-            candidate_id=candidate_id,
-        )
-
-        # Prepare the response data with candidate details
-        new_election_candidate_data = {
-            "id": election_candidate.id,
-            "candidate_id": candidate_id,
-            "election": election_id,
-            "name": candidate.name,
-            "image": candidate.image.url if candidate.image else None,
-
-            # "image": candidate.image.url if candidate.image else None,
-            "gender": candidate.gender,
-            "deleted": candidate.deleted,
-            "position": "-",
-            "votes": "-",
-
-            # Other details you want to include
-        }
-
-        return Response({"data": new_election_candidate_data, "count": 0, "code": 200})
+        serializer = ElectionCandidatesSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()  # This will call the `create` method of the serializer
+            return Response({"data": serializer.data, "code": 200})
+        return Response(serializer.errors, status=400)
 
 class DeleteElectionCandidate(APIView):
     def delete(self, request, id):

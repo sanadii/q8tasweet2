@@ -7,7 +7,7 @@ from django.db.models import Sum
 
 class Elections(TrackModel):
     # Basic Information
-    duedate = models.DateField(null=True, blank=True)
+    due_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('Categories', on_delete=models.SET_NULL, null=True, blank=True, related_name='category_elections')
     sub_category = models.ForeignKey('Categories', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategory_elections')
     # tags = models.ForeignKey('Categories', on_delete=models.SET_NULL, null=True, blank=True, related_name='tags_elections')
@@ -41,10 +41,10 @@ class Elections(TrackModel):
         verbose_name_plural = "Elections"
 
     def __str__(self):
-        return f"{self.sub_category.name} - {self.duedate.year if self.duedate else 'No Date'}"
+        return f"{self.sub_category.name} - {self.due_date.year if self.due_date else 'No Date'}"
 
     def get_dynamic_name(self):
-        return f"{self.sub_category.name} - {self.duedate.year if self.duedate else 'No Date'}"
+        return f"{self.sub_category.name} - {self.due_date.year if self.due_date else 'No Date'}"
 
 
 class ElectionCandidates(TrackModel):

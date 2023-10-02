@@ -11,20 +11,38 @@ from restapi.serializers import *
 from restapi.models import *
 import ast 
 from datetime import datetime  # Add this line to import the datetime class
+from rest_framework.pagination import PageNumberPagination
 
 
 def index(request):
     return render(request, 'index.html')
 
 # Candidates: getCandidate, deleteCandidate, addCandidate, updateCandidate, CandidateCount
-class GetCandidates(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def get(self, request):
-        candidates_data = Candidates.objects.all()
-        data_serializer = CandidatesSerializer(candidates_data, many=True, context={'request': request})
+class CustomPagination(PageNumberPagination):
+    page_size = 50
 
-        return Response({"data": data_serializer.data, "counts": 1, "code": 200})
+    def get_paginated_response(self, data):
+        return Response({
+            "count": self.page.paginator.count,
+            "next": self.get_next_link(),
+            "previous": self.get_previous_link(),
+            "data": data,
+        })
+
+
+class GetCandidates(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request, *args, **kwargs):
+        elections_data = Candidates.objects.all()
+        paginator = CustomPagination()
+        paginated = paginator.paginate_queryset(elections_data, request)
+        
+        # Passing context with request to the serializer
+        context = {"request": request}
+        data_serializer = CandidatesSerializer(paginated, many=True, context=context)
+        
+        return paginator.get_paginated_response(data_serializer.data)
 
 
 class AddNewCandidate(APIView):

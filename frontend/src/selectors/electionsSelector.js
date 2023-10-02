@@ -1,16 +1,19 @@
 import { createSelector } from 'reselect';
 
 const selectElectionsState = state => state.Elections;
-const selectCategoriesState = state => state.Categories;
+const selectCandidatesState = state => state.Candidates;
 const selectCampaignsState = state => state.Campaigns;
+
+const selectCategoriesState = state => state.Categories;
 const selectUsersState = state => state.Users;
 
 export const electionsSelector = createSelector(
   selectElectionsState,
-  selectUsersState,
-  selectCategoriesState,
+  selectCandidatesState,
   selectCampaignsState,
-  (electionsState, usersState, categoriesState, campaignsState) => ({
+  selectCategoriesState,
+  selectUsersState,
+  (electionsState, candidateState, campaignsState, categoriesState, usersState,) => ({
     // Election Selectors
     elections: electionsState.elections,
     electionDetails: electionsState.electionDetails,
@@ -18,7 +21,7 @@ export const electionsSelector = createSelector(
     electionCandidates: electionsState.electionCandidates,
     electionAttendees: electionsState.electionAttendees,
     electionCommitteeResults: electionsState.electionCommitteeResults,
-    
+
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,
 
@@ -28,6 +31,9 @@ export const electionsSelector = createSelector(
     subCategories: categoriesState.subCategories,
 
 
+    // Candidate Selectors
+    candidates: candidateState.candidates,
+
     // Campaign Selectors
     campaigns: campaignsState.campaigns,
     campaign: campaignsState.campaignDetails,
@@ -36,17 +42,17 @@ export const electionsSelector = createSelector(
     campaignGuarantees: campaignsState.campaignGuarantees,
     campaignCommittees: campaignsState.electionCommittees,
     campaignCandidates: campaignsState.electionCandidates,
-    electionsSelector: campaignsState.electionAttendees, // Added electionAttendees
+    electionsSelector: campaignsState.electionAttendees,
 
     isCampaignSuccess: campaignsState.isCampaignSuccess,
     campaignError: campaignsState.error,
 
-    
-    // User  electors
+
+    // User electors
     moderators: usersState.moderators,
-    currentUser: usersState.currentUser, // Added currentUser
-    currentCampaignMember: campaignsState.currentCampaignMember, // Added currentCampaignMember
-    electors: campaignsState.electors, // Added electors
+    currentUser: usersState.currentUser,
+    currentCampaignMember: campaignsState.currentCampaignMember,
+    electors: campaignsState.electors,
 
   })
 );

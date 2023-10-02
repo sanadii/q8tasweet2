@@ -22,8 +22,8 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
   const dispatch = useDispatch();
 
   const { electionDetails } = useSelector(electionsSelector);
-  const election_id = electionDetails.id;
-  
+  const electionId = electionDetails.id;
+console.log("electionId", electionId)
   const openModal = () => setModal(!modal);
   const toggleModal = () => {
     setModal(!modal);
@@ -36,7 +36,7 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
 
   const {
     id = "",
-    candidate_id = "",
+    candidateId = "",
     name = "",
     votes = null,
     remarks = "",
@@ -48,23 +48,23 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
 
     initialValues: {
       id: id,
-      election_id: election_id,
-      candidate_id: candidate_id,
+      electionId: electionId,
+      candidateId: candidateId,
       name: name,
       votes: votes,
       remarks: remarks,
     },
 
     validationSchema: Yup.object({
-      // candidate_id: Yup.string().required("Please Enter Candidate ID"),
+      // candidateId: Yup.string().required("Please Enter Candidate ID"),
     }),
     onSubmit: (values) => {
       if (isEdit) {
         const updatedElectionCandidate = {
           // Basic Information
           id: electionCandidate ? electionCandidate.id : 0,
-          election_id: election_id,
-          candidate_id: values.candidate_id,
+          electionId: electionId,
+          candidateId: values.candidateId,
           name: values.name,
           // Election Data
           votes: values.votes,
@@ -75,8 +75,8 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
       } else {
         const newElectionCandidate = {
           id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-          election_id: election_id,
-          candidate_id: values["candidate_id"],
+          electionId: electionId,
+          candidateId: values["candidateId"],
         };
         dispatch(addNewElectionCandidate(newElectionCandidate));
       }
@@ -98,7 +98,7 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
         ) : (
           <AddElectionCandidate
             toggleModal={toggleModal}
-            election_id={election_id}
+            electionId={electionId}
             setModal={setModal}
             dispatch={dispatch}
           />
@@ -125,11 +125,9 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
   );
 };
 
-const AddElectionCandidate = ({ election_id, dispatch }) => {
-  const { candidates, electionCandidateList } = useSelector((state) => ({
-    candidates: state.Candidates.candidates,
-    electionCandidateList: state.Elections.electionCandidates,
-  }));
+const AddElectionCandidate = ({ electionId, dispatch }) => {
+  const { candidates, electionCandidates } = useSelector(electionsSelector);
+  const electionCandidateList = electionCandidates;
 
   // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS
   useEffect(() => {
@@ -145,9 +143,9 @@ const AddElectionCandidate = ({ election_id, dispatch }) => {
   useEffect(() => {
     setCandidateList(
       candidates.filter((candidate) =>
-        candidate.name
-          .toLowerCase()
-          .includes(searchCandidateInput.toLowerCase())
+        candidate.name ? candidate.name
+          .toLowerCase().includes(searchCandidateInput
+            .toLowerCase()) : false
       )
     );
   }, [candidates, searchCandidateInput]);
@@ -178,10 +176,11 @@ const AddElectionCandidate = ({ election_id, dispatch }) => {
               onSubmit={(e) => {
                 e.preventDefault();
                 const newElectionCandidate = {
-                  id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-                  election_id: election_id,
-                  candidate_id: candidate.id,
+                  electionId: electionId,
+                  
+                  candidateId: candidate.id,
                 };
+                console.log("electionID:", electionId);
                 dispatch(addNewElectionCandidate(newElectionCandidate));
               }}
             >
@@ -208,14 +207,14 @@ const AddElectionCandidate = ({ election_id, dispatch }) => {
                 </div>
                 <div className="flex-shrink-0">
                   {electionCandidateList.some(
-                    (item) => item.candidate_id === candidate.id
+                    (item) => item.candidateId === candidate.id
                   ) ? (
                     <button
                       type="button"
                       className="btn btn-success btn-sm"
                       disabled
                     >
-                      Add Campaign
+                      تمت الإضافة
                     </button>
                   ) : (
                     <button
@@ -223,7 +222,7 @@ const AddElectionCandidate = ({ election_id, dispatch }) => {
                       className="btn btn-light btn-sm"
                       id="add-btn"
                     >
-                      Add To Election
+                      أضف
                     </button>
                   )}
                 </div>
@@ -257,7 +256,7 @@ const EditElectionCandidate = ({ validation }) => {
             Candidate Name: <b>{validation.values.name}</b>
           </li>
           <li>
-            Candidate ID: <b>({validation.values.candidate_id})</b>
+            Candidate ID: <b>({validation.values.candidateId})</b>
           </li>
         </ul>
         <div className="row g-3">
