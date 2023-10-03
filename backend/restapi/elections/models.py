@@ -51,13 +51,7 @@ class ElectionCandidates(TrackModel):
     election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True, related_name="candidate_elections")
     candidate = models.ForeignKey('Candidates', on_delete=models.SET_NULL, null=True, blank=True, related_name="election_candidates")
     votes = models.PositiveIntegerField(default=0)
-
-    # Administration
-    moderators = models.CharField(max_length=255, blank=True, null=True)
-    status = models.IntegerField(choices=StatusOptions.choices, blank=True, null=True)
-    priority = models.IntegerField(choices=PriorityOptions.choices, blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
 
     def update_votes(self):
         self.votes = self.committee_result_candidates.aggregate(Sum('votes'))['votes__sum'] or 0

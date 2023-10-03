@@ -78,13 +78,12 @@ const CandidatesTab = () => {
       const electionCandidate = arg;
 
       setElectionCandidate({
-        // Basic Information
         id: electionCandidate.id,
-        election_id: electionCandidate.election_id,
-        candidate_id: electionCandidate.candidate_id,
+        election: electionCandidate.election,
+        candidate: electionCandidate.candidate,
         name: electionCandidate.name,
         votes: electionCandidate.votes,
-        remarks: electionCandidate.remarks,
+        notes: electionCandidate.notes,
       });
 
       setIsEdit(true);

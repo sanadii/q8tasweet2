@@ -24,14 +24,12 @@ class ElectionsAdmin(admin.ModelAdmin):
     ]
 
 class ElectionCandidatesAdmin(admin.ModelAdmin):
-    list_display = ['get_candidate_name', 'get_election_category', 'get_election_subcategory', 'get_election_due_date', 'votes', 'status', 'priority']
-    list_filter = ['status', 'priority']
+    list_display = ['get_candidate_name', 'get_election_category', 'get_election_subcategory', 'get_election_due_date', 'votes', 'notes']
     search_fields = ['election__sub_category__name', 'candidate__name',]
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
     fieldsets = [
-        ('Basic Information', {'fields': ['election', 'candidate', 'votes']}),
-        ('Administration', {'fields': ['moderators', 'status', 'priority', 'notes', 'is_active']}),
+        ('Basic Information', {'fields': ['election', 'candidate', 'votes', 'notes']}),
         ('Tracking Information', {'fields': readonly_fields}),
     ]
     

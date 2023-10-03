@@ -89,9 +89,8 @@ class AddElection(APIView):
 
     def post(self, request):
         serializer = ElectionsSerializer(data=request.data, context={'request': request})
-        
         if serializer.is_valid():
-            new_election = serializer.save()
+            serializer.save()
             return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -124,12 +123,33 @@ class DeleteElection(APIView):
 
 # ElectionCandidates -----------------
 class AddNewElectionCandidate(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        serializer = ElectionCandidatesSerializer(data=request.data)
+        serializer = ElectionCandidatesSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save()  # This will call the `create` method of the serializer
+            serializer.save()
             return Response({"data": serializer.data, "code": 200})
         return Response(serializer.errors, status=400)
+
+
+class UpdateElectionCandidate(APIView):
+    permission_classes = [IsAuthenticated]  # You may want to include permission classes to ensure security
+
+    def patch(self, request, id):
+        try:
+            election_candidate = ElectionCandidates.objects.get(id=id)
+        except ElectionCandidates.DoesNotExist:
+            return Response({"error": "Election candidate not found"}, status=404)
+        
+        # Initialize the serializer with the election_candidate instance and the new data
+        serializer = ElectionCandidatesSerializer(instance=election_candidate, data=request.data, partial=True, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()  # This will handle the update of the election_candidate object with the validated data
+            return Response({"data": serializer.data, "count": 0, "code": 200})
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteElectionCandidate(APIView):
     def delete(self, request, id):
@@ -144,60 +164,6 @@ class DeleteElectionCandidate(APIView):
             return JsonResponse(
                 {"data": "Election not found", "count": 0, "code": 404}, safe=False
             )
-
-class UpdateElectionCandidate(APIView):
-    def patch(self, request, id):
-        # Basic Information
-        election_id = request.data.get("election_id")
-        candidate_id = request.data.get("candidate_id")
-
-        # Election Results
-        votes = request.data.get("votes")
-        remarks = request.data.get("remarks")
-
-        # Fetch the election candidate details based on the URL parameter "id"
-        try:
-            election_candidate = ElectionCandidates.objects.get(id=id)
-        except ElectionCandidates.DoesNotExist:
-            return Response({"error": "Election candidate not found"}, status=404)
-
-        # Get the actual Election instance
-        try:
-            election = Elections.objects.get(id=election_id)
-        except Elections.DoesNotExist:
-            return Response({"error": "Election not found"}, status=404)
-
-        # Get the actual Candidate instance
-        try:
-            candidate = Candidates.objects.get(id=candidate_id)
-        except Candidates.DoesNotExist:
-            return Response({"error": "Candidate not found"}, status=404)
-
-        # Update the election candidate with the new data
-        
-        # Basic Data
-        election_candidate.election = election
-        election_candidate.candidate = candidate
-
-        # Election Related Data
-        election_candidate.votes = votes
-        election_candidate.remarks = remarks
-        election_candidate.save()
-
-        # Prepare the response data with candidate details
-        updated_election_candidate_data = {
-            # Basic Information
-            "id": election_candidate.id,
-            "election_id": election_candidate.election.id,
-            "candidate_id": election_candidate.candidate.id,
-
-            # Election Data
-            "votes": election_candidate.votes,
-            "remarks": election_candidate.remarks,
-
-        }
-
-        return Response({"data": updated_election_candidate_data, "count": 0, "code": 200})
 
 class GetElectionCount(APIView):
     def get(self, request):

@@ -20,10 +20,11 @@ import SimpleBar from "simplebar-react";
 
 export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electionCandidate }) => {
   const dispatch = useDispatch();
+  console.log("ElectionCandidate:::", electionCandidate);
 
   const { electionDetails } = useSelector(electionsSelector);
-  const electionId = electionDetails.id;
-console.log("electionId", electionId)
+  const election = electionDetails.id;
+  console.log("election", election)
   const openModal = () => setModal(!modal);
   const toggleModal = () => {
     setModal(!modal);
@@ -31,52 +32,42 @@ console.log("electionId", electionId)
   // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS
 
   const handleButtonClick = () => {
-    validation.submitForm(); // validation is the Formik instance from the child component
+    validation.submitForm();
   };
-
-  const {
-    id = "",
-    candidateId = "",
-    name = "",
-    votes = null,
-    remarks = "",
-  } = electionCandidate || {};
 
   // validation
   const validation = useFormik({
     enableReinitialize: true,
 
     initialValues: {
-      id: id,
-      electionId: electionId,
-      candidateId: candidateId,
-      name: name,
-      votes: votes,
-      remarks: remarks,
+      id: (electionCandidate && electionCandidate.id) || "",
+      election: (electionCandidate && electionCandidate.election) || "",
+      candidate: (electionCandidate && electionCandidate.candidate) || "",
+      votes: (electionCandidate && electionCandidate.votes) || "",
+      notes: (electionCandidate && electionCandidate.notes) || "",
+      name: (electionCandidate && electionCandidate.name) || "",
     },
 
     validationSchema: Yup.object({
-      // candidateId: Yup.string().required("Please Enter Candidate ID"),
+      // candidate: Yup.string().required("Please Enter Candidate ID"),
     }),
     onSubmit: (values) => {
       if (isEdit) {
         const updatedElectionCandidate = {
           // Basic Information
           id: electionCandidate ? electionCandidate.id : 0,
-          electionId: electionId,
-          candidateId: values.candidateId,
-          name: values.name,
-          // Election Data
+          election: election,
+          candidate: electionCandidate.candidate,
+          name: electionCandidate.name,
           votes: values.votes,
-          remarks: values.remarks,
+          notes: values.notes,
         };
         dispatch(updateElectionCandidate(updatedElectionCandidate));
-        console.log("updatedElectionCandidate ", updatedElectionCandidate);
       } else {
         const newElectionCandidate = {
           id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-          electionId: electionId,
-          candidateId: values["candidateId"],
+          election: election,
+          candidate: values["candidate"],
         };
         dispatch(addNewElectionCandidate(newElectionCandidate));
       }
@@ -87,18 +78,19 @@ console.log("electionId", electionId)
   return (
     <Modal isOpen={modal} toggle={openModal} centered className="border-0">
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        {!!isEdit ? "Update Election Candidate" : "Add New Election Candidate"}
+        {!!isEdit ? "تعديل مرشح الإنتخابات" : "إضافة مرشح جديد"}
       </ModalHeader>
       <ModalBody className="p-4">
         {!!isEdit ? (
           <EditElectionCandidate
             validation={validation}
-            formikInstance={validation} // Pass the Formik instance here
+            formikInstance={validation}
+            electionCandidate={electionCandidate}
           />
         ) : (
           <AddElectionCandidate
             toggleModal={toggleModal}
-            electionId={electionId}
+            election={election}
             setModal={setModal}
             dispatch={dispatch}
           />
@@ -112,11 +104,11 @@ console.log("electionId", electionId)
               setModal(false);
             }}
           >
-            Close
+            إغلاق
           </Button>
           {!!isEdit ? (
             <Button color="success" id="add-btn" onClick={handleButtonClick}>
-              Update Election Candidate
+              تعديل
             </Button>
           ) : null}
         </div>
@@ -125,7 +117,7 @@ console.log("electionId", electionId)
   );
 };
 
-const AddElectionCandidate = ({ electionId, dispatch }) => {
+const AddElectionCandidate = ({ election, dispatch }) => {
   const { candidates, electionCandidates } = useSelector(electionsSelector);
   const electionCandidateList = electionCandidates;
 
@@ -176,11 +168,11 @@ const AddElectionCandidate = ({ electionId, dispatch }) => {
               onSubmit={(e) => {
                 e.preventDefault();
                 const newElectionCandidate = {
-                  electionId: electionId,
-                  
-                  candidateId: candidate.id,
+                  election: election,
+
+                  candidate: candidate.id,
                 };
-                console.log("electionID:", electionId);
+                console.log("election:", election);
                 dispatch(addNewElectionCandidate(newElectionCandidate));
               }}
             >
@@ -207,7 +199,7 @@ const AddElectionCandidate = ({ electionId, dispatch }) => {
                 </div>
                 <div className="flex-shrink-0">
                   {electionCandidateList.some(
-                    (item) => item.candidateId === candidate.id
+                    (item) => item.candidate === candidate.id
                   ) ? (
                     <button
                       type="button"
@@ -235,7 +227,7 @@ const AddElectionCandidate = ({ electionId, dispatch }) => {
   );
 };
 
-const EditElectionCandidate = ({ validation }) => {
+const EditElectionCandidate = ({ validation, electionCandidate }) => {
   return (
     <Form
       className="tablelist-form"
@@ -247,23 +239,23 @@ const EditElectionCandidate = ({ validation }) => {
     >
       <ModalBody>
         <input type="hidden" id="id-field" />
-        <h4>Candidate</h4>
+        <h4>المرشح</h4>
         <ul>
           <li>
-            ElectionCandidate ID: <b>{validation.values.id}</b>
+            رمز مرشح الإنتخابات: <b>{validation.values.id}</b>
           </li>
           <li>
-            Candidate Name: <b>{validation.values.name}</b>
+            اسم المرشح: <b>{electionCandidate.name || ""}</b>
           </li>
           <li>
-            Candidate ID: <b>({validation.values.candidateId})</b>
+            رمز المرشح: <b>{electionCandidate.candidate}</b>
           </li>
         </ul>
         <div className="row g-3">
           <Col lg={12}>
             <div>
               <Label htmlFor="candidate-id-field" className="form-label">
-                Votes
+                الأصوات
               </Label>
               <Input
                 name="votes"
@@ -292,12 +284,12 @@ const EditElectionCandidate = ({ validation }) => {
           </Col>
           <Col lg={12}>
             <div>
-              <Label htmlFor="candidate-id-field" className="form-label">
-                Remarks
+              <Label htmlFor="notes-field" className="form-label">
+                ملاحظات
               </Label>
               <Input
-                name="remarks"
-                id="candidate-id-field"
+                id="notes-field"
+                name="notes"
                 className="form-control"
                 placeholder="Enter Candidate ID"
                 type="text"
@@ -306,16 +298,16 @@ const EditElectionCandidate = ({ validation }) => {
                 }}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-                value={validation.values.remarks || ""}
+                value={validation.values.notes || ""}
                 invalid={
-                  validation.touched.remarks && validation.errors.remarks
+                  validation.touched.notes && validation.errors.notes
                     ? true
                     : false
                 }
               />
-              {validation.touched.remarks && validation.errors.remarks ? (
+              {validation.touched.notes && validation.errors.notes ? (
                 <FormFeedback type="invalid">
-                  {validation.errors.remarks}
+                  {validation.errors.notes}
                 </FormFeedback>
               ) : null}
             </div>

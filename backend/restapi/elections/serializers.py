@@ -75,7 +75,7 @@ class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer)
 
     class Meta:
         model = ElectionCandidates
-        fields = ["id", "election_id", "candidate_id", "name", "gender", "image", "votes", "is_active"]
+        fields = ["id", "election", "candidate", "name", "gender", "image", "votes", "notes"]
     name = serializers.SerializerMethodField('get_candidate_name')
     image = serializers.SerializerMethodField('get_candidate_image')
     gender = serializers.CharField(source='candidate.gender', read_only=True)
