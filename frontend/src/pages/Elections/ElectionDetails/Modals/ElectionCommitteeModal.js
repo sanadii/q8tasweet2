@@ -1,28 +1,28 @@
-// React & Redux ---------------
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Link } from "react-router-dom";
+// React & Redux core imports
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getElectionCommittees, addNewElectionCommittee, updateElectionCommittee } from "../../../../store/actions";
 
-// Custom Components & ConstantsImports ---------------
+// Action & Selector imports
+import { addNewElectionCommittee, updateElectionCommittee } from "../../../../store/actions";
+import { electionsSelector } from '../../../../Selectors/electionsSelector';
+
+// Constants & Component imports
 import { GenderOptions } from "../../../../Components/constants";
 
-// Form and Validation ---------------
-import * as Yup from "yup";
+// Form & validation imports
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import "react-toastify/dist/ReactToastify.css";
 
-// Reactstrap (UI) imports
-import { Col, Row, ModalBody, Label, Input, Modal, ModalHeader, Form, ModalFooter, Button, FormFeedback } from "reactstrap";
-
-// Additional package imports
-import SimpleBar from "simplebar-react";
+// UI Components & styling imports
+import { Col, ModalBody, Label, Input, Modal, ModalHeader, Form, ModalFooter, Button, FormFeedback } from "reactstrap";
 
 
 export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommittee }) => {
   const dispatch = useDispatch();
 
-  const election_id = useSelector((state) => state.Elections.electionDetails.id);
+  const { electionDetails } = useSelector(electionsSelector);
+  const election = electionDetails.id
 
   const openModal = () => setModal(!modal);
   const toggleModal = () => {
@@ -37,7 +37,7 @@ export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electi
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      election_id: election_id || "",
+      election: election || "",
       name: (electionCommittee && electionCommittee.name) || "",
       gender: (electionCommittee && electionCommittee.gender) || 0,
     },
@@ -49,7 +49,7 @@ export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electi
       if (isEdit) {
         const updatedElectionCommittee = {
           id: electionCommittee ? electionCommittee.id : 0,
-          election_id: election_id || "",
+          election: election || "",
           name: values.name,
           gender: parseInt(values.gender, 10),
         };
@@ -57,7 +57,7 @@ export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electi
         console.log("updatedElectionCommittee ", updatedElectionCommittee);
       } else {
         const newElectionCommittee = {
-          election_id: election_id || "",
+          election: election || "",
           name: values.name,
           gender: parseInt(values.gender, 10),
         };
@@ -87,13 +87,13 @@ export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electi
               <Col lg={12}>
                 <div>
                   <Label htmlFor="name-field" className="form-label">
-                    Name
+                    اسم اللجنة
                   </Label>
                   <Input
                     name="name"
                     id="name-field"
                     className="form-control"
-                    placeholder="Enter Name"
+                    placeholder="اسم اللجنة"
                     type="text"
                     validate={{
                       required: { value: true },
@@ -116,7 +116,7 @@ export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electi
 
                 <div>
                   <Label htmlFor="gender-field" className="form-label">
-                    Gender
+                    النوع
                   </Label>
                   <Input
                     name="gender"
@@ -157,7 +157,7 @@ export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electi
             }}
             className="btn-light"
           >
-            Close
+            أغلق
           </Button>
           <button type="submit" className="btn btn-success" id="add-btn" onClick={handleButtonClick}>
             {!!isEdit ? "Update Committee" : "Add Committee"}

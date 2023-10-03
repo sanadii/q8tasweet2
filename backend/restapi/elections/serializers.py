@@ -1,7 +1,6 @@
 # restapi/elections/serializers.py
 from rest_framework import serializers
 from datetime import datetime  # Importing datetime
-import json
 
 from restapi.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from restapi.models import (
@@ -9,10 +8,9 @@ from restapi.models import (
     Campaigns, Candidates, Categories, Electors
     )
 
-
 class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Elections model. """
-    admin_serializer_classes = (TrackMixin, TaskMixin)  # Define the tuple of admin serializers here.
+    admin_serializer_classes = (TrackMixin, TaskMixin)  # Only TrackMixin included
 
     name = serializers.SerializerMethodField('get_election_name')
     image = serializers.SerializerMethodField('get_election_image')
@@ -26,7 +24,17 @@ class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "electors", "electors_males", "electors_females",
             "attendees", "attendees_males", "attendees_females",
         ]
-            
+
+        # Exlude when used by other Serliazier + Action: get_fields
+        exclude_task_track_fields = ["task", "track"]
+
+    def get_fields(self):
+        fields = super().get_fields()
+        if self.context.get("exclude_task_track", False):
+            for field in self.Meta.exclude_task_track_fields:
+                fields.pop(field, None)
+        return fields
+
 
     def get_election_name(self, obj):
         sub_category = getattr(obj, 'sub_category', None)
@@ -73,21 +81,17 @@ class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer)
     """ Serializer for the ElectionCandidates model. """
     admin_serializer_classes = (TrackMixin,)
 
+    name = serializers.CharField(source='candidate.name', read_only=True)
+    gender = serializers.CharField(source='candidate.gender', read_only=True)
+    image = serializers.SerializerMethodField('get_candidate_image')
+
     class Meta:
         model = ElectionCandidates
         fields = ["id", "election", "candidate", "name", "gender", "image", "votes", "notes"]
-    name = serializers.SerializerMethodField('get_candidate_name')
-    image = serializers.SerializerMethodField('get_candidate_image')
-    gender = serializers.CharField(source='candidate.gender', read_only=True)
 
-    def get_candidate_name(self, obj):
-        return obj.candidate.name if obj.candidate else None
-    
     def get_candidate_image(self, obj):
-        if obj.candidate:
-            from restapi.serializers import CandidatesSerializer
-            candidate_serializer = CandidatesSerializer(obj.candidate)
-            return candidate_serializer.data.get("image", None)
+        if obj.candidate and obj.candidate.image:
+            return obj.candidate.image.url
         return None
 
     def create(self, validated_data):
@@ -100,13 +104,25 @@ class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer)
         return super().update(instance, validated_data)
 
 class ElectionCommitteesSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    admin_serializer_classes = (TrackMixin,)  # Define the tuple of admin serializers here.
-
+    """ Serializer for the ElectionCommittees model. """
+    admin_serializer_classes = (TrackMixin,)
+    
     class Meta:
         model = ElectionCommittees
-        fields = "__all__"
+        fields = ["id", "election", "name", "gender", "location"]
 
-class ElectionCommitteeResultsSerializer(TrackMixin, serializers.ModelSerializer):
+    def create(self, validated_data):
+        """ Customize creation (POST) of an instance """
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        """ Customize update (PUT, PATCH) of an instance """
+        # Additional logic to customize instance updating
+        return super().update(instance, validated_data)
+
+class ElectionCommitteeResultsSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    admin_serializer_classes = (TrackMixin,)
+
     class Meta:
         model = ElectionCommitteeResults
         fields = "__all__"

@@ -1,11 +1,11 @@
 # Elections Model
 from django.db import models
-from restapi.modelsHelper import TrackModel, ElectionTypeOptions, ElectionResultsOptions, StatusOptions, PriorityOptions, GenderOptions
+from restapi.modelsHelper import TrackModel, TaskModel, ElectionTypeOptions, ElectionResultsOptions, StatusOptions, PriorityOptions, GenderOptions
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum
 
-class Elections(TrackModel):
+class Elections(TrackModel, TaskModel):
     # Basic Information
     due_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('Categories', on_delete=models.SET_NULL, null=True, blank=True, related_name='category_elections')
@@ -28,11 +28,6 @@ class Elections(TrackModel):
     attendees = models.PositiveIntegerField(blank=True, null=True)
     attendees_males = models.PositiveIntegerField(blank=True, null=True)
     attendees_females = models.PositiveIntegerField(blank=True, null=True)
-
-    # Administration
-    moderators = models.CharField(max_length=255, blank=True, null=True)
-    status = models.IntegerField(choices=StatusOptions.choices, blank=True, null=True)
-    priority = models.IntegerField(choices=PriorityOptions.choices, blank=True, null=True)
 
     class Meta:
         # managed = False

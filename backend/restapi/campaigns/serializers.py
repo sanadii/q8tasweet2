@@ -1,6 +1,6 @@
 # restapi/campaigns/serializers.py
 from rest_framework import serializers
-from restapi.base_serializer import TrackMixin, TaskMixin
+from restapi.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 from restapi.models import (
     Elections, ElectionCandidates, ElectionCommittees,
@@ -13,13 +13,27 @@ from restapi.models import (
 from restapi.candidates.serializers import CandidatesSerializer
 from restapi.elections.serializers import ElectionsSerializer
 
-class CampaignsSerializer(serializers.ModelSerializer):
-    candidate = CandidatesSerializer(source='election_candidate.candidate', read_only=True)
-    election = ElectionsSerializer(source='election_candidate.election', read_only=True)
+class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """ Serializer for the Campaign model. """
+    admin_serializer_classes = (TrackMixin, TaskMixin)
+
+    candidate = CandidatesSerializer(source='election_candidate.candidate', read_only=True, context={"exclude_task_track": True})
+    election = ElectionsSerializer(source='election_candidate.election', read_only=True, context={"exclude_task_track": True})
     
     class Meta: 
         model = Campaigns
-        fields = "__all__"
+        fields = [
+            # Basic Information
+            "election", "candidate", "description",
+
+            # Media Coverage
+            "twitter", "instagram", "website",
+
+            # Activities
+            "target_score", "results", "events",
+        ]
+
+
 
 
 class CampaignDetailsSerializer(serializers.ModelSerializer):
@@ -77,7 +91,7 @@ class CampaignMembersSerializer(TrackMixin, serializers.ModelSerializer):
 
     class Meta:
         model = CampaignMembers
-        fields = [ "id", "user", "campaign", "rank", "supervisor", "committee", "notes", "mobile", "status"]
+        fields = [ "id", "user", "campaign", "rank", "supervisor", "committee", "notes", "phone", "status"]
 
 class CampaignGuaranteesSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
@@ -90,7 +104,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignGuarantees
-        fields = [ "id", "campaign", "member", "civil", "full_name", "mobile",
+        fields = [ "id", "campaign", "member", "civil", "full_name", "phone",
                   "gender", "membership_no", "box_no", "enrollment_date", "relationship",
                   "elector_notes", "notes", "status"
                   ]

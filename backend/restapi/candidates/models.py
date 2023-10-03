@@ -3,10 +3,10 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator, MaxValueValidator
 
-from restapi.modelsHelper import TrackModel, GenderOptions
+from restapi.modelsHelper import TrackModel, TaskModel, GenderOptions
 from restapi.validators import today
 
-class Candidates(TrackModel):
+class Candidates(TrackModel, TaskModel):
     # Basic Information
     name = models.CharField(max_length=255, blank=False, null=False)
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
@@ -28,10 +28,6 @@ class Candidates(TrackModel):
     # Taxonomies (Categories and Tags)
     tags = models.CharField(max_length=255, blank=True, null=True)
 
-    # Administration
-    moderators = models.CharField(max_length=255, blank=True, null=True)
-    status = models.IntegerField(blank=True, null=True)
-    priority = models.IntegerField(blank=True, null=True)
     class Meta:
         db_table = "candidate"
         verbose_name = "Candidate"

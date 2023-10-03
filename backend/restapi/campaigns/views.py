@@ -11,17 +11,13 @@ from .models import *
 import ast 
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
-from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-
-from django.db.models import Count, Case, When, IntegerField
-from collections import defaultdict
 from rest_framework import status
 import jwt
 from django.conf import settings
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import status
 
 
 # class GetCampaigns(APIView):
@@ -31,34 +27,102 @@ from django.conf import settings
 
 #         return Response({"data": data_serializer.data, "code": 200})
 
+class CustomPagination(PageNumberPagination):
+    page_size = 50
+
+    def get_paginated_response(self, data):
+        return Response({
+            "count": self.page.paginator.count,
+            "next": self.get_next_link(),
+            "previous": self.get_previous_link(),
+            "data": data,
+        })
+
 
 class GetCampaigns(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         try:
-            current_user_id = request.user.id
+            # Check if user is staff
+            if request.user.is_staff:
+                campaignss_data = Campaigns.objects.all()
+                paginator = CustomPagination()
+                paginated_campaignss = paginator.paginate_queryset(campaignss_data, request)
+                
+                # Passing context with request to the serializer
+                context = {"request": request}
+                data_serializer = CampaignsSerializer(paginated_campaignss, many=True, context=context)
+                
+                return paginator.get_paginated_response(data_serializer.data)
 
-            # Step 1: Query the CampaignMembers table
-            member_entries = CampaignMembers.objects.filter(user_id=current_user_id)
-            
-            # Step 2: Get corresponding Campaigns
-            campaign_ids = [entry.campaign.id for entry in member_entries if entry.campaign]
-            campaigns_data = Campaigns.objects.filter(id__in=campaign_ids)
-            
-            # Step 3: Serialize the data
-            data_serializer = CampaignsSerializer(campaigns_data, many=True)
+            else:  # if user is not staff
+                current_user_id = request.user.id
 
-            return Response({
-                "data": data_serializer.data,
-                # "currentUserId": current_user_id,
-                "code": 200
-            }, status=status.HTTP_200_OK)
+                # Step 1: Query the CampaignMembers table
+                member_entries = CampaignMembers.objects.filter(user_id=current_user_id)
+                
+                # Step 2: Get corresponding Campaigns
+                campaign_ids = [entry.campaign.id for entry in member_entries if entry.campaign]
+                campaigns_data = Campaigns.objects.filter(id__in=campaign_ids)
+                
+                # Step 3: Serialize the data
+                data_serializer = CampaignsSerializer(campaigns_data, many=True)
+
+                return Response({
+                    "data": data_serializer.data,
+                    "code": 200
+                }, status=status.HTTP_200_OK)
 
         except AuthenticationFailed as auth_failed:
             return Response({"error": str(auth_failed)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class GetCampaigns(APIView):
+#     permission_classes = [AllowAny]
+    
+#     def get(self, request, *args, **kwargs):
+#         campaignss_data = Elections.objects.all()
+#         paginator = CustomPagination()
+#         paginated_campaignss = paginator.paginate_queryset(campaignss_data, request)
+        
+#         # Passing context with request to the serializer
+#         context = {"request": request}
+#         data_serializer = ElectionsSerializer(paginated_campaignss, many=True, context=context)
+        
+#         return paginator.get_paginated_response(data_serializer.data)
+
+
+
+# class GetCampaigns(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         try:
+#             current_user_id = request.user.id
+
+#             # Step 1: Query the CampaignMembers table
+#             member_entries = CampaignMembers.objects.filter(user_id=current_user_id)
+            
+#             # Step 2: Get corresponding Campaigns
+#             campaign_ids = [entry.campaign.id for entry in member_entries if entry.campaign]
+#             campaigns_data = Campaigns.objects.filter(id__in=campaign_ids)
+            
+#             # Step 3: Serialize the data
+#             data_serializer = CampaignsSerializer(campaigns_data, many=True)
+
+#             return Response({
+#                 "data": data_serializer.data,
+#                 # "currentUserId": current_user_id,
+#                 "code": 200
+#             }, status=status.HTTP_200_OK)
+
+#         except AuthenticationFailed as auth_failed:
+#             return Response({"error": str(auth_failed)}, status=status.HTTP_401_UNAUTHORIZED)
+#         except Exception as e:
+#             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class GetCampaignDetails(APIView):
     permission_classes = [IsAuthenticated]
@@ -314,7 +378,7 @@ class AddNewCampaignMember(APIView):
             "supervisor": campaign_member.supervisor,
             "committee": campaign_member.committee,
             "notes": campaign_member.notes,
-            "mobile": campaign_member.mobile,
+            "phone": campaign_member.phone,
             "status": campaign_member.status,
         }
 
@@ -328,7 +392,7 @@ class UpdateCampaignMember(APIView):
         rank = request.data.get("rank")
         supervisor = request.data.get("supervisor")
         committee = request.data.get("committee")
-        mobile = request.data.get("mobile")
+        phone = request.data.get("phone")
         notes = request.data.get("notes")
         status = request.data.get("status")
 
@@ -357,7 +421,7 @@ class UpdateCampaignMember(APIView):
                 return Response({"error": "Committee not found"}, status=404)
         
         campaign_member.notes = notes
-        campaign_member.mobile = mobile
+        campaign_member.phone = phone
         campaign_member.status = status
         campaign_member.save()
 
@@ -372,7 +436,7 @@ class UpdateCampaignMember(APIView):
             "rank": campaign_member.rank,
             "supervisor": campaign_member.supervisor.id if campaign_member.supervisor else None,
             "committee": campaign_member.committee.id if campaign_member.committee else None,
-            "mobile": campaign_member.mobile,
+            "phone": campaign_member.phone,
             "notes": campaign_member.notes,
             "status": campaign_member.status,
         }
@@ -444,7 +508,7 @@ class UpdateCampaignGuarantee(APIView):
         # Basic Information
         campaign_id = request.data.get("campaign")
         member_id = request.data.get("member")
-        mobile = request.data.get("mobile")
+        phone = request.data.get("phone")
         status_value = request.data.get("status")
         notes = request.data.get("notes")
 
@@ -470,8 +534,8 @@ class UpdateCampaignGuarantee(APIView):
             campaign_guarantee.status = status_value
 
         # Update fields
-        if mobile:
-            campaign_guarantee.mobile = mobile
+        if phone:
+            campaign_guarantee.phone = phone
         if notes:
             campaign_guarantee.notes = notes
 
@@ -487,7 +551,7 @@ class UpdateCampaignGuarantee(APIView):
             # "full_name": elector.full_name(),  # Using the full_name method from Electors model
             "full_name": elector.full_name,  # Using the full_name method from Electors model
             "gender": elector.gender,
-            "mobile": campaign_guarantee.mobile,
+            "phone": campaign_guarantee.phone,
             "status": campaign_guarantee.status,
             "notes": campaign_guarantee.notes
         }
@@ -579,7 +643,7 @@ class UpdateElectionAttendee(APIView):
 
         # Basic Information
         member_id = request.data.get("member_id")
-        mobile = request.data.get("mobile")
+        phone = request.data.get("phone")
         status_value = request.data.get("status")
         notes = request.data.get("notes")
 
@@ -596,8 +660,8 @@ class UpdateElectionAttendee(APIView):
             campaign_guarantee.status = status_value
 
         # Update fields
-        if mobile:
-            campaign_guarantee.mobile = mobile
+        if phone:
+            campaign_guarantee.phone = phone
         if notes:
             campaign_guarantee.notes = notes
 
@@ -611,7 +675,7 @@ class UpdateElectionAttendee(APIView):
             "civil": elector.civil,
             "full_name": elector.full_name(),  # Using the full_name method from Electors model
             "gender": elector.gender,
-            "mobile": campaign_guarantee.mobile,
+            "phone": campaign_guarantee.phone,
             "status": campaign_guarantee.status,
             "notes": campaign_guarantee.notes
         }

@@ -64,28 +64,47 @@ class TaskMixin(serializers.BaseSerializer):
 from rest_framework import serializers
 from collections.abc import Iterable  # Import Iterable to check if an object is iterable
 
+# class AdminFieldMixin(serializers.Serializer):
+#     def __init__(self, *args, **kwargs):
+#         super(AdminFieldMixin, self).__init__(*args, **kwargs)
+        
+#         # Initialize instances based on admin_serializer_classes
+#         self.admin_serializer_instances = []
+#         if hasattr(self, 'admin_serializer_classes'):
+#             for serializer_class in self.admin_serializer_classes:
+#                 instance = serializer_class()
+#                 self.admin_serializer_instances.append(instance)
+
+#     def to_representation(self, instance):
+#         user = self.context.get('request').user if 'request' in self.context else None
+#         representation = super().to_representation(instance)
+        
+#         if user and user.is_staff:
+#             if isinstance(self.admin_serializer_instances, Iterable):
+#                 for serializer_instance in self.admin_serializer_instances:
+#                     key = serializer_instance.__class__.__name__.lower().replace('mixin', '')
+#                     representation[key] = serializer_instance.to_representation(instance)  # Changed this line to use to_representation method of mixin
+#         return representation
+
 class AdminFieldMixin(serializers.Serializer):
     def __init__(self, *args, **kwargs):
-        # Initialize instances of TrackMixin and TaskMixin
-        track_mixin_instance = TrackMixin()
-        task_mixin_instance = TaskMixin()
-
-        # Store instances in a tuple so they can be iterated over
-        self.admin_serializer_instances = (track_mixin_instance, task_mixin_instance)
-        
         super(AdminFieldMixin, self).__init__(*args, **kwargs)
+        
+        # Ensure admin_serializer_classes is iterable
+        serializer_classes = getattr(self, 'admin_serializer_classes', ())
+        if not isinstance(serializer_classes, (list, tuple)):
+            serializer_classes = [serializer_classes]
+
+        # Initialize instances based on admin_serializer_classes
+        self.admin_serializer_instances = [cls() for cls in serializer_classes]
 
     def to_representation(self, instance):
-        # Check if 'request' is in context and get the user from it
         user = self.context.get('request').user if 'request' in self.context else None
         representation = super().to_representation(instance)
         
-        # Check if the user is set and is_staff
         if user and user.is_staff:
-            # Check if admin_serializer_instances is iterable before attempting to iterate
             if isinstance(self.admin_serializer_instances, Iterable):
                 for serializer_instance in self.admin_serializer_instances:
                     key = serializer_instance.__class__.__name__.lower().replace('mixin', '')
-                    representation[key] = serializer_instance.data  # Attach the serializer_instance data to the representation under the derived key name
+                    representation[key] = serializer_instance.to_representation(instance)  # Changed this line to use to_representation method of mixin
         return representation
-

@@ -1,17 +1,26 @@
-# from candidates.models import Candidates
 from django.http import JsonResponse
 from django.http.response import JsonResponse
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from django.db.models.query import QuerySet
+from django.db.models import Sum
+from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+
+from http import HTTPStatus
+
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
+
 from restapi.serializers import *
 from restapi.models import *
 import ast 
-from datetime import datetime  # Add this line to import the datetime class
-from rest_framework.pagination import PageNumberPagination
+from datetime import datetime
+from operator import itemgetter
+
 
 
 def index(request):
@@ -30,113 +39,63 @@ class CustomPagination(PageNumberPagination):
         })
 
 
+
 class GetCandidates(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request, *args, **kwargs):
-        elections_data = Candidates.objects.all()
+        candidates_data = Candidates.objects.all()
         paginator = CustomPagination()
-        paginated = paginator.paginate_queryset(elections_data, request)
+        paginated_candidates = paginator.paginate_queryset(candidates_data, request)
         
         # Passing context with request to the serializer
         context = {"request": request}
-        data_serializer = CandidatesSerializer(paginated, many=True, context=context)
+        data_serializer = CandidatesSerializer(paginated_candidates, many=True, context=context)
         
         return paginator.get_paginated_response(data_serializer.data)
 
+# class GetCandidateDetails(APIView):
+#     def get(self, request, id):
+#         candidate = get_object_or_404(Candidates, id=id)
+#         context = {"request": request}
+
+#         candidate_candidates = CandidateCandidates.objects.filter(candidate=candidate).prefetch_related('candidate').only('id')
+#         candidate_committees = CandidateCommittees.objects.filter(candidate=candidate).select_related('candidate')
+
+#         return Response({
+#             "data": {
+#                 "candidateDetails": self.get_candidate_data(candidate, context),
+#                 "candidateCandidates": self.get_candidate_candidates(candidate_candidates, context),
+#                 "candidateCommittees": self.get_candidate_committees(candidate_committees, context),
+#                 "candidateCampaigns": self.get_candidate_campaigns(candidate, context),
+#             },
+#             "code": 200
+#         })
+
+#     def get_candidate_data(self, candidate, context):
+#         return CandidatesSerializer(candidate, context=context).data
+
+#     def get_candidate_candidates(self, candidate_candidates, context):
+#         return CandidateCandidatesSerializer(candidate_candidates, many=True, context=context).data
+
+#     def get_candidate_committees(self, candidate_committees, context):
+#         return CandidateCommitteesSerializer(candidate_committees, many=True, context=context).data
+
+#     def get_candidate_campaigns(self, candidate, context):
+#         candidate_candidate_ids = CandidateCandidates.objects.filter(candidate=candidate).values_list('id', flat=True)
+#         candidate_campaigns = Campaigns.objects.filter(candidate_candidate__in=candidate_candidate_ids)
+#         return CampaignsSerializer(candidate_campaigns, many=True, context=context).data
 
 class AddNewCandidate(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        User = get_user_model()
-
-        name = request.data.get("name")
-        image = request.data.get("image")
-        description = request.data.get("description")
-
-        # Candidate
-        gender = request.data.get("gender")
-        phone = request.data.get("phone")
-        email = request.data.get("email")
-        twitter = request.data.get("twitter")
-        instagram = request.data.get("instagram")
-
-        # Admin
-        moderators = self.get_moderators_list(request.data.get("moderators"))
-        status = request.data.get("status")
-        priority = request.data.get("priority")
-        deleted = request.data.get("deleted")
-        created_by = request.user
-
-        candidate = self.create_candidate(
-            name, image, description, gender, phone, email, twitter, instagram,
-            status, priority, moderators, created_by, deleted
-        )
-
-        new_candidate_data = self.prepare_new_candidate_data(candidate, moderators)
+        serializer = CandidatesSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
         
-        return Response({"data": new_candidate_data, "count": 0, "code": 200})
-
-    def get_instance(self, model, id):
-        if id:
-            try:
-                return model.objects.get(id=id)
-            except model.DoesNotExist:
-                return None
-        return None
-
-    def get_moderators_list(self, moderators):
-        if isinstance(moderators, str):
-            return ast.literal_eval(moderators)
-        return []
-
-    def create_candidate(self, name, image, description, gender, phone, email, twitter, instagram, status, priority, moderators, created_by, deleted):
-        candidate = Candidates(
-            name=name,
-            image=image,
-            gender=gender,
-            phone=phone,
-            email=email,
-            twitter=twitter,
-            instagram=instagram,
-            description=description,
-            status=status,
-            priority=priority,
-            moderators=moderators,
-            created_by=created_by,
-            deleted=deleted
-        )
-        candidate.save()
-        return candidate
-
-    def prepare_new_candidate_data(self, candidate, moderators):
-        new_candidate_data = {
-            "id": candidate.id,
-            "name": candidate.name,
-            "image": candidate.image.url if candidate.image else None,
-            "gender": candidate.gender,
-            "phone": candidate.phone,
-            "email": candidate.email,
-            "twitter": candidate.twitter,
-            "instagram": candidate.instagram,
-
-            # Admin
-            "status": candidate.status,
-            "priority": candidate.priority,
-            "moderators": moderators,  # Now this includes details not just IDs
-            "created_by": candidate.created_by.first_name if candidate.created_by else None,
-            "deleted": candidate.deleted,
-        }
-        return new_candidate_data
-
-
-class DeleteCandidate(APIView):
-    def delete(self, request, id):
-        try:
-            candidate = Candidates.objects.get(id=id)
-            candidate.delete()
-            return JsonResponse({"data": "Candidate deleted successfully", "count": 1, "code": 200}, safe=False)
-        except Candidates.DoesNotExist:
-            return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateCandidate(APIView):
     permission_classes = [IsAuthenticated]
@@ -146,86 +105,19 @@ class UpdateCandidate(APIView):
             candidate = Candidates.objects.get(id=id)
         except Candidates.DoesNotExist:
             return Response({"error": "Candidate not found"}, status=404)
-
-        # Extract the desired fields from the request data
-        name = request.data.get("name")
-        image = request.data.get("image")
-        gender = request.data.get("gender")
-
-        description = request.data.get("description")
-
-        # Admin
-        moderators = self.get_moderators_list(request.data.get("moderators"))
         
-        status = request.data.get("status")
-        priority = request.data.get("priority")
-        deleted = request.data.get("deleted")
-        updated_by = request.user
+        serializer = CandidatesSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200})
+        return Response(serializer.errors, status=400)
 
-        if isinstance(moderators, str):
-            moderators = ast.literal_eval(moderators)
-
-        # Update the candidate object with the new values
-        candidate.name = name
-        candidate.gender = gender
-        candidate.description = description
-        if image:
-            candidate.image = image
-
-        # Admin
-        candidate.priority = priority
-        candidate.status = status
-        candidate.moderators = moderators
-
-        # System
-        candidate.deleted = deleted
-        candidate.updated_by = updated_by
-
-        candidate.save()
-
-        # Fetch the updated list of moderators
-        moderators_list = self.get_updated_moderators_list(moderators)
-
-        # Return the updated candidate data in the response
-        updated_candidate_data = self.prepare_updated_candidate_data(candidate, moderators_list)
-
-        return Response({"data": updated_candidate_data, "count": 0, "code": 200})
-
-    # Add the following utility methods here
-
-    def get_moderators_list(self, moderators):
-        if isinstance(moderators, str):
-            return ast.literal_eval(moderators)
-        return []
-
-    def get_updated_moderators_list(self, moderators):
-        moderators_list = []
-        if moderators:
-            for moderator_id in moderators:
-                try:
-                    moderator = User.objects.get(id=moderator_id)
-                    moderators_list.append({
-                        "id": moderator.id,
-                        "img": moderator.image.url if moderator.image else None,
-                        "name": f"{moderator.first_name} {moderator.last_name}",
-                    })
-                except User.DoesNotExist:
-                    pass
-        return moderators_list
-
-    def prepare_updated_candidate_data(self, candidate, moderators_list):
-        updated_candidate_data = {
-            "id": candidate.id,
-            "name": candidate.name,
-            "gender": candidate.gender,
-            "image": candidate.image.url if candidate.image else None,
-            "description": candidate.description,
-            # Admin
-            "status": candidate.status,
-            "priority": candidate.priority,
-            "moderators": moderators_list,
-            "updatedBy": candidate.updated_by.first_name,
-            "deleted": candidate.deleted,
-        }
-        return updated_candidate_data
-    
+class DeleteCandidate(APIView):
+    def delete(self, request, id):
+        try:
+            candidate = Candidates.objects.get(id=id)
+            candidate.delete()
+            return JsonResponse({"data": "Candidate deleted successfully", "count": 1, "code": 200}, safe=False)
+        except Candidates.DoesNotExist:
+            return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)

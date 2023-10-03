@@ -5,4 +5,4 @@ def today():
     return date.today()
 
 civil_validator = RegexValidator(regex=r'^\d{12}$', message="Civil must be exactly 12 digits.")
-mobile_validator = RegexValidator(regex=r'^\d{8}$', message="Mobile must be exactly 8 digits.")
+phone_validator = RegexValidator(regex=r'^\d{8}$', message="phone must be exactly 8 digits.")

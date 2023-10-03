@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.core.validators import RegexValidator, MaxValueValidator
 
 from restapi.modelsHelper import TrackModel, GenderOptions
-from restapi.validators import today, civil_validator, mobile_validator
+from restapi.validators import today, civil_validator, phone_validator
   
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, username, first_name, password, **other_fields):
@@ -52,7 +52,7 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
     description = models.TextField(_('description'), blank=True)
 
     # User Contact
-    mobile = models.CharField(max_length=8, blank=True, null=True, validators=[mobile_validator])
+    phone = models.CharField(max_length=8, blank=True, null=True, validators=[phone_validator])
     twitter = models.CharField(max_length=150, blank=True)  # New
     instagram = models.CharField(max_length=150, blank=True)  # New
     

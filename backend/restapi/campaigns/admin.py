@@ -33,23 +33,23 @@ class CampaignMembersAdmin(admin.ModelAdmin):
     
     rank_display.short_description = 'Rank'
 
-    list_display = ['user', 'campaign', 'rank_display', 'supervisor', 'committee', 'civil', 'mobile', 'status']
+    list_display = ['user', 'campaign', 'rank_display', 'supervisor', 'committee', 'civil', 'phone', 'status']
     list_filter = ['campaign', 'rank']
     search_fields = ['user__username', 'campaign__title', 'committee__name']  
     readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']
 
     fieldsets = [
-        ('Basic Information', {'fields': ['user', 'campaign', 'rank', 'supervisor', 'committee', 'civil', 'mobile', 'notes', 'status']}),
+        ('Basic Information', {'fields': ['user', 'campaign', 'rank', 'supervisor', 'committee', 'civil', 'phone', 'notes', 'status']}),
         ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']}),
     ]
 
 class CampaignGuaranteesAdmin(admin.ModelAdmin):
-    list_display = ['campaign', 'member', 'civil', 'mobile', 'notes', 'status']
-    search_fields = ['campaign__title', 'member__user__username', 'civil__full_name', 'mobile']
+    list_display = ['campaign', 'member', 'civil', 'phone', 'notes', 'status']
+    search_fields = ['campaign__title', 'member__user__username', 'civil__full_name', 'phone']
     list_filter = ['campaign', 'member', 'status']
 
     fieldsets = [
-        ('Basic Information', {'fields': ['campaign', 'member', 'civil', 'mobile', 'notes', 'status']}),
+        ('Basic Information', {'fields': ['campaign', 'member', 'civil', 'phone', 'notes', 'status']}),
         ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']}),
     ]
 

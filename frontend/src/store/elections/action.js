@@ -137,18 +137,6 @@ export const getElectionCandidates = (election) => ({
   type: GET_ELECTION_CANDIDATES,
   payload: election,
 });
-export const updateElectionCandidate = electionCandidate => ({
-  type: UPDATE_ELECTION_CANDIDATE,
-  payload: electionCandidate,
-});
-export const updateElectionCandidateSuccess = electionCandidate => ({
-  type: UPDATE_ELECTION_CANDIDATE_SUCCESS,
-  payload: electionCandidate,
-});
-export const updateElectionCandidateFail = error => ({
-  type: UPDATE_ELECTION_CANDIDATE_FAIL,
-  payload: error,
-});
 
 export const addNewElectionCandidate = electionCandidate => ({
   type: ADD_NEW_ELECTION_CANDIDATE,
@@ -164,6 +152,20 @@ export const addElectionCandidateFail = error => ({
   type: ADD_ELECTION_CANDIDATE_FAIL,
   payload: error,
 });
+
+export const updateElectionCandidate = electionCandidate => ({
+  type: UPDATE_ELECTION_CANDIDATE,
+  payload: electionCandidate,
+});
+export const updateElectionCandidateSuccess = electionCandidate => ({
+  type: UPDATE_ELECTION_CANDIDATE_SUCCESS,
+  payload: electionCandidate,
+});
+export const updateElectionCandidateFail = error => ({
+  type: UPDATE_ELECTION_CANDIDATE_FAIL,
+  payload: error,
+});
+
 
 export const deleteElectionCandidate = electionCandidate => ({
   type: DELETE_ELECTION_CANDIDATE,

@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Link } from "react-router-dom";
+// React core imports
+import React, { useState, useEffect } from "react";
+
+// Redux imports
 import { useSelector, useDispatch } from "react-redux";
-import { getCandidates, addNewElectionCampaign, updateElectionCampaign } from "../../../../store/actions";
+import { addNewElectionCampaign } from "../../../../store/actions";
 
+// Router & navigation imports
+import { Link } from "react-router-dom";
+
+// Component imports
 import { ImageCircle } from "../../../../Components/Common";
-// Form validation imports
-import * as Yup from "yup";
-import { useFormik } from "formik";
 
-import "react-toastify/dist/ReactToastify.css";
-
-// Reactstrap (UI) imports
-import { Col, Row, ModalBody, Label, Input, Modal, ModalHeader, Form, ModalFooter, Button, FormFeedback } from "reactstrap";
+// UI Components & styling imports
+import { ModalBody, Input, Modal, ModalHeader, Form } from "reactstrap";
 
 // Additional package imports
 import SimpleBar from "simplebar-react";
-import Flatpickr from "react-flatpickr";
 
 export const ElectionCampaignModal = ({ modal, toggle, setModal, isEdit, electionCampaign }) => {
   const dispatch = useDispatch();

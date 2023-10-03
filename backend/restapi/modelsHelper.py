@@ -1,5 +1,7 @@
 # modelsHelpers.py
 from django.db import models
+from django.utils import timezone
+
 from django.core.validators import RegexValidator
 
 
@@ -58,18 +60,18 @@ class TrackModel(models.Model):
     created_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_created')
     updated_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_updated')
     deleted_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_deleted')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
-    deleted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(blank=True, null=True)
+    deleted = models.BooleanField(blank=True, null=True, default=False)
 
     class Meta:
         abstract = True
 
-# class TaskModel(models.Model):
-#     moderators = models.CharField(max_length=255, blank=True, null=True)
-#     status = models.IntegerField(choices=StatusOptions.choices, blank=True, null=True)
-#     priority = models.IntegerField(choices=PriorityOptions.choices, blank=True, null=True)
+class TaskModel(models.Model):
+    status = models.IntegerField(choices=StatusOptions.choices, blank=True, null=True)
+    priority = models.IntegerField(choices=PriorityOptions.choices, blank=True, null=True)
+    moderators = models.CharField(max_length=255, blank=True, null=True)
 
-#     class Meta:
-#         abstract = True
+    class Meta:
+        abstract = True

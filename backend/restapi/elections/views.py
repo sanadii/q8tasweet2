@@ -1,14 +1,11 @@
 # from elections.models import Elections
 from django.http import JsonResponse
 from django.http.response import JsonResponse
-from django.db.models.query import QuerySet
 from django.db.models import Sum
-from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 
-from http import HTTPStatus
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -18,16 +15,13 @@ from rest_framework.pagination import PageNumberPagination
 
 from restapi.serializers import *
 from restapi.models import *
-import ast 
-from datetime import datetime
-from operator import itemgetter
 
 
 def index(request):
     return render(request, "index.html")
 
 # Elections: getElection, deleteElection, addElection, updateElection, ElectionCount
-class CustomElectionPagination(PageNumberPagination):
+class CustomPagination(PageNumberPagination):
     page_size = 50
 
     def get_paginated_response(self, data):
@@ -43,7 +37,7 @@ class GetElections(APIView):
     
     def get(self, request, *args, **kwargs):
         elections_data = Elections.objects.all()
-        paginator = CustomElectionPagination()
+        paginator = CustomPagination()
         paginated_elections = paginator.paginate_queryset(elections_data, request)
         
         # Passing context with request to the serializer
@@ -127,64 +121,41 @@ class AddNewElectionCandidate(APIView):
 
     def post(self, request):
         serializer = ElectionCandidatesSerializer(data=request.data, context={'request': request})
+        
         if serializer.is_valid():
             serializer.save()
-            return Response({"data": serializer.data, "code": 200})
-        return Response(serializer.errors, status=400)
-
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
 
 class UpdateElectionCandidate(APIView):
-    permission_classes = [IsAuthenticated]  # You may want to include permission classes to ensure security
+    permission_classes = [IsAuthenticated]
 
     def patch(self, request, id):
         try:
             election_candidate = ElectionCandidates.objects.get(id=id)
         except ElectionCandidates.DoesNotExist:
-            return Response({"error": "Election candidate not found"}, status=404)
+            return Response({"data": "Election candidate not found", "count": 0, "code": 404}, status=404)
         
-        # Initialize the serializer with the election_candidate instance and the new data
         serializer = ElectionCandidatesSerializer(instance=election_candidate, data=request.data, partial=True, context={'request': request})
         
         if serializer.is_valid():
-            serializer.save()  # This will handle the update of the election_candidate object with the validated data
-            return Response({"data": serializer.data, "count": 0, "code": 200})
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
 
 class DeleteElectionCandidate(APIView):
+    permission_classes = [IsAuthenticated]
+
     def delete(self, request, id):
         try:
             election_candidate = ElectionCandidates.objects.get(id=id)
             election_candidate.delete()
-            return JsonResponse(
-                {"data": "Election deleted successfully", "count": 1, "code": 200},
-                safe=False,
-            )
-        except Elections.DoesNotExist:
-            return JsonResponse(
-                {"data": "Election not found", "count": 0, "code": 404}, safe=False
-            )
+            return Response({"data": "Election candidate deleted successfully", "count": 1, "code": 200}, status=200)
+        except ElectionCandidates.DoesNotExist:
+            return Response({"data": "Election candidate not found", "count": 0, "code": 404}, status=404)
 
-class GetElectionCount(APIView):
-    def get(self, request):
-        total_count = Elections.objects.count()
-        new_count = Elections.objects.filter(status="New").count()
-        inprogress_count = Elections.objects.filter(
-            status="Inprogress").count()
-        pending_count = Elections.objects.filter(status="Pending").count()
-        completed_count = Elections.objects.filter(status="Completed").count()
-
-        data = {
-            "total_elections": total_count,
-            "new_elections": new_count,
-            "inprogress_elections": inprogress_count,
-            "pending_elections": pending_count,
-            "completed_elections": completed_count,
-        }
-
-        return Response({"data": data, "count": 0, "code": 200})
-
-# Committees: getCommittee, deleteCommittee, addCommittee, updateCommittee, CommitteeCount
+# ElectionCandidates -----------------
 class GetCommittees(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -195,50 +166,15 @@ class GetCommittees(APIView):
         return Response({"data": data_serializer.data, "counts": 1, "code": 200})
 
 class AddNewElectionCommittee(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        try:
-            # Get user model and authenticated user
-            User = get_user_model()
-            created_by = request.user
+        serializer = ElectionCommitteesSerializer(data=request.data, context={'request': request})
 
-            # Deserialize the request data using a serializer (you need to define this serializer)
-            serializer = ElectionCommitteesSerializer(data=request.data)
-
-            if serializer.is_valid():
-                # Create a new committee object with the serializer"s validated data
-                committee_data = serializer.validated_data
-                committee_data["election_id"] = request.data.get("election_id")
-                committee_data["created_by"] = created_by
-                committee = ElectionCommittees(**committee_data)
-                committee.save()
-
-                new_committee_data = self.prepare_new_committee_data(committee)
-
-                return Response({"data": new_committee_data, "count": 1, "code": status.HTTP_201_CREATED})
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def prepare_new_committee_data(self, committee):
-        new_committee_data = {
-            "id": committee.id,
-            "election_id": committee.election_id,
-            "name": committee.name,
-            "gender": committee.gender,
-            "created_by": committee.created_by.first_name if committee.created_by else None,
-            "deleted": committee.deleted,
-        }
-        return new_committee_data
-
-class DeleteElectionCommittee(APIView):
-    def delete(self, request, id):
-        try:
-            committee = ElectionCommittees.objects.get(id=id)
-            committee.delete()
-            return JsonResponse({"data": "Committee deleted successfully", "count": 1, "code": 200}, safe=False)
-        except ElectionCommittees.DoesNotExist:
-            return JsonResponse({"data": "Committee not found", "count": 0, "code": 404}, safe=False)
+        if serializer.is_valid():
+            serializer.save(created_by=request.user)
+            return Response({"data": serializer.data, "count": 1, "code": status.HTTP_201_CREATED})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateElectionCommittee(APIView):
     permission_classes = [IsAuthenticated]
@@ -247,33 +183,25 @@ class UpdateElectionCommittee(APIView):
         try:
             committee = ElectionCommittees.objects.get(id=id)
         except ElectionCommittees.DoesNotExist:
-            return Response({"error": "Committee not found"}, status=404)
+            return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Extract the desired fields from the request data
-        name = request.data.get("name")
-        gender = request.data.get("gender")
-        election_id = request.data.get("election_id")
+        serializer = ElectionCommitteesSerializer(committee, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": status.HTTP_200_OK})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if the fields are not None before updating
-        if name is not None:
-            committee.name = name
-        if gender is not None:
-            committee.gender = gender
-        
-        # Set the election using the provided election_id
+class DeleteElectionCommittee(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
         try:
-            election = Elections.objects.get(id=election_id)
-            committee.election = election
-        except Elections.DoesNotExist:
-            return Response({"error": "Election not found"}, status=404)
+            committee = ElectionCommittees.objects.get(id=id)
+            committee.delete()
+            return Response({"data": "Committee deleted successfully", "count": 1, "code": status.HTTP_200_OK})
+        except ElectionCommittees.DoesNotExist:
+            return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Save the committee
-        committee.save(update_fields=["name", "gender", "election"])
-
-        # Serialize the updated committee object
-        serialized_data = ElectionCommitteesSerializer(committee).data
-
-        return Response({"data": serialized_data, "count": 1, "code": 200})
 
 class UpdateElectionCommitteeResults(APIView):
     permission_classes = [IsAuthenticated]  # Assuming only authenticated users can update

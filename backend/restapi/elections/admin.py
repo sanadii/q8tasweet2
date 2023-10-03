@@ -52,7 +52,7 @@ class ElectionCommitteesAdmin(admin.ModelAdmin):
     list_display = ['name', 'election', 'location']
     list_filter = ['election']
     search_fields = ['name', 'election__name', 'location']
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
+    # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
 class ElectionCommitteeResultsAdmin(admin.ModelAdmin):
     list_display = ['id']

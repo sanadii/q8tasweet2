@@ -14,9 +14,9 @@ export const DeleteModal = ({ show, onDeleteClick, onCloseClick }) => {
             style={{ width: "100px", height: "100px" }}
           ></lord-icon>
           <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-            <h4>Are you sure ?</h4>
+            <h4>هل أنت متأكد؟</h4>
             <p className="text-muted mx-4 mb-0">
-              Are you sure you want to remove this record ?
+              هل أنت متأكد أنك تريد حذف هذا السجل؟
             </p>
           </div>
         </div>
@@ -27,7 +27,7 @@ export const DeleteModal = ({ show, onDeleteClick, onCloseClick }) => {
             data-bs-dismiss="modal"
             onClick={onCloseClick}
           >
-            Close
+            اغلق
           </button>
           <button
             type="button"
@@ -35,7 +35,7 @@ export const DeleteModal = ({ show, onDeleteClick, onCloseClick }) => {
             id="delete-record"
             onClick={onDeleteClick}
           >
-            Yes, Delete It!
+            نعم، احذف!
           </button>
         </div>
       </ModalBody>
