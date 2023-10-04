@@ -12,6 +12,7 @@ const defaultImagePath = 'media/candidates/default.jpg';
 const defaultCandidatePath = 'media/candidates/default.jpg';
 const defaultElectionPath = 'media/candidates/default.jpg';
 const defaultUserPath = 'media/candidates/default.jpg';
+const defaultCampaignBgPath = 'media/candidates/default.jpg';
 
 
 export const ImageCircle = ({ imagePath }) => {
@@ -140,7 +141,9 @@ export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner 
 
 
 export const ImageCampaignBackground = ({ imagePath }) => {
-  const imageUrl = `${mediaUrl}${imagePath}`;
+  const imageUrl = imagePath ?
+    `${mediaUrl}${imagePath}` :
+    `${mediaUrl}${defaultCampaignBgPath}`;
 
   return (
     <div className="profile-foreground position-relative mx-n4 mt-n4">
@@ -150,6 +153,8 @@ export const ImageCampaignBackground = ({ imagePath }) => {
     </div>
   );
 };
+
+
 export const ImageCandidateCampaign = ({ imagePath }) => {
   const imageUrl = `${mediaUrl}${imagePath}`;
 

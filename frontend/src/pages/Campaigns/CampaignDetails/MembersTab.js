@@ -19,7 +19,7 @@ const MembersTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const { currentCampaignMember, campaignGuarantees, campaignMembers, campaignCommittees, electionsSelector, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
+  const { currentCampaignMember, campaignGuarantees, campaignMembers, campaignCommittees, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   // --------------- Constants ---------------
@@ -108,7 +108,7 @@ const MembersTab = () => {
   // Toggle
   const toggle = useCallback(() => {
     setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
-}, []);
+  }, []);
 
   const handleCampaignMemberClicks = () => {
     setCampaignMember("");
@@ -118,11 +118,11 @@ const MembersTab = () => {
 
   const getGuaranteeCountForMember = useCallback((memberId) => {
     return campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
-}, [campaignGuarantees]);
+  }, [campaignGuarantees]);
 
-const getAttendeeCountForMember = useCallback((memberId) => {
+  const getAttendeeCountForMember = useCallback((memberId) => {
     return electionsSelector.filter(attendee => attendee.member === memberId).length;
-}, [electionsSelector]);
+  }, [electionsSelector]);
 
 
   const handleCampaignMemberClick = useCallback(
@@ -188,7 +188,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
           <>
             <div className="d-flex align-items-center">
               <div className="flex-shrink-0">
-                {campaignMember.row.original.user.image ? (
+                {/* {campaignMember.row.original.user.image ? (
                   // Use the ImageCircle component here
                   <ImageCircle
                     imagePath={campaignMember.row.original.user.image}
@@ -199,7 +199,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
                       {campaignMember.row.original.user.name.charAt(0)}
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               <div className="flex-grow-1 ms-2 name">
                 {campaignMember.row.original.user.name}{" "}
@@ -430,7 +430,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
 
     return isValid;
   });
-  
+
   return (
     <React.Fragment>
       <DeleteModal
@@ -472,7 +472,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
 
-                {campaignMemberList ? (
+                {campaignMemberList && campaignMemberList.length ? (
                   <TableContainer
                     // Others to be investigateed
                     modal={modal}
@@ -515,7 +515,7 @@ const getAttendeeCountForMember = useCallback((memberId) => {
                     theadClass="table-light"
                   />
                 ) : (
-                  <Loader error={error} />
+                  <p>لا يوجد فريق عمل</p>
                 )}
               </div>
               <ToastContainer closeButton={false} limit={1} />

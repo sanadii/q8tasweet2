@@ -53,8 +53,6 @@ const Section = ({
     (option) => option.id === rankId
   );
 
-  const { currentUser } = useSelector(electionsSelector);
-
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
@@ -68,11 +66,11 @@ const Section = ({
   };
   return (
     <React.Fragment>
-      <ImageCampaignBackground imagePath={campaign.election.image} />
+      <ImageCampaignBackground imagePath={campaign?.election?.image} />
       <div className="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
         <Row className="g-4">
           <div className="col-auto">
-            <AvatarMedium imagePath={campaign.candidate.image} />
+            <AvatarMedium imagePath={campaign?.candidate?.image} />
           </div>
 
           <Col>
@@ -203,7 +201,7 @@ const Section = ({
                     style={{ backgroundColor: 'black' }}
                   >
                     <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                    <span className="d-none d-md-inline-block">بحث الناخبين 
+                    <span className="d-none d-md-inline-block">بحث الناخبين
                     </span>
                   </NavLink>
                 </NavItem>

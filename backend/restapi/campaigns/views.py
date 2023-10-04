@@ -11,17 +11,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
-from django.conf import settings
 from restapi.helper.views_helper import CustomPagination
-
-
-# class GetCampaigns(APIView):
-#     def get(self, request):
-#         campaigns_data = Campaigns.objects.all()
-#         data_serializer = CampaignsSerializer(campaigns_data, many=True)
-
-#         return Response({"data": data_serializer.data, "code": 200})
-
 
 
 class GetCampaigns(APIView):
@@ -99,9 +89,10 @@ class GetCampaignDetails(APIView):
                     "campaignDetails": campaign_data,
                     "campaignMembers": campaign_members,
                     "campaignGuarantees": campaign_guarantees,
+                    "electionAttendees": election_attendees,
                     "electionCandidates": election_candidates,
                     "electionCommittees": election_committees,
-                    "electionAttendees": election_attendees,
+                    
 
                 },
                 "code": 200
@@ -196,7 +187,10 @@ class GetCampaignDetails(APIView):
 
     def get_campaign_guarantees(self, campaign_members, election_id):
         # Extract the IDs from campaign_members
-        campaign_member_ids = [member["id"] for member in campaign_members]
+        campaign_member_ids = [member.get("id") for member in campaign_members if member.get("id") is not None]
+
+        if not campaign_member_ids:
+            return []
 
         # Fetch CampaignGuarantees related to the campaign members
         campaign_guarantees_query = CampaignGuarantees.objects.filter(member__id__in=campaign_member_ids)
@@ -259,23 +253,9 @@ class DeleteCampaign(APIView):
             return JsonResponse({"data": "Campaign deleted successfully", "count": 1, "code": 200}, safe=False)
         except Campaigns.DoesNotExist:
             return JsonResponse({"data": "Campaign not found", "count": 0, "code": 404}, safe=False)
-    
-class DeleteCampaignMember(APIView):
-    def delete(self, request, id):
-        try:
-            campaign_member = CampaignMembers.objects.get(id=id)
-            campaign_member.delete()
-            return JsonResponse(
-                {"data": "campaign member deleted successfully", "count": 1, "code": 200},
-                safe=False,
-            )
-        except Elections.DoesNotExist:
-            return JsonResponse(
-                {"data": "campaign not found", "count": 0, "code": 404}, safe=False
-            )
-        
 
 
+# Campaign Members
 class AddNewCampaignMember(APIView):
     def post(self, request):
         campaign_id = request.data.get("campaignId")
@@ -322,8 +302,6 @@ class AddNewCampaignMember(APIView):
         }
 
         return Response({"data": response_data, "count": 0, "code": 200})
-
-
 
 class UpdateCampaignMember(APIView):
     def patch(self, request, id):
@@ -381,6 +359,21 @@ class UpdateCampaignMember(APIView):
         }
 
         return Response({"data": updated_campaign_member_data, "count": 0, "code": 200})
+
+class DeleteCampaignMember(APIView):
+    def delete(self, request, id):
+        try:
+            campaign_member = CampaignMembers.objects.get(id=id)
+            campaign_member.delete()
+            return JsonResponse(
+                {"data": "campaign member deleted successfully", "count": 1, "code": 200},
+                safe=False,
+            )
+        except Elections.DoesNotExist:
+            return JsonResponse(
+                {"data": "campaign not found", "count": 0, "code": 404}, safe=False
+            )
+
 
 # Campaign Guarantees
 class AddNewCampaignGuarantee(APIView):

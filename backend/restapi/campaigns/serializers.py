@@ -12,6 +12,7 @@ from restapi.models import (
 
 from restapi.candidates.serializers import CandidatesSerializer
 from restapi.elections.serializers import ElectionsSerializer
+from restapi.users.serializers import UserSerializer
 
 class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Campaign model. """
@@ -48,7 +49,7 @@ class CampaignDetailsSerializer(serializers.ModelSerializer):
 
         election = ElectionsSerializer(read_only=True)
         candidate = CandidatesSerializer(read_only=True)
-        # user = UserSerializer(read_only=True)  # Assuming the user field name is 'user'
+        user = UserSerializer(read_only=True)  # Assuming the user field name is 'user'
         # image = serializers.ImageField(use_url=True)  # Ensure the image's URL is returned, not its data
 
     class Meta:

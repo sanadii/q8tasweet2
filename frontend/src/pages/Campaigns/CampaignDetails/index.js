@@ -10,34 +10,42 @@ import Section from "./Section";
 
 const CampaignDetails = () => {
   const dispatch = useDispatch();
-  const campaignId = useParams().id;
 
   document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
 
-  const { currentCampaignMember, campaign, campaignMembers, campaignGuarantees, campaignCommittees, isCampaignSuccess } = useSelector(electionsSelector);
+  const { campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, campaignCommittees, isCampaignSuccess } = useSelector(electionsSelector);
+
+  const [campaign, setCampaign] = useState({
+    id: useParams().id,
+  });
 
   useEffect(() => {
-    if (campaignId && !isEmpty({ id: campaignId })) {
-      dispatch(getCampaignDetails({ id: campaignId }));
+    if (campaign.id && !isEmpty(campaign)) {
+      dispatch(getCampaignDetails(campaign));
     }
-  }, [dispatch, campaignId]);
+  }, [dispatch, campaign, campaign.id]);
+
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {!campaign.election || !campaignMembers ? (
+
+          {!campaign || !campaignMembers ? (
             <div>إنتظار...</div>
           ) : (
             <Section
-              campaign={campaign}
+              campaign={campaignDetails}
               campaignMembers={campaignMembers}
               campaignGuarantees={campaignGuarantees}
               currentCampaignMember={currentCampaignMember}
               campaignCommittees={campaignCommittees}
             />
           )}
+
         </Container>
+
+
       </div>
     </React.Fragment>
   );

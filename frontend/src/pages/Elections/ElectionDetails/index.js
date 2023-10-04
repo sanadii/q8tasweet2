@@ -9,18 +9,14 @@ import { isEmpty } from "lodash";
 import Section from "./Section";
 
 const ElectionDetails = () => {
-  useEffect(() => {
-    document.title =
-      "Election Details | Q8Tasweet - React Admin & Dashboard Template";
-  }, []);
+  const dispatch = useDispatch();
 
+  document.title = "الانتخابات | Q8Tasweet - React Admin & Dashboard Template";
+
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees, categories } = useSelector(electionsSelector);
   const [election, setElection] = useState({
     id: useParams().id,
   });
-
-  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees, categories } = useSelector(electionsSelector);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (election.id && !isEmpty(election)) {

@@ -19,7 +19,7 @@ export const Filter = ({ column }) => {
 // Tab Filters
 const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
   const { campaignMembers, currentCampaignMember } = useSelector(electionsSelector);
-  const currentCampaignMemberRank = currentCampaignMember.rank.id;
+  const currentCampaignMemberRank = currentCampaignMember?.rank?.id || 10;
 
   const ranks = MemberRankOptions.filter((rank) =>
     rank.showTo.includes(currentCampaignMemberRank)

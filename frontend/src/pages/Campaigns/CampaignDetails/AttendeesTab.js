@@ -20,16 +20,13 @@ import "react-toastify/dist/ReactToastify.css";
 const AttendeesList = () => {
   const dispatch = useDispatch();
 
-  const { electionId, electionsSelector, campaignCommittees, campaignMembers, isElectionAttendeeSuccess, error  } = useSelector(electionsSelector);
+  const { electionId, campaignCommittees, campaignMembers, electionAttendees,isElectionAttendeeSuccess, error  } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
-
-  // ElectionAttendees Constants
-  const [electionAttendee, setElectionAttendee] = useState(null);
-  useState(electionsSelector);
-
   // Delete Modal Constants
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
+
+  const [electionAttendee, setElectionAttendee] = useState([]);
 
   // Delete Multiple Constants
   const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
@@ -269,7 +266,7 @@ const AttendeesList = () => {
     member: null,
   });
 
-  const electionAttendeeList = electionsSelector.filter(electionAttendee => {
+  const electionAttendeeList = electionAttendees.filter(electionAttendee => {
     let isValid = true;
     if (filters.global) {
       const globalSearch = filters.global.toLowerCase();

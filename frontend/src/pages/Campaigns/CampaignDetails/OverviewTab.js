@@ -13,10 +13,17 @@ const OverviewTab = () => {
 
   document.title = "Campaign Overview | Q8Tasweet";
 
-  const committeeObj = campaignCommittees.find(
-    (committee) => committee.id === currentCampaignMember.committee
-  );
-  const committeeName = committeeObj ? committeeObj.name : "Unknown";
+  // TODO: Move to helper
+  let committeeName = "Unknown";
+
+  if (Array.isArray(campaignCommittees)) {
+    const committeeObj = campaignCommittees.find(
+      (committee) => committee.id === currentCampaignMember.committee
+    );
+    if (committeeObj) {
+      committeeName = committeeObj.name;
+    }
+  }
 
   const rankObj = MemberRankOptions.find(
     (rank) => rank.id === currentCampaignMember.rank
@@ -266,10 +273,10 @@ const OverviewTab = () => {
               <ul>
                 <li>رمز الإنتخابات: <strong>{campaignDetails.election.id}</strong></li>
                 <li>الإسم: <strong>{campaignDetails.election.name}</strong></li>
-                <li>المرشحين: <strong>{campaignCandidates.length} مرشح</strong></li>
+                <li>المرشحين: <strong>{(campaignCandidates?.length ?? 0)} مرشح</strong></li>
                 <li>المقاعد: <strong>{campaignDetails.election.seats} مقعد</strong></li>
                 <li>الأصوات: <strong>{campaignDetails.election.votes} صوت</strong></li>
-                <li>اللجان: <strong>{campaignCommittees.length} لجنة</strong></li>
+                <li>المرشحين: <strong>{(campaignCandidates?.length ?? 0)} مرشح</strong></li>
               </ul>
             </CardBody>
           </Card>
