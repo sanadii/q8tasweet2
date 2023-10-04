@@ -1,6 +1,6 @@
 # restapi/campaigns/serializers.py
 from rest_framework import serializers
-from restapi.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+from restapi.helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 from restapi.models import (
     Elections, ElectionCandidates, ElectionCommittees,
@@ -16,25 +16,30 @@ from restapi.elections.serializers import ElectionsSerializer
 class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Campaign model. """
     admin_serializer_classes = (TrackMixin, TaskMixin)
-
-    candidate = CandidatesSerializer(source='election_candidate.candidate', read_only=True, context={"exclude_task_track": True})
-    election = ElectionsSerializer(source='election_candidate.election', read_only=True, context={"exclude_task_track": True})
+    candidate = CandidatesSerializer(source='election_candidate.candidate', read_only=True)
+    election = ElectionsSerializer(source='election_candidate.election', read_only=True)
     
     class Meta: 
         model = Campaigns
         fields = [
-            # Basic Information
-            "election", "candidate", "description",
-
-            # Media Coverage
+            "election_candidate", "election", "candidate", "description",
             "twitter", "instagram", "website",
-
-            # Activities
             "target_score", "results", "events",
         ]
+        
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        
+        # Remove unwanted fields from nested serializers
+        if "election" in rep:
+            rep["election"].pop("track", None)
+            rep["election"].pop("task", None)
+        
+        if "candidate" in rep:
+            rep["candidate"].pop("track", None)
+            rep["candidate"].pop("task", None)
 
-
-
+        return rep
 
 class CampaignDetailsSerializer(serializers.ModelSerializer):
 

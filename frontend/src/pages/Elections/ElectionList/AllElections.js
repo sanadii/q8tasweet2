@@ -1,7 +1,6 @@
 // React & Redux ------------
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, Row, Card, CardBody } from "reactstrap";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // Store ------------
@@ -9,10 +8,11 @@ import { getElections, deleteElection, getModeratorUsers, getCategories } from "
 
 // Custom Components & ConstantsImports ------------
 import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
-import ElectionModal from "./ElectionModal"
-import { Id, Name, CandidateCount, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
+import ElectionModal from "./ElectionModal";
+import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
-// Toast & Styles ------------
+// Styles & Toast ------------
+import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteElectionCampaign, addNewElectionCampaign } from "../../../store/actions";
+import { deleteElectionCampaign } from "../../../store/actions";
 import { Link } from "react-router-dom";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalHeader, ModalBody, Row, UncontrolledDropdown } from "reactstrap";
-
-import { ImageGenderCircle, ImageCandidateCampaign, DeleteModal } from "../../../Components/Common";
-
+import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
 import ElectionCampaignModal from "./Modals/ElectionCampaignModal";
+import { ImageCandidateCampaign, DeleteModal } from "../../../Components/Common";
 
 const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
   const dispatch = useDispatch();
-
-  const { electionCampaigns } = useSelector(electionsSelector);
+  const electionCampaigns = useSelector(electionsSelector);
 
   const [campaign, setCampaign] = useState([]);
   const [isBookmarkClick, setIsBookmarkClick] = useState(false);
@@ -32,7 +29,6 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
 
   // Modals: Delete, Set, Edit
   const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -98,9 +94,9 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
 
       <Row className="gy-2 mb-2" id="campaign-list">
         <div className="team-list list-view-filter">
-          {electionCampaigns && electionCampaigns.length ? (
+          {electionCampaigns && electionCampaigns.length > 0 ? (
             electionCampaigns.map((campaign, index) => (
-              <Card key={index} className="team-box">
+              <Card key={campaign.id} className="team-box">
                 <CardBody className="px-4">
                   <Row className="align-items-center team-row">
                     <div className="col team-settings">
@@ -164,7 +160,7 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
                             Candidate ID: {campaign.candidate.id}
                           </p>
                           <p className="text-muted mb-0 text-danger">
-                            Elcand ID: {campaign.election_candidate}
+                            ElectionCandidate ID: {campaign.electionCandidate}
                           </p>
                           <p className="text-muted mb-0">
                             Campaign ID: {campaign.id}
@@ -207,7 +203,7 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
               </Card>
             ))
           ) : (
-            <p>Error</p>
+            <p>No campaigns available.</p>
           )}
         </div>
       </Row>

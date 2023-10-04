@@ -3,8 +3,8 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from restapi.modelsHelper import TrackModel, TaskModel, RankOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
-from restapi.validators import civil_validator, phone_validator, today
+from restapi.helper.modelsHelper import TrackModel, TaskModel, RankOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
+from restapi.helper.validators import civil_validator, phone_validator, today
 
 class Campaigns(TrackModel, TaskModel):
     # Basic Information

@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from restapi.modelsHelper import TrackModel, GenderOptions
+from restapi.helper.modelsHelper import TrackModel, GenderOptions
 
 
 class Electors(models.Model):

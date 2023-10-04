@@ -18,6 +18,7 @@ import jwt
 from django.conf import settings
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
+from restapi.helper.views_helper import CustomPagination
 
 
 # class GetCampaigns(APIView):
@@ -27,16 +28,6 @@ from rest_framework import status
 
 #         return Response({"data": data_serializer.data, "code": 200})
 
-class CustomPagination(PageNumberPagination):
-    page_size = 50
-
-    def get_paginated_response(self, data):
-        return Response({
-            "count": self.page.paginator.count,
-            "next": self.get_next_link(),
-            "previous": self.get_previous_link(),
-            "data": data,
-        })
 
 
 class GetCampaigns(APIView):
@@ -78,51 +69,6 @@ class GetCampaigns(APIView):
             return Response({"error": str(auth_failed)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class GetCampaigns(APIView):
-#     permission_classes = [AllowAny]
-    
-#     def get(self, request, *args, **kwargs):
-#         campaignss_data = Elections.objects.all()
-#         paginator = CustomPagination()
-#         paginated_campaignss = paginator.paginate_queryset(campaignss_data, request)
-        
-#         # Passing context with request to the serializer
-#         context = {"request": request}
-#         data_serializer = ElectionsSerializer(paginated_campaignss, many=True, context=context)
-        
-#         return paginator.get_paginated_response(data_serializer.data)
-
-
-
-# class GetCampaigns(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request):
-#         try:
-#             current_user_id = request.user.id
-
-#             # Step 1: Query the CampaignMembers table
-#             member_entries = CampaignMembers.objects.filter(user_id=current_user_id)
-            
-#             # Step 2: Get corresponding Campaigns
-#             campaign_ids = [entry.campaign.id for entry in member_entries if entry.campaign]
-#             campaigns_data = Campaigns.objects.filter(id__in=campaign_ids)
-            
-#             # Step 3: Serialize the data
-#             data_serializer = CampaignsSerializer(campaigns_data, many=True)
-
-#             return Response({
-#                 "data": data_serializer.data,
-#                 # "currentUserId": current_user_id,
-#                 "code": 200
-#             }, status=status.HTTP_200_OK)
-
-#         except AuthenticationFailed as auth_failed:
-#             return Response({"error": str(auth_failed)}, status=status.HTTP_401_UNAUTHORIZED)
-#         except Exception as e:
-#             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class GetCampaignDetails(APIView):
     permission_classes = [IsAuthenticated]
@@ -284,43 +230,42 @@ class GetCampaignDetails(APIView):
         election_attendees = election_attendees_serializer.data
         return election_attendees
 
-
 class AddNewCampaign(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        election_candidate_id = request.data.get("election_candidate")
+        serializer = CampaignsSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Fetch the candidate details based on the candidate ID
+class UpdateCampaign(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, id):
         try:
-            election_candidate = ElectionCandidates.objects.get(id=election_candidate_id)
-        except ElectionCandidates.DoesNotExist:
-            return Response({"error": "Election Candidate not found"}, status=404)
-
-        campaign = Campaigns.objects.create(
-            election_candidate=election_candidate,
-        )
-
-        new_campaign_data = {
-            "id": campaign.id,
-            "election_candidate": election_candidate_id,
-            "name": election_candidate.candidate.name if election_candidate.candidate else None,
-            "candidate_image": election_candidate.candidate.image.url if election_candidate.candidate and election_candidate.candidate.image else None,
-            "gender": election_candidate.candidate.gender if election_candidate.candidate else None,
-            # Add other details you want to include
-        }
-
-        return Response({"data": new_campaign_data, "count": 0, "code": 200})
-
+            campaign = Campaigns.objects.get(id=id)
+        except Campaigns.DoesNotExist:
+            return Response({"error": "Campaign not found"}, status=404)
+        
+        serializer = CampaignsSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200})
+        return Response(serializer.errors, status=400)
 
 class DeleteCampaign(APIView):
     def delete(self, request, id):
         try:
             campaign = Campaigns.objects.get(id=id)
             campaign.delete()
-            return JsonResponse({"data": "Campaigns deleted successfully", "count": 1, "code": 200}, safe=False)
+            return JsonResponse({"data": "Campaign deleted successfully", "count": 1, "code": 200}, safe=False)
         except Campaigns.DoesNotExist:
-            return JsonResponse({"data": "Campaigns not found", "count": 0, "code": 404}, safe=False)
-
-
+            return JsonResponse({"data": "Campaign not found", "count": 0, "code": 404}, safe=False)
+    
 class DeleteCampaignMember(APIView):
     def delete(self, request, id):
         try:

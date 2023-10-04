@@ -13,32 +13,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
-from rest_framework.pagination import PageNumberPagination
 
 from restapi.serializers import *
 from restapi.models import *
-import ast 
-from datetime import datetime
-from operator import itemgetter
-
-
+from restapi.helper.views_helper import CustomPagination
 
 def index(request):
     return render(request, 'index.html')
-
-# Candidates: getCandidate, deleteCandidate, addCandidate, updateCandidate, CandidateCount
-class CustomPagination(PageNumberPagination):
-    page_size = 50
-
-    def get_paginated_response(self, data):
-        return Response({
-            "count": self.page.paginator.count,
-            "next": self.get_next_link(),
-            "previous": self.get_previous_link(),
-            "data": data,
-        })
-
-
 
 class GetCandidates(APIView):
     permission_classes = [AllowAny]

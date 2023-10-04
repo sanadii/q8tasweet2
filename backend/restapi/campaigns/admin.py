@@ -2,20 +2,21 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from restapi.models import Campaigns, CampaignMembers, CampaignGuarantees, ElectionAttendees
+from restapi.helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 
 class CampaignsAdmin(admin.ModelAdmin):
     list_display = ['election_candidate', 'status', 'priority', 'website']
     list_filter = ['status', 'priority']
-    search_fields = ['title', 'election_candidate__candidate__name', 'description']
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
+    search_fields = ['election_candidate__candidate__name', 'description']
+    readonly_fields = ReadOnlyTrackFields
 
     fieldsets = [
         ('Basic Information', {'fields': ['election_candidate', 'description', 'results']}),
         ('Contacts', {'fields': ['twitter', 'instagram', 'website']}),
         # ('Activities', {'fields': ['events', 'attendees', 'media_coverage', 'results']}),
-        # ('Administration', {'fields': ['moderators', 'status', 'priority']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']}),
+        TaskAdminFields,
+        TrackAdminFields
     ]
 
 class CampaignMembersAdmin(admin.ModelAdmin):
@@ -35,37 +36,37 @@ class CampaignMembersAdmin(admin.ModelAdmin):
 
     list_display = ['user', 'campaign', 'rank_display', 'supervisor', 'committee', 'civil', 'phone', 'status']
     list_filter = ['campaign', 'rank']
-    search_fields = ['user__username', 'campaign__title', 'committee__name']  
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']
+    search_fields = ['user__username', 'committee__name']  
+    readonly_fields = ReadOnlyTrackFields
 
     fieldsets = [
         ('Basic Information', {'fields': ['user', 'campaign', 'rank', 'supervisor', 'committee', 'civil', 'phone', 'notes', 'status']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']}),
+        TrackAdminFields
     ]
 
 class CampaignGuaranteesAdmin(admin.ModelAdmin):
     list_display = ['campaign', 'member', 'civil', 'phone', 'notes', 'status']
-    search_fields = ['campaign__title', 'member__user__username', 'civil__full_name', 'phone']
+    search_fields = ['member__user__username', 'civil__full_name', 'phone']
     list_filter = ['campaign', 'member', 'status']
+    readonly_fields = ReadOnlyTrackFields
 
     fieldsets = [
         ('Basic Information', {'fields': ['campaign', 'member', 'civil', 'phone', 'notes', 'status']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']}),
+        TrackAdminFields
     ]
 
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted']
 
 class ElectionAttendeesAdmin(admin.ModelAdmin):
     list_display = ['user', 'election', 'committee', 'elector', 'notes', 'status']
-    search_fields = ['user__username', 'election__title', 'committee__name', 'elector__full_name']
+    search_fields = ['user__username', 'committee__name', 'elector__full_name']
     list_filter = ['election', 'committee', 'status']
+    readonly_fields = ReadOnlyTrackFields
 
     fieldsets = [
         ('Basic Information', {'fields': ['user', 'election', 'committee', 'elector', 'notes', 'status']}),
-        ('Tracking Information', {'fields': ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']}),
+        TrackAdminFields
     ]
 
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
 
 admin.site.register(Campaigns, CampaignsAdmin)

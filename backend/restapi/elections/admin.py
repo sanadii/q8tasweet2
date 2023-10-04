@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from restapi.models import Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults
+from restapi.helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 class ElectionsAdmin(admin.ModelAdmin):
     list_display = ['get_election_name', 'due_date', 'category', 'sub_category', 'elect_seats', 'elect_votes']
@@ -8,7 +9,7 @@ class ElectionsAdmin(admin.ModelAdmin):
     search_fields = ['sub_category__name', 'description', 'elect_type', 'elect_result']
     ordering = ['-due_date', 'sub_category__name']
     date_hierarchy = 'due_date'
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']  # Keep this line
+    readonly_fields = ReadOnlyTrackFields
     
     def get_election_name(self, obj):
         return obj.get_dynamic_name()  # Note: here obj is the Elections object itself
@@ -19,18 +20,18 @@ class ElectionsAdmin(admin.ModelAdmin):
         ('Basic Information', {'fields': ['image', 'due_date', 'description']}),
         ('Taxonomies', {'fields': ['category', 'sub_category', 'tags']}),
         ('Election Options and Details', {'fields': ['type', 'result', 'votes', 'seats', 'electors', 'attendees']}),
-        ('Administration', {'fields': ['moderators', 'status', 'priority']}),
-        ('Tracking Information', {'fields': readonly_fields}),
+        TaskAdminFields,
+        TrackAdminFields
     ]
 
 class ElectionCandidatesAdmin(admin.ModelAdmin):
     list_display = ['get_candidate_name', 'get_election_category', 'get_election_subcategory', 'get_election_due_date', 'votes', 'notes']
     search_fields = ['election__sub_category__name', 'candidate__name',]
-    readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
+    readonly_fields = ReadOnlyTrackFields
 
     fieldsets = [
-        ('Basic Information', {'fields': ['election', 'candidate', 'votes', 'notes']}),
-        ('Tracking Information', {'fields': readonly_fields}),
+        TaskAdminFields,
+        TrackAdminFields
     ]
     
     def get_election_category(self, obj):

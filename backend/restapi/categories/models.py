@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from restapi.modelsHelper import TrackModel
+from restapi.helper.modelsHelper import TrackModel
 
 class Categories(TrackModel):
     name = models.CharField(max_length=255, null=True, blank=True)

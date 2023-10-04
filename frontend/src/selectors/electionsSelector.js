@@ -19,6 +19,8 @@ export const electionsSelector = createSelector(
     electionDetails: electionsState.electionDetails,
     electionCommittees: electionsState.electionCommittees,
     electionCandidates: electionsState.electionCandidates,
+    electionCampaigns: electionsState.electionCampaigns,
+
     electionAttendees: electionsState.electionAttendees,
     electionCommitteeResults: electionsState.electionCommitteeResults,
 
@@ -26,7 +28,7 @@ export const electionsSelector = createSelector(
     error: electionsState.error,
 
 
-    // Categories
+    // Taxonomy Selectors
     categories: categoriesState.categories,
     subCategories: categoriesState.subCategories,
 

@@ -175,7 +175,7 @@ export const ImageRoundedCircleXS = ({ imagePath }) => {
 };
 
 export const ImageCampaignCard = ({ urlPath, imagePath }) => {
-  const imageUrl = `${mediaUrl}${imagePath}`;
+  const imageUrl = `${imagePath}`;
 
   return (
     <Card className="mb-4">

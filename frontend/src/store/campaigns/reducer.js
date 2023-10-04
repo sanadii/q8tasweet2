@@ -3,8 +3,9 @@ import {
   API_RESPONSE_SUCCESS,
   API_RESPONSE_ERROR,
 
-  // Campaign s
+  // Campaigns ------------
   GET_CAMPAIGNS,
+  GET_CAMPAIGN_DETAILS,
   ADD_NEW_CAMPAIGN_SUCCESS,
   ADD_NEW_CAMPAIGN_FAIL,
   UPDATE_CAMPAIGN_SUCCESS,
@@ -12,10 +13,7 @@ import {
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_FAIL,
 
-  // Campaign Details
-  GET_CAMPAIGN_DETAILS,
-
-  // Campaign Members
+  // Campaign Members ---------------
   GET_ALL_CAMPAIGN_MEMBERS,
   // GET_CAMPAIGN_MEMBER_DETAILS,
   ADD_NEW_CAMPAIGN_MEMBER_SUCCESS,
@@ -52,7 +50,6 @@ const IntialState = {
   campaigns: [],
   campaignDetails: [],
   campaignGuarantees: [],
-
   campaignElectionCandidates: [],
   campaignElectionCommittees: [],
   campaignElectionAttendees: [],

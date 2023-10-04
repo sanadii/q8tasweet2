@@ -894,7 +894,7 @@ const ElectionList = () => {
               </Col>
               <Col lg={6}>
                 <Label for="election-votes-field" className="form-label">
-                  Number of Votes
+                  عدد الأصوات
                 </Label>
                 <Input
                   id="votes-field"
@@ -913,7 +913,7 @@ const ElectionList = () => {
               </Col>
               <Col lg={6}>
                 <Label for="election-seats-field" className="form-label">
-                  Number of Seats
+                  عدد مقاعد الفوز
                 </Label>
                 <Input
                   id="seats-field"
@@ -935,7 +935,7 @@ const ElectionList = () => {
               </Col>
               <Col lg={6}>
                 <Label for="electors-field" className="form-label">
-                  Number of Electors
+                  عدد الناخبين
                 </Label>
                 <Input
                   id="electors-field"
@@ -957,7 +957,7 @@ const ElectionList = () => {
               </Col>
               <Col lg={6}>
                 <Label for="attendees-field" className="form-label">
-                  Nunber of Attendees
+                  عدد الحضور
                 </Label>
                 <Input
                   id="attendees-field"

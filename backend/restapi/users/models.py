@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.validators import RegexValidator, MaxValueValidator
 
-from restapi.modelsHelper import TrackModel, GenderOptions
-from restapi.validators import today, civil_validator, phone_validator
+from restapi.helper.modelsHelper import TrackModel, GenderOptions
+from restapi.helper.validators import today, civil_validator, phone_validator
   
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, username, first_name, password, **other_fields):

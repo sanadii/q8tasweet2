@@ -2,7 +2,6 @@ import { APIClient } from "./api_helper";
 import * as url from "./url_helper";
 import axios from "axios";
 
-
 const restapi = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: { "Content-Type": "multipart/form-data" },
@@ -24,8 +23,6 @@ export const isUserAuthenticated = () => {
 // Login Method
 // export const postJwtLogin = data => api.create(url.POST_JWT_LOGIN, data);
 export const postJwtLogin = data => api.create(url.POST_JWT_LOGIN, data);
-
-
 
 // Register Method
 export const postFakeRegister = (data) => api.create(url.POST_REGISTER, data);
@@ -136,42 +133,25 @@ export const getCandidateCampaignCount = () => api.get(url.GET_CANDIDATE_CAMPAIG
 // --------------- Campaigns  ---------------
 // Campaign
 export const getCampaigns = () => api.get(url.GET_CAMPAIGNS);
-export const addNewCampaign = (campaign) =>
-  api.create(url.ADD_NEW_CAMPAIGN, campaign);
-export const updateCampaign = (campaign) =>
-  api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
-export const deleteCampaign = (campaign) =>
-  api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
-export const getCampaignDetails = (campaign) =>
-  api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign.id);
+export const addNewCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
+export const updateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
+export const deleteCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
+export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign.id);
 export const getCampaignCount = () => api.get(url.GET_CAMPAIGN_COUNT);
 
 // --------------- CampaignMember  ---------------
-export const getAllCampaignMembers = (member) =>
-  api.get(url.GET_ALL_CAMPAIGN_MEMBERS + "/" + member.id);
-export const addNewCampaignMember = (member) =>
-  api.create(url.ADD_NEW_CAMPAIGN_MEMBER, member);
-export const updateCampaignMember = (member) =>
-  api.update(url.UPDATE_CAMPAIGN_MEMBER + "/" + member.id, member);
-export const deleteCampaignMember = (member) =>
-  api.delete(url.DELETE_CAMPAIGN_MEMBER + "/" + member);
-export const getCampaignMemberDetails = (member) =>
-  api.get(url.GET_CAMPAIGN_MEMBER_DETAILS + "/" + member.id);
-export const getCampaignMemberCount = () =>
-  api.get(url.GET_CAMPAIGN_MEMBER_COUNT);
+export const getAllCampaignMembers = (member) => api.get(url.GET_ALL_CAMPAIGN_MEMBERS + "/" + member.id);
+export const addNewCampaignMember = (member) => api.create(url.ADD_NEW_CAMPAIGN_MEMBER, member);
+export const updateCampaignMember = (member) => api.update(url.UPDATE_CAMPAIGN_MEMBER + "/" + member.id, member);
+export const deleteCampaignMember = (member) => api.delete(url.DELETE_CAMPAIGN_MEMBER + "/" + member);
+export const getCampaignMemberDetails = (member) => api.get(url.GET_CAMPAIGN_MEMBER_DETAILS + "/" + member.id);
+export const getCampaignMemberCount = () => api.get(url.GET_CAMPAIGN_MEMBER_COUNT);
 
 // --------------- CampaignGuarantee  ---------------
-export const getAllCampaignGuarantees = (campaignGuarantee) =>
-  api.get(url.GET_ALL_CAMPAIGN_GUARANTEES, campaignGuarantee);
-export const deleteCampaignGuarantee = (campaignGuarantee) =>
-  api.delete(url.DELETE_CAMPAIGN_GUARANTEE + "/" + campaignGuarantee);
-export const addNewCampaignGuarantee = (campaignGuarantee) =>
-  api.create(url.ADD_NEW_CAMPAIGN_GUARANTEE, campaignGuarantee);
-export const updateCampaignGuarantee = (campaignGuarantee) =>
-  api.update(
-    url.UPDATE_CAMPAIGN_GUARANTEE + "/" + campaignGuarantee.id,
-    campaignGuarantee
-  );
+export const getAllCampaignGuarantees = (campaignGuarantee) => api.get(url.GET_ALL_CAMPAIGN_GUARANTEES, campaignGuarantee);
+export const deleteCampaignGuarantee = (campaignGuarantee) => api.delete(url.DELETE_CAMPAIGN_GUARANTEE + "/" + campaignGuarantee);
+export const addNewCampaignGuarantee = (campaignGuarantee) => api.create(url.ADD_NEW_CAMPAIGN_GUARANTEE, campaignGuarantee);
+export const updateCampaignGuarantee = (campaignGuarantee) => api.update(url.UPDATE_CAMPAIGN_GUARANTEE + "/" + campaignGuarantee.id, campaignGuarantee);
 
 // --------------- Users  ---------------
 export const getUsers = () => api.get(url.GET_USERS);
@@ -184,28 +164,18 @@ export const updateUser = (user) => api.update(url.UPDATE_USER + "/" + user.id, 
 export const deleteUser = (user) => api.delete(url.DELETE_USER + "/" + user);
 
 // UserCandidates
-export const getUserCandidates = (user) =>
-  api.get(url.GET_USER_CANDIDATES + "/" + user.id);
-export const addNewUserCandidate = (user) =>
-  api.create(url.ADD_NEW_USER_CANDIDATE, user);
-export const deleteUserCandidate = (user) =>
-  api.delete(url.DELETE_USER_CANDIDATE + "/" + user);
-export const updateUserCandidate = (user) =>
-  api.update(url.UPDATE_USER_CANDIDATE + "/" + user.id, user);
-export const getUserCandidateDetails = (user) =>
-  api.get(url.GET_USER_CANDIDATE_DETAILS + "/" + user.id);
+export const getUserCandidates = (user) => api.get(url.GET_USER_CANDIDATES + "/" + user.id);
+export const addNewUserCandidate = (user) => api.create(url.ADD_NEW_USER_CANDIDATE, user);
+export const deleteUserCandidate = (user) => api.delete(url.DELETE_USER_CANDIDATE + "/" + user);
+export const updateUserCandidate = (user) => api.update(url.UPDATE_USER_CANDIDATE + "/" + user.id, user);
+export const getUserCandidateDetails = (user) => api.get(url.GET_USER_CANDIDATE_DETAILS + "/" + user.id);
 
 // UserCampaign
-export const getUserCampaigns = (user) =>
-  api.get(url.GET_USER_CAMPAIGNS + "/" + user.id);
-export const addNewUserCampaign = (user) =>
-  api.create(url.ADD_NEW_USER_CAMPAIGN, user);
-export const updateUserCampaign = (user) =>
-  api.update(url.UPDATE_USER_CAMPAIGN + "/" + user.id, user);
-export const deleteUserCampaign = (user) =>
-  api.delete(url.DELETE_USER_CAMPAIGN + "/" + user);
-export const getUserCampaignDetails = (user) =>
-  api.get(url.GET_USER_CAMPAIGN_DETAILS + "/" + user.id);
+export const getUserCampaigns = (user) => api.get(url.GET_USER_CAMPAIGNS + "/" + user.id);
+export const addNewUserCampaign = (user) => api.create(url.ADD_NEW_USER_CAMPAIGN, user);
+export const updateUserCampaign = (user) => api.update(url.UPDATE_USER_CAMPAIGN + "/" + user.id, user);
+export const deleteUserCampaign = (user) => api.delete(url.DELETE_USER_CAMPAIGN + "/" + user);
+export const getUserCampaignDetails = (user) => api.get(url.GET_USER_CAMPAIGN_DETAILS + "/" + user.id);
 export const getUserCampaignCount = () => api.get(url.GET_USER_CAMPAIGN_COUNT);
 
 // Images
@@ -214,11 +184,9 @@ export const getUserCampaignCount = () => api.get(url.GET_USER_CAMPAIGN_COUNT);
 // };
 
 export const uploadNewImage = (formData) => api.upload(url.UPLOAD_IMAGE, formData);
-
 export const getImages = () => api.get(url.GET_IMAGES);
 // export const uploadNewImage = (formData) => api.create(url.UPLOAD_NEW_IMAGE, formData);
 // export const uploadNewImage = (formData) => api.post("/uploadImage", formData);
-
 export const updateImage = () => api.get(url.DELETE_IMAGE);
 export const deleteImage = () => api.get(url.UPDATE_IMAGE);
 

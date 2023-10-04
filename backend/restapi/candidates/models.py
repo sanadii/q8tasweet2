@@ -1,16 +1,14 @@
 # Categories Model
 from django.db import models
-from django.utils import timezone
-from django.core.validators import RegexValidator, MaxValueValidator
 
-from restapi.modelsHelper import TrackModel, TaskModel, GenderOptions
-from restapi.validators import today
+from restapi.helper.modelsHelper import TrackModel, TaskModel, GenderOptions
+from restapi.helper.validators import today
 
 class Candidates(TrackModel, TaskModel):
     # Basic Information
     name = models.CharField(max_length=255, blank=False, null=False)
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
-    image = models.ImageField(upload_to="users/", blank=True, null=True)
+    image = models.ImageField(upload_to="candidates/", blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
     # date_of_birth = models.DateField(null=True, blank=True, validators=[MaxValueValidator(limit_value=today)])
 

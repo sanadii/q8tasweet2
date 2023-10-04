@@ -167,7 +167,7 @@ const AddElectionCampaignModal = ({ election_id, dispatch }) => {
                 e.preventDefault();
                 const newElectionCampaign = {
                   id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-                  election_candidate: electionCandidate.id,
+                  electionCandidate: electionCandidate.id,
                 };
                 dispatch(addNewElectionCampaign(newElectionCampaign));
               }}
@@ -190,7 +190,7 @@ const AddElectionCampaignModal = ({ election_id, dispatch }) => {
                 </div>
                 <div className="flex-shrink-0">
                   {electionCampaignList.some(
-                    (item) => item.election_candidate === electionCandidate.id
+                    (item) => item.electionCandidate === electionCandidate.id
                   ) ? (
                     <p className="success mb-0 text-success">Added</p>
                   ) : (

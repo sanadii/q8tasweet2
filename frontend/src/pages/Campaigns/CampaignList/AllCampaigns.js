@@ -1,101 +1,36 @@
+// React & Redux core imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Col,
-  Modal,
-  ModalBody,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  Label,
-  Input,
-  Button,
-  ModalHeader,
-  FormFeedback,
-  Form,
-} from "reactstrap";
-import classnames from "classnames";
-import { Link } from "react-router-dom";
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-// Components
-// Custom component imports
-import { GenderCircle, ImageCircle, ImageGenderCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
-// import { TableContainer, DeleteModal, ImageCircle } from "../../../Components/Common";
+// Action & Selector imports
+import { getCampaigns, deleteCampaign, getModeratorUsers } from "../../../store/actions";
 
-import {
-  StatusOptions,
-  PriorityOptions,
-  ElectionTypeOptions,
-  ElectionResultOptions,
-  // TagOptions,
-} from "../../../Components/constants";
-
+// Constants & Component imports
+import { StatusOptions, PriorityOptions } from "../../../Components/constants";
+import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import CampaignModal from "./CampaignModal";
+import { Id, Name, DueDate, Status, Priority, CreateBy, Moderators, Actions } from "./CampaignListCol";
 import SimpleBar from "simplebar-react";
-import Flatpickr from "react-flatpickr";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-// Import React FilePond
-import { registerPlugin } from "react-filepond";
-import Select from "react-select";
-
-// Import FilePond styles
-import "filepond/dist/filepond.min.css";
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-
-import {
-  getCampaigns,
-  addNewCampaign,
-  updateCampaign,
-  deleteCampaign,
-  getModeratorUsers,
-  getCategories,
-} from "../../../store/actions";
-
-import {
-  Id,
-  Name,
-  CandidateCount,
-  DueDate,
-  Status,
-  Priority,
-  Category,
-  CreateBy,
-  Moderators,
-  Actions,
-} from "./CampaignListCol";
-
+// Form & validation imports
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+// UI Components & styling imports
+import { Col, Modal, ModalBody, Row, Label, Input, Button, ModalHeader, FormFeedback, Form } from "reactstrap";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// # id, image, name, description,  dueDate, location, category, status, priority, canidates, moderators
+
 const AllCampaigns = () => {
   const dispatch = useDispatch();
 
   // Campaign Data
-  const { campaigns, moderators, categories, subCategories, isCampaignSuccess, user, error } = useSelector(
-    (state) => ({
-      campaigns: state.Campaigns.campaigns,
-      moderators: state.Users.moderators,
-      categories: state.Categories.categories,
-      subCategories: state.Categories.subCategories,
-      isCampaignSuccess: state.Campaigns.isCampaignSuccess,
-      user: state.Profile.user,
-      error: state.Campaigns.error,
-    })
-  );
-
+  const { campaigns, moderators, isCampaignSuccess, error } = useSelector(electionsSelector);
   const [campaignList, setCampaignList] = useState(campaigns);
   const [campaign, setCampaign] = useState([]);
-  const [category, setCategory] = useState([]);
   const [campaignCandidates, setCampaignCandidates] = useState([]);
-  const [userName, setUserName] = useState("Admin");
-  const [userId, setUserId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
   // Campaign Data
@@ -106,10 +41,7 @@ const AllCampaigns = () => {
     // console.log("Campaigns:", campaigns); // log campaigns
   }, [dispatch, campaigns]);
 
-  useEffect(() => {
-    setCampaignList(campaigns);
-    // console.log("Campaign List:", campaignList); // log campaignList
-  }, [campaigns]);
+
 
   // Moderators
   useEffect(() => {
@@ -130,30 +62,6 @@ const AllCampaigns = () => {
       setModeratorsMap(map);
     });
   }, [moderators]);
-
-
-  // User & id
-  useEffect(() => {
-    if (sessionStorage.getItem("authUser")) {
-      const obj = JSON.parse(sessionStorage.getItem("authUser"));
-      let loggedUserId = "Not Logged In"; // default to "Logged In"
-      let name = "Not Logged In"; // default to "Logged In"
-
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        name = obj.providerData[0].email;
-      } else if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
-        loggedUserId = obj.data.id;
-      }
-
-      setUserName(name);
-      setUserId(loggedUserId); // set userId from sessionStorage
-    }
-  }, [user]);
-
-
-
-
-
 
 
   // Delete Campaign
@@ -185,185 +93,6 @@ const AllCampaigns = () => {
     }
   };
 
-  // Image
-  const [selectedImage, setSelectedImage] = useState(null);
-  const handleImageSelect = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-      // console.log("handleImageSelect called");
-    }
-  };
-
-  const formData = new FormData();
-  if (!selectedImage) {
-    // console.log("no selected image");
-  } else {
-    formData.append("image", selectedImage);
-    formData.append("folder", "campaigns"); // replace "yourFolderName" with the actual folder name
-  }
-
-  // validation
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-    initialValues: {
-      name: (campaign && campaign.name) || "",
-      image: (campaign && campaign.image) || "",
-      selectedImage: selectedImage,
-      description: (campaign && campaign.description) || "",
-      dueDate: (campaign && campaign.dueDate) || "",
-      category: (campaign && campaign.category) || 0,
-      subCategory: (campaign && campaign.subCategory) || 0,
-      tags: (campaign && campaign.tags) || [],
-
-      // Campaign Specification
-      type: (campaign && campaign.type) || "",
-      result: (campaign && campaign.result) || "",
-      votes: (campaign && campaign.votes) || 0,
-      seats: (campaign && campaign.seats) || 0,
-
-      // Admin
-      status: (campaign && campaign.status) || "New",
-      priority: (campaign && campaign.priority) || "High",
-      moderators:
-        campaign && Array.isArray(campaign.moderators)
-          ? campaign.moderators.map((moderator) => moderator.id)
-          : [],
-
-      // System
-      createdBy: userId,
-      updatedBy: userId,
-      createdDate: (campaign && campaign.createdDate) || "",
-      updatedDate: (campaign && campaign.updatedDate) || "",
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter Campaign Name"),
-      category: Yup.number().integer().required('Category is required'),
-      subCategory: Yup.number().integer().required('Sub-Category is required'),
-
-    }),
-    onSubmit: (values) => {
-      if (isEdit) {
-        const updatedCampaign = {
-          id: campaign ? campaign.id : 0,
-          name: values.name,
-          image: values.image,
-          selectedImage: selectedImage,
-          dueDate: values.dueDate,
-          description: values.description,
-
-          // Taxonomies
-          category: values.category,
-          subCategory: values.subCategory,
-          tags: Array.isArray(values.tags) ? values.tags : [],
-
-          // Campaign Spesifications
-          type: values.type,
-          result: values.result,
-          votes: values.votes,
-          seats: values.seats,
-
-          // Admin
-          status: values.status,
-          priority: values.priority,
-          moderators: values.moderators,
-          updatedBy: userId,
-        };
-        // console.log(updatedCampaign); // before calling dispatch in onSubmit
-
-        // Update campaign
-        dispatch(
-          updateCampaign({ campaign: updatedCampaign, formData: formData })
-        );
-      } else {
-        const newCampaign = {
-          id: (Math.floor(Math.random() * (30 - 20)) + 20).toString(),
-          name: values.name,
-          image: values.image,
-          selectedImage: selectedImage,
-          dueDate: values.dueDate,
-          description: values.description,
-
-          // Taxonomies
-          category: values.category,
-          subCategory: values.subCategory,
-          tags: Array.isArray(values.tags) ? values.tags : [],
-
-          // Campaign Spesifications
-          type: values.type,
-          result: values.result,
-          votes: values.votes,
-          seats: values.seats,
-
-          // Admin
-          status: values.status,
-          priority: values.priority,
-          moderators: values.moderators,
-          createdBy: userId,
-        };
-        // console.log(newCampaign); // before calling dispatch in onSubmit
-        // Save new campaign
-        dispatch(addNewCampaign({ campaign: newCampaign, formData: formData }));
-      }
-
-      validation.resetForm();
-      toggle();
-    },
-  });
-
-
-  // Campaign Categories
-  useEffect(() => {
-    if (categories && !categories.length) {
-      dispatch(getCategories());
-    }
-  }, [dispatch, categories]);
-
-  useEffect(() => {
-    setCategoryOptions(categories);
-    setSubCategoryOptions(subCategories);
-  }, [categories, subCategories]);
-
-  const [categoryOptions, setCategoryOptions] = useState(categories);
-  const [subCategoryOptions, setSubCategoryOptions] = useState([]);
-  const [activeParentCategoryId, setActiveParentCategoryId] = useState(null);
-
-  // Watch for changes in validation.values.category
-  useEffect(() => {
-    if (validation && validation.values.category) {
-      const initialCategoryId = Number(validation.values.category);
-      const relatedSubCategories = subCategories.filter(
-        subCategory => subCategory.parent === initialCategoryId
-      );
-
-      setActiveParentCategoryId(initialCategoryId);
-      setSubCategoryOptions(relatedSubCategories);
-    }
-  }, [validation, subCategories]);
-
-  const changeSubCategoriesOptions = (e) => {
-    const activeCategoryId = Number(e.target.value);
-    const relatedSubCategories = subCategories.filter(
-      subCategory => subCategory.parent === activeCategoryId
-    );
-
-    setActiveParentCategoryId(activeCategoryId);
-    const currentSubCategoryValue = validation.values.subCategory;
-    const isCurrentSubCategoryStillValid = relatedSubCategories.some(subCategory => subCategory.id === currentSubCategoryValue);
-
-    if (!isCurrentSubCategoryStillValid) {
-      // Reset the subCategory value to a default or append it to the list.
-      // For example, set it to the first subCategory in the filtered list:
-      validation.setFieldValue("subCategory", relatedSubCategories[0]?.id || "");
-
-      // Or, if you want to append the current subCategory to the list instead:
-      // const currentSubCategory = subCategories.find(subCategory => subCategory.id === currentSubCategoryValue);
-      // relatedSubCategories.push(currentSubCategory);
-    }
-
-    setSubCategoryOptions(relatedSubCategories);
-  };
-
 
 
   // Update Data
@@ -380,7 +109,6 @@ const AllCampaigns = () => {
             : "",
 
         dueDate: campaign.dueDate,
-        candidateCount: campaign.candidateCount,
         description: campaign.description,
 
         // Taxonomies
@@ -488,52 +216,29 @@ const AllCampaigns = () => {
           return <Id {...cellProps} />;
         },
       },
-
       {
-        name: "Image",
-        title: "Image",
-        accessor: "image",
-        Cell: (cellProps) => (
-          <ImageCircle imagePath={cellProps.row.original.image} />
-        ), // Use the CircleImage component
-      },
-
-      {
-        Header: "Campaigns",
-        accessor: "name",
+        Header: "الحملة",
+        accessor: "candidate.name",
         filterable: false,
         Cell: (cellProps) => {
           return <Name {...cellProps} />;
         },
       },
       {
-        Header: "Candidates",
-        accessor: "candidateCount",
+        Header: "الانتخابات",
+        accessor: "election.name",
         filterable: false,
         Cell: (cellProps) => {
-          return <CandidateCount {...cellProps} />;
+          return <Name {...cellProps} />;
         },
       },
 
       {
-        Header: "Due Date",
-        accessor: "dueDate",
+        Header: "الموعد",
+        accessor: "election.dueDate",
         filterable: false,
         Cell: (cellProps) => {
           return <DueDate {...cellProps} />;
-        },
-      },
-      {
-        Header: "Category",
-        accessor: "category",
-        filterable: false,
-        Cell: (cellProps) => {
-          return (
-            <Category
-              category={cellProps.row.original.category}
-              subCategory={cellProps.row.original.subCategory}
-            />
-          );
         },
       },
       {
@@ -589,29 +294,6 @@ const AllCampaigns = () => {
     ],
     [handleCampaignClick, checkedAll]
   );
-
-  // Dates
-  const defaultdate = () => {
-    let d = new Date();
-    const year = d.getFullYear();
-    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-    const day = ("0" + d.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
-
-  const [dueDate, setDate] = useState(defaultdate());
-
-  const dateformate = (e) => {
-    const selectedDate = new Date(e);
-    const formattedDate = `${selectedDate.getFullYear()}-${(
-      "0" +
-      (selectedDate.getMonth() + 1)
-    ).slice(-2)}-${("0" + selectedDate.getDate()).slice(-2)}`;
-
-    // Update the form field value directly with the formatted date
-    validation.setFieldValue("dueDate", formattedDate);
-  };
-
   return (
     <React.Fragment>
       <DeleteModal
@@ -627,6 +309,14 @@ const AllCampaigns = () => {
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
       />
+      <CampaignModal
+        modal={modal}
+        toggle={toggle}
+        campaign={campaign}
+        isEdit={isEdit}
+        setModal={setModal}
+      />
+
       <div className="row">
         <Col lg={12}>
           <div className="card" id="campaignsList">
@@ -706,191 +396,12 @@ const AllCampaigns = () => {
         >
           <ModalBody className="modal-body">
             <Row className="g-3">
-              <Col lg={12}>
-                <div>
-                  <Label for="emage-field" className="form-label">
-                    Upload Image
-                  </Label>
-                  <div className="text-center">
-                    <label
-                      htmlFor="emage-field"
-                      className="mb-0"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="right"
-                      title=""
-                      data-bs-original-title="Select Image"
-                    >
-                      <div className="position-relative d-inline-block">
-                        <div className="position-absolute top-100 start-100 translate-middle">
-                          <div className="avatar-xs">
-                            <div className="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
-                              <i className="ri-image-fill"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="avatar-xl"
-                          style={{
-                            width: "250px",
-                            height: "250px",
-                            overflow: "hidden",
-                            cursor: "pointer", // Add this line
-                            backgroundImage: `url(${validation.values.image})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }}
-                        ></div>
-                      </div>
-                      <input
-                        className="form-control d-none"
-                        id="emage-field"
-                        type="file"
-                        accept="image/png, image/gif, image/jpeg"
-                        onChange={(e) => {
-                          handleImageSelect(e);
-                          const selectedImage = e.target.files[0];
-                          if (selectedImage) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              // console.log(
-                              //   "Image loaded successfully:",
-                              //   reader.result
-                              // );
-                              const imgElement =
-                                document.querySelector(".avatar-xl");
-                              if (imgElement) {
-                                imgElement.style.backgroundImage = `url(${reader.result})`;
-                              }
-                            };
-                            reader.readAsDataURL(selectedImage);
-                          }
-                        }}
-                        onBlur={validation.handleBlur}
-                        invalid={
-                          validation.touched.image && validation.errors.image
-                            ? "true"
-                            : undefined
-                        }
-                      />
-                    </label>
-                  </div>
-                  {validation.touched.image && validation.errors.image ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.image}
-                    </FormFeedback>
-                  ) : null}
-                </div>
-              </Col>
+              <p>
+                Campaign Name:
+                Due Date:
+                Election:
 
-              <Col lg={6}>
-                <Label for="campaign=name-field" className="form-label">
-                  Campaign Name
-                </Label>
-                <Input
-                  name="name"
-                  id="campaign-name-field"
-                  className="form-control"
-                  placeholder="Campaign Name"
-                  type="text"
-                  validate={{
-                    required: { value: true },
-                  }}
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.name || ""}
-                  invalid={
-                    validation.touched.name && validation.errors.name
-                      ? true
-                      : false
-                  }
-                />
-                {validation.touched.name && validation.errors.name ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.name}
-                  </FormFeedback>
-                ) : null}
-              </Col>
-              <Col lg={6}>
-                <Label for="dueDate-field" className="form-label">
-                  Due Date
-                </Label>
-
-                <Flatpickr
-                  name="dueDate"
-                  id="dueDate-field"
-                  className="form-control"
-                  placeholder="Select a dueDate"
-                  options={{
-                    altInput: true,
-                    altFormat: "Y-m-d",
-                    dateFormat: "Y-m-d",
-                  }}
-                  onChange={(e) => dateformate(e)}
-                  value={validation.values.dueDate || ""}
-                />
-                {validation.touched.dueDate && validation.errors.dueDate ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.dueDate}
-                  </FormFeedback>
-                ) : null}
-              </Col>
-              <Col lg={6}>
-                <Label for="category-field" className="form-label">
-                  Campaign Category
-                </Label>
-                <Input
-                  name="category"
-                  type="select"
-                  className="form-select"
-                  id="category-field"
-                  onChange={(e) => {
-                    validation.handleChange(e);
-                    changeSubCategoriesOptions(e);
-                  }}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.category || 0}
-                >
-                  <option value="">Choose Category</option>
-                  {categoryOptions.map((category) => (
-                    <option key={category.id} value={parseInt(category.id)}>
-                      {category.name}
-                    </option>
-
-                  ))}
-                </Input>
-                {validation.touched.category && validation.errors.category ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.category}
-                  </FormFeedback>
-                ) : null}
-              </Col>
-              <Col lg={6}>
-                <Label for="sub-category-field" className="form-label">
-                  Campaign Sub-Category
-                </Label>
-                <Input
-                  name="subCategory"
-                  type="select"
-                  className="form-select"
-                  id="sub-category-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.subCategory || ""}
-                >
-                  <option value="">Choose Sub-Category</option>
-                  {subCategoryOptions.map((subCategory) => (
-                    <option key={subCategory.id} value={subCategory.id}>
-                      {subCategory.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.subCategory &&
-                  validation.errors.subCategory ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.subCategory}
-                  </FormFeedback>
-                ) : null}
-              </Col>
+              </p>
 
               <Col lg={12}>
                 <div>
@@ -1041,56 +552,6 @@ const AllCampaigns = () => {
                 {validation.touched.priority && validation.errors.priority ? (
                   <FormFeedback type="invalid">
                     {validation.errors.priority}
-                  </FormFeedback>
-                ) : null}
-              </Col>
-              <Col lg={6}>
-                <Label for="campaign-type-field" className="form-label">
-                  Campaign Type
-                </Label>
-                <Input
-                  name="type"
-                  type="select"
-                  className="form-select"
-                  id="ticket-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.type || ""}
-                >
-                  {ElectionTypeOptions.map((type) => (
-                    <option key={type.id} value={type.value}>
-                      {type.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.type && validation.errors.type ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.type}
-                  </FormFeedback>
-                ) : null}
-              </Col>
-              <Col lg={6}>
-                <Label for="campaign-result-field" className="form-label">
-                  Campaign Type
-                </Label>
-                <Input
-                  name="result"
-                  type="select"
-                  className="form-select"
-                  id="ticket-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.result || ""}
-                >
-                  {ElectionResultOptions.map((result) => (
-                    <option key={result.id} value={result.value}>
-                      {result.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.result && validation.errors.result ? (
-                  <FormFeedback result="invalid">
-                    {validation.errors.result}
                   </FormFeedback>
                 ) : null}
               </Col>
