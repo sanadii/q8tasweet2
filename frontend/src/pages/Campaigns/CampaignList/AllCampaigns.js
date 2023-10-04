@@ -7,30 +7,22 @@ import { electionsSelector } from '../../../Selectors/electionsSelector';
 import { getCampaigns, deleteCampaign, getModeratorUsers } from "../../../store/actions";
 
 // Constants & Component imports
-import { StatusOptions, PriorityOptions } from "../../../Components/constants";
-import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import CampaignModal from "./CampaignModal";
 import { Id, Name, DueDate, Status, Priority, CreateBy, Moderators, Actions } from "./CampaignListCol";
-import SimpleBar from "simplebar-react";
-
-// Form & validation imports
-import * as Yup from "yup";
-import { useFormik } from "formik";
 
 // UI Components & styling imports
-import { Col, Modal, ModalBody, Row, Label, Input, Button, ModalHeader, FormFeedback, Form } from "reactstrap";
+import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const AllCampaigns = () => {
   const dispatch = useDispatch();
 
-  // Campaign Data
+  // State Management
   const { campaigns, moderators, isCampaignSuccess, error } = useSelector(electionsSelector);
   const [campaignList, setCampaignList] = useState(campaigns);
   const [campaign, setCampaign] = useState([]);
-  const [campaignCandidates, setCampaignCandidates] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
 
   // Campaign Data
@@ -38,10 +30,8 @@ const AllCampaigns = () => {
     if (campaigns && !campaigns.length) {
       dispatch(getCampaigns());
     }
-    // console.log("Campaigns:", campaigns); // log campaigns
+    console.log("Campaigns:", campaigns); // log campaigns
   }, [dispatch, campaigns]);
-
-
 
   // Moderators
   useEffect(() => {
@@ -75,7 +65,7 @@ const AllCampaigns = () => {
       setCampaign(null);
     } else {
       setModal(true);
-      setDate(defaultdate());
+      // setDate(defaultdate());
     }
   }, [modal]);
 
@@ -93,43 +83,26 @@ const AllCampaigns = () => {
     }
   };
 
-
-
   // Update Data
   const handleCampaignClick = useCallback(
     (arg) => {
       const campaign = arg;
-
       setCampaign({
         id: campaign.id,
-        name: campaign.name,
-        image:
-          campaign && campaign.image
-            ? process.env.REACT_APP_API_URL + campaign.image
-            : "",
-
-        dueDate: campaign.dueDate,
+        candidateId: campaign.candidate.id,
+        candidateName: campaign.candidate.name,
+        electionId: campaign.election.id,
+        electionName: campaign.election.name,
+        electionDueDate: campaign.election.dueDate,
         description: campaign.description,
+        targetVotes: campaign.targetVotes,
 
-        // Taxonomies
-        category: campaign.category,
-        // categoryName: campaign.categoryName,
-        subCategory: campaign.subCategory,
-        // subCategoryName: campaign.subCategoryName,
-
-        tags: campaign.tags,
-
-        // Campaign Spesifications
-        type: campaign.type,
-        result: campaign.result,
-        votes: campaign.votes,
-        seats: campaign.seats,
-
-        // Admin
+        // Task
         status: campaign.status,
         priority: campaign.priority,
         moderators: campaign.moderators,
       });
+      console.log("campaign:", campaign)
 
       setIsEdit(true);
       toggle();
@@ -317,264 +290,72 @@ const AllCampaigns = () => {
         setModal={setModal}
       />
 
-      <div className="row">
+      <Row>
         <Col lg={12}>
-          <div className="card" id="campaignsList">
-            {isCampaignSuccess && campaigns.length ? (
-              <TableContainer
-                // Header
+          <Card id="electionList">
+            <CardBody>
+              <TableContainerHeader
                 // Title
-                // Button Text
-                setDeleteModalMulti={setDeleteModalMulti}
-                setIsEdit={setIsEdit}
+                ContainerHeaderTitle="الحملات الإنتخابية"
+
+                // Add Elector Button
+                isContainerAddButton={true}
+                AddButtonText="إضافة حملة أنتخابية"
+                isEdit={isEdit}
+                handleEntryClick={handleCampaignClicks}
                 toggle={toggle}
-                isTableContainerHeader={true}
 
-                // Filters
-                isGlobalFilter={true}
-                preGlobalFilteredRows={true}
-                isCampaignCategoryFilter={true}
-                // isGlobalSearch={true}
-                // isCampaignListFilter={true}
-                // isCustomerFilter={isCustomerFilter}
-                // FieldFiters
-                isFieldFilter={true}
-                isResetFilters={true}
-                isScampaignFilter={true}
-                isStatusFilter={true}
-                isPriorityFilter={true}
+                // Delete Button
                 isMultiDeleteButton={isMultiDeleteButton}
-                // isTestFilter={true}
-
-                // Table
-                columns={columns}
-                data={campaignList || []}
-                setCampaignList={setCampaignList}
-
-                // isStatusFilter={true}
-                // isGlobalPagination={true}
-                // isColumnFilter={true} // Change the prop name
-                // isCampaignScampaignFilter={true}
-                // isScampaignFilter={true}
-
-                SearchPlaceholder="Search for campaigns or something..."
-                // useFilters={true}
-                customPageSize={20}
-                className="custom-header-css"
-                divClass="table-responsive table-card mb-3"
-                tableClass="align-middle table-nowrap mb-0"
-                theadClass="table-light table-nowrap"
-                thClass="table-light text-muted"
-                handleCampaignClick={handleCampaignClicks}
+                setDeleteModalMulti={setDeleteModalMulti}
               />
-            ) : (
-              <Loader error={error} />
-            )}
-            <ToastContainer closeButton={false} limit={1} />
-          </div>
+              {isCampaignSuccess && campaigns.length ? (
+                <TableContainer
+                  setDeleteModalMulti={setDeleteModalMulti}
+                  setIsEdit={setIsEdit}
+                  toggle={toggle}
+                  isTableContainerHeader={true}
+
+                  // Filters
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isCampaignCategoryFilter={true}
+                  // isGlobalSearch={true}
+                  // isCampaignListFilter={true}
+                  // isCustomerFilter={isCustomerFilter}
+                  // FieldFiters
+                  isFieldFilter={true}
+                  isResetFilters={true}
+                  isScampaignFilter={true}
+                  isStatusFilter={true}
+                  isPriorityFilter={true}
+                  isMultiDeleteButton={isMultiDeleteButton}
+                  // isTestFilter={true}
+
+                  // Table
+                  columns={columns}
+                  data={campaigns || []}
+                  setCampaignList={setCampaignList}
+
+
+                  SearchPlaceholder="Search for campaigns or something..."
+                  // useFilters={true}
+                  customPageSize={20}
+                  className="custom-header-css"
+                  divClass="table-responsive table-card mb-3"
+                  tableClass="align-middle table-nowrap mb-0"
+                  theadClass="table-light table-nowrap"
+                  thClass="table-light text-muted"
+                  handleCampaignClick={handleCampaignClicks}
+                />
+              ) : (
+                <Loader error={error} />
+              )}
+              <ToastContainer closeButton={false} limit={1} />
+            </CardBody>
+          </Card>
         </Col>
-      </div>
-
-      <Modal
-        isOpen={modal}
-        toggle={toggle}
-        centered
-        size="lg"
-        className="border-0"
-        modalClassName="modal fade zoomIn"
-      >
-        <ModalHeader className="p-3 bg-soft-info" toggle={toggle}>
-          {!!isEdit ? "Edit Campaign" : "Create Campaign"}
-        </ModalHeader>
-        <Form
-          className="tablelist-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            validation.handleSubmit();
-            return false;
-          }}
-        >
-          <ModalBody className="modal-body">
-            <Row className="g-3">
-              <p>
-                Campaign Name:
-                Due Date:
-                Election:
-
-              </p>
-
-              <Col lg={12}>
-                <div>
-                  <Label for="description-field" className="form-label">
-                    Description
-                  </Label>
-                  <Input
-                    name="description"
-                    id="description-field"
-                    className="form-control"
-                    placeholder="Description"
-                    type="textarea"
-                    validate={{
-                      required: { value: true },
-                    }}
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.description || ""}
-                    invalid={
-                      validation.touched.description &&
-                        validation.errors.description
-                        ? true
-                        : false
-                    }
-                  />
-                  {validation.touched.description &&
-                    validation.errors.description ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.description}
-                    </FormFeedback>
-                  ) : null}
-                </div>
-              </Col>
-              <Col lg={12}>
-                <Label className="form-label">Moderators</Label>
-                <SimpleBar style={{ maxHeight: "95px" }}>
-                  <ul className="list-unstyled vstack gap-2 mb-0">
-                    {moderators &&
-                      moderators.map((moderator) => (
-                        <li key={moderator.id}>
-                          <div className="form-check d-flex align-items-center">
-                            <input
-                              name="moderators"
-                              className="form-check-input me-3"
-                              type="checkbox"
-                              onChange={(e) => {
-                                const selectedId = parseInt(e.target.value);
-                                const updatedModerators =
-                                  validation.values.moderators.includes(
-                                    selectedId
-                                  )
-                                    ? validation.values.moderators.filter(
-                                      (id) => id !== selectedId
-                                    )
-                                    : [
-                                      ...validation.values.moderators,
-                                      selectedId,
-                                    ];
-                                validation.setFieldValue(
-                                  "moderators",
-                                  updatedModerators
-                                );
-                              }}
-                              onBlur={validation.handleBlur}
-                              value={moderator.id}
-                              checked={validation.values.moderators.includes(
-                                moderator.id
-                              )}
-                              id={moderator.image}
-                            />
-
-                            <label
-                              className="form-check-label d-flex align-items-center"
-                              htmlFor={moderator.image}
-                            >
-                              <span className="flex-shrink-0">
-                                <img
-                                  src={
-                                    process.env.REACT_APP_API_URL +
-                                    moderator.image
-                                  }
-                                  alt=""
-                                  className="avatar-xxs rounded-circle"
-                                />
-                              </span>
-                              <span className="flex-grow-1 ms-2">
-                                {moderator.firstName}
-                              </span>
-                            </label>
-                            {validation.touched.moderators &&
-                              validation.errors.moderators ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.moderators}
-                              </FormFeedback>
-                            ) : null}
-                          </div>
-                        </li>
-                      ))}
-                  </ul>
-                </SimpleBar>
-              </Col>
-              <hr />
-              {/* <p>Admin Use</p> */}
-              <Col lg={6}>
-                <Label for="status-field" className="form-label">
-                  Status
-                </Label>
-                <Input
-                  name="status"
-                  type="select"
-                  className="form-select"
-                  id="ticket-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.status || ""}
-                >
-                  {StatusOptions.map((status) => (
-                    <option key={status.id} value={status.value}>
-                      {status.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.status && validation.errors.status ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.status}
-                  </FormFeedback>
-                ) : null}
-              </Col>
-              <Col lg={6}>
-                <Label for="priority-field" className="form-label">
-                  Priority
-                </Label>
-                <Input
-                  name="priority"
-                  type="select"
-                  className="form-select"
-                  id="priority-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.priority || ""}
-                >
-                  {PriorityOptions.map((priority) => (
-                    <option key={priority.id} value={priority.value}>
-                      {priority.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.priority && validation.errors.priority ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.priority}
-                  </FormFeedback>
-                ) : null}
-              </Col>
-            </Row>
-          </ModalBody>
-          <div className="modal-footer">
-            <div className="hstack gap-2 justify-content-end">
-              <Button
-                type="button"
-                onClick={() => {
-                  setModal(false);
-                }}
-                className="btn-light"
-              >
-                Close
-              </Button>
-              <button type="submit" className="btn btn-success" id="add-btn">
-                {!!isEdit ? "Update Campaign" : "Add Campaign"}
-              </button>
-            </div>
-          </div>
-        </Form>
-      </Modal>
+      </Row>
     </React.Fragment>
   );
 };

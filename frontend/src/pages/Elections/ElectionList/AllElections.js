@@ -1,17 +1,17 @@
-// React & Redux ------------
+// React & Redux
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-// Store ------------
+// Store
 import { getElections, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
 
-// Custom Components & ConstantsImports ------------
+// Constants & Component imports
 import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import ElectionModal from "./ElectionModal";
 import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
-// Styles & Toast ------------
+// UI Components & styling imports
 import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,9 +19,8 @@ import "react-toastify/dist/ReactToastify.css";
 const AllElections = () => {
   const dispatch = useDispatch();
 
-  // State Management ------------
+  // State Management
   const { elections, isElectionSuccess, error, categories, subCategories, moderators } = useSelector(electionsSelector);
-
   const [election, setElection] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -113,11 +112,12 @@ const AllElections = () => {
         electors: election.electors,
         attendees: election.attendees,
 
-        // Admin
+        // Task
         status: election.status,
         priority: election.priority,
         moderators: election.moderators,
       });
+      console.log("election:", election)
 
       setIsEdit(true);
       toggle();
@@ -352,67 +352,65 @@ const AllElections = () => {
       />
       <Row>
         <Col lg={12}>
-          <Card id="memberList">
+          <Card id="electionList">
             <CardBody>
-              <div>
-                <TableContainerHeader
-                  // Title
-                  ContainerHeaderTitle="الإنتخابات"
+              <TableContainerHeader
+                // Title
+                ContainerHeaderTitle="الإنتخابات"
 
-                  // Add Elector Button
-                  isContainerAddButton={true}
-                  AddButtonText="إضافة إنتخابات"
-                  isEdit={isEdit}
-                  handleEntryClick={handleElectionClicks}
-                  toggle={toggle}
+                // Add Elector Button
+                isContainerAddButton={true}
+                AddButtonText="إضافة إنتخابات"
+                isEdit={isEdit}
+                handleEntryClick={handleElectionClicks}
+                toggle={toggle}
 
-                  // Delete Button
-                  isMultiDeleteButton={isMultiDeleteButton}
-                  setDeleteModalMulti={setDeleteModalMulti}
+                // Delete Button
+                isMultiDeleteButton={isMultiDeleteButton}
+                setDeleteModalMulti={setDeleteModalMulti}
+              />
+              {isElectionSuccess && elections.length ? (
+                <TableContainer
+
+                  // Filters -------------------------
+                  isTableContainerFilter={true}
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isElectionCategoryFilter={true}
+                  isStatusFilter={true}
+                  isPriorityFilter={true}
+                  isResetFilters={true}
+
+                  // Filter Settings
+                  filters={filters}
+                  setFilters={setFilters}
+                  SearchPlaceholder="البحث بالاسم..."
+
+                  // Data -------------------------
+                  columns={columns}
+                  data={electionList || []}
+                  customPageSize={20}
+
+                  // isStatusFilter={true}
+                  // isGlobalPagination={true}
+                  // isColumnFilter={true} // Change the prop name
+                  // isElectionSelectionFilter={true}
+                  // isSelectionFilter={true}
+
+                  // useFilters={true}
+
+                  // Styling -------------------------
+                  className="custom-header-css"
+                  divClass="table-responsive table-card mb-2"
+                  tableClass="align-middle table-nowrap"
+                  theadClass="table-light"
+                  thClass="table-light text-muted"
+
+
                 />
-                {isElectionSuccess && elections.length ? (
-                  <TableContainer
-
-                    // Filters -------------------------
-                    isTableContainerFilter={true}
-                    isGlobalFilter={true}
-                    preGlobalFilteredRows={true}
-                    isElectionCategoryFilter={true}
-                    isStatusFilter={true}
-                    isPriorityFilter={true}
-                    isResetFilters={true}
-
-                    // Filter Settings
-                    filters={filters}
-                    setFilters={setFilters}
-                    SearchPlaceholder="البحث بالاسم..."
-
-                    // Data -------------------------
-                    columns={columns}
-                    data={electionList || []}
-                    customPageSize={20}
-
-                    // isStatusFilter={true}
-                    // isGlobalPagination={true}
-                    // isColumnFilter={true} // Change the prop name
-                    // isElectionSelectionFilter={true}
-                    // isSelectionFilter={true}
-
-                    // useFilters={true}
-
-                    // Styling -------------------------
-                    className="custom-header-css"
-                    divClass="table-responsive table-card mb-2"
-                    tableClass="align-middle table-nowrap"
-                    theadClass="table-light"
-                    thClass="table-light text-muted"
-
-
-                  />
-                ) : (
-                  <Loader error={error} />
-                )}
-              </div>
+              ) : (
+                <Loader error={error} />
+              )}
 
               <ToastContainer closeButton={false} limit={1} />
             </CardBody>

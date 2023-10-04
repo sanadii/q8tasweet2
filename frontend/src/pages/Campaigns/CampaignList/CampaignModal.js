@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // ------------ Import Actions ------------
-import { addCampaign, updateCampaign } from "../../../store/actions";
+import { addNewCampaign, updateCampaign } from "../../../store/actions";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,13 +14,14 @@ import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Moda
 
 // ------------ Custom Components & ConstantsImports ------------
 import { PriorityOptions, StatusOptions } from "../../../Components/constants";
-// import useCategoryManager from "../../../Components/Hooks/CategoryHooks";
 
 import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";
 
 const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
   const dispatch = useDispatch();
+
+  console.log("CAMPAIGN ??:", campaign);
 
   // ------------ State Management ------------
   const { campaigns, moderators, isCampaignSuccess, error } = useSelector(electionsSelector);
@@ -30,10 +31,12 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
     initialValues: {
-      // name: (campaign && campaign.name) || "",
-      // image: (campaign && campaign.image) || "",
+      election_candidate: (campaign && campaign.election_candidate) || "",
+      // candidateName: (campaign && campaign.candidateName) || "",
+      // electionName: (campaign && campaign.electionName) || "",
+      // electionDueDate: (campaign && campaign.electionDueDate) || "",
+      // targetVotes: (campaign && campaign.targetVotes) || "",
       description: (campaign && campaign.description) || "",
-      dueDate: (campaign && campaign.dueDate) || "",
 
       // Admin
       status: (campaign && campaign.status) || "New",
@@ -53,10 +56,7 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
       if (isEdit) {
         const updatedCampaign = {
           id: campaign ? campaign.id : 0,
-          // name: values.name,
-          // image: values.image,
-          // selectedImage: selectedImage,
-          dueDate: values.dueDate,
+          election_candidate: values.election_candidate,
           description: values.description,
 
           // Admin
@@ -67,15 +67,11 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
 
         // Update campaign
         dispatch(
-          updateCampaign({ campaign: updatedCampaign, formData: formData })
+          updateCampaign(updatedCampaign)
         );
       } else {
         const newCampaign = {
           id: (Math.floor(Math.random() * (30 - 20)) + 20).toString(),
-          // name: values.name,
-          // image: values.image,
-          // selectedImage: selectedImage,
-          dueDate: values.dueDate,
           description: values.description,
 
           // Admin
@@ -85,7 +81,7 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
         };
         // console.log(newCampaign); // before calling dispatch in onSubmit
         // Save new campaign
-        dispatch(addNewCampaign({ campaign: newCampaign, formData: formData }));
+        dispatch(addNewCampaign(newCampaign));
       }
 
       validation.resetForm();
@@ -93,35 +89,17 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
     },
   });
 
-  const {
-    categoryOptions,
-    subCategoryOptions,
-    changeSubCategoriesOptions,
-    activeParentCategoryId
-  } = useCategoryManager(categories, subCategories, validation);
-
-  const dateformate = (e) => {
-    const selectedDate = new Date(e);
-    const formattedDate = `${selectedDate.getFullYear()}-${(
-      "0" +
-      (selectedDate.getMonth() + 1)
-    ).slice(-2)}-${("0" + selectedDate.getDate()).slice(-2)}`;
-
-    // Update the form field value directly with the formatted date
-    validation.setFieldValue("dueDate", formattedDate);
-  };
-
   return (
     <Modal
       isOpen={modal}
-      // toggle={toggle}
+      toggle={toggle}
       centered
       size="lg"
       className="border-0"
       modalClassName="modal fade zoomIn"
     >
       <ModalHeader className="p-3 bg-soft-info" toggle={toggle}>
-        {!!isEdit ? "Edit Election" : "Create Election"}
+        {!!isEdit ? "Edit Campaign" : "Create Campaign"}
       </ModalHeader>
       <Form
         className="tablelist-form"
@@ -133,225 +111,50 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
       >
         <ModalBody className="modal-body">
           <Row className="g-3">
-            <Col lg={4}>
-              <div>
-                <Label for="category-field" className="form-label">
-                  تصنيف الانتخابات
-                </Label>
-                <Input
-                  name="category"
-                  type="select"
-                  className="form-select"
-                  id="category-field"
-                  onChange={(e) => {
-                    validation.handleChange(e);
-                    changeSubCategoriesOptions(e);
-                  }}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.category || ""}
-                >
-                  <option value="">Choose Category</option>
-                  {categoryOptions.map((category) => (
-                    <option key={category.id} value={parseInt(category.id)}>
-                      {category.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.category && validation.errors.category ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.category}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
+            {console.log("campaign details:", campaign)}
+            {/* <p>
+              المرشح: <strong>{campaign.candidateName}</strong> [{campaign.candidateId}]
+              <br />
+              الانتخابات:
+              <strong>{campaign.electionName}</strong>  [{campaign.electionId}]
+              <br />
+              الموعد: <strong>{campaign.electionDueDate}</strong>
+            </p> */}
 
-            <Col lg={4}>
+            <Col lg={12}>
               <div>
-                <Label for="sub-category-field" className="form-label">
-                  تصنيف الإنتخابات
+                <Label for="description-field" className="form-label">
+                  Description
                 </Label>
                 <Input
-                  name="subCategory"
-                  type="select"
-                  className="form-select"
-                  id="sub-category-field"
+                  name="description"
+                  id="description-field"
+                  className="form-control"
+                  placeholder="Description"
+                  type="textarea"
+                  validate={{
+                    required: { value: true },
+                  }}
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  value={validation.values.subCategory || ""}
-                >
-                  <option value="">التصنيف الفرعي</option>
-                  {subCategoryOptions.map((subCategory) => (
-                    <option key={subCategory.id} value={subCategory.id}>
-                      {subCategory.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.subCategory &&
-                  validation.errors.subCategory ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.subCategory}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
-            <Col lg={4}>
-              <div>
-                <Label for="dueDate-field" className="form-label">
-                  الموعد
-                </Label>
-                <Flatpickr
-                  name="dueDate"
-                  id="dueDate-field"
-                  className="form-control"
-                  placeholder="Select a dueDate"
-                  options={{
-                    altInput: true,
-                    altFormat: "Y-m-d",
-                    dateFormat: "Y-m-d",
-                  }}
-                  onChange={(e) => dateformate(e)}
-                  value={validation.values.dueDate || ""}
+                  value={validation.values.description || ""}
+                  invalid={
+                    validation.touched.description &&
+                      validation.errors.description
+                      ? true
+                      : false
+                  }
                 />
-                {validation.touched.dueDate && validation.errors.dueDate ? (
+                {validation.touched.description &&
+                  validation.errors.description ? (
                   <FormFeedback type="invalid">
-                    {validation.errors.dueDate}
+                    {validation.errors.description}
                   </FormFeedback>
                 ) : null}
               </div>
             </Col>
-            <Col lg={4}>
-              <Label for="electType-field" className="form-label">
-                نوع الانتخابات
-              </Label>
-              <Input
-                name="electType"
-                type="select"
-                className="form-select"
-                id="ticket-field"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electType || 1}
-              >
-                {ElectionTypeOptions.map((electType) => (
-                  <option key={electType.id} value={electType.id}>
-                    {electType.name}
-                  </option>
-                ))}
-              </Input>
-              {validation.touched.electType && validation.errors.electType ? (
-                <FormFeedback type="invalid">
-                  {validation.errors.type}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="electResult-field" className="form-label">
-                نتائج الانتخابات
-              </Label>
-              <Input
-                id="elect-result-field"
-                name="electResult"
-                type="select"
-                className="form-select"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electResult || 1}
-              >
-                {ElectionResultOptions.map((electResult) => (
-                  <option key={electResult.id} value={electResult.id}>
-                    {electResult.name}
-                  </option>
-                ))}
-              </Input>
-              {validation.touched.electResult && validation.errors.electResult ? (
-                <FormFeedback type="invalid">
-                  {validation.errors.electResult}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="electVotes-field" className="form-label">
-                عدد الأصوات
-              </Label>
-              <Input
-                id="elect-votes-field"
-                name="electVotes"
-                type="number"
-                value={validation.values.electVotes || 0}
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-              ></Input>
-              {validation.touched.electVotes && validation.errors.electVotes ? (
-                <FormFeedback electVotes="invalid">
-                  {validation.errors.electVotes}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="electSeats-field" className="form-label">
-                عدد المقاعد
-              </Label>
-              <Input
-                id="elect-seats-field"
-                name="electSeats"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electSeats || 0}
-              ></Input>
-              {validation.touched.electSeats && validation.errors.electSeats ? (
-                <FormFeedback electSeats="invalid">
-                  {validation.errors.electSeats}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="electors-field" className="form-label">
-                عدد الناخبين
-              </Label>
-              <Input
-                id="electors-field"
-                name="electors"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electors || 0}
-              ></Input>
-              {validation.touched.electors && validation.errors.electSeats ? (
-                <FormFeedback electors="invalid">
-                  {validation.errors.electors}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="attendees-field" className="form-label">
-                عدد الحضور
-              </Label>
-              <Input
-                id="attendees-field"
-                name="attendees"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.attendees || 0}
-              ></Input>
-              {validation.touched.attendees && validation.errors.attendees ? (
-                <FormFeedback attendees="invalid">
-                  {validation.errors.attendees}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <hr />
-
-
-            <Col lg={6}>
-              <Label className="form-label">المشرفين</Label>
+            <Col lg={12}>
+              <Label className="form-label">Moderators</Label>
               <SimpleBar style={{ maxHeight: "95px" }}>
                 <ul className="list-unstyled vstack gap-2 mb-0">
                   {moderators &&
@@ -418,58 +221,57 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
                 </ul>
               </SimpleBar>
             </Col>
+            <hr />
             {/* <p>Admin Use</p> */}
             <Col lg={6}>
-              <div>
-                <Label for="status-field" className="form-label">
-                  الحالة
-                </Label>
-                <Input
-                  name="status"
-                  type="select"
-                  className="form-select"
-                  id="ticket-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.status || ""}
-                >
-                  {StatusOptions.map((status) => (
-                    <option key={status.id} value={status.id}>
-                      {status.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.status && validation.errors.status ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.status}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div>
-                <Label for="priority-field" className="form-label">
-                  الأولية
-                </Label>
-                <Input
-                  name="priority"
-                  type="select"
-                  className="form-select"
-                  id="priority-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.priority || ""}
-                >
-                  {PriorityOptions.map((priority) => (
-                    <option key={priority.id} value={priority.id}>
-                      {priority.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.priority && validation.errors.priority ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.priority}
-                  </FormFeedback>
-                ) : null}
-              </div>
+              <Label for="status-field" className="form-label">
+                Status
+              </Label>
+              <Input
+                name="status"
+                type="select"
+                className="form-select"
+                id="ticket-field"
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+                value={validation.values.status || ""}
+              >
+                {StatusOptions.map((status) => (
+                  <option key={status.id} value={status.value}>
+                    {status.name}
+                  </option>
+                ))}
+              </Input>
+              {validation.touched.status && validation.errors.status ? (
+                <FormFeedback type="invalid">
+                  {validation.errors.status}
+                </FormFeedback>
+              ) : null}
+            </Col>
+            <Col lg={6}>
+              <Label for="priority-field" className="form-label">
+                Priority
+              </Label>
+              <Input
+                name="priority"
+                type="select"
+                className="form-select"
+                id="priority-field"
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+                value={validation.values.priority || ""}
+              >
+                {PriorityOptions.map((priority) => (
+                  <option key={priority.id} value={priority.value}>
+                    {priority.name}
+                  </option>
+                ))}
+              </Input>
+              {validation.touched.priority && validation.errors.priority ? (
+                <FormFeedback type="invalid">
+                  {validation.errors.priority}
+                </FormFeedback>
+              ) : null}
             </Col>
           </Row>
         </ModalBody>
@@ -482,10 +284,10 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
               }}
               className="btn-light"
             >
-              أغلق
+              Close
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
-              {!!isEdit ? "Update Election" : "Add Election"}
+              {!!isEdit ? "Update Campaign" : "Add Campaign"}
             </button>
           </div>
         </div>

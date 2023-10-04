@@ -142,29 +142,18 @@ function* getAllCampaignMembers({ payload: campaign }) {
   }
 }
 
-function* onAddNewCampaign({ payload: { campaign, formData } }) {
+
+function* onAddNewCampaign({ payload: campaign }) {
   try {
-    // Dispatch the uploadNewImage action with the formData & Wait for the upload to succeed before proceeding
-    yield put(uploadNewImage(formData));
-    const { payload: uploadResponse } = yield take(UPLOAD_IMAGE_SUCCESS);
-
-    // Replace backslashes in image URL with forward slashes & update the image field in campaign object with  url
-    const formattedImageUrl = uploadResponse.url.replace(/\\/g, "/");
-    const updatedCampaign = {
-      ...campaign,
-      image: formattedImageUrl,
-    };
-
-    // Call the API function to add a  campaign & Dispatch the addNewCampaignSuccess action with the received data
-    const addNewCampaignResponse = yield call(addNewCampaign, updatedCampaign);
-    yield put(addNewCampaignSuccess(addNewCampaignResponse));
-
+    const response = yield call(addNewCampaign, campaign);
+    yield put(addNewCampaignSuccess(response));
     toast.success("Campaign Added Successfully", { autoClose: 2000 });
   } catch (error) {
     yield put(addNewCampaignFail(error));
     toast.error("Campaign Added Failed", { autoClose: 2000 });
   }
 }
+
 
 function* onDeleteCampaign({ payload: campaign }) {
   try {
@@ -177,39 +166,19 @@ function* onDeleteCampaign({ payload: campaign }) {
   }
 }
 
-function* onUpdateCampaign({ payload: { campaign, formData } }) {
+function* onUpdateCampaign({ payload: campaign }) {
   try {
-    let uploadResponse;
-
-    // Check if an image is selected (formData contains a selected file)
-    if (formData && formData.get("image")) {
-      // Dispatch the uploadNewImage action with the formData & Wait for the upload to succeed before proceeding
-      yield put(uploadNewImage(formData));
-      const action = yield take([UPLOAD_IMAGE_SUCCESS, UPLOAD_IMAGE_FAIL]);
-      if (action.type === UPLOAD_IMAGE_SUCCESS) {
-        uploadResponse = action.payload;
-      } else {
-        throw Error("Image Upload Failed");
-      }
-    }
-
-    // Replace backslashes in image URL with forward slashes & update the image field in the campaign object with the  URL
-    const formattedImageUrl = uploadResponse?.url?.replace(/\\/g, "/");
-    const updatedCampaign = {
-      ...campaign,
-      image: formattedImageUrl,
-    };
-
-    // Call the API function to update the campaign & Dispatch the updateCampaignSuccess action with the received data
-    const updateCampaignResponse = yield call(updateCampaign, updatedCampaign);
-    yield put(updateCampaignSuccess(updateCampaignResponse));
-
-    toast.success("Campaign Updated Successfully", { autoClose: 2000 });
+    const response = yield call(updateCampaign, campaign);
+    yield put(updateCampaignSuccess(response));
+    toast.success("Campaign Updated Successfully", {
+      autoClose: 2000,
+    });
   } catch (error) {
     yield put(updateCampaignFail(error));
     toast.error("Campaign Updated Failed", { autoClose: 2000 });
   }
 }
+
 
 // Campaign Guarantees
 function* getAllCampaignGuarantees({ payload: campaign }) {

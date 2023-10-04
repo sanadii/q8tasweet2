@@ -10,8 +10,7 @@ urlpatterns = [
     path("getCampaignDetails/<int:id>", GetCampaignDetails.as_view(), name="getCampaignDetails"),
     path("addNewCampaign", AddNewCampaign.as_view(), name="AddNewCampaign"),
     path("deleteCampaign/<int:id>", DeleteCampaign.as_view(), name="DeleteCampaign"),
-    # path("updateCampaign/<int:id>", UpdateCampaign.as_view(), name="UpdateCampaign"),
-    # path("getCampaignCount", GetCampaignCount.as_view(), name="GetCampaignCount"),
+    path("updateCampaign/<int:id>", UpdateCampaign.as_view(), name="UpdateCampaign"),
 
 
     # # Election Campaigns

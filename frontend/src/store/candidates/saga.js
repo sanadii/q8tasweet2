@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 // Candidate Redux States
 import {
   GET_CANDIDATES,
-  GET_CANDIDATE_COUNT,
   GET_CANDIDATE_DETAILS,
   ADD_NEW_CANDIDATE,
   DELETE_CANDIDATE,
@@ -18,7 +17,6 @@ import {
   DELETE_CANDIDATE_CANDIDATE,
   UPDATE_CANDIDATE_CANDIDATE,
   // GET_CANDIDATE_CANDIDATE_DETAILS,
-  // GET_CANDIDATE_CANDIDATE_COUNT,
 
   // Candidate Campaign
   GET_CANDIDATE_CAMPAIGNS,
@@ -26,7 +24,6 @@ import {
   DELETE_CANDIDATE_CAMPAIGN,
   UPDATE_CANDIDATE_CAMPAIGN,
   GET_CANDIDATE_CAMPAIGN_DETAILS,
-  GET_CANDIDATE_CAMPAIGN_COUNT,
 
 } from "./actionType";
 
@@ -36,7 +33,7 @@ import {
 } from "../uploadImage/actionType";
 
 import {
-  // getCandidates, getCandidateDetails, getCandidatesCount
+  // getCandidates, getCandidateDetails, 
   // API Response
   CandidateApiResponseSuccess,
   CandidateApiResponseError,
@@ -72,7 +69,6 @@ import { uploadNewImage } from "../uploadImage/action";
 //Include Both Helper File with needed methods
 import {
   getCandidates as getCandidatesApi,
-  getCandidateCount as getCandidateCountApi,
   getCandidateDetails as getCandidateDetailsApi,
   addNewCandidate,
   updateCandidate,
@@ -81,7 +77,6 @@ import {
   // Candidate Candidates
   getCandidateElections as getCandidateElectionsApi,
   // getCandidateElectionDetails as getCandidateElectionDetailsApi,
-  // getCandidateElectionCount as getCandidateElectionCountApi,
   addNewCandidateElection,
   updateCandidateElection,
   deleteCandidateElection,
@@ -89,7 +84,6 @@ import {
   // Candidate Campaigns
   getCandidateCampaigns as getCandidateCampaignsApi,
   // getCandidateCampaignDetails as getCandidateCampaignDetailsApi,
-  // getCandidateCampaignCount as getCandidateCampaignCountApi,
   addNewCandidateCampaign,
   updateCandidateCampaign,
   deleteCandidateCampaign,
@@ -99,20 +93,11 @@ function* getCandidates() {
   try {
     const response = yield call(getCandidatesApi);
     yield put(CandidateApiResponseSuccess(GET_CANDIDATES, response.data));
-    yield put(CandidateApiResponseSuccess(GET_CANDIDATE_COUNT, response.counts));
   } catch (error) {
     yield put(CandidateApiResponseError(GET_CANDIDATES, error));
   }
 }
 
-function* getCandidateCount() {
-  try {
-    const response = yield call(getCandidateCountApi);
-    yield put(CandidateApiResponseSuccess(GET_CANDIDATE_COUNT, response.data));
-  } catch (error) {
-    yield put(CandidateApiResponseError(GET_CANDIDATE_COUNT, error));
-  }
-}
 
 function* getCandidateDetails({ payload: candidate }) {
   try {
@@ -317,9 +302,6 @@ export function* watchDeleteCandidate() {
   yield takeEvery(DELETE_CANDIDATE, onDeleteCandidate);
 }
 
-export function* watchGetCandidateCount() {
-  yield takeEvery(GET_CANDIDATE_COUNT, getCandidateCount);
-}
 
 export function* watchGetCandidateDetails() {
   yield takeEvery(GET_CANDIDATE_DETAILS, getCandidateDetails);
@@ -366,17 +348,14 @@ function* candidateSaga() {
 
     // Candidates
     fork(watchGetCandidates),
-    fork(watchGetCandidateCount),
     fork(watchAddNewCandidate),
     fork(watchUpdateCandidate),
     fork(watchDeleteCandidate),
     fork(watchGetCandidateDetails),
-    fork(watchGetCandidateCount),
 
     // CandidateElections
     fork(watchGetCandidateElections),
     // fork(watchGetCandidateElectionDetails),
-    // fork(watchGetCandidateElectionCount),
     fork(watchAddNewCandidateElection),
     fork(watchUpdateCandidateElection),
     fork(watchDeleteCandidateElection),
@@ -384,7 +363,6 @@ function* candidateSaga() {
     // CandidateCampiagns
     fork(watchGetCandidateCampaigns),
     // fork(watchGetCandidateCampiagnDetails),
-    // fork(watchGetCandidateCampiagnCount),
     fork(watchAddNewCandidateCampaign),
     fork(watchUpdateCandidateCampaign),
     fork(watchDeleteCandidateCampaign),

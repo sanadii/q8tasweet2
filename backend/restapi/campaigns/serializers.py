@@ -22,10 +22,10 @@ class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     class Meta: 
         model = Campaigns
         fields = [
-            "election_candidate", "election", "candidate", "description",
+            "id", "election_candidate", "election", "candidate",
+            "description", "target_votes",
             "twitter", "instagram", "website",
-            "target_score", "results", "events",
-        ]
+            ]
         
     def to_representation(self, instance):
         rep = super().to_representation(instance)

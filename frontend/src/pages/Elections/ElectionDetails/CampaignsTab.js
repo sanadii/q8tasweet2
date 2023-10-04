@@ -10,7 +10,7 @@ import { ImageCandidateCampaign, DeleteModal } from "../../../Components/Common"
 
 const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
   const dispatch = useDispatch();
-  const electionCampaigns = useSelector(electionsSelector);
+  const { electionCampaigns } = useSelector(electionsSelector);
 
   const [campaign, setCampaign] = useState([]);
   const [isBookmarkClick, setIsBookmarkClick] = useState(false);

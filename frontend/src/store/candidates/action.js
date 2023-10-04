@@ -16,7 +16,6 @@ import {
   DELETE_CANDIDATE_FAIL,
 
   // Candidate Details
-  GET_CANDIDATE_COUNT,
   GET_CANDIDATE_DETAILS,
 
   // Candidate Candidate
@@ -61,10 +60,6 @@ export const CandidateApiResponseError = (actionType, error) => ({
 // Get Candidates
 export const getCandidates = () => ({
   type: GET_CANDIDATES,
-});
-
-export const getCandidateCount = () => ({
-  type: GET_CANDIDATE_COUNT,
 });
 
 

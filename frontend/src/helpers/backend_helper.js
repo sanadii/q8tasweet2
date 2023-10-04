@@ -64,38 +64,34 @@ export const postSocialLogin = (data) => api.create(url.SOCIAL_LOGIN, data);
 
 // Elections  //////////////////////////////
 export const getElections = () => api.get(url.GET_ELECTIONS);
+export const getElectionDetails = (election) => api.get(url.GET_ELECTION_DETAILS + "/" + election.id);
 export const addElection = (election) => api.create(url.ADD_ELECTION, election);
 export const updateElection = (election) => api.update(url.UPDATE_ELECTION + "/" + election.id, election);
 export const deleteElection = (election) => api.delete(url.DELETE_ELECTION + "/" + election);
-export const getElectionDetails = (election) => api.get(url.GET_ELECTION_DETAILS + "/" + election.id);
-export const getElectionCount = () => api.get(url.GET_ELECTION_COUNT);
 
 // ElectionCandidates
 export const getElectionCandidates = (electionCandidate) => api.get(url.GET_ELECTION_CANDIDATES + "/" + electionCandidate.id);
-export const addNewElectionCandidate = (electionCandidate) => api.create(url.ADD_NEW_ELECTION_CANDIDATE, electionCandidate);
-export const deleteElectionCandidate = (electionCandidate) => api.delete(url.DELETE_ELECTION_CANDIDATE + "/" + electionCandidate);
-export const updateElectionCandidate = (electionCandidate) => api.update(url.UPDATE_ELECTION_CANDIDATE + "/" + electionCandidate.id, electionCandidate);
 export const getElectionCandidateDetails = (electionCandidate) => api.get(url.GET_ELECTION_CANDIDATE_DETAILS + "/" + electionCandidate.id);
-export const getElectionCandidateCount = () => api.get(url.GET_ELECTION_COUNT);
+export const addNewElectionCandidate = (electionCandidate) => api.create(url.ADD_NEW_ELECTION_CANDIDATE, electionCandidate);
+export const updateElectionCandidate = (electionCandidate) => api.update(url.UPDATE_ELECTION_CANDIDATE + "/" + electionCandidate.id, electionCandidate);
+export const deleteElectionCandidate = (electionCandidate) => api.delete(url.DELETE_ELECTION_CANDIDATE + "/" + electionCandidate);
 
 // ElectionCommittees
 export const getElectionCommittees = (electionCommittee) => api.get(url.GET_ELECTION_COMMITTEES + "/" + electionCommittee.id);
-export const addNewElectionCommittee = (electionCommittee) => api.create(url.ADD_NEW_ELECTION_COMMITTEE, electionCommittee);
-export const deleteElectionCommittee = (electionCommittee) => api.delete(url.DELETE_ELECTION_COMMITTEE + "/" + electionCommittee);
-export const updateElectionCommittee = (electionCommittee) => api.update(url.UPDATE_ELECTION_COMMITTEE + "/" + electionCommittee.id, electionCommittee);
 export const getElectionCommitteeDetails = (electionCommittee) => api.get(url.GET_ELECTION_COMMITTEE_DETAILS + "/" + electionCommittee.id);
-export const getElectionCommitteeCount = () => api.get(url.GET_ELECTION_COUNT);
+export const addNewElectionCommittee = (electionCommittee) => api.create(url.ADD_NEW_ELECTION_COMMITTEE, electionCommittee);
+export const updateElectionCommittee = (electionCommittee) => api.update(url.UPDATE_ELECTION_COMMITTEE + "/" + electionCommittee.id, electionCommittee);
+export const deleteElectionCommittee = (electionCommittee) => api.delete(url.DELETE_ELECTION_COMMITTEE + "/" + electionCommittee);
 
 // ElectionCommittees
 export const updateElectionCommitteeResults = (electionCommitteeResult) => api.update(url.UPDATE_ELECTION_COMMITTEE_RESULTS + "/" + electionCommitteeResult.id, electionCommitteeResult);
 
 // ElectionCampaigns
 export const getElectionCampaigns = (campaign) => api.get(url.GET_ELECTION_CAMPAIGNS + "/" + campaign.id);
-export const addNewElectionCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
-export const deleteElectionCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
-export const updateElectionCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
 export const getElectionCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign.id);
-export const getElectionCampaignCount = () => api.get(url.GET_ELECTION_CAMPAIGN_COUNT);
+export const addNewElectionCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
+export const updateElectionCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
+export const deleteElectionCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
 
 // ElectionAttendee
 export const getAllElectionAttendees = (electionAttendee) => api.get(url.GET_ELECTION_ATTENDEES, electionAttendee);
@@ -107,27 +103,24 @@ export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_E
 // --------------- Candidates  ---------------
 // Candidates
 export const getCandidates = () => api.get(url.GET_CANDIDATES);
+export const getCandidateDetails = (candidate) => api.get(url.GET_CANDIDATE_DETAILS + "/" + candidate.id);
 export const addNewCandidate = (candidate) => api.create(url.ADD_NEW_CANDIDATE, candidate);
 export const updateCandidate = (candidate) => api.update(url.UPDATE_CANDIDATE + "/" + candidate.id, candidate);
 export const deleteCandidate = (candidate) => api.delete(url.DELETE_CANDIDATE + "/" + candidate);
-export const getCandidateDetails = (candidate) => api.get(url.GET_CANDIDATE_DETAILS + "/" + candidate.id);
-export const getCandidateCount = () => api.get(url.GET_CANDIDATE_COUNT);
 
 // CandidateElections
 export const getCandidateElections = (candidate) => api.get(url.GET_CANDIDATE_ELECTIONS + "/" + candidate.id);
-export const addNewCandidateElection = (candidate) => api.create(url.ADD_NEW_CANDIDATE_ELECTION, candidate);
-export const deleteCandidateElection = (candidate) => api.delete(url.DELETE_CANDIDATE_ELECTION + "/" + candidate);
-export const updateCandidateElection = (candidate) => api.update(url.UPDATE_CANDIDATE_ELECTION + "/" + candidate.id, candidate);
 export const getCandidateElectionDetails = (candidate) => api.get(url.GET_CANDIDATE_ELECTION_DETAILS + "/" + candidate.id);
-export const getCandidateElectionCount = () => api.get(url.GET_ELECTION_COUNT);
+export const addNewCandidateElection = (candidate) => api.create(url.ADD_NEW_CANDIDATE_ELECTION, candidate);
+export const updateCandidateElection = (candidate) => api.update(url.UPDATE_CANDIDATE_ELECTION + "/" + candidate.id, candidate);
+export const deleteCandidateElection = (candidate) => api.delete(url.DELETE_CANDIDATE_ELECTION + "/" + candidate);
 
 // CandidateCampaigns
 export const getCandidateCampaigns = (campaign) => api.get(url.GET_CANDIDATE_CAMPAIGNS + "/" + campaign.id);
-export const addNewCandidateCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
-export const deleteCandidateCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
-export const updateCandidateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
 export const getCandidateCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign.id);
-export const getCandidateCampaignCount = () => api.get(url.GET_CANDIDATE_CAMPAIGN_COUNT);
+export const addNewCandidateCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
+export const updateCandidateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
+export const deleteCandidateCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
 
 
 // --------------- Campaigns  ---------------
@@ -137,7 +130,6 @@ export const addNewCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, cam
 export const updateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
 export const deleteCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
 export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign.id);
-export const getCampaignCount = () => api.get(url.GET_CAMPAIGN_COUNT);
 
 // --------------- CampaignMember  ---------------
 export const getAllCampaignMembers = (member) => api.get(url.GET_ALL_CAMPAIGN_MEMBERS + "/" + member.id);
@@ -145,7 +137,6 @@ export const addNewCampaignMember = (member) => api.create(url.ADD_NEW_CAMPAIGN_
 export const updateCampaignMember = (member) => api.update(url.UPDATE_CAMPAIGN_MEMBER + "/" + member.id, member);
 export const deleteCampaignMember = (member) => api.delete(url.DELETE_CAMPAIGN_MEMBER + "/" + member);
 export const getCampaignMemberDetails = (member) => api.get(url.GET_CAMPAIGN_MEMBER_DETAILS + "/" + member.id);
-export const getCampaignMemberCount = () => api.get(url.GET_CAMPAIGN_MEMBER_COUNT);
 
 // --------------- CampaignGuarantee  ---------------
 export const getAllCampaignGuarantees = (campaignGuarantee) => api.get(url.GET_ALL_CAMPAIGN_GUARANTEES, campaignGuarantee);
@@ -176,7 +167,6 @@ export const addNewUserCampaign = (user) => api.create(url.ADD_NEW_USER_CAMPAIGN
 export const updateUserCampaign = (user) => api.update(url.UPDATE_USER_CAMPAIGN + "/" + user.id, user);
 export const deleteUserCampaign = (user) => api.delete(url.DELETE_USER_CAMPAIGN + "/" + user);
 export const getUserCampaignDetails = (user) => api.get(url.GET_USER_CAMPAIGN_DETAILS + "/" + user.id);
-export const getUserCampaignCount = () => api.get(url.GET_USER_CAMPAIGN_COUNT);
 
 // Images
 // export const uploadNewImage = (formData) => {

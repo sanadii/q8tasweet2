@@ -2,22 +2,16 @@
 from django.http import JsonResponse
 from django.http.response import JsonResponse
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
-from django.shortcuts import render
 from rest_framework.views import APIView
 from restapi.serializers import *
 from restapi.models import *
 from .models import *
-import ast 
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
-import jwt
 from django.conf import settings
-from rest_framework.pagination import PageNumberPagination
-from rest_framework import status
 from restapi.helper.views_helper import CustomPagination
 
 

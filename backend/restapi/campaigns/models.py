@@ -17,9 +17,7 @@ class Campaigns(TrackModel, TaskModel):
     website = models.URLField(max_length=120, blank=True, null=True)
 
     # Activities
-    target_score = models.PositiveIntegerField(blank=True, null=True)
-    results = models.IntegerField(blank=True, null=True)
-    events = models.PositiveIntegerField(blank=True, null=True)
+    target_votes = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         db_table = "campaign"
