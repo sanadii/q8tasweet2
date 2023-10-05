@@ -67,35 +67,17 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
         representation["Candidate_deleted"] = instance.candidate.deleted
         return representation
 
-class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    """ Serializer for the Campaigns model. """
-    admin_serializer_classes = (TrackMixin,)
 
-    # Example fields; adjust according to your model's fields and requirements
-    name = serializers.CharField(read_only=True)
-    start_date = serializers.DateField(read_only=True)
-    end_date = serializers.DateField(read_only=True)
-
-    class Meta:
-        model = Campaigns
-        fields = ["id", "election", "name", "start_date", "end_date"]
-
-    def create(self, validated_data):
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
-
-
-class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class CampaignMembersSerializer(serializers.ModelSerializer):
     """ Serializer for the CampaignMembers model. """
-    admin_serializer_classes = (TrackMixin,)
-
-    member_name = serializers.CharField(source='member.name', read_only=True)
+    # admin_serializer_classes = (TrackMixin,)
 
     class Meta:
         model = CampaignMembers
-        fields = ["id", "campaign", "member", "member_name", "role"]
+        fields = ["id", "user", "campaign",
+                  "rank", "supervisor", "committee", "civil",
+                  "phone", "notes", "status"
+                ]
 
     def create(self, validated_data):
         return super().create(validated_data)
@@ -108,11 +90,9 @@ class CampaignGuaranteesSerializer(AdminFieldMixin, serializers.ModelSerializer)
     """ Serializer for the CampaignGuarantees model. """
     admin_serializer_classes = (TrackMixin,)
 
-    guarantee_name = serializers.CharField(source='guarantee.name', read_only=True)
-
     class Meta:
         model = CampaignGuarantees
-        fields = ["id", "campaign", "guarantee", "guarantee_name", "details"]
+        fields = ["id", "campaign", "member", "civil", "phone", "notes", "status"]
 
     def create(self, validated_data):
         return super().create(validated_data)
@@ -125,11 +105,9 @@ class CampaignAttendeesSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the CampaignAttendees model. """
     admin_serializer_classes = (TrackMixin,)
 
-    attendee_name = serializers.CharField(source='attendee.name', read_only=True)
-
     class Meta:
         model = CampaignAttendees
-        fields = ["id", "campaign", "attendee", "attendee_name", "attended_date"]
+        fields = ["id", "user", "election", "committee", "elector", "notes", "status"]
 
     def create(self, validated_data):
         return super().create(validated_data)
@@ -139,70 +117,70 @@ class CampaignAttendeesSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
 
 
-class CampaignAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
-    full_name = serializers.SerializerMethodField()
-    civil = serializers.SerializerMethodField()
-    gender = serializers.SerializerMethodField()
-    membership_no = serializers.SerializerMethodField()
-    box_no = serializers.SerializerMethodField()
-    enrollment_date = serializers.SerializerMethodField()
-    relationship = serializers.SerializerMethodField()
-    elector_notes = serializers.SerializerMethodField()
+# class CampaignAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
+#     full_name = serializers.SerializerMethodField()
+#     civil = serializers.SerializerMethodField()
+#     gender = serializers.SerializerMethodField()
+#     membership_no = serializers.SerializerMethodField()
+#     box_no = serializers.SerializerMethodField()
+#     enrollment_date = serializers.SerializerMethodField()
+#     relationship = serializers.SerializerMethodField()
+#     elector_notes = serializers.SerializerMethodField()
 
-    class Meta:
-        model = CampaignAttendees
-        fields = ["id", "election", "committee", "user", "civil", "full_name", "gender",
-                  "membership_no", "box_no", "enrollment_date", "relationship", "elector_notes", "notes",
-                  "status"
-                  ]
+#     class Meta:
+#         model = CampaignAttendees
+#         fields = ["id", "election", "committee", "user", "civil", "full_name", "gender",
+#                   "membership_no", "box_no", "enrollment_date", "relationship", "elector_notes", "notes",
+#                   "status"
+#                   ]
 
-    def get_full_name(self, obj):
-        try:
-            return obj.elector.full_name if obj.elector else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+#     def get_full_name(self, obj):
+#         try:
+#             return obj.elector.full_name if obj.elector else None
+#         except Electors.DoesNotExist:
+#             return "Not Found"
 
-    def get_gender(self, obj):
-        try:
-            return obj.elector.gender if obj.elector else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+#     def get_gender(self, obj):
+#         try:
+#             return obj.elector.gender if obj.elector else None
+#         except Electors.DoesNotExist:
+#             return "Not Found"
 
-    def get_membership_no(self, obj):
-        try:
-            return obj.elector.membership_no if obj.elector else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+#     def get_membership_no(self, obj):
+#         try:
+#             return obj.elector.membership_no if obj.elector else None
+#         except Electors.DoesNotExist:
+#             return "Not Found"
 
-    def get_box_no(self, obj):
-        try:
-            return obj.elector.box_no if obj.elector else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+#     def get_box_no(self, obj):
+#         try:
+#             return obj.elector.box_no if obj.elector else None
+#         except Electors.DoesNotExist:
+#             return "Not Found"
 
-    def get_enrollment_date(self, obj):
-        try:
-            return obj.elector.enrollment_date if obj.elector else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+#     def get_enrollment_date(self, obj):
+#         try:
+#             return obj.elector.enrollment_date if obj.elector else None
+#         except Electors.DoesNotExist:
+#             return "Not Found"
 
-    def get_relationship(self, obj):
-        try:
-            return obj.elector.relationship if obj.elector else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+#     def get_relationship(self, obj):
+#         try:
+#             return obj.elector.relationship if obj.elector else None
+#         except Electors.DoesNotExist:
+#             return "Not Found"
 
-    def get_elector_notes(self, obj):
-        try:
-            return obj.elector.notes if obj.elector else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+#     def get_elector_notes(self, obj):
+#         try:
+#             return obj.elector.notes if obj.elector else None
+#         except Electors.DoesNotExist:
+#             return "Not Found"
         
-    def get_civil(self, obj):
-        try:
-            return obj.elector.civil if obj.elector else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+#     def get_civil(self, obj):
+#         try:
+#             return obj.elector.civil if obj.elector else None
+#         except Electors.DoesNotExist:
+#             return "Not Found"
 
 
 # For CampaignGuaranteesSerializer and CampaignAttendeesSerializer,
