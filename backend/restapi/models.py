@@ -1,7 +1,7 @@
 # restapi/models.py
 
 from django.db import models
-from .campaigns.models import Campaigns, CampaignMembers, CampaignGuarantees, ElectionAttendees
+from .campaigns.models import Campaigns, CampaignMembers, CampaignGuarantees, CampaignAttendees
 from .candidates.models import Candidates
 from .categories.models import Categories, Tags, Areas
 from .elections.models import Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults

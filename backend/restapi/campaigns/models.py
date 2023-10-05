@@ -57,16 +57,16 @@ class CampaignGuarantees(TrackModel):
         verbose_name_plural = "Campaign Guarantees"
     
 
-class ElectionAttendees(TrackModel):
+class CampaignAttendees(TrackModel):
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attended_elections')
-    election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_attendees')
+    election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True, related_name='Campaign_attendees')
     committee = models.ForeignKey('ElectionCommittees', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_attendees')
     elector = models.ForeignKey('Electors', on_delete=models.SET_NULL, null=True, blank=True, related_name='elector_attendees')
     notes = models.TextField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        db_table = 'election_attendee'
+        db_table = 'Campaign_attendee'
         verbose_name = "Election Attendee"
         verbose_name_plural = "Election Attendees"
 

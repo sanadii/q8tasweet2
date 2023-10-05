@@ -5,7 +5,7 @@ from restapi.helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixi
 from restapi.models import (
     Elections, ElectionCandidates, ElectionCommittees,
     Candidates, 
-    Campaigns, CampaignMembers, CampaignGuarantees, ElectionAttendees,
+    Campaigns, CampaignMembers, CampaignGuarantees, CampaignAttendees,
     Electors,
     Categories,
 )
@@ -42,7 +42,7 @@ class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
         return rep
 
-class CampaignDetailsSerializer(serializers.ModelSerializer):
+class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     def get_elections_candidates(self):
         from ..serializers import ElectionsSerializer, CandidatesSerializer
@@ -67,99 +67,79 @@ class CampaignDetailsSerializer(serializers.ModelSerializer):
         representation["Candidate_deleted"] = instance.candidate.deleted
         return representation
 
+class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """ Serializer for the Campaigns model. """
+    admin_serializer_classes = (TrackMixin,)
 
-class CampaignElectionSerializer(TrackMixin, serializers.ModelSerializer):
+    # Example fields; adjust according to your model's fields and requirements
+    name = serializers.CharField(read_only=True)
+    start_date = serializers.DateField(read_only=True)
+    end_date = serializers.DateField(read_only=True)
+
     class Meta:
-        model = Elections
-        fields = "__all__"
+        model = Campaigns
+        fields = ["id", "election", "name", "start_date", "end_date"]
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        return {"election_" + key: value for key, value in representation.items()}
+    def create(self, validated_data):
+        return super().create(validated_data)
 
-
-class CampaignCandidateSerializer(TrackMixin, serializers.ModelSerializer):
-    class Meta:
-        model = Candidates
-        fields = "__all__"
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        return {"candidate_" + key: value for key, value in representation.items()}
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
 
-class CampaignMembersSerializer(TrackMixin, serializers.ModelSerializer):
+class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """ Serializer for the CampaignMembers model. """
+    admin_serializer_classes = (TrackMixin,)
 
-    def get_serializers(self):
-        from ..serializers import UserSerializer
-        user = UserSerializer()  # Removed source="user"
-        rank = serializers.IntegerField()
+    member_name = serializers.CharField(source='member.name', read_only=True)
 
     class Meta:
         model = CampaignMembers
-        fields = [ "id", "user", "campaign", "rank", "supervisor", "committee", "notes", "phone", "status"]
+        fields = ["id", "campaign", "member", "member_name", "role"]
 
-class CampaignGuaranteesSerializer(serializers.ModelSerializer):
-    full_name = serializers.SerializerMethodField()
-    gender = serializers.SerializerMethodField()
-    membership_no = serializers.SerializerMethodField()
-    box_no = serializers.SerializerMethodField()
-    enrollment_date = serializers.SerializerMethodField()
-    relationship = serializers.SerializerMethodField()
-    elector_notes = serializers.SerializerMethodField()
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
+
+
+class CampaignGuaranteesSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """ Serializer for the CampaignGuarantees model. """
+    admin_serializer_classes = (TrackMixin,)
+
+    guarantee_name = serializers.CharField(source='guarantee.name', read_only=True)
 
     class Meta:
         model = CampaignGuarantees
-        fields = [ "id", "campaign", "member", "civil", "full_name", "phone",
-                  "gender", "membership_no", "box_no", "enrollment_date", "relationship",
-                  "elector_notes", "notes", "status"
-                  ]
+        fields = ["id", "campaign", "guarantee", "guarantee_name", "details"]
 
-    def get_full_name(self, obj):
-        try:
-            return obj.civil.full_name if obj.civil else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+    def create(self, validated_data):
+        return super().create(validated_data)
 
-    def get_gender(self, obj):
-        try:
-            return obj.civil.gender if obj.civil else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
-    def get_membership_no(self, obj):
-        try:
-            return obj.civil.membership_no if obj.civil else None
-        except Electors.DoesNotExist:
-            return "Not Found"
 
-    def get_box_no(self, obj):
-        try:
-            return obj.civil.box_no if obj.civil else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+class CampaignAttendeesSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """ Serializer for the CampaignAttendees model. """
+    admin_serializer_classes = (TrackMixin,)
 
-    def get_enrollment_date(self, obj):
-        try:
-            return obj.civil.enrollment_date if obj.civil else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+    attendee_name = serializers.CharField(source='attendee.name', read_only=True)
 
-    def get_relationship(self, obj):
-        try:
-            return obj.civil.relationship if obj.civil else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+    class Meta:
+        model = CampaignAttendees
+        fields = ["id", "campaign", "attendee", "attendee_name", "attended_date"]
 
-    def get_elector_notes(self, obj):
-        try:
-            return obj.civil.notes if obj.civil else None
-        except Electors.DoesNotExist:
-            return "Not Found"
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
 
 
-class ElectionAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
+class CampaignAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     civil = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
@@ -170,7 +150,7 @@ class ElectionAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
     elector_notes = serializers.SerializerMethodField()
 
     class Meta:
-        model = ElectionAttendees
+        model = CampaignAttendees
         fields = ["id", "election", "committee", "user", "civil", "full_name", "gender",
                   "membership_no", "box_no", "enrollment_date", "relationship", "elector_notes", "notes",
                   "status"
@@ -225,7 +205,7 @@ class ElectionAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
             return "Not Found"
 
 
-# For CampaignGuaranteesSerializer and ElectionAttendeesSerializer,
+# For CampaignGuaranteesSerializer and CampaignAttendeesSerializer,
 # you could have a method like this to avoid repeating the same logic
 def get_field_or_not_found(self, obj, field_name):
     try:

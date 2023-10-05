@@ -58,165 +58,52 @@ class GetCampaignDetails(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, id):
-        try:
-            current_user_id = request.user.id
-            
-            # 1. Fetch campaign data
-            campaign_data = self.get_campaign_data(id)
+        campaign = get_object_or_404(Campaigns, id=id)
+        context = {"request": request}
 
-            # 2. Extract the election ID directly from campaignDetails
-            election_id = campaign_data['election']['id']  # This is assuming campaignDetails.election.id structure
+        return Response({
+            "data": {
+                "currentCampaignMember": self.get_current_campaign_member(id, request.user.id, context),
+                "campaignDetails": self.get_campaign_data(id, context),
+                "campaignMembers": self.get_campaign_members(id, context),
+                "campaignGuarantees": self.get_campaign_guarantees(id, context),
+                "campaignAttendees": self.get_campaign_attendees(id, context),
+                "electionCandidates": self.get_election_candidates(id, context),
+                "electionCommittees": self.get_election_committees(id, context)
+            },
+            "code": 200
+        })
 
-            # 2. Get election candidate data
-            election_candidate_data = self.get_election_candidate_data(campaign_data)
+    def get_campaign_data(self, id, context):
+        campaign = get_object_or_404(Campaigns, id=id)
+        return CampaignsSerializer(campaign, context=context).data
 
-            # 3. Extract election and candidate details
-            election_details, candidate_details = self.extract_election_candidate_details(election_candidate_data)
+    def get_current_campaign_member(self, campaign_id, user_id, context):
+        # Assuming there's a method to fetch the current user's campaign membership details
+        member_data = self.fetch_current_user_membership(campaign_id, user_id)
+        return CampaignMembersSerializer(member_data, context=context).data
 
-            # 4. Fetch election related data (committees and candidates)
-            election_committees, election_candidates = self.get_election_related_data(election_id)
+    def get_campaign_members(self, campaign_id, context):
+        members = CampaignMembers.objects.filter(election_id=campaign_id)
+        return CampaignMembersSerializer(members, many=True, context=context).data
 
-            # 5. Get campaign members data
-            campaign_members, current_campaign_member_data = self.get_campaign_members_data(id, current_user_id)
+    def get_campaign_guarantees(self, campaign_id, context):
+        guarantees = CampaignGuarantees.objects.filter(election_id=campaign_id)
+        return CampaignGuaranteesSerializer(guarantees, many=True, context=context).data
 
-            # 6. Fetch Guarantees & Attendees
-            campaign_guarantees = self.get_campaign_guarantees(campaign_members, election_id)
-            election_attendees = self.get_election_attendees(election_id)
+    def get_campaign_attendees(self, campaign_id, context):
+        attendees = CampaignAttendees.objects.filter(election_id=campaign_id)
+        return CampaignAttendeesSerializer(attendees, many=True, context=context).data
 
-            return Response({
-                "data": {
-                    "currentCampaignMember": current_campaign_member_data,
-                    "campaignDetails": campaign_data,
-                    "campaignMembers": campaign_members,
-                    "campaignGuarantees": campaign_guarantees,
-                    "electionAttendees": election_attendees,
-                    "electionCandidates": election_candidates,
-                    "electionCommittees": election_committees,
-                    
+    def get_election_candidates(self, election_id, context):
+        candidates = ElectionCandidates.objects.filter(election_id=election_id)
+        return ElectionCandidatesSerializer(candidates, many=True, context=context).data
 
-                },
-                "code": 200
-            })
+    def get_election_committees(self, election_id, context):
+        committees = ElectionCommittees.objects.filter(election_id=election_id)
+        return ElectionCommitteesSerializer(committees, many=True, context=context).data
 
-        except Campaigns.DoesNotExist:
-            return JsonResponse({"error": "Campaign not found"}, status=404)
-        
-    # ... [ keep all helper methods here without any change ] ...
-
-    def get_campaign_data(self, id):
-        # Fetch the campaign details based on the given ID
-        campaign = Campaigns.objects.get(id=id)
-        campaign_serializer = CampaignsSerializer(campaign)
-        campaign_data = campaign_serializer.data
-        return campaign_data
-
-    def get_election_candidate_data(self, campaign_data):
-        # Extract the election_candidate ID from the campaign_data
-        election_candidate_id = campaign_data.get('election_candidate')  # Adjust the field name if it's different
-
-        # If there's a valid ID, query the ElectionCandidates table using it
-        election_candidate_obj = get_object_or_404(ElectionCandidates, id=election_candidate_id)
-        election_candidate_serializer = CampaignDetailsSerializer(election_candidate_obj)
-        election_candidate_data = election_candidate_serializer.data
-        return election_candidate_data
-
-    def extract_election_candidate_details(self, election_candidate_data):
-        # Extract election and candidate details from the serialized data
-        election_details = election_candidate_data.get("election", {})
-        candidate_details = election_candidate_data.get("candidate", {})
-        return election_details, candidate_details
-
-    def get_campaign_members_data(self, id, current_user_id):
-        # Query for campaign members
-        campaign_members_query = CampaignMembers.objects.select_related('user').filter(campaign_id=id)
-        campaign_members_serializer = CampaignMembersSerializer(campaign_members_query, many=True)
-        campaign_members = campaign_members_serializer.data
-
-        # Fetch the current user's campaign member details
-        current_campaign_member_query = CampaignMembers.objects.select_related('user').filter(campaign_id=id, user_id=current_user_id).first()
-        current_campaign_member_data = {}
-
-        if current_campaign_member_query:
-            current_campaign_member_serializer = CampaignMembersSerializer(current_campaign_member_query)
-            current_campaign_member_data = current_campaign_member_serializer.data
-
-            # Extract the fullName
-            user = current_campaign_member_query.user
-            fullName = f"{user.first_name} {user.last_name}"
-
-            # Get user data from serializer
-            user_data = current_campaign_member_data.get("user", {})
-
-            # Include the fullName and other user details in the current_campaign_member_data dictionary
-            current_campaign_member_data["fullName"] = fullName
-            current_campaign_member_data["user"] = {
-                "id": user.id,
-                "email": user.email,
-            }
-
-            # TODO: add admin to work here
-            # Filter the campaign members based on the current user's rank
-            rank = int(current_campaign_member_data.get("rank", 0))  # Safely get and convert rank
-            if rank < 3:
-                # If the rank is less than 3, show all members. So, no changes needed.
-                pass
-            elif rank == 3:
-                # Show only the current member and members whose supervisor is the current member's ID.
-                campaign_members = [member for member in campaign_members if member["id"] == current_campaign_member_data["id"] or member["supervisor"] == current_campaign_member_data["id"]]
-            else: # rank > 3
-                # Show only the current member and their supervisor.
-                supervisor_id = current_campaign_member_data["supervisor"]
-                campaign_members = [member for member in campaign_members if member["id"] == current_campaign_member_data["id"] or member["id"] == supervisor_id]
-            # ...
-
-        return campaign_members, current_campaign_member_data
-
-
-    def get_election_related_data(self, election_id):
-        # Fetch ElectionCommittees based on the election ID
-        election_committees_query = ElectionCommittees.objects.filter(election=election_id)
-        election_committees_serializer = ElectionCommitteesSerializer(election_committees_query, many=True)
-        election_committees = election_committees_serializer.data
-
-        # Fetch ElectionCandidates for the same election
-        election_candidates_query = ElectionCandidates.objects.filter(election=election_id)
-        election_candidates_serializer = CampaignDetailsSerializer(election_candidates_query, many=True)  # Use the appropriate serializer
-        election_candidates = election_candidates_serializer.data
-
-        return election_committees, election_candidates
-
-    def get_campaign_guarantees(self, campaign_members, election_id):
-        # Extract the IDs from campaign_members
-        campaign_member_ids = [member.get("id") for member in campaign_members if member.get("id") is not None]
-
-        if not campaign_member_ids:
-            return []
-
-        # Fetch CampaignGuarantees related to the campaign members
-        campaign_guarantees_query = CampaignGuarantees.objects.filter(member__id__in=campaign_member_ids)
-        campaign_guarantees_serializer = CampaignGuaranteesSerializer(campaign_guarantees_query, many=True)
-        campaign_guarantees = campaign_guarantees_serializer.data
-        
-        # Fetch election attendees for given election_id
-        # attendees = ElectionAttendees.objects.filter(election_id=election_id).values_list('civil', flat=True)
-        attendees = ElectionAttendees.objects.filter(election_id=election_id).values_list('elector_id', flat=True)
-
-        attendee_set = set(attendees)  # Convert to set for faster lookups
-
-        # Marking campaign guarantees as attended based on the civil value
-        for guarantee in campaign_guarantees:
-            guarantee['attended'] = guarantee['civil'] in attendee_set
-
-        return campaign_guarantees
-
-    def get_election_attendees(self, election_id):
-        # Filter ElectionAttendee entries based on the provided election_id
-        election_attendees_query = ElectionAttendees.objects.filter(election_id=election_id)
-        
-        # Serialize the data
-        election_attendees_serializer = ElectionAttendeesSerializer(election_attendees_query, many=True)
-        election_attendees = election_attendees_serializer.data
-        return election_attendees
+    # Add any other helper methods here
 
 class AddNewCampaign(APIView):
     permission_classes = [IsAuthenticated]
@@ -537,7 +424,7 @@ class AddNewElectionAttendee(APIView):
             return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # Create the new link between the user, elector, and election
-        election_attendee = ElectionAttendees.objects.create(
+        Campaign_attendee = CampaignAttendees.objects.create(
             user_id=user_id,
             elector=elector,
             committee=committee,
@@ -547,14 +434,14 @@ class AddNewElectionAttendee(APIView):
 
         # Prepare the response data with member, elector, and election details
         response_data = {
-            "id": election_attendee.id,
+            "id": Campaign_attendee.id,
             "user": user.id,
             "civil": elector.civil,
             "election": election.id,
             "committee": committee.id,
             "full_name": elector.full_name(),
             "gender": elector.gender,
-            "status": election_attendee.status,
+            "status": Campaign_attendee.status,
             # ... other fields you want to return
         }
 
@@ -564,8 +451,8 @@ class UpdateElectionAttendee(APIView):
     def patch(self, request, id):
         # Fetch the campaign guarantee based on the URL parameter 'id'
         try:
-            campaign_guarantee = ElectionAttendees.objects.get(id=id)
-        except ElectionAttendees.DoesNotExist:
+            campaign_guarantee = CampaignAttendees.objects.get(id=id)
+        except CampaignAttendees.DoesNotExist:
             return Response({"error": "Campaign Guarantee not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # Since civil is a ForeignKey, you can directly use it to access the related Elector object
@@ -617,13 +504,13 @@ class UpdateElectionAttendee(APIView):
 class DeleteElectionAttendee(APIView):
     def delete(self, request, id):
         try:
-            campaign_guarantee = ElectionAttendees.objects.get(id=id)
+            campaign_guarantee = CampaignAttendees.objects.get(id=id)
             campaign_guarantee.delete()
             return JsonResponse(
                 {"data": "campaign Guarantee deleted successfully", "count": 1, "code": 200},
                 safe=False,
             )
-        except ElectionAttendees.DoesNotExist:
+        except CampaignAttendees.DoesNotExist:
             return JsonResponse(
                 {"data": "campaign not found", "count": 0, "code": 404}, safe=False
             )

@@ -16,12 +16,12 @@ from restapi.candidates.serializers import (
 
 from restapi.campaigns.serializers import (
     CampaignsSerializer,
-    CampaignElectionSerializer,
-    CampaignCandidateSerializer,
+    # CampaignElectionSerializer,
+    # CampaignCandidateSerializer,
     CampaignMembersSerializer,
     CampaignGuaranteesSerializer,
     CampaignDetailsSerializer,
-    ElectionAttendeesSerializer
+    CampaignAttendeesSerializer
 )
 
 from restapi.electors.serializers import ElectorsSerializer

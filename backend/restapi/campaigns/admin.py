@@ -1,7 +1,7 @@
 # Campaign Admin
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from restapi.models import Campaigns, CampaignMembers, CampaignGuarantees, ElectionAttendees
+from restapi.models import Campaigns, CampaignMembers, CampaignGuarantees, CampaignAttendees
 from restapi.helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 
@@ -56,7 +56,7 @@ class CampaignGuaranteesAdmin(admin.ModelAdmin):
     ]
 
 
-class ElectionAttendeesAdmin(admin.ModelAdmin):
+class CampaignAttendeesAdmin(admin.ModelAdmin):
     list_display = ['user', 'election', 'committee', 'elector', 'notes', 'status']
     search_fields = ['user__username', 'committee__name', 'elector__full_name']
     list_filter = ['election', 'committee', 'status']
@@ -72,7 +72,7 @@ class ElectionAttendeesAdmin(admin.ModelAdmin):
 admin.site.register(Campaigns, CampaignsAdmin)
 admin.site.register(CampaignMembers, CampaignMembersAdmin)
 admin.site.register(CampaignGuarantees, CampaignGuaranteesAdmin)
-admin.site.register(ElectionAttendees, ElectionAttendeesAdmin)
+admin.site.register(CampaignAttendees, CampaignAttendeesAdmin)
 
 # class ElectionsAdminSite(AdminSite):
 #     site_header = 'Elections Administration'

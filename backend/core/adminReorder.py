@@ -21,7 +21,7 @@ ADMIN_REORDER = (
         'restapi.Campaigns',
         'restapi.CampaignMembers',
         'restapi.CampaignGuarantees',
-        'restapi.ElectionAttendees'
+        'restapi.CampaignAttendees'
     )},
 
     # Electors
