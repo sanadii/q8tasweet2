@@ -31,7 +31,7 @@ export const CampaignMembersModal = ({ modal, toggle, modalMode, campaignMember 
   const dispatch = useDispatch();
 
   // --------------- Define States ---------------
-  const { currentCampaignMember, campaignMembers, campaignId } = useSelector(electionsSelector);
+  const { currentCampaignUser, campaignMembers, campaignId } = useSelector(electionsSelector);
 
 
   // --------------- Set Constants ---------------

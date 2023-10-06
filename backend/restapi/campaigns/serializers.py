@@ -10,9 +10,16 @@ from restapi.models import (
     Categories,
 )
 
-from restapi.candidates.serializers import CandidatesSerializer
+# from restapi.serializers import (
+#     ElectionsSerializer,
+#     CandidatesSerializer,
+#     UserSerializer,
+#     ElectorsSerializer,
+# )
+from restapi.serializers import CandidatesSerializer
 from restapi.elections.serializers import ElectionsSerializer
 from restapi.users.serializers import UserSerializer
+from restapi.electors.serializers import ElectorsSerializer
 
 class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Campaign model. """
@@ -70,20 +77,35 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
 class CampaignMembersSerializer(serializers.ModelSerializer):
     """ Serializer for the CampaignMembers model. """
-    # admin_serializer_classes = (TrackMixin,)
+    fullName = serializers.SerializerMethodField()
 
     class Meta:
         model = CampaignMembers
-        fields = ["id", "user", "campaign",
-                  "rank", "supervisor", "committee", "civil",
-                  "phone", "notes", "status"
-                ]
+        fields = ["id", "user", "campaign", "rank", "supervisor", "committee", 
+                  "civil", "phone", "notes", "status", "fullName"]
 
-    def create(self, validated_data):
-        return super().create(validated_data)
+    def get_fullName(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"
 
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        
+        request = self.context.get('request')
+        current_user = request.user
+        if current_user.is_staff:
+            return rep
+
+        rank = int(rep.get("rank", 0))
+        
+        if rank == 3:
+            if not (rep["id"] == instance.id or rep["supervisor"] == instance.id):
+                return {}
+        elif rank > 3:
+            supervisor_id = rep.get("supervisor")
+            if not (rep["id"] == instance.id or rep["id"] == supervisor_id):
+                return {}
+
+        return rep
 
 
 class CampaignGuaranteesSerializer(AdminFieldMixin, serializers.ModelSerializer):
@@ -102,18 +124,34 @@ class CampaignGuaranteesSerializer(AdminFieldMixin, serializers.ModelSerializer)
 
 
 class CampaignAttendeesSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    """ Serializer for the CampaignAttendees model. """
-    admin_serializer_classes = (TrackMixin,)
 
     class Meta:
         model = CampaignAttendees
-        fields = ["id", "user", "election", "committee", "elector", "notes", "status"]
+        fields = [
+            # Attendees' Fields
+            "id", "user", "election", "committee", "elector", "notes", "status"] + ElectorsSerializer.Meta.fields 
+        
+    # Dynamically create SerializerMethodFields and their associated getters
+    for elector_field in ElectorsSerializer.Meta.fields:
+        exec(f"{elector_field} = serializers.SerializerMethodField()")
+
+        def get_field_value(self, instance, elector_field=elector_field):  # using default arg to "freeze" the current field_name
+            return getattr(instance.elector, elector_field, None)
+
+        exec(f"get_{elector_field} = get_field_value")
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in ElectorsSerializer.Meta.fields:
+            rep[field] = self.get_field_value(instance, field)
+        return rep
 
     def create(self, validated_data):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
+
 
 
 

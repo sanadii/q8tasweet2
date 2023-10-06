@@ -129,3 +129,49 @@ is not maintianed anymore. It is thus unlikely that this bug will
 ever be fixed. Add "@babel/plugin-proposal-private-property-in-object" to
 your devDependencies to work around this error. This will make this message
 go away.
+
+
+- Document title (getConfigs as main)
+Yes, updating `document.title` directly in the component body is not a recommended practice. 
+
+In React, there are a few ways you can handle changing the `document.title`:
+
+1. **Using `useEffect`**:
+    It's the most basic way to set `document.title`. By placing it inside a `useEffect`, you ensure that it only runs once the component mounts, and not on every render.
+
+    ```javascript
+    useEffect(() => {
+        document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
+    }, []);
+    ```
+
+2. **Using a Custom Hook**:
+    You can create a custom hook `useDocumentTitle` which makes your intent clearer and the functionality reusable.
+
+    ```javascript
+    // hooks/useDocumentTitle.js
+    import { useEffect } from 'react';
+
+    function useDocumentTitle(title) {
+        useEffect(() => {
+            document.title = title;
+        }, [title]);
+    }
+
+    export default useDocumentTitle;
+    ```
+
+    Then, in your component:
+
+    ```javascript
+    import useDocumentTitle from 'path_to_hooks/useDocumentTitle';
+
+    ...
+
+    useDocumentTitle("الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template");
+    ```
+
+3. **Using a Library**:
+    There are libraries like `react-helmet` that provide components to manage changes to the head of the document, including the title. This might be overkill if you're just updating the title, but if you foresee needing to manage other parts of the `<head>` (like meta tags, styles, etc.), it's a great option.
+
+Using the custom hook approach is clean and makes the functionality reusable across different components.

@@ -1,16 +1,18 @@
-// --------------- React, Redux & Store imports ---------------
+// React & Redux core
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
+// Store & Selectors
 import { deleteCampaignMember } from "../../../store/actions";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-// --------------- Component & Constants imports ---------------
+// Components & Hooks
+import CampaignMembersModal from "./Modals/CampaignMembersModal";
 import { ImageCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import { MemberRankOptions, MemberStatusOptions } from "../../../Components/constants";
-import CampaignMembersModal from "./Modals/CampaignMembersModal";
 import useUserRoles from "../../../Components/Hooks/useUserRoles";
 
-// --------------- Utility imports ---------------
+// UI & Utilities
 import { Col, Row, Card, CardBody, CardHeader, CardFooter } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,7 +21,7 @@ const MembersTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const { currentCampaignMember, campaignGuarantees, campaignMembers, campaignCommittees, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
+  const { currentCampaignUser, campaignGuarantees, campaignMembers, campaignElectionCommittees, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   // --------------- Constants ---------------
@@ -183,7 +185,7 @@ const MembersTab = () => {
       },
       {
         Header: "العضو",
-        accessor: "user.name",
+        accessor: "fullName",
         Cell: (campaignMember) => (
           <>
             <div className="d-flex align-items-center">
@@ -202,7 +204,7 @@ const MembersTab = () => {
                 )} */}
               </div>
               <div className="flex-grow-1 ms-2 name">
-                {campaignMember.row.original.user.name}{" "}
+                {campaignMember.row.original.fullName}{" "}
                 {campaignMember.row.original.status}
               </div>
             </div>
@@ -279,7 +281,7 @@ const MembersTab = () => {
               );
             }
 
-            const committee = campaignCommittees.find(
+            const committee = campaignElectionCommittees.find(
               (committee) => committee.id === committeeId
             );
             return (
@@ -405,10 +407,10 @@ const MembersTab = () => {
       committeeColumns,
       attendantColumns,
       sorterColumns,
-      currentCampaignMember.rank !== 3 ? SupervisorColumns : [],
+      currentCampaignUser.rank !== 3 ? SupervisorColumns : [],
       actionColumn
     );
-  }, [handleCampaignMemberClick, checkedAll, activeTab, campaignGuarantees.length, campaignMembers, currentCampaignMember.rank, campaignCommittees, getAttendeeCountForMember, getGuaranteeCountForMember, isAdmin]);
+  }, [handleCampaignMemberClick, checkedAll, activeTab, campaignGuarantees.length, campaignMembers, currentCampaignUser.rank, campaignElectionCommittees, getAttendeeCountForMember, getGuaranteeCountForMember, isAdmin]);
 
 
   // Filters -------------------------
@@ -472,7 +474,7 @@ const MembersTab = () => {
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
 
-                {campaignMemberList && campaignMemberList.length ? (
+                {campaignMembers && campaignMembers.length ? (
                   <TableContainer
                     // Others to be investigateed
                     modal={modal}

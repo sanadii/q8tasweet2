@@ -51,14 +51,14 @@ const CampaignMembersAddModal = ({ campaignId }) => {
     );
   }, [users, searchUserInput]);
 
-  const { campaignCommittees } = useSelector(electionsSelector);
+  const { campaignElectionCommittees } = useSelector(electionsSelector);
 
   const [electionCommitteeList, setElectionCommitteeList] =
-    useState(campaignCommittees);
+    useState(campaignElectionCommittees);
 
   useEffect(() => {
-    setElectionCommitteeList(campaignCommittees);
-  }, [campaignCommittees]);
+    setElectionCommitteeList(campaignElectionCommittees);
+  }, [campaignElectionCommittees]);
 
   const supervisorMembers = campaignMembers.filter(
     (member) => member.rank === 3

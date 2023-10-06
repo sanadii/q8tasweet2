@@ -1,13 +1,13 @@
 // --------------- React, Redux & Store imports ---------------
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteElectionAttendee, updateElectionAttendee } from "../../../store/actions";
+import { deleteCampaignAttendee, updateCampaignAttendee } from "../../../store/actions";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // Component imports
 import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
 import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../Components/Common";
-import ElectionAttendeesModal from "./Modals/ElectionAttendeesModal";
+import CampaignAttendeesModal from "./Modals/CampaignAttendeesModal";
 import { GuaranteeStatusOptions } from "../../../Components/constants";
 import useUserRoles from "../../../Components/Hooks/useUserRoles";
 
@@ -20,13 +20,15 @@ import "react-toastify/dist/ReactToastify.css";
 const AttendeesList = () => {
   const dispatch = useDispatch();
 
-  const { electionId, campaignCommittees, campaignMembers, electionAttendees,isElectionAttendeeSuccess, error  } = useSelector(electionsSelector);
+  const { campaignDetails, campaignElectionCommittees, campaignElectionCandidates, campaignMembers, campaignAttendees,isCampaignAttendeeSuccess, error  } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+  
+  const electionId = campaignDetails.election.id;
   // Delete Modal Constants
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
 
-  const [electionAttendee, setElectionAttendee] = useState([]);
+  const [campaignAttendee, setCampaignAttendee] = useState([]);
 
   // Delete Multiple Constants
   const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
@@ -34,15 +36,15 @@ const AttendeesList = () => {
 
 
   // Delete Data
-  const handleDeleteElectionAttendee = () => {
-    if (electionAttendee) {
-      dispatch(deleteElectionAttendee(electionAttendee.id));
+  const handleDeleteCampaignAttendee = () => {
+    if (campaignAttendee) {
+      dispatch(deleteCampaignAttendee(campaignAttendee.id));
       setDeleteModal(false);
     }
   };
 
-  const onClickDelete = (electionAttendee) => {
-    setElectionAttendee(electionAttendee);
+  const onClickDelete = (campaignAttendee) => {
+    setCampaignAttendee(campaignAttendee);
     setDeleteModal(true);
   };
 
@@ -55,19 +57,19 @@ const AttendeesList = () => {
     setIsModalVisible(prev => !prev);
   }, []);
 
-  const handleElectionAttendeeClick = useCallback(
+  const handleCampaignAttendeeClick = useCallback(
     (arg, modalMode) => {
-      const electionAttendee = arg;
-      setElectionAttendee({
-        id: electionAttendee.id,
-        user: electionAttendee.user,
-        civil: electionAttendee.civil,
-        full_name: electionAttendee.full_name,
-        box_no: electionAttendee.box_no,
-        membership_no: electionAttendee.membership_no,
-        enrollment_date: electionAttendee.enrollment_date,
-        status: electionAttendee.status,
-        notes: electionAttendee.notes,
+      const campaignAttendee = arg;
+      setCampaignAttendee({
+        id: campaignAttendee.id,
+        user: campaignAttendee.user,
+        civil: campaignAttendee.civil,
+        full_name: campaignAttendee.full_name,
+        box_no: campaignAttendee.box_no,
+        membership_no: campaignAttendee.membership_no,
+        enrollment_date: campaignAttendee.enrollment_date,
+        status: campaignAttendee.status,
+        notes: campaignAttendee.notes,
       });
 
       // Set the modalMode state here
@@ -80,7 +82,7 @@ const AttendeesList = () => {
   // Checked All
   const checkedAll = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".electionAttendeeCheckBox");
+    const checkedEntry = document.querySelectorAll(".campaignAttendeeCheckBox");
 
     if (checkall.checked) {
       checkedEntry.forEach((checkedEntry) => {
@@ -97,7 +99,7 @@ const AttendeesList = () => {
   const deleteMultiple = () => {
     const checkall = document.getElementById("checkBoxAll");
     selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteElectionAttendee(element.value));
+      dispatch(deleteCampaignAttendee(element.value));
       setTimeout(() => {
         toast.clearWaitingQueue();
       }, 3000);
@@ -108,7 +110,7 @@ const AttendeesList = () => {
 
   const deleteCheckbox = () => {
     const checkedEntry = document.querySelectorAll(
-      ".electionAttendeeCheckBox:checked"
+      ".campaignAttendeeCheckBox:checked"
     );
     checkedEntry.length > 0
       ? setIsMultiDeleteButton(true)
@@ -139,11 +141,11 @@ const AttendeesList = () => {
   }, [campaignMembers]); // campaignMembers as dependency
 
   const findCommitteeById = useCallback((committeeId) => {
-    const committee = campaignCommittees.find(
+    const committee = campaignElectionCommittees.find(
       (committee) => committee && committee.id === committeeId
     );
     return committee?.name || "Committee not found";
-  }, [campaignCommittees]); // campaignCommittees as dependency
+  }, [campaignElectionCommittees]); // campaignElectionCommittees as dependency
 
   const columns = useMemo(() => [
       // {
@@ -159,7 +161,7 @@ const AttendeesList = () => {
       //     return (
       //       <input
       //         type="checkbox"
-      //         className="electionAttendeeCheckBox form-check-input"
+      //         className="campaignAttendeeCheckBox form-check-input"
       //         value={cellProps.row.original.id}
       //         onChange={() => deleteCheckbox()}
       //       />
@@ -213,9 +215,9 @@ const AttendeesList = () => {
                 to="#"
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
-                  const electionAttendee = cellProps.row.original;
-                  handleElectionAttendeeClick(
-                    electionAttendee,
+                  const campaignAttendee = cellProps.row.original;
+                  handleCampaignAttendeeClick(
+                    campaignAttendee,
                     "GuaranteeViewModal"
                   );
                 }}
@@ -228,9 +230,9 @@ const AttendeesList = () => {
                     to="#"
                     className="btn btn-sm btn-soft-info edit-list"
                     onClick={() => {
-                      const electionAttendee = cellProps.row.original;
-                      handleElectionAttendeeClick(
-                        electionAttendee,
+                      const campaignAttendee = cellProps.row.original;
+                      handleCampaignAttendeeClick(
+                        campaignAttendee,
                         "GuaranteeUpdateModal"
                       );
                     }}
@@ -241,8 +243,8 @@ const AttendeesList = () => {
                     to="#"
                     className="btn btn-sm btn-soft-danger remove-list"
                     onClick={() => {
-                      const electionAttendee = cellProps.row.original;
-                      onClickDelete(electionAttendee);
+                      const campaignAttendee = cellProps.row.original;
+                      onClickDelete(campaignAttendee);
                     }}
                   >
                     <i className="ri-delete-bin-5-fill align-bottom" />
@@ -254,8 +256,8 @@ const AttendeesList = () => {
         },
       },
     ],
-    // [handleElectionAttendeeClick, checkedAll, findCommitteeById, findUserById, isAdmin, isAttendant]
-    [handleElectionAttendeeClick, findCommitteeById, findUserById, isAdmin, isAttendant]
+    // [handleCampaignAttendeeClick, checkedAll, findCommitteeById, findUserById, isAdmin, isAttendant]
+    [handleCampaignAttendeeClick, findCommitteeById, findUserById, isAdmin, isAttendant]
   );
 
   // Filters -------------------------
@@ -266,21 +268,21 @@ const AttendeesList = () => {
     member: null,
   });
 
-  const electionAttendeeList = electionAttendees.filter(electionAttendee => {
+  const campaignAttendeeList = campaignAttendees.filter(campaignAttendee => {
     let isValid = true;
     if (filters.global) {
       const globalSearch = filters.global.toLowerCase();
 
-      const nameIncludes = electionAttendee.full_name && typeof electionAttendee.full_name === 'string' && electionAttendee.full_name.toLowerCase().includes(globalSearch);
-      const civilIncludes = electionAttendee.civil && typeof electionAttendee.civil === 'number' && String(electionAttendee.civil).includes(globalSearch);
+      const nameIncludes = campaignAttendee.full_name && typeof campaignAttendee.full_name === 'string' && campaignAttendee.full_name.toLowerCase().includes(globalSearch);
+      const civilIncludes = campaignAttendee.civil && typeof campaignAttendee.civil === 'number' && String(campaignAttendee.civil).includes(globalSearch);
 
       isValid = isValid && (nameIncludes || civilIncludes);
     }
     if (filters.gender !== null) {
-      isValid = isValid && electionAttendee.gender === filters.gender;
+      isValid = isValid && campaignAttendee.gender === filters.gender;
     }
     if (filters.committee !== null) {
-      isValid = isValid && electionAttendee.committee === filters.committee;
+      isValid = isValid && campaignAttendee.committee === filters.committee;
     }
     return isValid;
   });
@@ -291,7 +293,7 @@ const AttendeesList = () => {
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteElectionAttendee}
+        onDeleteClick={handleDeleteCampaignAttendee}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
@@ -303,11 +305,11 @@ const AttendeesList = () => {
         onCloseClick={() => setDeleteModalMulti(false)}
       />
 
-      <ElectionAttendeesModal
+      <CampaignAttendeesModal
         modal={isModalVisible}
         modalMode={modalMode}
         toggle={toggle}
-        electionAttendee={electionAttendee}
+        campaignAttendee={campaignAttendee}
       />
       <Row>
         <Col lg={12}>
@@ -328,7 +330,7 @@ const AttendeesList = () => {
                   isMultiDeleteButton={isMultiDeleteButton}
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
-                {electionAttendeeList ? (
+                {campaignAttendeeList ? (
                   <TableContainer
                     // Filters -------------------------
                     isTableContainerFilter={true}
@@ -348,7 +350,7 @@ const AttendeesList = () => {
 
                     // Data -------------------------
                     columns={columns}
-                    data={electionAttendeeList || []}
+                    data={campaignAttendeeList || []}
                     customPageSize={50}
 
 

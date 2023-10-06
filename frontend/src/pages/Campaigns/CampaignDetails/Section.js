@@ -1,17 +1,22 @@
+// React & Redux core
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import classnames from "classnames";
+
+// Store & Selectors
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-// --------------- Component, Constants, Hooks Imports ---------------
+// UI & Utilities
+import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
+import SwiperCore, { Autoplay } from "swiper";
+
+// Components & Hooks
 import { AvatarMedium, ImageCampaignBackground } from "../../../Components/Common";
 import { MemberRankOptions } from "../../../Components/constants";
 import useUserRoles from "../../../Components/Hooks/useUserRoles";
 
-import SwiperCore, { Autoplay } from "swiper";
-
+// Tabs
 import OverviewTab from "./OverviewTab";
 import MembersTab from "./MembersTab";
 import GuaranteesTab from "./GuaranteesTab";
@@ -22,34 +27,50 @@ import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
 const TAB_VISIBILITY_RULES = {
-  members: [1, 2, 3, 0],
-  guarantees: [1, 2, 3, 4, 0],
-  attendees: [1, 2, 3, 5, 0],
-  sorting: [1, 2, 3, 4, 5, 6, 0],
-  edit: [1, 0],
+  members: ['isAdmin', 'isModerator', 'isParty', 'isCandidate', 'isSupervisor'],
+  guarantees: ['isAdmin', 'isModerator', 'isParty', 'isCandidate', 'isSupervisor', 'isGuarantor'],
+  attendees: ['isAdmin', 'isModerator', 'isParty', 'isCandidate', 'isSupervisor', 'isAttendant'],
+  sorting: ['isAdmin', 'isModerator', 'isParty', 'isCandidate', 'isSupervisor', 'isSorter'],
+  edit: ['isAdmin', 'isModerator', 'isParty', 'isCandidate'],
 };
 
-function isTabVisible(tabName, rank) {
-  return TAB_VISIBILITY_RULES[tabName].includes(rank);
+function isTabVisible(tabName, userRoles) {
+  return TAB_VISIBILITY_RULES[tabName].some(role => userRoles[role]);
 }
 
 // const Section = ({ campaign, campaignCandidateList }) => {
 const Section = ({
-  currentCampaignMember,
+  currentCampaignUser,
   campaign,
   campaignMembers,
   campaignGuarantees,
-  campaignCommittees,
+  campaignElectionCommittees,
 }) => {
   SwiperCore.use([Autoplay]);
+
+  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+  
+  const userRoles = {
+    isAdmin,
+    isSubscriber,
+    isModerator,
+    isParty,
+    isCandidate,
+    isSupervisor,
+    isGuarantor,
+    isAttendant,
+    isSorter,
+    isBelowSupervisor,
+    isAttendantOrSorter
+  };
+
 
   // --------------- Constants ---------------
   const [activeTab, setActiveTab] = useState("1");
   const [activityTab, setActivityTab] = useState("1");
-  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
-  const rankId = currentCampaignMember.rank;
-  const currentCampaignMemberRank = MemberRankOptions.find(
+  const rankId = currentCampaignUser.rank;
+  const currentCampaignUserRank = MemberRankOptions.find(
     (option) => option.id === rankId
   );
 
@@ -127,7 +148,7 @@ const Section = ({
                   </NavLink>
                 </NavItem>
 
-                {(isModerator || isParty || isCandidate || isSupervisor) && (
+                {(isAdmin || isModerator || isParty || isCandidate || isSupervisor) && (
                   <NavItem>
                     <NavLink
                       href="#members"
@@ -142,7 +163,7 @@ const Section = ({
                   </NavItem>
                 )}
 
-                {isTabVisible("guarantees", currentCampaignMember.rank) && (
+                {isTabVisible("guarantees", userRoles) && (
                   <NavItem>
                     <NavLink
                       href="#guarantees"
@@ -158,38 +179,35 @@ const Section = ({
                     </NavLink>
                   </NavItem>
                 )}
-                {
-                  isTabVisible("attendees", currentCampaignMember.rank) && (
-
-                    <NavItem>
-                      <NavLink
-                        href="#attendees"
-                        className={classnames({ active: activeTab === "4" })}
-                        onClick={() => {
-                          toggleTab("4");
-                        }}
-                      >
-                        <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">الحضور</span>
-                      </NavLink>
-                    </NavItem>
-                  )
+                {isTabVisible("attendees", userRoles) && (
+                  <NavItem>
+                    <NavLink
+                      href="#attendees"
+                      className={classnames({ active: activeTab === "4" })}
+                      onClick={() => {
+                        toggleTab("4");
+                      }}
+                    >
+                      <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
+                      <span className="d-none d-md-inline-block">الحضور</span>
+                    </NavLink>
+                  </NavItem>
+                )
                 }
-                {
-                  isTabVisible("sorting", currentCampaignMember.rank) && (
-                    <NavItem>
-                      <NavLink
-                        href="#sorting"
-                        className={classnames({ active: activeTab === "5" })}
-                        onClick={() => {
-                          toggleTab("5");
-                        }}
-                      >
-                        <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">الفرز</span>
-                      </NavLink>
-                    </NavItem>
-                  )
+                {isTabVisible("sorting", userRoles) && (
+                  <NavItem>
+                    <NavLink
+                      href="#sorting"
+                      className={classnames({ active: activeTab === "5" })}
+                      onClick={() => {
+                        toggleTab("5");
+                      }}
+                    >
+                      <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
+                      <span className="d-none d-md-inline-block">الفرز</span>
+                    </NavLink>
+                  </NavItem>
+                )
                 }
                 <NavItem>
                   <NavLink

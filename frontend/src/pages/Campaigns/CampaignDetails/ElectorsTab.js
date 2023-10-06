@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getElectors, addNewCampaignGuarantee, addNewElectionAttendee } from "../../../store/actions";
+import { getElectors, addNewCampaignGuarantee, addNewCampaignAttendee } from "../../../store/actions";
 import SimpleBar from "simplebar-react";
 import { Loader, TableContainer } from "../../../Components/Common";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
@@ -13,18 +13,18 @@ import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 export const ElectorsTab = () => {
   const dispatch = useDispatch();
 
-  const { currentCampaignMember, campaignDetails, campaignMembers, electors, campaignGuarantees, electionsSelector, isCampaignGuaranteeSuccess, error } = useSelector(electionsSelector);
+  const { currentCampaignUser, campaignDetails, campaignMembers, electors, campaignGuarantees, campaignAttendees, isCampaignGuaranteeSuccess, error } = useSelector(electionsSelector);
   const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
 
   useEffect(() => {
     setCampaignGuaranteeList(campaignGuarantees);
   }, [campaignGuarantees]);
 
-  const [electionAttendeeList, setElectionAttendeeList] = useState(electionsSelector);
+  const [campaignAttendeeList, setCampaignAttendeeList] = useState(campaignAttendees);
 
   useEffect(() => {
-    setCampaignGuaranteeList(electionsSelector);
-  }, [electionsSelector]);
+    setCampaignGuaranteeList(campaignAttendees);
+  }, [campaignAttendees]);
 
   // Add New CampaignGuarantee Search & Filter
   const [searchElectorInput, setSearchElectorInput] = useState("");
@@ -141,14 +141,14 @@ export const ElectorsTab = () => {
       },
       {
         Header:
-          currentCampaignMember.rank >= 2 && currentCampaignMember.rank <= 4
+          currentCampaignUser.rank >= 2 && currentCampaignUser.rank <= 4
             ? "Add Guarantee"
             : "Add Attendee",
         Cell: (cellProps) => {
           return (
             <div className="flex-shrink-0">
-              {currentCampaignMember.rank >= 2 &&
-                currentCampaignMember.rank <= 4 ? (
+              {currentCampaignUser.rank >= 2 &&
+                currentCampaignUser.rank <= 4 ? (
                 campaignGuarantees.some(
                   (item) => item.civil === cellProps.row.original.civil
                 ) ? (
@@ -162,7 +162,7 @@ export const ElectorsTab = () => {
                       e.preventDefault();
                       const newCampaignGuarantee = {
                         campaign: campaignDetails.id,
-                        member: currentCampaignMember.id,
+                        member: currentCampaignUser.id,
                         elector: cellProps.row.original.civil,
                         status: 1,
                       };
@@ -183,14 +183,14 @@ export const ElectorsTab = () => {
                   id="add-btn"
                   onClick={(e) => {
                     e.preventDefault();
-                    const newElectionAttendee = {
-                      user: currentCampaignMember.user.id,
+                    const newCampaignAttendee = {
+                      user: currentCampaignUser.user.id,
                       election: campaignDetails.election.id,
-                      committee: currentCampaignMember.committee,
+                      committee: currentCampaignUser.committee,
                       elector: cellProps.row.original.civil,
                       status: 1,
                     };
-                    dispatch(addNewElectionAttendee(newElectionAttendee));
+                    dispatch(addNewCampaignAttendee(newCampaignAttendee));
                   }}
                 >
                   تسجيل حضور
@@ -206,10 +206,10 @@ export const ElectorsTab = () => {
       campaignDetails.election.id,
       campaignDetails.id,
       campaignGuarantees,
-      currentCampaignMember.committee,
-      currentCampaignMember.id,
-      currentCampaignMember.rank,
-      currentCampaignMember.user.id,
+      currentCampaignUser.committee,
+      currentCampaignUser.id,
+      currentCampaignUser.rank,
+      currentCampaignUser.user.id,
       dispatch,
       electionsSelector,
     ]);

@@ -1,26 +1,41 @@
 // hooks/useUserRoles.js
+// React & Redux core
+import { useSelector } from 'react-redux';
 
-import { useSelector } from 'react-redux';  // Assuming you're using Redux
+// Store & Selectors
+import { electionsSelector } from '../../Selectors/electionsSelector';
 
 const useUserRoles = () => {
-    const currentUser = useSelector(state => state.Users.currentUser);
-    const currentMember = useSelector(state => state.Campaigns.currentCampaignMember);
+    const { currentUser, currentCampaignUser } = useSelector(electionsSelector);
+    const rank = currentCampaignUser?.rank;
 
+    // If user is an admin, don't evaluate subscriber roles
+    if (currentUser?.isStaff === true) {
+        return {
+            isAdmin: true,
+            isSubscriber: false,
+        };
+    }
+    
+    // canEditCampaign,
+    // canViewGuarantees,
+    // canViewGuarantees,
+    // canViewAttendees,
+    // canViewSorting,
+
+    // If user is not an admin, evaluate subscriber roles
     return {
-        // Staff Roles
-        isAdmin: currentUser?.isStaff === true,
-        isSubscriber: currentUser?.isStaff === false,
-
-        // Subscriber Roles
-        isModerator: currentMember?.rank === 10,
-        isParty: currentMember?.rank === 1,
-        isCandidate: currentMember?.rank === 2,
-        isSupervisor: currentMember?.rank === 3,
-        isGuarantor: currentMember?.rank === 4,
-        isAttendant: currentMember?.rank === 5,
-        isSorter: currentMember?.rank === 6,
-        isBelowSupervisor: currentMember?.rank > 3,
-        isAttendantOrSorter: currentMember?.rank === 5 || currentMember?.rank === 6,
+        isAdmin: false,
+        isSubscriber: true,
+        isModerator: rank === 10,
+        isParty: rank === 1,
+        isCandidate: rank === 2,
+        isSupervisor: rank === 3,
+        isGuarantor: rank === 4,
+        isAttendant: rank === 5,
+        isSorter: rank === 6,
+        isBelowSupervisor: rank > 3,
+        isAttendantOrSorter: [5, 6].includes(rank),
     };
 }
 

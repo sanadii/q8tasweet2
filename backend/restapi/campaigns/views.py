@@ -59,31 +59,39 @@ class GetCampaignDetails(APIView):
 
     def get(self, request, id):
         context = {"request": request}
+        current_user_id = context["request"].user.id
+
         campaign = get_object_or_404(Campaigns, id=id)
         election_candidate = campaign.election_candidate
         election = election_candidate.election
         candidate = election_candidate.candidate
 
-
         campaign_members = CampaignMembers.objects.filter(campaign=campaign).prefetch_related('campaign').only('id')
         campaign_guarantees = CampaignGuarantees.objects.filter(campaign=campaign).select_related('campaign')
         campaign_attendeess = CampaignAttendees.objects.filter(election=election).select_related('election')
 
-        # election_candidates = CampaignAttendees.objects.filter(election=election).select_related('election')
-        # election_committees = CampaignAttendees.objects.filter(election=election).select_related('election')
+        election_candidates = ElectionCandidates.objects.filter(election=election).select_related('election')
+        election_committees = ElectionCommittees.objects.filter(election=election).select_related('election')
 
         return Response({
             "data": {
-                # "currentCampaignMember": self.get_current_campaign_member(id, request.user.id, context),
+                "currentCampaignUser": self.get_current_campaign_member(id, request.user.id, context),
                 "campaignDetails": self.get_campaign_data(campaign, context),
                 "campaignMembers": self.get_campaign_members(campaign_members, context),
                 "campaignGuarantees": self.get_campaign_guarantees(campaign_guarantees, context),
                 "campaignAttendees": self.get_campaign_attendees(campaign_attendeess, context),
-                # "electionCandidates": self.get_election_candidates(election_candidates, context),
-                # "electionCommittees": self.get_election_committees(election_committees, context)
+                
+                "campaignElectionCandidates": self.get_campaign_election_candidates(election_candidates, context),
+                "campaignElectionCommittees": self.get_campaign_election_committees(election_committees, context)
             },
             "code": 200
         })
+
+    def get_current_campaign_member(self, campaign_id, user_id, context):
+        current_campaign_member_query = CampaignMembers.objects.select_related('user').filter(campaign_id=campaign_id, user_id=user_id).first()
+        if current_campaign_member_query:
+            return CampaignMembersSerializer(current_campaign_member_query, context=context).data
+        return None
 
     def get_campaign_data(self, campaign, context):
         return CampaignsSerializer(campaign, context=context).data
@@ -97,13 +105,11 @@ class GetCampaignDetails(APIView):
     def get_campaign_attendees(self, campaign_attendeess, context):
         return CampaignAttendeesSerializer(campaign_attendeess, many=True, context=context).data
 
-    # def get_election_candidates(self, election_id, context):
-    #     candidates = ElectionCandidates.objects.filter(election_id=election_id)
-    #     return ElectionCandidatesSerializer(candidates, many=True, context=context).data
+    def get_campaign_election_candidates(self, election_candidates, context):
+        return ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
 
-    # def get_election_committees(self, election_id, context):
-    #     committees = ElectionCommittees.objects.filter(election_id=election_id)
-    #     return ElectionCommitteesSerializer(committees, many=True, context=context).data
+    def get_campaign_election_committees(self, election_committees, context):
+        return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
 
     # Add any other helper methods here
 

@@ -42,9 +42,11 @@ export const electionsSelector = createSelector(
     campaignDetails: campaignsState.campaignDetails,
     campaignMembers: campaignsState.campaignMembers,
     campaignGuarantees: campaignsState.campaignGuarantees,
-    campaignCommittees: campaignsState.electionCommittees,
-    campaignCandidates: campaignsState.electionCandidates,
-    electionsSelector: campaignsState.electionAttendees,
+    campaignAttendees: campaignsState.campaignAttendees,
+
+    
+    campaignElectionCommittees: campaignsState.campaignElectionCommittees,
+    campaignElectionCandidates: campaignsState.campaignElectionCandidates,
 
     isCampaignSuccess: campaignsState.isCampaignSuccess,
     campaignError: campaignsState.error,
@@ -53,7 +55,7 @@ export const electionsSelector = createSelector(
     // User electors
     moderators: usersState.moderators,
     currentUser: usersState.currentUser,
-    currentCampaignMember: campaignsState.currentCampaignMember,
+    currentCampaignUser: campaignsState.currentCampaignUser,
     electors: campaignsState.electors,
 
   })

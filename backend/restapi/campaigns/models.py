@@ -1,6 +1,6 @@
-# Campaigns Models
 # restapi/campaigns/models
 from django.db import models
+from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from restapi.helper.modelsHelper import TrackModel, TaskModel, RankOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
@@ -30,7 +30,7 @@ class Campaigns(TrackModel, TaskModel):
 class CampaignMembers(TrackModel):
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_users')
     campaign = models.ForeignKey('Campaigns', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members')
-    rank = models.IntegerField(choices=RankOptions.choices, blank=True, null=True)
+    rank = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members_by_rank')
     supervisor = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_supervisors')
     committee = models.ForeignKey('ElectionCommittees', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_members')
     civil = models.CharField(max_length=12, blank=True, null=True, validators=[civil_validator])
@@ -58,7 +58,7 @@ class CampaignGuarantees(TrackModel):
     
 
 class CampaignAttendees(TrackModel):
-    user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attended_elections')
+    user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attendant_elections')
     election = models.ForeignKey('Elections', on_delete=models.SET_NULL, null=True, blank=True, related_name='Campaign_attendees')
     committee = models.ForeignKey('ElectionCommittees', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_attendees')
     elector = models.ForeignKey('Electors', on_delete=models.SET_NULL, null=True, blank=True, related_name='elector_attendees')
@@ -67,6 +67,5 @@ class CampaignAttendees(TrackModel):
 
     class Meta:
         db_table = 'Campaign_attendee'
-        verbose_name = "Election Attendee"
-        verbose_name_plural = "Election Attendees"
-
+        verbose_name = "Campaign Attendee"
+        verbose_name_plural = "Campaign Attendees"

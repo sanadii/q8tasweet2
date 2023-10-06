@@ -1,36 +1,46 @@
+// React & Redux core
 import React, { useEffect, useState } from "react";
-import { Container } from "reactstrap";
-import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getCampaignDetails } from "../../../store/actions";
-import { isEmpty } from "lodash";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { useParams } from "react-router-dom";
 
+// Store & Selectors
+import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { getCampaignDetails } from "../../../store/actions";
+
+// Components
 import Section from "./Section";
+
+// UI & Utilities
+import { Container } from "reactstrap";
+import { isEmpty } from "lodash";
+
 
 const CampaignDetails = () => {
   const dispatch = useDispatch();
+  const { id: campaignId } = useParams();
+  
+  const {
+    campaignDetails,
+    currentCampaignUser,
+    campaignMembers,
+    campaignGuarantees,
+    campaignElectionCommittees,
+    isCampaignSuccess
+  } = useSelector(electionsSelector);
 
-  document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
-
-  const { campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, campaignCommittees, isCampaignSuccess } = useSelector(electionsSelector);
-
-  const [campaign, setCampaign] = useState({
-    id: useParams().id,
-  });
+  const [campaign, setCampaign] = useState({ id: campaignId });
 
   useEffect(() => {
+    document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
     if (campaign.id && !isEmpty(campaign)) {
       dispatch(getCampaignDetails(campaign));
     }
-  }, [dispatch, campaign, campaign.id]);
-
+  }, [dispatch, campaign]);
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-
           {!campaign || !campaignMembers ? (
             <div>إنتظار...</div>
           ) : (
@@ -38,14 +48,11 @@ const CampaignDetails = () => {
               campaign={campaignDetails}
               campaignMembers={campaignMembers}
               campaignGuarantees={campaignGuarantees}
-              currentCampaignMember={currentCampaignMember}
-              campaignCommittees={campaignCommittees}
+              currentCampaignUser={currentCampaignUser}
+              campaignElectionCommittees={campaignElectionCommittees}
             />
-          )}
-
+          )}F
         </Container>
-
-
       </div>
     </React.Fragment>
   );

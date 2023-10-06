@@ -26,11 +26,11 @@ import {
   GET_CAMPAIGN_GUARANTEE_DETAILS,
 
   // Campaign Attendees
-  GET_ELECTION_ATTENDEES,
-  ADD_NEW_ELECTION_ATTENDEE,
-  DELETE_ELECTION_ATTENDEE,
-  UPDATE_ELECTION_ATTENDEE,
-  GET_ELECTION_ATTENDEE_DETAILS,
+  GET_CAMPAIGN_ATTENDEES,
+  ADD_NEW_CAMPAIGN_ATTENDEE,
+  DELETE_CAMPAIGN_ATTENDEE,
+  UPDATE_CAMPAIGN_ATTENDEE,
+  GET_CAMPAIGN_ATTENDEE_DETAILS,
 } from "./actionType";
 
 import {
@@ -69,12 +69,12 @@ import {
   deleteCampaignGuaranteeFail,
 
   // Campaign Attendees
-  addNewElectionAttendeeSuccess,
-  addNewElectionAttendeeFail,
-  updateElectionAttendeeSuccess,
-  updateElectionAttendeeFail,
-  deleteElectionAttendeeSuccess,
-  deleteElectionAttendeeFail,
+  addNewCampaignAttendeeSuccess,
+  addNewCampaignAttendeeFail,
+  updateCampaignAttendeeSuccess,
+  updateCampaignAttendeeFail,
+  deleteCampaignAttendeeSuccess,
+  deleteCampaignAttendeeFail,
 
 } from "./action";
 
@@ -103,11 +103,11 @@ import {
   deleteCampaignGuarantee,
 
   // Campaign Attendees
-  getAllElectionAttendees as getAllElectionAttendeesApi,
-  // getElectionAttendeeDetails as getElectionAttendeeDetailsApi,
-  addNewElectionAttendee,
-  updateElectionAttendee,
-  deleteElectionAttendee,
+  getAllCampaignAttendees as getAllCampaignAttendeesApi,
+  // getCampaignAttendeeDetails as getCampaignAttendeeDetailsApi,
+  addNewCampaignAttendee,
+  updateCampaignAttendee,
+  deleteCampaignAttendee,
 
 } from "../../helpers/backend_helper";
 
@@ -264,52 +264,52 @@ function* onUpdateCampaignGuarantee({ payload: campaignGuarantee }) {
   }
 }
 
-// ElectionAttendees
-function* getAllElectionAttendees({ payload: campaign }) {
+// CampaignAttendees
+function* getAllCampaignAttendees({ payload: campaign }) {
   try {
-    const response = yield call(getAllElectionAttendeesApi, campaign);
+    const response = yield call(getAllCampaignAttendeesApi, campaign);
     yield put(
-      CampaignApiResponseSuccess(GET_ELECTION_ATTENDEES, response.data)
+      CampaignApiResponseSuccess(GET_CAMPAIGN_ATTENDEES, response.data)
     );
   } catch (error) {
-    yield put(CampaignApiResponseError(GET_ELECTION_ATTENDEES, error));
+    yield put(CampaignApiResponseError(GET_CAMPAIGN_ATTENDEES, error));
   }
 }
 
-function* onAddNewElectionAttendee({ payload: electionAttendee }) {
+function* onAddNewCampaignAttendee({ payload: campaignAttendee }) {
   try {
-    const response = yield call(addNewElectionAttendee, electionAttendee);
-    yield put(addNewElectionAttendeeSuccess(response));
-    // toast.success("ElectionAttendee Added Successfully", { autoClose: 2000 });
+    const response = yield call(addNewCampaignAttendee, campaignAttendee);
+    yield put(addNewCampaignAttendeeSuccess(response));
+    // toast.success("CampaignAttendee Added Successfully", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewElectionAttendeeFail(error));
-    // toast.error("ElectionAttendee Added Failed", { autoClose: 2000 });
+    yield put(addNewCampaignAttendeeFail(error));
+    // toast.error("CampaignAttendee Added Failed", { autoClose: 2000 });
   }
 }
 
-function* onDeleteElectionAttendee({ payload: electionAttendee }) {
+function* onDeleteCampaignAttendee({ payload: campaignAttendee }) {
   try {
-    const response = yield call(deleteElectionAttendee, electionAttendee);
+    const response = yield call(deleteCampaignAttendee, campaignAttendee);
     yield put(
-      deleteElectionAttendeeSuccess({ electionAttendee, ...response })
+      deleteCampaignAttendeeSuccess({ campaignAttendee, ...response })
     );
-    toast.success("ElectionAttendee Delete Successfully", { autoClose: 2000 });
+    toast.success("CampaignAttendee Delete Successfully", { autoClose: 2000 });
   } catch (error) {
-    yield put(deleteElectionAttendeeFail(error));
-    toast.error("ElectionAttendee Delete Failed", { autoClose: 2000 });
+    yield put(deleteCampaignAttendeeFail(error));
+    toast.error("CampaignAttendee Delete Failed", { autoClose: 2000 });
   }
 }
 
-function* onUpdateElectionAttendee({ payload: electionAttendee }) {
+function* onUpdateCampaignAttendee({ payload: campaignAttendee }) {
   try {
-    const response = yield call(updateElectionAttendee, electionAttendee);
-    yield put(updateElectionAttendeeSuccess(response));
-    toast.success("ElectionAttendee Updated Successfully", {
+    const response = yield call(updateCampaignAttendee, campaignAttendee);
+    yield put(updateCampaignAttendeeSuccess(response));
+    toast.success("CampaignAttendee Updated Successfully", {
       autoClose: 2000,
     });
   } catch (error) {
-    yield put(updateElectionAttendeeFail(error));
-    toast.error("ElectionAttendee Updated Failed", { autoClose: 2000 });
+    yield put(updateCampaignAttendeeFail(error));
+    toast.error("CampaignAttendee Updated Failed", { autoClose: 2000 });
   }
 }
 
@@ -370,21 +370,21 @@ export function* watchDeleteCampaignGuarantee() {
   yield takeEvery(DELETE_CAMPAIGN_GUARANTEE, onDeleteCampaignGuarantee);
 }
 
-// ElectionAttendees Watchers
-export function* watchGetAllElectionAttendees() {
-  yield takeEvery(GET_ELECTION_ATTENDEES, getAllElectionAttendees);
+// CampaignAttendees Watchers
+export function* watchGetAllCampaignAttendees() {
+  yield takeEvery(GET_CAMPAIGN_ATTENDEES, getAllCampaignAttendees);
 }
 
-export function* watchAddNewElectionAttendee() {
-  yield takeEvery(ADD_NEW_ELECTION_ATTENDEE, onAddNewElectionAttendee);
+export function* watchAddNewCampaignAttendee() {
+  yield takeEvery(ADD_NEW_CAMPAIGN_ATTENDEE, onAddNewCampaignAttendee);
 }
 
-export function* watchUpdateElectionAttendee() {
-  yield takeEvery(UPDATE_ELECTION_ATTENDEE, onUpdateElectionAttendee);
+export function* watchUpdateCampaignAttendee() {
+  yield takeEvery(UPDATE_CAMPAIGN_ATTENDEE, onUpdateCampaignAttendee);
 }
 
-export function* watchDeleteElectionAttendee() {
-  yield takeEvery(DELETE_ELECTION_ATTENDEE, onDeleteElectionAttendee);
+export function* watchDeleteCampaignAttendee() {
+  yield takeEvery(DELETE_CAMPAIGN_ATTENDEE, onDeleteCampaignAttendee);
 }
 
 
@@ -411,12 +411,12 @@ function* campaignSaga() {
     fork(watchUpdateCampaignGuarantee),
     fork(watchDeleteCampaignGuarantee),
 
-    // ElectionAttendees
-    fork(watchGetAllElectionAttendees),
-    // fork(watchGetElectionAttendeeDetails),
-    fork(watchAddNewElectionAttendee),
-    fork(watchUpdateElectionAttendee),
-    fork(watchDeleteElectionAttendee),
+    // CampaignAttendees
+    fork(watchGetAllCampaignAttendees),
+    // fork(watchGetCampaignAttendeeDetails),
+    fork(watchAddNewCampaignAttendee),
+    fork(watchUpdateCampaignAttendee),
+    fork(watchDeleteCampaignAttendee),
 
 
   ]);

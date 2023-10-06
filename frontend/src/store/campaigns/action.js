@@ -43,17 +43,17 @@ import {
   DELETE_CAMPAIGN_GUARANTEE_SUCCESS,
   DELETE_CAMPAIGN_GUARANTEE_FAIL,
 
-  // ElectionAttendees
-  GET_ELECTION_ATTENDEES,
-  ADD_NEW_ELECTION_ATTENDEE,
-  ADD_NEW_ELECTION_ATTENDEE_SUCCESS,
-  ADD_NEW_ELECTION_ATTENDEE_FAIL,
-  UPDATE_ELECTION_ATTENDEE,
-  UPDATE_ELECTION_ATTENDEE_SUCCESS,
-  UPDATE_ELECTION_ATTENDEE_FAIL,
-  DELETE_ELECTION_ATTENDEE,
-  DELETE_ELECTION_ATTENDEE_SUCCESS,
-  DELETE_ELECTION_ATTENDEE_FAIL,
+  // CampaignAttendees
+  GET_CAMPAIGN_ATTENDEES,
+  ADD_NEW_CAMPAIGN_ATTENDEE,
+  ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS,
+  ADD_NEW_CAMPAIGN_ATTENDEE_FAIL,
+  UPDATE_CAMPAIGN_ATTENDEE,
+  UPDATE_CAMPAIGN_ATTENDEE_SUCCESS,
+  UPDATE_CAMPAIGN_ATTENDEE_FAIL,
+  DELETE_CAMPAIGN_ATTENDEE,
+  DELETE_CAMPAIGN_ATTENDEE_SUCCESS,
+  DELETE_CAMPAIGN_ATTENDEE_FAIL,
 } from "./actionType";
 
 // Campaign Success / Error
@@ -230,46 +230,46 @@ export const deleteCampaignGuaranteeFail = (error) => ({
 
 
 // ----------- Attendeees -------------
-// ElectionAttendees
-export const updateElectionAttendee = (electionAttendee) => ({
-  type: UPDATE_ELECTION_ATTENDEE,
-  payload: electionAttendee,
+// CampaignAttendees
+export const updateCampaignAttendee = (campaignAttendee) => ({
+  type: UPDATE_CAMPAIGN_ATTENDEE,
+  payload: campaignAttendee,
 });
-export const updateElectionAttendeeSuccess = (electionAttendee) => ({
-  type: UPDATE_ELECTION_ATTENDEE_SUCCESS,
-  payload: electionAttendee,
+export const updateCampaignAttendeeSuccess = (campaignAttendee) => ({
+  type: UPDATE_CAMPAIGN_ATTENDEE_SUCCESS,
+  payload: campaignAttendee,
 });
-export const updateElectionAttendeeFail = (error) => ({
-  type: UPDATE_ELECTION_ATTENDEE_FAIL,
+export const updateCampaignAttendeeFail = (error) => ({
+  type: UPDATE_CAMPAIGN_ATTENDEE_FAIL,
   payload: error,
 });
 
-export const addNewElectionAttendee = (electionAttendee) => ({
-  type: ADD_NEW_ELECTION_ATTENDEE,
-  payload: electionAttendee,
+export const addNewCampaignAttendee = (campaignAttendee) => ({
+  type: ADD_NEW_CAMPAIGN_ATTENDEE,
+  payload: campaignAttendee,
 });
 
-export const addNewElectionAttendeeSuccess = (electionAttendee) => ({
-  type: ADD_NEW_ELECTION_ATTENDEE_SUCCESS,
-  payload: electionAttendee,
+export const addNewCampaignAttendeeSuccess = (campaignAttendee) => ({
+  type: ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS,
+  payload: campaignAttendee,
 });
 
-export const addNewElectionAttendeeFail = (error) => ({
-  type: ADD_NEW_ELECTION_ATTENDEE_FAIL,
+export const addNewCampaignAttendeeFail = (error) => ({
+  type: ADD_NEW_CAMPAIGN_ATTENDEE_FAIL,
   payload: error,
 });
 
-export const deleteElectionAttendee = (electionAttendee) => ({
-  type: DELETE_ELECTION_ATTENDEE,
-  payload: electionAttendee,
+export const deleteCampaignAttendee = (campaignAttendee) => ({
+  type: DELETE_CAMPAIGN_ATTENDEE,
+  payload: campaignAttendee,
 });
 
-export const deleteElectionAttendeeSuccess = (electionAttendee) => ({
-  type: DELETE_ELECTION_ATTENDEE_SUCCESS,
-  payload: electionAttendee,
+export const deleteCampaignAttendeeSuccess = (campaignAttendee) => ({
+  type: DELETE_CAMPAIGN_ATTENDEE_SUCCESS,
+  payload: campaignAttendee,
 });
 
-export const deleteElectionAttendeeFail = (error) => ({
-  type: DELETE_ELECTION_ATTENDEE_FAIL,
+export const deleteCampaignAttendeeFail = (error) => ({
+  type: DELETE_CAMPAIGN_ATTENDEE_FAIL,
   payload: error,
 });

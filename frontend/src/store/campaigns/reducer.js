@@ -34,25 +34,25 @@ import {
   DELETE_CAMPAIGN_GUARANTEE_FAIL,
 
   // Campaign Attendees
-  GET_ELECTION_ATTENDEES,
-  // GET_ELECTION_ATTENDEE_DETAILS,
-  ADD_NEW_ELECTION_ATTENDEE_SUCCESS,
-  ADD_NEW_ELECTION_ATTENDEE_FAIL,
-  UPDATE_ELECTION_ATTENDEE_SUCCESS,
-  UPDATE_ELECTION_ATTENDEE_FAIL,
-  DELETE_ELECTION_ATTENDEE_SUCCESS,
-  DELETE_ELECTION_ATTENDEE_FAIL,
+  GET_CAMPAIGN_ATTENDEES,
+  // GET_CAMPAIGN_ATTENDEE_DETAILS,
+  ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS,
+  ADD_NEW_CAMPAIGN_ATTENDEE_FAIL,
+  UPDATE_CAMPAIGN_ATTENDEE_SUCCESS,
+  UPDATE_CAMPAIGN_ATTENDEE_FAIL,
+  DELETE_CAMPAIGN_ATTENDEE_SUCCESS,
+  DELETE_CAMPAIGN_ATTENDEE_FAIL,
 } from "./actionType";
 
 const IntialState = {
-  currentCampaignMember: [],
+  currentCampaignUser: [],
 
   campaigns: [],
   campaignDetails: [],
   campaignGuarantees: [],
   campaignElectionCandidates: [],
   campaignElectionCommittees: [],
-  campaignElectionAttendees: [],
+  campaignAttendees: [],
 };
 
 const Campaigns = (state = IntialState, action) => {
@@ -69,15 +69,15 @@ const Campaigns = (state = IntialState, action) => {
         case GET_CAMPAIGN_DETAILS:
           return {
             ...state,
-            currentCampaignMember: action.payload.data.currentCampaignMember,
+            currentCampaignUser: action.payload.data.currentCampaignUser,
 
             campaignDetails: action.payload.data.campaignDetails,
             campaignMembers: action.payload.data.campaignMembers,
             campaignGuarantees: action.payload.data.campaignGuarantees,
 
-            campaignElectionCandidates: action.payload.data.electionCandidates,
-            campaignElectionCommittees: action.payload.data.electionCommittees,
-            campaignElectionAttendees: action.payload.data.electionAttendees,
+            campaignElectionCandidates: action.payload.data.campaignElectionCandidates,
+            campaignElectionCommittees: action.payload.data.campaignElectionCommittees,
+            campaignAttendees: action.payload.data.campaignAttendees,
             isCampaignCreated: false,
             isCampaignSuccess: true,
           };
@@ -95,12 +95,12 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignGuaranteeCreated: false,
             isCampaignGuaranteeSuccess: true,
           };
-        case GET_ELECTION_ATTENDEES:
+        case GET_CAMPAIGN_ATTENDEES:
           return {
             ...state,
-            campaignElectionAttendees: action.payload.data.electors,
-            isElectionAttendeeCreated: false,
-            isElectionAttendeeSuccess: true,
+            campaignCampaignAttendees: action.payload.data.electors,
+            isCampaignAttendeeCreated: false,
+            isCampaignAttendeeSuccess: true,
           };
 
         default:
@@ -144,12 +144,12 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignGuaranteeSuccess: true,
           };
         }
-        case GET_ELECTION_ATTENDEES: {
+        case GET_CAMPAIGN_ATTENDEES: {
           return {
             ...state,
             error: action.payload.error,
-            isElectionAttendeeCreated: false,
-            isElectionAttendeeSuccess: true,
+            isCampaignAttendeeCreated: false,
+            isCampaignAttendeeSuccess: true,
           };
         }
 
@@ -348,66 +348,66 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignGuaranteeDeleteFail: true,
       };
     // Campaign Attendees
-    case GET_ELECTION_ATTENDEES: {
+    case GET_CAMPAIGN_ATTENDEES: {
       return {
         ...state,
         error: action.payload.error,
-        isElectionAttendeeCreated: false,
-        isElectionAttendeeSuccess: true,
+        isCampaignAttendeeCreated: false,
+        isCampaignAttendeeSuccess: true,
       };
     }
 
-    case ADD_NEW_ELECTION_ATTENDEE_SUCCESS:
+    case ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS:
       return {
         ...state,
-        isElectionAttendeeCreated: true,
-        campaignElectionAttendees: [...state.campaignElectionAttendees, action.payload.data],
-        isElectionAttendeeAdd: true,
-        isElectionAttendeeAddFail: false,
+        isCampaignAttendeeCreated: true,
+        campaignCampaignAttendees: [...state.campaignAttendees, action.payload.data],
+        isCampaignAttendeeAdd: true,
+        isCampaignAttendeeAddFail: false,
       };
 
-    case ADD_NEW_ELECTION_ATTENDEE_FAIL:
+    case ADD_NEW_CAMPAIGN_ATTENDEE_FAIL:
       return {
         ...state,
         error: action.payload,
-        isElectionAttendeeAdd: false,
-        isElectionAttendeeAddFail: true,
+        isCampaignAttendeeAdd: false,
+        isCampaignAttendeeAddFail: true,
       };
-    case UPDATE_ELECTION_ATTENDEE_SUCCESS:
+    case UPDATE_CAMPAIGN_ATTENDEE_SUCCESS:
       return {
         ...state,
-        campaignElectionAttendees: state.campaignElectionAttendees.map((electionAttendee) =>
-          electionAttendee.id.toString() === action.payload.data.id.toString()
-            ? { ...electionAttendee, ...action.payload.data }
-            : electionAttendee
+        campaignAttendees: state.campaignAttendees.map((campaignAttendee) =>
+          campaignAttendee.id.toString() === action.payload.data.id.toString()
+            ? { ...campaignAttendee, ...action.payload.data }
+            : campaignAttendee
         ),
-        isElectionAttendeeUpdate: true,
-        isElectionAttendeeUpdateFail: false,
+        isCampaignAttendeeUpdate: true,
+        isCampaignAttendeeUpdateFail: false,
       };
-    case UPDATE_ELECTION_ATTENDEE_FAIL:
+    case UPDATE_CAMPAIGN_ATTENDEE_FAIL:
       return {
         ...state,
         error: action.payload,
-        isElectionAttendeeUpdate: false,
-        isElectionAttendeeUpdateFail: true,
+        isCampaignAttendeeUpdate: false,
+        isCampaignAttendeeUpdateFail: true,
       };
-    case DELETE_ELECTION_ATTENDEE_SUCCESS:
+    case DELETE_CAMPAIGN_ATTENDEE_SUCCESS:
       return {
         ...state,
-        campaignElectionAttendees: state.campaignElectionAttendees.filter(
-          (electionAttendee) =>
-            electionAttendee.id.toString() !==
-            action.payload.electionAttendee.toString()
+        campaignAttendees: state.campaignAttendees.filter(
+          (campaignAttendee) =>
+            campaignAttendee.id.toString() !==
+            action.payload.campaignAttendee.toString()
         ),
-        isElectionAttendeeDelete: true,
-        isElectionAttendeeDeleteFail: false,
+        isCampaignAttendeeDelete: true,
+        isCampaignAttendeeDeleteFail: false,
       };
-    case DELETE_ELECTION_ATTENDEE_FAIL:
+    case DELETE_CAMPAIGN_ATTENDEE_FAIL:
       return {
         ...state,
         error: action.payload,
-        isElectionAttendeeDelete: false,
-        isElectionAttendeeDeleteFail: true,
+        isCampaignAttendeeDelete: false,
+        isCampaignAttendeeDeleteFail: true,
       };
 
 

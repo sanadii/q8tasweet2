@@ -28,7 +28,7 @@ const CampaignGuaranteesModalUpdate = ({
   const { campaign } = useSelector((state) => ({
     campaign: state.Campaigns.campaignDetails.id,
   }));
-  const campaignCommittees = useSelector(electionsSelector); // Directly use without redundant useState
+  const campaignElectionCommittees = useSelector(electionsSelector); // Directly use without redundant useState
 
   const GurantorOptions = campaignMembers.filter(
     (member) => member.rank === 2 || member.rank === 3 || member.rank === 4

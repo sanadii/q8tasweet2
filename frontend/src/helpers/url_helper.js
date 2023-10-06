@@ -36,6 +36,14 @@ export const DELETE_ELECTION_COMMITTEE = "/elections/deleteElectionCommittee";
 // Election Committee Results
 export const UPDATE_ELECTION_COMMITTEE_RESULTS = "/elections/updateElectionCommitteeResults";
 
+
+// ElectionAttendee
+export const GET_ELECTION_ATTENDEES = "/campaigns/getAllElectionAttendees";
+export const DELETE_ELECTION_ATTENDEE = "/campaigns/deleteElectionAttendee";
+export const ADD_NEW_ELECTION_ATTENDEE = "/campaigns/addNewElectionAttendee";
+export const UPDATE_ELECTION_ATTENDEE = "/campaigns/updateElectionAttendee";
+
+
 // Election Campaign
 export const GET_ELECTION_CAMPAIGNS = "/elections/getElectionCampaigns";
 export const GET_ELECTION_CAMPAIGN_DETAILS = "/elections/getElectionCampaignDetails";
@@ -87,11 +95,11 @@ export const DELETE_CAMPAIGN_GUARANTEE = "/campaigns/deleteCampaignGuarantee";
 export const ADD_NEW_CAMPAIGN_GUARANTEE = "/campaigns/addNewCampaignGuarantee";
 export const UPDATE_CAMPAIGN_GUARANTEE = "/campaigns/updateCampaignGuarantee";
 
-// ElectionAttendee
-export const GET_ELECTION_ATTENDEES = "/campaigns/getAllElectionAttendees";
-export const DELETE_ELECTION_ATTENDEE = "/campaigns/deleteElectionAttendee";
-export const ADD_NEW_ELECTION_ATTENDEE = "/campaigns/addNewElectionAttendee";
-export const UPDATE_ELECTION_ATTENDEE = "/campaigns/updateElectionAttendee";
+// CampaignAttendee
+export const GET_CAMPAIGN_ATTENDEES = "/campaigns/getAllCampaignAttendees";
+export const DELETE_CAMPAIGN_ATTENDEE = "/campaigns/deleteCampaignAttendee";
+export const ADD_NEW_CAMPAIGN_ATTENDEE = "/campaigns/addNewCampaignAttendee";
+export const UPDATE_CAMPAIGN_ATTENDEE = "/campaigns/updateCampaignAttendee";
 
 // USERS
 export const GET_USERS = "/users/getUsers";

@@ -69,3 +69,16 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
         return self.username
     class Meta:
         db_table = 'users_user'
+
+class AuthCategory(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class CustomGroup(models.Model):  # Renamed to CustomGroup to avoid confusion with Django's built-in Group
+    name = models.CharField(max_length=255)
+    category = models.ForeignKey(AuthCategory, on_delete=models.CASCADE, related_name='groups')
+
+    def __str__(self):
+        return self.name

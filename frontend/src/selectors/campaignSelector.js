@@ -15,12 +15,12 @@ export const electionsSelector = createSelector(
     // electionCandidates: campaignsState.electionCandidates,
     // electionAttendees: campaignsState.electionAttendees,
 
-    campaignCommittees: campaignsState.electionCommittees,
+    campaignElectionCommittees: campaignsState.electionCommittees,
     campaignCandidates: campaignsState.electionCandidates,
     electionsSelector: campaignsState.electionAttendees,
 
     isCampaignSuccess: campaignsState.isCampaignSuccess,
-    currentCampaignMember: campaignsState.currentCampaignMember,
+    currentCampaignUser: campaignsState.currentCampaignUser,
     electors: campaignsState.electors,
   })
 );

@@ -15,7 +15,7 @@ src\pages\Campaigns\CampaignDetails\ElectorsTab.js
   Line 105:5:  React Hook useCallback has a missing dependency: 'campaignDetails.id'. Either include it or remove the dependency array                                  
                                                                                                                                                                         
               react-hooks/exhaustive-deps
-  Line 228:5:  React Hook useMemo has missing dependencies: 'campaignDetails.election.id', 'campaignDetails.id', 'campaignGuarantees', 'currentCampaignMember.committee', 'currentCampaignMember.id', 'currentCampaignMember.rank', 'currentCampaignMember.user.id', 'dispatch', and 'electionAttendees'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 228:5:  React Hook useMemo has missing dependencies: 'campaignDetails.election.id', 'campaignDetails.id', 'campaignGuarantees', 'currentCampaignUser.committee', 'currentCampaignUser.id', 'currentCampaignUser.rank', 'currentCampaignUser.user.id', 'dispatch', and 'electionAttendees'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
 
 src\pages\Campaigns\CampaignDetails\GuaranteesTab.js
   Line 75:9:   The 'toggle' function makes the dependencies of useCallback Hook (at line 100) change on every render. To fix this, wrap the definition of 'toggle' in its own useCallback() Hook  react-hooks/exhaustive-deps
@@ -23,7 +23,7 @@ src\pages\Campaigns\CampaignDetails\GuaranteesTab.js
                           react-hooks/exhaustive-deps
 
 src\pages\Campaigns\CampaignDetails\MembersTab.js
-  Line 421:6:  React Hook useMemo has missing dependencies: 'campaignGuarantees.length', 'campaignMembers', 'currentCampaignMember.rank', 'electionCommittees', 'getAttendeeCountForMember', and 'getGuaranteeCountForMember'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 421:6:  React Hook useMemo has missing dependencies: 'campaignGuarantees.length', 'campaignMembers', 'currentCampaignUser.rank', 'electionCommittees', 'getAttendeeCountForMember', and 'getGuaranteeCountForMember'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
 
 src\pages\Campaigns\CampaignDetails\Modals\CampaignGuaranteesModalUpdate.js
   Line 54:6:  React Hook useEffect has missing dependencies: 'handleUpdateButton' and 'setOnModalSubmit'. Either include them or remove the dependency array. If 'setOnModalSubmit' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps

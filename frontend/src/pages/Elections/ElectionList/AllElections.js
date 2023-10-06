@@ -1,20 +1,21 @@
-// React & Redux
+// React & Redux core
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-// Store
+// Store & Selectors
+import { electionsSelector } from '../../../Selectors/electionsSelector';
 import { getElections, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
 
-// Constants & Component imports
-import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+// Components & Columns
 import ElectionModal from "./ElectionModal";
+import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
-// UI Components & styling imports
+// UI, Styles & Notifications
 import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 
 const AllElections = () => {
   const dispatch = useDispatch();
