@@ -9,7 +9,7 @@ import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 const OverviewTab = () => {
 
-  const { campaignDetails, currentCampaignUser, campaignMembers, campaignGuarantees, campaignElectionCommittees, campaignCandidates } = useSelector(electionsSelector);
+  const { campaignDetails, currentCampaignMember, campaignMembers, campaignGuarantees, campaignElectionCommittees, campaignCandidates } = useSelector(electionsSelector);
 
   document.title = "Campaign Overview | Q8Tasweet";
 
@@ -18,7 +18,7 @@ const OverviewTab = () => {
 
   if (Array.isArray(campaignElectionCommittees)) {
     const committeeObj = campaignElectionCommittees.find(
-      (committee) => committee.id === currentCampaignUser.committee
+      (committee) => committee.id === currentCampaignMember.committee
     );
     if (committeeObj) {
       committeeName = committeeObj.name;
@@ -26,7 +26,7 @@ const OverviewTab = () => {
   }
 
   const rankObj = MemberRankOptions.find(
-    (rank) => rank.id === currentCampaignUser.rank
+    (rank) => rank.id === currentCampaignMember.rank
   );
   const rankName = rankObj ? rankObj.name : "Unknown";
   const getGenderIcon = (gender) => {
@@ -259,8 +259,8 @@ const OverviewTab = () => {
               <h5 className="card-title mb-3"><strong>معلومات المستخدم</strong></h5>
 
               <ul>
-                <li>رقم العضوية: <strong>{currentCampaignUser.id}</strong></li>
-                <li>الإسم: <strong>{currentCampaignUser.fullName}</strong></li>
+                <li>رقم العضوية: <strong>{currentCampaignMember.id}</strong></li>
+                <li>الإسم: <strong>{currentCampaignMember.fullName}</strong></li>
                 <li>الرتبة: <strong>{rankName}</strong></li>
                 <li>اللجنة: <strong> {committeeName}</strong></li>
               </ul>

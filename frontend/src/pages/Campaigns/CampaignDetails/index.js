@@ -9,49 +9,62 @@ import { getCampaignDetails } from "../../../store/actions";
 
 // Components
 import Section from "./Section";
+import useCampaignPermission from "../../../Components/Hooks/useCampaignPermission";
 
 // UI & Utilities
 import { Container } from "reactstrap";
-import { isEmpty } from "lodash";
+// import { isEmpty } from "lodash";
 
 
 const CampaignDetails = () => {
   const dispatch = useDispatch();
   const { id: campaignId } = useParams();
-  
+  const { hasPermission } = useCampaignPermission(); // Use the hook
+
   const {
     campaignDetails,
-    currentCampaignUser,
+    currentUser,
+    currentCampaignMember,
     campaignMembers,
     campaignGuarantees,
     campaignElectionCommittees,
     isCampaignSuccess
   } = useSelector(electionsSelector);
 
-  const [campaign, setCampaign] = useState({ id: campaignId });
-
   useEffect(() => {
     document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
-    if (campaign.id && !isEmpty(campaign)) {
-      dispatch(getCampaignDetails(campaign));
+    if (campaignId) {
+      dispatch(getCampaignDetails({ id: campaignId }));
     }
-  }, [dispatch, campaign]);
+  }, [dispatch, campaignId]);
+
+  const isLoading = !campaignDetails || !campaignDetails.candidate || !campaignDetails.election;
+
+  if (!hasPermission('canViewCampaigns')) { // Check if the user doesn't have the permission
+    return <div>You do not have permission to view this campaign.</div>;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="page-content">
+        <Container fluid>
+          <div>تحميل...</div>
+        </Container>
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {!campaign || !campaignMembers ? (
-            <div>إنتظار...</div>
-          ) : (
-            <Section
-              campaign={campaignDetails}
-              campaignMembers={campaignMembers}
-              campaignGuarantees={campaignGuarantees}
-              currentCampaignUser={currentCampaignUser}
-              campaignElectionCommittees={campaignElectionCommittees}
-            />
-          )}F
+          <Section
+            campaign={campaignDetails}
+            campaignMembers={campaignMembers}
+            campaignGuarantees={campaignGuarantees}
+            currentCampaignMember={currentCampaignMember}
+            campaignElectionCommittees={campaignElectionCommittees}
+          />
         </Container>
       </div>
     </React.Fragment>

@@ -1,7 +1,7 @@
 # Categories Model
 from django.db import models
 
-from restapi.helper.modelsHelper import TrackModel, TaskModel, GenderOptions
+from restapi.helper.models_helper import TrackModel, TaskModel, GenderOptions
 from restapi.helper.validators import today
 
 class Candidates(TrackModel, TaskModel):

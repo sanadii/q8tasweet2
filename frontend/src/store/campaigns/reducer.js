@@ -45,7 +45,7 @@ import {
 } from "./actionType";
 
 const IntialState = {
-  currentCampaignUser: [],
+  currentCampaignMember: [],
 
   campaigns: [],
   campaignDetails: [],
@@ -69,7 +69,7 @@ const Campaigns = (state = IntialState, action) => {
         case GET_CAMPAIGN_DETAILS:
           return {
             ...state,
-            currentCampaignUser: action.payload.data.currentCampaignUser,
+            currentCampaignMember: action.payload.data.currentCampaignMember,
 
             campaignDetails: action.payload.data.campaignDetails,
             campaignMembers: action.payload.data.campaignMembers,

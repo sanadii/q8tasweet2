@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 import { electionsSelector } from '../../Selectors/electionsSelector';
 
 const useUserRoles = () => {
-    const { currentUser, currentCampaignUser } = useSelector(electionsSelector);
-    const rank = currentCampaignUser?.rank;
+    const { currentUser, currentCampaignMember } = useSelector(electionsSelector);
+    const rank = currentCampaignMember?.rank;
 
     // If user is an admin, don't evaluate subscriber roles
     if (currentUser?.isStaff === true) {
@@ -16,13 +16,6 @@ const useUserRoles = () => {
             isSubscriber: false,
         };
     }
-    
-    // canEditCampaign,
-    // canViewGuarantees,
-    // canViewGuarantees,
-    // canViewAttendees,
-    // canViewSorting,
-
     // If user is not an admin, evaluate subscriber roles
     return {
         isAdmin: false,

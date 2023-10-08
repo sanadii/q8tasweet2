@@ -21,7 +21,7 @@ const MembersTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const { currentCampaignUser, campaignGuarantees, campaignMembers, campaignElectionCommittees, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
+  const { currentCampaignMember, campaignGuarantees, campaignMembers, campaignElectionCommittees, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
   // --------------- Constants ---------------
@@ -407,10 +407,10 @@ const MembersTab = () => {
       committeeColumns,
       attendantColumns,
       sorterColumns,
-      currentCampaignUser.rank !== 3 ? SupervisorColumns : [],
+      currentCampaignMember.rank !== 3 ? SupervisorColumns : [],
       actionColumn
     );
-  }, [handleCampaignMemberClick, checkedAll, activeTab, campaignGuarantees.length, campaignMembers, currentCampaignUser.rank, campaignElectionCommittees, getAttendeeCountForMember, getGuaranteeCountForMember, isAdmin]);
+  }, [handleCampaignMemberClick, checkedAll, activeTab, campaignGuarantees.length, campaignMembers, currentCampaignMember.rank, campaignElectionCommittees, getAttendeeCountForMember, getGuaranteeCountForMember, isAdmin]);
 
 
   // Filters -------------------------

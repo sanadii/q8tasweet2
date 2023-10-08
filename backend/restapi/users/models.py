@@ -4,10 +4,10 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.validators import RegexValidator, MaxValueValidator
+from django.contrib.auth.models import Group
 
-from restapi.helper.modelsHelper import TrackModel, GenderOptions
-from restapi.helper.validators import today, civil_validator, phone_validator
-  
+from restapi.helper.models_helper import TrackModel, GenderOptions, GroupCategories, group_category_field, group_permission_field
+from restapi.helper.validators import today, civil_validator, phone_validator  
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, username, first_name, password, **other_fields):
 
@@ -68,17 +68,7 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
     class Meta:
-        db_table = 'users_user'
+        db_table = 'auth_user'
 
-class AuthCategory(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-class CustomGroup(models.Model):  # Renamed to CustomGroup to avoid confusion with Django's built-in Group
-    name = models.CharField(max_length=255)
-    category = models.ForeignKey(AuthCategory, on_delete=models.CASCADE, related_name='groups')
-
-    def __str__(self):
-        return self.name
+Group.add_to_class('group_category', group_category_field)
+Group.add_to_class('role', group_permission_field)

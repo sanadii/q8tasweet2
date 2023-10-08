@@ -40,7 +40,7 @@ function isTabVisible(tabName, userRoles) {
 
 // const Section = ({ campaign, campaignCandidateList }) => {
 const Section = ({
-  currentCampaignUser,
+  currentCampaignMember,
   campaign,
   campaignMembers,
   campaignGuarantees,
@@ -69,8 +69,8 @@ const Section = ({
   const [activeTab, setActiveTab] = useState("1");
   const [activityTab, setActivityTab] = useState("1");
 
-  const rankId = currentCampaignUser.rank;
-  const currentCampaignUserRank = MemberRankOptions.find(
+  const rankId = currentCampaignMember.rank;
+  const currentCampaignMemberRank = MemberRankOptions.find(
     (option) => option.id === rankId
   );
 
@@ -85,6 +85,9 @@ const Section = ({
       setActivityTab(tab);
     }
   };
+  console.log("campaign:", campaign);
+  console.log("candidate:", campaign.candidate);
+  console.log("name:", campaign.candidate.name);
   return (
     <React.Fragment>
       <ImageCampaignBackground imagePath={campaign?.election?.image} />

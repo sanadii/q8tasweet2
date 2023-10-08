@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from restapi.helper.modelsHelper import TrackModel, TaskModel, RankOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
+from restapi.helper.models_helper import TrackModel, TaskModel, RankOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
 from restapi.helper.validators import civil_validator, phone_validator, today
 
 class Campaigns(TrackModel, TaskModel):

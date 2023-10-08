@@ -6,7 +6,7 @@ const CampaignMembersViewModal = ({ campaignMember }) => {
   const { Users, Campaigns } = useSelector(state => state);
 
   const currentUser = Users?.currentUser;
-  const currentCampaignUser = Campaigns?.currentCampaignUser;
+  const currentCampaignMember = Campaigns?.currentCampaignMember;
   const campaignMembers = Campaigns?.campaignMembers || [];
   const campaignElectionCommittees = Campaigns?.campaignElectionCommittees || [];
 

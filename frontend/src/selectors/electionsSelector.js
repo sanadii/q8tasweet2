@@ -55,7 +55,7 @@ export const electionsSelector = createSelector(
     // User electors
     moderators: usersState.moderators,
     currentUser: usersState.currentUser,
-    currentCampaignUser: campaignsState.currentCampaignUser,
+    currentCampaignMember: campaignsState.currentCampaignMember,
     electors: campaignsState.electors,
 
   })

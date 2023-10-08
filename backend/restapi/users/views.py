@@ -103,12 +103,8 @@ class GetCurrentUser(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # The user is already authenticated, so you can access the user directly from the request
         user = request.user
-
-        # Serialize the user
         user_data = UserSerializer(user).data
-
         return Response({"data": user_data, "code": 200})
 
 class DeleteUser(APIView):

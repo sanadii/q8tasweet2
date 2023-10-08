@@ -1,6 +1,6 @@
 # Elections Model
 from django.db import models
-from restapi.helper.modelsHelper import TrackModel, TaskModel, ElectionTypeOptions, ElectionResultsOptions, StatusOptions, PriorityOptions, GenderOptions
+from restapi.helper.models_helper import TrackModel, TaskModel, ElectionTypeOptions, ElectionResultsOptions, StatusOptions, PriorityOptions, GenderOptions
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum

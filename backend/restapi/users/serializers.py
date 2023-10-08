@@ -1,21 +1,9 @@
 # restapi/user/serializers.py
 from rest_framework import serializers
 from restapi.models import User
+from django.contrib.auth.models import Group, Permission
 
 # USER
-class UserSerializer(serializers.ModelSerializer):
-    full_name = serializers.SerializerMethodField()
-
-    class Meta:
-        model = User
-        fields = ["id", "username",
-                  "first_name", "last_name", "full_name",
-                  "email", "image",
-                  "is_active", "is_staff"
-                  ]
-
-    def get_full_name(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
 
 class UserJWTLoginSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,3 +29,49 @@ class UserCreateSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['codename']
+        # fields = ['name', 'codename']
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name', 'role']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    roles = serializers.SerializerMethodField()  # Changed the field name to 'roles'
+    permissions = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", 
+                  "first_name", "last_name", "full_name", "image",
+                  "is_active", "is_staff",
+                  'roles', 'permissions'
+                  ]
+        
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
+    def get_roles(self, obj):
+        # Gets the role attribute for all the groups associated with the user
+        return [group.role for group in obj.groups.all()]
+
+    def get_permissions(self, obj):
+        user_permissions = list(obj.user_permissions.all().values_list('codename', flat=True))
+        group_permissions = list(Permission.objects.filter(group__user=obj).values_list('codename', flat=True))
+        all_permissions = list(set(user_permissions + group_permissions))
+        formatted_permissions = [self.format_permission(perm) for perm in all_permissions]  # <-- Change is here
+        return formatted_permissions
+    
+    def format_permission(self, permission):
+        parts = permission.split('_')
+        camel_case_name = parts[0] + ''.join([part.capitalize() for part in parts[1:]])
+
+        return 'can' + camel_case_name[0].capitalize() + camel_case_name[1:]
+

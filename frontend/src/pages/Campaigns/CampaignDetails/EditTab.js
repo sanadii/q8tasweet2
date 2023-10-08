@@ -21,7 +21,7 @@ const EditTab = () => {
 
   document.title = "Starter | Q8Tasweet - React Admin & Dashboard Template";
 
-  const { currentCampaignUser, currentUser, campaignMembers, campaignElectionCommittees } = useSelector(electionsSelector);
+  const { currentCampaignMember, currentUser, campaignMembers, campaignElectionCommittees } = useSelector(electionsSelector);
 
   const [electionCommitteeList, setElectionCommitteeList] =
     useState(campaignElectionCommittees);
@@ -41,16 +41,16 @@ const EditTab = () => {
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      id: (currentCampaignUser && currentCampaignUser.id) || "",
-      campaignId: (currentCampaignUser && currentCampaignUser.campaignId) || "",
-      userId: (currentCampaignUser && currentCampaignUser.userId) || "",
-      name: (currentCampaignUser && currentCampaignUser.name) || "",
-      rank: (currentCampaignUser && currentCampaignUser.rank) || 0,
-      committee: (currentCampaignUser && currentCampaignUser.committee) || 0,
-      supervisor: (currentCampaignUser && currentCampaignUser.supervisor) || 0,
-      mobile: (currentCampaignUser && currentCampaignUser.mobile) || "",
-      notes: (currentCampaignUser && currentCampaignUser.notes) || "",
-      status: (currentCampaignUser && currentCampaignUser.status) || 0,
+      id: (currentCampaignMember && currentCampaignMember.id) || "",
+      campaignId: (currentCampaignMember && currentCampaignMember.campaignId) || "",
+      userId: (currentCampaignMember && currentCampaignMember.userId) || "",
+      name: (currentCampaignMember && currentCampaignMember.name) || "",
+      rank: (currentCampaignMember && currentCampaignMember.rank) || 0,
+      committee: (currentCampaignMember && currentCampaignMember.committee) || 0,
+      supervisor: (currentCampaignMember && currentCampaignMember.supervisor) || 0,
+      mobile: (currentCampaignMember && currentCampaignMember.mobile) || "",
+      notes: (currentCampaignMember && currentCampaignMember.notes) || "",
+      status: (currentCampaignMember && currentCampaignMember.status) || 0,
     },
     validationSchema: Yup.object({
       status: Yup.number().integer().required("Status is required"),
@@ -75,7 +75,7 @@ const EditTab = () => {
 
   let fields = [];
 
-  // Conditionally add rank if the currentCampaignUser exists and is not the currentUser.
+  // Conditionally add rank if the currentCampaignMember exists and is not the currentUser.
 
 
   fields.push({
@@ -154,7 +154,7 @@ const EditTab = () => {
                     <input type="hidden" id="id-field" />
                     <h4>
                       <strong>
-                        [{currentCampaignUser.id}] {currentCampaignUser.fullName}
+                        [{currentCampaignMember.id}] {currentCampaignMember.fullName}
                       </strong>
                     </h4>
                   </Row>

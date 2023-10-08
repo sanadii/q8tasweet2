@@ -21,7 +21,7 @@ const CampaignMembersUpdateModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const { currentCampaignUser, currentUser, campaignMembers, campaignElectionCommittees } = useSelector(electionsSelector);
+  const { currentCampaignMember, currentUser, campaignMembers, campaignElectionCommittees } = useSelector(electionsSelector);
 
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 
@@ -90,7 +90,7 @@ const CampaignMembersUpdateModal = ({
   // Conditionally add rank if the campaignMember exists and is not the currentUser.
   if (campaignMember && currentUser.id !== campaignMember.userId) {
     const filteredRankOptions = MemberRankOptions.filter(
-      (option) => option.id > currentCampaignUser.rank
+      (option) => option.id > currentCampaignMember.rank
     );
 
     fields.push({

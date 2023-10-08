@@ -75,7 +75,7 @@ class GetCampaignDetails(APIView):
 
         return Response({
             "data": {
-                "currentCampaignUser": self.get_current_campaign_member(id, request.user.id, context),
+                "currentCampaignMember": self.get_current_campaign_member(id, request.user.id, context),
                 "campaignDetails": self.get_campaign_data(campaign, context),
                 "campaignMembers": self.get_campaign_members(campaign_members, context),
                 "campaignGuarantees": self.get_campaign_guarantees(campaign_guarantees, context),

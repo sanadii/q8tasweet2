@@ -13,7 +13,7 @@ import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 export const ElectorsTab = () => {
   const dispatch = useDispatch();
 
-  const { currentCampaignUser, campaignDetails, campaignMembers, electors, campaignGuarantees, campaignAttendees, isCampaignGuaranteeSuccess, error } = useSelector(electionsSelector);
+  const { currentCampaignMember, campaignDetails, campaignMembers, electors, campaignGuarantees, campaignAttendees, isCampaignGuaranteeSuccess, error } = useSelector(electionsSelector);
   const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
 
   useEffect(() => {
@@ -141,14 +141,14 @@ export const ElectorsTab = () => {
       },
       {
         Header:
-          currentCampaignUser.rank >= 2 && currentCampaignUser.rank <= 4
+          currentCampaignMember.rank >= 2 && currentCampaignMember.rank <= 4
             ? "Add Guarantee"
             : "Add Attendee",
         Cell: (cellProps) => {
           return (
             <div className="flex-shrink-0">
-              {currentCampaignUser.rank >= 2 &&
-                currentCampaignUser.rank <= 4 ? (
+              {currentCampaignMember.rank >= 2 &&
+                currentCampaignMember.rank <= 4 ? (
                 campaignGuarantees.some(
                   (item) => item.civil === cellProps.row.original.civil
                 ) ? (
@@ -162,7 +162,7 @@ export const ElectorsTab = () => {
                       e.preventDefault();
                       const newCampaignGuarantee = {
                         campaign: campaignDetails.id,
-                        member: currentCampaignUser.id,
+                        member: currentCampaignMember.id,
                         elector: cellProps.row.original.civil,
                         status: 1,
                       };
@@ -184,9 +184,9 @@ export const ElectorsTab = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     const newCampaignAttendee = {
-                      user: currentCampaignUser.user.id,
+                      user: currentCampaignMember.user.id,
                       election: campaignDetails.election.id,
-                      committee: currentCampaignUser.committee,
+                      committee: currentCampaignMember.committee,
                       elector: cellProps.row.original.civil,
                       status: 1,
                     };
@@ -206,10 +206,10 @@ export const ElectorsTab = () => {
       campaignDetails.election.id,
       campaignDetails.id,
       campaignGuarantees,
-      currentCampaignUser.committee,
-      currentCampaignUser.id,
-      currentCampaignUser.rank,
-      currentCampaignUser.user.id,
+      currentCampaignMember.committee,
+      currentCampaignMember.id,
+      currentCampaignMember.rank,
+      currentCampaignMember.user.id,
       dispatch,
       electionsSelector,
     ]);

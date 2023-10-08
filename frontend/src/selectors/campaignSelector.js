@@ -20,7 +20,7 @@ export const electionsSelector = createSelector(
     electionsSelector: campaignsState.electionAttendees,
 
     isCampaignSuccess: campaignsState.isCampaignSuccess,
-    currentCampaignUser: campaignsState.currentCampaignUser,
+    currentCampaignMember: campaignsState.currentCampaignMember,
     electors: campaignsState.electors,
   })
 );

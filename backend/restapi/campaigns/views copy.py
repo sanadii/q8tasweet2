@@ -146,7 +146,7 @@ class GetCampaignDetails(APIView):
 
             return Response({
                 "data": {
-                    "currentCampaignUser": current_campaign_member_data,
+                    "currentCampaignMember": current_campaign_member_data,
                     "campaignDetails": campaign_data,
                     "campaignMembers": campaign_members,
                     "campaignGuarantees": campaign_guarantees,
