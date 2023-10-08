@@ -15,6 +15,7 @@ import SwiperCore, { Autoplay } from "swiper";
 import { AvatarMedium, ImageCampaignBackground } from "../../../Components/Common";
 import { MemberRankOptions } from "../../../Components/constants";
 import useUserRoles from "../../../Components/Hooks/useUserRoles";
+import useCampaignPermission from "../../../Components/Hooks/useCampaignPermission";
 
 // Tabs
 import OverviewTab from "./OverviewTab";
@@ -48,7 +49,9 @@ const Section = ({
 }) => {
   SwiperCore.use([Autoplay]);
 
-  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+  const { isSubscriber, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+
+  const { isAdmin, isContributor, isModerator, hasPermission } = useCampaignPermission();
   
   const userRoles = {
     isAdmin,
@@ -85,9 +88,6 @@ const Section = ({
       setActivityTab(tab);
     }
   };
-  console.log("campaign:", campaign);
-  console.log("candidate:", campaign.candidate);
-  console.log("name:", campaign.candidate.name);
   return (
     <React.Fragment>
       <ImageCampaignBackground imagePath={campaign?.election?.image} />

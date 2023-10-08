@@ -1,25 +1,39 @@
-// hooks/useUserRoles.js
-// React & Redux core
+// hooks/useCampaignPermission.js
 import { useSelector } from 'react-redux';
-
-// Store & Selectors
 import { electionsSelector } from '../../Selectors/electionsSelector';
 
 const useCampaignPermission = () => {
     const { currentUser, currentCampaignModerator, currentCampaignMember } = useSelector(electionsSelector);
 
-    let permissions = {};
+    // Initialize permissions based on the user's roles
+    let permissions = [];
 
-    if (currentUser.roles.isAdmin) {
+    if (currentUser.roles.includes('isAdmin')) {
         permissions = currentUser.permissions;
-    } else if (currentUser.roles.isContributor) {
+    } else if (currentUser.roles.includes('isModerator')) {
         permissions = currentCampaignModerator.permissions;
     } else {
         permissions = currentCampaignMember.rank.permissions;
     }
 
+    // Define a function to check if the user has a specific permission
+    const hasPermission = (permission) => {
+        console.log(`Checking permission "${permission}"`);
+        const has = permissions.includes(permission);
+        console.log(`Has permission "${permission}": ${has}`);
+        return has;
+    };
+
+    // Export the constants for specific roles
+    const isAdmin = currentUser.roles.includes('isAdmin');
+    const isModerator = currentUser.roles.includes('isModerator');
+    const isContributor = !isAdmin && isModerator; // Modify this as per your logic
+
     return {
-        hasPermission: (permission) => permissions[permission],
+        hasPermission,
+        isAdmin,
+        isContributor,
+        isModerator,
     };
 };
 

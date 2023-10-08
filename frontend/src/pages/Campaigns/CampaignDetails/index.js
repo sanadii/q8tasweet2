@@ -13,13 +13,10 @@ import useCampaignPermission from "../../../Components/Hooks/useCampaignPermissi
 
 // UI & Utilities
 import { Container } from "reactstrap";
-// import { isEmpty } from "lodash";
-
 
 const CampaignDetails = () => {
   const dispatch = useDispatch();
   const { id: campaignId } = useParams();
-  const { hasPermission } = useCampaignPermission(); // Use the hook
 
   const {
     campaignDetails,
@@ -31,6 +28,14 @@ const CampaignDetails = () => {
     isCampaignSuccess
   } = useSelector(electionsSelector);
 
+  console.log('User Roles:', currentUser.roles);
+  console.log('User Permissions:', currentUser.permissions);
+
+  const { isAdmin, isContributor, isModerator, hasPermission } = useCampaignPermission();
+  // Check if the user has specific permissions
+  const canViewCampaigns = hasPermission('canViewCampaigns');
+  const canAddCampaign = hasPermission('canAddCampaign');
+
   useEffect(() => {
     document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
     if (campaignId) {
@@ -40,34 +45,34 @@ const CampaignDetails = () => {
 
   const isLoading = !campaignDetails || !campaignDetails.candidate || !campaignDetails.election;
 
-  if (!hasPermission('canViewCampaigns')) { // Check if the user doesn't have the permission
-    return <div>You do not have permission to view this campaign.</div>;
-  }
-
-  if (isLoading) {
-    return (
-      <div className="page-content">
-        <Container fluid>
-          <div>تحميل...</div>
-        </Container>
-      </div>
-    );
-  }
-
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Section
-            campaign={campaignDetails}
-            campaignMembers={campaignMembers}
-            campaignGuarantees={campaignGuarantees}
-            currentCampaignMember={currentCampaignMember}
-            campaignElectionCommittees={campaignElectionCommittees}
-          />
+          {canViewCampaigns ? (
+            isLoading ? (
+              <div className="page-content">
+                <Container fluid>
+                  <div>تحميل...</div>
+                </Container>
+              </div>
+            ) : (
+              <Section
+                campaign={campaignDetails}
+                campaignMembers={campaignMembers}
+                campaignGuarantees={campaignGuarantees}
+                currentCampaignMember={currentCampaignMember}
+                campaignElectionCommittees={campaignElectionCommittees}
+              />
+            )
+          ) : (
+            <div>
+              لست مصرح بمعاينة الحملة الإنتخابية.
+            </div>
+          )}
         </Container>
-      </div>
-    </React.Fragment>
+      </div >
+    </React.Fragment >
   );
 };
 

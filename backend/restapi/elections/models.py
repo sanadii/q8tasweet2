@@ -4,6 +4,19 @@ from restapi.helper.models_helper import TrackModel, TaskModel, ElectionTypeOpti
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum
+from restapi.helper.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
+
+
+class TestNow(models.Model):
+    name = models.CharField(max_length=255, blank=False, null=False)
+
+    class Meta:
+        db_table = "test_now"
+        verbose_name = "Test Now"
+        verbose_name_plural = "Test Nows"
+        default_permissions = []
+
+    custom_manager = ModelsPermissionManager()
 
 class Elections(TrackModel, TaskModel):
     # Basic Information
@@ -48,6 +61,9 @@ class ElectionCandidates(TrackModel):
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
 
+    # Manage permissions
+    # custom_manager = ModelsPermissionManager()
+
     def update_votes(self):
         self.votes = self.committee_result_candidates.aggregate(Sum('votes'))['votes__sum'] or 0
         self.save()
@@ -56,6 +72,20 @@ class ElectionCandidates(TrackModel):
         db_table = "election_candidate"
         verbose_name = "Election Candidate"
         verbose_name_plural = "Election Candidates"
+        # default_permissions = []
+        permissions  = [("add_election_candidates", "Can add election candidates")]
+
+    # def save(self, *args, **kwargs):
+    #     if not self.pk:
+    #         self._meta.default_permissions = []
+    #         self._meta.permissions = [
+    #             ("add_election_candidates", "Can add election candidates"),
+    #             ("change_election_candidates", "Can change election candidates"),
+    #             ("delete_election_candidates", "Can delete election candidates"),
+    #             ("view_election_candidates", "Can view election candidates"),
+    #         ]
+    #     super().save(*args, **kwargs)
+
 
     def __str__(self):
         return str(self.candidate.name)
