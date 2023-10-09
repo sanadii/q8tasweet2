@@ -27,18 +27,6 @@ import ElectorsTab from "./ElectorsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
-const TAB_VISIBILITY_RULES = {
-  members: ['isAdmin', 'isModerator', 'isParty', 'isCandidate', 'isSupervisor'],
-  guarantees: ['isAdmin', 'isModerator', 'isParty', 'isCandidate', 'isSupervisor', 'isGuarantor'],
-  attendees: ['isAdmin', 'isModerator', 'isParty', 'isCandidate', 'isSupervisor', 'isAttendant'],
-  sorting: ['isAdmin', 'isModerator', 'isParty', 'isCandidate', 'isSupervisor', 'isSorter'],
-  edit: ['isAdmin', 'isModerator', 'isParty', 'isCandidate'],
-};
-
-function isTabVisible(tabName, userRoles) {
-  return TAB_VISIBILITY_RULES[tabName].some(role => userRoles[role]);
-}
-
 // const Section = ({ campaign, campaignCandidateList }) => {
 const Section = ({
   currentCampaignMember,
@@ -49,25 +37,32 @@ const Section = ({
 }) => {
   SwiperCore.use([Autoplay]);
 
-  const { isSubscriber, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+  // Permissions
+  const permissionsList = [
+    'canViewCampaign',
+    'canViewCampaignMember',
+    'canViewCampaignGuarantee',
+    'canViewCampaignAttendee',
+    'canViewCampaignSorting',
+    'canSerachCampaignElector'
+  ];
 
   const { isAdmin, isContributor, isModerator, hasPermission } = useCampaignPermission();
+
+  const permissions = {};
+  permissionsList.forEach(permission => {
+      permissions[permission] = hasPermission(permission);
+  });
   
-  const userRoles = {
-    isAdmin,
-    isSubscriber,
-    isModerator,
-    isParty,
-    isCandidate,
-    isSupervisor,
-    isGuarantor,
-    isAttendant,
-    isSorter,
-    isBelowSupervisor,
-    isAttendantOrSorter
-  };
-
-
+  const { 
+      canViewCampaign, 
+      canViewCampaignMember, 
+      canViewCampaignGuarantee, 
+      canViewCampaignAttendee, 
+      canViewCampaignSorting, 
+      canSerachCampaignElector 
+  } = permissions;
+  
   // --------------- Constants ---------------
   const [activeTab, setActiveTab] = useState("1");
   const [activityTab, setActivityTab] = useState("1");
@@ -151,22 +146,22 @@ const Section = ({
                   </NavLink>
                 </NavItem>
 
-                {(isAdmin || isModerator || isParty || isCandidate || isSupervisor) && (
-                  <NavItem>
-                    <NavLink
-                      href="#members"
-                      className={classnames({ active: activeTab === "2" })}
-                      onClick={() => {
-                        toggleTab("2");
-                      }}
-                    >
-                      <i className="ri-list-unordered d-inline-block d-md-none"></i>{" "}
-                      <span className="d-none d-md-inline-block">فريق العمل</span>
-                    </NavLink>
-                  </NavItem>
-                )}
+                {
+                  canViewCampaignMember && (
+                    <NavItem>
+                      <NavLink
+                        href="#members"
+                        className={classnames({ active: activeTab === "2" })}
+                        onClick={() => toggleTab("2")}
+                      >
+                        <i className="ri-list-unordered d-inline-block d-md-none"></i>
+                        <span className="d-none d-md-inline-block">فريق العمل</span>
+                      </NavLink>
+                    </NavItem>
+                  )
+                }
 
-                {isTabVisible("guarantees", userRoles) && (
+                {canViewCampaignGuarantee && (
                   <NavItem>
                     <NavLink
                       href="#guarantees"
@@ -182,7 +177,7 @@ const Section = ({
                     </NavLink>
                   </NavItem>
                 )}
-                {isTabVisible("attendees", userRoles) && (
+                {canViewCampaignAttendee && (
                   <NavItem>
                     <NavLink
                       href="#attendees"
@@ -197,7 +192,7 @@ const Section = ({
                   </NavItem>
                 )
                 }
-                {isTabVisible("sorting", userRoles) && (
+                {canViewCampaignSorting && (
                   <NavItem>
                     <NavLink
                       href="#sorting"

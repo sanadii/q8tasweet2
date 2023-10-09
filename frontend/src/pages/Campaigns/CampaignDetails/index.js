@@ -28,12 +28,8 @@ const CampaignDetails = () => {
     isCampaignSuccess
   } = useSelector(electionsSelector);
 
-  console.log('User Roles:', currentUser.roles);
-  console.log('User Permissions:', currentUser.permissions);
-
   const { isAdmin, isContributor, isModerator, hasPermission } = useCampaignPermission();
-  // Check if the user has specific permissions
-  const canViewCampaigns = hasPermission('canViewCampaigns');
+  const canViewCampaign = hasPermission('canViewCampaign');
   const canAddCampaign = hasPermission('canAddCampaign');
 
   useEffect(() => {
@@ -49,7 +45,7 @@ const CampaignDetails = () => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {canViewCampaigns ? (
+          {canViewCampaign ? (
             isLoading ? (
               <div className="page-content">
                 <Container fluid>
