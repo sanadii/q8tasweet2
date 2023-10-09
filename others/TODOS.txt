@@ -175,3 +175,24 @@ In React, there are a few ways you can handle changing the `document.title`:
     There are libraries like `react-helmet` that provide components to manage changes to the head of the document, including the title. This might be overkill if you're just updating the title, but if you foresee needing to manage other parts of the `<head>` (like meta tags, styles, etc.), it's a great option.
 
 Using the custom hook approach is clean and makes the functionality reusable across different components.
+
+
+Make Default Groupt to be created as soon as the project launch with its roles
+
+GROUP
+	Campaign Admin
+	Campaign Attendant
+	Campaign Candidate
+	Campaign Candidate Admin
+	Campaign Guarantor
+	Campaign Sorter
+	Campaign Supervisor
+	Website Admin
+	Website Editor
+	Website Moderator
+	Website Supervisor
+	Website Support
+
+
+
+  100. work on Loadish

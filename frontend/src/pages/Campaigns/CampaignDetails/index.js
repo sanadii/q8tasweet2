@@ -1,5 +1,5 @@
 // React & Redux core
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -18,57 +18,35 @@ const CampaignDetails = () => {
   const dispatch = useDispatch();
   const { id: campaignId } = useParams();
 
-  const {
-    campaignDetails,
-    currentUser,
-    currentCampaignMember,
-    campaignMembers,
-    campaignGuarantees,
-    campaignElectionCommittees,
-    isCampaignSuccess
-  } = useSelector(electionsSelector);
-
-  const { isAdmin, isContributor, isModerator, hasPermission } = useCampaignPermission();
-  const canViewCampaign = hasPermission('canViewCampaign');
-  const canAddCampaign = hasPermission('canAddCampaign');
+  const { isCampaignSuccess } = useSelector(electionsSelector);
+  const { hasPermission } = useCampaignPermission();
 
   useEffect(() => {
     document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
+  }, []);
+
+  useEffect(() => {
     if (campaignId) {
       dispatch(getCampaignDetails({ id: campaignId }));
     }
   }, [dispatch, campaignId]);
 
-  const isLoading = !campaignDetails || !campaignDetails.candidate || !campaignDetails.election;
-
   return (
-    <React.Fragment>
-      <div className="page-content">
-        <Container fluid>
-          {canViewCampaign ? (
-            isLoading ? (
-              <div className="page-content">
-                <Container fluid>
-                  <div>تحميل...</div>
-                </Container>
-              </div>
-            ) : (
-              <Section
-                campaign={campaignDetails}
-                campaignMembers={campaignMembers}
-                campaignGuarantees={campaignGuarantees}
-                currentCampaignMember={currentCampaignMember}
-                campaignElectionCommittees={campaignElectionCommittees}
-              />
-            )
+    <div className="page-content">
+      <Container fluid>
+        {hasPermission('canViewCampaign') ? (
+          isCampaignSuccess ? (
+            <Section />
           ) : (
-            <div>
-              لست مصرح بمعاينة الحملة الإنتخابية.
-            </div>
-          )}
-        </Container>
-      </div >
-    </React.Fragment >
+            <div>تحميل...</div>
+          )
+        ) : (
+          <div>
+            لست مصرح بمعاينة الحملة الإنتخابية.
+          </div>
+        )}
+      </Container>
+    </div>
   );
 };
 

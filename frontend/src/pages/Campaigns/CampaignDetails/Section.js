@@ -1,7 +1,6 @@
 // React & Redux core
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import classnames from "classnames";
 
 // Store & Selectors
@@ -14,7 +13,6 @@ import SwiperCore, { Autoplay } from "swiper";
 // Components & Hooks
 import { AvatarMedium, ImageCampaignBackground } from "../../../Components/Common";
 import { MemberRankOptions } from "../../../Components/constants";
-import useUserRoles from "../../../Components/Hooks/useUserRoles";
 import useCampaignPermission from "../../../Components/Hooks/useCampaignPermission";
 
 // Tabs
@@ -28,61 +26,65 @@ import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
 // const Section = ({ campaign, campaignCandidateList }) => {
-const Section = ({
-  currentCampaignMember,
-  campaign,
-  campaignMembers,
-  campaignGuarantees,
-  campaignElectionCommittees,
-}) => {
+const Section = () => {
   SwiperCore.use([Autoplay]);
 
-  // Permissions
-  const permissionsList = [
-    'canViewCampaign',
-    'canViewCampaignMember',
-    'canViewCampaignGuarantee',
-    'canViewCampaignAttendee',
-    'canViewCampaignSorting',
-    'canSerachCampaignElector'
-  ];
+  const {
+    campaign,
+    currentCampaignMember,
+    campaignMembers,
+    campaignGuarantees,
+    campaignElectionCommittees,
+    isCampaignSuccess
+  } = useSelector(electionsSelector);
 
+  // Permissions
   const { isAdmin, isContributor, isModerator, hasPermission } = useCampaignPermission();
 
-  const permissions = {};
-  permissionsList.forEach(permission => {
-      permissions[permission] = hasPermission(permission);
-  });
-  
-  const { 
-      canViewCampaign, 
-      canViewCampaignMember, 
-      canViewCampaignGuarantee, 
-      canViewCampaignAttendee, 
-      canViewCampaignSorting, 
-      canSerachCampaignElector 
-  } = permissions;
-  
-  // --------------- Constants ---------------
-  const [activeTab, setActiveTab] = useState("1");
-  const [activityTab, setActivityTab] = useState("1");
+  // Tabs
+  const tabs = [
+    { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', text: 'نظرة عامة' },
+    { tabId: 2, permission: 'canViewCampaignMember', href: '#members', icon: 'ri-list-unordered', text: 'فريق العمل' },
+    { tabId: 3, permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', text: 'الضمانات' },
+    { tabId: 4, permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', text: 'الحضور' },
+    { tabId: 5, permission: 'canViewCampaignSorting', href: '#sorting', icon: 'ri-sort-line', text: 'الفرز' },
+    { tabId: 6, permission: 'canViewElector', href: '#electors', icon: 'ri-user-voice-line', text: 'الناخبين' },
+    { tabId: 7, permission: 'canViewActivitie', href: '#activities', icon: 'ri-activity-line', text: 'الأنشطة' },
+    { tabId: 9, permission: 'canViewCampaign', href: '#edit', icon: 'ri-activity-line', text: 'تعديل' },
+  ];
 
-  const rankId = currentCampaignMember.rank;
-  const currentCampaignMemberRank = MemberRankOptions.find(
-    (option) => option.id === rankId
-  );
+  const tabComponents = {
+    1: <OverviewTab />,
+    2: <MembersTab campaignMembers={campaignMembers} />,
+    3: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />,
+    4: <AttendeesTab />,
+    5: <SortingTab />,
+    6: <ElectorsTab />,
+    7: <ActivitiesTab />,
+    9: <EditTab />,
+    // ... add other tabs similarly if they require props
+  };
+
+  const visibleTabs = useMemo(() => tabs.filter(tab => hasPermission(tab.permission)), [tabs, hasPermission]);
+
+  const renderTabContent = (tabId) => {
+    console.log(`Trying to render content for tab: ${tabId}`);
+    return tabComponents[tabId] || null;
+  };
+
+  // Constants
+  const [activeTab, setActiveTab] = useState(String(visibleTabs[0]?.tabId || 1));
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
-      setActiveTab(tab);
+      setActiveTab(String(tab));
     }
   };
 
-  const toggleActivityTab = (tab) => {
-    if (activityTab !== tab) {
-      setActivityTab(tab);
-    }
-  };
+  useEffect(() => {
+    console.log('Active tab:', activeTab);
+  }, [activeTab]);
+
   return (
     <React.Fragment>
       <ImageCampaignBackground imagePath={campaign?.election?.image} />
@@ -108,14 +110,16 @@ const Section = ({
             <Row className="text text-white-50 text-center">
               <Col lg={6} xs={4}>
                 <div className="p-2">
-                  <h4 className="text-white mb-1">{campaignMembers.length}</h4>
+                <h4 className="text-white mb-1">
+                  {campaignMembers?.length || 0}
+                  </h4>
                   <p className="fs-14 mb-0">الفريق</p>
                 </div>
               </Col>
               <Col lg={6} xs={4}>
                 <div className="p-2">
                   <h4 className="text-white mb-1">
-                    {campaignGuarantees.length}
+                    {campaignGuarantees?.length || 0}
                   </h4>
                   <p className="fs-14 mb-0">المضامين</p>
                 </div>
@@ -133,98 +137,22 @@ const Section = ({
                 className="animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1"
                 role="tablist"
               >
-                <NavItem>
-                  <NavLink
-                    href="#overview-tab"
-                    className={classnames({ active: activeTab === "1" })}
-                    onClick={() => {
-                      toggleTab("1");
-                    }}
-                  >
-                    <i className="ri-airplay-fill d-inline-block d-md-none"></i>{" "}
-                    <span className="d-none d-md-inline-block">نظرة عامة</span>
-                  </NavLink>
-                </NavItem>
-
-                {
-                  canViewCampaignMember && (
-                    <NavItem>
-                      <NavLink
-                        href="#members"
-                        className={classnames({ active: activeTab === "2" })}
-                        onClick={() => toggleTab("2")}
-                      >
-                        <i className="ri-list-unordered d-inline-block d-md-none"></i>
-                        <span className="d-none d-md-inline-block">فريق العمل</span>
-                      </NavLink>
-                    </NavItem>
-                  )
-                }
-
-                {canViewCampaignGuarantee && (
-                  <NavItem>
+                {visibleTabs.map((tab) => (
+                  <NavItem key={tab.tabId}>
                     <NavLink
-                      href="#guarantees"
-                      className={classnames({ active: activeTab === "3" })}
-                      onClick={() => {
-                        toggleTab("3");
-                      }}
+                      href={tab.href}
+                      className={classnames({ active: activeTab === tab.tabId })}
+                      onClick={() => toggleTab(tab.tabId)}
                     >
-
-                      <span className="d-none d-md-inline-block">
-                        المضامين <i className="ri-price-tag-line d-inline-block d-md-none"></i>
-                      </span>
+                      <i className={`${tab.icon} d-inline-block d-md-none`}></i>
+                      <span className="d-none d-md-inline-block">{tab.text}</span>
                     </NavLink>
                   </NavItem>
-                )}
-                {canViewCampaignAttendee && (
-                  <NavItem>
-                    <NavLink
-                      href="#attendees"
-                      className={classnames({ active: activeTab === "4" })}
-                      onClick={() => {
-                        toggleTab("4");
-                      }}
-                    >
-                      <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                      <span className="d-none d-md-inline-block">الحضور</span>
-                    </NavLink>
-                  </NavItem>
-                )
+                ))
                 }
-                {canViewCampaignSorting && (
-                  <NavItem>
-                    <NavLink
-                      href="#sorting"
-                      className={classnames({ active: activeTab === "5" })}
-                      onClick={() => {
-                        toggleTab("5");
-                      }}
-                    >
-                      <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                      <span className="d-none d-md-inline-block">الفرز</span>
-                    </NavLink>
-                  </NavItem>
-                )
-                }
-                <NavItem>
-                  <NavLink
-                    href="#electors"
-                    className={classnames({ active: activeTab === "6" })}
-                    onClick={() => {
-                      toggleTab("6");
-                    }}
-                    style={{ backgroundColor: 'black' }}
-                  >
-                    <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                    <span className="d-none d-md-inline-block">بحث الناخبين
-                    </span>
-                  </NavLink>
-                </NavItem>
-              </Nav >
+              </Nav>
 
               {isAdmin && (
-                <div className="flex-shrink-0">
                   <NavItem className="btn btn-success">
                     <NavLink
                       href="#edit"
@@ -239,40 +167,16 @@ const Section = ({
                       </span>
                     </NavLink>
                   </NavItem>
-                </div>
               )}
 
             </div >
-
             <TabContent activeTab={activeTab} className="pt-4">
-              <TabPane tabId="1">
-                <OverviewTab />
-              </TabPane>
-
-              <TabPane tabId="2">
-                <MembersTab campaignMembers={campaignMembers} />
-              </TabPane>
-
-              <TabPane tabId="3">
-                <GuaranteesTab
-                  campaignGuarantees={campaignGuarantees}
-                  campaignMembers={campaignMembers}
-                />
-              </TabPane>
-
-              <TabPane tabId="4">
-                <AttendeesTab />
-              </TabPane>
-              <TabPane tabId="5">
-                <SortingTab />
-              </TabPane>
-              <TabPane tabId="6">
-                <ElectorsTab />
-              </TabPane>
-              <TabPane tabId="9">
-                <EditTab />
-              </TabPane>
-            </TabContent >
+              {tabs.map(tab => (
+                <TabPane key={tab.tabId} tabId={String(tab.tabId)}>
+                  {activeTab === String(tab.tabId) && renderTabContent(tab.tabId)}
+                </TabPane>
+              ))}
+            </TabContent>
           </div >
         </Col >
       </Row >
