@@ -60,7 +60,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_roles(self, obj):
         # Gets the role attribute for all the groups associated with the user
-        return [group.role for group in obj.groups.all()]
+        roles = [group.name for group in obj.groups.all()]
+        
+        # Format each role to prepend "is" and capitalize the first letter
+        formatted_roles = ["is" + role.replace(" ", "").capitalize() for role in roles]
+        
+        return formatted_roles
 
     def get_permissions(self, obj):
         user_permissions = list(obj.user_permissions.all().values_list('codename', flat=True))

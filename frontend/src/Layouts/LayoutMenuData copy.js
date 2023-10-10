@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const Navdata = () => {
     const history = useNavigate();
+
+    
     //state data
     const [isDashboard, setIsDashboard] = useState(false);
     const [isApps, setIsApps] = useState(false);
