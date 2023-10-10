@@ -15,7 +15,7 @@ import SwiperCore, { Autoplay } from "swiper";
 import { AvatarMedium, ImageCampaignBackground } from "../../../Components/Common";
 import { MemberRankOptions } from "../../../Components/constants";
 import useUserRoles from "../../../Components/Hooks/useUserRoles";
-import useCampaignPermission from "../../../Components/Hooks/useCampaignPermission";
+import usePermission from "../../../Components/Hooks/usePermission";
 
 // Tabs
 import OverviewTab from "./OverviewTab";
@@ -47,7 +47,7 @@ const Section = ({
     'canSerachCampaignElector'
   ];
 
-  const { isAdmin, isContributor, isModerator, hasPermission } = useCampaignPermission();
+  const { isAdmin, isContributor, isModerator, hasPermission } = usePermission();
 
   const permissions = {};
   permissionsList.forEach(permission => {

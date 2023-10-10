@@ -2,34 +2,32 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function useAdminMenu(iscurrentState, setIscurrentState) {
+export function useAdminMenu(isCurrentState, setIscurrentState) {
   const history = useNavigate();
 
   useEffect(() => {
-    document.body.classList.remove("twocolumn-panel");
-
     // State management
-    if (iscurrentState === "adminDashboard") {
+    if (isCurrentState === "adminDashboard") {
       history("/dashboard");
       document.body.classList.add("twocolumn-panel");
     }
-    if (iscurrentState === "adminElections") {
+    if (isCurrentState === "adminElections") {
       history("/elections");
       document.body.classList.add("twocolumn-panel");
     }
-    if (iscurrentState === "adminCandidates") {
+    if (isCurrentState === "adminCandidates") {
       history("/candidates");
       document.body.classList.add("twocolumn-panel");
     }
-    if (iscurrentState === "adminCampaigns") {
+    if (isCurrentState === "adminCampaigns") {
       history("/campaigns");
       document.body.classList.add("twocolumn-panel");
     }
-    if (iscurrentState === "adminUsers") {
+    if (isCurrentState === "adminUsers") {
       history("/admin/users");
       document.body.classList.add("twocolumn-panel");
     }
-  }, [history, iscurrentState]);
+  }, [history, isCurrentState]);
 
   return [
     {

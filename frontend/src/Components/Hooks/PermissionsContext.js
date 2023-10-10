@@ -1,11 +1,11 @@
 // PermissionsContext.js
 import React, { createContext, useContext } from 'react';
-import useCampaignPermission from './hooks/useCampaignPermission';
+import usePermission from './hooks/usePermission';
 
 const PermissionsContext = createContext();
 
 export const PermissionsProvider = ({ children }) => {
-    const permissionsHook = useCampaignPermission();
+    const permissionsHook = usePermission();
     return (
         <PermissionsContext.Provider value={permissionsHook}>
             {children}

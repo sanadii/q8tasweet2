@@ -98,11 +98,13 @@ class UpdateElection(APIView):
         except Elections.DoesNotExist:
             return Response({"error": "Election not found"}, status=404)
         
-        serializer = ElectionsSerializer(data=request.data, context={'request': request})
+        # Link the retrieved 'election' object with the serializer
+        serializer = ElectionsSerializer(election, data=request.data, context={'request': request}, partial=True)
         
         if serializer.is_valid():
             serializer.save()
             return Response({"data": serializer.data, "count": 0, "code": 200})
+        
         return Response(serializer.errors, status=400)
 
 class DeleteElection(APIView):

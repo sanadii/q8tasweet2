@@ -8,12 +8,11 @@ import { electionsSelector } from '../../../../Selectors/electionsSelector';
 
 // UI Components & styling imports
 import { Input, Form } from "reactstrap";
-
-// Additional package imports
 import SimpleBar from "simplebar-react";
 
+const AddElectionCandidate = ({ election }) => {
+    const dispatch = useDispatch();
 
-const AddElectionCandidate = ({ election, dispatch }) => {
     const { candidates, electionCandidates } = useSelector(electionsSelector);
     const electionCandidateList = electionCandidates;
 
@@ -65,7 +64,6 @@ const AddElectionCandidate = ({ election, dispatch }) => {
                                 e.preventDefault();
                                 const newElectionCandidate = {
                                     election: election,
-
                                     candidate: candidate.id,
                                 };
                                 dispatch(addNewElectionCandidate(newElectionCandidate));
@@ -94,13 +92,11 @@ const AddElectionCandidate = ({ election, dispatch }) => {
                                     {electionCandidateList.some(
                                         (item) => item.candidate === candidate.id
                                     ) ? (
-                                        <button
-                                            type="button"
-                                            className="btn btn-success btn-sm"
-                                            disabled
+                                        <p
+                                            className="text-success"
                                         >
                                             تمت الإضافة
-                                        </button>
+                                        </p>
                                     ) : (
                                         <button
                                             type="submit"

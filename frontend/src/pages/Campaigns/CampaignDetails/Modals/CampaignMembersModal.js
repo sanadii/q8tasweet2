@@ -1,4 +1,4 @@
-// --------------- React & Redux imports ---------------
+// React & Redux core imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -7,10 +7,7 @@ import { electionsSelector } from '../../../../Selectors/electionsSelector';
 import { getUsers, addNewCampaignMember, updateCampaignMember } from "../../../../store/actions";
 
 // --------------- Component & Constants imports ---------------
-import {
-  MemberRankOptions,
-  MemberStatusOptions,
-} from "../../../../Components/constants";
+import { MemberRankOptions, MemberStatusOptions } from "../../../../Components/constants";
 import { ImageRoundedCircleXS } from "../../../../Components/Common";
 import CampaignMembersUpdateModal from "./CampaignMembersUpdateModal";
 import CampaignMembersAddModal from "./CampaignMembersAddModal";
@@ -31,8 +28,8 @@ export const CampaignMembersModal = ({ modal, toggle, modalMode, campaignMember 
   const dispatch = useDispatch();
 
   // --------------- Define States ---------------
-  const { currentCampaignMember, campaignMembers, campaignId } = useSelector(electionsSelector);
-
+  const { currentCampaignMember, campaignMembers, electionDetails } = useSelector(electionsSelector);
+  const electionId = electionDetails.id;
 
   // --------------- Set Constants ---------------
   const [onModalSubmit, setOnModalSubmit] = useState(null);

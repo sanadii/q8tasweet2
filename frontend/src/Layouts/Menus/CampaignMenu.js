@@ -6,8 +6,6 @@ export function useCampaignMenu(iscurrentState, setIscurrentState) {
   const history = useNavigate();
 
   useEffect(() => {
-    document.body.classList.remove("twocolumn-panel");
-
     // State management
     if (iscurrentState === "campaigns") {
       history("/campaigns");
@@ -17,7 +15,7 @@ export function useCampaignMenu(iscurrentState, setIscurrentState) {
 
   return [
     {
-        label: "قائمة المستخدم",
+        label: "الحملة الإنتخابية",
         isHeader: true,
       },
       {

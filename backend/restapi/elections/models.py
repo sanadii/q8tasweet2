@@ -23,8 +23,6 @@ class Elections(TrackModel, TaskModel):
     due_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('Categories', on_delete=models.SET_NULL, null=True, blank=True, related_name='category_elections')
     sub_category = models.ForeignKey('Categories', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategory_elections')
-    # tags = models.ForeignKey('Categories', on_delete=models.SET_NULL, null=True, blank=True, related_name='tags_elections')
-    # tags = models.ManyToManyField('Categories', related_name='elections')
 
     # Election Options and Details
     elect_type = models.IntegerField(choices=ElectionTypeOptions.choices, blank=True, null=True)

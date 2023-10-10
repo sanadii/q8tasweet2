@@ -1,4 +1,4 @@
-// React & Redux core
+// Pages/Campaigns/CampaignDetails/index.js
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -9,7 +9,12 @@ import { getCampaignDetails } from "../../../store/actions";
 
 // Components
 import Section from "./Section";
-import useCampaignPermission from "../../../Components/Hooks/useCampaignPermission";
+
+// Common Components
+import Loader from "../../../Components/Common/Loader";
+
+// Hooks
+import usePermission from "../../../Components/Hooks/usePermission";
 
 // UI & Utilities
 import { Container } from "reactstrap";
@@ -18,8 +23,13 @@ const CampaignDetails = () => {
   const dispatch = useDispatch();
   const { id: campaignId } = useParams();
 
-  const { isCampaignSuccess } = useSelector(electionsSelector);
-  const { hasPermission } = useCampaignPermission();
+  const { campaign, currentCampaignMember,
+    campaignMembers,
+    campaignGuarantees,
+    campaignElectionCommittees,
+    isCampaignSuccess } = useSelector(electionsSelector);
+
+  const { canViewCampaign } = usePermission();
 
   useEffect(() => {
     document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
@@ -31,11 +41,13 @@ const CampaignDetails = () => {
     }
   }, [dispatch, campaignId]);
 
+
+
   return (
     <div className="page-content">
       <Container fluid>
-        {hasPermission('canViewCampaign') ? (
-          isCampaignSuccess ? (
+        {canViewCampaign ? (
+          campaign ? (
             <Section />
           ) : (
             <div>تحميل...</div>

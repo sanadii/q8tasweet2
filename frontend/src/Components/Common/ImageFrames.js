@@ -16,7 +16,7 @@ const defaultCampaignBgPath = 'media/candidates/default.jpg';
 
 
 export const ImageCircle = ({ imagePath }) => {
-  const imageUrl = `${mediaUrl}${imagePath}`;
+  const imageUrl = `${imagePath}`;
 
   return (
     <div className="avatar-xs flex-shrink-0 me-3">
@@ -80,13 +80,32 @@ export const AvatarMedium = ({ row }) => {
 
 
 export const ImageMedium = ({ imagePath }) => {
-  const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
+  const imageUrl = imagePath ? `${imagePath}` : `${mediaUrl}${defaultImagePath}`;
 
   return (
     <React.Fragment>
 
       <div className="d-flex align-items-center">
         <div className="avatar-md"> {/* To maintain the image size */}
+          <img
+            src={imageUrl}
+            alt=""
+            className="img-thumbnail rounded-circle"
+          />
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
+
+export const ImageLarge = ({ imagePath }) => {
+  const imageUrl = imagePath ? `${imagePath}` : `${mediaUrl}${defaultImagePath}`;
+
+  return (
+    <React.Fragment>
+
+      <div className="d-flex align-items-center">
+        <div className="avatar-lg"> {/* To maintain the image size */}
           <img
             src={imageUrl}
             alt=""
@@ -137,8 +156,6 @@ export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner 
     </div>
   );
 };
-
-
 
 export const ImageCampaignBackground = ({ imagePath }) => {
   const imageUrl = imagePath ?

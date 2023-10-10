@@ -1,32 +1,24 @@
-// --------------- React & Redux imports ---------------
+// React & Redux core imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+
+// Action & Selector imports
+import { getUsers, addNewCampaignMember } from "../../../../store/actions";
 import { electionsSelector } from '../../../../Selectors/electionsSelector';
 
-import { getUsers, addNewCampaignMember, updateCampaignMember } from "../../../../store/actions";
-
-// --------------- Reactstrap (UI) imports ---------------
+// UI Components & styling imports
 import { Input, ModalBody, Form } from "reactstrap";
-
-// --------------- Utility imports ---------------
-import SimpleBar from "simplebar-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SimpleBar from "simplebar-react";
 
-const CampaignMembersAddModal = ({ campaignId }) => {
+const CampaignMembersAddModal = () => {
   const dispatch = useDispatch();
 
-  const { users, campaignMembers } = useSelector((state) => ({
-    users: state.Users.users,
-    campaignMembers: state.Campaigns.campaignMembers,
-  }));
-
-  const [campaignMemberList, setCampaignMemberList] = useState(campaignMembers);
-
-  useEffect(() => {
-    setCampaignMemberList(campaignMembers);
-  }, [campaignMembers]);
+  const { campaignDetails, users, campaignMembers } = useSelector(electionsSelector);
+  const campaignId = campaignDetails.id;
+  const campaignMemberList = campaignMembers;
 
   // Dispatch getMember TODO: MOVE TO ELECTION DETAILS
   useEffect(() => {
@@ -45,11 +37,14 @@ const CampaignMembersAddModal = ({ campaignId }) => {
 
   useEffect(() => {
     setUserList(
-      users.filter((users) =>
-        users.firstName.toLowerCase().includes(searchUserInput.toLowerCase())
+      users.filter((user) =>
+        user.fullName ? user.fullName
+          .toLowerCase().includes(searchUserInput
+            .toLowerCase()) : false
       )
     );
   }, [users, searchUserInput]);
+
 
   const { campaignElectionCommittees } = useSelector(electionsSelector);
 
@@ -90,11 +85,8 @@ const CampaignMembersAddModal = ({ campaignId }) => {
               onSubmit={(e) => {
                 e.preventDefault(); // Prevent page refresh
                 const newCampaignMember = {
-                  id: (
-                    Math.floor(Math.random() * (100 - 20)) + 20
-                  ).toString(),
-                  campaignId: campaign_id,
-                  userId: user.id,
+                  campaign: campaignId,
+                  user: user.id,
                 };
                 dispatch(addNewCampaignMember(newCampaignMember));
               }}
@@ -117,28 +109,26 @@ const CampaignMembersAddModal = ({ campaignId }) => {
                 <div className="flex-grow-1">
                   <h5 className="fs-13 mb-0">
                     <Link to="#" className="text-body d-block">
-                      {user.username}
+                      {user.fullName}
                     </Link>
                   </h5>
                 </div>
                 <div className="flex-shrink-0">
                   {campaignMembers.some(
-                    (item) => item.user.id === user.id
+                    (item) => item.user === user.id
                   ) ? (
-                    <button
-                      type="button"
-                      className="btn btn-success btn-sm"
-                      disabled
+                    <p
+                      className="text-success"
                     >
-                      ADDED
-                    </button>
+                      تمت الإضافة
+                    </p>
                   ) : (
                     <button
                       type="submit"
                       className="btn btn-light btn-sm"
                       id="add-btn"
                     >
-                      Add
+                      أضف
                     </button>
                   )}
                 </div>

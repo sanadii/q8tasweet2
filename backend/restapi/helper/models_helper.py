@@ -72,13 +72,20 @@ class TrackModel(models.Model):
     created_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_created')
     updated_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_updated')
     deleted_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_deleted')
-    created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    # deleted_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    deleted_at = models.DateTimeField(blank=True, null=True)
     deleted = models.BooleanField(blank=True, null=True, default=False)
 
     class Meta:
         abstract = True
+
+    def save(self, *args, **kwargs):
+        # If instance has an ID, it means the instance already exists,
+        # hence we can update the `updated_at` field.
+        if self.id:
+            self.updated_at = timezone.now()
+        super(TrackModel, self).save(*args, **kwargs)
 
 class TaskModel(models.Model):
     status = models.IntegerField(choices=StatusOptions.choices, blank=True, null=True)

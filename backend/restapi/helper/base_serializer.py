@@ -64,27 +64,6 @@ class TaskMixin(serializers.BaseSerializer):
 from rest_framework import serializers
 from collections.abc import Iterable  # Import Iterable to check if an object is iterable
 
-# class AdminFieldMixin(serializers.Serializer):
-#     def __init__(self, *args, **kwargs):
-#         super(AdminFieldMixin, self).__init__(*args, **kwargs)
-        
-#         # Initialize instances based on admin_serializer_classes
-#         self.admin_serializer_instances = []
-#         if hasattr(self, 'admin_serializer_classes'):
-#             for serializer_class in self.admin_serializer_classes:
-#                 instance = serializer_class()
-#                 self.admin_serializer_instances.append(instance)
-
-#     def to_representation(self, instance):
-#         user = self.context.get('request').user if 'request' in self.context else None
-#         representation = super().to_representation(instance)
-        
-#         if user and user.is_staff:
-#             if isinstance(self.admin_serializer_instances, Iterable):
-#                 for serializer_instance in self.admin_serializer_instances:
-#                     key = serializer_instance.__class__.__name__.lower().replace('mixin', '')
-#                     representation[key] = serializer_instance.to_representation(instance)  # Changed this line to use to_representation method of mixin
-#         return representation
 
 class AdminFieldMixin(serializers.Serializer):
     def __init__(self, *args, **kwargs):

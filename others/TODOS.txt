@@ -196,3 +196,7 @@ GROUP
 
 
   100. work on Loadish
+
+101. Profile models
+  User Profile model
+  Candidate Profile Model

@@ -1,3 +1,4 @@
+// Pages/Campaigns/CampaignDetails/index.js
 // React & Redux core
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,9 +12,10 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap
 import SwiperCore, { Autoplay } from "swiper";
 
 // Components & Hooks
-import { AvatarMedium, ImageCampaignBackground } from "../../../Components/Common";
+import { ImageMedium, ImageLarge, ImageCircle, ImageCampaignBackground } from "../../../Components/Common";
 import { MemberRankOptions } from "../../../Components/constants";
-import useCampaignPermission from "../../../Components/Hooks/useCampaignPermission";
+import usePermission from "../../../Components/Hooks/usePermission";
+import Loader from "../../../Components/Common/Loader";
 
 // Tabs
 import OverviewTab from "./OverviewTab";
@@ -25,7 +27,8 @@ import ElectorsTab from "./ElectorsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
-// const Section = ({ campaign, campaignCandidateList }) => {
+
+
 const Section = () => {
   SwiperCore.use([Autoplay]);
 
@@ -39,11 +42,19 @@ const Section = () => {
   } = useSelector(electionsSelector);
 
   // Permissions
-  const { isAdmin, isContributor, isModerator, hasPermission } = useCampaignPermission();
+  const { isAdmin, isEditor, isContributor, isModerator, isSubscriber, canViewCampaign,
+    canViewCampaignMember,
+    canViewCampaignGuarantee,
+    canViewCampaignAttendee,
+    canViewCampaignSorting,
+    canViewElector,
+    canViewActivitie
+  } = usePermission();
+
 
   // Tabs
   const tabs = [
-    { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', text: 'نظرة عامة' },
+    { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', text: 'الملخص' },
     { tabId: 2, permission: 'canViewCampaignMember', href: '#members', icon: 'ri-list-unordered', text: 'فريق العمل' },
     { tabId: 3, permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', text: 'الضمانات' },
     { tabId: 4, permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', text: 'الحضور' },
@@ -65,7 +76,8 @@ const Section = () => {
     // ... add other tabs similarly if they require props
   };
 
-  const visibleTabs = useMemo(() => tabs.filter(tab => hasPermission(tab.permission)), [tabs, hasPermission]);
+  const permissions = usePermission();
+  const visibleTabs = useMemo(() => tabs.filter(tab => !!permissions[tab.permission]), [tabs, permissions]);
 
   const renderTabContent = (tabId) => {
     console.log(`Trying to render content for tab: ${tabId}`);
@@ -85,13 +97,18 @@ const Section = () => {
     console.log('Active tab:', activeTab);
   }, [activeTab]);
 
+
+  if (!campaign.candidate) {
+    return <Loader />;
+  }
+
   return (
     <React.Fragment>
-      <ImageCampaignBackground imagePath={campaign?.election?.image} />
-      <div className="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
+      <ImageCampaignBackground imagePath={campaign.election.image} />
+      <div className="pt-4 mb-4 mb-lg-3 pb-lg-2 profile-wrapper">
         <Row className="g-4">
           <div className="col-auto">
-            <AvatarMedium imagePath={campaign?.candidate?.image} />
+            <ImageLarge imagePath={campaign.candidate.image} />
           </div>
 
           <Col>
@@ -101,29 +118,33 @@ const Section = () => {
               <div className="hstack text-white gap-1">
                 <div className="me-2">
                   <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
-                  التاريخ: <strong >{campaign.election.duedate}</strong>
+                  التاريخ: <strong >{campaign.election.dueDate}</strong>
                 </div>
               </div>
             </div>
           </Col>
           <Col xs={12} className="col-lg-auto order-last order-lg-0">
             <Row className="text text-white-50 text-center">
-              <Col lg={6} xs={4}>
-                <div className="p-2">
-                <h4 className="text-white mb-1">
-                  {campaignMembers?.length || 0}
-                  </h4>
-                  <p className="fs-14 mb-0">الفريق</p>
-                </div>
-              </Col>
-              <Col lg={6} xs={4}>
-                <div className="p-2">
-                  <h4 className="text-white mb-1">
-                    {campaignGuarantees?.length || 0}
-                  </h4>
-                  <p className="fs-14 mb-0">المضامين</p>
-                </div>
-              </Col>
+              {canViewCampaignMember &&
+                <Col lg={6} xs={4}>
+                  <div className="p-2">
+                    <h4 className="text-white mb-1">
+                      {campaignMembers?.length || 0}
+                    </h4>
+                    <p className="fs-14 mb-0">الفريق</p>
+                  </div>
+                </Col>
+              }
+              {canViewCampaignGuarantee &&
+                <Col lg={6} xs={4}>
+                  <div className="p-2">
+                    <h4 className="text-white mb-1">
+                      {campaignGuarantees?.length || 0}
+                    </h4>
+                    <p className="fs-14 mb-0">المضامين</p>
+                  </div>
+                </Col>
+              }
             </Row>
           </Col>
         </Row>
@@ -153,20 +174,20 @@ const Section = () => {
               </Nav>
 
               {isAdmin && (
-                  <NavItem className="btn btn-success">
-                    <NavLink
-                      href="#edit"
-                      className={classnames({ active: activeTab === "9" })}
-                      onClick={() => {
-                        toggleTab("9");
-                      }}
-                    >
-                      <i className="ri-edit-box-line align-bottom me-2"></i>
-                      <span className="d-none d-md-inline-block">
-                        تعديل
-                      </span>
-                    </NavLink>
-                  </NavItem>
+                <NavItem className="btn btn-success">
+                  <NavLink
+                    href="#edit"
+                    className={classnames({ active: activeTab === "9" })}
+                    onClick={() => {
+                      toggleTab("9");
+                    }}
+                  >
+                    <i className="ri-edit-box-line align-bottom me-2"></i>
+                    <span className="d-none d-md-inline-block">
+                      تعديل
+                    </span>
+                  </NavLink>
+                </NavItem>
               )}
 
             </div >

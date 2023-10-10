@@ -24,6 +24,7 @@ export {
   ImageCampaignBackground,
   ImageCandidateWinnerCircle,
   ImageMedium,
+  ImageLarge,
 } from "./ImageFrames";
 
 // Fetching

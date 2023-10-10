@@ -6,11 +6,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignMember } from "../../../store/actions";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-// Components & Hooks
+// Compontents
 import CampaignMembersModal from "./Modals/CampaignMembersModal";
+
+// Common Components
 import { ImageCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+
+// Constants
 import { MemberRankOptions, MemberStatusOptions } from "../../../Components/constants";
-import useUserRoles from "../../../Components/Hooks/useUserRoles";
+
+// Hooks
+import usePermission from "../../../Components/Hooks/usePermission";
 
 // UI & Utilities
 import { Col, Row, Card, CardBody, CardHeader, CardFooter } from "reactstrap";
@@ -21,8 +27,16 @@ const MembersTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const { currentCampaignMember, campaignGuarantees, campaignMembers, campaignElectionCommittees, isCampaignMemberSuccess, error } = useSelector(electionsSelector);
-  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+  const {
+    currentCampaignMember,
+    campaignGuarantees,
+    campaignMembers,
+    campaignElectionCommittees,
+    isCampaignMemberSuccess,
+    error
+  } = useSelector(electionsSelector);
+  
+  const { isAdmin, isEditor, isContributor, isModerator, isSubscriber } = usePermission();
 
   // --------------- Constants ---------------
   const [campaignMember, setCampaignMember] = useState([]);
@@ -32,13 +46,16 @@ const MembersTab = () => {
   //   setCampaignMemberList(campaignMembers);
   // }, [campaignMembers]);
 
+  // Models
+  const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  // 
+  const [modalMode, setModalMode] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  //Delete Election Member
+  // Modals: Delete, Set, Edit
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
-
-
 
   // Delete Data
   const handleDeleteCampaignMember = () => {
@@ -101,11 +118,6 @@ const MembersTab = () => {
     setActiveTab(newTab);
   };
 
-
-  // Modal Constants
-  const [modal, setModal] = useState(false);
-  const [modalMode, setModalMode] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Toggle
   const toggle = useCallback(() => {

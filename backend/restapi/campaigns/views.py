@@ -152,108 +152,32 @@ class DeleteCampaign(APIView):
 
 # Campaign Members
 class AddNewCampaignMember(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        campaign_id = request.data.get("campaignId")
-        user_id = request.data.get("userId")
-
-        # Fetch the user details based on userId
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=404)
-
-        # Fetch the campaign details based on campaign
-        try:
-            campaign = Campaigns.objects.get(id=campaign_id)
-        except Campaigns.DoesNotExist:
-            return Response({"error": "Campaign not found"}, status=404)
-
-        # Create the new campaign member with user and campaign details
-        campaign_member = CampaignMembers.objects.create(
-            campaign=campaign,
-            user=user,
-        )
-
-        # Prepare the response data
-        response_data = {
-            "id": campaign_member.id,
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "name": f"{user.first_name} {user.last_name}",
-                "email": user.email,
-                "image": user.image.url if user.image else None,
-                # Include other user fields here if needed
-            },
-            "campaign": campaign.id,
-            # I'm assuming these fields are in the CampaignMembers model. 
-            # If they aren't, you can adjust accordingly.
-            "rank": campaign_member.rank,
-            "supervisor": campaign_member.supervisor,
-            "committee": campaign_member.committee,
-            "notes": campaign_member.notes,
-            "phone": campaign_member.phone,
-            "status": campaign_member.status,
-        }
-
-        return Response({"data": response_data, "count": 0, "code": 200})
+        serializer = CampaignMembersSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
 
 class UpdateCampaignMember(APIView):
-    def patch(self, request, id):
-        # Election Results
-        rank = request.data.get("rank")
-        supervisor = request.data.get("supervisor")
-        committee = request.data.get("committee")
-        phone = request.data.get("phone")
-        notes = request.data.get("notes")
-        status = request.data.get("status")
+    permission_classes = [IsAuthenticated]
 
-        # Fetch the campaign member details based on the URL parameter 'id'
+    def patch(self, request, id):
         try:
             campaign_member = CampaignMembers.objects.get(id=id)
         except CampaignMembers.DoesNotExist:
-            return Response({"error": "Campaign Member not found"}, status=404)
-
-        # Update the election candidate with the new data
-
-        # Election Related Data
-        campaign_member.rank = rank
-        if supervisor:
-            try:
-                supervisor_instance = CampaignMembers.objects.get(id=supervisor)
-                campaign_member.supervisor = supervisor_instance
-            except CampaignMembers.DoesNotExist:
-                return Response({"error": "Supervisor not found"}, status=404)
+            return Response({"data": "Campaign Member not found", "count": 0, "code": 404}, status=404)
         
-        if committee:
-            try:
-                committee_instance = ElectionCommittees.objects.get(id=committee)  # Assuming your committee model is named ElectionCommittees
-                campaign_member.committee = committee_instance
-            except ElectionCommittees.DoesNotExist:
-                return Response({"error": "Committee not found"}, status=404)
+        serializer = CampaignMembersSerializer(instance=campaign_member, data=request.data, partial=True, context={'request': request})
         
-        campaign_member.notes = notes
-        campaign_member.phone = phone
-        campaign_member.status = status
-        campaign_member.save()
-
-        # Prepare the response data with member details
-        updated_campaign_member_data = {
-            # Basic Information
-            "id": campaign_member.id,
-            "campaignId": campaign_member.campaign.id,  # Extracted from the campaign_member instance
-            "userId": campaign_member.user.id,          # Extracted from the campaign_member instance
-
-            # Election Data
-            "rank": campaign_member.rank,
-            "supervisor": campaign_member.supervisor.id if campaign_member.supervisor else None,
-            "committee": campaign_member.committee.id if campaign_member.committee else None,
-            "phone": campaign_member.phone,
-            "notes": campaign_member.notes,
-            "status": campaign_member.status,
-        }
-
-        return Response({"data": updated_campaign_member_data, "count": 0, "code": 200})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
 
 class DeleteCampaignMember(APIView):
     def delete(self, request, id):

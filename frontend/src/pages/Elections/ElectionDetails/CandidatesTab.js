@@ -2,42 +2,47 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+
+// Store & Selectors
+import { deleteElectionCandidate } from "../../../store/actions";
 import { electionsSelector } from '../../../Selectors/electionsSelector';
 
-import { deleteElectionCandidate } from "../../../store/actions";
+// Components
 import ElectionCandidateModal from "./Modals/ElectionCandidateModal";
 
-// Utility and helper imports
+// Common Components
+import { ImageCandidateWinnerCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+
+// UI & Utilities
+import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
 import { isEmpty } from "lodash";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Custom component imports
-import { ImageCandidateWinnerCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
-
-// Reactstrap (UI) imports
-import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
-
-// Additional package imports
 import SimpleBar from "simplebar-react";
+
 
 const CandidatesTab = () => {
   const dispatch = useDispatch();
 
-  const { electionDetails, electionCandidates, isElectionCandidateSuccess, isElectionSuccess, error } = useSelector(electionsSelector);
+  const {
+    electionDetails,
+    electionCandidates,
+    isElectionCandidateSuccess,
+    isElectionSuccess,
+    error
+  } = useSelector(electionsSelector);
 
-  const election_id = electionDetails.id;
+  // const election_id = electionDetails.id;
+
+  // Constants
   const [electionCandidate, setElectionCandidate] = useState([]);
-  const [electionCandidateList, setElectionCandidateList] =
-    useState(electionCandidates);
+  const [electionCandidateList, setElectionCandidateList] = useState(electionCandidates);
 
   useEffect(() => {
     setElectionCandidateList(electionCandidates);
   }, [electionCandidates]);
 
-  // Modals: Delete, Set, Edit
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
+  // Models
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -50,6 +55,10 @@ const CandidatesTab = () => {
       setModal(true);
     }
   }, [modal]);
+
+  // Modals: Delete, Set, Edit
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
 
   // Delete Data
   const handleDeleteElectionCandidate = () => {
