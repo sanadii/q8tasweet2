@@ -39,7 +39,7 @@ class PermissionSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['id', 'name', 'role']
+        fields = ['id', 'name', 'category']
 
 
 class UserSerializer(serializers.ModelSerializer):

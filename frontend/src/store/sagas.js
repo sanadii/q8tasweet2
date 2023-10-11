@@ -6,6 +6,7 @@ import AuthSaga from "./auth/login/saga";
 import ForgetSaga from "./auth/forgetpwd/saga";
 import ProfileSaga from "./auth/profile/saga";
 import UsersSaga from "./users/saga";
+import GroupsSaga from "./groups/saga";
 
 
 // Elections
@@ -37,6 +38,7 @@ export default function* rootSaga() {
     fork(ForgetSaga),
     fork(ProfileSaga),
     fork(UsersSaga),
+    fork(GroupsSaga),
 
     // Project
     fork(electionSaga),

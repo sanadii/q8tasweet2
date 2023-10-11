@@ -28,5 +28,13 @@ urlpatterns = [
     path("getModeratorUsers", GetModeratorUsers.as_view(), name="GetModeratorUsers"),
     path('getCurrentUser', GetCurrentUser.as_view(), name="GetCurrentUser"),
     path('addNewUser', AddNewUser.as_view(), name="AddNewUser"),
+    path('updateUser', UpdateUser.as_view(), name="UpdateUser"),
     path('deleteUser/<int:id>', DeleteUser.as_view(), name="DeleteUser"),
+
+    # Groups
+    path("getGroups", GetGroups.as_view(), name="GetGroups"),
+    path('addNewGroup', AddNewGroup.as_view(), name="AddNewGroup"),
+    path('updateGroup', UpdateGroup.as_view(), name="UpdateGroup"),
+    path('deleteGroup/<int:id>', DeleteGroup.as_view(), name="DeleteGroup"),
+
 ]

@@ -9,6 +9,7 @@ import Account from "./auth/register/reducer";
 import ForgetPassword from "./auth/forgetpwd/reducer";
 import Profile from "./auth/profile/reducer";
 import Users from "./users/reducer";
+import Groups from "./groups/reducer";
 
 
 // Elections
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
     ForgetPassword,
     Profile,
     Users,
+    Groups,
 
     // Project
     Elections,

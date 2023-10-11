@@ -123,22 +123,21 @@ export const updateCandidateCampaign = (campaign) => api.update(url.UPDATE_CAMPA
 export const deleteCandidateCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
 
 
-// --------------- Campaigns  ---------------
-// Campaign
+// Campaigns ---------------
 export const getCampaigns = () => api.get(url.GET_CAMPAIGNS);
 export const addNewCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
 export const updateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
 export const deleteCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
 export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign.id);
 
-// --------------- CampaignMember  ---------------
+// CampaignMember
 export const getAllCampaignMembers = (member) => api.get(url.GET_ALL_CAMPAIGN_MEMBERS + "/" + member.id);
 export const addNewCampaignMember = (member) => api.create(url.ADD_NEW_CAMPAIGN_MEMBER, member);
 export const updateCampaignMember = (member) => api.update(url.UPDATE_CAMPAIGN_MEMBER + "/" + member.id, member);
 export const deleteCampaignMember = (member) => api.delete(url.DELETE_CAMPAIGN_MEMBER + "/" + member);
 export const getCampaignMemberDetails = (member) => api.get(url.GET_CAMPAIGN_MEMBER_DETAILS + "/" + member.id);
 
-// --------------- CampaignGuarantee  ---------------
+// CampaignGuarantee
 export const getAllCampaignGuarantees = (campaignGuarantee) => api.get(url.GET_ALL_CAMPAIGN_GUARANTEES, campaignGuarantee);
 export const deleteCampaignGuarantee = (campaignGuarantee) => api.delete(url.DELETE_CAMPAIGN_GUARANTEE + "/" + campaignGuarantee);
 export const addNewCampaignGuarantee = (campaignGuarantee) => api.create(url.ADD_NEW_CAMPAIGN_GUARANTEE, campaignGuarantee);
@@ -150,7 +149,7 @@ export const deleteCampaignAttendee = (campaignAttendee) => api.delete(url.DELET
 export const addNewCampaignAttendee = (campaignAttendee) => api.create(url.ADD_NEW_CAMPAIGN_ATTENDEE, campaignAttendee);
 export const updateCampaignAttendee = (campaignAttendee) => api.put(url.UPDATE_CAMPAIGN_ATTENDEE, campaignAttendee);
 
-// --------------- Users  ---------------
+// Users ---------------
 export const getUsers = () => api.get(url.GET_USERS);
 export const getCurrentUser = () => api.get(url.GET_CURRENT_USER);
 export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + user.id);
@@ -173,6 +172,13 @@ export const addNewUserCampaign = (user) => api.create(url.ADD_NEW_USER_CAMPAIGN
 export const updateUserCampaign = (user) => api.update(url.UPDATE_USER_CAMPAIGN + "/" + user.id, user);
 export const deleteUserCampaign = (user) => api.delete(url.DELETE_USER_CAMPAIGN + "/" + user);
 export const getUserCampaignDetails = (user) => api.get(url.GET_USER_CAMPAIGN_DETAILS + "/" + user.id);
+
+// Groups ---------------
+export const getGroups = () => api.get(url.GET_GROUPS);
+export const getGroupDetails = (group) => api.get(url.GET_GROUP_DETAILS + "/" + group.id);
+export const addNewGroup = (group) => api.upload(url.ADD_NEW_GROUP, group);
+export const updateGroup = (group) => api.update(url.UPDATE_GROUP + "/" + group.id, group);
+export const deleteGroup = (group) => api.delete(url.DELETE_GROUP + "/" + group);
 
 // Images
 // export const uploadNewImage = (formData) => {

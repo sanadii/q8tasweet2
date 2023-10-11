@@ -2,85 +2,86 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 // Auth
-import Login from "../pages/Authentication/Login";
-import ForgetPasswordPage from "../pages/Authentication/ForgetPassword";
-import Logout from "../pages/Authentication/Logout";
-import Register from "../pages/Authentication/Register";
+import Login from "pages/Authentication/Login";
+import ForgetPasswordPage from "pages/Authentication/ForgetPassword";
+import Logout from "pages/Authentication/Logout";
+import Register from "pages/Authentication/Register";
 
 // User profile
-import UserProfile from "../pages/Authentication/Profile";
-import ProfileSettings from "../pages/Authentication/Profile/Settings";
+import UserProfile from "pages/Authentication/Profile";
+import ProfileSettings from "pages/Authentication/Profile/Settings";
 // user edit profile
 
 //Dashboard
 
 // ------------------ ADMIN PAGES -------------------------
-import Settings from "../pages/Admin/Settings";
-import Categories from "../pages/Admin/Settings/Categories";
+import Settings from "pages/Admin/Settings";
+import Categories from "pages/Admin/Settings/Categories";
+import Groups from "pages/Admin/Settings/Groups";
 
-// import Alphabet from "../pages/Alphabet";
+// import Alphabet from "pages/Alphabet";
 
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "pages/Dashboard";
 
 
 // Election Pages
-import ElectionList from "../pages/Elections/ElectionList";
-import ElectionDetails from "../pages/Elections/ElectionDetails";
+import ElectionList from "pages/Elections/ElectionList";
+import ElectionDetails from "pages/Elections/ElectionDetails";
 
 // Candidates Pages
-import CandidateList from "../pages/Candidates/CandidateList";
-import CandidateDetails from "../pages/Candidates/CandidateDetails";
+import CandidateList from "pages/Candidates/CandidateList";
+import CandidateDetails from "pages/Candidates/CandidateDetails";
 
 // Campaign Pages
-import CampaignList from "../pages/Campaigns/CampaignList";
-import CampaignGrid from "../pages/Campaigns/CampaignList/CampaignGrid";
-import CampaignDetails from "../pages/Campaigns/CampaignDetails";
+import CampaignList from "pages/Campaigns/CampaignList";
+import CampaignGrid from "pages/Campaigns/CampaignList/CampaignGrid";
+import CampaignDetails from "pages/Campaigns/CampaignDetails";
 
 
 // User Pages
-import UserList from "../pages/Users/UserList";
+import UserList from "pages/Users/UserList";
 
 
 
 // Public Pages ---------------
 // Elections
-import ElectionGrid from "../pages/Public/ElectionGrid";
-import Results from "../pages/Public/Results";
+import ElectionGrid from "pages/Public/ElectionGrid";
+import Results from "pages/Public/Results";
 
 // //AuthenticationInner pages
-import BasicSignIn from "../pages/AuthenticationInner/Login/BasicSignIn";
-import CoverSignIn from "../pages/AuthenticationInner/Login/CoverSignIn";
-import BasicSignUp from "../pages/AuthenticationInner/Register/BasicSignUp";
-import CoverSignUp from "../pages/AuthenticationInner/Register/CoverSignUp";
+import BasicSignIn from "pages/AuthenticationInner/Login/BasicSignIn";
+import CoverSignIn from "pages/AuthenticationInner/Login/CoverSignIn";
+import BasicSignUp from "pages/AuthenticationInner/Register/BasicSignUp";
+import CoverSignUp from "pages/AuthenticationInner/Register/CoverSignUp";
 
-import BasicPasswReset from "../pages/AuthenticationInner/PasswordReset/BasicPasswReset";
-import CoverPasswReset from "../pages/AuthenticationInner/PasswordReset/CoverPasswReset";
+import BasicPasswReset from "pages/AuthenticationInner/PasswordReset/BasicPasswReset";
+import CoverPasswReset from "pages/AuthenticationInner/PasswordReset/CoverPasswReset";
 
-import BasicLockScreen from "../pages/AuthenticationInner/LockScreen/BasicLockScr";
-import CoverLockScreen from "../pages/AuthenticationInner/LockScreen/CoverLockScr";
+import BasicLockScreen from "pages/AuthenticationInner/LockScreen/BasicLockScr";
+import CoverLockScreen from "pages/AuthenticationInner/LockScreen/CoverLockScr";
 
-import BasicLogout from "../pages/AuthenticationInner/Logout/BasicLogout";
-import CoverLogout from "../pages/AuthenticationInner/Logout/CoverLogout";
+import BasicLogout from "pages/AuthenticationInner/Logout/BasicLogout";
+import CoverLogout from "pages/AuthenticationInner/Logout/CoverLogout";
 
-import BasicSuccessMsg from "../pages/AuthenticationInner/SuccessMessage/BasicSuccessMsg";
-import CoverSuccessMsg from "../pages/AuthenticationInner/SuccessMessage/CoverSuccessMsg";
-import BasicTwosVerify from "../pages/AuthenticationInner/TwoStepVerification/BasicTwosVerify";
-import CoverTwosVerify from "../pages/AuthenticationInner/TwoStepVerification/CoverTwosVerify";
+import BasicSuccessMsg from "pages/AuthenticationInner/SuccessMessage/BasicSuccessMsg";
+import CoverSuccessMsg from "pages/AuthenticationInner/SuccessMessage/CoverSuccessMsg";
+import BasicTwosVerify from "pages/AuthenticationInner/TwoStepVerification/BasicTwosVerify";
+import CoverTwosVerify from "pages/AuthenticationInner/TwoStepVerification/CoverTwosVerify";
 
-import Basic404 from "../pages/AuthenticationInner/Errors/Basic404";
-import Cover404 from "../pages/AuthenticationInner/Errors/Cover404";
-import Alt404 from "../pages/AuthenticationInner/Errors/Alt404";
-import Error500 from "../pages/AuthenticationInner/Errors/Error500";
+import Basic404 from "pages/AuthenticationInner/Errors/Basic404";
+import Cover404 from "pages/AuthenticationInner/Errors/Cover404";
+import Alt404 from "pages/AuthenticationInner/Errors/Alt404";
+import Error500 from "pages/AuthenticationInner/Errors/Error500";
 
-import BasicPasswCreate from "../pages/AuthenticationInner/PasswordCreate/BasicPasswCreate";
-import CoverPasswCreate from "../pages/AuthenticationInner/PasswordCreate/CoverPasswCreate";
+import BasicPasswCreate from "pages/AuthenticationInner/PasswordCreate/BasicPasswCreate";
+import CoverPasswCreate from "pages/AuthenticationInner/PasswordCreate/CoverPasswCreate";
 
-import Offlinepage from "../pages/AuthenticationInner/Errors/Offlinepage";
+import Offlinepage from "pages/AuthenticationInner/Errors/Offlinepage";
 
 // // User Profile
 
-// import FileManager from "../pages/FileManager";
-// import ToDoList from "../pages/ToDo";
+// import FileManager from "pages/FileManager";
+// import ToDoList from "pages/ToDo";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -98,6 +99,7 @@ const authProtectedRoutes = [
   // Admin Options
   { path: "/settings", component: <Settings /> },
   { path: "/settings/categories", component: <Categories /> },
+  { path: "/settings/groups", component: <Groups /> },
 
   // Admin Lists
   { path: "/admin/campaigns", component: <CampaignList /> },

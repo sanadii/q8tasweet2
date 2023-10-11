@@ -8,6 +8,7 @@ from django.contrib.auth.models import Group
 
 from restapi.helper.models_helper import TrackModel, GenderOptions, GroupCategories, group_category_field, group_permission_field
 from restapi.helper.validators import today, civil_validator, phone_validator  
+
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, username, first_name, password, **other_fields):
 
@@ -70,5 +71,5 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'auth_user'
 
-Group.add_to_class('group_category', group_category_field)
+Group.add_to_class('category', group_category_field)
 Group.add_to_class('role', group_permission_field)

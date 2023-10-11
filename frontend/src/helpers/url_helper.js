@@ -11,8 +11,7 @@ export const POST_EDIT_JWT_PROFILE = "/users/postProfile";
 export const POST_EDIT_PROFILE = "/users/user";
 
 
-// --------------- Elections ---------------
-// Elections
+// Elections ---------------
 export const GET_ELECTIONS = "/elections/getElections";
 export const GET_ELECTION_DETAILS = "/elections/getElectionDetails";
 export const ADD_ELECTION = "/elections/addElection";
@@ -124,6 +123,14 @@ export const GET_USER_CAMPAIGN_DETAILS = "/users/getUserCampaignDetails";
 export const ADD_NEW_USER_CAMPAIGN = "/users/addNewUserCampaign";
 export const UPDATE_USER_CAMPAIGN = "/users/updateUserCampaign";
 export const DELETE_USER_CAMPAIGN = "/users/deleteUserCampaign";
+
+
+// GROUPS
+export const GET_GROUPS = "/users/getGroups";
+export const GET_GROUP_DETAILS = "/users/getGroupDetails";
+export const ADD_NEW_GROUP = "/users/addNewGroup";
+export const UPDATE_GROUP = "/users/updateGroup";
+export const DELETE_GROUP = "/users/deleteGroup";
 
 // Images
 export const UPLOAD_IMAGE = "/media/uploadImage";

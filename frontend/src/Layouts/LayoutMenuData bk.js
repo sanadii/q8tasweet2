@@ -167,7 +167,7 @@ const Navdata = () => {
         },
         {
           id: "categories",
-          label: "المجموعات",
+          label: "التصنيف",
           link: "/settings/categories",
           parentId: "Setting",
         },

@@ -1,24 +1,16 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import serializers, status
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.http.response import JsonResponse
-
-from django.conf import settings
-from .serializers import *
-from .models import User
-
-from rest_framework_simplejwt.views import TokenObtainPairView
-
-import jwt, datetime
-from datetime import datetime, timedelta
+from restapi.serializers import *
+from restapi.models import User
 from django.contrib.auth.models import Group
-
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from restapi.helper.models_helper import GroupCategories
 
 @method_decorator(csrf_exempt, name='dispatch')
 class userJWTLogin(APIView):
@@ -44,17 +36,7 @@ class userJWTLogin(APIView):
             'access_token': access_token,
             'data': user_data
         })
-    
 
-class AddNewUser(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request, format=None):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -85,7 +67,7 @@ class GetUsers(APIView):
         data_data = User.objects.all()
         data_serializer = UserSerializer(data_data, many=True)
         return Response({"data": data_serializer.data, "code": 200})
-    
+
 class GetModeratorUsers(APIView):
     def get(self, request):
         # Get the group object for 'Moderator'
@@ -98,6 +80,29 @@ class GetModeratorUsers(APIView):
         data_serializer = UserSerializer(moderators, many=True)
 
         return Response({"data": data_serializer.data, "code": 200})
+
+class AddNewUser(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateUser(APIView):
+    def patch(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response({"data": "User not found", "code": 404}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GetCurrentUser(APIView):
     permission_classes = [IsAuthenticated]
@@ -116,3 +121,50 @@ class DeleteUser(APIView):
         except User.DoesNotExist:
             return JsonResponse({"data": "User not found", "count": 0, "code": 404}, safe=False)
 
+
+# Group Model
+class GetGroups(APIView):
+
+    def get(self, request):
+        groups = Group.objects.all()
+        serializer = GroupSerializer(groups, many=True)
+
+        # Fetch all distinct categories
+        categories = dict(GroupCategories.choices)  
+
+        # Return the response in the desired format
+        return Response({
+            "groups": serializer.data,
+            "categories": categories,
+            "code": 200
+        })
+
+class AddNewGroup(APIView):
+    def post(self, request):
+        serializer = GroupSerializer(data=request.data)
+        if serializer.is_valid():
+            group = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateGroup(APIView):
+    def patch(self, request, id):
+        try:
+            group = Group.objects.get(id=id)
+        except Group.DoesNotExist:
+            return Response({"data": "Group not found", "code": 404}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = GroupSerializer(group, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteGroup(APIView):
+    def delete(self, request, id):
+        try:
+            group = Group.objects.get(id=id)
+            group.delete()
+            return JsonResponse({"data": "Group deleted successfully", "count": 1, "code": 200}, safe=False)
+        except Group.DoesNotExist:
+            return JsonResponse({"data": "Group not found", "count": 0, "code": 404}, safe=False)

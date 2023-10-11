@@ -55,12 +55,22 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
         },
         {
           id: "categories",
-          label: "المجموعات",
+          label: "التصنيف",
           link: "/settings/categories",
           parentId: "settings",
           click: function (e) {
             e.preventDefault();
             setIscurrentState("categories");
+          },
+        },
+        {
+          id: "groups",
+          label: "المجموعات",
+          link: "/settings/groups",
+          parentId: "settings",
+          click: function (e) {
+            e.preventDefault();
+            setIscurrentState("groups");
           },
         },
       ],

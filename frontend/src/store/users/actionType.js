@@ -2,7 +2,6 @@
 export const API_RESPONSE_SUCCESS = "API_RESPONSE_SUCCESS";
 export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
 
-
 // Get Users
 export const GET_USERS = "GET_USERS";
 export const GET_CURRENT_USER = "GET_CURRENT_USER";

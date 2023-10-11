@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { updateIconSidebar } from './Menus/utils';  // adjust the path according to your directory structure
 import usePermission from '../Components/Hooks/usePermission'; // adjust the path
 
-
 // Menus
 import { useAdminMenu } from './Menus/AdminMenu';
 import { useSettingsMenu } from './Menus/SettingsMenu';
