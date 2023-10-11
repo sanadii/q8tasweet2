@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // Action & Selector imports
 import { getUsers, addNewCampaignMember } from "../../../../store/actions";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { userSelector, campaignSelector } from 'Selectors';
 
 // UI Components & styling imports
 import { Input, ModalBody, Form } from "reactstrap";
@@ -16,7 +16,9 @@ import SimpleBar from "simplebar-react";
 const CampaignMembersAddModal = () => {
   const dispatch = useDispatch();
 
-  const { campaignDetails, users, campaignMembers } = useSelector(electionsSelector);
+  const { campaignDetails, campaignMembers, campaignElectionCommittees } = useSelector(campaignSelector);
+  const { users } = useSelector(userSelector);
+
   const campaignId = campaignDetails.id;
   const campaignMemberList = campaignMembers;
 
@@ -46,7 +48,6 @@ const CampaignMembersAddModal = () => {
   }, [users, searchUserInput]);
 
 
-  const { campaignElectionCommittees } = useSelector(electionsSelector);
 
   const [electionCommitteeList, setElectionCommitteeList] =
     useState(campaignElectionCommittees);

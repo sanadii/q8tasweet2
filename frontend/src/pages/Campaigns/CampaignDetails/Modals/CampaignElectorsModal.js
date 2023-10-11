@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 import "react-toastify/dist/ReactToastify.css";
 
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
@@ -8,7 +8,7 @@ import { GuaranteeStatusOptions } from "../../../../Components/constants";
 
 const CampaignElectorsModal = ({ modal, toggle, modalMode, elector }) => {
 
-  const { campaignMembers } = useSelector(electionsSelector);
+  const { campaignMembers } = useSelector(campaignSelector);
 
   const [onModalSubmit, setOnModalSubmit] = useState(null);
 

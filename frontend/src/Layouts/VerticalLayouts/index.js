@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 import { Collapse } from 'reactstrap';
 
-import { layoutSelector } from '../../Selectors/layoutSelector';
+import { layoutSelector } from 'Selectors/layoutSelector';
 
 
 // Import Data

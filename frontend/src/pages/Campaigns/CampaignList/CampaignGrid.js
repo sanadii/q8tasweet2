@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { ImageCampaignCard } from "../../../Components/Common";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { userSelector, campaignSelector, categorySelector } from 'Selectors';
 
 import { Link } from "react-router-dom";
 
@@ -15,8 +15,12 @@ const CampaignGrid = () => {
 
   document.title = "Campaigns - Q8 TASWEET APP";
 
-  const { campaigns, moderators, categories, subCategories, isCampaignSuccess, user, error } = useSelector(electionsSelector);
+  // State Management
+  const { campaigns, isCampaignSuccess, error } = useSelector(campaignSelector);
+  const { moderators, user } = useSelector(userSelector);
+  const { categories, subCategories } = useSelector(categorySelector);
 
+  // Constant Management
   const [campaignList, setCampaignList] = useState(campaigns);
   const [campaign, setCampaign] = useState([]);
   const [category, setCategory] = useState([]);

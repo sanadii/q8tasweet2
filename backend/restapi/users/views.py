@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.http.response import JsonResponse
 from restapi.serializers import *
+
 from restapi.models import User
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_exempt
@@ -13,7 +14,7 @@ from django.utils.decorators import method_decorator
 from restapi.helper.models_helper import GroupCategories
 
 @method_decorator(csrf_exempt, name='dispatch')
-class userJWTLogin(APIView):
+class UserLogin(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
         email = request.data.get('email')
@@ -28,7 +29,7 @@ class userJWTLogin(APIView):
         refresh = RefreshToken.for_user(user)
         access_token = str(AccessToken().for_user(user))
 
-        user_data = UserJWTLoginSerializer(user).data
+        user_data = UserLoginSerializer(user).data
 
         return Response({
             'status': 'success',
@@ -129,14 +130,17 @@ class GetGroups(APIView):
         groups = Group.objects.all()
         serializer = GroupSerializer(groups, many=True)
 
-        # Fetch all distinct categories
-        categories = dict(GroupCategories.choices)  
+        # Fetch all distinct categories and transform to desired format
+        raw_categories = dict(GroupCategories.choices)
+        categories = [{'id': key, 'name': value} for key, value in raw_categories.items()]
 
         # Return the response in the desired format
         return Response({
-            "groups": serializer.data,
-            "categories": categories,
-            "code": 200
+            "code": 200,
+            "data": {
+                "groups": serializer.data,
+                "categories": categories
+            }
         })
 
 class AddNewGroup(APIView):

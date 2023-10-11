@@ -1,12 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { electionsSelector } from '../Selectors/electionsSelector';
+import { userSelector } from 'Selectors';
 import getAdminMenu from "./Menus/AdminMenu";
 
 const Navdata = () => {
   const history = useNavigate();
-  // const currentUser = useSelector(electionsSelector);
+  // const currentUser = useSelector(userSelector);
   // const roles = currentUser.roles || [];
   // const isAdmin = roles.includes('isAdmin');
   const isAdmin = true; // Temporarily set to true for debugging

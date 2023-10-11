@@ -3,10 +3,11 @@
 import { useSelector } from 'react-redux';
 
 // Store & Selectors
-import { electionsSelector } from '../../Selectors/electionsSelector';
+import { userSelector, campaignSelector } from 'Selectors';
 
 const useUserRoles = () => {
-    const { currentUser, currentCampaignMember } = useSelector(electionsSelector);
+    const { currentUser } = useSelector(userSelector);
+    const { currentCampaignModerator, currentCampaignMember } = useSelector(campaignSelector);
     const rank = currentCampaignMember?.rank;
 
     // If user is an admin, don't evaluate subscriber roles

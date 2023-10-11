@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"; // Removed unnecessary impor
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCurrentUser } from "../../../store/actions";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { userSelector } from 'Selectors';
 
 import {
   Card,
@@ -56,7 +56,7 @@ const SimplePage = () => {
   const dispatch = useDispatch();
 
   // Getting the user data from Redux state
-  const { currentUser } = useSelector(electionsSelector);
+  const { currentUser } = useSelector(userSelector);
   const user = currentUser;
 
   const [userName, setUserName] = useState("");

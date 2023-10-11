@@ -10,7 +10,7 @@ app_name = "users"
 
 urlpatterns = [
     # Authentication
-    path("auth/userLogin", userJWTLogin.as_view(), name="userJWTLogin"),
+    path("auth/userLogin", UserLogin.as_view(), name="UserLogin"),
     path("auth/postProfile/", UserProfileUpdateAPIView.as_view(), name="user_profile_update"),
     # path("user/", UserCreate.as_view(), name="listpost"),
     path("auth/", include("rest_framework.urls", namespace="rest_framework")),

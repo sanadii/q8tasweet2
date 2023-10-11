@@ -1,26 +1,28 @@
+// Selectors/campaignsSelectors.js
 import { createSelector } from 'reselect';
 
 const selectCampaignsState = state => state.Campaigns;
 
-export const electionsSelector = createSelector(
+export const campaignSelector = createSelector(
   selectCampaignsState,
-  campaignsState => ({
+  (campaignsState) => ({
+
+    // Campaign Selectors
     campaigns: campaignsState.campaigns,
     campaign: campaignsState.campaignDetails,
     campaignDetails: campaignsState.campaignDetails,
     campaignMembers: campaignsState.campaignMembers,
     campaignGuarantees: campaignsState.campaignGuarantees,
-
-    // electionCommittees: campaignsState.electionCommittees,
-    // electionCandidates: campaignsState.electionCandidates,
-    // electionAttendees: campaignsState.electionAttendees,
-
-    campaignElectionCommittees: campaignsState.electionCommittees,
-    campaignCandidates: campaignsState.electionCandidates,
-    electionsSelector: campaignsState.electionAttendees,
+    campaignAttendees: campaignsState.campaignAttendees,
+    
+    campaignElectionCommittees: campaignsState.campaignElectionCommittees,
+    campaignElectionCandidates: campaignsState.campaignElectionCandidates,
 
     isCampaignSuccess: campaignsState.isCampaignSuccess,
+    campaignError: campaignsState.error,
+
     currentCampaignMember: campaignsState.currentCampaignMember,
     electors: campaignsState.electors,
+
   })
 );

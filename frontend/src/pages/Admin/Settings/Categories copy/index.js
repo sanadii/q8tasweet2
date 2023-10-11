@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import DeleteModal from "../../../../Components/Common/DeleteModal";
 import BreadCrumb from "../../../../Components/Common/BreadCrumb";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { categorySelector } from 'Selectors';
 import useCategoryManager from "../../../../Components/Hooks/CategoryHooks";
 
 // Redux
@@ -45,7 +45,7 @@ const Categories = () => {
   }
 
 
-  const { categories, subCategories } = useSelector(electionsSelector);
+  const { categories, subCategories } = useSelector(categorySelector);
   const [categoryList, setCategoryList] = useState(categories);
   const [subCategoryList, setSubCategoryList] = useState(subCategories);
 

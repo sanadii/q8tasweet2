@@ -19,7 +19,7 @@ import {
 
 const IntialState = {
   groups: [],
-  groupDetails: [],
+  categories: [],
 };
 
 const Groups = (state = IntialState, action) => {
@@ -29,7 +29,8 @@ const Groups = (state = IntialState, action) => {
         case GET_GROUPS:
           return {
             ...state,
-            groups: action.payload.data,
+            groups: action.payload.data.groups,
+            categories: action.payload.data.categories,
             isGroupCreated: false,
             isGroupSuccess: true,
           };
@@ -84,7 +85,7 @@ const Groups = (state = IntialState, action) => {
       return {
         ...state,
         isGroupCreated: true,
-        groups: [...state.groups, action.payload.data],
+        groups: [...state.groups, action.payload.data.groups],
         isGroupAdd: true,
         isGroupAddFail: false,
       };

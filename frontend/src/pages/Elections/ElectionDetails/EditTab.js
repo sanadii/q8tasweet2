@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector, categorySelector } from 'Selectors';
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -25,7 +25,8 @@ import { StatusOptions, PriorityOptions, RankOptions, ElectionTypeOptions, Elect
 const EditTab = ({ election }) => {
   const dispatch = useDispatch();
 
-  const { electionDetails, categories, subCategories } = useSelector(electionsSelector);
+  const { electionDetails } = useSelector(electionSelector);
+  const { categories, subCategories } = useSelector(categorySelector);
 
   const validation = useFormik({
     enableReinitialize: true,

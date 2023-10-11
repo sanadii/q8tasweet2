@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 // Store & Selectors
 import { getElectionDetails, getCategories } from "../../../store/actions";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector, categorySelector } from 'Selectors';
 
 // Components
 import Section from "./Section";
@@ -17,14 +17,15 @@ import { isEmpty } from "lodash";
 const ElectionDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  
+
+  const { categories } = useSelector(categorySelector);
   const {
-    electionDetails, 
-    electionCandidates, 
-    electionCampaigns, 
-    electionCommittees, 
-    categories
-  } = useSelector(electionsSelector);
+    electionDetails,
+    electionCandidates,
+    electionCampaigns,
+    electionCommittees,
+  } = useSelector(electionSelector);
+
 
   const [election, setElection] = useState({ id });
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector, categorySelector } from 'Selectors';
 
 import { ImageMedium } from "../../../Components/Common";
 import { Card, CardBody, CardFooter, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
@@ -22,7 +22,8 @@ import EditTab from "./EditTab";
 
 const Section = () => {
 
-  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees, categories, subCategories } = useSelector(electionsSelector);
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
+  const { categories, subCategories } = useSelector(categorySelector);
 
   const election = electionDetails;
   const categoryId = election.category; // assuming election object has a categoryId property
@@ -111,7 +112,7 @@ const Section = () => {
                         </div>
                       </div>
                     </Row>
-                   
+
 
                   </div>
                   <div className="col-md-auto">

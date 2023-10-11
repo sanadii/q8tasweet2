@@ -1,9 +1,9 @@
 # models_elpers.py
 from django.db import models
 from django.utils import timezone
-
 from django.core.validators import RegexValidator
 
+# TODO: make sure dictionaries are all changed to id and name and any otherthing if needed
 class GroupCategories(models.IntegerChoices):
     ADMIN = 1, 'Admin'
     CONTRIBUTOR = 2, 'Contributor'

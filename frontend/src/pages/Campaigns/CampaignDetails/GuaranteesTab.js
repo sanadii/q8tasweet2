@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignGuarantee, updateCampaignGuarantee } from "../../../store/actions";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 
 // Component imports
 import { Col, Row, Card, CardHeader, CardBody } from "reactstrap";
@@ -20,7 +20,7 @@ const GuaranteesTab = () => {
   const dispatch = useDispatch();
 
   // --------------- States ---------------
-  const { campaignGuarantees, campaignMembers, isCampaignGuaranteeSuccess, error  } = useSelector(electionsSelector);
+  const { campaignGuarantees, campaignMembers, isCampaignGuaranteeSuccess, error } = useSelector(campaignSelector);
 
   // CampaignGuarantees Constants
   const [campaignGuarantee, setCampaignGuarantee] = useState(null);

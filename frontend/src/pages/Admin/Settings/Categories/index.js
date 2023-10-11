@@ -3,10 +3,10 @@ import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeade
 import SimpleBar from "simplebar-react";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import DeleteModal from "../../../../Components/Common/DeleteModal";
-import BreadCrumb from "../../../../Components/Common/BreadCrumb";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
-import useCategoryManager from "../../../../Components/Hooks/CategoryHooks";
+import DeleteModal from "Components/Common/DeleteModal";
+import BreadCrumb from "Components/Common/BreadCrumb";
+import { categorySelector } from 'Selectors';
+import useCategoryManager from "Components/Hooks/CategoryHooks";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -16,19 +16,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 // Store actions
-import {
-  getCategories as onGetCategories,
-  updateCategory as onUpdateCategory,
-  deleteCategory as onDeleteCategory,
-  addNewCategory as onAddNewCategory,
-} from "../../../../store/actions";
+import { getCategories, addNewCategory, updateCategory, deleteCategory } from "store/actions";
 
 const Categories = () => {
   document.title = "المجموعات | Q8Tasweet - React Admin & Dashboard Template";
-
   const dispatch = useDispatch();
 
-  // ------------ Image Upload Helper ------------
+  // Image Upload Helper
   const [selectedImage, setSelectedImage] = useState(null);
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -44,37 +38,20 @@ const Categories = () => {
     formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
   }
 
+  // State Management
+  const { categories, subCategories } = useSelector(categorySelector);
 
-  const { categories, subCategories } = useSelector(electionsSelector);
-  const [categoryList, setCategoryList] = useState(categories);
-  const [subCategoryList, setSubCategoryList] = useState(subCategories);
-
-  useEffect(() => {
-    setSubCategoryList(subCategories);
-  }, [subCategories]);
-
-  useEffect(() => {
-    setCategoryList(categories);
-  }, [categories]);
-
+  // State Hooks
   const [deleteModal, setDeleteModal] = useState(false);
-
-
-
-  // Add / Edit / Modals
   const [category, setCategory] = useState(null);
   const [modalCategory, setModalCategory] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
 
   useEffect(() => {
-    dispatch(onGetCategories());
+    dispatch(getCategories());
   }, [dispatch]);
 
-  useEffect(() => {
-    setCategory(categoryList);
-    setSubCategoryList(categoryList);
-  }, [categoryList]);
 
   const toggle = useCallback(() => {
     if (modalCategory) {
@@ -120,30 +97,11 @@ const Categories = () => {
 
   const handleDeleteCategory = () => {
     if (category) {
-      dispatch(onDeleteCategory(category));
+      dispatch(deleteCategory(category));
       setDeleteModal(false);
     }
   };
 
-  const searchList = (e) => {
-    let inputVal = e.toLowerCase();
-
-    function filterItems(arr, query) {
-      return arr.filter(function (el) {
-        return el.category.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-      });
-    }
-
-    let filterData = filterItems(subCategoryList, inputVal);
-    setSubCategoryList(filterData);
-    if (filterData.length === 0) {
-      document.getElementById("noresult").style.display = "block";
-      document.getElementById("category-category").style.display = "none";
-    } else {
-      document.getElementById("noresult").style.display = "none";
-      document.getElementById("category-category").style.display = "block";
-    }
-  };
   console.log(categories, subCategories);
 
   const [isMainCategory, setIsMainCategory] = useState(false);
@@ -185,7 +143,7 @@ const Categories = () => {
           parent: values.parent,
         };
         // save edit Folder
-        dispatch(onUpdateCategory({cateogy: updatedCategory, formData: formData}));
+        dispatch(updateCategory({ cateogy: updatedCategory, formData: formData }));
         validation.resetForm();
       } else {
         const newCategory = {
@@ -195,7 +153,7 @@ const Categories = () => {
           parent: values.parent,
         };
         // save new Folder
-        dispatch(onAddNewCategory(newCategory));
+        dispatch(addNewCategory(newCategory));
         validation.resetForm();
       }
       toggle();
@@ -287,18 +245,6 @@ const Categories = () => {
             <div className="file-manager-content w-100 p-4 pb-0">
               <div className="p-3 bg-light rounded mb-4">
                 <Row className="g-2">
-                  <Col className="col-lg">
-                    <div className="search-box">
-                      <input
-                        type="text"
-                        id="searchsubCategoryList"
-                        className="form-control search"
-                        placeholder="Search category name"
-                        onKeyUp={(e) => searchList(e.target.value)}
-                      />
-                      <i className="ri-search-line search-icon"></i>
-                    </div>
-                  </Col>
                   <Col className="col-lg-auto">
                     <button
                       className="btn btn-primary createCategory"
@@ -315,7 +261,7 @@ const Categories = () => {
                 className="category-content position-relative px-4 mx-n4"
                 id="category-content"
               >
-                {!categoryList && (
+                {!subCategoryOptions && (
                   <div id="elmLoader">
                     <div
                       className="spinner-border text-primary avatar-sm"

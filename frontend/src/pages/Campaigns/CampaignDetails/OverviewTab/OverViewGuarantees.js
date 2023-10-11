@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Store & Selectors
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 
 // Components, Constants & Hooks
 import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../../Components/Common";
@@ -22,7 +22,7 @@ const OverViewGuarantees = () => {
         campaignMembers,
         campaignGuarantees,
         campaignElectionCommittees,
-    } = useSelector(electionsSelector);
+    } = useSelector(campaignSelector);
 
 
     function getGuaranteeCount(memberId) {

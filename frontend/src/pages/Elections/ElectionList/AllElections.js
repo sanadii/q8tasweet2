@@ -3,13 +3,16 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
-import { electionsSelector } from '../../../Selectors/electionsSelector';
-import { getElections, deleteElection, getModeratorUsers, getCategories } from "../../../store/actions";
+import { electionSelector, categorySelector, userSelector } from 'Selectors';
+import { getElections, deleteElection, getModeratorUsers, getCategories } from "store/actions";
 
 // Components & Columns
 import ElectionModal from "./ElectionModal";
 import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
 import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
+
+// Hooks
+import useDelete from "Components/Hooks/useDelete"
 
 // UI, Styles & Notifications
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -21,9 +24,24 @@ const AllElections = () => {
   const dispatch = useDispatch();
 
   // State Management
-  const { elections, isElectionSuccess, error, categories, subCategories, moderators } = useSelector(electionsSelector);
+  const { elections, isElectionSuccess, error } = useSelector(electionSelector);
+  const { categories, subCategories } = useSelector(electionSelector);
+  const { moderators } = useSelector(categorySelector);
   const [election, setElection] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+
+
+  const { 
+    deleteModal, 
+    setDeleteModal, 
+    isMultiDeleteButton, 
+    setIsMultiDeleteButton,
+    onClickDelete, 
+    handleDelete, 
+    handleMultiDelete, 
+    selectItemsForDelete 
+  } = useDelete();
+
 
   // Election Data
   useEffect(() => {
@@ -62,7 +80,6 @@ const AllElections = () => {
 
 
   // Delete Election ------------
-  const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
   const [modal, setModal] = useState(false);
 
@@ -77,10 +94,6 @@ const AllElections = () => {
   }, [modal]);
 
   // Delete Data ------------
-  const onClickDelete = (election) => {
-    setElection(election);
-    setDeleteModal(true);
-  };
 
   // Delete Data ------------
   const handleDeleteElection = () => {
@@ -152,8 +165,8 @@ const AllElections = () => {
 
   // Delete Multiple
   const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
-  const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
 
+  
   const deleteMultiple = () => {
     const checkall = document.getElementById("checkBoxAll");
     selectedCheckBoxDelete.forEach((element) => {
@@ -391,14 +404,6 @@ const AllElections = () => {
                   columns={columns}
                   data={electionList || []}
                   customPageSize={20}
-
-                  // isStatusFilter={true}
-                  // isGlobalPagination={true}
-                  // isColumnFilter={true} // Change the prop name
-                  // isElectionSelectionFilter={true}
-                  // isSelectionFilter={true}
-
-                  // useFilters={true}
 
                   // Styling -------------------------
                   className="custom-header-css"

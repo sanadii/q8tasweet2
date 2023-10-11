@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "../../../store/actions";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { userSelector, campaignSelector } from 'Selectors';
 
 // --------------- Component & Constants imports ---------------
 import { MemberRankOptions } from "../../../Components/constants";
@@ -21,7 +21,8 @@ const EditTab = () => {
 
   document.title = "Starter | Q8Tasweet - React Admin & Dashboard Template";
 
-  const { currentCampaignMember, currentUser, campaignMembers, campaignElectionCommittees } = useSelector(electionsSelector);
+  const { currentUser } = useSelector(userSelector);
+  const { currentCampaignMember, campaignMembers, campaignElectionCommittees } = useSelector(campaignSelector);
 
   const [electionCommitteeList, setElectionCommitteeList] =
     useState(campaignElectionCommittees);

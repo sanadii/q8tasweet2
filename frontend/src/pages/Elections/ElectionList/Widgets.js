@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Card, CardBody, Col, Row } from "reactstrap";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector } from 'Selectors';
 
 const Widgets = () => {
   // ------------ State Management ------------
-  const { elections } = useSelector(electionsSelector);
+  const { elections } = useSelector(electionSelector);
 
   const electionStatuses = ["Active", "Cancelled", "Deleted", "Archived"];
   const statusCounts = [

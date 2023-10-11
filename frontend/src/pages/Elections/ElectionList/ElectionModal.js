@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector, categorySelector, userSelector } from 'Selectors';
 
 // ------------ Import Actions ------------
 import { addElection, updateElection, getCategories } from "../../../store/actions";
@@ -23,8 +23,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
   const dispatch = useDispatch();
 
   // ------------ State Management ------------
-  const { moderators, isElectionSuccess, error } = useSelector(electionsSelector);
-  const { categories, subCategories } = useSelector(electionsSelector);
+  const { moderators } = useSelector(userSelector);
+  const { isElectionSuccess, error } = useSelector(electionSelector);
+  const { categories, subCategories } = useSelector(categorySelector);
 
   // validation
   const validation = useFormik({

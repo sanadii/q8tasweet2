@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import classnames from "classnames";
 
 // Store & Selectors
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 
 // UI & Utilities
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
@@ -39,7 +39,7 @@ const Section = () => {
     campaignGuarantees,
     campaignElectionCommittees,
     isCampaignSuccess
-  } = useSelector(electionsSelector);
+  } = useSelector(campaignSelector);
 
   // Permissions
   const { isAdmin, isEditor, isContributor, isModerator, isSubscriber, canViewCampaign,

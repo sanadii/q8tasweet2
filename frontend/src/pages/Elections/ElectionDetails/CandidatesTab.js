@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // Store & Selectors
 import { deleteElectionCandidate } from "../../../store/actions";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector } from 'Selectors';
 
 // Components
 import ElectionCandidateModal from "./Modals/ElectionCandidateModal";
@@ -30,7 +30,7 @@ const CandidatesTab = () => {
     isElectionCandidateSuccess,
     isElectionSuccess,
     error
-  } = useSelector(electionsSelector);
+  } = useSelector(electionSelector);
 
   // const election_id = electionDetails.id;
 

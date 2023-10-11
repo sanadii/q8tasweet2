@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 // Redux Related Imports
 import { useSelector, useDispatch } from "react-redux";
 import { updateElectionCommitteeResults } from "../../../store/actions";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector } from 'Selectors';
 
 // Component and UI Library Imports
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -17,7 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 const ResultsTab = () => {
   const dispatch = useDispatch();
 
-  const { electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector(electionsSelector);
+  const { electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector(electionSelector);
   const [editedData, setEditedData] = useState({});
   const [modifiedData, setModifiedData] = useState({});
 

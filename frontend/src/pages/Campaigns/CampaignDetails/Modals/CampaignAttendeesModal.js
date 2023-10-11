@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 
 import { updateCampaignAttendee } from "../../../../store/actions";
 import * as Yup from "yup";
@@ -13,7 +13,7 @@ import { GuaranteeStatusOptions } from "../../../../Components/constants";
 
 const CampaignAttendeesModal = ({ modal, toggle, modalMode, campaignAttendee }) => {
 
-  const { campaignMembers } = useSelector(electionsSelector);
+  const { campaignMembers } = useSelector(campaignSelector);
 
   const [onModalSubmit, setOnModalSubmit] = useState(null);
 
@@ -113,7 +113,7 @@ const CampaignAttendeeUpdateModal = ({
   const { campaignId } = useSelector((state) => ({
     campaignId: state.Campaigns.campaignDetails.id,
   }));
-  const campaignElectionCommittees = useSelector(electionsSelector); // Directly use without redundant useState
+  const campaignElectionCommittees = useSelector(campaignSelector); // Directly use without redundant useState
 
 
 

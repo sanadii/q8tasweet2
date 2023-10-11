@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Badge, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Card, CardBody, } from "reactstrap";
-import { electionsSelector } from '../../Selectors/electionsSelector';
+import { electionSelector } from 'Selectors';
 
 // --------------- Component, Constants, Hooks Imports ---------------
 import { ImageGenderCircle, AvatarMedium, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Components/Common";
@@ -23,7 +23,7 @@ const ElectionDetails = () => {
     id: useParams().id,
   });
 
-  const { electionDetails, electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector(electionsSelector);
+  const { electionDetails, electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector(electionSelector);
 
   useEffect(() => {
     if (election.id && !isEmpty(election)) {

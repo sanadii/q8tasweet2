@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Store & Selectors
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 import { getCampaignDetails } from "../../../store/actions";
 
 // UI & Utilities
@@ -17,7 +17,7 @@ const CampaignDetails = () => {
   const {
     campaignDetails,
     // ... other properties
-  } = useSelector(electionsSelector);
+  } = useSelector(campaignSelector);
 
   useEffect(() => {
     document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";

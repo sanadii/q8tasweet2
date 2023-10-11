@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
 import { StatusOptions, PriorityOptions, MemberRankOptions, GenderOptions, GuaranteeStatusOptions } from "../../Components/constants";
 import classnames from "classnames";
-import { electionsSelector } from '../../Selectors/electionsSelector';
+import { electionSelector, campaignSelector, categorySelector } from 'Selectors';
 
 import { Nav, NavItem, NavLink, Input } from "reactstrap";
 
@@ -18,7 +18,7 @@ export const Filter = ({ column }) => {
 
 // Tab Filters
 const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
-  const { campaignMembers, currentCampaignMember } = useSelector(electionsSelector);
+  const { campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
   const currentCampaignMemberRank = currentCampaignMember?.rank?.id || 10;
 
   const ranks = MemberRankOptions.filter((rank) =>
@@ -95,7 +95,8 @@ const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
 
 const ElectionCategoryFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
 
-  const { elections, categories } = useSelector(electionsSelector);
+  const { elections } = useSelector(electionSelector);
+  const { categories } = useSelector(categorySelector);
 
   // Compute the count for each category
   const categoryCounts = categories.reduce((counts, category) => {
@@ -370,7 +371,7 @@ const GuaranteeStatusFilter = ({ filters, setFilters }) => {
 
 
 const CandidateGenderFilter = ({ setElectionCandidateList }) => {
-  const electionCandidates = useSelector(electionsSelector);
+  const electionCandidates = useSelector(electionSelector);
 
   const ChangeCandidateGender = (e) => {
     const selectedGender = e ? Number(e) : null; // Convert to number
@@ -408,7 +409,7 @@ const CandidateGenderFilter = ({ setElectionCandidateList }) => {
 };
 
 const GenderFilter = ({ filters, setFilters }) => {
-  const campaignGuarantees = useSelector(electionsSelector);
+  const campaignGuarantees = useSelector(campaignSelector);
 
   const ChangeGuaranteeGender = (e) => {
     const selectedGender = e ? Number(e) : null; // Convert to number
@@ -447,7 +448,7 @@ const GenderFilter = ({ filters, setFilters }) => {
 
 
 const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
-  const campaignGuarantees = useSelector(electionsSelector);
+  const campaignGuarantees = useSelector(campaignSelector);
 
   const AttendanceOptions = [
     { id: 'true', name: "حضر" },
@@ -572,7 +573,7 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
 // };
 
 const GuarantorFilter = ({ filters, setFilters }) => {
-  const { campaignMembers } = useSelector(electionsSelector);
+  const { campaignMembers } = useSelector(campaignSelector);
 
   const [sortedGurantorOptions, setSortedGuarantorOptions] = useState([]);
 
@@ -646,7 +647,7 @@ const SearchFilter = ({ filters, setFilters, searchField }) => {
 };
 
 const ElectionCommitteeFilter = ({ filters, setFilters }) => {
-  const { electionAttendees, electionCommittees } = useSelector(electionsSelector);
+  const { electionAttendees, electionCommittees } = useSelector(electionSelector);
 
   // Directly sorting the committees
   const sortedCommitteeOptions = [...electionCommittees].sort((a, b) =>

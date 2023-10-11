@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, Container, Form, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { userSelector } from 'Selectors';
 
 //import images
 import progileBg from '../../../assets/images/profile-bg.jpg';
 import avatar1 from '../../../assets/images/users/avatar-1.jpg';
 
 const ProfileSettings = () => {
-    const { currentUser } = useSelector(electionsSelector);
+    const { currentUser } = useSelector(userSelector);
     const user = currentUser;
     const [activeTab, setActiveTab] = useState("1");
 

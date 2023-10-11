@@ -1,10 +1,11 @@
 // Components/Hooks/usePermission.js
 import { useSelector } from 'react-redux';
-import { electionsSelector } from '../../Selectors/electionsSelector';
+import { userSelector, campaignSelector } from 'Selectors';
 import computePermissions from '../Utils/permissions'; // adjust the path accordingly
 
 const usePermission = () => {
-    const { currentUser, currentCampaignModerator, currentCampaignContributor, currentCampaignEditor, currentCampaignMember } = useSelector(electionsSelector);
+    const { currentUser } = useSelector(userSelector);
+    const { currentCampaignModerator, currentCampaignContributor, currentCampaignEditor, currentCampaignMember } = useSelector(campaignSelector);
 
     if (!currentUser || !currentUser.roles) {
         throw new Error("Current user or user roles are not available.");

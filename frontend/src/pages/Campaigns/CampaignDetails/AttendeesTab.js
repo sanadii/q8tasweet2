@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignAttendee, updateCampaignAttendee } from "../../../store/actions";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 
 // Component imports
 import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AttendeesList = () => {
   const dispatch = useDispatch();
 
-  const { campaignDetails, campaignElectionCommittees, campaignElectionCandidates, campaignMembers, campaignAttendees,isCampaignAttendeeSuccess, error  } = useSelector(electionsSelector);
+  const { campaignDetails, campaignElectionCommittees, campaignElectionCandidates, campaignMembers, campaignAttendees, isCampaignAttendeeSuccess, error  } = useSelector(campaignSelector);
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
   
   const electionId = campaignDetails.election.id;

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
 import { addNewElectionCommittee, updateElectionCommittee } from "../../../../store/actions";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { electionSelector } from 'Selectors';
 
 // Constants & Component imports
 import { GenderOptions } from "../../../../Components/constants";
@@ -21,7 +21,7 @@ import { Col, ModalBody, Label, Input, Modal, ModalHeader, Form, ModalFooter, Bu
 export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommittee }) => {
   const dispatch = useDispatch();
 
-  const { electionDetails } = useSelector(electionsSelector);
+  const { electionDetails } = useSelector(electionSelector);
   const election = electionDetails.id
 
   const openModal = () => setModal(!modal);

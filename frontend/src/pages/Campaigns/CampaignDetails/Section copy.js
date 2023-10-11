@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import classnames from "classnames";
 
 // Store & Selectors
-import { electionsSelector } from '../../../Selectors/electionsSelector';
 
 // UI & Utilities
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";

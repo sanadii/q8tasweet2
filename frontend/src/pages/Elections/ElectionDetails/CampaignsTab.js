@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteElectionCampaign } from "../../../store/actions";
 import { Link } from "react-router-dom";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector } from 'Selectors';
 
 import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
 import ElectionCampaignModal from "./Modals/ElectionCampaignModal";
@@ -10,7 +10,7 @@ import { ImageCandidateCampaign, DeleteModal } from "../../../Components/Common"
 
 const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
   const dispatch = useDispatch();
-  const { electionCampaigns } = useSelector(electionsSelector);
+  const { electionCampaigns } = useSelector(electionSelector);
 
   const [campaign, setCampaign] = useState([]);
   const [isBookmarkClick, setIsBookmarkClick] = useState(false);

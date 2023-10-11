@@ -1,12 +1,14 @@
+// Selectors/userSelectors.js
 import { createSelector } from 'reselect';
 
 const selectUsersState = state => state.Users;
 
-export const electionsSelector = createSelector(
+export const userSelector = createSelector(
     selectUsersState,
-    usersState => ({
-      moderators: usersState.moderators,
-      currentUser: usersState.currentUser,
+    (usersState,) => ({
+        // User Selectors
+        users: usersState.users,
+        moderators: usersState.moderators,
+        currentUser: usersState.currentUser,
     })
-  );
-  
+);

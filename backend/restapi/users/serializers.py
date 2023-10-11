@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group, Permission
 
 # USER
 
-class UserJWTLoginSerializer(serializers.ModelSerializer):
+class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'first_name', 'last_name', 'username']

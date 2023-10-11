@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
 import { addNewElectionCandidate, updateElectionCandidate } from "../../../../store/actions";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { electionSelector } from 'Selectors';
 
 // Constants & Component imports
 import AddElectionCandidate from "./AddElectionCandidate";
@@ -21,7 +21,7 @@ import { ModalBody, Modal, ModalHeader, ModalFooter, Button } from "reactstrap";
 export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electionCandidate }) => {
   const dispatch = useDispatch();
 
-  const { electionDetails } = useSelector(electionsSelector);
+  const { electionDetails } = useSelector(electionSelector);
   const election = electionDetails.id;
 
   const openModal = () => setModal(!modal);

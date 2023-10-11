@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getElectors, addNewCampaignGuarantee, addNewCampaignAttendee } from "../../../store/actions";
 import SimpleBar from "simplebar-react";
 import { Loader, TableContainer } from "../../../Components/Common";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { campaignSelector, electorSelector } from 'Selectors';
 
 import CampaignElectorsModal from "./Modals/CampaignElectorsModal";
 
@@ -13,7 +13,8 @@ import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 export const ElectorsTab = () => {
   const dispatch = useDispatch();
 
-  const { currentCampaignMember, campaignDetails, campaignMembers, electors, campaignGuarantees, campaignAttendees, isCampaignGuaranteeSuccess, error } = useSelector(electionsSelector);
+  const { currentCampaignMember, campaignDetails, campaignMembers, campaignGuarantees, campaignAttendees, isCampaignGuaranteeSuccess, error } = useSelector(campaignSelector);
+  const { electors } = useSelector(electorSelector);
   const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
 
   useEffect(() => {
@@ -172,7 +173,7 @@ export const ElectorsTab = () => {
                     إضف للمضامين
                   </button>
                 )
-              ) : electionsSelector.some(
+              ) : electors.some(
                 (item) => item.civil === cellProps.row.original.civil
               ) ? (
                 <span className="text-success">تم التحضير</span>
@@ -211,7 +212,7 @@ export const ElectorsTab = () => {
       currentCampaignMember.rank,
       currentCampaignMember.user.id,
       dispatch,
-      electionsSelector,
+      electors,
     ]);
   return (
     <React.Fragment>

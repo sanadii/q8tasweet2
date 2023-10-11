@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Store & Selectors
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 import { getCampaignDetails } from "../../../store/actions";
 
 // Components
@@ -23,11 +23,14 @@ const CampaignDetails = () => {
   const dispatch = useDispatch();
   const { id: campaignId } = useParams();
 
-  const { campaign, currentCampaignMember,
+  const {
+    campaign,
+    currentCampaignMember,
     campaignMembers,
     campaignGuarantees,
     campaignElectionCommittees,
-    isCampaignSuccess } = useSelector(electionsSelector);
+    isCampaignSuccess
+  } = useSelector(campaignSelector);
 
   const { canViewCampaign } = usePermission();
 

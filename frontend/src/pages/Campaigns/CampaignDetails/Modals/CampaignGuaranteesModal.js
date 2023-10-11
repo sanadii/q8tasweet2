@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import CampaignGuaranteesModalUpdate from "./CampaignGuaranteesModalUpdate";
@@ -10,7 +10,7 @@ import CampaignGuaranteesModalView from "./CampaignGuaranteesModalView"
 const CampaignGuaranteesModal = ({ modal, toggle, modalMode, campaignGuarantee }) => {
 
   // --------------- Define States ---------------
-  const { campaignMembers } = useSelector(electionsSelector);
+  const { campaignMembers } = useSelector(campaignSelector);
 
   // --------------- Set Constants ---------------F
   const [onModalSubmit, setOnModalSubmit] = useState(null);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownMenu, DropdownToggle, Form } from 'reactstrap';
-import { layoutSelector } from '../Selectors/layoutSelector';
+import { layoutSelector } from 'Selectors/layoutSelector';
 
 //import images
 import logoSm from "../assets/images/logo-sm.png";

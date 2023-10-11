@@ -3,7 +3,7 @@
 import { useSelector } from 'react-redux';
 
 // Store & Selectors
-import { electionsSelector } from '../../Selectors/electionsSelector';
+import { userSelector, campaignSelector } from 'Selectors';
 
 const usePermission = () => {
 
@@ -12,7 +12,8 @@ const usePermission = () => {
     // if the user is admin, use currentUser.permissions
     // if the user is contributor, use currentCampaignModerator.permissions
     // if the user is subscriber, use currentCampaignMember.rank.permission
-    const { currentUser, currentCampaignModerator, currentCampaignMember } = useSelector(electionsSelector);
+    const { currentUser } = useSelector(userSelector);
+    const { currentCampaignModerator, currentCampaignMember } = useSelector(campaignSelector);
     const rank = currentCampaignMember?.rank;
 
     // If user is an admin, don't evaluate subscriber roles

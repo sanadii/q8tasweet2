@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "../../../../store/actions";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports 
 import { MemberRankOptions } from "../../../../Components/constants";
@@ -24,7 +24,8 @@ const CampaignMembersUpdateModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const { currentCampaignMember, currentUser, campaignMembers, campaignElectionCommittees } = useSelector(electionsSelector);
+  const { currentUser } = useSelector(userSelector);
+  const { currentCampaignMember, campaignMembers, campaignElectionCommittees } = useSelector(campaignSelector);
 
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
 

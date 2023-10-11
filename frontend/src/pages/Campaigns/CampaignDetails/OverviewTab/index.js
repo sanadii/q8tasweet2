@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Store & Selectors
-import { electionsSelector } from 'Selectors/electionsSelector';
+import { userSelector, campaignSelector } from 'Selectors';
 
 // Components, Constants & Hooks
 import usePermission from "Components/Hooks/usePermission";
@@ -20,14 +20,16 @@ const OverviewTab = () => {
 
   const {
     campaignDetails,
-    currentUser,
     currentCampaignMember,
     campaignMembers,
     campaignGuarantees,
     campaignElectionCommittees,
     campaignCandidates
-  } = useSelector(electionsSelector);
+  } = useSelector(campaignSelector);
 
+  const {
+    currentUser,
+  } = useSelector(userSelector);
   document.title = "Campaign Overview | Q8Tasweet";
 
   // Permissions

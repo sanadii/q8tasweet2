@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
 import { getCandidates, addNewElectionCandidate } from "../../../../store/actions";
-import { electionsSelector } from '../../../../Selectors/electionsSelector';
+import { electionSelector, candidateSelector } from 'Selectors';
 
 // UI Components & styling imports
 import { Input, Form } from "reactstrap";
@@ -13,7 +13,9 @@ import SimpleBar from "simplebar-react";
 const AddElectionCandidate = ({ election }) => {
     const dispatch = useDispatch();
 
-    const { candidates, electionCandidates } = useSelector(electionsSelector);
+    const { electionCandidates } = useSelector(electionSelector);
+    const { candidates } = useSelector(candidateSelector);
+
     const electionCandidateList = electionCandidates;
 
     // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS

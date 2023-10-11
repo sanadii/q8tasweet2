@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
 import { deleteCampaignMember } from "store/actions";
-import { electionsSelector } from 'Selectors/electionsSelector';
+import { campaignSelector } from 'Selectors';
 
 // Compontents
 import CampaignMembersModal from "./CampaignMembersModal";
@@ -122,8 +122,8 @@ const getGuaranteeCountForMember = useCallback((memberId) => {
 }, [campaignGuarantees]);
 
 const getAttendeeCountForMember = useCallback((memberId) => {
-    return electionsSelector.filter(attendee => attendee.member === memberId).length;
-}, [electionsSelector]);
+    return campaignAttendees.filter(attendee => attendee.member === memberId).length;
+}, [campaignAttendees]);
 
 
 const handleCampaignMemberClick = useCallback(

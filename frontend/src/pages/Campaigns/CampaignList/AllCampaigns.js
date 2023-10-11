@@ -1,7 +1,7 @@
 // React & Redux core imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { userSelector, campaignSelector } from 'Selectors';
 
 // Action & Selector imports
 import { getCampaigns, deleteCampaign, getModeratorUsers } from "../../../store/actions";
@@ -20,7 +20,8 @@ const AllCampaigns = () => {
   const dispatch = useDispatch();
 
   // State Management
-  const { campaigns, moderators, isCampaignSuccess, error } = useSelector(electionsSelector);
+  const { moderators } = useSelector(userSelector);
+  const { campaigns, isCampaignSuccess, error } = useSelector(campaignSelector);
   const [campaignList, setCampaignList] = useState(campaigns);
   const [campaign, setCampaign] = useState([]);
   const [isEdit, setIsEdit] = useState(false);

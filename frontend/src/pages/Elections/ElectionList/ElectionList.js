@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Modal, ModalBody, Row, Label, Input, Button, ModalHeader, FormFeedback, Form } from "reactstrap";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector, userSelector, categorySelector } from 'Selectors';
 
 // Custom component imports
 import { ImageCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
@@ -35,7 +35,9 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 const ElectionList = () => {
   const dispatch = useDispatch();
 
-  const { elections, moderators, categories, subCategories, isElectionSuccess, error } = useSelector(electionsSelector);
+  const { elections, isElectionSuccess, error } = useSelector(electionSelector);
+  const { moderators } = useSelector(userSelector);
+  const { categories, subCategories } = useSelector(categorySelector);
 
   const [electionList, setElectionList] = useState(elections);
   const [election, setElection] = useState([]);

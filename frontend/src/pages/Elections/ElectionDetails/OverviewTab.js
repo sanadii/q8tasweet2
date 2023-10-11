@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
 import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
-import { electionsSelector } from '../../../Selectors/electionsSelector';
+import { electionSelector } from 'Selectors';
 
 
 //SimpleBar
@@ -11,7 +11,7 @@ import SimpleBar from "simplebar-react";
 
 const OverviewTab = ({ election }) => {
 
-  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionsSelector);
+  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
 
   const moderators = Array.isArray(election.moderators)
     ? election.moderators

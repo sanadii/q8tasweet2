@@ -5,6 +5,7 @@ from restapi.helper.base_serializer import (
 )
 
 from restapi.users.serializers import (
+    UserLoginSerializer,
     UserSerializer,
     GroupSerializer,
     PermissionSerializer,
