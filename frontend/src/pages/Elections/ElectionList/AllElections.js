@@ -25,21 +25,24 @@ const AllElections = () => {
 
   // State Management
   const { elections, isElectionSuccess, error } = useSelector(electionSelector);
-  const { categories, subCategories } = useSelector(electionSelector);
-  const { moderators } = useSelector(categorySelector);
+  const { categories, subCategories } = useSelector(categorySelector);
+  const { moderators } = useSelector(userSelector);
+
   const [election, setElection] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
 
-  const { 
-    deleteModal, 
-    setDeleteModal, 
-    isMultiDeleteButton, 
-    setIsMultiDeleteButton,
-    onClickDelete, 
-    handleDelete, 
-    handleMultiDelete, 
-    selectItemsForDelete 
+  const {
+    deleteMultiple,
+    setDeleteModalMulti,
+    deleteModalMulti,
+    checkedAll,
+    deleteCheckbox,
+    deleteModal,
+    setDeleteModal,
+    isMultiDeleteButton,
+    onClickDelete,
+    handleDeleteElection
   } = useDelete();
 
 
@@ -79,8 +82,7 @@ const AllElections = () => {
   }, [moderators]);
 
 
-  // Delete Election ------------
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
+  // Modal
   const [modal, setModal] = useState(false);
 
   const toggle = useCallback(() => {
@@ -93,15 +95,6 @@ const AllElections = () => {
     }
   }, [modal]);
 
-  // Delete Data ------------
-
-  // Delete Data ------------
-  const handleDeleteElection = () => {
-    if (election) {
-      dispatch(deleteElection(election.id));
-      setDeleteModal(false);
-    }
-  };
 
   // Update Data ------------
   const handleElectionClick = useCallback(
@@ -144,47 +137,6 @@ const AllElections = () => {
     setElection("");
     setIsEdit(false);
     toggle();
-  };
-
-  // Checked All
-  const checkedAll = useCallback(() => {
-    const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".electionCheckBox");
-
-    if (checkall.checked) {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = true;
-      });
-    } else {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = false;
-      });
-    }
-    deleteCheckbox();
-  }, []);
-
-  // Delete Multiple
-  const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
-
-  
-  const deleteMultiple = () => {
-    const checkall = document.getElementById("checkBoxAll");
-    selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteElection(element.value));
-      setTimeout(() => {
-        toast.clearWaitingQueue();
-      }, 3000);
-    });
-    setIsMultiDeleteButton(false);
-    checkall.checked = false;
-  };
-
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".electionCheckBox:checked");
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
   };
 
   const columns = useMemo(
@@ -340,7 +292,6 @@ const AllElections = () => {
 
     return isValid;
   });
-
 
   return (
     <React.Fragment>
