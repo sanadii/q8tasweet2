@@ -12,7 +12,7 @@ import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader
 import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
 // Hooks
-import useDelete from "Components/Hooks/useDelete"
+import { useDelete, useFetchDataIfNeeded } from "Components/Hooks"
 
 // UI, Styles & Notifications
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -29,47 +29,30 @@ const AllElections = () => {
   const { moderators } = useSelector(userSelector);
 
   const [election, setElection] = useState(null);
+  const [moderatorsMap, setModeratorsMap] = useState({});
   const [isEdit, setIsEdit] = useState(false);
 
 
   const {
-    deleteMultiple,
+    handleDeleteItem,
+    onClickDelete,
+    handleDeleteMultiple,
+    isMultiDeleteButton,
+    setDeleteModal,
+    deleteModal,
     setDeleteModalMulti,
     deleteModalMulti,
     checkedAll,
     deleteCheckbox,
-    deleteModal,
-    setDeleteModal,
-    isMultiDeleteButton,
-    onClickDelete,
-    handleDeleteElection
-  } = useDelete();
+  } = useDelete(deleteElection);
+
+  // Fetch Data If Needed Hook
+  useFetchDataIfNeeded(elections, getElections);
+  useFetchDataIfNeeded(categories, getCategories);
+  useFetchDataIfNeeded(moderators, getModeratorUsers);
 
 
-  // Election Data
-  useEffect(() => {
-    if (!elections || !elections.length) {
-      dispatch(getElections());
-    }
-  }, [dispatch, elections]);
-
-  // Election Categories
-  useEffect(() => {
-    if (!categories || !categories.length) {
-      dispatch(getCategories());
-    }
-  }, [dispatch, categories]);
-
-  // Moderators
-  useEffect(() => {
-    if (!moderators || !moderators.length) {
-      dispatch(getModeratorUsers());
-    }
-  }, [dispatch, moderators]);
-
-  // Moderators ------------
-  const [moderatorsMap, setModeratorsMap] = useState({});
-
+  // useGetModeratorList - TODO: Create A Hook
   useEffect(() => {
     Promise.resolve(moderators).then((moderatorsList) => {
       const map = moderatorsList.reduce((acc, moderator) => {
@@ -154,7 +137,7 @@ const AllElections = () => {
           return (
             <input
               type="checkbox"
-              className="electionCheckBox form-check-input"
+              className="checkboxSelector form-check-input"
               value={cellProps.row.original.id}
               onChange={() => deleteCheckbox()}
             />
@@ -297,13 +280,13 @@ const AllElections = () => {
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteElection}
+        onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          deleteMultiple();
+          handleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}

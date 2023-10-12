@@ -1,4 +1,4 @@
-// index.js
+// Components/Common/index.js
 
 // Table use
 export { ExportCSVModal } from "./ExportCSVModal";
@@ -14,6 +14,8 @@ export { DeleteModal } from "./DeleteModal";
 
 // UI
 export { GenderCircle } from "./GenderCircle";
+
+// Image Frames
 export {
   ImageCircle,
   ImageGenderCircle,

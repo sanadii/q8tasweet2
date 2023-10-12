@@ -6,17 +6,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignMember } from "store/actions";
 import { campaignSelector } from 'Selectors';
 
-// Compontents
+// Compontents, Constants, Hooks
 import CampaignMembersModal from "./CampaignMembersModal";
-
-// Common Components
 import { ImageCircle, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Components/Common";
-
-// Constants
 import { MemberRankOptions, MemberStatusOptions } from "Components/constants";
-
-// Hooks
-import usePermission from "Components/Hooks/usePermission";
+import { usePermission, useDelete } from "Components/Hooks";
 
 // UI & Utilities
 import { Col, Row, Card, CardBody, CardHeader, CardFooter } from "reactstrap";
@@ -26,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 const MembersTab = () => {
   const dispatch = useDispatch();
 
-  // --------------- States ---------------
+  // States
   const {
     currentCampaignMember,
     campaignGuarantees,
@@ -35,7 +29,8 @@ const MembersTab = () => {
     isCampaignMemberSuccess,
     error
   } = useSelector(campaignSelector);
-  
+
+  // Permission Hook
   const {
     isAdmin,
     isEditor,
@@ -48,79 +43,28 @@ const MembersTab = () => {
     // canViewMember,
   } = usePermission();
 
-  // --------------- Constants ---------------
+    // Delete Hook
+    const {
+      handleDeleteItem,
+      onClickDelete,
+      handleDeleteMultiple,
+      isMultiDeleteButton,
+      setDeleteModal,
+      deleteModal,
+      setDeleteModalMulti,
+      deleteModalMulti,
+      checkedAll,
+      deleteCheckbox,
+    } = useDelete(deleteCampaignMember);
+
+    
+  // Constants
   const [campaignMember, setCampaignMember] = useState([]);
-  // const [campaignMemberList, setCampaignMemberList] = useState(campaignMembers);
-
-  // useEffect(() => {
-  //   setCampaignMemberList(campaignMembers);
-  // }, [campaignMembers]);
-
-  // Models
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  // 
   const [modalMode, setModalMode] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Modals: Delete, Set, Edit
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
-
-  // Delete Data
-  const handleDeleteCampaignMember = () => {
-    if (campaignMember) {
-      dispatch(deleteCampaignMember(campaignMember.id));
-      setDeleteModal(false);
-    }
-  };
-
-  const onClickDelete = (campaignMember) => {
-    setCampaignMember(campaignMember);
-    setDeleteModal(true);
-  };
-
-  // Checked All
-  const checkedAll = useCallback(() => {
-    const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".campaignMemberCheckBox");
-
-    if (checkall.checked) {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = true;
-      });
-    } else {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = false;
-      });
-    }
-    deleteCheckbox();
-  }, []);
-
-  // Delete Multiple
-  const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
-  const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
-
-  const deleteMultiple = () => {
-    const checkall = document.getElementById("checkBoxAll");
-    selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteCampaignMember(element.value));
-      setTimeout(() => {
-        toast.clearWaitingQueue();
-      }, 3000);
-    });
-    setIsMultiDeleteButton(false);
-    checkall.checked = false;
-  };
-
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".campaignMemberCheckBox:checked"
-    );
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
-  };
 
   const [activeTab, setActiveTab] = useState("0");
 
@@ -459,13 +403,13 @@ const MembersTab = () => {
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteCampaignMember}
+        onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          deleteMultiple();
+          handleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}

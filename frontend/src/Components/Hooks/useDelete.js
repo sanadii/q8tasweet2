@@ -1,56 +1,57 @@
-// useDelete.js
 import { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteElection } from 'store/actions';
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const useDelete = () => {
+const useDelete = (deleteAction) => {
   const dispatch = useDispatch();
 
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
-  const [election, setElection] = useState(null);
+  const [itemToDelete, setItemToDelete] = useState(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
   const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
 
-
-  // Functions
-  // Delete Data ------------
-  const onClickDelete = (election) => {
-    setElection(election);
+  const onClickDelete = (item) => {
+    setItemToDelete(item);
     setDeleteModal(true);
   };
 
-  // Delete Data ------------
-  const handleDeleteElection = () => {
-    if (election) {
-      dispatch(deleteElection(election.id));
+  const handleDeleteItem = () => {
+    if (itemToDelete) {
+      dispatch(deleteAction(itemToDelete.id));
       setDeleteModal(false);
     }
   };
 
-  // Checked All
   const checkedAll = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".electionCheckBox");
+    const checkedEntries = document.querySelectorAll(".checkboxSelector");
 
     if (checkall.checked) {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = true;
+      checkedEntries.forEach(entry => {
+        entry.checked = true;
       });
     } else {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = false;
+      checkedEntries.forEach(entry => {
+        entry.checked = false;
       });
     }
     deleteCheckbox();
   }, []);
 
-  const deleteMultiple = () => {
+  const deleteCheckbox = () => {
+    const checkedEntry = document.querySelectorAll(".checkboxSelector:checked");
+    checkedEntry.length > 0
+      ? setIsMultiDeleteButton(true)
+      : setIsMultiDeleteButton(false);
+    setSelectedCheckBoxDelete(checkedEntry);
+  };
+
+  const handleDeleteMultiple = () => {
     const checkall = document.getElementById("checkBoxAll");
     selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteElection(element.value));
+      dispatch(deleteAction(element.value));
       setTimeout(() => {
         toast.clearWaitingQueue();
       }, 3000);
@@ -59,46 +60,24 @@ const useDelete = () => {
     checkall.checked = false;
   };
 
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".electionCheckBox:checked");
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
-
-    const deleteMultiple = () => {
-      const checkall = document.getElementById("checkBoxAll");
-      selectedCheckBoxDelete.forEach((element) => {
-        dispatch(deleteElection(element.value));
-        setTimeout(() => {
-          toast.clearWaitingQueue();
-        }, 3000);
-      });
-      setIsMultiDeleteButton(false);
-      checkall.checked = false;
-    };
-
-    const deleteCheckbox = () => {
-      const checkedEntry = document.querySelectorAll(".electionCheckBox:checked");
-      checkedEntry.length > 0
-        ? setIsMultiDeleteButton(true)
-        : setIsMultiDeleteButton(false);
-      setSelectedCheckBoxDelete(checkedEntry);
-    };
-
-  }
   return {
-    deleteMultiple,
+    // Basic delete actions
+    handleDeleteItem,
+    onClickDelete,
+    
+    // Multi-delete actions
+    handleDeleteMultiple,
+    isMultiDeleteButton,
+    
+    // Modals
+    setDeleteModal,
+    deleteModal,
     setDeleteModalMulti,
     deleteModalMulti,
+    
+    // Checkbox related
     checkedAll,
     deleteCheckbox,
-    selectedCheckBoxDelete,
-    deleteModal,
-    setDeleteModal,
-    isMultiDeleteButton,
-    onClickDelete,
-    handleDeleteElection
   };
 };
 
