@@ -8,7 +8,7 @@ import { getElections, deleteElection, getModeratorUsers, getCategories } from "
 
 // Components & Columns
 import ElectionModal from "./ElectionModal";
-import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Components/Common";
 import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
 // Hooks

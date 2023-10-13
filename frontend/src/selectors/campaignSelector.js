@@ -10,6 +10,7 @@ export const campaignSelector = createSelector(
     // Campaign Selectors
     campaigns: campaignsState.campaigns,
     campaign: campaignsState.campaignDetails,
+    campaignId: campaignsState.campaignDetails.id,
     campaignDetails: campaignsState.campaignDetails,
     campaignMembers: campaignsState.campaignMembers,
     campaignGuarantees: campaignsState.campaignGuarantees,
@@ -23,6 +24,9 @@ export const campaignSelector = createSelector(
 
     currentCampaignMember: campaignsState.currentCampaignMember,
     electors: campaignsState.electors,
+
+    campaignRanks: campaignsState.campaignRanks,
+
 
   })
 );

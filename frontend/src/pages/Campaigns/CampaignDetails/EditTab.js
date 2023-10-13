@@ -49,7 +49,7 @@ const EditTab = () => {
       rank: (currentCampaignMember && currentCampaignMember.rank) || 0,
       committee: (currentCampaignMember && currentCampaignMember.committee) || 0,
       supervisor: (currentCampaignMember && currentCampaignMember.supervisor) || 0,
-      mobile: (currentCampaignMember && currentCampaignMember.mobile) || "",
+      phone: (currentCampaignMember && currentCampaignMember.phone) || "",
       notes: (currentCampaignMember && currentCampaignMember.notes) || "",
       status: (currentCampaignMember && currentCampaignMember.status) || 0,
     },
@@ -66,7 +66,7 @@ const EditTab = () => {
         rank: parseInt(values.rank, 10),
         committee: parseInt(values.committee, 10),
         supervisor: parseInt(values.supervisor, 10),
-        mobile: values.mobile,
+        phone: values.phone,
         notes: values.notes,
       };
       dispatch(updateCampaignMember(updatedCampaignMember));
@@ -90,10 +90,10 @@ const EditTab = () => {
 
   // Mobile field is always shown.
   fields.push({
-    id: "mobile-field",
+    id: "phone-field",
     label: "Mobile",
     type: "text",
-    name: "mobile",
+    name: "phone",
   });
 
   // Conditionally add supervisor if rank is above 3.

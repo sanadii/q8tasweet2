@@ -46,7 +46,6 @@ const TableContainerFilters = ({
     isTestFilter,
     isGlobalSearch,
 
-
     // Settings
     filters,
     setFilters,
@@ -57,9 +56,6 @@ const TableContainerFilters = ({
     setCampaignMemberList,
     setElectionCandidateList,
     setCampaignGuaranteeList,
-
-    // Actions
-    onTabChange,
 
     // From useTable
     preGlobalFilteredRows,

@@ -73,7 +73,7 @@ const GuaranteesTab = () => {
         box_no: campaignGuarantee.box_no,
         membership_no: campaignGuarantee.membership_no,
         enrollment_date: campaignGuarantee.enrollment_date,
-        mobile: campaignGuarantee.mobile,
+        phone: campaignGuarantee.phone,
         status: campaignGuarantee.status,
         notes: campaignGuarantee.notes,
       });
@@ -187,7 +187,7 @@ const GuaranteesTab = () => {
         accessor: "civil",
         filterable: false,
         Cell: (cellProps) => {
-          return <p>{cellProps.row.original.mobile}</p>;
+          return <p>{cellProps.row.original.phone}</p>;
         },
       },
       {

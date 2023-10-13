@@ -1,16 +1,19 @@
 # from campaigns.models import Campaigns
 from django.http import JsonResponse
 from django.http.response import JsonResponse
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
+
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import AuthenticationFailed
+
 from restapi.serializers import *
 from restapi.models import *
 from .models import *
-from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework import status
 from restapi.helper.views_helper import CustomPagination
 
 
@@ -73,6 +76,8 @@ class GetCampaignDetails(APIView):
         election_candidates = ElectionCandidates.objects.filter(election=election).select_related('election')
         election_committees = ElectionCommittees.objects.filter(election=election).select_related('election')
 
+        campaign_ranks = Group.objects.filter(Q(category=4))
+
         return Response({
             "data": {
                 "currentCampaignMember": self.get_current_campaign_member(id, request.user.id, context),
@@ -82,10 +87,14 @@ class GetCampaignDetails(APIView):
                 "campaignAttendees": self.get_campaign_attendees(campaign_attendeess, context),
                 
                 "campaignElectionCandidates": self.get_campaign_election_candidates(election_candidates, context),
-                "campaignElectionCommittees": self.get_campaign_election_committees(election_committees, context)
+                "campaignElectionCommittees": self.get_campaign_election_committees(election_committees, context),
+                "campaign_ranks": self.get_campaign_ranks(campaign_ranks, context),
             },
             "code": 200
         })
+
+    def get_campaign_ranks(self, campaign_ranks, context):
+        return GroupSerializer(campaign_ranks, many=True, context=context).data
 
     def get_current_campaign_member(self, campaign_id, user_id, context):
         current_campaign_member_query = CampaignMembers.objects.select_related('user').filter(campaign_id=campaign_id, user_id=user_id).first()

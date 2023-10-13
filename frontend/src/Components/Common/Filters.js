@@ -18,30 +18,38 @@ export const Filter = ({ column }) => {
 
 // Tab Filters
 const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
-  const { campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
-  const currentCampaignMemberRank = currentCampaignMember?.rank?.id || 10;
+  const { campaignRanks, campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
+  const activeRole = campaignRanks.find(rank => rank.id.toString() === activeTab)?.role;
 
-  const ranks = MemberRankOptions.filter((rank) =>
-    rank.showTo.includes(currentCampaignMemberRank)
-  );
+
+  console.log("Current activeRole:", activeRole);
+  console.log("Current filters:", filters);
+
+  const currentCampaignMemberRole = currentCampaignMember?.role || "CampaignCandidate";
+  const currentRank = campaignRanks.find(rank => rank.role === currentCampaignMemberRole);
 
   // Compute the count for each rank
-  const rankCounts = ranks.reduce((counts, rank) => {
-    counts[rank.id] = campaignMembers.filter(
-      (item) => item.rank === rank.id
-    ).length;
+  const rankCounts = campaignRanks.reduce((counts, rank) => {
+    counts[rank.id] = campaignMembers.filter(item => item.rank === rank.id).length;
     return counts;
   }, {});
 
-  const ChangeCampaignRank = (tab, type) => {
+  const ChangeCampaignRank = (e, tab, rankId, newRole) => {
+    e.preventDefault();
+    
+    console.log("Tab clicked:", tab);
+    console.log("RankId of tab clicked:", rankId);
+
     if (activeTab !== tab) {
       setActiveTab(tab);
-      if (type !== "all") {
+      if (rankId !== "all") {
+        console.log("Setting filter for specific rank:", rankId);
         setFilters(prevFilters => ({
           ...prevFilters,
-          rank: type
+          rank: rankId
         }));
       } else {
+        console.log("Setting filter to show all");
         setFilters(prevFilters => ({
           ...prevFilters,
           rank: null
@@ -63,20 +71,20 @@ const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
                 { active: activeTab === "0" },
                 "fw-semibold"
               )}
-              onClick={() => ChangeCampaignRank("0", "all")}
+              onClick={(e) => ChangeCampaignRank(e, "0", "all", null)}
               href="#"
             >
-              All
+              الكل
             </NavLink>
           </NavItem>
-          {ranks.map((rank) => (
+          {campaignRanks.map((rank) => (
             <NavItem key={rank.id}>
               <NavLink
                 className={classnames(
                   { active: activeTab === rank.id.toString() },
                   "fw-semibold"
                 )}
-                onClick={() => ChangeCampaignRank(rank.id.toString(), rank.id)}
+                onClick={(e) => ChangeCampaignRank(e, rank.id.toString(), rank.id)}
                 href="#"
               >
                 {rank.name}

@@ -180,7 +180,6 @@ const TableContainer = ({
             setCampaignMemberList={setCampaignMemberList}
             setElectionCandidateList={setElectionCandidateList}
             setCampaignGuaranteeList={setCampaignGuaranteeList}
-
             // Actions
             onTabChange={onTabChange}
 

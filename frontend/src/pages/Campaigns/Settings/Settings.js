@@ -663,7 +663,7 @@ const Settings = () => {
                                                                 htmlFor="chatNotification">
                                                                 Show chat notifications
                                                             </Label>
-                                                            <p className="text-muted">To prevent duplicate mobile
+                                                            <p className="text-muted">To prevent duplicate phone
                                                                 notifications from the Gmail and Chat apps, in settings,
                                                                 turn off Chat notifications.</p>
                                                         </div>

@@ -7,3 +7,8 @@ export { useProfile } from "./UserHooks";
 export { default as GroupHook } from "./GroupHook";
 export { default as CategoryHooks } from "./CategoryHooks";
 
+
+// Campaigns
+
+export { useSupervisorMembers, useCampaignRanks } from "./CampaignHooks";
+

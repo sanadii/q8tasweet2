@@ -69,7 +69,7 @@ const CampaignGuaranteesModalView = ({ campaignGuarantee }) => {
               </tr>
               <tr>
                 <td className="fw-medium">Mobile</td>
-                <td>{campaignGuarantee.mobile}</td>
+                <td>{campaignGuarantee.phone}</td>
               </tr>
               <tr>
                 <td className="fw-medium">Status</td>

@@ -127,7 +127,7 @@ const CampaignAttendeeUpdateModal = ({
   const initialValues = {
     id: campaignAttendee?.id || "",
     member_id: campaignAttendee?.guarantor || "",
-    mobile: campaignAttendee?.mobile || "",
+    phone: campaignAttendee?.phone || "",
     status: campaignAttendee?.status || 0,
     notes: campaignAttendee?.notes || "",
 
@@ -143,7 +143,7 @@ const CampaignAttendeeUpdateModal = ({
       const updatedCampaignAttendee = {
         id: campaignAttendee ? campaignAttendee.id : 0,
         member_id: values.guarantor,
-        mobile: values.mobile,
+        phone: values.phone,
         civil: values.civil,
         status: parseInt(values.status, 10),
         notes: values.notes,
@@ -261,8 +261,8 @@ const CampaignAttendeeUpdateModal = ({
                   <td className="fw-medium">Mobile</td>
                   <td>
                     <Input
-                      name="mobile"
-                      id="mobile-field"
+                      name="phone"
+                      id="phone-field"
                       className="form-control"
                       placeholder="Enter Guarantee Mobile"
                       type="number"
@@ -271,16 +271,16 @@ const CampaignAttendeeUpdateModal = ({
                       }}
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}
-                      value={validation.values.mobile || ""}
+                      value={validation.values.phone || ""}
                       invalid={
-                        validation.touched.mobile && validation.errors.mobile
+                        validation.touched.phone && validation.errors.phone
                           ? true
                           : false
                       }
                     />
-                    {validation.touched.mobile && validation.errors.mobile ? (
+                    {validation.touched.phone && validation.errors.phone ? (
                       <FormFeedback type="invalid">
-                        {validation.errors.mobile}
+                        {validation.errors.phone}
                       </FormFeedback>
                     ) : null}
                   </td>

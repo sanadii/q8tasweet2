@@ -39,7 +39,7 @@ class PermissionSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['id', 'name', 'category']
+        fields = ['id', 'name', 'category', 'role']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -60,7 +60,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_roles(self, obj):
         # Gets the role attribute for all the groups associated with the user
-        roles = [group.name for group in obj.groups.all()]
+        roles = [group.role for group in obj.groups.all()]
         
         # Format each role to prepend "is" and capitalize the first letter
         formatted_roles = ["is" + role.replace(" ", "").capitalize() for role in roles]

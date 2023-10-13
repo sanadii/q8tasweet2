@@ -7,15 +7,15 @@ from django.core.validators import RegexValidator
 class GroupCategories(models.IntegerChoices):
     ADMIN = 1, 'Admin'
     CONTRIBUTOR = 2, 'Contributor'
-    MEMBER = 4, 'Member'
+    CAMPAIGN = 4, 'Campaign'
     SUBSCRIBER = 5, 'Subscriber'
 
 group_category_field = models.IntegerField(
     choices=GroupCategories.choices,
-    default=GroupCategories.MEMBER,
+    default=GroupCategories.SUBSCRIBER,
 )
 
-group_permission_field = models.CharField(max_length=255, null=True, blank=True)  # Define your char field with desired attributes
+group_role_field = models.CharField(max_length=255, null=True, blank=True)  # Define your char field with desired attributes
 
 class StatusOptions(models.IntegerChoices):
     PUBLISHED = 1, 'منشور'
