@@ -1,7 +1,7 @@
 // React imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
-import CampaignGuaranteesModal from "./Modals/CampaignGuaranteesModal";
+import GuaranteesModal from "./GuaranteesTab/GuaranteesModal";
 
 // Redux imports
 import { useSelector, useDispatch } from "react-redux";
@@ -19,7 +19,7 @@ import {
   TableContainer,
 } from "../../../Components/Common";
 import {
-  MemberRankOptions,
+  MemberRoleOptions,
   MemberStatusOptions,
 } from "../../../Components/constants";
 
@@ -89,7 +89,7 @@ const GuaranteesTab = ({ campaignGuarantees }) => {
         campaign_id: campaignGuarantee.campaign_id,
         user_id: campaignGuarantee.user_id,
         name: campaignGuarantee.name,
-        rank: campaignGuarantee.rank,
+        role: campaignGuarantee.role,
         status: campaignGuarantee.status,
         notes: campaignGuarantee.notes,
       });
@@ -352,7 +352,7 @@ const GuaranteesTab = ({ campaignGuarantees }) => {
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
       />
-      <CampaignGuaranteesModal
+      <GuaranteesModal
         modal={modal}
         setModal={setModal}
         isEdit={isEdit}
@@ -381,7 +381,7 @@ const GuaranteesTab = ({ campaignGuarantees }) => {
                       // Filters
                       isGlobalFilter={true}
                       preGlobalFilteredRows={true}
-                      // isCampaignRankFilter={true}
+                      // isCampaignRoleFilter={true}
                       onTabChange={handleTabChange}
                       isFieldFilter={true}
                       SearchPlaceholder="Search for Election Candidates..."

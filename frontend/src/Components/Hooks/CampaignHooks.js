@@ -2,55 +2,67 @@
 
 import { useMemo } from 'react';
 
-const useSupervisorMembers = (campaignRanks, campaignMembers) => {
-    const supervisorRankId = useMemo(() => {
-        return campaignRanks.find(rank => rank.role === "CampaignSupervisor")?.id;
-    }, [campaignRanks]);
+const useSupervisorMembers = (campaignRoles, campaignMembers) => {
+  const supervisorRoleId = useMemo(() => {
+    return campaignRoles.find(role => role.role === "campaignSupervisor")?.id;
+  }, [campaignRoles]);
 
-    const supervisorMembers = useMemo(() => {
-        return campaignMembers.filter(member => member.rank === supervisorRankId);
-    }, [campaignMembers, supervisorRankId]);
+  const supervisorMembers = useMemo(() => {
+    return campaignMembers.filter(member => member.role === supervisorRoleId);
+  }, [campaignMembers, supervisorRoleId]);
 
-    return supervisorMembers;
+  return supervisorMembers;
+};
+
+const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
+  return useMemo(() => {
+    const currentRoleId = currentCampaignMember?.role;
+    let excludedRoleStrings = [];
+    let excludedRoleIds = [];
+
+    const currentRoleObject = campaignRoles.find(role => role.id === currentRoleId);
+    const currentRole = currentRoleObject?.role;
+    console.log("currentMemberRole:", currentRole);
+
+    switch (currentRole) {
+      case "campaignAdmin":
+        // No roles excluded for campaignAdmin.
+        break;
+      case "candidateAdmin":
+        excludedRoleStrings = ["campaignAdmin", "campaignSupervisor"];
+        break;
+      case "campaignCandidate":
+        excludedRoleStrings = ["campaignAdmin", "campaignSupervisor", "campaignCandidate"];
+        break;
+      case "campaignSupervisor":
+        excludedRoleStrings = ["campaignAdmin", "candidateAdmin", "campaignCandidate", "campaignSupervisor"];
+        break;
+      default:
+        break;
+    }
+
+    excludedRoleIds = campaignRoles
+      .filter(role => {
+        const isExcluded = excludedRoleStrings.includes(role.role);
+        if (isExcluded) {
+          console.log("Excluding role:", role.role);
+        }
+        return isExcluded;
+      })
+      .map(role => role.id);
+
+    const allRoleStrings = campaignRoles.map(role => role.role);
+    console.log("All Role Strings:", allRoleStrings);
+
+    const displayedRoles = campaignRoles.filter(role => !excludedRoleIds.includes(role.id));
+    console.log("Displayed Roles:", displayedRoles);
+
+    return displayedRoles;
+
+  }, [campaignRoles, currentCampaignMember]);
 };
 
 
 
-// create a hooks, 
-// Dont show currentCampaignMember.rank
-// if campaignAdmin, show all ranks
-// if candidateAdmin, Show All except campaignAdmin, and candidateAdmin
-// if candidate, Show All Except campaignAdmin, and candidateAdmin, candidate
-// if supervisor, show all ranks except campaignAdmin, candidateAdmin, candidate, and supervisor
 
-const useCampaignRanks = (campaignRanks, currentCampaignMember) => {
-
-    return useMemo(() => {
-      const currentRankId = currentCampaignMember?.rank;
-  
-      // Based on the rank ID of the currentCampaignMember, 
-      // derive the rank IDs that should not be displayed.
-      let excludedRankIds = [];
-      switch (currentRankId) {
-        case 1: // campaignAdmin
-          break;
-        case 2: // candidateAdmin
-          excludedRankIds = [1, 2];
-          break;
-        case 3: // candidate
-          excludedRankIds = [1, 2, 3];
-          break;
-        case 4: // supervisor
-          excludedRankIds = [1, 2, 3, 4];
-          break;
-        default:
-          break;
-      }
-  
-      return campaignRanks.filter(rank => !excludedRankIds.includes(rank.id));
-    }, [campaignRanks, currentCampaignMember]);
-  
-  };
-  
-
-export { useSupervisorMembers, useCampaignRanks };
+export { useSupervisorMembers, useCampaignRoles };

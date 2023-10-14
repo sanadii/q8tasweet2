@@ -25,7 +25,7 @@ src\pages\Campaigns\CampaignDetails\GuaranteesTab.js
 src\pages\Campaigns\CampaignDetails\MembersTab.js
   Line 421:6:  React Hook useMemo has missing dependencies: 'campaignGuarantees.length', 'campaignMembers', 'currentCampaignUser.rank', 'electionCommittees', 'getAttendeeCountForMember', and 'getGuaranteeCountForMember'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
 
-src\pages\Campaigns\CampaignDetails\Modals\CampaignGuaranteesModalUpdate.js
+src\pages\Campaigns\CampaignDetails\Modals\GuaranteesModalUpdate.js
   Line 54:6:  React Hook useEffect has missing dependencies: 'handleUpdateButton' and 'setOnModalSubmit'. Either include them or remove the dependency array. If 'setOnModalSubmit' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
 
 src\pages\Campaigns\CampaignDetails\Modals\CampaignMembersModal.js

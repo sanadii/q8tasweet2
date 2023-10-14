@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
-import { StatusOptions, PriorityOptions, MemberRankOptions, GenderOptions, GuaranteeStatusOptions } from "../../Components/constants";
+import { StatusOptions, PriorityOptions, MemberRoleOptions, GenderOptions, GuaranteeStatusOptions } from "../../Components/constants";
 import classnames from "classnames";
 import { electionSelector, campaignSelector, categorySelector } from 'Selectors';
 
@@ -17,42 +17,42 @@ export const Filter = ({ column }) => {
 
 
 // Tab Filters
-const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
-  const { campaignRanks, campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
-  const activeRole = campaignRanks.find(rank => rank.id.toString() === activeTab)?.role;
+const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
+  const { campaignRoles, campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
+  const activeRole = campaignRoles.find(role => role.id.toString() === activeTab)?.role;
 
 
   console.log("Current activeRole:", activeRole);
   console.log("Current filters:", filters);
 
-  const currentCampaignMemberRole = currentCampaignMember?.role || "CampaignCandidate";
-  const currentRank = campaignRanks.find(rank => rank.role === currentCampaignMemberRole);
+  const currentCampaignMemberRole = currentCampaignMember?.role || "campaignCandidate";
+  const currentRole = campaignRoles.find(role => role.role === currentCampaignMemberRole);
 
-  // Compute the count for each rank
-  const rankCounts = campaignRanks.reduce((counts, rank) => {
-    counts[rank.id] = campaignMembers.filter(item => item.rank === rank.id).length;
+  // Compute the count for each role
+  const roleCounts = campaignRoles.reduce((counts, role) => {
+    counts[role.id] = campaignMembers.filter(item => item.role === role.id).length;
     return counts;
   }, {});
 
-  const ChangeCampaignRank = (e, tab, rankId, newRole) => {
+  const ChangeCampaignRole = (e, tab, roleId, newRole) => {
     e.preventDefault();
     
     console.log("Tab clicked:", tab);
-    console.log("RankId of tab clicked:", rankId);
+    console.log("RoleId of tab clicked:", roleId);
 
     if (activeTab !== tab) {
       setActiveTab(tab);
-      if (rankId !== "all") {
-        console.log("Setting filter for specific rank:", rankId);
+      if (roleId !== "all") {
+        console.log("Setting filter for specific role:", roleId);
         setFilters(prevFilters => ({
           ...prevFilters,
-          rank: rankId
+          role: roleId
         }));
       } else {
         console.log("Setting filter to show all");
         setFilters(prevFilters => ({
           ...prevFilters,
-          rank: null
+          role: null
         }));
       }
     }
@@ -71,25 +71,25 @@ const MemberRankFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
                 { active: activeTab === "0" },
                 "fw-semibold"
               )}
-              onClick={(e) => ChangeCampaignRank(e, "0", "all", null)}
+              onClick={(e) => ChangeCampaignRole(e, "0", "all", null)}
               href="#"
             >
               الكل
             </NavLink>
           </NavItem>
-          {campaignRanks.map((rank) => (
-            <NavItem key={rank.id}>
+          {campaignRoles.map((role) => (
+            <NavItem key={role.id}>
               <NavLink
                 className={classnames(
-                  { active: activeTab === rank.id.toString() },
+                  { active: activeTab === role.id.toString() },
                   "fw-semibold"
                 )}
-                onClick={(e) => ChangeCampaignRank(e, rank.id.toString(), rank.id)}
+                onClick={(e) => ChangeCampaignRole(e, role.id.toString(), role.id)}
                 href="#"
               >
-                {rank.name}
+                {role.name}
                 <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
-                  {rankCounts[rank.id]}
+                  {roleCounts[role.id]}
                 </span>
               </NavLink>
             </NavItem>
@@ -587,20 +587,20 @@ const GuarantorFilter = ({ filters, setFilters }) => {
 
   useEffect(() => {
     const GurantorOptions = campaignMembers.filter(
-      (member) => member.rank === 2 || member.rank === 3 || member.rank === 4
+      (member) => member.role === 2 || member.role === 3 || member.role === 4
     );
 
-    setSortedGuarantorOptions(GurantorOptions.sort((a, b) => a.rank - b.rank));
+    setSortedGuarantorOptions(GurantorOptions.sort((a, b) => a.role - b.role));
   }, [campaignMembers]);
 
 
-  const ChangeGuaranteeRank = (e) => {
-    const selectedRank = e.target.value ? parseInt(e.target.value, 10) : null;
+  const ChangeGuaranteeRole = (e) => {
+    const selectedRole = e.target.value ? parseInt(e.target.value, 10) : null;
 
     // Update the filters
     setFilters(prev => ({
       ...prev,
-      member: selectedRank,
+      member: selectedRole,
     }));
   };
 
@@ -614,13 +614,13 @@ const GuarantorFilter = ({ filters, setFilters }) => {
             className="form-select form-control"
             name="choices-select-guarantor"
             id="choices-select-guarantor"
-            onChange={ChangeGuaranteeRank}
+            onChange={ChangeGuaranteeRole}
             value={filters.member || ''}
           >
             <option value="">- الكل - </option>
             {sortedGurantorOptions.map((member) => (
               <option key={member.id} value={member.id}>
-                {member.user.name}
+                {member.fullName}
               </option>
             ))}
           </select>
@@ -712,7 +712,7 @@ const ResetFilters = ({ setFilters, activeTab, setActiveTab }) => {
             status: null,
             priority: null,
             category: null,
-            rank: null,
+            role: null,
             gender: null,
             member: null,
             attended: null,
@@ -745,8 +745,8 @@ export {
   // AttendeeGenderFilter,
   GuaranteeAttendanceFilter,
   GuaranteeStatusFilter,
-  // MemberRankFilter,
-  MemberRankFilter,
+  // MemberRoleFilter,
+  MemberRoleFilter,
   GuarantorFilter,
   // Reset Filters
   ElectionCommitteeFilter,

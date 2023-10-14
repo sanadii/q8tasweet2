@@ -44,7 +44,7 @@ const ActivitiesTab = ({ user }) => {
                                     <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Christi">
                                         <img src={avatar4} alt="" className="rounded-circle avatar-xs" />
                                     </Link>
-                                    <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Frank Hook">
+                                    <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Frole Hook">
                                         <img src={avatar3} alt="" className="rounded-circle avatar-xs" />
                                     </Link>
                                     <Link to="#" className="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title=" Ruby">

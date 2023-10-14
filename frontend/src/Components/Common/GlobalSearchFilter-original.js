@@ -403,7 +403,7 @@ const TicketsListGlobalFilter = () => {
     );
 };
 
-const NFTRankingGlobalFilter = () => {
+const NFTRoleingGlobalFilter = () => {
     return (
         <React.Fragment>
             <Col xxl={2} sm={4} className="ms-auto">
@@ -534,7 +534,7 @@ export {
     CryptoOrdersGlobalFilter,
     InvoiceListGlobalSearch,
     TicketsListGlobalFilter,
-    NFTRankingGlobalFilter,
+    NFTRoleingGlobalFilter,
     TaskListGlobalFilter,
     LeadsGlobalFilter
 };

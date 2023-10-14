@@ -78,7 +78,7 @@ class CampaignElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
         return {"election_" + key: value for key, value in representation.items()}
 
 
-class CampaignCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class campaignCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     class Meta:
         model = Candidates
         fields = "__all__"
@@ -95,7 +95,7 @@ class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     class Meta:
         model = CampaignMembers
-        fields = ["id", "user", "user_details", "campaign", "rank", "supervisor", "committee", "notes", "phone", "status"]
+        fields = ["id", "user", "user_details", "campaign", "role", "supervisor", "committee", "notes", "phone", "status"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -111,7 +111,7 @@ class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     class Meta:
         model = CampaignMembers
-        fields = ["id", "user", "user_details", "campaign", "rank", "supervisor", "committee", "notes", "phone", "status"]
+        fields = ["id", "user", "user_details", "campaign", "role", "supervisor", "committee", "notes", "phone", "status"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -122,17 +122,17 @@ class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
             user = instance.user
             data['fullName'] = f"{user.first_name} {user.last_name}"
             data['user_details'] = UserSerializer(user).data
-            rank = int(data.get("rank", 0))
+            role = int(data.get("role", 0))
 
-            if rank >= 3:
-                # Filter the members based on the rank logic
+            if role >= 3:
+                # Filter the members based on the role logic
                 # Note: The below is a simple example, you might need to adjust based on your actual needs
                 queryset = CampaignMembers.objects.select_related('user').filter(campaign_id=instance.campaign_id)
 
-                if rank == 3:
+                if role == 3:
                     # Get members whose supervisor is the current member's ID.
                     members = queryset.filter(Q(id=current_user_id) | Q(supervisor=current_user_id))
-                else:  # rank > 3
+                else:  # role > 3
                     # Get the current member and their supervisor.
                     supervisor_id = data["supervisor"]
                     members = queryset.filter(Q(id=current_user_id) | Q(id=supervisor_id))

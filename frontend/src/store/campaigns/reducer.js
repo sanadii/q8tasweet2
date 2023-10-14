@@ -53,7 +53,7 @@ const IntialState = {
   campaignElectionCandidates: [],
   campaignElectionCommittees: [],
   campaignAttendees: [],
-  campaignRanks: [],
+  campaignRoles: [],
 };
 
 const Campaigns = (state = IntialState, action) => {
@@ -73,7 +73,7 @@ const Campaigns = (state = IntialState, action) => {
             currentCampaignMember: action.payload.data.currentCampaignMember,
 
             campaignDetails: action.payload.data.campaignDetails,
-            campaignRanks: action.payload.data.campaignRanks,
+            campaignRoles: action.payload.data.campaignRoles,
             campaignMembers: action.payload.data.campaignMembers,
             campaignGuarantees: action.payload.data.campaignGuarantees,
 

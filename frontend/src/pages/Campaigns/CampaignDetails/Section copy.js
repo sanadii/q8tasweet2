@@ -12,7 +12,7 @@ import SwiperCore, { Autoplay } from "swiper";
 
 // Components & Hooks
 import { AvatarMedium, ImageCampaignBackground } from "../../../Components/Common";
-import { MemberRankOptions } from "../../../Components/constants";
+import { MemberRoleOptions } from "../../../Components/constants";
 import useUserRoles from "../../../Components/Hooks/useUserRoles";
 import usePermission from "../../../Components/Hooks/usePermission";
 
@@ -66,9 +66,9 @@ const Section = ({
   const [activeTab, setActiveTab] = useState("1");
   const [activityTab, setActivityTab] = useState("1");
 
-  const rankId = currentCampaignMember.rank;
-  const currentCampaignMemberRank = MemberRankOptions.find(
-    (option) => option.id === rankId
+  const roleId = currentCampaignMember.role;
+  const currentCampaignMemberRole = MemberRoleOptions.find(
+    (option) => option.id === roleId
   );
 
   const toggleTab = (tab) => {

@@ -79,7 +79,7 @@ export const GET_CAMPAIGN_DETAILS = "/campaigns/getCampaignDetails";
 export const ADD_NEW_CAMPAIGN = "/campaigns/addNewCampaign";
 export const UPDATE_CAMPAIGN = "/campaigns/updateCampaign";
 export const DELETE_CAMPAIGN = "/campaigns/deleteCampaign";
-// export const GET_CAMPAIGN_CANDIDATES = "/campaigns/getCampaignCandidates";
+// export const GET_CAMPAIGN_CANDIDATES = "/campaigns/getcampaignCandidates";
 
 // Campaign Members
 export const GET_ALL_CAMPAIGN_MEMBERS = "/campaigns/getElectionMembers";

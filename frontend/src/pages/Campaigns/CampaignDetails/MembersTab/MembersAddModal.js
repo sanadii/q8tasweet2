@@ -57,7 +57,7 @@ const MembersAddModal = () => {
   }, [campaignElectionCommittees]);
 
   const supervisorMembers = campaignMembers.filter(
-    (member) => member.rank === 3
+    (member) => member.role === 3
   );
 
   return (
@@ -129,7 +129,7 @@ const MembersAddModal = () => {
                       className="btn btn-light btn-sm"
                       id="add-btn"
                     >
-                      أضف
+                      إضافة
                     </button>
                   )}
                 </div>

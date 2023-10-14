@@ -40,7 +40,7 @@ import Dropzone from "react-dropzone";
 import {
   StatusOptions,
   PriorityOptions,
-  RankOptions,
+  RoleOptions,
   ElectionTypeOptions,
   ElectionResultOptions,
   TagOptions,

@@ -10,5 +10,5 @@ export { default as CategoryHooks } from "./CategoryHooks";
 
 // Campaigns
 
-export { useSupervisorMembers, useCampaignRanks } from "./CampaignHooks";
+export { useSupervisorMembers, useCampaignRoles } from "./CampaignHooks";
 

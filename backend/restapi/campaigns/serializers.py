@@ -81,7 +81,7 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignMembers
-        fields = ["id", "user", "campaign", "rank", "supervisor", "committee", 
+        fields = ["id", "user", "campaign", "role", "supervisor", "committee", 
                   "civil", "phone", "notes", "status", "fullName"]
 
     def get_fullName(self, obj):
@@ -95,12 +95,12 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
         if current_user.is_staff:
             return rep
 
-        rank = int(rep.get("rank", 0))
+        role = int(rep.get("role", 0))
         
-        if rank == 3:
+        if role == 3:
             if not (rep["id"] == instance.id or rep["supervisor"] == instance.id):
                 return {}
-        elif rank > 3:
+        elif role > 3:
             supervisor_id = rep.get("supervisor")
             if not (rep["id"] == instance.id or rep["id"] == supervisor_id):
                 return {}
@@ -108,13 +108,29 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
         return rep
 
 
-class CampaignGuaranteesSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    """ Serializer for the CampaignGuarantees model. """
-    admin_serializer_classes = (TrackMixin,)
+class CampaignGuaranteesSerializer(serializers.ModelSerializer):
+
+    # get the data from Electors Model Directly
+    full_name = serializers.CharField(source='civil.full_name', default="Not Found", read_only=True)
+    gender = serializers.IntegerField(source='civil.gender', default="Not Found", read_only=True)
+    membership_no = serializers.CharField(source='civil.membership_no', default="Not Found", read_only=True)
+    box_no = serializers.CharField(source='civil.box_no', default="Not Found", read_only=True)
+    enrollment_date = serializers.DateField(source='civil.enrollment_date', default=None, read_only=True)
+    relationship = serializers.CharField(source='civil.relationship', default="Not Found", read_only=True)
+    elector_notes = serializers.CharField(source='civil.notes', default="Not Found", read_only=True)
+    attended = serializers.SerializerMethodField()
 
     class Meta:
         model = CampaignGuarantees
-        fields = ["id", "campaign", "member", "civil", "phone", "notes", "status"]
+        fields = [
+            "id", "campaign", "member",
+            "civil", "full_name", "gender", "attended",
+            "phone", "notes", "status",
+            "membership_no", "box_no", "enrollment_date", "relationship", "elector_notes",
+            ]
+
+    def get_attended(self, obj):
+        return CampaignAttendees.objects.filter(elector=obj.civil).exists()
 
     def create(self, validated_data):
         return super().create(validated_data)

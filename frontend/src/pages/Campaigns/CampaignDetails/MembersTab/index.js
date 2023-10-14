@@ -13,7 +13,7 @@ import { usePermission, useDelete } from "Components/Hooks";
 import {
   Id,
   Name,
-  Rank,
+  Role,
   Team,
   Guarantees,
   Attendees,
@@ -36,7 +36,7 @@ const MembersTab = () => {
     campaignGuarantees,
     campaignAttendees,
     campaignMembers,
-    campaignRanks,
+    campaignRoles,
     campaignElectionCommittees,
     isCampaignMemberSuccess,
     error
@@ -65,12 +65,13 @@ const MembersTab = () => {
   // Filters -------------------------
   const [filters, setFilters] = useState({
     global: "",
-    rank: null,
+    role: null,
   });
 
-  const matchingRank = campaignRanks.find(rank => rank.id === filters.rank);
-  const activeRole = matchingRank?.role;
-
+  const matchingRole = campaignRoles.find(role => role.id === filters.role);
+  const activeRole = matchingRole?.role;
+  console.log("matchingRole", matchingRole)
+  console.log("activeRole", activeRole)
   // Toggle
   const toggle = useCallback(() => {
     setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
@@ -91,7 +92,7 @@ const MembersTab = () => {
         campaignId: campaignMember.campaign,
         userId: campaignMember.user.id,
         name: campaignMember.user.name,
-        rank: campaignMember.rank,
+        role: campaignMember.role,
         supervisor: campaignMember.supervisor,
         committee: campaignMember.committee,
         phone: campaignMember.phone,
@@ -118,37 +119,37 @@ const MembersTab = () => {
     },
     {
       Header: "الرتبة",
-      accessor: "rank",
-      Cell: (cellProps) => <Rank cellProps={cellProps} campaignRanks={campaignRanks} />
+      accessor: "role",
+      Cell: (cellProps) => <Role cellProps={cellProps} campaignRoles={campaignRoles} />
     },
     {
       Header: "الفريق",
-      ShowTo: ["CampaignCandidate", "CampaignSupervisor"],
-      Cell: () => <Team campaignMembers={campaignMembers} />
+      ShowTo: ["campaignCandidate", "campaignSupervisor"],
+      Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
     },
     {
       Header: "المضامين",
-      ShowTo: ["CampaignAdmin", "CampaigaignCandidateAdmin", "CampaignCandidate", "CampaignSupervisor", "CampaignGuarantor"],
+      ShowTo: ["campaignAdmin", "CampaigaigncandidateAdmin", "campaignCandidate", "campaignSupervisor", "campaignGuarantor"],
       Cell: (cellProps) => <Guarantees cellProps={cellProps} campaignGuarantees={campaignGuarantees} />
     },
     {
       Header: "اللجنة",
-      ShowTo: ["CampaignAttendant", "CampaignSorter"],
+      ShowTo: ["campaignAttendant", "campaignSorter"],
       Cell: (cellProps) => <Committee cellProps={cellProps} campaignElectionCommittees={campaignElectionCommittees} />
     },
     {
       Header: "الحضور",
-      ShowTo: ["CampaignAttendant"],
+      ShowTo: ["campaignAttendant"],
       Cell: (cellProps) => <Attendees cellProps={cellProps} campaignAttendees={campaignAttendees} />
     },
     {
       Header: "تم الفرز",
-      ShowTo: ["CampaignSorter"],
+      ShowTo: ["campaignSorter"],
       Cell: (cellProps) => <Sorted cellProps={cellProps} />
     },
     {
       Header: "المشرف",
-      ShowTo: ["CampaignGuarantor", "CampaignAttendant", "CampaignSorter"],
+      ShowTo: ["campaignGuarantor", "campaignAttendant", "campaignSorter"],
       Cell: (cellProps) => <Supervisor campaignMembers={campaignMembers} cellProps={cellProps} />
     },
     {
@@ -157,7 +158,8 @@ const MembersTab = () => {
         <Actions
           cellProps={cellProps}
           handleCampaignMemberClick={handleCampaignMemberClick}
-          onClickDelete={onClickDelete} isAdmin={isAdmin}
+          onClickDelete={onClickDelete}
+          isAdmin={isAdmin}
         />
       )
     }
@@ -174,9 +176,9 @@ const MembersTab = () => {
   const campaignMemberList = campaignMembers.filter(campaignMember => {
     let isValid = true;
 
-    if (filters.rank !== null) {
-      isValid = isValid && campaignMember.rank === filters.rank;
-      console.log("RANK?", filters.rank)
+    if (filters.role !== null) {
+      isValid = isValid && campaignMember.role === filters.role;
+      console.log("role?", filters.role)
     }
 
     if (filters.global) {
@@ -230,7 +232,7 @@ const MembersTab = () => {
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
 
-                    isMemberRankFilter={true}
+                    isMemberRoleFilter={true}
                     isResetFilters={true}
 
                     // Settings

@@ -8,7 +8,7 @@ import { userSelector, campaignSelector } from 'Selectors';
 const useUserRoles = () => {
     const { currentUser } = useSelector(userSelector);
     const { currentCampaignModerator, currentCampaignMember } = useSelector(campaignSelector);
-    const rank = currentCampaignMember?.rank;
+    const role = currentCampaignMember?.role;
 
     // If user is an admin, don't evaluate subscriber roles
     if (currentUser?.isStaff === true) {
@@ -21,15 +21,15 @@ const useUserRoles = () => {
     return {
         isAdmin: false,
         isSubscriber: true,
-        isModerator: rank === 10,
-        isParty: rank === 1,
-        isCandidate: rank === 2,
-        isSupervisor: rank === 3,
-        isGuarantor: rank === 4,
-        isAttendant: rank === 5,
-        isSorter: rank === 6,
-        isBelowSupervisor: rank > 3,
-        isAttendantOrSorter: [5, 6].includes(rank),
+        isModerator: role === 10,
+        isParty: role === 1,
+        isCandidate: role === 2,
+        isSupervisor: role === 3,
+        isGuarantor: role === 4,
+        isAttendant: role === 5,
+        isSorter: role === 6,
+        isBelowSupervisor: role > 3,
+        isAttendantOrSorter: [5, 6].includes(role),
     };
 }
 

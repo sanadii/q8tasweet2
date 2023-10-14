@@ -27,7 +27,7 @@ from restapi.candidates.serializers import (
 from restapi.campaigns.serializers import (
     CampaignsSerializer,
     # CampaignElectionSerializer,
-    # CampaignCandidateSerializer,
+    # campaignCandidateSerializer,
     CampaignMembersSerializer,
     CampaignGuaranteesSerializer,
     CampaignDetailsSerializer,

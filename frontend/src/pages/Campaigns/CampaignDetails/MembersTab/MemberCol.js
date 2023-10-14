@@ -1,8 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { useSelector } from "react-redux";
-import { categorySelector } from 'Selectors';
-
-import { Link } from "react-router-dom";
+import React from "react";
 
 const Id = (cellProps) => {
     return (
@@ -26,39 +22,41 @@ const Name = (cellProps) => {
     );
 };
 
-const Rank = ({ cellProps, campaignRanks }) => {
-    const rankId = cellProps.row.original.rank;
-    const rank = campaignRanks.find((option) => option.id === rankId);
+const Role = ({ cellProps, campaignRoles }) => {
+    const roleId = cellProps.row.original.role;
+    const role = campaignRoles.find((option) => option.id === roleId);
 
     return (
         <p className="text-success">
-            <strong>{rank ? rank.name : "غير معرف"}</strong>
+            <strong>{role ? role.name : "غير معرف"}</strong>
         </p>
     );
 }
 
-const Team = ({ campaignMembers }) => {
-    return (
-        <p>{campaignMembers.length}</p>
-    );
-};
-const Guarantees = ({ cellProps, campaignGuarantees }) => {
-    const getGuaranteeCountForMember = useCallback((memberId) => {
-        return campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
-    }, [campaignGuarantees]);
+const Team = ({ cellProps, campaignMembers }) => {
+    const memberId = cellProps.row.original.id;
+    const teamCountForMember = campaignMembers.filter(member => member.supervisor === memberId).length;
 
     return (
-        <p>{getGuaranteeCountForMember(cellProps.row.original.id)}</p>
+        <p>{teamCountForMember}</p>
+    );
+};
+
+const Guarantees = ({ cellProps, campaignGuarantees }) => {
+    const memberId = cellProps.row.original.id;
+    const guaranteeCountForMember = campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
+
+    return (
+        <p>{guaranteeCountForMember}</p>
     );
 };
 
 const Attendees = ({ cellProps, campaignAttendees }) => {
-    const getAttendeeCountForMember = useCallback((memberId) => {
-        return campaignAttendees.filter(attendee => attendee.member === memberId).length;
-    }, [campaignAttendees]);
+    const userId = cellProps.row.original.user;
+    const attendeeCountForMember = campaignAttendees.filter(attendee => attendee.member === userId).length;
 
     return (
-        <p>{getAttendeeCountForMember(cellProps.row.original.id)}</p>
+        <p>{attendeeCountForMember}</p>
     );
 };
 
@@ -159,7 +157,7 @@ const Actions = (props) => {
 export {
     Id,
     Name,
-    Rank,
+    Role,
     Team,
     Guarantees,
     Attendees,

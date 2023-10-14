@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from restapi.helper.models_helper import TrackModel, TaskModel, RankOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
+from restapi.helper.models_helper import TrackModel, TaskModel, RoleOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
 from restapi.helper.validators import civil_validator, phone_validator, today
 
 class Campaigns(TrackModel, TaskModel):
@@ -30,7 +30,7 @@ class Campaigns(TrackModel, TaskModel):
 class CampaignMembers(TrackModel):
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_users')
     campaign = models.ForeignKey('Campaigns', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members')
-    rank = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members_by_rank')
+    role = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members_by_role')
     supervisor = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_supervisors')
     committee = models.ForeignKey('ElectionCommittees', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_members')
     civil = models.CharField(max_length=12, blank=True, null=True, validators=[civil_validator])

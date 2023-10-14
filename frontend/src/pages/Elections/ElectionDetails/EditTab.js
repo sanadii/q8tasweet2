@@ -20,7 +20,7 @@ import Select from "react-select";
 
 import Dropzone from "react-dropzone";
 
-import { StatusOptions, PriorityOptions, RankOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "../../../Components/constants";
+import { StatusOptions, PriorityOptions, RoleOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "../../../Components/constants";
 
 const EditTab = ({ election }) => {
   const dispatch = useDispatch();

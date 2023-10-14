@@ -9,7 +9,7 @@ import {
     PriorityFilter,
     ElectionCategoryFilter,
     CandidateGenderFilter,
-    MemberRankFilter,
+    MemberRoleFilter,
     GenderFilter,
     // AttendeeGenderFilter,
     GuaranteeStatusFilter,
@@ -24,7 +24,7 @@ const TableContainerFilters = ({
 
     // Tab Filters -------------------------
     isElectionCategoryFilter,
-    isCampaignRankFilter,
+    isCampaignRoleFilter,
 
     // Global Filter -------------------------
     isGlobalFilter,
@@ -35,7 +35,7 @@ const TableContainerFilters = ({
     isStatusFilter,
     isPriorityFilter,
     isCandidateGenderFilter,
-    isMemberRankFilter,
+    isMemberRoleFilter,
     isGenderFilter,
     isGuaranteeAttendanceFilter,
     isAttendeesGenderFilter,
@@ -89,8 +89,8 @@ const TableContainerFilters = ({
                                 setActiveTab={setActiveTab}
                             />
                         )}
-                        {isMemberRankFilter && (
-                            <MemberRankFilter
+                        {isMemberRoleFilter && (
+                            <MemberRoleFilter
                                 setFilters={setFilters}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}

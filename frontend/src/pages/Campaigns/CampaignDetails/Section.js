@@ -12,10 +12,10 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap
 import SwiperCore, { Autoplay } from "swiper";
 
 // Components & Hooks
-import { ImageMedium, ImageLarge, ImageCircle, ImageCampaignBackground } from "../../../Components/Common";
-import { MemberRankOptions } from "../../../Components/constants";
-import usePermission from "../../../Components/Hooks/usePermission";
-import Loader from "../../../Components/Common/Loader";
+import { ImageMedium, ImageLarge, ImageCircle, ImageCampaignBackground } from "Components/Common";
+import { MemberRoleOptions } from "Components/constants";
+import usePermission from "Components/Hooks/usePermission";
+import Loader from "Components/Common/Loader";
 
 // Tabs
 import OverviewTab from "./OverviewTab";

@@ -5,7 +5,7 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports 
-import { useUserRoles, useSupervisorMembers, useCampaignRanks } from "Components/Hooks";
+import { useUserRoles, useSupervisorMembers, useCampaignRoles } from "Components/Hooks";
 
 // Form validation imports
 import * as Yup from "yup";
@@ -14,144 +14,150 @@ import { useFormik } from "formik";
 // Reactstrap (UI) imports
 import { Col, Row, ModalBody, Label, Input, Form, FormFeedback } from "reactstrap";
 
-
-// TO DO
-// Get Available Groups to assign the RANK
-const MembersUpdateModal = ({
-  campaignMember,
-  setOnModalSubmit,
-}) => {
+const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   const dispatch = useDispatch();
-
   const { currentUser } = useSelector(userSelector);
   const {
     currentCampaignMember,
     campaignId,
     campaignMembers,
-    campaignRanks,
+    campaignRoles,
     campaignElectionCommittees
   } = useSelector(campaignSelector);
 
-  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+  const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
 
-  const [campaignCommitteeList, setElectionCommitteeList] =
-    useState(campaignElectionCommittees);
+  useEffect(() => {
+    setCampaignCommitteeList(campaignElectionCommittees);
+  }, [campaignElectionCommittees]);
 
-  useEffect(() => { setElectionCommitteeList(campaignElectionCommittees); }, [campaignElectionCommittees]);
+  const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
+  const roleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
 
-  const supervisorOptions = useSupervisorMembers(campaignRanks, campaignMembers);
-  const rankOptions = useCampaignRanks(campaignRanks, currentCampaignMember);
-  console.log("rankOptions:", rankOptions);
-  
-  // Check campaignRanks, if the rank role is either "CampaignGuarantor", "CampaignAttendant", "CampaignSorter", return true
-  const supervisedMember = useMemo(() => {
-    return campaignRanks
-      .filter(rank => ["CampaignGuarantor", "CampaignAttendant", "CampaignSorter"].includes(rank.role))
-      .map(rank => rank.id);
-  }, [campaignRanks]);
+  const { id, campaign, role, committee, supervisor, phone, notes } = campaignMember || {};
 
-  const { id, campaign, rank, committee, supervisor, phone, notes } = campaignMember || {};
-
-  // validation
   const validation = useFormik({
     enableReinitialize: true,
-
     initialValues: {
       id: id || "",
       campaign: campaignId || "",
-      rank: rank || "",
+      role: role || "",
       committee: committee || "",
       supervisor: supervisor || "",
       phone: phone || "",
       notes: notes || "",
     },
     validationSchema: Yup.object({
-      rank: Yup.number().integer().required("rank is required"),
+      role: Yup.number().integer().required("role is required"),
       supervisor: Yup.number().integer(),
       committee: Yup.number().integer(),
     }),
-
     onSubmit: (values) => {
-      const updatedCampaignMember = {
-        id: values.id,
+      dispatch(updateCampaignMember({
+        ...values,
         campaign: parseInt(values.campaign, 10),
-        rank: parseInt(values.rank, 10),
+        role: parseInt(values.role, 10),
         committee: parseInt(values.committee, 10),
-        supervisor: parseInt(values.supervisor, 10),
-        phone: values.phone,
-        notes: values.notes,
-      };
-      dispatch(updateCampaignMember(updatedCampaignMember));
+        supervisor: parseInt(values.supervisor, 10)
+      }));
       validation.resetForm();
     },
   });
+  
+  const getRoleString = useCallback((roleId, roles) => {
+    const roleObj = roles.find(role => role.id.toString() === roleId.toString());
+    return roleObj ? roleObj.role : null;
+  }, [campaignRoles]);
 
-  // Submit
-  const handleUpdateButton = useCallback(() => {
-    validation.submitForm();
-  }, [validation]);
+  const [selectedRole, setSelectedRole] = useState(validation.values.role);
+
+  useEffect(() => {
+    setSelectedRole(validation.values.role);
+  }, [validation.values.role]);
+
+  const currentRoleString = getRoleString(selectedRole, campaignRoles);
+
+  const handleUpdateButton = useCallback(() => validation.submitForm(), [validation]);
 
   useEffect(() => {
     setOnModalSubmit(() => handleUpdateButton);
+    return () => setOnModalSubmit(null);
+  }, [handleUpdateButton]);
 
-    return () => setOnModalSubmit(null); // Cleanup on unmount
-  }, []);
+  // Field Definition Builder
+  const buildFields = () => {
+    const isCurrentUserCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
 
-  let fields = [];
+    const defaultFields = [
+      isCurrentUserCampaignMember && {
+        id: "role-field",
+        label: "Role",
+        type: "select",
+        options: campaignRoles.map(role => ({
+          id: role.id,
+          label: role.name,
+          role: role.role,
+          value: role.id
+        })),
+        name: "role",
+      },
+      {
+        id: "phone-field",
+        label: "Mobile",
+        type: "text",
+        name: "phone"
+      },
+      {
+        id: "notes-field",
+        label: "Notes",
+        type: "textarea",
+        name: "notes"
+      }
+    ];
 
-  // Conditionally add rank if the campaignMember exists and is not the currentUser.
-  if (campaignMember && currentUser.id !== campaignMember.userId) {
-    const filteredRankOptions = campaignRanks.filter(
-      (option) => option.id > currentCampaignMember.rank
-    );
+    const conditionalFields = [
+      {
+        condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(currentRoleString),
+        field: {
+          id: "supervisor-field",
+          label: "المشرف",
+          type: "select",
+          options: supervisorOptions.map(supervisor => ({
+            id: supervisor.id,
+            label: supervisor.fullName,
+            value: supervisor.id
+          })),
+          name: "supervisor",
+          valueAccessor: (item) => item.fullName,
+        }
+      },
+      {
+        condition: ["campaignAttendant", "campaignSorter"].includes(currentRoleString),
+        field: {
+          id: "committee-field",
+          label: "Committee",
+          type: "select",
+          options: campaignCommitteeList.map(committee => ({
+            id: committee.id,
+            label: committee.name,
+            value: committee.id
+          })),
 
-    fields.push({
-      id: "rank-field",
-      label: "Rank",
-      type: "select",
-      options: rankOptions,
-      name: "rank",
-    });
-  }
+          name: "committee",
+          valueAccessor: (item) => item.name,
+        }
+      }
+    ];
 
-  // Mobile field is always shown.
-  fields.push({
-    id: "phone-field",
-    label: "Mobile",
-    type: "text",
-    name: "phone",
-  });
+    const filteredFields = conditionalFields
+      .filter(({ condition }) => condition)
+      .map(({ field }) => field);
 
-  // supervisedMemberRanksConditionally add supervisor if rank is above 3.
-  if (validation.values.rank > 3) {
-    fields.push({
-      id: "supervisor-field",
-      label: "المشرف",
-      type: "select",
-      options: supervisorOptions,
-      name: "supervisor",
-      valueAccessor: (item) => item.fullName,
-    });
-  }
+    return [...defaultFields, ...filteredFields].filter(Boolean);
+  };
 
-  // Conditionally add committee if rank is above 4.
-  if (validation.values.rank > 4) {
-    fields.push({
-      id: "committee-field",
-      label: "Committee",
-      type: "select",
-      options: campaignCommitteeList,
-      name: "committee",
-      valueAccessor: (item) => item.name,
-    });
-  }
-  // Notes field is always shown.
-  fields.push({
-    id: "notes-field",
-    label: "Notes",
-    type: "textarea",
-    name: "notes",
-  });
+  const fields = useMemo(buildFields, [currentRoleString, campaignCommitteeList, supervisorOptions, roleOptions]);
+
 
   return (
     <Form
@@ -159,7 +165,6 @@ const MembersUpdateModal = ({
       onSubmit={(e) => {
         e.preventDefault();
         validation.handleSubmit();
-        return false;
       }}
     >
       <ModalBody className="vstack gap-3">
@@ -182,51 +187,37 @@ const MembersUpdateModal = ({
             <Col lg={9}>
               {field.type === "textarea" ? (
                 <textarea
-                  name={field.name}
-                  id={field.id}
+                  {...field}
                   className="form-control"
                   placeholder={`Enter ${field.label}`}
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values[field.name] || ""}
                   invalid={
-                    validation.touched[field.name] &&
-                      validation.errors[field.name]
-                      ? true
-                      : false
+                    validation.touched[field.name] && validation.errors[field.name]
                   }
                 />
               ) : (
                 <Input
-                  name={field.name}
-                  type={field.type}
+                  {...field}
                   className={field.type === "select" ? "form-select" : ""}
-                  id={field.id}
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values[field.name] || ""}
                 >
-                  {field.type === "select" && (
-                    <option value="">-- Select --</option>
-                  )}
-
-                  {field.options &&
-                    field.options.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {field.valueAccessor
-                          ? field.valueAccessor(option)
-                          : option.name}
-                      </option>
-                    ))}
+                  {field.type === "select" && <option value="">-- Select --</option>}
+                  {field.options && field.options.map((option) => (
+                    <option key={option.id} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </Input>
               )}
-
-              {validation.touched[field.name] &&
-                validation.errors[field.name] ? (
+              {validation.touched[field.name] && validation.errors[field.name] && (
                 <FormFeedback type="invalid">
                   {validation.errors[field.name]}
                 </FormFeedback>
-              ) : null}
+              )}
             </Col>
           </Row>
         ))}

@@ -11,7 +11,7 @@ import { campaignSelector } from 'Selectors';
 
 // Components, Constants & Hooks
 import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../../Components/Common";
-import { MemberRankOptions } from "../../../../Components/constants";
+import { MemberRoleOptions } from "../../../../Components/constants";
 
 // UI & Utilities
 import { Card, CardBody, CardHeader, Col, Row, TabContent, Table, UncontrolledCollapse } from "reactstrap";

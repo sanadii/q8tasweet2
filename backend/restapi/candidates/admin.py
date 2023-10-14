@@ -20,9 +20,9 @@ class CandidatesAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(Candidates, CandidatesAdmin)
-class CandidateAdminSite(AdminSite):
+class candidateAdminSite(AdminSite):
     site_header = 'Candidates Administration'
     site_title = 'Candidates Admin'
     index_title = 'Candidates Admin'
 
-candidate_admin_site = CandidateAdminSite(name='candidate')
+candidate_admin_site = candidateAdminSite(name='candidate')

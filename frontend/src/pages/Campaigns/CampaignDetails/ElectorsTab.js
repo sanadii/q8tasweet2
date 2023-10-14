@@ -48,7 +48,7 @@ export const ElectorsTab = () => {
   const [campaignGuarantee, setCampaignGuarantee] = useState(null); // initialized to null
 
   const guarantorMembers = campaignMembers.filter(
-    (member) => member.rank === 3 || member.rank === 4
+    (member) => member.role === 3 || member.role === 4
   );
 
   // Modal Constants
@@ -142,14 +142,14 @@ export const ElectorsTab = () => {
       },
       {
         Header:
-          currentCampaignMember.rank >= 2 && currentCampaignMember.rank <= 4
+          currentCampaignMember.role >= 2 && currentCampaignMember.role <= 4
             ? "Add Guarantee"
             : "Add Attendee",
         Cell: (cellProps) => {
           return (
             <div className="flex-shrink-0">
-              {currentCampaignMember.rank >= 2 &&
-                currentCampaignMember.rank <= 4 ? (
+              {currentCampaignMember.role >= 2 &&
+                currentCampaignMember.role <= 4 ? (
                 campaignGuarantees.some(
                   (item) => item.civil === cellProps.row.original.civil
                 ) ? (
@@ -209,7 +209,7 @@ export const ElectorsTab = () => {
       campaignGuarantees,
       currentCampaignMember.committee,
       currentCampaignMember.id,
-      currentCampaignMember.rank,
+      currentCampaignMember.role,
       currentCampaignMember.user.id,
       dispatch,
       electors,

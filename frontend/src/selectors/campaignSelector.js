@@ -25,7 +25,7 @@ export const campaignSelector = createSelector(
     currentCampaignMember: campaignsState.currentCampaignMember,
     electors: campaignsState.electors,
 
-    campaignRanks: campaignsState.campaignRanks,
+    campaignRoles: campaignsState.campaignRoles,
 
 
   })

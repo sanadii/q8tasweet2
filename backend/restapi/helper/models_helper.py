@@ -58,7 +58,7 @@ class GuaranteeStatusOptions(models.IntegerChoices):
     NOT_CONFIRMED = 4, 'غير مؤكد'
     NOT_KNOWN = 5, 'غير معروف'
         
-class RankOptions(models.IntegerChoices):
+class RoleOptions(models.IntegerChoices):
     PARTY = 1, 'قائمة'
     CANDIDATE = 2, 'مرشح'
     SUPERVISOR = 3, 'مشرف'

@@ -9,7 +9,7 @@ const TableContainer = ({
   // Global Header -------------------------
   isTableContainerFilter,
   isElectionCategoryFilter,
-  isCampaignRankFilter,
+  isCampaignRoleFilter,
 
   // Constants, going where?
   campaignMember,
@@ -23,7 +23,7 @@ const TableContainer = ({
   isSearchFilter,
   isStatusFilter,
   isPriorityFilter,
-  isMemberRankFilter,
+  isMemberRoleFilter,
   isCandidateGenderFilter,
   isGenderFilter,
   isGuaranteeAttendanceFilter,
@@ -153,7 +153,7 @@ const TableContainer = ({
             isGlobalFilter={isGlobalFilter}
             // Upper Filters -------------------------
             isElectionCategoryFilter={isElectionCategoryFilter}
-            isCampaignRankFilter={isCampaignRankFilter}
+            isCampaignRoleFilter={isCampaignRoleFilter}
 
             filters={filters}
             setFilters={setFilters}
@@ -167,7 +167,7 @@ const TableContainer = ({
             isGenderFilter={isGenderFilter}
             isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
             isAttendeesGenderFilter={isAttendeesGenderFilter}
-            isMemberRankFilter={isMemberRankFilter}
+            isMemberRoleFilter={isMemberRoleFilter}
             isCommitteeFilter={isCommitteeFilter}
             isGuaranteeStatusFilter={isGuaranteeStatusFilter}
             isGuarantorFilter={isGuarantorFilter}

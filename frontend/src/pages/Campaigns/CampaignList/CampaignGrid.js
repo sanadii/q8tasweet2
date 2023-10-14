@@ -24,7 +24,7 @@ const CampaignGrid = () => {
   const [campaignList, setCampaignList] = useState(campaigns);
   const [campaign, setCampaign] = useState([]);
   const [category, setCategory] = useState([]);
-  const [campaignCandidates, setCampaignCandidates] = useState([]);
+  const [campaignCandidates, setcampaignCandidates] = useState([]);
   const [userName, setUserName] = useState("Admin");
   const [userId, setUserId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);

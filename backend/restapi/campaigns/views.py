@@ -76,7 +76,7 @@ class GetCampaignDetails(APIView):
         election_candidates = ElectionCandidates.objects.filter(election=election).select_related('election')
         election_committees = ElectionCommittees.objects.filter(election=election).select_related('election')
 
-        campaign_ranks = Group.objects.filter(Q(category=4))
+        campaign_roles = Group.objects.filter(Q(category=4))
 
         return Response({
             "data": {
@@ -88,13 +88,13 @@ class GetCampaignDetails(APIView):
                 
                 "campaignElectionCandidates": self.get_campaign_election_candidates(election_candidates, context),
                 "campaignElectionCommittees": self.get_campaign_election_committees(election_committees, context),
-                "campaign_ranks": self.get_campaign_ranks(campaign_ranks, context),
+                "campaign_roles": self.get_campaign_roles(campaign_roles, context),
             },
             "code": 200
         })
 
-    def get_campaign_ranks(self, campaign_ranks, context):
-        return GroupSerializer(campaign_ranks, many=True, context=context).data
+    def get_campaign_roles(self, campaign_roles, context):
+        return GroupSerializer(campaign_roles, many=True, context=context).data
 
     def get_current_campaign_member(self, campaign_id, user_id, context):
         current_campaign_member_query = CampaignMembers.objects.select_related('user').filter(campaign_id=campaign_id, user_id=user_id).first()

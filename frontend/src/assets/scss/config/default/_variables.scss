@@ -223,6 +223,7 @@ $success:       $green;
 $info:          $cyan;
 $warning:       $yellow;
 $danger:        $red;
+$pink:          $pink;
 $light:         $gray-100;
 $dark:          $gray-900;
 // scss-docs-end theme-color-variables
@@ -235,6 +236,7 @@ $theme-colors: (
   "info":       $info,
   "warning":    $warning,
   "danger":     $danger,
+  "pink":       $pink,
   "light":      $light,
   "dark":       $dark
 );
@@ -853,6 +855,7 @@ $table-variants: (
   "info":       shift-color($info, $table-bg-scale),
   "warning":    shift-color($warning, $table-bg-scale),
   "danger":     shift-color($danger, $table-bg-scale),
+  "pink":     shift-color($pink, $table-bg-scale),
   "light":      $light,
   "dark":       $dark,
 );

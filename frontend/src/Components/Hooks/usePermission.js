@@ -23,7 +23,7 @@ const usePermission = () => {
         if (isEditor) return currentCampaignEditor.permissions;
         if (isModerator) return currentCampaignModerator.permissions;
         if (isContributor) return currentCampaignContributor.permissions;
-        return currentCampaignMember.rank.permissions;
+        return currentCampaignMember.role.permissions;
     };
 
     const permissions = getPermissions();

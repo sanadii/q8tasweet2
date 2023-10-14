@@ -407,7 +407,7 @@ const Navdata = () => {
                         { id: 4, label: "Item Details", link: "/apps-nft-item-details" },
                         { id: 5, label: "Collections", link: "/apps-nft-collections" },
                         { id: 6, label: "Creators", link: "/apps-nft-creators" },
-                        { id: 7, label: "Ranking", link: "/apps-nft-ranking" },
+                        { id: 7, label: "Roleing", link: "/apps-nft-roleing" },
                         { id: 8, label: "Wallet Connect", link: "/apps-nft-wallet" },
                         { id: 9, label: "Create NFT", link: "/apps-nft-create" },
                     ]

@@ -10,7 +10,7 @@ const MembersViewModal = ({ campaignMember }) => {
   const campaignMembers = Campaigns?.campaignMembers || [];
   const campaignElectionCommittees = Campaigns?.campaignElectionCommittees || [];
 
-  const supervisorMembers = campaignMembers.filter(member => member.rank === 3);
+  const supervisorMembers = campaignMembers.filter(member => member.role === 3);
 
   const displayField = (label, value) => {
     if (!value) return null;
@@ -34,10 +34,10 @@ const MembersViewModal = ({ campaignMember }) => {
           </h4>
         </Row>
 
-        {displayField("Rank", campaignMember?.rank)}
+        {displayField("Role", campaignMember?.role)}
         {displayField("Mobile", campaignMember?.phone)}
-        {campaignMember?.rank > 3 && displayField("Supervisor", supervisorMembers.find(supervisor => supervisor.id === campaignMember.supervisor)?.user?.name)}
-        {campaignMember?.rank > 4 && displayField("Committee", campaignElectionCommittees.find(committee => committee.id === campaignMember.committee)?.name)}
+        {campaignMember?.role > 3 && displayField("Supervisor", supervisorMembers.find(supervisor => supervisor.id === campaignMember.supervisor)?.user?.name)}
+        {campaignMember?.role > 4 && displayField("Committee", campaignElectionCommittees.find(committee => committee.id === campaignMember.committee)?.name)}
         {displayField("Notes", campaignMember?.notes)}
       </ModalBody>
     </div>

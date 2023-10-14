@@ -156,15 +156,15 @@ class GetCampaignDetails(APIView):
             }
 
             # TODO: add admin to work here
-            # Filter the campaign members based on the current user's rank
-            rank = int(current_campaign_member_data.get("rank", 0))  # Safely get and convert rank
-            if rank < 3:
-                # If the rank is less than 3, show all members. So, no changes needed.
+            # Filter the campaign members based on the current user's role
+            role = int(current_campaign_member_data.get("role", 0))  # Safely get and convert role
+            if role < 3:
+                # If the role is less than 3, show all members. So, no changes needed.
                 pass
-            elif rank == 3:
+            elif role == 3:
                 # Show only the current member and members whose supervisor is the current member's ID.
                 campaign_members = [member for member in campaign_members if member["id"] == current_campaign_member_data["id"] or member["supervisor"] == current_campaign_member_data["id"]]
-            else: # rank > 3
+            else: # role > 3
                 # Show only the current member and their supervisor.
                 supervisor_id = current_campaign_member_data["supervisor"]
                 campaign_members = [member for member in campaign_members if member["id"] == current_campaign_member_data["id"] or member["id"] == supervisor_id]
@@ -294,7 +294,7 @@ class AddNewCampaignMember(APIView):
             "campaign": campaign.id,
             # I'm assuming these fields are in the CampaignMembers model. 
             # If they aren't, you can adjust accordingly.
-            "rank": campaign_member.rank,
+            "role": campaign_member.role,
             "supervisor": campaign_member.supervisor,
             "committee": campaign_member.committee,
             "notes": campaign_member.notes,
@@ -307,7 +307,7 @@ class AddNewCampaignMember(APIView):
 class UpdateCampaignMember(APIView):
     def patch(self, request, id):
         # Election Results
-        rank = request.data.get("rank")
+        role = request.data.get("role")
         supervisor = request.data.get("supervisor")
         committee = request.data.get("committee")
         phone = request.data.get("phone")
@@ -323,7 +323,7 @@ class UpdateCampaignMember(APIView):
         # Update the election candidate with the new data
 
         # Election Related Data
-        campaign_member.rank = rank
+        campaign_member.role = role
         if supervisor:
             try:
                 supervisor_instance = CampaignMembers.objects.get(id=supervisor)
@@ -351,7 +351,7 @@ class UpdateCampaignMember(APIView):
             "userId": campaign_member.user.id,          # Extracted from the campaign_member instance
 
             # Election Data
-            "rank": campaign_member.rank,
+            "role": campaign_member.role,
             "supervisor": campaign_member.supervisor.id if campaign_member.supervisor else None,
             "committee": campaign_member.committee.id if campaign_member.committee else None,
             "phone": campaign_member.phone,

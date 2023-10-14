@@ -5,7 +5,7 @@ import { updateCampaignMember } from "../../../store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // --------------- Component & Constants imports ---------------
-import { MemberRankOptions } from "../../../Components/constants";
+import { MemberRoleOptions } from "../../../Components/constants";
 
 // --------------- Form validation imports ---------------
 import * as Yup from "yup";
@@ -32,7 +32,7 @@ const EditTab = () => {
   }, [campaignElectionCommittees]);
 
   const supervisorMembers = campaignMembers.filter(
-    (member) => member.rank === 3
+    (member) => member.role === 3
   );
   const handleUpdateButton = () => {
     validation.submitForm();
@@ -46,7 +46,7 @@ const EditTab = () => {
       campaignId: (currentCampaignMember && currentCampaignMember.campaignId) || "",
       userId: (currentCampaignMember && currentCampaignMember.userId) || "",
       name: (currentCampaignMember && currentCampaignMember.name) || "",
-      rank: (currentCampaignMember && currentCampaignMember.rank) || 0,
+      role: (currentCampaignMember && currentCampaignMember.role) || 0,
       committee: (currentCampaignMember && currentCampaignMember.committee) || 0,
       supervisor: (currentCampaignMember && currentCampaignMember.supervisor) || 0,
       phone: (currentCampaignMember && currentCampaignMember.phone) || "",
@@ -55,7 +55,7 @@ const EditTab = () => {
     },
     validationSchema: Yup.object({
       status: Yup.number().integer().required("Status is required"),
-      rank: Yup.number().integer().required("rank is required"),
+      role: Yup.number().integer().required("role is required"),
       supervisor: Yup.number().integer().required("supervisor is required"),
       committee: Yup.number().integer().required("committee is required"),
     }),
@@ -63,7 +63,7 @@ const EditTab = () => {
     onSubmit: (values) => {
       const updatedCampaignMember = {
         id: values.id,
-        rank: parseInt(values.rank, 10),
+        role: parseInt(values.role, 10),
         committee: parseInt(values.committee, 10),
         supervisor: parseInt(values.supervisor, 10),
         phone: values.phone,
@@ -76,15 +76,15 @@ const EditTab = () => {
 
   let fields = [];
 
-  // Conditionally add rank if the currentCampaignMember exists and is not the currentUser.
+  // Conditionally add role if the currentCampaignMember exists and is not the currentUser.
 
 
   fields.push({
-    id: "rank-field",
-    label: "Rank",
+    id: "role-field",
+    label: "Role",
     type: "select",
-    options: MemberRankOptions,
-    name: "rank",
+    options: MemberRoleOptions,
+    name: "role",
   });
 
 
@@ -96,7 +96,7 @@ const EditTab = () => {
     name: "phone",
   });
 
-  // Conditionally add supervisor if rank is above 3.
+  // Conditionally add supervisor if role is above 3.
   fields.push({
     id: "supervisor-field",
     label: "Supervisor",
@@ -107,7 +107,7 @@ const EditTab = () => {
   });
 
 
-  // Conditionally add committee if rank is above 4.
+  // Conditionally add committee if role is above 4.
   fields.push({
     id: "committee-field",
     label: "Committee",

@@ -20,8 +20,8 @@ class CampaignsAdmin(admin.ModelAdmin):
     ]
 
 class CampaignMembersAdmin(admin.ModelAdmin):
-    def rank_display(self, obj):
-        rank_dict = {
+    def role_display(self, obj):
+        role_dict = {
             1: "Party",
             2: "Candidate",
             3: "Supervisor",
@@ -30,17 +30,17 @@ class CampaignMembersAdmin(admin.ModelAdmin):
             6: "Sorter",
             10: "Moderator",
         }
-        return rank_dict.get(obj.rank, "Unknown")
+        return role_dict.get(obj.role, "Unknown")
     
-    rank_display.short_description = 'Rank'
+    role_display.short_description = 'Role'
 
-    list_display = ['user', 'campaign', 'rank_display', 'supervisor', 'committee', 'civil', 'phone', 'status']
-    list_filter = ['campaign', 'rank']
+    list_display = ['user', 'campaign', 'role_display', 'supervisor', 'committee', 'civil', 'phone', 'status']
+    list_filter = ['campaign', 'role']
     search_fields = ['user__username', 'committee__name']  
     readonly_fields = ReadOnlyTrackFields
 
     fieldsets = [
-        ('Basic Information', {'fields': ['user', 'campaign', 'rank', 'supervisor', 'committee', 'civil', 'phone', 'notes', 'status']}),
+        ('Basic Information', {'fields': ['user', 'campaign', 'role', 'supervisor', 'committee', 'civil', 'phone', 'notes', 'status']}),
         TrackAdminFields
     ]
 
@@ -81,9 +81,9 @@ admin.site.register(CampaignAttendees, CampaignAttendeesAdmin)
 
 # campaign_admin_site = ElectionsAdminSite(name='campaign_admin')
 
-class CampaignAdminSite(AdminSite):
+class campaignAdminSite(AdminSite):
     site_header = 'Campaigns Administration'
     site_title = 'Campaigns Admin'
     index_title = 'Campaigns Admin'
 
-campaign_admin_site = CampaignAdminSite(name='campaign_admin')
+campaign_admin_site = campaignAdminSite(name='campaign_admin')

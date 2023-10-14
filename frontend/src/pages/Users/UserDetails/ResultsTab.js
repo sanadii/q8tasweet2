@@ -27,7 +27,7 @@ const ResultsTab = ({ user }) => {
                 <Table className="table-hover table-striped align-middle table-nowrap mb-0">
                   <thead>
                     <tr>
-                      <th scope="col">Rank</th>
+                      <th scope="col">Role</th>
                       <th scope="col">Name</th>
                       <th scope="col">Total</th>
                       <th scope="col">Com 1</th>

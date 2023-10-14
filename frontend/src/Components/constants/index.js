@@ -7,7 +7,7 @@ export * from './PriorityOptions';
 export * from './GenderOptions';
 
 // Member Options
-export * from './MemberRankOptions';
+export * from './MemberRoleOptions';
 export * from './MemberStatusOptions';
 
 export * from './ElectionTypes';

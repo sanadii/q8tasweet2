@@ -9,7 +9,7 @@ import { userSelector, campaignSelector } from 'Selectors';
 
 // Components, Constants & Hooks
 import usePermission from "Components/Hooks/usePermission";
-import { MemberRankOptions } from "Components/constants";
+import { MemberRoleOptions } from "Components/constants";
 import OverViewGuarantees from "./OverViewGuarantees";
 // import OverViewNotifications from "./Components/OverViewNotifications";
 
@@ -47,16 +47,16 @@ const OverviewTab = () => {
     }
   }
 
-  let rankName;
+  let roleName;
 
   if (isAdmin) {
-    rankName = "ADMIN";
+    roleName = "ADMIN";
   } else {
-    const rankObj = MemberRankOptions.find(
-      rank => rank.id === currentCampaignMember.rank
+    const roleObj = MemberRoleOptions.find(
+      role => role.id === currentCampaignMember.role
     );
 
-    rankName = rankObj ? rankObj.name : "DEFAULT_RANK"; // replace 'DEFAULT_RANK' with whatever default value you'd like
+    roleName = roleObj ? roleObj.name : "DEFAULT_role"; // replace 'DEFAULT_role' with whatever default value you'd like
   }
 
   const getGenderIcon = (gender) => {
@@ -113,7 +113,7 @@ const OverviewTab = () => {
                   <ul>
                     <li>الإسم: <strong>{currentCampaignMember.fullName}</strong></li>
                     <li>رمز المستخدم: <strong>{currentUser.id}</strong></li>
-                    <li>العضوية: <strong>{rankName}</strong></li>
+                    <li>العضوية: <strong>{roleName}</strong></li>
                     <li>رمز العضوية: <strong>{currentCampaignMember.id}</strong></li>
                     <li>اللجنة: <strong> {committeeName}</strong></li>
                   </ul>

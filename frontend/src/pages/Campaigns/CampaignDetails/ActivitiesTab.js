@@ -116,7 +116,7 @@ const ActivitiesTab = () => {
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
                     title=""
-                    data-bs-original-title="Frank Hook"
+                    data-bs-original-title="Frole Hook"
                   >
                     <img
                       src={avatar3}

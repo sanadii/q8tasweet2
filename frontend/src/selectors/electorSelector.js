@@ -1,7 +1,7 @@
 // Selectors/electorSelector.js
 import { createSelector } from 'reselect';
 
-const selectElectorState = state => state.Elections;
+const selectElectorState = state => state.Electors;
 
 export const electorSelector = createSelector(
     selectElectorState,
