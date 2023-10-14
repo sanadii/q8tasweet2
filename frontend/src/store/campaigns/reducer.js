@@ -13,7 +13,7 @@ import {
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_FAIL,
 
-  // Campaign Members ---------------
+  // Campaign Members
   GET_ALL_CAMPAIGN_MEMBERS,
   // GET_CAMPAIGN_MEMBER_DETAILS,
   ADD_NEW_CAMPAIGN_MEMBER_SUCCESS,
@@ -50,9 +50,10 @@ const IntialState = {
   campaigns: [],
   campaignDetails: [],
   campaignGuarantees: [],
+  campaignAttendees: [],
+
   campaignElectionCandidates: [],
   campaignElectionCommittees: [],
-  campaignAttendees: [],
   campaignRoles: [],
 };
 
@@ -76,10 +77,10 @@ const Campaigns = (state = IntialState, action) => {
             campaignRoles: action.payload.data.campaignRoles,
             campaignMembers: action.payload.data.campaignMembers,
             campaignGuarantees: action.payload.data.campaignGuarantees,
+            campaignAttendees: action.payload.data.campaignAttendees,
 
             campaignElectionCandidates: action.payload.data.campaignElectionCandidates,
             campaignElectionCommittees: action.payload.data.campaignElectionCommittees,
-            campaignAttendees: action.payload.data.campaignAttendees,
             
             isCampaignCreated: false,
             isCampaignSuccess: true,
@@ -101,7 +102,7 @@ const Campaigns = (state = IntialState, action) => {
         case GET_CAMPAIGN_ATTENDEES:
           return {
             ...state,
-            campaignCampaignAttendees: action.payload.data.electors,
+            campaignAttendees: action.payload.data.electors,
             isCampaignAttendeeCreated: false,
             isCampaignAttendeeSuccess: true,
           };
@@ -364,7 +365,7 @@ const Campaigns = (state = IntialState, action) => {
       return {
         ...state,
         isCampaignAttendeeCreated: true,
-        campaignCampaignAttendees: [...state.campaignAttendees, action.payload.data],
+        campaignAttendees: [...state.campaignAttendees, action.payload.data],
         isCampaignAttendeeAdd: true,
         isCampaignAttendeeAddFail: false,
       };

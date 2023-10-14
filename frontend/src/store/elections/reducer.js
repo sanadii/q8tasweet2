@@ -3,7 +3,7 @@ import {
   API_RESPONSE_SUCCESS,
   API_RESPONSE_ERROR,
 
-  // Election ---------------
+  // Election
   GET_ELECTIONS,
   GET_ELECTION_DETAILS,
   ADD_ELECTION_SUCCESS,
@@ -13,7 +13,7 @@ import {
   DELETE_ELECTION_SUCCESS,
   DELETE_ELECTION_FAIL,
 
-  // Election Candidates ---------------
+  // Election Candidates
   GET_ELECTION_CANDIDATES,
   ADD_ELECTION_CANDIDATE_SUCCESS,
   ADD_ELECTION_CANDIDATE_FAIL,
@@ -22,7 +22,7 @@ import {
   DELETE_ELECTION_CANDIDATE_SUCCESS,
   DELETE_ELECTION_CANDIDATE_FAIL,
 
-  // Election Committees ---------------
+  // Election Committees
   GET_ELECTION_COMMITTEES,
   ADD_ELECTION_COMMITTEE_SUCCESS,
   ADD_ELECTION_COMMITTEE_FAIL,
@@ -31,11 +31,11 @@ import {
   DELETE_ELECTION_COMMITTEE_SUCCESS,
   DELETE_ELECTION_COMMITTEE_FAIL,
 
-  // Election Committee Results ----------------
+  // Election Committee Results-
   UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS,
   UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL,
 
-  // Election Campaigns ---------------
+  // Election Campaigns
   GET_ELECTION_CAMPAIGNS,
   ADD_ELECTION_CAMPAIGN_SUCCESS,
   ADD_ELECTION_CAMPAIGN_FAIL,
@@ -213,7 +213,7 @@ const Elections = (state = IntialState, action) => {
         isElectionDeleteFail: true,
       };
 
-    // Election Candidates ---------------
+    // Election Candidates
     case GET_ELECTION_CANDIDATES: {
       return {
         ...state,
@@ -277,7 +277,7 @@ const Elections = (state = IntialState, action) => {
         isElectionCandidateDeleteFail: true,
       };
 
-    // Election Committees ---------------
+    // Election Committees
     case GET_ELECTION_COMMITTEES: {
       return {
         ...state,
@@ -375,7 +375,7 @@ const Elections = (state = IntialState, action) => {
     // Election Committee Results
 
 
-    // Election Campaigns ---------------
+    // Election Campaigns
     case GET_ELECTION_CAMPAIGNS: {
       return {
         ...state,

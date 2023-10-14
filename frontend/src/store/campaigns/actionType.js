@@ -26,7 +26,7 @@ export const DELETE_CAMPAIGN_FAIL = "DELETE_CAMPAIGN_FAIL";
 export const GET_CAMPAIGN_DETAILS = "GET_CAMPAIGN_DETAILS";
 
 
-// --------------- Campaign Members ---------------
+// Campaign Members
 // Campaign Members
 export const GET_ALL_CAMPAIGN_MEMBERS = "GET_ALL_CAMPAIGN_MEMBERS";
 export const GET_ALL_CAMPAIGN_MEMBERS_SUCCESS = "GET_ALL_CAMPAIGN_MEMBERS_SUCCESS";
@@ -51,7 +51,7 @@ export const DELETE_CAMPAIGN_MEMBER_FAIL = "DELETE_CAMPAIGN_MEMBER_FAIL";
 export const GET_CAMPAIGN_MEMBER_DETAILS = "GET_CAMPAIGN_MEMBER_DETAILS";
 export const GET_CAMPAIGN_MEMBER_COUNT = "GET_CAMPAIGN_MEMBER_COUNT";
 
-// --------------- Campaign Guarantees ---------------
+// Campaign Guarantees
 // Campaign Guarantees
 export const GET_ALL_CAMPAIGN_GUARANTEES = "GET_ALL_CAMPAIGN_GUARANTEES";
 export const GET_ALL_CAMPAIGN_GUARANTEES_SUCCESS = "GET_ALL_CAMPAIGN_GUARANTEES_SUCCESS";
@@ -77,7 +77,7 @@ export const GET_CAMPAIGN_GUARANTEE_DETAILS = "GET_CAMPAIGN_GUARANTEE_DETAILS";
 export const GET_CAMPAIGN_GUARANTEE_COUNT = "GET_CAMPAIGN_GUARANTEE_COUNT";
 
 
-// --------------- Campaign Guarantees ---------------
+// Campaign Guarantees
 // Campaign Attendeees
 export const GET_CAMPAIGN_ATTENDEES = "GET_CAMPAIGN_ATTENDEES";
 export const GET_CAMPAIGN_ATTENDEES_SUCCESS = "GET_CAMPAIGN_ATTENDEES_SUCCESS";

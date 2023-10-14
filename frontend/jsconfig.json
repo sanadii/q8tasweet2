@@ -1,7 +1,11 @@
 {
-    "compilerOptions": {
-      "baseUrl": "src"
-    },
-    "include": ["src"]
-  }
-  
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "Common/*": ["src/Components/Common/*"],
+      "constants/*": ["src/Components/constants/*"],
+      "Hooks/*": ["src/Components/Hooks/*"]
+    }
+  },
+  "include": ["src"]
+}

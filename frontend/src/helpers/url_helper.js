@@ -11,7 +11,7 @@ export const POST_EDIT_JWT_PROFILE = "/users/postProfile";
 export const POST_EDIT_PROFILE = "/users/user";
 
 
-// Elections ---------------
+// Elections
 export const GET_ELECTIONS = "/elections/getElections";
 export const GET_ELECTION_DETAILS = "/elections/getElectionDetails";
 export const ADD_ELECTION = "/elections/addElection";
@@ -51,7 +51,7 @@ export const UPDATE_ELECTION_CAMPAIGN = "/elections/updateElectionCampaign";
 export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
 
 
-// --------------- Candidates ---------------
+// Candidates
 // Candidates
 export const GET_CANDIDATES = "/candidates/getCandidates";
 export const GET_CANDIDATE_DETAILS = "/candidates/getCandidateDetails";
@@ -73,7 +73,7 @@ export const ADD_NEW_CANDIDATE_CAMPAIGN = "/candidates/addNewCandidateCampaign";
 export const UPDATE_CANDIDATE_CAMPAIGN = "/candidates/updateCandidateCampaign";
 export const DELETE_CANDIDATE_CAMPAIGN = "/candidates/deleteCandidateCampaign";
 
-// Campaigns ---------------
+// Campaigns
 export const GET_CAMPAIGNS = "/campaigns/getCampaigns";
 export const GET_CAMPAIGN_DETAILS = "/campaigns/getCampaignDetails";
 export const ADD_NEW_CAMPAIGN = "/campaigns/addNewCampaign";

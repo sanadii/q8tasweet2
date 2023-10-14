@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
 import { Table, Row, Col, Button, Input, CardBody, CardHeader, CardFooter } from "reactstrap";
 import { DefaultColumnFilter } from "./Filters";
-import { TableContainerHeader, TableContainerFooter, TableContainerFilters } from "../Common";
+import { TableContainerHeader, TableContainerFooter, TableContainerFilters } from "Components/Common";
 
 const TableContainer = ({
-  // Global Header -------------------------
+  // Global Header----------
   isTableContainerFilter,
   isElectionCategoryFilter,
-  isCampaignRoleFilter,
+  isCampaignRankFilter,
 
   // Constants, going where?
   campaignMember,
@@ -18,12 +18,12 @@ const TableContainer = ({
   setElectionCandidateList,
   setCampaignGuaranteeList,
 
-  // Filters -------------------------
+  // Filters----------
   isGlobalFilter,
   isSearchFilter,
   isStatusFilter,
   isPriorityFilter,
-  isMemberRoleFilter,
+  isMemberRankFilter,
   isCandidateGenderFilter,
   isGenderFilter,
   isGuaranteeAttendanceFilter,
@@ -43,18 +43,18 @@ const TableContainer = ({
   // Actions
   onTabChange,
 
-  // Data & Columns -------------------------
+  // Data & Columns----------
   columns,
   data,
 
-  // Table Styling -------------------------
+  // Table Styling----------
   tableClass,
   theadClass,
   trClass,
   thClass,
   divClass,
 
-  // Global Header -------------------------
+  // Global Header----------
   isTableContainerFooter,
 }) => {
   const {
@@ -151,14 +151,14 @@ const TableContainer = ({
           <TableContainerFilters
 
             isGlobalFilter={isGlobalFilter}
-            // Upper Filters -------------------------
+            // Upper Filters----------
             isElectionCategoryFilter={isElectionCategoryFilter}
-            isCampaignRoleFilter={isCampaignRoleFilter}
+            isCampaignRankFilter={isCampaignRankFilter}
 
             filters={filters}
             setFilters={setFilters}
 
-            // Filters -------------------------
+            // Filters----------
             SearchPlaceholder={SearchPlaceholder}
             isSearchFilter={isSearchFilter}
             isStatusFilter={isStatusFilter}
@@ -167,14 +167,14 @@ const TableContainer = ({
             isGenderFilter={isGenderFilter}
             isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
             isAttendeesGenderFilter={isAttendeesGenderFilter}
-            isMemberRoleFilter={isMemberRoleFilter}
+            isMemberRankFilter={isMemberRankFilter}
             isCommitteeFilter={isCommitteeFilter}
             isGuaranteeStatusFilter={isGuaranteeStatusFilter}
             isGuarantorFilter={isGuarantorFilter}
             isResetFilters={isResetFilters}
             isTestFilter={isTestFilter}
 
-            // Constant  -------------------------
+            // Constant ----------
             campaignMember={campaignMember}
             setElectionList={setElectionList}
             setCampaignMemberList={setCampaignMemberList}

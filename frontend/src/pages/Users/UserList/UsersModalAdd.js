@@ -9,7 +9,7 @@ import { campaignSelector } from 'Selectors';
 
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
-// ---------------- Components & Constants imports ----------------
+// -Components & Constants imports-
 import UserModalUpdate from "./UserModalUpdate";
 import UserModalAdd from "./UserModalAdd";
 import { GuaranteeStatusOptions } from "../../../../Components/constants";

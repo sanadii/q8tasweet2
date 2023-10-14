@@ -22,16 +22,16 @@ import {
 
 const TableContainerFilters = ({
 
-    // Tab Filters -------------------------
+    // Tab Filters----------
     isElectionCategoryFilter,
     isCampaignRoleFilter,
 
-    // Global Filter -------------------------
+    // Global Filter----------
     isGlobalFilter,
 
     globalFilter,
 
-    // Select Filters -------------------------
+    // Select Filters----------
     isStatusFilter,
     isPriorityFilter,
     isCandidateGenderFilter,

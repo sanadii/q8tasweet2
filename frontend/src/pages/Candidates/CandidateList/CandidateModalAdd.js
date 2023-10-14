@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
-// ---------------- Components & Constants imports ----------------
+// -Components & Constants imports-
 import CandidateModalUpdate from "./CandidateModalUpdate";
 import CandidateModalAdd from "./CandidateModalAdd";
 import { GuaranteeStatusOptions } from "../../../../Components/constants";

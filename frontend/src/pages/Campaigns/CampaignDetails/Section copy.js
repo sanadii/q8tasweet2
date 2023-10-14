@@ -62,7 +62,7 @@ const Section = ({
       canSerachCampaignElector 
   } = permissions;
   
-  // --------------- Constants ---------------
+  // Constants
   const [activeTab, setActiveTab] = useState("1");
   const [activityTab, setActivityTab] = useState("1");
 

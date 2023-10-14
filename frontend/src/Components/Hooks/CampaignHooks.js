@@ -14,6 +14,18 @@ const useSupervisorMembers = (campaignRoles, campaignMembers) => {
   return supervisorMembers;
 };
 
+// const useAttendantMembers = (campaignRoles, campaignMembers) => {
+//   const attendantRoleId = useMemo(() => {
+//     return campaignRoles.find(role => role.role === "campaignAttendant")?.id;
+//   }, [campaignRoles]);
+
+//   const attendantMembers = useMemo(() => {
+//     return campaignMembers.filter(member => member.role === attendantRoleId);
+//   }, [campaignMembers, attendantRoleId]);
+
+//   return attendantMembers;
+// };
+
 const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
   return useMemo(() => {
     const currentRoleId = currentCampaignMember?.role;
@@ -65,4 +77,8 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
 
 
 
-export { useSupervisorMembers, useCampaignRoles };
+export {
+  useSupervisorMembers,
+  // useAttendantMembers,
+  useCampaignRoles
+};

@@ -1,17 +1,17 @@
-// --------------- React & Redux imports ---------------
+// React & Redux imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "../../../store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
-// --------------- Component & Constants imports ---------------
+// Component & Constants imports
 import { MemberRoleOptions } from "../../../Components/constants";
 
-// --------------- Form validation imports ---------------
+// Form validation imports
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
-// --------------- Reactstrap (UI) imports ---------------
+// Reactstrap (UI) imports
 import { Col, Row, ModalBody, Label, Input, Form, FormFeedback, Card, CardHeader, CardBody, ModalFooter } from "reactstrap";
 
 

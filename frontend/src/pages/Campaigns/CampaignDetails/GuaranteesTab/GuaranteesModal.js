@@ -9,10 +9,10 @@ import GuaranteesModalView from "./GuaranteesModalView"
 
 const GuaranteesModal = ({ modal, toggle, modalMode, campaignGuarantee }) => {
 
-  // --------------- Define States ---------------
+  // Define States
   const { campaignMembers } = useSelector(campaignSelector);
 
-  // --------------- Set Constants ---------------F
+  // Set ConstantsF
   const [onModalSubmit, setOnModalSubmit] = useState(null);
 
   let ModalTitle;

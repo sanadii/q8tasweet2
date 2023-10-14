@@ -132,7 +132,7 @@ export const deleteElectionFail = (error) => ({
   payload: error,
 });
 
-// ElectionCandidates ---------------
+// ElectionCandidates
 export const getElectionCandidates = (election) => ({
   type: GET_ELECTION_CANDIDATES,
   payload: election,
@@ -182,7 +182,7 @@ export const deleteElectionCandidateFail = error => ({
   payload: error,
 });
 
-// Election Committees ---------------
+// Election Committees
 export const getElectionCommittees = (election) => ({
   type: GET_ELECTION_COMMITTEES,
   payload: election,
@@ -231,7 +231,7 @@ export const deleteElectionCommitteeFail = error => ({
   payload: error,
 });
 
-// Election Committee Results ---------------
+// Election Committee Results
 export const updateElectionCommitteeResults = electionCommitteeResult => ({
   type: UPDATE_ELECTION_COMMITTEE_RESULTS,
   payload: electionCommitteeResult,
@@ -245,7 +245,7 @@ export const updateElectionCommitteeResultsFail = error => ({
   payload: error,
 });
 
-// Election Campaigns ---------------
+// Election Campaigns
 export const getElectionCampaigns = (election) => ({
   type: GET_ELECTION_CAMPAIGNS,
   payload: election,

@@ -246,7 +246,7 @@ const AllElections = () => {
 
   const [dueDate, setDate] = useState(defaultdate());
 
-  // Filters -------------------------
+  // Filters----------
   const [filters, setFilters] = useState({
     global: "",
     status: null,
@@ -320,7 +320,7 @@ const AllElections = () => {
               {isElectionSuccess && elections.length ? (
                 <TableContainer
 
-                  // Filters -------------------------
+                  // Filters----------
                   isTableContainerFilter={true}
                   isGlobalFilter={true}
                   preGlobalFilteredRows={true}
@@ -334,12 +334,12 @@ const AllElections = () => {
                   setFilters={setFilters}
                   SearchPlaceholder="البحث بالاسم..."
 
-                  // Data -------------------------
+                  // Data----------
                   columns={columns}
                   data={electionList || []}
                   customPageSize={20}
 
-                  // Styling -------------------------
+                  // Styling----------
                   className="custom-header-css"
                   divClass="table-responsive table-card mb-2"
                   tableClass="align-middle table-nowrap"

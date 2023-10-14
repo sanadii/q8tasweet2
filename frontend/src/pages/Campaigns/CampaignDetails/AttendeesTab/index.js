@@ -1,28 +1,36 @@
-// --------------- React, Redux & Store imports ---------------
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+// React, Redux & Store imports
+import React, { useState, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteCampaignAttendee, updateCampaignAttendee } from "store/actions";
+import { deleteCampaignAttendee } from "store/actions";
 import { campaignSelector } from 'Selectors';
 
 // Component imports
-import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
 import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "Components/Common";
 import AttendeesModal from "./AttendeesModal";
-import { GuaranteeStatusOptions } from "Components/constants";
 import useUserRoles from "Components/Hooks/useUserRoles";
+import { Id, Name, Attendant, Actions } from "./AttendeesCol";
 
 // Utility imports
+import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
-
-// CSS imports
 import "react-toastify/dist/ReactToastify.css";
 
 const AttendeesList = () => {
   const dispatch = useDispatch();
 
-  const { campaignDetails, campaignElectionCommittees, campaignElectionCandidates, campaignMembers, campaignAttendees, isCampaignAttendeeSuccess, error  } = useSelector(campaignSelector);
+  const {
+    campaignDetails,
+    campaignElectionCommittees,
+    campaignElectionCandidates,
+    campaignMembers,
+    campaignAttendees,
+    campaignRoles,
+    isCampaignAttendeeSuccess,
+    error
+  } = useSelector(campaignSelector);
+
   const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
-  
+
   const electionId = campaignDetails.election.id;
   // Delete Modal Constants
   const [deleteModal, setDeleteModal] = useState(false);
@@ -64,11 +72,11 @@ const AttendeesList = () => {
         id: campaignAttendee.id,
         user: campaignAttendee.user,
         civil: campaignAttendee.civil,
-        full_name: campaignAttendee.full_name,
-        box_no: campaignAttendee.box_no,
-        membership_no: campaignAttendee.membership_no,
-        enrollment_date: campaignAttendee.enrollment_date,
-        status: campaignAttendee.status,
+        fullName: campaignAttendee.fullName,
+        gender: campaignAttendee.gender,
+        boxNo: campaignAttendee.boxNo,
+        membershipNo: campaignAttendee.membershipNo,
+        enrollmentDate: campaignAttendee.enrollmentDate,
         notes: campaignAttendee.notes,
       });
 
@@ -148,119 +156,70 @@ const AttendeesList = () => {
   }, [campaignElectionCommittees]); // campaignElectionCommittees as dependency
 
   const columns = useMemo(() => [
-      // {
-      //   Header: (
-      //     <input
-      //       type="checkbox"
-      //       id="checkBoxAll"
-      //       className="form-check-input"
-      //       onClick={() => checkedAll()}
-      //     />
-      //   ),
-      //   Cell: (cellProps) => {
-      //     return (
-      //       <input
-      //         type="checkbox"
-      //         className="campaignAttendeeCheckBox form-check-input"
-      //         value={cellProps.row.original.id}
-      //         onChange={() => deleteCheckbox()}
-      //       />
-      //     );
-      //   },
-      //   id: "#",
-      // },
-      {
-        Header: "الاسم",
-        Cell: (cellProps) => {
-          return (
-            <div>
-              {getGenderIcon(cellProps.row.original.gender)}
-              <b>{cellProps.row.original.full_name}</b>
-              <br />
-              {cellProps.row.original.civil}
-            </div>
-          );
-        },
+    // {
+    //   Header: (
+    //     <input
+    //       type="checkbox"
+    //       id="checkBoxAll"
+    //       className="form-check-input"
+    //       onClick={() => checkedAll()}
+    //     />
+    //   ),
+    //   Cell: (cellProps) => {
+    //     return (
+    //       <input
+    //         type="checkbox"
+    //         className="campaignAttendeeCheckBox form-check-input"
+    //         value={cellProps.row.original.id}
+    //         onChange={() => deleteCheckbox()}
+    //       />
+    //     );
+    //   },
+    //   id: "#",
+    // },
+    {
+      Header: "م.",
+      Cell: (cellProps) => <Id {...cellProps} />
+    },
+    {
+      Header: "الاسم",
+      accessor: row => ({ fullName: row.fullName, gender: row.gender }),
+      Cell: (cellProps) => <Name {...cellProps} />
+    },
+    {
+      Header: "اللجنة",
+      accessor: "committee",
+      Cell: (cellProps) => {
+        const committeeId = cellProps.row.original.committee; // Directly access the user ID from original data
+        const committeeName = findCommitteeById(committeeId);
+        return <p>{committeeName}</p>;
       },
-      {
-        Header: "اللجنة",
-        accessor: "civil",
-        Cell: (cellProps) => {
-          const committeeId = cellProps.row.original.committee; // Directly access the user ID from original data
-          const committeeName = findCommitteeById(committeeId);
-          return <p>{committeeName}</p>;
-        },
+    },
+    {
+      Header: "المحضر",
+      accessor: "user",
+      Cell: (cellProps) => {
+        return <p>{cellProps.row.original.user}</p>;
       },
-      {
-        Header: "الحضور",
-        filterable: false,
-        Cell: (cellProps) => {
-          const userId = cellProps.row.original.user; // Directly access the user ID from original data
-          const userName = findUserById(userId);
-          return (
-            <p className="text-info">
-              <strong>{userName}</strong>
-            </p>
-          );
-        },
-      },
-
-      // Only for Attendants
-      {
-        Header: "إجراءات",
-        Cell: (cellProps) => {
-          return (
-            <div className="list-inline hstack gap-2 mb-0">
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-warning edit-list"
-                onClick={() => {
-                  const campaignAttendee = cellProps.row.original;
-                  handleCampaignAttendeeClick(
-                    campaignAttendee,
-                    "GuaranteeViewModal"
-                  );
-                }}
-              >
-                <i className="ri-eye-fill align-bottom" />
-              </button>
-              {(isAdmin || isAttendant) && (
-                <>
-                  <button
-                    to="#"
-                    className="btn btn-sm btn-soft-info edit-list"
-                    onClick={() => {
-                      const campaignAttendee = cellProps.row.original;
-                      handleCampaignAttendeeClick(
-                        campaignAttendee,
-                        "GuaranteeUpdateModal"
-                      );
-                    }}
-                  >
-                    <i className="ri-pencil-fill align-bottom" />
-                  </button>
-                  <button
-                    to="#"
-                    className="btn btn-sm btn-soft-danger remove-list"
-                    onClick={() => {
-                      const campaignAttendee = cellProps.row.original;
-                      onClickDelete(campaignAttendee);
-                    }}
-                  >
-                    <i className="ri-delete-bin-5-fill align-bottom" />
-                  </button>
-                </>
-              )}
-            </div>
-          );
-        },
-      },
-    ],
+    },
+    // Only for Attendants
+    {
+      Header: "إجراءات",
+      Cell: (cellProps) =>
+        <Actions
+          cellProps={cellProps}
+          handleCampaignAttendeeClick={handleCampaignAttendeeClick}
+          onClickDelete={onClickDelete}
+          isAdmin={isAdmin}
+          isAttendant={isAttendant}
+        />
+    },
+  ],
     // [handleCampaignAttendeeClick, checkedAll, findCommitteeById, findUserById, isAdmin, isAttendant]
     [handleCampaignAttendeeClick, findCommitteeById, findUserById, isAdmin, isAttendant]
   );
 
-  // Filters -------------------------
+  // Filters----------
   const [filters, setFilters] = useState({
     global: "",
     gender: null,
@@ -332,7 +291,7 @@ const AttendeesList = () => {
                 />
                 {campaignAttendeeList ? (
                   <TableContainer
-                    // Filters -------------------------
+                    // Filters----------
                     isTableContainerFilter={true}
                     isGenderFilter={true}
                     isCommitteeFilter={true}
@@ -348,13 +307,13 @@ const AttendeesList = () => {
                     SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
                     onTabChange={handleTabChange}
 
-                    // Data -------------------------
+                    // Data----------
                     columns={columns}
                     data={campaignAttendeeList || []}
                     customPageSize={50}
 
 
-                    // Styling -------------------------
+                    // Styling----------
                     className="custom-header-css"
                     divClass="table-responsive table-card mb-2"
                     tableClass="align-middle table-nowrap"

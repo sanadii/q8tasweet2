@@ -1,7 +1,7 @@
 // Components/Hooks/usePermission.js
 import { useSelector } from 'react-redux';
 import { userSelector, campaignSelector } from 'Selectors';
-import computePermissions from '../Utils/permissions'; // adjust the path accordingly
+import computePermissions from 'Components/Utils/permissions'; // adjust the path accordingly
 
 const usePermission = () => {
     const { currentUser } = useSelector(userSelector);

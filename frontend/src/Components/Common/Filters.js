@@ -269,7 +269,7 @@ const SelectColumnFilter = ({
 };
 
 
-// Select Filter -------------------------
+// Select Filter----------
 const PriorityFilter = ({ filters, setFilters }) => {
   const ChangeSelectedPriority = (e) => {
     const selectedPriorityId = parseInt(e, 10);

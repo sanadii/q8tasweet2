@@ -14,7 +14,7 @@ import ProfileSettings from "pages/Authentication/Profile/Settings";
 
 //Dashboard
 
-// ------------------ ADMIN PAGES -------------------------
+// ---ADMIN PAGES----------
 import Settings from "pages/Admin/Settings";
 import Categories from "pages/Admin/Settings/Categories";
 import Groups from "pages/Admin/Settings/Groups";
@@ -43,7 +43,7 @@ import UserList from "pages/Users/UserList";
 
 
 
-// Public Pages ---------------
+// Public Pages
 // Elections
 import ElectionGrid from "pages/Public/ElectionGrid";
 import Results from "pages/Public/Results";
@@ -95,7 +95,7 @@ const authProtectedRoutes = [
   // Notifications
   // Like & Follow
 
-  // ------------------------ Admin ------------------------
+  // ---------Admin---------
   // Admin Options
   { path: "/settings", component: <Settings /> },
   { path: "/settings/categories", component: <Categories /> },
@@ -109,12 +109,12 @@ const authProtectedRoutes = [
 
 
 
-  // ---------------------- Subscribers ---------------------
+  // -------Subscribers------
   { path: "/campaigns", component: <CampaignGrid /> },
 
 
 
-  // ------------------------- Common -----------------------
+  // ----------Common--------
   { path: "/elections/:id", component: <ElectionDetails /> },
   { path: "/campaigns/:id", component: <CampaignDetails /> },
   // { path: "/campaigns/:id", component: <CampaignDetails /> },

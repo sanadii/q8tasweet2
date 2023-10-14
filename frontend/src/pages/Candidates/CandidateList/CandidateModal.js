@@ -1,14 +1,14 @@
-// React & Redux ---------------
+// React & Redux
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewCandidate, updateCandidate } from "../../../store/actions";
 
-// Custom Components & ConstantsImports ---------------
+// Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "../../../Components/constants";
 import SimpleBar from "simplebar-react";
 
-// Form and Validation ---------------
+// Form and Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,10 +19,10 @@ import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Moda
 const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
   const dispatch = useDispatch();
 
-  // State Management ---------------
+  // State Management
   const moderators = useSelector((state) => state.Users.moderators);
 
-  // Image Upload Helper ---------------
+  // Image Upload Helper
   const [selectedImage, setSelectedImage] = useState(null);
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -38,7 +38,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
     formData.append("folder", "candidates"); // replace "yourFolderName" with the actual folder name
   }
 
-  // validation ---------------
+  // validation
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,

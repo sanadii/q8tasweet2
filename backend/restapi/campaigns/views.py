@@ -205,254 +205,83 @@ class DeleteCampaignMember(APIView):
 
 # Campaign Guarantees
 class AddNewCampaignGuarantee(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        campaign_id = request.data.get("campaign")
-        member_id = request.data.get("member")
-        civil = request.data.get("elector")
-        status = request.data.get("status")
-
-        # Fetch the elector details based on elector civil
-        try:
-            elector = Electors.objects.get(civil=civil)
-        except Electors.DoesNotExist:
-            return Response({"error": "Elector not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Fetch the campaign based on campaign_id
-        try:
-            campaign = Campaigns.objects.get(id=campaign_id)
-        except CampaignMembers.DoesNotExist:
-            return Response({"error": "Campaign not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Fetch the member based on member_id
-        try:
-            member = CampaignMembers.objects.get(id=member_id)
-        except CampaignMembers.DoesNotExist:
-            return Response({"error": "Member not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Create the new link between the campaign member and the elector
-        campaign_guarantee = CampaignGuarantees.objects.create(
-            campaign_id=campaign_id,
-            member_id=member_id,
-            civil=elector,
-            status=status,
-        )
-
-        # Prepare the response data with member and elector details
-        response_data = {
-            "id": campaign_guarantee.id,
-            "campaign": campaign.id,
-            "member": member.id,
-            "civil": elector.civil,
-            # "full_name": elector.full_name(),
-            "full_name": elector.full_name,
-            "gender": elector.gender,
-            "status": campaign_guarantee.status,
-            # ... other fields you want to return
-        }
-
-        return Response({"data": response_data, "count": 0, "code": 200})
+        serializer = CampaignGuaranteesSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
 
 class UpdateCampaignGuarantee(APIView):
+    permission_classes = [IsAuthenticated]
+
     def patch(self, request, id):
-        # Fetch the campaign guarantee based on the URL parameter 'id'
         try:
             campaign_guarantee = CampaignGuarantees.objects.get(id=id)
         except CampaignGuarantees.DoesNotExist:
-            return Response({"error": "Campaign Guarantee not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Since civil is a ForeignKey, you can directly use it to access the related Elector object
-        elector = campaign_guarantee.civil
-        if not elector:
-            return Response({"error": "Elector not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Basic Information
-        campaign_id = request.data.get("campaign")
-        member_id = request.data.get("member")
-        phone = request.data.get("phone")
-        status_value = request.data.get("status")
-        notes = request.data.get("notes")
-
-        # If there's a campaign_id provided, update the campaign
-        if campaign_id:
-            try:
-                campaign = Campaigns.objects.get(id=campaign_id)
-                # Assuming there is a 'campaign' attribute in CampaignGuarantees
-                campaign_guarantee.campaign = campaign
-            except Campaigns.DoesNotExist:
-                return Response({"error": "Campaign not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # If there's a member_id provided, update the member
-        if member_id:
-            try:
-                member = CampaignMembers.objects.get(id=member_id)
-                campaign_guarantee.member = member
-            except CampaignMembers.DoesNotExist:
-                return Response({"error": "Member not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Update status
-        if status_value:
-            campaign_guarantee.status = status_value
-
-        # Update fields
-        if phone:
-            campaign_guarantee.phone = phone
-        if notes:
-            campaign_guarantee.notes = notes
-
-        # Save the changes
-        campaign_guarantee.save()
-
-        # Prepare the response data with guarantee details
-        updated_data = {
-            "id": campaign_guarantee.id,
-            "campaign": campaign_guarantee.campaign.id if campaign_guarantee.campaign else None,
-            "member": campaign_guarantee.member.id if campaign_guarantee.member else None,
-            "civil": elector.civil,
-            # "full_name": elector.full_name(),  # Using the full_name method from Electors model
-            "full_name": elector.full_name,  # Using the full_name method from Electors model
-            "gender": elector.gender,
-            "phone": campaign_guarantee.phone,
-            "status": campaign_guarantee.status,
-            "notes": campaign_guarantee.notes
-        }
-
-        return Response({"data": updated_data, "count": 0, "code": 200})
+            return Response({"data": "Campaign Guarantee not found", "count": 0, "code": 404}, status=404)
+        
+        serializer = CampaignGuaranteesSerializer(instance=campaign_guarantee, data=request.data, partial=True, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
 
 class DeleteCampaignGuarantee(APIView):
+    permission_classes = [IsAuthenticated]
+
     def delete(self, request, id):
         try:
             campaign_guarantee = CampaignGuarantees.objects.get(id=id)
             campaign_guarantee.delete()
-            return JsonResponse(
-                {"data": "campaign Guarantee deleted successfully", "count": 1, "code": 200},
-                safe=False,
-            )
+            return JsonResponse({"data": "Campaign Guarantee deleted successfully", "count": 1, "code": 200}, safe=False)
         except CampaignGuarantees.DoesNotExist:
-            return JsonResponse(
-                {"data": "campaign not found", "count": 0, "code": 404}, safe=False
-            )
+            return JsonResponse({"data": "Campaign Guarantee not found", "count": 0, "code": 404}, safe=False)
 
-class AddNewElectionAttendee(APIView):
+class AddNewCampaignAttendee(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
-        user_id = request.data.get("user")
-        election_id = request.data.get("election")
-        committee_id = request.data.get("committee")
-        civil = request.data.get("elector")
-        status_value = request.data.get("status")  # Renamed to avoid conflict with status module
+        # Assuming you have a serializer for CampaignAttendees
+        serializer = CampaignAttendeesSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
 
-        # Fetch the elector details based on elector civil
-        try:
-            elector = Electors.objects.get(civil=civil)
-        except Electors.DoesNotExist:
-            return Response({"error": "Elector not found"}, status=status.HTTP_404_NOT_FOUND)
+class UpdateCampaignAttendee(APIView):
+    permission_classes = [IsAuthenticated]
 
-        # Fetch the member based on member_id
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Fetch the election based on election_id
-        try:
-            election = Elections.objects.get(id=election_id)
-        except Elections.DoesNotExist:
-            return Response({"error": "Election not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Fetch the election based on committee_id
-        try:
-            committee = ElectionCommittees.objects.get(id=committee_id)
-        except ElectionCommittees.DoesNotExist:
-            return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Create the new link between the user, elector, and election
-        Campaign_attendee = CampaignAttendees.objects.create(
-            user_id=user_id,
-            elector=elector,
-            committee=committee,
-            election=election,
-            status=status_value,
-        )
-
-        # Prepare the response data with member, elector, and election details
-        response_data = {
-            "id": Campaign_attendee.id,
-            "user": user.id,
-            "civil": elector.civil,
-            "election": election.id,
-            "committee": committee.id,
-            "full_name": elector.full_name(),
-            "gender": elector.gender,
-            "status": Campaign_attendee.status,
-            # ... other fields you want to return
-        }
-
-        return Response({"data": response_data, "count": 0, "code": 200})
-
-class UpdateElectionAttendee(APIView):
     def patch(self, request, id):
-        # Fetch the campaign guarantee based on the URL parameter 'id'
         try:
-            campaign_guarantee = CampaignAttendees.objects.get(id=id)
+            campaign_attendee = CampaignAttendees.objects.get(id=id)
         except CampaignAttendees.DoesNotExist:
-            return Response({"error": "Campaign Guarantee not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"data": "Campaign Attendee not found", "count": 0, "code": 404}, status=404)
+        
+        # Assuming you have a serializer for CampaignAttendees
+        serializer = CampaignAttendeesSerializer(instance=campaign_attendee, data=request.data, partial=True, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
 
-        # Since civil is a ForeignKey, you can directly use it to access the related Elector object
-        elector = campaign_guarantee.civil
-        if not elector:
-            return Response({"error": "Elector not found"}, status=status.HTTP_404_NOT_FOUND)
+class DeleteCampaignAttendee(APIView):
+    permission_classes = [IsAuthenticated]
 
-        # Basic Information
-        member_id = request.data.get("member_id")
-        phone = request.data.get("phone")
-        status_value = request.data.get("status")
-        notes = request.data.get("notes")
-
-        # If there's a member_id provided, update the member
-        if member_id:
-            try:
-                member = CampaignMembers.objects.get(id=member_id)
-                campaign_guarantee.member = member
-            except CampaignMembers.DoesNotExist:
-                return Response({"error": "Member not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Update status
-        if status_value:
-            campaign_guarantee.status = status_value
-
-        # Update fields
-        if phone:
-            campaign_guarantee.phone = phone
-        if notes:
-            campaign_guarantee.notes = notes
-
-        # Save the changes
-        campaign_guarantee.save()
-
-        # Prepare the response data with guarantee details
-        updated_data = {
-            "id": campaign_guarantee.id,
-            "member": campaign_guarantee.member.id if campaign_guarantee.member else None,
-            "civil": elector.civil,
-            "full_name": elector.full_name(),  # Using the full_name method from Electors model
-            "gender": elector.gender,
-            "phone": campaign_guarantee.phone,
-            "status": campaign_guarantee.status,
-            "notes": campaign_guarantee.notes
-        }
-
-        return Response({"data": updated_data, "count": 0, "code": 200})
-
-class DeleteElectionAttendee(APIView):
     def delete(self, request, id):
         try:
-            campaign_guarantee = CampaignAttendees.objects.get(id=id)
-            campaign_guarantee.delete()
-            return JsonResponse(
-                {"data": "campaign Guarantee deleted successfully", "count": 1, "code": 200},
-                safe=False,
-            )
+            campaign_attendee = CampaignAttendees.objects.get(id=id)
+            campaign_attendee.delete()
+            return Response({"data": "Campaign Attendee deleted successfully", "count": 1, "code": 200}, status=200)
         except CampaignAttendees.DoesNotExist:
-            return JsonResponse(
-                {"data": "campaign not found", "count": 0, "code": 404}, safe=False
-            )
-        
+            return Response({"data": "Campaign Attendee not found", "count": 0, "code": 404}, status=404)
+      

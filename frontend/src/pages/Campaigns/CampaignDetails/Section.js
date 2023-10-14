@@ -42,7 +42,12 @@ const Section = () => {
   } = useSelector(campaignSelector);
 
   // Permissions
-  const { isAdmin, isEditor, isContributor, isModerator, isSubscriber, canViewCampaign,
+  const { isAdmin,
+    isEditor,
+    isContributor,
+    isModerator,
+    isSubscriber,
+    canViewCampaign,
     canViewCampaignMember,
     canViewCampaignGuarantee,
     canViewCampaignAttendee,

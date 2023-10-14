@@ -257,12 +257,12 @@ const OverViewGuarantees = () => {
                     <Row>
                         <Col>
                             <TableContainer
-                                // Data -------------------------
+                                // Data----------
                                 columns={columns}
                                 data={guarantorData || []}  // Here's the change
                                 customPageSize={50}
 
-                                // Styling -------------------------
+                                // Styling----------
                                 className="custom-header-css"
                                 divClass="table-responsive table-card mb-2"
                                 tableClass="align-middle table-nowrap"

@@ -1,8 +1,8 @@
-// --------------- React & Redux imports ---------------
+// React & Redux imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-// --------------- Reactstrap (UI) imports ---------------
+// Reactstrap (UI) imports
 import {
   Col,
   Row,

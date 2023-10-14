@@ -100,7 +100,7 @@ export const addNewElectionAttendee = (electionAttendee) => api.create(url.ADD_N
 export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_ELECTION_ATTENDEE, electionAttendee);
 
 
-// --------------- Candidates  ---------------
+// Candidates 
 // Candidates
 export const getCandidates = () => api.get(url.GET_CANDIDATES);
 export const getCandidateDetails = (candidate) => api.get(url.GET_CANDIDATE_DETAILS + "/" + candidate.id);
@@ -123,7 +123,7 @@ export const updateCandidateCampaign = (campaign) => api.update(url.UPDATE_CAMPA
 export const deleteCandidateCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
 
 
-// Campaigns ---------------
+// Campaigns
 export const getCampaigns = () => api.get(url.GET_CAMPAIGNS);
 export const addNewCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
 export const updateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
@@ -149,7 +149,7 @@ export const deleteCampaignAttendee = (campaignAttendee) => api.delete(url.DELET
 export const addNewCampaignAttendee = (campaignAttendee) => api.create(url.ADD_NEW_CAMPAIGN_ATTENDEE, campaignAttendee);
 export const updateCampaignAttendee = (campaignAttendee) => api.put(url.UPDATE_CAMPAIGN_ATTENDEE, campaignAttendee);
 
-// Users ---------------
+// Users
 export const getUsers = () => api.get(url.GET_USERS);
 export const getCurrentUser = () => api.get(url.GET_CURRENT_USER);
 export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + user.id);
@@ -173,7 +173,7 @@ export const updateUserCampaign = (user) => api.update(url.UPDATE_USER_CAMPAIGN 
 export const deleteUserCampaign = (user) => api.delete(url.DELETE_USER_CAMPAIGN + "/" + user);
 export const getUserCampaignDetails = (user) => api.get(url.GET_USER_CAMPAIGN_DETAILS + "/" + user.id);
 
-// Groups ---------------
+// Groups
 export const getGroups = () => api.get(url.GET_GROUPS);
 export const getGroupDetails = (group) => api.get(url.GET_GROUP_DETAILS + "/" + group.id);
 export const addNewGroup = (group) => api.upload(url.ADD_NEW_GROUP, group);

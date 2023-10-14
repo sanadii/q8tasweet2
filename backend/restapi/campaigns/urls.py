@@ -27,9 +27,9 @@ urlpatterns = [
     path("updateCampaignGuarantee/<int:id>", UpdateCampaignGuarantee.as_view(), name="UpdateCampaignGuarantee"),
 
     # Attendees
-    path("addNewElectionAttendee", AddNewElectionAttendee.as_view(), name="AddNewElectionAttendee"),
-    path("deleteElectionAttendee/<int:id>", DeleteElectionAttendee.as_view(), name="DeleteElectionAttendee"),
-    path("updateElectionAttendee/<int:id>", UpdateElectionAttendee.as_view(), name="UpdateElectionAttendee"),
+    path("addNewCampaignAttendee", AddNewCampaignAttendee.as_view(), name="AddNewCampaignAttendee"),
+    path("deleteCampaignAttendee/<int:id>", DeleteCampaignAttendee.as_view(), name="DeleteCampaignAttendee"),
+    path("updateCampaignAttendee/<int:id>", UpdateCampaignAttendee.as_view(), name="UpdateCampaignAttendee"),
 
 
 ]

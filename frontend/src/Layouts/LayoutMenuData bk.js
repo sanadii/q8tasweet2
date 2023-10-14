@@ -47,7 +47,7 @@ const Navdata = () => {
   useEffect(() => {
     document.body.classList.remove("twocolumn-panel");
 
-    // ------------------ DASHBOARD -----------------------
+    // ---DASHBOARD--------
     if (iscurrentState !== "Dashboard") {
       setIsDashboard(false);
     }
@@ -63,7 +63,7 @@ const Navdata = () => {
       setIsAuth(false);
     }
 
-    // ---------------- SUBSCRIBER PAGES --------------------
+    // -SUBSCRIBER PAGES-----
     if (iscurrentState === "elections") {
       history("/elections");
       document.body.classList.add("twocolumn-panel");
@@ -77,7 +77,7 @@ const Navdata = () => {
       document.body.classList.add("twocolumn-panel");
     }
 
-    // ------------------ ADMIN PAGES -------------------------
+    // ---ADMIN PAGES----------
     if (iscurrentState === "elections") {
       history("/admin/elections");
       document.body.classList.add("twocolumn-panel");

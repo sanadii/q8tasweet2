@@ -57,13 +57,13 @@ class CampaignGuaranteesAdmin(admin.ModelAdmin):
 
 
 class CampaignAttendeesAdmin(admin.ModelAdmin):
-    list_display = ['user', 'election', 'committee', 'elector', 'notes', 'status']
-    search_fields = ['user__username', 'committee__name', 'elector__full_name']
+    list_display = ['user', 'election', 'committee', 'civil', 'notes', 'status']
+    search_fields = ['user__username', 'committee__name', 'civil__full_name']
     list_filter = ['election', 'committee', 'status']
     readonly_fields = ReadOnlyTrackFields
 
     fieldsets = [
-        ('Basic Information', {'fields': ['user', 'election', 'committee', 'elector', 'notes', 'status']}),
+        ('Basic Information', {'fields': ['user', 'election', 'committee', 'civil', 'notes', 'status']}),
         TrackAdminFields
     ]
 

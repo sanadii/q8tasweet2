@@ -239,7 +239,7 @@ const CommitteesTab = () => {
   const [isExportCSV, setIsExportCSV] = useState(false);
 
 
-  // Filters -------------------------
+  // Filters----------
   const [filters, setFilters] = useState({
     global: "",
     gender: null,

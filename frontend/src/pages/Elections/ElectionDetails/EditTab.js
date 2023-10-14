@@ -94,7 +94,7 @@ const EditTab = ({ election }) => {
     },
   });
 
-  // Categories ---------------
+  // Categories
   const { categoryOptions, subCategoryOptions, changeSubCategoriesOptions, activeParentCategoryId } = useCategoryManager(categories, subCategories, validation);
 
   const [selectedMulti, setselectedMulti] = useState(null);

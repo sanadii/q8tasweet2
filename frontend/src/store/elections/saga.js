@@ -11,13 +11,13 @@ import {
   DELETE_ELECTION,
   UPDATE_ELECTION,
 
-  // Election Candidates ---------------
+  // Election Candidates
   GET_ELECTION_CANDIDATES,
   ADD_NEW_ELECTION_CANDIDATE,
   DELETE_ELECTION_CANDIDATE,
   UPDATE_ELECTION_CANDIDATE,
 
-  // Election Committees ---------------
+  // Election Committees
   GET_ELECTION_COMMITTEES,
   ADD_NEW_ELECTION_COMMITTEE,
   DELETE_ELECTION_COMMITTEE,
@@ -26,7 +26,7 @@ import {
   // Election Committee Results
   UPDATE_ELECTION_COMMITTEE_RESULTS,
 
-  // Election Campaign ---------------
+  // Election Campaign
   GET_ELECTION_CAMPAIGNS,
   ADD_NEW_ELECTION_CAMPAIGN,
   DELETE_ELECTION_CAMPAIGN,
@@ -44,7 +44,7 @@ import {
   ElectionApiResponseSuccess,
   ElectionApiResponseError,
 
-  // Elections ---------------
+  // Elections
   addElectionSuccess,
   addElectionFail,
   updateElectionSuccess,
@@ -52,7 +52,7 @@ import {
   deleteElectionSuccess,
   deleteElectionFail,
 
-  // Election Candidates ---------------
+  // Election Candidates
   addElectionCandidateSuccess,
   addElectionCandidateFail,
   updateElectionCandidateSuccess,
@@ -60,7 +60,7 @@ import {
   deleteElectionCandidateSuccess,
   deleteElectionCandidateFail,
 
-  // Election Committees ---------------
+  // Election Committees
   addElectionCommitteeSuccess,
   addElectionCommitteeFail,
   updateElectionCommitteeSuccess,
@@ -68,11 +68,11 @@ import {
   deleteElectionCommitteeSuccess,
   deleteElectionCommitteeFail,
 
-  // Election Committees Results ---------------
+  // Election Committees Results
   updateElectionCommitteeResultsSuccess,
   updateElectionCommitteeResultsFail,
 
-  // Election Campaigns ---------------
+  // Election Campaigns
   addElectionCampaignSuccess,
   addElectionCampaignFail,
   updateElectionCampaignSuccess,
@@ -86,29 +86,29 @@ import { uploadNewImage } from "../uploadImage/action";
 
 //Include Both Helper File with needed methods
 import {
-  // Elections ---------------
+  // Elections
   getElections as getElectionsApi,
   getElectionDetails as getElectionDetailsApi,
   addElection,
   updateElection,
   deleteElection,
 
-  // Election Candidates ---------------
+  // Election Candidates
   getElectionCandidates as getElectionCandidatesApi,
   addNewElectionCandidate,
   updateElectionCandidate,
   deleteElectionCandidate,
 
-  // Election Committees ---------------
+  // Election Committees
   getElectionCommittees as getElectionCommitteesApi,
   addNewElectionCommittee,
   updateElectionCommittee,
   deleteElectionCommittee,
 
-  // Election Committee Results ---------------
+  // Election Committee Results
   updateElectionCommitteeResults,
 
-  // Election Campaigns ---------------
+  // Election Campaigns
   getElectionCampaigns as getElectionCampaignsApi,
   addNewElectionCampaign,
   updateElectionCampaign,
@@ -213,7 +213,7 @@ function* onUpdateElection({ payload: { election, formData } }) {
   }
 }
 
-// Election Candidates ---------------
+// Election Candidates
 function* getElectionCandidates({ payload: election }) {
   try {
     const response = yield call(getElectionCandidatesApi, election);
@@ -263,7 +263,7 @@ function* onUpdateElectionCandidate({ payload: electionCandidate }) {
 }
 
 
-// Election Committees ---------------
+// Election Committees
 function* getElectionCommittees({ payload: election }) {
   try {
     const response = yield call(getElectionCommitteesApi, election);
@@ -329,7 +329,7 @@ function* onUpdateElectionCommitteeResults({ payload: electionCommitteeResult })
   }
 }
 
-// Election Campaigns ---------------
+// Election Campaigns
 function* getElectionCampaigns({ payload: election }) {
   try {
     const response = yield call(getElectionCampaignsApi, election);
@@ -378,7 +378,7 @@ function* onUpdateElectionCampaign({ payload: electionCampaign }) {
 
 
 
-// Watchers ---------------
+// Watchers
 export function* watchGetElections() {
   yield takeEvery(GET_ELECTIONS, getElections);
 }
@@ -400,7 +400,7 @@ export function* watchGetElectionDetails() {
   yield takeEvery(GET_ELECTION_DETAILS, getElectionDetails);
 }
 
-// Election Candidates Watchers ---------------
+// Election Candidates Watchers
 export function* watchGetElectionCandidates() {
   yield takeEvery(GET_ELECTION_CANDIDATES, getElectionCandidates);
 }
@@ -418,7 +418,7 @@ export function* watchDeleteElectionCandidate() {
 }
 
 
-// Election Committees Watchers ---------------
+// Election Committees Watchers
 export function* watchGetElectionCommittees() {
   yield takeEvery(GET_ELECTION_COMMITTEES, getElectionCommittees);
 }
@@ -435,12 +435,12 @@ export function* watchDeleteElectionCommittee() {
   yield takeEvery(DELETE_ELECTION_COMMITTEE, onDeleteElectionCommittee);
 }
 
-// Election Committees Results Watchers ---------------
+// Election Committees Results Watchers
 export function* watchUpdateElectionCommitteeResults() {
   yield takeEvery(UPDATE_ELECTION_COMMITTEE_RESULTS, onUpdateElectionCommitteeResults);
 }
 
-// Election Campaigns Watchers ---------------
+// Election Campaigns Watchers
 export function* watchGetElectionCampaigns() {
   yield takeEvery(GET_ELECTION_CAMPAIGNS, getElectionCampaigns);
 }
@@ -462,29 +462,29 @@ export function* watchDeleteElectionCampaign() {
 function* electionSaga() {
   yield all([
 
-    // Elections ---------------
+    // Elections
     fork(watchGetElections),
     fork(watchAddNewElection),
     fork(watchUpdateElection),
     fork(watchDeleteElection),
     fork(watchGetElectionDetails),
 
-    // ElectionCandidates ---------------
+    // ElectionCandidates
     fork(watchGetElectionCandidates),
     fork(watchAddNewElectionCandidate),
     fork(watchUpdateElectionCandidate),
     fork(watchDeleteElectionCandidate),
 
-    // ElectionCommittees ---------------
+    // ElectionCommittees
     fork(watchGetElectionCommittees),
     fork(watchAddNewElectionCommittee),
     fork(watchUpdateElectionCommittee),
     fork(watchDeleteElectionCommittee),
 
-    // ElectionCommitteeResults ---------------
+    // ElectionCommitteeResults
     fork(watchUpdateElectionCommitteeResults),
 
-    // ElectionCampiagns ---------------
+    // ElectionCampiagns
     fork(watchGetElectionCampaigns),
     fork(watchAddNewElectionCampaign),
     fork(watchUpdateElectionCampaign),

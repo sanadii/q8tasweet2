@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { campaignSelector } from 'Selectors';
 
-import { updateCampaignAttendee } from "../../../../store/actions";
+import { updateCampaignAttendee } from "store/actions";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
-import { GuaranteeStatusOptions } from "../../../../Components/constants";
+import { Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { GenderOptions } from "Components/constants";
 
 const AttendeesModal = ({ modal, toggle, modalMode, campaignAttendee }) => {
 
-  const { campaignMembers } = useSelector(campaignSelector);
+  const { campaignMembers, campaignRoles } = useSelector(campaignSelector);
 
   const [onModalSubmit, setOnModalSubmit] = useState(null);
 
@@ -33,26 +32,26 @@ const AttendeesModal = ({ modal, toggle, modalMode, campaignAttendee }) => {
       ModalButtonText = "Send Text";
       break;
     case "GuaranteeUpdateModal":
-      ModalTitle = "Update Campaign Guarantee";
+      ModalTitle = "تعديل تحضير ناخب";
       ModalContent = CampaignAttendeeUpdateModal;
-      ModalButtonText = "Update Campaign Guarantee";
+      ModalButtonText = "تعديل تحضير ناخب";
       break;
     case "GuaranteeViewModal":
-      ModalTitle = "View Campaign Guarantee";
+      ModalTitle = "مشاهدة تحضير ناخب";
       ModalContent = CampaignAttendeeViewModal;
-      ModalButtonText = "Close";
+      ModalButtonText = "اغلاق";
       break;
     default:
       ModalTitle = "Default Modal"; // A default title for other cases
       ModalContent = DefaultModalContent;
-      ModalButtonText = "Close"; // A default button text
+      ModalButtonText = "اغلاق"; // A default button text
   }
 
 
   return (
     <Modal isOpen={modal} toggle={toggle} centered className="border-0" size="lg">
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        Update Campaign Guarantee
+        تعديل تحضير ناخب
       </ModalHeader>
       <ModalBody className="p-4">
 
@@ -65,7 +64,7 @@ const AttendeesModal = ({ modal, toggle, modalMode, campaignAttendee }) => {
       </ModalBody>
       <ModalFooter>
         <div className="hstack gap-2 justify-content-end">
-          <Button color="light" onClick={() => toggle(false)}>Close</Button>
+          <Button color="light" onClick={() => toggle(false)}>اغلاق</Button>
 
           {/* if ModalButtonText and ModalButtonText is not empty */}
           {ModalButtonText && ModalButtonText.length > 0 &&
@@ -80,8 +79,6 @@ const AttendeesModal = ({ modal, toggle, modalMode, campaignAttendee }) => {
               {ModalButtonText}
             </Button>
           }
-
-
         </div>
       </ModalFooter>
     </Modal>
@@ -172,29 +169,39 @@ const CampaignAttendeeUpdateModal = ({
           <Table size="sm"> {/* Using reactstrap's Table */}
             <thead className="bg-primary text-white">
               <tr>
-                <th colSpan="2" className="text-center">Elector Info</th>
+                <th colSpan="2" className="text-center">معلومات الناخب</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="fw-medium">Name / Gender</td> {/* Added text-muted */}
-                <td>{campaignAttendee.full_name} {campaignAttendee.gender}</td>
+                <td className="fw-medium">الاسم</td>{" "}
+                <td>
+                  {campaignAttendee.fullName}
+                </td>
               </tr>
               <tr>
-                <td className="fw-medium">CID</td>
+                <td className="fw-medium">النوع</td>{" "}
+                <td>
+                  {
+                    (GenderOptions.find(g => g.id === campaignAttendee.gender) || {}).name || "غير محدد"
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td className="fw-medium">الرقم المدني</td>
                 <td>{campaignAttendee.civil}</td>
               </tr>
               <tr>
-                <td className="fw-medium">Box Number</td>
-                <td>{campaignAttendee.box_no}</td>
+                <td className="fw-medium">رقم الصندوق</td>
+                <td>{campaignAttendee.boxNo}</td>
               </tr>
               <tr>
-                <td className="fw-medium">Member Number</td>
-                <td>{campaignAttendee.membership_no}</td>
+                <td className="fw-medium">رقم العضوية</td>
+                <td>{campaignAttendee.membershipNo}</td>
               </tr>
               <tr>
-                <td className="fw-medium">Enrolment Date</td>
-                <td>{campaignAttendee.enrollment_date}</td>
+                <td className="fw-medium">تاريخ العضوية</td>
+                <td>{campaignAttendee.enrollmentDate}</td>
               </tr>
             </tbody>
           </Table>
@@ -211,113 +218,30 @@ const CampaignAttendeeUpdateModal = ({
             <Table size="sm">
               <thead className="bg-primary text-white">
                 <tr>
-                  <th colSpan="2" className="text-center">Guarantee Info</th>
+                  <th colSpan="2" className="text-center">معلومات التحضير</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="fw-medium">Guarantor [ID]</td>
+                  <td className="fw-medium">المحضر</td>
                   <td>
-                    <Input
-                      name="guarantor"
-                      type="select"
-                      className="form-select"
-                      id="guarantor-field"
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.guarantor || ""}
-                    >
-                      {sortedGurantorOptions.map((guarantor) => {
-                        let prefix = "";
-                        switch (guarantor.role) {
-                          case 2:
-                            prefix = "🔵";  // blue circle for candidate
-                            break;
-                          case 3:
-                            prefix = "🟡";  // yellow circle for supervisor
-                            break;
-                          case 4:
-                            prefix = "🟢";  // green circle for guarantor
-                            break;
-                          default:
-                            break;
-                        }
-                        return (
-                          <option key={guarantor.id} value={guarantor.id}>
-                            {prefix} {guarantor.name}
-                          </option>
-                        );
-                      })}
-
-                    </Input>
-                    {validation.touched.guarantor && validation.errors.guarantor ? (
-                      <FormFeedback type="invalid">
-                        {validation.errors.guarantor}
-                      </FormFeedback>
-                    ) : null}
+                    <td>-</td>
                   </td>
                 </tr>
                 <tr>
-                  <td className="fw-medium">Mobile</td>
+                  <td className="fw-medium">اللجنة</td>
                   <td>
-                    <Input
-                      name="phone"
-                      id="phone-field"
-                      className="form-control"
-                      placeholder="Enter Guarantee Mobile"
-                      type="number"
-                      validate={{
-                        required: { value: true },
-                      }}
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.phone || ""}
-                      invalid={
-                        validation.touched.phone && validation.errors.phone
-                          ? true
-                          : false
-                      }
-                    />
-                    {validation.touched.phone && validation.errors.phone ? (
-                      <FormFeedback type="invalid">
-                        {validation.errors.phone}
-                      </FormFeedback>
-                    ) : null}
+                    <td>-</td>
                   </td>
                 </tr>
                 <tr>
-                  <td className="fw-medium">Status</td>
-                  <td>
-                    <Input
-                      name="status"
-                      type="select"
-                      className="form-select"
-                      id="status-field"
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.status || ""}
-                    >
-                      {GuaranteeStatusOptions.map((status) => (
-                        <option key={status.id} value={status.id}>
-                          {status.name}
-                        </option>
-                      ))}
-                    </Input>
-                    {validation.touched.status && validation.errors.status ? (
-                      <FormFeedback type="invalid">
-                        {validation.errors.status}
-                      </FormFeedback>
-                    ) : null}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="fw-medium">Notes</td>
+                  <td className="fw-medium">ملاحضات</td>
                   <td>
                     <Input
                       name="notes"
                       id="guarantee-id-field"
                       className="form-control"
-                      placeholder="Enter Guarantee ID"
+                      placeholder="ادخل ملاحظات"
                       type="textarea"
                       validate={{
                         required: { value: true },

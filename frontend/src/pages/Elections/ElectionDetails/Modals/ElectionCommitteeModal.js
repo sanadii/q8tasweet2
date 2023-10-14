@@ -33,7 +33,7 @@ export const ElectionCommitteeModal = ({ modal, toggle, setModal, isEdit, electi
     validation.submitForm(); // validation is the Formik instance from the child component
   };
 
-  // validation ---------------
+  // validation
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {

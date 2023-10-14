@@ -19,7 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 const GuaranteesTab = () => {
   const dispatch = useDispatch();
 
-  // --------------- States ---------------
+  // States
   const { campaignGuarantees, campaignMembers, isCampaignGuaranteeSuccess, error } = useSelector(campaignSelector);
 
   // CampaignGuarantees Constants
@@ -173,7 +173,7 @@ const GuaranteesTab = () => {
       },
     ], [handleCampaignGuaranteeClick, campaignMembers]);
 
-  // Filters -------------------------
+  // Filters----------
   const [filters, setFilters] = useState({
     global: "",
     attended: null,
@@ -251,7 +251,7 @@ const GuaranteesTab = () => {
 
                 {campaignGuaranteeList ? (
                   <TableContainer
-                    // Filters -------------------------
+                    // Filters----------
                     isTableContainerFilter={true}
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
@@ -267,13 +267,13 @@ const GuaranteesTab = () => {
                     setFilters={setFilters}
                     SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
 
-                    // Data -------------------------
+                    // Data----------
                     columns={columns}
                     data={campaignGuaranteeList || []}
                     customPageSize={50}
                     // setCampaignGuaranteeList={setCampaignGuaranteeList}
 
-                    // Styling -------------------------
+                    // Styling----------
                     className="custom-header-css"
                     divClass="table-responsive table-card mb-2"
                     tableClass="align-middle table-nowrap"

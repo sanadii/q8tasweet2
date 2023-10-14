@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Badge, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Card, CardBody, } from "reactstrap";
 import { electionSelector } from 'Selectors';
 
-// --------------- Component, Constants, Hooks Imports ---------------
+// Component, Constants, Hooks Imports
 import { ImageGenderCircle, AvatarMedium, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Components/Common";
 
 import { Container } from "reactstrap";

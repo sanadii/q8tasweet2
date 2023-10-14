@@ -62,7 +62,7 @@ const MembersTab = () => {
   const [modalMode, setModalMode] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Filters -------------------------
+  // Filters----------
   const [filters, setFilters] = useState({
     global: "",
     role: null,
@@ -227,7 +227,7 @@ const MembersTab = () => {
                     toggle={toggle}
                     campaignMember={campaignMember}
 
-                    // Filters -------------------------
+                    // Filters----------
                     isTableContainerFilter={true}
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
@@ -245,7 +245,7 @@ const MembersTab = () => {
                     // onTabChange={handleTabChange}
 
 
-                    // Data -------------------------
+                    // Data----------
                     columns={columns}
                     data={campaignMemberList || []}
                     // setCampaignMemberList={setCampaignMemberList}
@@ -253,7 +253,7 @@ const MembersTab = () => {
                     // TODO: to find out what is this for and how to be used with the table
                     // handleItemClick={() => handleCampaignMemberClick(campaignMember, "AddModal")}
 
-                    // Styling -------------------------
+                    // Styling----------
                     className="custom-header-css"
                     divClass="table-responsive table-card mb-2"
                     tableClass="align-middle table-nowrap"

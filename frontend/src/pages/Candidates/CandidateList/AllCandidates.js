@@ -292,7 +292,7 @@ const AllCandidates = () => {
   const [dueDate, setDate] = useState(defaultdate());
 
 
-  // Filters -------------------------
+  // Filters----------
   const [filters, setFilters] = useState({
     global: "",
     gender: null,
@@ -379,7 +379,7 @@ const AllCandidates = () => {
                   AddButtonText="Add New Candidate"
                   isEdit={isEdit}
 
-                  // Filters -------------------------
+                  // Filters----------
                   isTableContainerFilter={true}
                   isGlobalFilter={true}
                   preGlobalFilteredRows={true}

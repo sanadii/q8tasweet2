@@ -180,7 +180,7 @@ function* onUpdateCampaign({ payload: campaign }) {
 }
 
 
-// Campaign Guarantees
+// CampaignGuarantees
 function* getAllCampaignGuarantees({ payload: campaign }) {
   try {
     const response = yield call(getAllCampaignGuaranteesApi, campaign);

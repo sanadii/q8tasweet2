@@ -1,9 +1,9 @@
 # GitHub documentation for ignoring files
 # https://help.github.com/articles/ignoring-files/
 
-# ---------------------------------------
+#------------------------
 # Dependencies
-# ---------------------------------------
+#------------------------
 
 # Node modules and related
 # /node_modules
@@ -18,9 +18,9 @@ __pycache__/
 *.pyc
 *.pyo
 
-# ---------------------------------------
+#------------------------
 # Caches and Logs
-# ---------------------------------------
+#------------------------
 
 # Python caches
 .pytest_cache/
@@ -30,9 +30,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# ---------------------------------------
+#------------------------
 # Configuration & Environment
-# ---------------------------------------
+#------------------------
 
 # OS generated
 # .DS_Store
@@ -43,24 +43,24 @@ yarn-error.log*
 # .env.test.local
 # .env.production.local
 
-# ---------------------------------------
+#------------------------
 # Dependency Locks
-# ---------------------------------------
+#------------------------
 
 # While many projects include them, if you choose not to:
 # package-lock.json
 # yarn.lock
 
-# ---------------------------------------
+#------------------------
 # Build Output
-# ---------------------------------------
+#------------------------
 
 # Compiled frontend assets
 # frontend/build/
 
-# ---------------------------------------
+#------------------------
 # Miscellaneous
-# ---------------------------------------
+#------------------------
 
 # Code coverage reports (if generated)
 # /coverage
