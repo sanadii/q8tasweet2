@@ -1,7 +1,7 @@
 # Campaign Admin
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from restapi.models import Campaigns, CampaignMembers, CampaignGuarantees, CampaignAttendees
+from restapi.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from restapi.helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 
@@ -69,21 +69,21 @@ class CampaignAttendeesAdmin(admin.ModelAdmin):
 
 
 
-admin.site.register(Campaigns, CampaignsAdmin)
-admin.site.register(CampaignMembers, CampaignMembersAdmin)
-admin.site.register(CampaignGuarantees, CampaignGuaranteesAdmin)
-admin.site.register(CampaignAttendees, CampaignAttendeesAdmin)
+admin.site.register(Campaign, CampaignsAdmin)
+admin.site.register(CampaignMember, CampaignMembersAdmin)
+admin.site.register(CampaignGuarantee, CampaignGuaranteesAdmin)
+admin.site.register(CampaignAttendee, CampaignAttendeesAdmin)
 
 # class ElectionsAdminSite(AdminSite):
-#     site_header = 'Elections Administration'
-#     site_title = 'Elections Admin'
-#     index_title = 'Elections Admin'
+#     site_header = 'Election Administration'
+#     site_title = 'Election Admin'
+#     index_title = 'Election Admin'
 
 # campaign_admin_site = ElectionsAdminSite(name='campaign_admin')
 
 class campaignAdminSite(AdminSite):
-    site_header = 'Campaigns Administration'
-    site_title = 'Campaigns Admin'
-    index_title = 'Campaigns Admin'
+    site_header = 'Campaign Administration'
+    site_title = 'Campaign Admin'
+    index_title = 'Campaign Admin'
 
 campaign_admin_site = campaignAdminSite(name='campaign_admin')

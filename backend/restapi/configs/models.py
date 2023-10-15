@@ -1,7 +1,7 @@
 # restapi/configs/models.py
 from django.db import models
 
-class Configs(models.Model):
+class Config(models.Model):
     key = models.CharField(max_length=255, unique=True, null=True)
     value = models.TextField(null=True)
 
@@ -11,7 +11,7 @@ class Configs(models.Model):
         verbose_name_plural = "Configuration"
 
     def save(self, *args, **kwargs):
-        super(Configs, self).save(*args, **kwargs)
+        super(Config, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.key

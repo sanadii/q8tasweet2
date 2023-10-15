@@ -1,4 +1,4 @@
-# from campaigns.models import Campaigns
+# from campaigns.models import Campaign
 from django.http import JsonResponse
 from django.http.response import JsonResponse
 from rest_framework.response import Response
@@ -25,7 +25,7 @@ from django.conf import settings
 
 class GetAllElectors(APIView):
     def get(self, request):
-        electors = Electors.objects.all()
+        electors = Elector.objects.all()
         electors_serializer = ElectorsSerializer(electors, many=True)
         return Response({"data": {"allElectors": electors_serializer.data}, "code": 200})
 
@@ -43,12 +43,12 @@ class StandardResultsSetPagination(PageNumberPagination):
 #         if search_type == 'cid':
 #             if not (query.isdigit() and len(query) == 12):  # Validate Civil ID
 #                 return Response({"error": "Invalid Civil ID."}, status=400)
-#             electors = Electors.objects.filter(civil=query)
+#             electors = Elector.objects.filter(civil=query)
             
 #         elif search_type == 'name':
 #             if len(query) < 3:  # Validate name length
 #                 return Response({"error": "Name should be at least 3 characters long."}, status=400)
-#             electors = Electors.objects.filter(
+#             electors = Elector.objects.filter(
 #                 Q(name_1__icontains=query) | 
 #                 Q(name_2__icontains=query) | 
 #                 Q(name_3__icontains=query) | 
@@ -99,7 +99,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 #             queries |= Q(last_name__icontains=query)
         
-#         electors = Electors.objects.filter(queries)
+#         electors = Elector.objects.filter(queries)
 
 #         # Pagination
 #         paginator = StandardResultsSetPagination()
@@ -121,11 +121,11 @@ class GetElectors(APIView):
         query = request.GET.get('searchInput', '').strip()
         
         if query.isdigit():
-            electors = Electors.objects.filter(civil=query)
+            electors = Elector.objects.filter(civil=query)
             if not electors.exists():
                 raise NotFound(detail="Name was not found.", code=404)
         else:
-            all_electors = Electors.objects.all()
+            all_electors = Elector.objects.all()
             if len(query) >= 3:
                 electors = [elector for elector in all_electors if query.lower() in elector.full_name.lower()]
             else:

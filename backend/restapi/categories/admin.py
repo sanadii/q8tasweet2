@@ -1,7 +1,7 @@
-# Categories & Tags Admin
+# Category & Tag Admin
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from restapi.models import Categories, Tags, Areas
+from restapi.models import Category, Tag, Area
 from restapi.helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 class AreasAdmin(admin.ModelAdmin):
@@ -42,13 +42,13 @@ class CategoriesAdmin(admin.ModelAdmin):
     
 
 # AdminSites
-admin.site.register(Categories, CategoriesAdmin)
-admin.site.register(Tags, TagsAdmin)
-admin.site.register(Areas, AreasAdmin)
+admin.site.register(Category, CategoriesAdmin)
+admin.site.register(Tag, TagsAdmin)
+admin.site.register(Area, AreasAdmin)
 
 class CategoryAdminSite(AdminSite):
-    site_header = 'Categories Administration'
-    site_title = 'Categories Admin'
-    index_title = 'Categories Admin'
+    site_header = 'Category Administration'
+    site_title = 'Category Admin'
+    index_title = 'Category Admin'
 
 category_admin_site = CategoryAdminSite(name='category')

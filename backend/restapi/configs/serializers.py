@@ -5,5 +5,5 @@ from restapi.models import *
 # PROJECT
 class ConfigsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Configs
+        model = Config
         fields = "__all__"

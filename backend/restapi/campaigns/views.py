@@ -1,4 +1,4 @@
-# from campaigns.models import Campaigns
+# from campaigns.models import Campaign
 from django.http import JsonResponse
 from django.http.response import JsonResponse
 from django.db.models import Q
@@ -24,7 +24,7 @@ class GetCampaigns(APIView):
         try:
             # Check if user is staff
             if request.user.is_staff:
-                campaignss_data = Campaigns.objects.all()
+                campaignss_data = Campaign.objects.all()
                 paginator = CustomPagination()
                 paginated_campaignss = paginator.paginate_queryset(campaignss_data, request)
                 
@@ -37,12 +37,12 @@ class GetCampaigns(APIView):
             else:  # if user is not staff
                 current_user_id = request.user.id
 
-                # Step 1: Query the CampaignMembers table
-                member_entries = CampaignMembers.objects.filter(user_id=current_user_id)
+                # Step 1: Query the CampaignMember table
+                member_entries = CampaignMember.objects.filter(user_id=current_user_id)
                 
-                # Step 2: Get corresponding Campaigns
+                # Step 2: Get corresponding Campaign
                 campaign_ids = [entry.campaign.id for entry in member_entries if entry.campaign]
-                campaigns_data = Campaigns.objects.filter(id__in=campaign_ids)
+                campaigns_data = Campaign.objects.filter(id__in=campaign_ids)
                 
                 # Step 3: Serialize the data
                 data_serializer = CampaignsSerializer(campaigns_data, many=True)
@@ -64,17 +64,17 @@ class GetCampaignDetails(APIView):
         context = {"request": request}
         current_user_id = context["request"].user.id
 
-        campaign = get_object_or_404(Campaigns, id=id)
+        campaign = get_object_or_404(Campaign, id=id)
         election_candidate = campaign.election_candidate
         election = election_candidate.election
         candidate = election_candidate.candidate
 
-        campaign_members = CampaignMembers.objects.filter(campaign=campaign).prefetch_related('campaign').only('id')
-        campaign_guarantees = CampaignGuarantees.objects.filter(campaign=campaign).select_related('campaign')
-        campaign_attendeess = CampaignAttendees.objects.filter(election=election).select_related('election')
+        campaign_members = CampaignMember.objects.filter(campaign=campaign).prefetch_related('campaign').only('id')
+        campaign_guarantees = CampaignGuarantee.objects.filter(campaign=campaign).select_related('campaign')
+        campaign_attendeess = CampaignAttendee.objects.filter(election=election).select_related('election')
 
-        election_candidates = ElectionCandidates.objects.filter(election=election).select_related('election')
-        election_committees = ElectionCommittees.objects.filter(election=election).select_related('election')
+        election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
+        election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
 
         campaign_roles = Group.objects.filter(Q(category=4))
 
@@ -97,7 +97,7 @@ class GetCampaignDetails(APIView):
         return GroupSerializer(campaign_roles, many=True, context=context).data
 
     def get_current_campaign_member(self, campaign_id, user_id, context):
-        current_campaign_member_query = CampaignMembers.objects.select_related('user').filter(campaign_id=campaign_id, user_id=user_id).first()
+        current_campaign_member_query = CampaignMember.objects.select_related('user').filter(campaign_id=campaign_id, user_id=user_id).first()
         if current_campaign_member_query:
             return CampaignMembersSerializer(current_campaign_member_query, context=context).data
         return None
@@ -138,8 +138,8 @@ class UpdateCampaign(APIView):
 
     def patch(self, request, id):
         try:
-            campaign = Campaigns.objects.get(id=id)
-        except Campaigns.DoesNotExist:
+            campaign = Campaign.objects.get(id=id)
+        except Campaign.DoesNotExist:
             return Response({"error": "Campaign not found"}, status=404)
         
         serializer = CampaignsSerializer(data=request.data, context={'request': request})
@@ -152,10 +152,10 @@ class UpdateCampaign(APIView):
 class DeleteCampaign(APIView):
     def delete(self, request, id):
         try:
-            campaign = Campaigns.objects.get(id=id)
+            campaign = Campaign.objects.get(id=id)
             campaign.delete()
             return JsonResponse({"data": "Campaign deleted successfully", "count": 1, "code": 200}, safe=False)
-        except Campaigns.DoesNotExist:
+        except Campaign.DoesNotExist:
             return JsonResponse({"data": "Campaign not found", "count": 0, "code": 404}, safe=False)
 
 
@@ -176,8 +176,8 @@ class UpdateCampaignMember(APIView):
 
     def patch(self, request, id):
         try:
-            campaign_member = CampaignMembers.objects.get(id=id)
-        except CampaignMembers.DoesNotExist:
+            campaign_member = CampaignMember.objects.get(id=id)
+        except CampaignMember.DoesNotExist:
             return Response({"data": "Campaign Member not found", "count": 0, "code": 404}, status=404)
         
         serializer = CampaignMembersSerializer(instance=campaign_member, data=request.data, partial=True, context={'request': request})
@@ -191,13 +191,13 @@ class UpdateCampaignMember(APIView):
 class DeleteCampaignMember(APIView):
     def delete(self, request, id):
         try:
-            campaign_member = CampaignMembers.objects.get(id=id)
+            campaign_member = CampaignMember.objects.get(id=id)
             campaign_member.delete()
             return JsonResponse(
                 {"data": "campaign member deleted successfully", "count": 1, "code": 200},
                 safe=False,
             )
-        except Elections.DoesNotExist:
+        except Election.DoesNotExist:
             return JsonResponse(
                 {"data": "campaign not found", "count": 0, "code": 404}, safe=False
             )
@@ -220,8 +220,8 @@ class UpdateCampaignGuarantee(APIView):
 
     def patch(self, request, id):
         try:
-            campaign_guarantee = CampaignGuarantees.objects.get(id=id)
-        except CampaignGuarantees.DoesNotExist:
+            campaign_guarantee = CampaignGuarantee.objects.get(id=id)
+        except CampaignGuarantee.DoesNotExist:
             return Response({"data": "Campaign Guarantee not found", "count": 0, "code": 404}, status=404)
         
         serializer = CampaignGuaranteesSerializer(instance=campaign_guarantee, data=request.data, partial=True, context={'request': request})
@@ -237,17 +237,17 @@ class DeleteCampaignGuarantee(APIView):
 
     def delete(self, request, id):
         try:
-            campaign_guarantee = CampaignGuarantees.objects.get(id=id)
+            campaign_guarantee = CampaignGuarantee.objects.get(id=id)
             campaign_guarantee.delete()
             return JsonResponse({"data": "Campaign Guarantee deleted successfully", "count": 1, "code": 200}, safe=False)
-        except CampaignGuarantees.DoesNotExist:
+        except CampaignGuarantee.DoesNotExist:
             return JsonResponse({"data": "Campaign Guarantee not found", "count": 0, "code": 404}, safe=False)
 
 class AddNewCampaignAttendee(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        # Assuming you have a serializer for CampaignAttendees
+        # Assuming you have a serializer for CampaignAttendee
         serializer = CampaignAttendeesSerializer(data=request.data, context={'request': request})
         
         if serializer.is_valid():
@@ -261,11 +261,11 @@ class UpdateCampaignAttendee(APIView):
 
     def patch(self, request, id):
         try:
-            campaign_attendee = CampaignAttendees.objects.get(id=id)
-        except CampaignAttendees.DoesNotExist:
+            campaign_attendee = CampaignAttendee.objects.get(id=id)
+        except CampaignAttendee.DoesNotExist:
             return Response({"data": "Campaign Attendee not found", "count": 0, "code": 404}, status=404)
         
-        # Assuming you have a serializer for CampaignAttendees
+        # Assuming you have a serializer for CampaignAttendee
         serializer = CampaignAttendeesSerializer(instance=campaign_attendee, data=request.data, partial=True, context={'request': request})
         
         if serializer.is_valid():
@@ -279,9 +279,9 @@ class DeleteCampaignAttendee(APIView):
 
     def delete(self, request, id):
         try:
-            campaign_attendee = CampaignAttendees.objects.get(id=id)
+            campaign_attendee = CampaignAttendee.objects.get(id=id)
             campaign_attendee.delete()
             return Response({"data": "Campaign Attendee deleted successfully", "count": 1, "code": 200}, status=200)
-        except CampaignAttendees.DoesNotExist:
+        except CampaignAttendee.DoesNotExist:
             return Response({"data": "Campaign Attendee not found", "count": 0, "code": 404}, status=404)
       

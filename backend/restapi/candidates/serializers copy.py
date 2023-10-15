@@ -16,7 +16,7 @@ class CandidatesSerializer(serializers.ModelSerializer):
     deletedBy = serializers.SerializerMethodField()  # Renamed to camelCase
 
     class Meta:
-        model = Candidates
+        model = Candidate
         fields = [
             "id",  "name", "description", "image",
             "gender", "phone", "email", "twitter", "instagram",

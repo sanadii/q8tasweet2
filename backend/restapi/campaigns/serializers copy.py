@@ -3,11 +3,11 @@ from rest_framework import serializers
 from restapi.helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 from restapi.models import (
-    Elections, ElectionCandidates, ElectionCommittees,
-    Candidates, 
-    Campaigns, CampaignMembers, CampaignGuarantees, CampaignAttendees,
-    Electors,
-    Categories,
+    Election, ElectionCandidate, ElectionCommittee,
+    Candidate, 
+    Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee,
+    Elector,
+    Category,
 )
 
 from restapi.candidates.serializers import CandidatesSerializer
@@ -21,7 +21,7 @@ class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     election = ElectionsSerializer(source='election_candidate.election', read_only=True)
     
     class Meta: 
-        model = Campaigns
+        model = Campaign
         fields = [
             "id", "election_candidate", "election", "candidate",
             "description", "target_votes",
@@ -53,7 +53,7 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
         # image = serializers.ImageField(use_url=True)  # Ensure the image's URL is returned, not its data
 
     class Meta:
-        model = ElectionCandidates
+        model = ElectionCandidate
         fields = [ "id", "votes", "deleted", "election", "candidate"]
 
     def to_representation(self, instance):
@@ -70,7 +70,7 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
 class CampaignElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     class Meta:
-        model = Elections
+        model = Election
         fields = "__all__"
 
     def to_representation(self, instance):
@@ -80,7 +80,7 @@ class CampaignElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
 class campaignCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     class Meta:
-        model = Candidates
+        model = Candidate
         fields = "__all__"
 
     def to_representation(self, instance):
@@ -94,7 +94,7 @@ class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
     user_details = UserSerializer(source='user', read_only=True)  # Nested User serializer
 
     class Meta:
-        model = CampaignMembers
+        model = CampaignMember
         fields = ["id", "user", "user_details", "campaign", "role", "supervisor", "committee", "notes", "phone", "status"]
 
     def to_representation(self, instance):
@@ -110,7 +110,7 @@ class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
     user_details = UserSerializer(source='user', read_only=True)  # Nested User serializer
 
     class Meta:
-        model = CampaignMembers
+        model = CampaignMember
         fields = ["id", "user", "user_details", "campaign", "role", "supervisor", "committee", "notes", "phone", "status"]
 
     def to_representation(self, instance):
@@ -127,7 +127,7 @@ class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
             if role >= 3:
                 # Filter the members based on the role logic
                 # Note: The below is a simple example, you might need to adjust based on your actual needs
-                queryset = CampaignMembers.objects.select_related('user').filter(campaign_id=instance.campaign_id)
+                queryset = CampaignMember.objects.select_related('user').filter(campaign_id=instance.campaign_id)
 
                 if role == 3:
                     # Get members whose supervisor is the current member's ID.
@@ -151,7 +151,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
     elector_notes = serializers.SerializerMethodField()
 
     class Meta:
-        model = CampaignGuarantees
+        model = CampaignGuarantee
         fields = [ "id", "campaign", "member", "civil", "full_name", "phone",
                   "gender", "membership_no", "box_no", "enrollment_date", "relationship",
                   "elector_notes", "notes", "status"
@@ -160,43 +160,43 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
     def get_full_name(self, obj):
         try:
             return obj.civil.full_name if obj.civil else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_gender(self, obj):
         try:
             return obj.civil.gender if obj.civil else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_membership_no(self, obj):
         try:
             return obj.civil.membership_no if obj.civil else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_box_no(self, obj):
         try:
             return obj.civil.box_no if obj.civil else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_enrollment_date(self, obj):
         try:
             return obj.civil.enrollment_date if obj.civil else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_relationship(self, obj):
         try:
             return obj.civil.relationship if obj.civil else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_elector_notes(self, obj):
         try:
             return obj.civil.notes if obj.civil else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
 
@@ -212,7 +212,7 @@ class CampaignAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
     elector_notes = serializers.SerializerMethodField()
 
     class Meta:
-        model = CampaignAttendees
+        model = CampaignAttendee
         fields = ["id", "election", "committee", "user", "civil", "full_name", "gender",
                   "membership_no", "box_no", "enrollment_date", "relationship", "elector_notes", "notes",
                   "status"
@@ -221,49 +221,49 @@ class CampaignAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
     def get_full_name(self, obj):
         try:
             return obj.elector.full_name if obj.elector else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_gender(self, obj):
         try:
             return obj.elector.gender if obj.elector else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_membership_no(self, obj):
         try:
             return obj.elector.membership_no if obj.elector else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_box_no(self, obj):
         try:
             return obj.elector.box_no if obj.elector else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_enrollment_date(self, obj):
         try:
             return obj.elector.enrollment_date if obj.elector else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_relationship(self, obj):
         try:
             return obj.elector.relationship if obj.elector else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_elector_notes(self, obj):
         try:
             return obj.elector.notes if obj.elector else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
         
     def get_civil(self, obj):
         try:
             return obj.elector.civil if obj.elector else None
-        except Electors.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
 
@@ -272,5 +272,5 @@ class CampaignAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
 def get_field_or_not_found(self, obj, field_name):
     try:
         return getattr(obj, field_name) if obj else None
-    except Electors.DoesNotExist:
+    except Elector.DoesNotExist:
         return "Not Found"

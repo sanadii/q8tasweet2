@@ -2,14 +2,14 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 
-from restapi.models import Configs
+from restapi.models import Config
 
 class ConfigsAdmin(admin.ModelAdmin):
     list_display = ['key', 'value']
     search_fields = ['key',]
 
 # AdminSites
-admin.site.register(Configs, ConfigsAdmin)
+admin.site.register(Config, ConfigsAdmin)
 
 class ConfigsAdminSite(AdminSite):
     site_header = 'Configurations'

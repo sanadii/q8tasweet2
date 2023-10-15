@@ -25,7 +25,7 @@ import AttendeesTab from "./AttendeesTab";
 import SortingTab from "./SortingTab";
 import ElectorsTab from "./ElectorsTab";
 import ActivitiesTab from "./ActivitiesTab";
-import EditTab from "./EditTab";
+import EditTab from "./EditTab/EditTab";
 
 
 

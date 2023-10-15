@@ -5,5 +5,5 @@ class RestapiConfig(AppConfig):
     name = 'restapi'
 
     # def ready(self):
-    #     from .models import Elections
-    #     Elections.create_custom_permissions()
+    #     from .models import Election
+    #     Election.create_custom_permissions()

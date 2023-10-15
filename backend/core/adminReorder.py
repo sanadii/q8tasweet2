@@ -3,37 +3,37 @@ ADMIN_REORDER = (
     # Keep original label and models
     'sites',
 
-    # Elections
-    {'app': 'restapi', 'label': 'Elections', 'models': (
-        'restapi.Elections',
-        'restapi.ElectionCandidates',
-        'restapi.ElectionCommittees',
-        'restapi.ElectionCommitteeResults'
+    # Election
+    {'app': 'restapi', 'label': 'Election', 'models': (
+        'restapi.Election',
+        'restapi.ElectionCandidate',
+        'restapi.ElectionCommittee',
+        'restapi.ElectionCommitteeResult'
     )},
 
-    # Candidates
-    {'app': 'restapi', 'label': 'Candidates', 'models': (
-        'restapi.Candidates',
+    # Candidate
+    {'app': 'restapi', 'label': 'Candidate', 'models': (
+        'restapi.Candidate',
     )},
 
-    # Campaigns
-    {'app': 'restapi', 'label': 'Campaigns', 'models': (
-        'restapi.Campaigns',
-        'restapi.CampaignMembers',
-        'restapi.CampaignGuarantees',
-        'restapi.CampaignAttendees'
+    # Campaign
+    {'app': 'restapi', 'label': 'Campaign', 'models': (
+        'restapi.Campaign',
+        'restapi.CampaignMember',
+        'restapi.CampaignGuarantee',
+        'restapi.CampaignAttendee'
     )},
 
-    # Electors
-    {'app': 'restapi', 'label': 'Electors', 'models': (
-        'restapi.Electors',
+    # Elector
+    {'app': 'restapi', 'label': 'Elector', 'models': (
+        'restapi.Elector',
     )},
 
     # Taxonomy
     {'app': 'restapi', 'label': 'Taxonomies', 'models': (
-        'restapi.Categories',
-        'restapi.Tags',
-        'restapi.Areas',
+        'restapi.Category',
+        'restapi.Tag',
+        'restapi.Area',
     )},
     
     # Auth
@@ -44,6 +44,6 @@ ADMIN_REORDER = (
 
     # Configurations
     {'app': 'restapi', 'label': 'Configurations','models': (
-        'restapi.Configs',
+        'restapi.Config',
     )},
 )

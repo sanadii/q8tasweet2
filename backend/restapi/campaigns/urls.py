@@ -5,7 +5,7 @@ from .views import *
 app_name = "campaigns"
 
 urlpatterns = [
-    # Campaigns
+    # Campaign
     path("getCampaigns", GetCampaigns.as_view(), name="getCampaigns"),
     path("getCampaignDetails/<int:id>", GetCampaignDetails.as_view(), name="getCampaignDetails"),
     path("addNewCampaign", AddNewCampaign.as_view(), name="AddNewCampaign"),
@@ -13,7 +13,7 @@ urlpatterns = [
     path("updateCampaign/<int:id>", UpdateCampaign.as_view(), name="UpdateCampaign"),
 
 
-    # # Election Campaigns
+    # # Election Campaign
     # path("getElectionCampaigns/<int:id>", GetElectionCampaigns.as_view(), name="getElectionCampaigns"),
     # # path('getElectionCampaigns', GetElectionCampaigns.as_view(), name='getElectionCampaigns'),
     path("addNewCampaignMember", AddNewCampaignMember.as_view(), name="AddNewCampaignMember"),

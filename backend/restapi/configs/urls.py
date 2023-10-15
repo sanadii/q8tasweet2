@@ -13,7 +13,7 @@ from restapi.admin import (
 
 from .views import *
 
-app_name = "Configs"
+app_name = "Config"
 
 urlpatterns = [
     # Admin

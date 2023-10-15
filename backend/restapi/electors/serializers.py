@@ -4,5 +4,5 @@ from restapi.models import *
 
 class ElectorsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Electors
+        model = Elector
         fields = ["civil", "full_name", "gender", "box_no", "membership_no", "enrollment_date", "notes"]

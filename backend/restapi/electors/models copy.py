@@ -1,11 +1,11 @@
-# Electors Model
+# Elector Model
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from backend.restapi.helper.models_helper import TrackModel, GenderOptions
 
 
-class Electors(models.Model):
+class Elector(models.Model):
     civil = models.BigAutoField(primary_key=True)
     
     # Name fields
@@ -53,5 +53,5 @@ class Electors(models.Model):
         # managed = False
         db_table = 'electors'
         verbose_name = "Elector"
-        verbose_name_plural = "Electors"
+        verbose_name_plural = "Elector"
 

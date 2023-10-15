@@ -1,20 +1,20 @@
 # Menu
 
 # General Menu -------------------------------------------
-# - Elections                       All          
-# - Candidates                      All
-# - Campaigns                       All (if they are members of campaigns)
+# - Election                       All          
+# - Candidate                      All
+# - Campaign                       All (if they are members of campaigns)
 
 # Admin Menu -------------------------------------------
-# - Elections                       Admin               Editor          
-# - Candidates                      Admin               Editor  
-# - Campaigns                       Admin               Editor              Moderators
+# - Election                       Admin               Editor          
+# - Candidate                      Admin               Editor  
+# - Campaign                       Admin               Editor              Moderators
 
 
 # Admin Settings Menu -------------------------------------------
-# - Configs                         Admin               Editor          
-# - Areas                           Admin               Editor          
-# - Categories                      Admin               Editor          
+# - Config                         Admin               Editor          
+# - Area                           Admin               Editor          
+# - Category                      Admin               Editor          
 
 
 
@@ -23,15 +23,15 @@
 
 
 # Editor Menu -------------------------------------------
-# - Elections                       Admin               Editor          
-# - Candidates                      Admin               Editor  
+# - Election                       Admin               Editor          
+# - Candidate                      Admin               Editor  
 
 
 
 # Moderator Menu -------------------------------------------
-# - Elections                       Admin               Editor          
-# - Candidates                      Admin               Editor  
-# - Campaigns                       Admin               Editor              Moderators
+# - Election                       Admin               Editor          
+# - Candidate                      Admin               Editor  
+# - Campaign                       Admin               Editor              Moderators
 
 # can_view_admin_menu
 # can_view_contributor_menu

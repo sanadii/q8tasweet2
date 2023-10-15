@@ -6,7 +6,7 @@ from .views import *
 app_name = "candidates"
 
 urlpatterns = [
-        # Candidates
+        # Candidate
     path("getCandidates", GetCandidates.as_view(), name="GetCandidates"),
     path("addNewCandidate", AddNewCandidate.as_view(), name="AddNewCandidate"),
     path("deleteCandidate/<int:id>", DeleteCandidate.as_view(), name="DeleteCandidate"),
@@ -17,7 +17,7 @@ urlpatterns = [
     # path("getCandidateCandidates", GetCandidateCandidates.as_view(), name="GetCandidateCandidates"),
     # path("getCandidateCandidates/<int:id>", GetCandidateCandidates.as_view(), name="GetCandidateCandidates"),
 
-    # Candidate Candidates
+    # Candidate Candidate
     # path("getCandidateCandidates/<int:candidate_id>", GetCandidateCandidates.as_view(), name="getCandidateCandidates"),
     # path("addNewCandidateCandidate", AddNewCandidateCandidate.as_view(), name="AddNewCandidateCandidate"),
     # path("deleteCandidateCandidate/<int:id>", DeleteCandidateCandidate.as_view(), name="DeleteCandidateCandidate"),

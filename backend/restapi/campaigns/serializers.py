@@ -3,11 +3,11 @@ from rest_framework import serializers
 from restapi.helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 from restapi.models import (
-    Elections, ElectionCandidates, ElectionCommittees,
-    Candidates, 
-    Campaigns, CampaignMembers, CampaignGuarantees, CampaignAttendees,
-    Electors,
-    Categories,
+    Election, ElectionCandidate, ElectionCommittee,
+    Candidate, 
+    Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee,
+    Elector,
+    Category,
 )
 
 # from restapi.serializers import (
@@ -28,7 +28,7 @@ class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     election = ElectionsSerializer(source='election_candidate.election', read_only=True)
     
     class Meta: 
-        model = Campaigns
+        model = Campaign
         fields = [
             "id", "election_candidate", "election", "candidate",
             "description", "target_votes",
@@ -60,7 +60,7 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
         # image = serializers.ImageField(use_url=True)  # Ensure the image's URL is returned, not its data
 
     class Meta:
-        model = ElectionCandidates
+        model = ElectionCandidate
         fields = [ "id", "votes", "deleted", "election", "candidate"]
 
     def to_representation(self, instance):
@@ -76,11 +76,11 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
 
 class CampaignMembersSerializer(serializers.ModelSerializer):
-    """ Serializer for the CampaignMembers model. """
+    """ Serializer for the CampaignMember model. """
     fullName = serializers.SerializerMethodField()
 
     class Meta:
-        model = CampaignMembers
+        model = CampaignMember
         fields = ["id", "user", "campaign", "role", "supervisor", "committee", 
                   "civil", "phone", "notes", "status", "fullName"]
 
@@ -110,7 +110,7 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
 
 class CampaignGuaranteesSerializer(serializers.ModelSerializer):
 
-    # get the data from Electors Model Directly
+    # get the data from Elector Model Directly
     full_name = serializers.CharField(source='civil.full_name', default="Not Found", read_only=True)
     gender = serializers.IntegerField(source='civil.gender', default=-1, read_only=True)
     membership_no = serializers.CharField(source='civil.membership_no', default="Not Found", read_only=True)
@@ -121,7 +121,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
     attended = serializers.SerializerMethodField()
 
     class Meta:
-        model = CampaignGuarantees
+        model = CampaignGuarantee
         fields = [
             "id", "campaign", "member",
             "civil", "full_name", "gender", "attended",
@@ -130,7 +130,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
             ]
 
     def get_attended(self, obj):
-        return CampaignAttendees.objects.filter(civil=obj.civil).exists()
+        return CampaignAttendee.objects.filter(civil=obj.civil).exists()
 
     def create(self, validated_data):
         return super().create(validated_data)
@@ -140,7 +140,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
 
 
 class CampaignAttendeesSerializer(serializers.ModelSerializer):
-    # Directly get the data from the Electors Model
+    # Directly get the data from the Elector Model
     full_name = serializers.CharField(source='civil.full_name', default="Not Found", read_only=True)
     gender = serializers.IntegerField(source='civil.gender', default=-1, read_only=True)
     membership_no = serializers.CharField(source='civil.membership_no', default="Not Found", read_only=True)
@@ -148,10 +148,10 @@ class CampaignAttendeesSerializer(serializers.ModelSerializer):
     enrollment_date = serializers.DateField(source='civil.enrollment_date', default=None, read_only=True)
     relationship = serializers.CharField(source='civil.relationship', default="Not Found", read_only=True)
     elector_notes = serializers.CharField(source='civil.notes', default="Not Found", read_only=True)
-    # attended field will not be included here since it's specific to CampaignGuarantees model
+    # attended field will not be included here since it's specific to CampaignGuarantee model
 
     class Meta:
-        model = CampaignAttendees
+        model = CampaignAttendee
         fields = [
             "id", "user", "election", "committee", "civil", "notes", "status",
             "full_name", "gender", "membership_no", "box_no", "enrollment_date",
@@ -171,5 +171,5 @@ class CampaignAttendeesSerializer(serializers.ModelSerializer):
 def get_field_or_not_found(self, obj, field_name):
     try:
         return getattr(obj, field_name) if obj else None
-    except Electors.DoesNotExist:
+    except Elector.DoesNotExist:
         return "Not Found"

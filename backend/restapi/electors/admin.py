@@ -1,7 +1,7 @@
-# Electors Admin
+# Elector Admin
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from restapi.models import Electors
+from restapi.models import Elector
 
 class ElectorsAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'civil', 'family_name', 'gender', 'serial_number', 'membership_no', 'box_no', 'enrollment_date']
@@ -12,12 +12,12 @@ class ElectorsAdmin(admin.ModelAdmin):
         ('Basic Information', {'fields': ['civil', 'full_name', 'family_name', 'gender', 'serial_number', 'membership_no', 'box_no', 'enrollment_date', 'relationship', 'notes']}),
     ]
 
-# Electors
-admin.site.register(Electors, ElectorsAdmin)
+# Elector
+admin.site.register(Elector, ElectorsAdmin)
 
 class ElectorAdminSite(AdminSite):
-    site_header = 'Electors Administration'
-    site_title = 'Electors Admin'
-    index_title = 'Electors Admin'
+    site_header = 'Elector Administration'
+    site_title = 'Elector Admin'
+    index_title = 'Elector Admin'
 
 elector_admin_site = ElectorAdminSite(name='elector')

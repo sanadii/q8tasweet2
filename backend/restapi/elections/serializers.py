@@ -4,18 +4,18 @@ from datetime import datetime  # Importing datetime
 
 from restapi.helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from restapi.models import (
-    Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults,
-    Campaigns, Candidates, Categories, Electors
+    Election, ElectionCandidate, ElectionCommittee, ElectionCommitteeResult,
+    Campaign, Candidate, Category, Elector
     )
 
 class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    """ Serializer for the Elections model. """
+    """ Serializer for the Election model. """
     admin_serializer_classes = (TrackMixin, TaskMixin)
     name = serializers.SerializerMethodField('get_election_name')
     image = serializers.SerializerMethodField('get_election_image')
     
     class Meta:
-        model = Elections
+        model = Election
         fields = [
             "id", "name", "image", "due_date",
             "category", "sub_category",
@@ -71,7 +71,7 @@ class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    """ Serializer for the ElectionCandidates model. """
+    """ Serializer for the ElectionCandidate model. """
     admin_serializer_classes = (TrackMixin,)
 
     name = serializers.CharField(source='candidate.name', read_only=True)
@@ -79,7 +79,7 @@ class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer)
     image = serializers.SerializerMethodField('get_candidate_image')
 
     class Meta:
-        model = ElectionCandidates
+        model = ElectionCandidate
         fields = ["id", "election", "candidate", "name", "gender", "image", "votes", "notes"]
 
     def get_candidate_image(self, obj):
@@ -97,11 +97,11 @@ class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer)
         return super().update(instance, validated_data)
 
 class ElectionCommitteesSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    """ Serializer for the ElectionCommittees model. """
+    """ Serializer for the ElectionCommittee model. """
     admin_serializer_classes = (TrackMixin,)
     
     class Meta:
-        model = ElectionCommittees
+        model = ElectionCommittee
         fields = ["id", "election", "name", "gender", "location"]
 
     def create(self, validated_data):
@@ -117,5 +117,5 @@ class ElectionCommitteeResultsSerializer(AdminFieldMixin, serializers.ModelSeria
     admin_serializer_classes = (TrackMixin,)
 
     class Meta:
-        model = ElectionCommitteeResults
+        model = ElectionCommitteeResult
         fields = "__all__"

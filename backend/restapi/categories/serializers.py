@@ -5,11 +5,11 @@ from restapi.models import *
 # CATEGORIES
 class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Categories
+        model = Category
         fields = ["id", "name", "image", "parent"]
 
 # SUB-CATEGORIES
 class SubCategoriesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Categories
+        model = Category
         fields = ["id", "name", "parent", "image"]

@@ -1,15 +1,15 @@
 # Before removing candidate vote calulation & commitee results (after updating the models for calcuation)
 # class GetElectionDetails(APIView):
 #     def get(self, request, id):
-#         election = get_object_or_404(Elections, id=id)
+#         election = get_object_or_404(Election, id=id)
         
 #         # Passing the context with the request to the serializer
 #         context = {"request": request}
 
 #         # Getting candidats, committees and campaigns only once
-#         election_candidates = ElectionCandidates.objects.filter(election=election)
-#         election_committees = ElectionCommittees.objects.filter(election=election)
-#         # election_campaigns = Campaigns.objects.filter(election=election)
+#         election_candidates = ElectionCandidate.objects.filter(election=election)
+#         election_committees = ElectionCommittee.objects.filter(election=election)
+#         # election_campaigns = Campaign.objects.filter(election=election)
 
 #         return Response({
 #             "data": {
@@ -31,7 +31,7 @@
 #         for candidate in election_candidates:
 #             related_results = candidate.committee_result_candidates.all()
 #             total_votes = sum([result.votes for result in related_results]) or 0
-#             candidate.total_votes = total_votes  # assuming total_votes is a property of ElectionCandidates
+#             candidate.total_votes = total_votes  # assuming total_votes is a property of ElectionCandidate
         
 #         # sort before serialization
 #         election_candidates = sorted(election_candidates, key=lambda x: x.total_votes, reverse=True)
@@ -49,11 +49,11 @@
 #     def get_election_committees(self, election_committees, context):
 #         return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
 
-#     # Showing Committee Results for Candidates of This Election Only
+#     # Showing Committee Results for Candidate of This Election Only
 #     def get_election_committee_results(self, election, election_committees):
         
 #         transformed_results = {}
-#         all_candidates = ElectionCandidates.objects.filter(election=election).prefetch_related("committee_result_candidates", "candidate_campaigns")
+#         all_candidates = ElectionCandidate.objects.filter(election=election).prefetch_related("committee_result_candidates", "candidate_campaigns")
 
 #         candidate_data = {str(candidate.id): {"votes": 0, "position": None} for candidate in all_candidates}
         
@@ -80,6 +80,6 @@
 
 #     def get_election_campaigns_for_election(self, election, context):
 #         election_candidate_ids = election.electioncandidates_set.values_list("id", flat=True)
-#         election_campaigns = Campaigns.objects.filter(election_candidate__in=election_candidate_ids)
+#         election_campaigns = Campaign.objects.filter(election_candidate__in=election_candidate_ids)
 #         return CampaignsSerializer(election_campaigns, many=True, context=context).data
 

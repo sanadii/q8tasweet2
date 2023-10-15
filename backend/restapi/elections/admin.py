@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from restapi.models import Elections, ElectionCandidates, ElectionCommittees, ElectionCommitteeResults
+from restapi.models import Election, ElectionCandidate, ElectionCommittee, ElectionCommitteeResult
 from restapi.helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 class ElectionsAdmin(admin.ModelAdmin):
@@ -12,7 +12,7 @@ class ElectionsAdmin(admin.ModelAdmin):
     readonly_fields = ReadOnlyTrackFields
     
     def get_election_name(self, obj):
-        return obj.get_dynamic_name()  # Note: here obj is the Elections object itself
+        return obj.get_dynamic_name()  # Note: here obj is the Election object itself
     get_election_name.short_description = 'Election Name'
     
     # Your existing fieldsets
@@ -59,14 +59,14 @@ class ElectionCommitteeResultsAdmin(admin.ModelAdmin):
     list_display = ['id']
 
 # AdminSites
-admin.site.register(Elections, ElectionsAdmin)
-admin.site.register(ElectionCandidates, ElectionCandidatesAdmin)
-admin.site.register(ElectionCommittees, ElectionCommitteesAdmin)
-admin.site.register(ElectionCommitteeResults, ElectionCommitteeResultsAdmin)
+admin.site.register(Election, ElectionsAdmin)
+admin.site.register(ElectionCandidate, ElectionCandidatesAdmin)
+admin.site.register(ElectionCommittee, ElectionCommitteesAdmin)
+admin.site.register(ElectionCommitteeResult, ElectionCommitteeResultsAdmin)
 
 class ElectionAdminSite(AdminSite):
-    site_header = 'Elections Administration'
-    site_title = 'Elections Admin'
-    index_title = 'Elections Admin'
+    site_header = 'Election Administration'
+    site_title = 'Election Admin'
+    index_title = 'Election Admin'
 
 election_admin_site = ElectionAdminSite(name='election')

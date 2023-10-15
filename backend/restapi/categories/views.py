@@ -1,4 +1,4 @@
-# from campaigns.models import Campaigns
+# from campaigns.models import Campaign
 from django.http import JsonResponse
 from django.http.response import JsonResponse
 from rest_framework.response import Response
@@ -25,15 +25,15 @@ from django.conf import settings
 
 # class GetCampaigns(APIView):
 #     def get(self, request):
-#         campaigns_data = Campaigns.objects.all()
+#         campaigns_data = Campaign.objects.all()
 #         data_serializer = CampaignsSerializer(campaigns_data, many=True)
 
 #         return Response({"data": data_serializer.data, "code": 200})
 
 class GetCategories(APIView):
     def get(self, request):
-        categories = Categories.objects.filter(parent=None).exclude(id=0)
-        subcategories = Categories.objects.exclude(parent=None).exclude(id=0)
+        categories = Category.objects.filter(parent=None).exclude(id=0)
+        subcategories = Category.objects.exclude(parent=None).exclude(id=0)
         categories_serializer = CategoriesSerializer(categories, many=True)
         subcategories_serializer = SubCategoriesSerializer(subcategories, many=True)
         return Response({"data": {"categories": categories_serializer.data, "subCategories": subcategories_serializer.data}, "code": 200})
@@ -45,8 +45,8 @@ class UpdateCategory(APIView):
 
     def patch(self, request, id):
         try:
-            category = Categories.objects.get(id=id)
-        except Categories.DoesNotExist:
+            category = Category.objects.get(id=id)
+        except Category.DoesNotExist:
             return Response({"error": "Category not found"}, status=404)
 
         # Extract the desired fields from the request data
@@ -61,7 +61,7 @@ class UpdateCategory(APIView):
         if image:
             category.image = image
         if parent:
-            category.parent = Categories.objects.get(id=parent)
+            category.parent = Category.objects.get(id=parent)
 
         # System
         category.updated_by = updated_by

@@ -1,10 +1,10 @@
-# Categories Model
+# Category Model
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from restapi.helper.models_helper import TrackModel
 
-class Categories(TrackModel):
+class Category(TrackModel):
     name = models.CharField(max_length=255, null=True, blank=True)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to="elections/", null=True, blank=True)
@@ -15,24 +15,24 @@ class Categories(TrackModel):
     class Meta:
         db_table = "category"
         verbose_name = "Category"
-        verbose_name_plural = "Categories"
+        verbose_name_plural = "Category"
 
     def __str__(self):
         return self.name
 
-class Tags(models.Model):
+class Tag(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     class Meta:
-        db_table = "Tags"
+        db_table = "Tag"
         verbose_name = "Tag"
-        verbose_name_plural = "Tags"
+        verbose_name_plural = "Tag"
 
     def __str__(self):
         return self.name
 
-class Areas(TrackModel):
+class Area(TrackModel):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
@@ -44,7 +44,7 @@ class Areas(TrackModel):
     class Meta:
         db_table = "area"
         verbose_name = "Area"
-        verbose_name_plural = "Areas"
+        verbose_name_plural = "Area"
 
     def __str__(self):
         return self.name

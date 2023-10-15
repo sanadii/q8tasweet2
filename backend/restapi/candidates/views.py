@@ -25,7 +25,7 @@ class GetCandidates(APIView):
     permission_classes = [AllowAny]
     
     def get(self, request, *args, **kwargs):
-        candidates_data = Candidates.objects.all()
+        candidates_data = Candidate.objects.all()
         paginator = CustomPagination()
         paginated_candidates = paginator.paginate_queryset(candidates_data, request)
         
@@ -37,7 +37,7 @@ class GetCandidates(APIView):
 
 # class GetCandidateDetails(APIView):
 #     def get(self, request, id):
-#         candidate = get_object_or_404(Candidates, id=id)
+#         candidate = get_object_or_404(Candidate, id=id)
 #         context = {"request": request}
 
 #         candidate_candidates = CandidateCandidates.objects.filter(candidate=candidate).prefetch_related('candidate').only('id')
@@ -64,7 +64,7 @@ class GetCandidates(APIView):
 
 #     def get_candidate_campaigns(self, candidate, context):
 #         candidate_candidate_ids = CandidateCandidates.objects.filter(candidate=candidate).values_list('id', flat=True)
-#         candidate_campaigns = Campaigns.objects.filter(candidate_candidate__in=candidate_candidate_ids)
+#         candidate_campaigns = Campaign.objects.filter(candidate_candidate__in=candidate_candidate_ids)
 #         return CampaignsSerializer(candidate_campaigns, many=True, context=context).data
 
 class AddNewCandidate(APIView):
@@ -83,8 +83,8 @@ class UpdateCandidate(APIView):
 
     def patch(self, request, id):
         try:
-            candidate = Candidates.objects.get(id=id)
-        except Candidates.DoesNotExist:
+            candidate = Candidate.objects.get(id=id)
+        except Candidate.DoesNotExist:
             return Response({"error": "Candidate not found"}, status=404)
         
         serializer = CandidatesSerializer(data=request.data, context={'request': request})
@@ -97,8 +97,8 @@ class UpdateCandidate(APIView):
 class DeleteCandidate(APIView):
     def delete(self, request, id):
         try:
-            candidate = Candidates.objects.get(id=id)
+            candidate = Candidate.objects.get(id=id)
             candidate.delete()
             return JsonResponse({"data": "Candidate deleted successfully", "count": 1, "code": 200}, safe=False)
-        except Candidates.DoesNotExist:
+        except Candidate.DoesNotExist:
             return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)

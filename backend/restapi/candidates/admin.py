@@ -1,7 +1,7 @@
 # Candidate Admin
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from restapi.models import Candidates
+from restapi.models import Candidate
 from restapi.helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 class CandidatesAdmin(admin.ModelAdmin):
@@ -19,10 +19,10 @@ class CandidatesAdmin(admin.ModelAdmin):
         TrackAdminFields
     ]
 
-admin.site.register(Candidates, CandidatesAdmin)
+admin.site.register(Candidate, CandidatesAdmin)
 class candidateAdminSite(AdminSite):
-    site_header = 'Candidates Administration'
-    site_title = 'Candidates Admin'
-    index_title = 'Candidates Admin'
+    site_header = 'Candidate Administration'
+    site_title = 'Candidate Admin'
+    index_title = 'Candidate Admin'
 
 candidate_admin_site = candidateAdminSite(name='candidate')

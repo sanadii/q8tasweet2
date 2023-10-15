@@ -4,17 +4,21 @@
 // React & Redux core
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 
 // Store & Selectors
 import { campaignSelector } from 'Selectors';
 
 // Components, Constants & Hooks
-import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../../Components/Common";
-import { MemberRoleOptions } from "../../../../Components/constants";
+import { Loader, TableContainer, TableContainerHeader, TableContainerFilter } from "Components/Common";
+import { MemberRoleOptions, GuaranteeStatusOptions } from "Components/constants";
 
 // UI & Utilities
 import { Card, CardBody, CardHeader, Col, Row, TabContent, Table, UncontrolledCollapse } from "reactstrap";
+
+const STATUS_MAP = GuaranteeStatusOptions.reduce((acc, curr) => {
+    acc[curr.value] = curr.id;
+    return acc;
+}, {});
 
 const OverViewGuarantees = () => {
     const {
@@ -30,14 +34,11 @@ const OverViewGuarantees = () => {
         return campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
     }
 
-    const getStatusCount = useCallback((memberId, status) => {
-        let statusMap = {
-            "New": 1,
-            "Contacted": 2,
-            "Confirmed": 3,
-            "Not Confirmed": 4
-        };
-        return campaignGuarantees.filter(guarantee => guarantee.member === memberId && guarantee.status === statusMap[status]).length;
+    const getStatusCount = useCallback((memberId, statusValue) => {
+        return campaignGuarantees.filter(guarantee =>
+            guarantee.member === memberId &&
+            guarantee.status === STATUS_MAP[statusValue]
+        ).length;
     }, [campaignGuarantees]);
 
 
@@ -47,7 +48,7 @@ const OverViewGuarantees = () => {
         };
 
         campaignGuarantees.forEach((guarantee) => {
-            if (guarantee.member === memberId && guarantee.status === "Attended") {
+            if (guarantee.member === memberId && guarantee.attended === true) {
                 counts["Attended"] += 1;
             }
         });
@@ -56,42 +57,10 @@ const OverViewGuarantees = () => {
     }
 
 
-    function getStatusCountsForMember(campaignGuarantees, memberId) {
-        const guaranteesForMember = campaignGuarantees.filter(item => item.member === memberId);
-
-        let statusCounts = {
-            "New": 0,
-            "Contacted": 0,
-            "Confirmed": 0,
-            "Not Confirmed": 0
-        };
-
-        guaranteesForMember.forEach(guarantee => {
-            switch (guarantee.status) {
-                case 1:
-                    statusCounts["New"] += 1;
-                    break;
-                case 2:
-                    statusCounts["Contacted"] += 1;
-                    break;
-                case 3:
-                    statusCounts["Confirmed"] += 1;
-                    break;
-                case 4:
-                    statusCounts["Not Confirmed"] += 1;
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        return statusCounts;
-    }
-
     // First, aggregate the guarantees based on the guarantor
     const aggregatedGuarantors = campaignGuarantees.reduce((acc, curr) => {
         const memberInfo = campaignMembers.find(member => member.id === curr.member);
-        const guarantorName = memberInfo ? memberInfo.user.name : 'Unknown';
+        const guarantorName = memberInfo ? memberInfo.fullName : 'Unknown';
 
         if (curr.member in acc) {
             acc[curr.member].count += 1;
@@ -108,80 +77,52 @@ const OverViewGuarantees = () => {
     // Transform the aggregated object back to an array
     const guarantorData = Object.values(aggregatedGuarantors);
 
+    const statusColumns = GuaranteeStatusOptions.map(statusOption => ({
+        Header: statusOption.name,
+        Cell: (cellProps) => {
+            const memberId = cellProps.row.original.member;
+            const count = getStatusCount(memberId, statusOption.value);
+            return (
+                <div style={{ backgroundColor: statusOption.badgeClass.split(' ').find(cls => cls.startsWith('bg-')) }}>
+                    {count}
+                </div>
+            );
+        },
+    }));
+                
     const columns = useMemo(
         () => [
             {
-                Header: "Name",
+                Header: "الفريق",
                 accessor: "name",
                 Cell: (cellProps) => {
                     const guarantor = cellProps.row.original;
-                    return (
-                        < b > {guarantor.name}</b >
-                    );
+                    return <b>{guarantor.name}</b>;
                 },
             },
             {
-                Header: "Total",
+                Header: "المجموع",
                 Cell: (cellProps) => {
                     const memberId = cellProps.row.original.member;
-                    const counts = getStatusCountsForMember(campaignGuarantees, memberId);
-                    const totalCount = counts["New"] + counts["Confirmed"] + counts["Not Confirmed"];
-                    return (
-                        <strong>{totalCount}</strong>
-                    );
+                    const totalCount = getGuaranteeCount(memberId); 
+                    return <strong>{totalCount}</strong>;
                 },
             },
+            ...statusColumns, // Spread the dynamically generated columns here
             {
-                Header: "Attended",
+                Header: "الحضور",
                 Cell: (cellProps) => {
                     const memberId = cellProps.row.original.member;
                     const counts = getAttendeesCountsForMember(campaignGuarantees, memberId);
                     const totalCount = counts["Attended"];
-                    return (
-                        <strong>{totalCount}</strong>
-                    );
+                    return <strong>{totalCount}</strong>;
                 },
             },
-            {
-                Header: "New",
-                // A method to count the New status for the member.
-                Cell: (cellProps) => {
-                    const memberId = cellProps.row.original.member;
-                    const count = getStatusCount(memberId, "New");
-                    return <p>{count}</p>;
-                },
-            },
-            {
-                Header: "Contacted",
-                // A method to count the Contacted status for the member.
-                Cell: (cellProps) => {
-                    const memberId = cellProps.row.original.member;
-                    const count = getStatusCount(memberId, "Contacted");
-                    return <p>{count}</p>;
-                },
-            },
-            {
-                Header: "Confirmed",
-                // A method to count the Contacted status for the member.
-                Cell: (cellProps) => {
-                    const memberId = cellProps.row.original.member;
-                    const count = getStatusCount(memberId, "Confirmed");
-                    return <p>{count}</p>;
-                },
-            },
-            {
-                Header: "Not Confirmed",
-                // A method to count the Not Confirmed status for the member.
-                Cell: (cellProps) => {
-                    const memberId = cellProps.row.original.member;
-                    const count = getStatusCount(memberId, "Not Confirmed");
-                    return <p>{count}</p>;
-                },
-            },
-
         ],
         [campaignGuarantees, getStatusCount]
     );
+    
+
     const [totals, setTotals] = useState({
         totalGuarantees: 0,
         totalNew: 0,
@@ -193,26 +134,24 @@ const OverViewGuarantees = () => {
 
     useEffect(() => {
         // Calculate totals
-        const totalGuarantees = campaignGuarantees.length;
-        const totalNew = getAllStatusCount(campaignGuarantees, 1);
-        const totalContacted = getAllStatusCount(campaignGuarantees, 2);
-        const totalConfirmed = getAllStatusCount(campaignGuarantees, 3);
-        const totalNotConfirmed = getAllStatusCount(campaignGuarantees, 4);
+        const totalGuaranteesByStatus = GuaranteeStatusOptions.reduce((acc, statusOption) => {
+            acc[statusOption.value] = getAllStatusCount(campaignGuarantees, statusOption.id);
+            return acc;
+        }, {});
         const totalAttendees = getAllAttendeesCount(campaignGuarantees);
 
-        const attendancePercentage = (totalAttendees / totalGuarantees) * 100;
-
-        // Set totals in state
-        setTotals({
-            totalGuarantees,
-            totalNew,
-            totalContacted,
-            totalConfirmed,
-            totalNotConfirmed,
-            totalAttendees,
+        setTotals(prevTotals => {
+            const updatedTotals = {
+                ...prevTotals,
+                totalGuarantees: campaignGuarantees.length,
+                totalAttendees,
+                ...totalGuaranteesByStatus,
+            };
+            const attendancePercentage = (updatedTotals.totalAttendees / updatedTotals.totalGuarantees) * 100;
+            return { ...updatedTotals, attendancePercentage };
         });
     }, [campaignGuarantees]);
-
+    
     // Helper function to count guarantees with a specific status
     const getAllStatusCount = (guarantees, status) => {
         return guarantees.filter((guarantee) => guarantee.status === status).length;
@@ -220,7 +159,7 @@ const OverViewGuarantees = () => {
 
     // Helper function to count attendees
     const getAllAttendeesCount = (guarantees) => {
-        return guarantees.filter((guarantee) => guarantee.status === "Attended").length;
+        return guarantees.filter((guarantee) => guarantee.attended === true).length;
     };
 
     return (
