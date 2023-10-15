@@ -21,10 +21,6 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
   const { campaignRoles, campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
   const activeRole = campaignRoles.find(role => role.id.toString() === activeTab)?.role;
 
-
-  console.log("Current activeRole:", activeRole);
-  console.log("Current filters:", filters);
-
   const currentCampaignMemberRole = currentCampaignMember?.role || "campaignCandidate";
   const currentRole = campaignRoles.find(role => role.role === currentCampaignMemberRole);
 
@@ -37,19 +33,14 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
   const ChangeCampaignRole = (e, tab, roleId, newRole) => {
     e.preventDefault();
     
-    console.log("Tab clicked:", tab);
-    console.log("RoleId of tab clicked:", roleId);
-
     if (activeTab !== tab) {
       setActiveTab(tab);
       if (roleId !== "all") {
-        console.log("Setting filter for specific role:", roleId);
         setFilters(prevFilters => ({
           ...prevFilters,
           role: roleId
         }));
       } else {
-        console.log("Setting filter to show all");
         setFilters(prevFilters => ({
           ...prevFilters,
           role: null

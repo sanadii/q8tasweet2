@@ -70,8 +70,6 @@ const MembersTab = () => {
 
   const matchingRole = campaignRoles.find(role => role.id === filters.role);
   const activeRole = matchingRole?.role;
-  console.log("matchingRole", matchingRole)
-  console.log("activeRole", activeRole)
   // Toggle
   const toggle = useCallback(() => {
     setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
@@ -178,7 +176,6 @@ const MembersTab = () => {
 
     if (filters.role !== null) {
       isValid = isValid && campaignMember.role === filters.role;
-      console.log("role?", filters.role)
     }
 
     if (filters.global) {

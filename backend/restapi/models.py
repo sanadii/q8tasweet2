@@ -21,6 +21,6 @@ from restapi.elections.models import (
 )
 from restapi.electors.models import Elector
 from restapi.configs.models import Config
-from restapi.users.models import User
+from restapi.auth.models import User
 
 # If you need to create overarching models, define them here.

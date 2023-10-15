@@ -23,7 +23,7 @@ const TableContainer = ({
   isSearchFilter,
   isStatusFilter,
   isPriorityFilter,
-  isMemberRankFilter,
+  isMemberRoleFilter,
   isCandidateGenderFilter,
   isGenderFilter,
   isGuaranteeAttendanceFilter,
@@ -42,7 +42,8 @@ const TableContainer = ({
 
   // Actions
   onTabChange,
-
+  getBgClassForStatus,
+  
   // Data & Columns----------
   columns,
   data,
@@ -52,6 +53,7 @@ const TableContainer = ({
   theadClass,
   trClass,
   thClass,
+  tdClass,
   divClass,
 
   // Global Header----------
@@ -167,7 +169,7 @@ const TableContainer = ({
             isGenderFilter={isGenderFilter}
             isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
             isAttendeesGenderFilter={isAttendeesGenderFilter}
-            isMemberRankFilter={isMemberRankFilter}
+            isMemberRoleFilter={isMemberRoleFilter}
             isCommitteeFilter={isCommitteeFilter}
             isGuaranteeStatusFilter={isGuaranteeStatusFilter}
             isGuarantorFilter={isGuarantorFilter}
@@ -219,9 +221,20 @@ const TableContainer = ({
                 return (
                   <Fragment key={row.getRowProps().key}>
                     <tr>
-                      {row.cells.map((cell) => {
+                      {row.cells.map((cell, columnIndex) => {
+                        let className = '';
+
+                        // Check if getBgClassForStatus exists and columnIndex is not 0, then call it
+                        if (getBgClassForStatus && columnIndex !== 0) {
+                          className = getBgClassForStatus(columnIndex);
+                        }
+
                         return (
-                          <td key={cell.id} {...cell.getCellProps()}>
+                          <td
+                            key={cell.id}
+                            {...cell.getCellProps()}
+                            className={className} // Assign the calculated className here
+                          >
                             {cell.render("Cell")}
                           </td>
                         );

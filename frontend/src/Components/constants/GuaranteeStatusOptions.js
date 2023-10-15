@@ -5,6 +5,7 @@ export const GuaranteeStatusOptions = [
     value: "New",
     role: "Admin, Moderator",
     badgeClass: "badge bg-info",
+    bgClass: "bg-soft-info",
   },
   {
     id: 2,
@@ -12,6 +13,8 @@ export const GuaranteeStatusOptions = [
     value: "Contacted",
     role: "Admin, Moderator",
     badgeClass: "badge bg-warning",
+    bgClass: "bg-soft-warning",
+
   },
   {
     id: 3,
@@ -19,6 +22,8 @@ export const GuaranteeStatusOptions = [
     value: "Confirmed",
     role: "Moderator",
     badgeClass: "badge bg-success",
+    bgClass: "bg-soft-success",
+
   },
   {
     id: 4,
@@ -26,5 +31,7 @@ export const GuaranteeStatusOptions = [
     value: "Not Confirmed",
     role: "Moderator",
     badgeClass: "badge bg-danger",
+    bgClass: "bg-soft-danger",
+
   },
 ];

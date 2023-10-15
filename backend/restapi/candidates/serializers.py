@@ -9,6 +9,7 @@ class CandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = [
-            "id",  "name", "gender", "image", "description",
-            "phone", "email", "twitter", "instagram",
+            "id",  "name", "gender", "image",
+            # "description", "gender", "phone", "email", "twitter", "instagram",
+            # "phone", "email", "twitter", "instagram",
         ]

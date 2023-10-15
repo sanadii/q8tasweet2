@@ -12,7 +12,7 @@ from restapi.models import (
 
 from restapi.candidates.serializers import CandidatesSerializer
 from restapi.elections.serializers import ElectionsSerializer
-from restapi.users.serializers import UserSerializer
+from restapi.auth.serializers import UserSerializer
 
 class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Campaign model. """
@@ -90,7 +90,7 @@ class campaignCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
 
 class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    from restapi.users.serializers import UserSerializer
+    from restapi.auth.serializers import UserSerializer
     user_details = UserSerializer(source='user', read_only=True)  # Nested User serializer
 
     class Meta:
@@ -106,7 +106,7 @@ class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
             data['fullName'] = f"{user.first_name} {user.last_name}"
 
         return data
-    from restapi.users.serializers import UserSerializer
+    from restapi.auth.serializers import UserSerializer
     user_details = UserSerializer(source='user', read_only=True)  # Nested User serializer
 
     class Meta:

@@ -46,10 +46,10 @@ const Navdata = () => {
 
   const menuItems = [
     ...(isAdmin ? [...AdminMenu, ...SettingsMenu] : []),
-    ...(isAdmin || isEditor ? EditorMenu : []),
-    ...(isAdmin || isModerator ? ModeratorMenu : []),
-    ...(isAdmin || isContributor ? ContributorMenu : []),
-    ...(isAdmin || isSubscriber ? CampaignMenu : []),
+    // ...(isAdmin || isEditor ? EditorMenu : []),
+    // ...(isAdmin || isModerator ? ModeratorMenu : []),
+    // ...(isAdmin || isContributor ? ContributorMenu : []),
+    // ...(isAdmin || isSubscriber ? CampaignMenu : []),
 
   ];
 

@@ -1,14 +1,14 @@
 // Authentications
-export const POST_LOGIN = "/users/auth/signin";
-export const POST_JWT_LOGIN = "/users/auth/userLogin";
-export const POST_PASSWORD_FORGET = "/users/auth/forgot-password";
-export const POST_JWT_PASSWORD_FORGET = "/users/auth/forget-pwd";
-export const SOCIAL_LOGIN = "/users/auth/social-login";
-export const POST_REGISTER = "/users/auth/signup";
+export const POST_LOGIN = "/auth/signin";
+export const POST_JWT_LOGIN = "/auth/userLogin";
+export const POST_PASSWORD_FORGET = "/auth/forgot-password";
+export const POST_JWT_PASSWORD_FORGET = "/auth/forget-pwd";
+export const SOCIAL_LOGIN = "/auth/social-login";
+export const POST_REGISTER = "/auth/signup";
 
 // Proterm
-export const POST_EDIT_JWT_PROFILE = "/users/postProfile";
-export const POST_EDIT_PROFILE = "/users/user";
+export const POST_EDIT_JWT_PROFILE = "/auth/postProfile";
+export const POST_EDIT_PROFILE = "/auth/user";
 
 
 // Elections
@@ -101,36 +101,36 @@ export const ADD_NEW_CAMPAIGN_ATTENDEE = "/campaigns/addNewCampaignAttendee";
 export const UPDATE_CAMPAIGN_ATTENDEE = "/campaigns/updateCampaignAttendee";
 
 // USERS
-export const GET_USERS = "/users/getUsers";
-export const GET_CURRENT_USER = "/users/getCurrentUser";
-export const GET_USER_DETAILS = "/users/getUserDetails";
-export const GET_MODERATOR_USERS = "/users/getModeratorUsers";
+export const GET_USERS = "/auth/getUsers";
+export const GET_CURRENT_USER = "/auth/getCurrentUser";
+export const GET_USER_DETAILS = "/auth/getUserDetails";
+export const GET_MODERATOR_USERS = "/auth/getModeratorUsers";
 
-export const ADD_NEW_USER = "/users/addNewUser";
-export const UPDATE_USER = "/users/updateUser";
-export const DELETE_USER = "/users/deleteUser";
+export const ADD_NEW_USER = "/auth/addNewUser";
+export const UPDATE_USER = "/auth/updateUser";
+export const DELETE_USER = "/auth/deleteUser";
 
 // User Candidate
-export const GET_USER_CANDIDATES = "/users/getUserCandidates";
-export const GET_USER_CANDIDATE_DETAILS = "/users/getUserCandidateDetails";
-export const ADD_NEW_USER_CANDIDATE = "/users/addNewUserCandidate";
-export const UPDATE_USER_CANDIDATE = "/users/updateUserCandidate";
-export const DELETE_USER_CANDIDATE = "/users/deleteUserCandidate";
+export const GET_USER_CANDIDATES = "/auth/getUserCandidates";
+export const GET_USER_CANDIDATE_DETAILS = "/auth/getUserCandidateDetails";
+export const ADD_NEW_USER_CANDIDATE = "/auth/addNewUserCandidate";
+export const UPDATE_USER_CANDIDATE = "/auth/updateUserCandidate";
+export const DELETE_USER_CANDIDATE = "/auth/deleteUserCandidate";
 
 // User Campaign
-export const GET_USER_CAMPAIGNS = "/users/getUserCampaigns";
-export const GET_USER_CAMPAIGN_DETAILS = "/users/getUserCampaignDetails";
-export const ADD_NEW_USER_CAMPAIGN = "/users/addNewUserCampaign";
-export const UPDATE_USER_CAMPAIGN = "/users/updateUserCampaign";
-export const DELETE_USER_CAMPAIGN = "/users/deleteUserCampaign";
+export const GET_USER_CAMPAIGNS = "/auth/getUserCampaigns";
+export const GET_USER_CAMPAIGN_DETAILS = "/auth/getUserCampaignDetails";
+export const ADD_NEW_USER_CAMPAIGN = "/auth/addNewUserCampaign";
+export const UPDATE_USER_CAMPAIGN = "/auth/updateUserCampaign";
+export const DELETE_USER_CAMPAIGN = "/auth/deleteUserCampaign";
 
 
 // GROUPS
-export const GET_GROUPS = "/users/getGroups";
-export const GET_GROUP_DETAILS = "/users/getGroupDetails";
-export const ADD_NEW_GROUP = "/users/addNewGroup";
-export const UPDATE_GROUP = "/users/updateGroup";
-export const DELETE_GROUP = "/users/deleteGroup";
+export const GET_GROUPS = "/auth/getGroups";
+export const GET_GROUP_DETAILS = "/auth/getGroupDetails";
+export const ADD_NEW_GROUP = "/auth/addNewGroup";
+export const UPDATE_GROUP = "/auth/updateGroup";
+export const DELETE_GROUP = "/auth/deleteGroup";
 
 // Images
 export const UPLOAD_IMAGE = "/media/uploadImage";

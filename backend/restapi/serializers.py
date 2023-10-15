@@ -4,7 +4,7 @@ from restapi.helper.base_serializer import (
     TaskMixin,
 )
 
-from restapi.users.serializers import (
+from restapi.auth.serializers import (
     UserLoginSerializer,
     UserSerializer,
     GroupSerializer,

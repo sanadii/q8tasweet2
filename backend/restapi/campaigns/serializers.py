@@ -18,7 +18,7 @@ from restapi.models import (
 # )
 from restapi.serializers import CandidatesSerializer
 from restapi.elections.serializers import ElectionsSerializer
-from restapi.users.serializers import UserSerializer
+from restapi.auth.serializers import UserSerializer
 from restapi.electors.serializers import ElectorsSerializer
 
 class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):

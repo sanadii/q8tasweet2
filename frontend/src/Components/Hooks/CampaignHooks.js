@@ -34,7 +34,6 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
 
     const currentRoleObject = campaignRoles.find(role => role.id === currentRoleId);
     const currentRole = currentRoleObject?.role;
-    console.log("currentMemberRole:", currentRole);
 
     switch (currentRole) {
       case "campaignAdmin":
@@ -64,10 +63,8 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
       .map(role => role.id);
 
     const allRoleStrings = campaignRoles.map(role => role.role);
-    console.log("All Role Strings:", allRoleStrings);
 
     const displayedRoles = campaignRoles.filter(role => !excludedRoleIds.includes(role.id));
-    console.log("Displayed Roles:", displayedRoles);
 
     return displayedRoles;
 

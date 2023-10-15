@@ -34,11 +34,8 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
 
       stateVariables: isSettings,
       click: function (e) {
-        // console.log("Clicked settings menu item");
-        // console.log("isSettings before toggle:", isSettings);
         e.preventDefault();
         setIsSettings(!isSettings);
-        // console.log("isSettings after toggle:", !isSettings);
         setIscurrentState("settings");
         updateIconSidebar(e);
       },

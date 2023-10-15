@@ -11,4 +11,4 @@ from restapi.electors.admin import ElectorAdminSite, elector_admin_site
 from restapi.configs.admin import ConfigsAdminSite, configs_admin_site
 
 from restapi.categories.admin import CategoryAdminSite, category_admin_site
-from restapi.users.admin import UserAdminSite, user_admin_site
+from restapi.auth.admin import UserAdminSite, user_admin_site

@@ -18,8 +18,8 @@ class CandidatesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = [
-            "id",  "name", "description", "image",
-            "gender", "phone", "email", "twitter", "instagram",
+            "id",  "name", "image",
+            # "description", "gender", "phone", "email", "twitter", "instagram",
             "status", "priority", 
             "moderators", "createdBy", "updatedBy", "deletedBy", "createdDate", "updatedDate", "deletedDate", "deleted",
         ]

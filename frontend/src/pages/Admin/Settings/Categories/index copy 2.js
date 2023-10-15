@@ -33,12 +33,10 @@ const Categories = () => {
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedImage(e.target.files[0]);
-      // console.log("handleImageSelect called");
     }
   };
   const formData = new FormData();
   if (!selectedImage) {
-    // console.log("no selected image");
   } else {
     formData.append("image", selectedImage);
     formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
@@ -136,7 +134,6 @@ const Categories = () => {
       document.getElementById("category-category").style.display = "block";
     }
   };
-  console.log(categories, subCategories);
 
   const [isMainCategory, setIsMainCategory] = useState(false);
 
@@ -200,8 +197,6 @@ const Categories = () => {
     changeSubCategoriesOptions,
     activeParentCategoryId
   } = useCategoryManager(categories, subCategories, validation);
-
-  console.log("activeParentCategoryId:", activeParentCategoryId);
 
   return (
     <React.Fragment>
