@@ -1,0 +1,12 @@
+
+
+
+Campaign - الحملة الانتخابية
+1. Campaign Moderator - مشرف إدارة الحملة 
+2. Campaign Director -  مدير الحملة 
+3. Campaign Associate - مدير مساعد الحملة
+4. Campaign Candidate - مرشح
+5. Campaign Coordinator - منسق
+6. Campaign Guarantor - ضامن	
+7. Campaign Attendant - محضر
+8. Campaign Sorter - فارز

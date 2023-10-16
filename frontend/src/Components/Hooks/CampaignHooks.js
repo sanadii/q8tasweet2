@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 const useSupervisorMembers = (campaignRoles, campaignMembers) => {
   const supervisorRoleId = useMemo(() => {
-    return campaignRoles.find(role => role.role === "campaignSupervisor")?.id;
+    return campaignRoles.find(role => role.role === "CampaignCoordinator")?.id;
   }, [campaignRoles]);
 
   const supervisorMembers = useMemo(() => {
@@ -36,17 +36,17 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
     const currentRole = currentRoleObject?.role;
 
     switch (currentRole) {
-      case "campaignAdmin":
-        // No roles excluded for campaignAdmin.
+      case "CampaignDirector":
+        // No roles excluded for CampaignDirector.
         break;
       case "candidateAdmin":
-        excludedRoleStrings = ["campaignAdmin", "campaignSupervisor"];
+        excludedRoleStrings = ["CampaignDirector", "CampaignCoordinator"];
         break;
       case "campaignCandidate":
-        excludedRoleStrings = ["campaignAdmin", "campaignSupervisor", "campaignCandidate"];
+        excludedRoleStrings = ["CampaignDirector", "CampaignCoordinator", "campaignCandidate"];
         break;
-      case "campaignSupervisor":
-        excludedRoleStrings = ["campaignAdmin", "candidateAdmin", "campaignCandidate", "campaignSupervisor"];
+      case "CampaignCoordinator":
+        excludedRoleStrings = ["CampaignDirector", "candidateAdmin", "campaignCandidate", "CampaignCoordinator"];
         break;
       default:
         break;

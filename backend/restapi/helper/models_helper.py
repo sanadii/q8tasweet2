@@ -5,10 +5,10 @@ from django.core.validators import RegexValidator
 
 # TODO: make sure dictionaries are all changed to id and name and any otherthing if needed
 class GroupCategories(models.IntegerChoices):
-    ADMIN = 1, 'Admin'
-    CONTRIBUTOR = 2, 'Contributor'
-    CAMPAIGN = 4, 'Campaign'
-    SUBSCRIBER = 5, 'Subscriber'
+    ADMIN = 1, 'إدارة الموقع'
+    CONTRIBUTOR = 2, 'مساهمين'
+    CAMPAIGN = 4, 'الحملة الانتخابية'
+    SUBSCRIBER = 5, 'مشترك'
 
 group_category_field = models.IntegerField(
     choices=GroupCategories.choices,

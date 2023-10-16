@@ -10,18 +10,7 @@ import { campaignSelector } from 'Selectors';
 import MembersModal from "./MembersModal";
 import { DeleteModal, TableContainer, TableContainerHeader } from "Components/Common";
 import { usePermission, useDelete } from "Components/Hooks";
-import {
-  Id,
-  Name,
-  Role,
-  Team,
-  Guarantees,
-  Attendees,
-  Committee,
-  Sorted,
-  Supervisor,
-  Actions,
-} from "./MemberCol";
+import { Id, Name, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
 
 // UI & Utilities
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -122,12 +111,12 @@ const MembersTab = () => {
     },
     {
       Header: "الفريق",
-      ShowTo: ["campaignCandidate", "campaignSupervisor"],
+      ShowTo: ["campaignCandidate", "CampaignCoordinator"],
       Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
     },
     {
       Header: "المضامين",
-      ShowTo: ["campaignAdmin", "CampaigaigncandidateAdmin", "campaignCandidate", "campaignSupervisor", "campaignGuarantor"],
+      ShowTo: ["CampaignDirector", "CampaigaigncandidateAdmin", "campaignCandidate", "CampaignCoordinator", "campaignGuarantor"],
       Cell: (cellProps) => <Guarantees cellProps={cellProps} campaignGuarantees={campaignGuarantees} />
     },
     {
@@ -170,20 +159,24 @@ const MembersTab = () => {
     });
   }, [activeRole, columnsDefinition]);
 
-
   const campaignMemberList = campaignMembers.filter(campaignMember => {
     let isValid = true;
 
+    // Check the role if there's a filter set for it
     if (filters.role !== null) {
       isValid = isValid && campaignMember.role === filters.role;
     }
 
+    // Check the global filter (e.g., for searching by name)
     if (filters.global) {
-      isValid = isValid && campaignMember.user.name && typeof campaignMember.user.name === 'string' && campaignMember.user.name.toLowerCase().includes(filters.global.toLowerCase());
+      isValid = isValid && campaignMember.user.name &&
+        typeof campaignMember.user.name === 'string' &&
+        campaignMember.user.name.toLowerCase().includes(filters.global.toLowerCase());
     }
 
     return isValid;
-  });
+});
+
 
   return (
     <React.Fragment>
@@ -262,7 +255,6 @@ const MembersTab = () => {
               </div>
               <ToastContainer closeButton={false} limit={1} />
             </CardBody>
-
           </Card>
         </Col>
       </Row>

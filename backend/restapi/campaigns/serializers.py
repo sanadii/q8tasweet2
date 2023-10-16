@@ -85,7 +85,9 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
                   "civil", "phone", "notes", "status", "fullName"]
 
     def get_fullName(self, obj):
-        return f"{obj.user.first_name} {obj.user.last_name}"
+        if obj.user:
+            return f"{obj.user.first_name} {obj.user.last_name}"
+        return "User not found"
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

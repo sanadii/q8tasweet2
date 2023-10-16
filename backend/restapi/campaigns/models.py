@@ -1,15 +1,14 @@
 # restapi/campaigns/models
 from django.db import models
 from django.contrib.auth.models import Group
-from django.utils import timezone
-from django.core.validators import RegexValidator
-from restapi.helper.models_helper import TrackModel, TaskModel, RoleOptions, StatusOptions, GuaranteeStatusOptions, PriorityOptions
-from restapi.helper.validators import civil_validator, phone_validator, today
+from restapi.helper.models_helper import TrackModel, TaskModel, GuaranteeStatusOptions
+from restapi.helper.validators import civil_validator, phone_validator
 
 class Campaign(TrackModel, TaskModel):
     # Basic Information
     election_candidate = models.ForeignKey('ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='candidate_campaigns')
     description = models.TextField(blank=True, null=True)
+    target_votes = models.PositiveIntegerField(blank=True, null=True)
 
     # Media Coverage
     twitter = models.CharField(max_length=120, blank=True, null=True)
@@ -17,7 +16,6 @@ class Campaign(TrackModel, TaskModel):
     website = models.URLField(max_length=120, blank=True, null=True)
 
     # Activities
-    target_votes = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         db_table = "campaign"
@@ -26,6 +24,14 @@ class Campaign(TrackModel, TaskModel):
 
     def __str__(self):
         return f"{self.election_candidate.candidate.name} - Year"  # Assuming the candidate's name is accessible through the relation
+
+class CampaignProfile(TrackModel, TaskModel):
+    campaign = models.OneToOneField('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_campaigns")
+
+    class Meta:
+        db_table = 'campaign_profile'
+        verbose_name = "Campaign profile"
+        verbose_name_plural = "Campaign profiles"
 
 class CampaignMember(TrackModel):
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='memberships')

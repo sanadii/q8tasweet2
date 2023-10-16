@@ -6,26 +6,15 @@ import "react-toastify/dist/ReactToastify.css";
 // User Redux States
 import {
   GET_USERS,
-  GET_CURRENT_USER,
   GET_USER_DETAILS,
-  GET_MODERATOR_USERS,
   ADD_NEW_USER,
   DELETE_USER,
   UPDATE_USER,
 
-  // User Candidates
-  GET_USER_CANDIDATES,
-  ADD_NEW_USER_CANDIDATE,
-  DELETE_USER_CANDIDATE,
-  UPDATE_USER_CANDIDATE,
-  // GET_USER_CANDIDATE_DETAILS,
-
-  // User Campaign
-  GET_USER_CAMPAIGNS,
-  ADD_NEW_USER_CAMPAIGN,
-  DELETE_USER_CAMPAIGN,
-  UPDATE_USER_CAMPAIGN,
-  // GET_USER_CAMPAIGN_DETAILS,
+  // Specific User(s)
+  GET_CURRENT_USER,
+  GET_MODERATOR_USERS,
+  GET_CAMPAIGN_MODERATORS,
 } from "./actionType";
 
 import {
@@ -34,7 +23,8 @@ import {
 } from "../uploadImage/actionType";
 
 import {
-  // getUsers, getUserDetails,
+  // getUsers,
+  // getUserDetails,
   // API Response
   UserApiResponseSuccess,
   UserApiResponseError,
@@ -47,21 +37,9 @@ import {
   deleteUserSuccess,
   deleteUserFail,
 
-  // User Candidates
-  addNewUserCandidateSuccess,
-  addNewUserCandidateFail,
-  updateUserCandidateSuccess,
-  updateUserCandidateFail,
-  deleteUserCandidateSuccess,
-  deleteUserCandidateFail,
-
-  // User Campaigns
-  addNewUserCampaignSuccess,
-  addNewUserCampaignFail,
-  updateUserCampaignSuccess,
-  updateUserCampaignFail,
-  deleteUserCampaignSuccess,
-  deleteUserCampaignFail,
+  // // Specific User(s)
+  // getModeratorUsers,
+  // getCampaignModerators,
 } from "./action";
 
 import { uploadNewImage } from "../uploadImage/action";
@@ -69,26 +47,16 @@ import { uploadNewImage } from "../uploadImage/action";
 //Include Both Helper File with needed methods
 import {
   getUsers as getUsersApi,
-  getCurrentUser as getCurrentUserApi,
   getUserDetails as getUserDetailsApi,
-  getModeratorUsers as getModeratorUsersApi,
   addNewUser,
   updateUser,
   deleteUser,
 
-  // User Candidates
-  getUserCandidates as getUserCandidatesApi,
-  // getUserCandidateDetails as getUserCandidateDetailsApi,
-  addNewUserCandidate,
-  updateUserCandidate,
-  deleteUserCandidate,
+  // Specific User(s)
+  getCurrentUser as getCurrentUserApi,
+  getModeratorUsers as getModeratorUsersApi,
+  getCampaignModerators as getCampaignModeratorsApi,
 
-  // User Campaigns
-  getUserCampaigns as getUserCampaignsApi,
-  // getUserCampaignDetails as getUserCampaignDetailsApi,
-  addNewUserCampaign,
-  updateUserCampaign,
-  deleteUserCampaign,
 } from "../../helpers/backend_helper";
 
 function* getUsers() {
@@ -100,29 +68,13 @@ function* getUsers() {
   }
 }
 
-function* getCurrentUser({ payload: token }) {
-  try {
-    const response = yield call(getCurrentUserApi, token);
-    yield put(UserApiResponseSuccess(GET_CURRENT_USER, response.data));
-  } catch (error) {
-    yield put(UserApiResponseError(GET_CURRENT_USER, error));
-  }
-}
+
 function* getUserDetails({ payload: user }) {
   try {
     const response = yield call(getUserDetailsApi, user);
     yield put(UserApiResponseSuccess(GET_USER_DETAILS, response.data));
   } catch (error) {
     yield put(UserApiResponseError(GET_USER_DETAILS, error));
-  }
-}
-
-function* getModeratorUsers() {
-  try {
-    const response = yield call(getModeratorUsersApi);
-    yield put(UserApiResponseSuccess(GET_MODERATOR_USERS, response.data));
-  } catch (error) {
-    yield put(UserApiResponseError(GET_MODERATOR_USERS, error));
   }
 }
 
@@ -184,93 +136,30 @@ function* onUpdateUser({ payload: { user, formData } }) {
   }
 }
 
-// User Candidates
-function* getUserCandidates({ payload: user }) {
+function* getCurrentUser({ payload: token }) {
   try {
-    const response = yield call(getUserCandidatesApi, user);
-    yield put(UserApiResponseSuccess(GET_USER_CANDIDATES, response.data));
+    const response = yield call(getCurrentUserApi, token);
+    yield put(UserApiResponseSuccess(GET_CURRENT_USER, response.data));
   } catch (error) {
-    yield put(UserApiResponseError(GET_USER_CANDIDATES, error));
+    yield put(UserApiResponseError(GET_CURRENT_USER, error));
   }
 }
 
-function* onAddNewUserCandidate({ payload: userCandidate }) {
+function* getModeratorUsers() {
   try {
-    const response = yield call(addNewUserCandidate, userCandidate);
-    yield put(addNewUserCandidateSuccess(response));
-    toast.success("UserCandidate Added Successfully", { autoClose: 2000 });
+    const response = yield call(getModeratorUsersApi);
+    yield put(UserApiResponseSuccess(GET_MODERATOR_USERS, response.data));
   } catch (error) {
-    yield put(addNewUserCandidateFail(error));
-    toast.error("UserCandidate Added Failed", { autoClose: 2000 });
+    yield put(UserApiResponseError(GET_MODERATOR_USERS, error));
   }
 }
 
-function* onDeleteUserCandidate({ payload: userCandidate }) {
+function* getCampaignModerators() {
   try {
-    const response = yield call(deleteUserCandidate, userCandidate);
-    yield put(deleteUserCandidateSuccess({ userCandidate, ...response }));
-    toast.success("UserCandidate Delete Successfully", { autoClose: 2000 });
+    const response = yield call(getCampaignModeratorsApi);
+    yield put(UserApiResponseSuccess(GET_CAMPAIGN_MODERATORS, response.data));
   } catch (error) {
-    yield put(deleteUserCandidateFail(error));
-    toast.error("UserCandidate Delete Failed", { autoClose: 2000 });
-  }
-}
-
-function* onUpdateUserCandidate({ payload: userCandidate }) {
-  try {
-    const response = yield call(updateUserCandidate, userCandidate);
-    yield put(updateUserCandidateSuccess(response));
-    toast.success("UserCandidate Updated Successfully", {
-      autoClose: 2000,
-    });
-  } catch (error) {
-    yield put(updateUserCandidateFail(error));
-    toast.error("UserCandidate Updated Failed", { autoClose: 2000 });
-  }
-}
-
-// User Campaigns
-function* getUserCampaigns({ payload: user }) {
-  try {
-    const response = yield call(getUserCampaignsApi, user);
-    yield put(UserApiResponseSuccess(GET_USER_CAMPAIGNS, response.data));
-  } catch (error) {
-    yield put(UserApiResponseError(GET_USER_CAMPAIGNS, error));
-  }
-}
-
-function* onAddNewUserCampaign({ payload: userCampaign }) {
-  try {
-    const response = yield call(addNewUserCampaign, userCampaign);
-    yield put(addNewUserCampaignSuccess(response));
-    toast.success("UserCampaign Added Successfully", { autoClose: 2000 });
-  } catch (error) {
-    yield put(addNewUserCampaignFail(error));
-    toast.error("UserCampaign Added Failed", { autoClose: 2000 });
-  }
-}
-
-function* onDeleteUserCampaign({ payload: userCampaign }) {
-  try {
-    const response = yield call(deleteUserCampaign, userCampaign);
-    yield put(deleteUserCampaignSuccess({ userCampaign, ...response }));
-    toast.success("UserCampaign Delete Successfully", { autoClose: 2000 });
-  } catch (error) {
-    yield put(deleteUserCampaignFail(error));
-    toast.error("UserCampaign Delete Failed", { autoClose: 2000 });
-  }
-}
-
-function* onUpdateUserCampaign({ payload: userCampaign }) {
-  try {
-    const response = yield call(updateUserCampaign, userCampaign);
-    yield put(updateUserCampaignSuccess(response));
-    toast.success("UserCampaign Updated Successfully", {
-      autoClose: 2000,
-    });
-  } catch (error) {
-    yield put(updateUserCampaignFail(error));
-    toast.error("UserCampaign Updated Failed", { autoClose: 2000 });
+    yield put(UserApiResponseError(GET_CAMPAIGN_MODERATORS, error));
   }
 }
 
@@ -278,86 +167,44 @@ function* onUpdateUserCampaign({ payload: userCampaign }) {
 export function* watchGetUsers() {
   yield takeEvery(GET_USERS, getUsers);
 }
-export function* watchGetCurrentUser() {
-  yield takeEvery(GET_CURRENT_USER, getCurrentUser);
-}
 export function* watchGetUserDetails() {
   yield takeEvery(GET_USER_DETAILS, getUserDetails);
 }
-export function* watchGetModeratorUsers() {
-  yield takeEvery(GET_MODERATOR_USERS, getModeratorUsers);
-}
-
 export function* watchAddNewUser() {
   yield takeEvery(ADD_NEW_USER, onAddNewUser);
 }
-
 export function* watchUpdateUser() {
   yield takeEvery(UPDATE_USER, onUpdateUser);
 }
-
 export function* watchDeleteUser() {
   yield takeEvery(DELETE_USER, onDeleteUser);
 }
 
-// User Candidates Watchers
-export function* watchGetUserCandidates() {
-  yield takeEvery(GET_USER_CANDIDATES, getUserCandidates);
+// Specific User(s)
+export function* watchGetCurrentUser() {
+  yield takeEvery(GET_CURRENT_USER, getCurrentUser);
 }
-
-export function* watchAddNewUserCandidate() {
-  yield takeEvery(ADD_NEW_USER_CANDIDATE, onAddNewUserCandidate);
+export function* watchGetModeratorUsers() {
+  yield takeEvery(GET_MODERATOR_USERS, getModeratorUsers);
 }
-
-export function* watchUpdateUserCandidate() {
-  yield takeEvery(UPDATE_USER_CANDIDATE, onUpdateUserCandidate);
-}
-
-export function* watchDeleteUserCandidate() {
-  yield takeEvery(DELETE_USER_CANDIDATE, onDeleteUserCandidate);
-}
-
-// User Campaigns Watchers
-export function* watchGetUserCampaigns() {
-  yield takeEvery(GET_USER_CAMPAIGNS, getUserCampaigns);
-}
-
-export function* watchAddNewUserCampaign() {
-  yield takeEvery(ADD_NEW_USER_CAMPAIGN, onAddNewUserCampaign);
-}
-
-export function* watchUpdateUserCampaign() {
-  yield takeEvery(UPDATE_USER_CAMPAIGN, onUpdateUserCampaign);
-}
-
-export function* watchDeleteUserCampaign() {
-  yield takeEvery(DELETE_USER_CAMPAIGN, onDeleteUserCampaign);
+export function* watchGetCampaignModerators() {
+  yield takeEvery(GET_CAMPAIGN_MODERATORS, getCampaignModerators);
 }
 
 function* userSaga() {
   yield all([
     // Users
     fork(watchGetUsers),
-    fork(watchGetCurrentUser),
     fork(watchGetUserDetails),
-    fork(watchGetModeratorUsers),
     fork(watchAddNewUser),
     fork(watchUpdateUser),
     fork(watchDeleteUser),
 
     // UserCandidates
-    fork(watchGetUserCandidates),
-    // fork(watchGetUserCandidateDetails),
-    fork(watchAddNewUserCandidate),
-    fork(watchUpdateUserCandidate),
-    fork(watchDeleteUserCandidate),
+    fork(watchGetCurrentUser),
+    fork(watchGetModeratorUsers),
+    fork(watchGetCampaignModerators),
 
-    // UserCampiagns
-    fork(watchGetUserCampaigns),
-    // fork(watchGetUserCampiagnDetails),
-    fork(watchAddNewUserCampaign),
-    fork(watchUpdateUserCampaign),
-    fork(watchDeleteUserCampaign),
   ]);
 }
 

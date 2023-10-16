@@ -11,7 +11,7 @@ import {
   useRowSelect
 } from "react-table";
 import { Table, Row, Col, Button, Input, CardBody } from "reactstrap";
-import { DefaultColumnFilter } from "./filters";
+import { DefaultColumnFilter } from "./Filters";
 
 // Define a default UI for filtering
 function GlobalFilter({

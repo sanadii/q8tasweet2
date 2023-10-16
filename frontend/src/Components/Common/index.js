@@ -12,9 +12,6 @@ export { default as TableContainerFilters } from "./TableContainerFilters";
 // Modals
 export { DeleteModal } from "./DeleteModal";
 
-// UI
-export { GenderCircle } from "./GenderCircle";
-
 // Image Frames
 export {
   ImageCircle,

@@ -22,11 +22,14 @@ urlpatterns = [
 
     # Users
     path("getUsers", GetUsers.as_view(), name="GetUsers"),
-    path("getModeratorUsers", GetModeratorUsers.as_view(), name="GetModeratorUsers"),
-    path('getCurrentUser', GetCurrentUser.as_view(), name="GetCurrentUser"),
     path('addNewUser', AddNewUser.as_view(), name="AddNewUser"),
     path('updateUser', UpdateUser.as_view(), name="UpdateUser"),
     path('deleteUser/<int:id>', DeleteUser.as_view(), name="DeleteUser"),
+
+    # Specific Users
+    path('getCurrentUser', GetCurrentUser.as_view(), name="GetCurrentUser"),
+    path("getModeratorUsers", GetModeratorUsers.as_view(), name="GetModeratorUsers"),
+    path("getCampaignModerators", GetCampaignModerators.as_view(), name="GetCampaignModerators"),
 
     # Groups
     path("getGroups", GetGroups.as_view(), name="GetGroups"),

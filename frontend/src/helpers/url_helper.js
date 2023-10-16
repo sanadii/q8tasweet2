@@ -102,27 +102,15 @@ export const UPDATE_CAMPAIGN_ATTENDEE = "/campaigns/updateCampaignAttendee";
 
 // USERS
 export const GET_USERS = "/auth/getUsers";
-export const GET_CURRENT_USER = "/auth/getCurrentUser";
 export const GET_USER_DETAILS = "/auth/getUserDetails";
-export const GET_MODERATOR_USERS = "/auth/getModeratorUsers";
-
 export const ADD_NEW_USER = "/auth/addNewUser";
 export const UPDATE_USER = "/auth/updateUser";
 export const DELETE_USER = "/auth/deleteUser";
 
-// User Candidate
-export const GET_USER_CANDIDATES = "/auth/getUserCandidates";
-export const GET_USER_CANDIDATE_DETAILS = "/auth/getUserCandidateDetails";
-export const ADD_NEW_USER_CANDIDATE = "/auth/addNewUserCandidate";
-export const UPDATE_USER_CANDIDATE = "/auth/updateUserCandidate";
-export const DELETE_USER_CANDIDATE = "/auth/deleteUserCandidate";
-
-// User Campaign
-export const GET_USER_CAMPAIGNS = "/auth/getUserCampaigns";
-export const GET_USER_CAMPAIGN_DETAILS = "/auth/getUserCampaignDetails";
-export const ADD_NEW_USER_CAMPAIGN = "/auth/addNewUserCampaign";
-export const UPDATE_USER_CAMPAIGN = "/auth/updateUserCampaign";
-export const DELETE_USER_CAMPAIGN = "/auth/deleteUserCampaign";
+// SPECIFIC USER(S)
+export const GET_CURRENT_USER = "/auth/getCurrentUser";
+export const GET_MODERATOR_USERS = "/auth/getModeratorUsers";
+export const GET_CAMPAIGN_MODERATORS = "/auth/getCampaignModerators";
 
 
 // GROUPS

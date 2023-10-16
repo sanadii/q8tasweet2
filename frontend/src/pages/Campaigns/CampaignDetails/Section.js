@@ -12,8 +12,7 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap
 import SwiperCore, { Autoplay } from "swiper";
 
 // Components & Hooks
-import { ImageMedium, ImageLarge, ImageCircle, ImageCampaignBackground } from "Components/Common";
-import { MemberRoleOptions } from "Components/constants";
+import { ImageLarge, ImageCampaignBackground } from "Components/Common";
 import usePermission from "Components/Hooks/usePermission";
 import Loader from "Components/Common/Loader";
 
@@ -25,8 +24,7 @@ import AttendeesTab from "./AttendeesTab";
 import SortingTab from "./SortingTab";
 import ElectorsTab from "./ElectorsTab";
 import ActivitiesTab from "./ActivitiesTab";
-import EditTab from "./EditTab/EditTab";
-
+import EditTab from "./EditTab";
 
 
 const Section = () => {
@@ -34,29 +32,28 @@ const Section = () => {
 
   const {
     campaign,
-    currentCampaignMember,
     campaignMembers,
+    campaignRoles,
     campaignGuarantees,
-    campaignElectionCommittees,
-    isCampaignSuccess
   } = useSelector(campaignSelector);
 
   // Permissions
   const { isAdmin,
-    isEditor,
-    isContributor,
-    isModerator,
-    isSubscriber,
-    canViewCampaign,
     canViewCampaignMember,
     canViewCampaignGuarantee,
-    canViewCampaignAttendee,
-    canViewCampaignSorting,
-    canViewElector,
-    canViewActivitie
   } = usePermission();
 
 
+  // // // Find the role ID for 'campaignModerator'
+  const campaignModeratorRole = campaignRoles && campaignRoles.find(campaignRole => campaignRole.role === 'CampaignModerator');
+  const campaignModeratorRoleID = campaignModeratorRole ? campaignModeratorRole.id : null;
+  const campaignModerators = campaignMembers && campaignMembers.filter(member => member.role === campaignModeratorRoleID);
+      
+  // // // Filter the campaignMembers to retrieve only those with the role of 'campaignModerator'
+  const campaignAdminRole = campaignRoles && campaignRoles.find(campaignRole => campaignRole.role === 'CampaignDirector');
+  const campaignAdminRoleID = campaignAdminRole ? campaignAdminRole.id : null;
+  const campaignAdmins = campaignMembers && campaignMembers.filter(member => member.role === campaignAdminRoleID);
+  
   // Tabs
   const tabs = [
     { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', text: 'الملخص' },
@@ -125,7 +122,21 @@ const Section = () => {
                   <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
                   التاريخ: <strong >{campaign.election.dueDate}</strong>
                 </div>
+                {campaignModerators && campaignModerators.length > 0 &&
+                  <div className="me-2">
+                    <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
+                    المشرف الإداري: <strong>{campaignModerators.map(moderator => moderator.fullName).join(' | ')}</strong>
+                  </div>
+                }
+                {campaignAdmins && campaignAdmins.length > 0 &&
+                  <div className="me-2">
+                    <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
+                    مدير الحملة: <strong>{campaignAdmins.map(moderator => moderator.fullName).join(' | ')}</strong>
+                  </div>
+                }
+
               </div>
+
             </div>
           </Col>
           <Col xs={12} className="col-lg-auto order-last order-lg-0">

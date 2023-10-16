@@ -38,14 +38,14 @@ const OverviewTab = () => {
   // TODO: Move to helper
   let committeeName = "Unknown";
 
-  if (Array.isArray(campaignElectionCommittees)) {
-    const committeeObj = campaignElectionCommittees.find(
-      (committee) => committee.id === currentCampaignMember.committee
-    );
-    if (committeeObj) {
-      committeeName = committeeObj.name;
-    }
-  }
+  // if (Array.isArray(campaignElectionCommittees)) {
+  //   const committeeObj = campaignElectionCommittees.find(
+  //     (committee) => committee.id === currentCampaignMember.committee
+  //   );
+  //   if (committeeObj) {
+  //     committeeName = committeeObj.name;
+  //   }
+  // }
 
   let roleName;
 
@@ -115,7 +115,7 @@ const OverviewTab = () => {
                     <li>رمز المستخدم: <strong>{currentUser.id}</strong></li>
                     <li>العضوية: <strong>{roleName}</strong></li>
                     <li>رمز العضوية: <strong>{currentCampaignMember.id}</strong></li>
-                    <li>اللجنة: <strong> {committeeName}</strong></li>
+                    {/* <li>اللجنة: <strong> {committeeName}</strong></li> */}
                   </ul>
                 </div>
               }

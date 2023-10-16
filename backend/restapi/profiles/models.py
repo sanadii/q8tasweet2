@@ -26,14 +26,14 @@ class UserProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
         db_table = 'auth_user_profile'
 
 
+class ElectionProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
+    election = models.OneToOneField('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_elections")
+
+    class Meta:
+        db_table = 'election_profile'
+        
 class CandidateProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
-    candidate = models.OneToOneField(
-        'Candidate',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="profile"
-    )
+    candidate = models.OneToOneField('Candidate', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_candidates")
 
     description = models.CharField(max_length=255, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True, validators=[MaxValueValidator(limit_value=today)])
@@ -52,9 +52,3 @@ class CandidateProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'candidate_profile'
 
-
-
-class ElectionProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
-
-    class Meta:
-        db_table = 'election_profile'

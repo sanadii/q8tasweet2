@@ -5,9 +5,7 @@ import {
 
   // User s
   GET_USERS,
-  GET_CURRENT_USER,
   GET_USER_DETAILS,
-  GET_MODERATOR_USERS,
 
   ADD_NEW_USER_SUCCESS,
   ADD_NEW_USER_FAIL,
@@ -16,26 +14,11 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
 
+  // Specific Users
+  GET_CURRENT_USER,
+  GET_MODERATOR_USERS,
+  GET_CAMPAIGN_MODERATORS,
 
-  // User Candidates
-  GET_USER_CANDIDATES,
-  // GET_USER_CANDIDATE_DETAILS,
-  ADD_NEW_USER_CANDIDATE_SUCCESS,
-  ADD_NEW_USER_CANDIDATE_FAIL,
-  UPDATE_USER_CANDIDATE_SUCCESS,
-  UPDATE_USER_CANDIDATE_FAIL,
-  DELETE_USER_CANDIDATE_SUCCESS,
-  DELETE_USER_CANDIDATE_FAIL,
-
-  // User Campaigns
-  GET_USER_CAMPAIGNS,
-  // GET_USER_CAMPAIGN_DETAILS,
-  ADD_NEW_USER_CAMPAIGN_SUCCESS,
-  ADD_NEW_USER_CAMPAIGN_FAIL,
-  UPDATE_USER_CAMPAIGN_SUCCESS,
-  UPDATE_USER_CAMPAIGN_FAIL,
-  DELETE_USER_CAMPAIGN_SUCCESS,
-  DELETE_USER_CAMPAIGN_FAIL,
 } from "./actionType";
 
 const IntialState = {
@@ -43,12 +26,7 @@ const IntialState = {
   moderators: [],
   currentUser: [],
   userDetails: [],
-  userCandidates: [],
-  userCampaigns: [],
-  // userCandidates: [],
-  // userCampaigns: [],
-  // userMembers: [],
-  // userGuarantees: [],
+  campaignModerators: [],
 };
 
 const Users = (state = IntialState, action) => {
@@ -85,22 +63,13 @@ const Users = (state = IntialState, action) => {
             isUserCreated: false,
             isUserSuccess: true,
           };
-
-        case GET_USER_CANDIDATES:
+        case GET_CAMPAIGN_MODERATORS:
           return {
             ...state,
-            userCandidates: action.payload.data,
-            isUserCandidateCreated: false,
-            isUserCandidateSuccess: true,
+            campaignModerators: action.payload.data,
+            isUserCreated: false,
+            isUserSuccess: true,
           };
-        case GET_USER_CAMPAIGNS:
-          return {
-            ...state,
-            userCampaigns: action.payload.data,
-            isUserCampaignCreated: false,
-            isUserCampaignSuccess: true,
-          };
-
         default:
           return { ...state };
       }
@@ -136,23 +105,13 @@ const Users = (state = IntialState, action) => {
             isUserCreated: false,
             isUserSuccess: true,
           };
-        case GET_USER_CANDIDATES: {
+        case GET_CAMPAIGN_MODERATORS:
           return {
             ...state,
             error: action.payload.error,
-            isUserCandidateCreated: false,
-            isUserCandidateSuccess: true,
+            isUserCreated: false,
+            isUserSuccess: true,
           };
-        }
-
-        case GET_USER_CAMPAIGNS: {
-          return {
-            ...state,
-            error: action.payload.error,
-            isUserCampaignCreated: false,
-            isUserCampaignSuccess: true,
-          };
-        }
         default:
           return { ...state };
       }
@@ -163,13 +122,6 @@ const Users = (state = IntialState, action) => {
         isUserCreated: false,
       };
     }
-    case GET_CURRENT_USER: {
-      return {
-        ...state,
-        currentUser: action.payload,
-        isUserCreated: false,
-      };
-    }
     case GET_USER_DETAILS: {
       return {
         ...state,
@@ -177,14 +129,6 @@ const Users = (state = IntialState, action) => {
         isUserCreated: false,
       };
     }
-    case GET_MODERATOR_USERS: {
-      return {
-        ...state,
-        isUserCreated: false,
-      };
-    }
-
-
     case ADD_NEW_USER_SUCCESS:
       return {
         ...state,
@@ -235,132 +179,26 @@ const Users = (state = IntialState, action) => {
         isUserDeleteFail: true,
       };
 
-    // User Candidates
-    case GET_USER_CANDIDATES: {
+    // Specific User(s)
+    case GET_CURRENT_USER: {
       return {
         ...state,
-        error: action.payload.error,
-        isUserCandidateCreated: false,
-        isUserCandidateSuccess: true,
+        currentUser: action.payload,
+        isUserCreated: false,
       };
     }
-
-    case ADD_NEW_USER_CANDIDATE_SUCCESS:
+    case GET_MODERATOR_USERS: {
       return {
         ...state,
-        isUserCandidateCreated: true,
-        userCandidates: [...state.userCandidates, action.payload.data],
-        isUserCandidateAdd: true,
-        isUserCandidateAddFail: false,
-      };
-
-    case ADD_NEW_USER_CANDIDATE_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isUserCandidateAdd: false,
-        isUserCandidateAddFail: true,
-      };
-    case UPDATE_USER_CANDIDATE_SUCCESS:
-      return {
-        ...state,
-        userCandidates: state.userCandidates.map((userCandidate) =>
-          userCandidate.id.toString() === action.payload.data.id.toString()
-            ? { ...userCandidate, ...action.payload.data }
-            : userCandidate
-        ),
-        isUserCandidateUpdate: true,
-        isUserCandidateUpdateFail: false,
-      };
-    case UPDATE_USER_CANDIDATE_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isUserCandidateUpdate: false,
-        isUserCandidateUpdateFail: true,
-      };
-    case DELETE_USER_CANDIDATE_SUCCESS:
-      return {
-        ...state,
-        userCandidates: state.userCandidates.filter(
-          (userCandidate) =>
-            userCandidate.id.toString() !==
-            action.payload.userCandidate.toString()
-        ),
-        isUserCandidateDelete: true,
-        isUserCandidateDeleteFail: false,
-      };
-    case DELETE_USER_CANDIDATE_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isUserCandidateDelete: false,
-        isUserCandidateDeleteFail: true,
-      };
-
-    // User Campaigns
-    case GET_USER_CAMPAIGNS: {
-      return {
-        ...state,
-        error: action.payload.error,
-        isUserCampaignCreated: false,
-        isUserCampaignSuccess: true,
+        isUserCreated: false,
       };
     }
-
-    case ADD_NEW_USER_CAMPAIGN_SUCCESS:
+    case GET_CAMPAIGN_MODERATORS: {
       return {
         ...state,
-        isUserCampaignCreated: true,
-        userCampaigns: [...state.userCampaigns, action.payload.data],
-        isUserCampaignAdd: true,
-        isUserCampaignAddFail: false,
+        isUserCreated: false,
       };
-
-    case ADD_NEW_USER_CAMPAIGN_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isUserCampaignAdd: false,
-        isUserCampaignAddFail: true,
-      };
-    case UPDATE_USER_CAMPAIGN_SUCCESS:
-      return {
-        ...state,
-        userCampaigns: state.userCampaigns.map((userCampaign) =>
-          userCampaign.id.toString() === action.payload.data.id.toString()
-            ? { ...userCampaign, ...action.payload.data }
-            : userCampaign
-        ),
-        isUserCampaignUpdate: true,
-        isUserCampaignUpdateFail: false,
-      };
-    case UPDATE_USER_CAMPAIGN_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isUserCampaignUpdate: false,
-        isUserCampaignUpdateFail: true,
-      };
-    case DELETE_USER_CAMPAIGN_SUCCESS:
-      return {
-        ...state,
-        userCampaigns: state.userCampaigns.filter(
-          (userCampaign) =>
-            userCampaign.id.toString() !==
-            action.payload.userCampaign.toString()
-        ),
-        isUserCampaignDelete: true,
-        isUserCampaignDeleteFail: false,
-      };
-    case DELETE_USER_CAMPAIGN_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isUserCampaignDelete: false,
-        isUserCampaignDeleteFail: true,
-      };
-
+    }
     default:
       return { ...state };
   }

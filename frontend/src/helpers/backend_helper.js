@@ -151,27 +151,17 @@ export const updateCampaignAttendee = (campaignAttendee) => api.put(url.UPDATE_C
 
 // Users
 export const getUsers = () => api.get(url.GET_USERS);
-export const getCurrentUser = () => api.get(url.GET_CURRENT_USER);
 export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + user.id);
-export const getModeratorUsers = () => api.get(url.GET_MODERATOR_USERS);
 
 export const addNewUser = (user) => api.upload(url.ADD_NEW_USER, user);
 export const updateUser = (user) => api.update(url.UPDATE_USER + "/" + user.id, user);
 export const deleteUser = (user) => api.delete(url.DELETE_USER + "/" + user);
 
-// UserCandidates
-export const getUserCandidates = (user) => api.get(url.GET_USER_CANDIDATES + "/" + user.id);
-export const addNewUserCandidate = (user) => api.create(url.ADD_NEW_USER_CANDIDATE, user);
-export const deleteUserCandidate = (user) => api.delete(url.DELETE_USER_CANDIDATE + "/" + user);
-export const updateUserCandidate = (user) => api.update(url.UPDATE_USER_CANDIDATE + "/" + user.id, user);
-export const getUserCandidateDetails = (user) => api.get(url.GET_USER_CANDIDATE_DETAILS + "/" + user.id);
+// Specific User(s)
+export const getCurrentUser = () => api.get(url.GET_CURRENT_USER);
+export const getModeratorUsers = () => api.get(url.GET_MODERATOR_USERS);
+export const getCampaignModerators = () => api.get(url.GET_CAMPAIGN_MODERATORS);
 
-// UserCampaign
-export const getUserCampaigns = (user) => api.get(url.GET_USER_CAMPAIGNS + "/" + user.id);
-export const addNewUserCampaign = (user) => api.create(url.ADD_NEW_USER_CAMPAIGN, user);
-export const updateUserCampaign = (user) => api.update(url.UPDATE_USER_CAMPAIGN + "/" + user.id, user);
-export const deleteUserCampaign = (user) => api.delete(url.DELETE_USER_CAMPAIGN + "/" + user);
-export const getUserCampaignDetails = (user) => api.get(url.GET_USER_CAMPAIGN_DETAILS + "/" + user.id);
 
 // Groups
 export const getGroups = () => api.get(url.GET_GROUPS);

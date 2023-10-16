@@ -7,9 +7,7 @@ import {
     ResetFilters,
     StatusFilter,
     PriorityFilter,
-    ElectionCategoryFilter,
     CandidateGenderFilter,
-    MemberRoleFilter,
     GenderFilter,
     // AttendeeGenderFilter,
     GuaranteeStatusFilter,
@@ -18,6 +16,9 @@ import {
     GuaranteeAttendanceFilter,
 } from "./Filters";
 
+
+import MemberRoleFilter from "./Filters/MemberRoleFilter";
+import ElectionCategoryFilter from "./Filters/ElectionCategoryFilter";
 
 
 const TableContainerFilters = ({

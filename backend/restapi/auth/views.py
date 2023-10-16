@@ -12,6 +12,7 @@ from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from restapi.helper.models_helper import GroupCategories
+from django.core.exceptions import ObjectDoesNotExist
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserLogin(APIView):
@@ -72,9 +73,9 @@ class GetUsers(APIView):
 class GetModeratorUsers(APIView):
     def get(self, request):
         # Get the group object for 'Moderator'
-        group = Group.objects.get(name='Moderator')
+        group = Group.objects.get(role='CampaignModerator')
 
-        # Get the users in the group 'Moderator'
+        # Get the users in the group 'Moderator' - ID is 14
         moderators = group.user_set.all()
 
         # Serialize the data
@@ -82,6 +83,22 @@ class GetModeratorUsers(APIView):
 
         return Response({"data": data_serializer.data, "code": 200})
 
+class GetCampaignModerators(APIView):
+    def get(self, request):
+        try:
+            # Get the group object where role is 'campaignModerator'
+            group = Group.objects.get(role='CampaignModerator')
+            
+            # Get the users in the group with role 'campaignModerator'
+            moderators = group.user_set.all()
+            
+            # Serialize the data
+            data_serializer = UserSerializer(moderators, many=True)
+
+            return Response({"data": data_serializer.data, "code": 200})
+        except ObjectDoesNotExist:
+            return Response({"data": [], "code": 200, "message": "No moderators found."})
+    
 class AddNewUser(APIView):
     permission_classes = [AllowAny]
 
