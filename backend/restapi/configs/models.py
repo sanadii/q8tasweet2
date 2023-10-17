@@ -9,7 +9,13 @@ class Config(models.Model):
         db_table = "config"
         verbose_name = "Configuration"
         verbose_name_plural = "Configuration"
-
+        default_permissions = []
+        permissions  = [
+            ("canViewConfig", "Can View Config"),
+            ("canAddConfig", "Can Add Config"),
+            ("canChangeConfig", "Can Change Config"),
+            ("canDeleteConfig", "Can Delete Config"),
+            ]
     def save(self, *args, **kwargs):
         super(Config, self).save(*args, **kwargs)
 

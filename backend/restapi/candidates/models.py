@@ -13,8 +13,15 @@ class Candidate(TrackModel, TaskModel):
     class Meta:
         db_table = "candidate"
         verbose_name = "Candidate"
-        verbose_name_plural = "Candidate"
-
+        verbose_name_plural = "Candidates"
+        default_permissions = []
+        permissions  = [
+            ("canViewCandidate", "Can View Candidate"),
+            ("canAddCandidate", "Can Add Candidate"),
+            ("canChangeCandidate", "Can Change Candidate"),
+            ("canDeleteCandidate", "Can Delete Candidate"),
+            ]
+        
     def __str__(self):
         return self.name
     

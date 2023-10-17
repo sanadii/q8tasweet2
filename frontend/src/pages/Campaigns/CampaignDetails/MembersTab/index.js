@@ -34,7 +34,7 @@ const MembersTab = () => {
 
   // Permission Hook
   const {
-    isAdmin,
+    canChangeConfigs,
   } = usePermission();
 
   // Delete Hook
@@ -110,33 +110,33 @@ const MembersTab = () => {
       Cell: (cellProps) => <Role cellProps={cellProps} campaignRoles={campaignRoles} />
     },
     {
-      Header: "الفريق",
-      ShowTo: ["campaignCandidate", "CampaignCoordinator"],
-      Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
-    },
-    {
       Header: "المضامين",
-      ShowTo: ["CampaignDirector", "CampaigaigncandidateAdmin", "campaignCandidate", "CampaignCoordinator", "campaignGuarantor"],
+      ShowTo: ["CampaignDirector", "CampaigaignAssistant", "CampaignCandidate", "CampaignCoordinator", "CampaignGuarantor", "manager"],
       Cell: (cellProps) => <Guarantees cellProps={cellProps} campaignGuarantees={campaignGuarantees} />
     },
     {
+      Header: "الفريق",
+      ShowTo: ["CampaignCandidate", "CampaignCoordinator"],
+      Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
+    },
+    {
       Header: "اللجنة",
-      ShowTo: ["campaignAttendant", "campaignSorter"],
+      ShowTo: ["CampaignAttendant", "CampaignSorter"],
       Cell: (cellProps) => <Committee cellProps={cellProps} campaignElectionCommittees={campaignElectionCommittees} />
     },
     {
       Header: "الحضور",
-      ShowTo: ["campaignAttendant"],
+      ShowTo: ["CampaignAttendant"],
       Cell: (cellProps) => <Attendees cellProps={cellProps} campaignAttendees={campaignAttendees} />
     },
     {
       Header: "تم الفرز",
-      ShowTo: ["campaignSorter"],
+      ShowTo: ["CampaignSorter"],
       Cell: (cellProps) => <Sorted cellProps={cellProps} />
     },
     {
       Header: "المشرف",
-      ShowTo: ["campaignGuarantor", "campaignAttendant", "campaignSorter"],
+      ShowTo: ["CampaignGuarantor", "CampaignAttendant", "CampaignSorter"],
       Cell: (cellProps) => <Supervisor campaignMembers={campaignMembers} cellProps={cellProps} />
     },
     {
@@ -146,7 +146,7 @@ const MembersTab = () => {
           cellProps={cellProps}
           handleCampaignMemberClick={handleCampaignMemberClick}
           onClickDelete={onClickDelete}
-          isAdmin={isAdmin}
+          canChangeConfigs={canChangeConfigs}
         />
       )
     }
@@ -164,7 +164,11 @@ const MembersTab = () => {
 
     // Check the role if there's a filter set for it
     if (filters.role !== null) {
-      isValid = isValid && campaignMember.role === filters.role;
+      if (Array.isArray(filters.role)) {
+        isValid = isValid && filters.role.includes(campaignMember.role);
+      } else {
+        isValid = isValid && campaignMember.role === filters.role;
+      }
     }
 
     // Check the global filter (e.g., for searching by name)
@@ -176,6 +180,7 @@ const MembersTab = () => {
 
     return isValid;
 });
+
 
 
   return (

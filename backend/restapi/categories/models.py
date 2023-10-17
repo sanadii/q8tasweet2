@@ -16,6 +16,8 @@ class Category(TrackModel):
         db_table = "category"
         verbose_name = "Category"
         verbose_name_plural = "Category"
+        default_permissions = []
+
 
     def __str__(self):
         return self.name
@@ -28,6 +30,8 @@ class Tag(models.Model):
         db_table = "Tag"
         verbose_name = "Tag"
         verbose_name_plural = "Tag"
+        default_permissions = []
+
 
     def __str__(self):
         return self.name
@@ -45,6 +49,7 @@ class Area(TrackModel):
         db_table = "area"
         verbose_name = "Area"
         verbose_name_plural = "Area"
+        default_permissions = []
 
     def __str__(self):
         return self.name

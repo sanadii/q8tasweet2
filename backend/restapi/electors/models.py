@@ -23,4 +23,11 @@ class Elector(models.Model):
         db_table = 'electors'
         verbose_name = "Elector"
         verbose_name_plural = "Elector"
+        default_permissions = []
+        permissions  = [
+            ("canViewElector", "Can View Elector"),
+            ("canAddElector", "Can Add Elector"),
+            ("canChangeElector", "Can Change Elector"),
+            ("canDeleteElector", "Can Delete Elector"),
+            ]
 

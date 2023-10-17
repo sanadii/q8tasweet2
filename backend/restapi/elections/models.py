@@ -6,18 +6,6 @@ from django.dispatch import receiver
 from django.db.models import Sum
 from restapi.helper.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 
-
-class TestNow(models.Model):
-    name = models.CharField(max_length=255, blank=False, null=False)
-
-    class Meta:
-        db_table = "test_now"
-        verbose_name = "Test Now"
-        verbose_name_plural = "Test Nows"
-        default_permissions = []
-
-    custom_manager = ModelsPermissionManager()
-
 class Election(TrackModel, TaskModel):
     # Basic Information
     due_date = models.DateField(null=True, blank=True)
@@ -45,6 +33,13 @@ class Election(TrackModel, TaskModel):
         db_table = "election"
         verbose_name = "Election"
         verbose_name_plural = "Election"
+        default_permissions = []
+        permissions  = [
+            ("canViewElection", "Can View Election"),
+            ("canAddElection", "Can Add Election"),
+            ("canChangeElection", "Can Change Election"),
+            ("canDeleteElection", "Can Delete Election"),
+            ]
 
     def __str__(self):
         return f"{self.sub_category.name} - {self.due_date.year if self.due_date else 'No Date'}"
@@ -59,8 +54,6 @@ class ElectionCandidate(TrackModel):
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
 
-    # Manage permissions
-    # custom_manager = ModelsPermissionManager()
 
     def update_votes(self):
         self.votes = self.committee_result_candidates.aggregate(Sum('votes'))['votes__sum'] or 0
@@ -70,20 +63,13 @@ class ElectionCandidate(TrackModel):
         db_table = "election_candidate"
         verbose_name = "Election Candidate"
         verbose_name_plural = "Election Candidate"
-        # default_permissions = []
-        permissions  = [("add_election_candidates", "Can add election candidates")]
-
-    # def save(self, *args, **kwargs):
-    #     if not self.pk:
-    #         self._meta.default_permissions = []
-    #         self._meta.permissions = [
-    #             ("add_election_candidates", "Can add election candidates"),
-    #             ("change_election_candidates", "Can change election candidates"),
-    #             ("delete_election_candidates", "Can delete election candidates"),
-    #             ("view_election_candidates", "Can view election candidates"),
-    #         ]
-    #     super().save(*args, **kwargs)
-
+        default_permissions = []
+        permissions  = [
+            ("canViewElectionCandidate", "Can View Election Candidate"),
+            ("canAddElectionCandidate", "Can Add Election Candidate"),
+            ("canChangeElectionCandidate", "Can Change Election Candidate"),
+            ("canDeleteElectionCandidate", "Can Delete Election Candidate"),
+            ]
 
     def __str__(self):
         return str(self.candidate.name)
@@ -99,7 +85,13 @@ class ElectionCommittee(TrackModel):
         db_table = "election_committee"
         verbose_name = "Election Committe"
         verbose_name_plural = "Election Committes"
-
+        default_permissions = []
+        permissions  = [
+            ("canViewElectionCommitte", "Can View Election Committe"),
+            ("canAddElectionCommitte", "Can Add Election Committe"),
+            ("canChangeElectionCommitte", "Can Change Election Committe"),
+            ("canDeleteElectionCommitte", "Can Delete Election Committe"),
+            ]
     def __str__(self):
         return self.name
 
@@ -113,7 +105,14 @@ class ElectionCommitteeResult(TrackModel):
         db_table = "election_committee_result"
         verbose_name = "Committe Result"
         verbose_name_plural = "Committe Results"
-
+        default_permissions = []
+        permissions  = [
+            ("canViewCommitteeResult", "Can View Committee Result"),
+            ("canAddCommitteeResult", "Can Add Committee Result"),
+            ("canChangeCommitteeResult", "Can Change Committee Result"),
+            ("canDeleteCommitteeResult", "Can Delete Committee Result"),
+            ]
+        
     def __str__(self):
         return f"{self.election_committee.name} - {self.election_candidate.candidate.name} - Votes: {self.votes}"
 

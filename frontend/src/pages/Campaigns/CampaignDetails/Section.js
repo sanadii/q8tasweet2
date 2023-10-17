@@ -35,25 +35,19 @@ const Section = () => {
     campaignMembers,
     campaignRoles,
     campaignGuarantees,
+    campaignAttendees,
   } = useSelector(campaignSelector);
 
   // Permissions
-  const { isAdmin,
+  const {
+    canChangeCampaign,
     canViewCampaignMember,
     canViewCampaignGuarantee,
+    // canViewCampaignAttendees,
   } = usePermission();
 
 
-  // // // Find the role ID for 'campaignModerator'
-  const campaignModeratorRole = campaignRoles && campaignRoles.find(campaignRole => campaignRole.role === 'CampaignModerator');
-  const campaignModeratorRoleID = campaignModeratorRole ? campaignModeratorRole.id : null;
-  const campaignModerators = campaignMembers && campaignMembers.filter(member => member.role === campaignModeratorRoleID);
-      
-  // // // Filter the campaignMembers to retrieve only those with the role of 'campaignModerator'
-  const campaignAdminRole = campaignRoles && campaignRoles.find(campaignRole => campaignRole.role === 'CampaignDirector');
-  const campaignAdminRoleID = campaignAdminRole ? campaignAdminRole.id : null;
-  const campaignAdmins = campaignMembers && campaignMembers.filter(member => member.role === campaignAdminRoleID);
-  
+
   // Tabs
   const tabs = [
     { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', text: 'الملخص' },
@@ -94,11 +88,6 @@ const Section = () => {
       setActiveTab(String(tab));
     }
   };
-
-  useEffect(() => {
-    console.log('Active tab:', activeTab);
-  }, [activeTab]);
-
 
   if (!campaign.candidate) {
     return <Loader />;
@@ -161,6 +150,16 @@ const Section = () => {
                   </div>
                 </Col>
               }
+              {/* {canViewCampaignAttendees &&
+                <Col lg={6} xs={4}>
+                  <div className="p-2">
+                    <h4 className="text-white mb-1">
+                      {campaignAttendees?.length || 0}
+                    </h4>
+                    <p className="fs-14 mb-0">الحضور</p>
+                  </div>
+                </Col>
+              } */}
             </Row>
           </Col>
         </Row>
@@ -189,7 +188,7 @@ const Section = () => {
                 }
               </Nav>
 
-              {isAdmin && (
+              {canChangeCampaign && (
                 <NavItem className="btn btn-success">
                   <NavLink
                     href="#edit"

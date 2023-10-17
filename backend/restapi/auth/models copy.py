@@ -67,3 +67,12 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
         return self.username
     class Meta:
         db_table = 'auth_user'
+        verbose_name = "User"
+        verbose_name_plural = "User"
+        default_permissions = []
+        permissions  = [
+            ("canViewUser", "Can View User"),
+            ("canAddUser", "Can Add User"),
+            ("canChangeUser", "Can Change User"),
+            ("canDeleteUser", "Can Delete User"),
+            ]

@@ -1,5 +1,5 @@
 // Components/Common/Filters/MemberRoleFilter.js
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import classnames from "classnames";
 import { campaignSelector } from 'Selectors';
@@ -16,11 +16,11 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
             )
             .map(role => role.id);
     }, [campaignRoles]);
-    console.log("CampaignManagerRoles:", CampaignManagerRoles);
 
-
-
-
+    // Compute the count of members with managerial roles
+    const managerCounts = useMemo(() => {
+        return campaignMembers.filter(member => CampaignManagerRoles.includes(member.role)).length;
+    }, [CampaignManagerRoles, campaignMembers]);
 
     // Compute the count for each role
     const roleCounts = useMemo(() => {
@@ -29,8 +29,6 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
             return counts;
         }, {});
     }, [campaignRoles, campaignMembers]);
-
-
 
     // Handle Change Campaign Tab Click
     const ChangeCampaignRole = (e, tab, roleIds) => {
@@ -43,7 +41,7 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
                     ...prevFilters,
                     role: null
                 }));
-            } else if (Array.isArray(roleId) && tab === "manager") {
+            } else if (Array.isArray(roleIds) && tab === "manager") {
                 setFilters(prevFilters => ({
                     ...prevFilters,
                     role: CampaignManagerRoles
@@ -55,16 +53,8 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
                 }));
             }
         }
-        console.log("Changing Campaign Role to:", roleIds);
-        console.log("New Tab:", tab);
     };
 
-    useEffect(() => {
-        console.log('Filters changed to:', filters);
-    }, [filters]);
-
-    // console.log("Role Counts:", roleCounts);
-    console.log("Current Active Tab:", activeTab);
     return (
         <React.Fragment>
             <div>
@@ -94,8 +84,10 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
                         href="#"
                     >
                         الإدارة
+                        <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
+                            {managerCounts}
+                        </span>
                     </NavLink>
-
 
                     {campaignRoles.filter(role => !CampaignManagerRoles.includes(role.id)).map((role) => (
                         <NavItem key={role.id}>
@@ -118,6 +110,7 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
             </div>
         </React.Fragment>
     );
+
 };
 
 export default MemberRoleFilter;

@@ -15,7 +15,11 @@ group_category_field = models.IntegerField(
     default=GroupCategories.SUBSCRIBER,
 )
 
-group_role_field = models.CharField(max_length=255, null=True, blank=True)  # Define your char field with desired attributes
+group_role_field = models.CharField(
+    max_length=255,
+    null=True,
+    blank=True
+)  # Define your char field with desired attributes
 
 class StatusOptions(models.IntegerChoices):
     PUBLISHED = 1, 'منشور'
@@ -68,6 +72,28 @@ class RoleOptions(models.IntegerChoices):
     # OTHER = 7, 'Other'  # Commented out as per your code.
     MODERATOR = 10, 'مدير'
 
+
+# def generate_custom_permissions(model_name):
+#     """Generate custom permissions for a given model name."""
+#     permissions = [
+#         ('canView' + model_name, 'Can View ' + model_name),
+#         ('canAdd' + model_name, 'Can Add ' + model_name),
+#         ('canChange' + model_name, 'Can Change ' + model_name),
+#         ('canDelete' + model_name, 'Can Delete ' + model_name),
+#     ]
+#     return permissions
+
+
+# class CustomMeta(models.base.ModelBase):
+#     def __new__(cls, name, bases, attrs):
+#         new_class = super().__new__(cls, name, bases, attrs)
+        
+#         # If it's not the base model itself and doesn't have abstract attribute
+#         if name != "BaseModel" and not new_class._meta.abstract:
+#             setattr(new_class.Meta, 'permissions', generate_custom_permissions(name))
+        
+#         return new_class
+
 class TrackModel(models.Model):
     created_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_created')
     updated_by = models.ForeignKey('restapi.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_updated')
@@ -79,6 +105,8 @@ class TrackModel(models.Model):
 
     class Meta:
         abstract = True
+        # default_permissions = ()
+
 
     def save(self, *args, **kwargs):
         # If instance has an ID, it means the instance already exists,

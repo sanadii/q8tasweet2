@@ -1,10 +1,11 @@
 # restapi/users/models.py
 from django.db import models
-from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.core.validators import RegexValidator, MaxValueValidator
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import AbstractBaseUser, Group, Permission, PermissionsMixin, BaseUserManager
+from django.contrib.contenttypes.models import ContentType
+from django.core.validators import MaxValueValidator
 
 from restapi.helper.models_helper import TrackModel, GenderOptions, GroupCategories, group_category_field, group_role_field
 from restapi.helper.validators import today, civil_validator, phone_validator  
@@ -70,6 +71,22 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
         return self.username
     class Meta:
         db_table = 'auth_user'
+        verbose_name = "User"
+        verbose_name_plural = "User"
+        default_permissions = []
+        permissions  = [
+            ("canViewUser", "Can View User"),
+            ("canAddUser", "Can Add User"),
+            ("canChangeUser", "Can Change User"),
+            ("canDeleteUser", "Can Delete User"),
+            ]
+        
 
+
+# Group Model
 Group.add_to_class('category', group_category_field)
 Group.add_to_class('role', group_role_field)
+
+
+
+

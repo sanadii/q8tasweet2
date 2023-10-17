@@ -112,7 +112,7 @@ const Supervisor = ({ cellProps, campaignMembers }) => {
 };
 
 const Actions = (props) => {
-    const { cellProps, handleCampaignMemberClick, onClickDelete, isAdmin } = props;
+    const { cellProps, handleCampaignMemberClick, onClickDelete, canChangeConfigs } = props;
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -126,18 +126,19 @@ const Actions = (props) => {
             >
                 <i className="ri-eye-fill align-bottom" />
             </button>
-            {isAdmin && (
-                <>
-                    <button
-                        to="#"
-                        className="btn btn-sm btn-soft-info edit-list"
-                        onClick={() => {
-                            const campaignMember = cellProps.row.original;
-                            handleCampaignMemberClick(campaignMember, "UpdateModal");
-                        }}
-                    >
-                        <i className="ri-pencil-fill align-bottom" />
-                    </button>
+            <>
+                <button
+                    to="#"
+                    className="btn btn-sm btn-soft-info edit-list"
+                    onClick={() => {
+                        const campaignMember = cellProps.row.original;
+                        handleCampaignMemberClick(campaignMember, "UpdateModal");
+                    }}
+                >
+                    <i className="ri-pencil-fill align-bottom" />
+                </button>
+                {canChangeConfigs && (
+
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-danger remove-list"
@@ -148,8 +149,9 @@ const Actions = (props) => {
                     >
                         <i className="ri-delete-bin-5-fill align-bottom" />
                     </button>
-                </>
-            )}
+                )}
+
+            </>
         </div>
     );
 };

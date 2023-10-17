@@ -40,6 +40,7 @@ ADMIN_REORDER = (
     {'app': 'auth', 'label': 'Authorisation','models': (
         'restapi.User',
         'auth.Group',
+        'auth.Permission',
     )},
 
     # Configurations

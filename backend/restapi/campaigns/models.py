@@ -21,7 +21,13 @@ class Campaign(TrackModel, TaskModel):
         db_table = "campaign"
         verbose_name = "Campaign"
         verbose_name_plural = "Campaign"
-
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaign", "Can View Campaign"),
+            ("canAddCampaign", "Can Add Campaign"),
+            ("canChangeCampaign", "Can Change Campaign"),
+            ("canDeleteCampaign", "Can Delete Campaign"),
+            ]
     def __str__(self):
         return f"{self.election_candidate.candidate.name} - Year"  # Assuming the candidate's name is accessible through the relation
 
@@ -30,8 +36,9 @@ class CampaignProfile(TrackModel, TaskModel):
 
     class Meta:
         db_table = 'campaign_profile'
-        verbose_name = "Campaign profile"
-        verbose_name_plural = "Campaign profiles"
+        verbose_name = "Campaign Profile"
+        verbose_name_plural = "Campaign Profiles"
+        default_permissions = []
 
 class CampaignMember(TrackModel):
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='memberships')
@@ -48,7 +55,14 @@ class CampaignMember(TrackModel):
         db_table = 'campaign_member'
         verbose_name = "Campaign Member"
         verbose_name_plural = "Campaign Members"
-
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaignMember", "Can View Test Now"),
+            ("canAddCampaignMember", "Can Add Test Now"),
+            ("canChangeCampaignMember", "Can Change Test Now"),
+            ("canDeleteCampaignMember", "Can Delete Test Now"),
+            ]
+        
 class CampaignGuarantee(TrackModel):
     campaign = models.ForeignKey('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantees')
     member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='guarantee_guarantors')
@@ -61,7 +75,13 @@ class CampaignGuarantee(TrackModel):
         db_table = 'campaign_guarantee'
         verbose_name = "Campaign Guarantee"
         verbose_name_plural = "Campaign Guarantees"
-    
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaignGuarantee", "Can View Campaign Guarantee"),
+            ("canAddCampaignGuarantee", "Can Add Campaign Guarantee"),
+            ("canChangeCampaignGuarantee", "Can Change Campaign Guarantee"),
+            ("canDeleteCampaignGuarantee", "Can Delete Campaign Guarantee"),
+            ]
 
 class CampaignAttendee(TrackModel):
     user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attendant_attendees')
@@ -75,3 +95,10 @@ class CampaignAttendee(TrackModel):
         db_table = 'campaign_attendee'
         verbose_name = "Campaign Attendee"
         verbose_name_plural = "Campaign Attendees"
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaignAttendee", "Can View Campaign Attendee"),
+            ("canAddCampaignAttendee", "Can Add Campaign Attendee"),
+            ("canChangeCampaignAttendee", "Can Change Campaign Attendee"),
+            ("canDeleteCampaignAttendee", "Can Delete Campaign Attendee"),
+            ]

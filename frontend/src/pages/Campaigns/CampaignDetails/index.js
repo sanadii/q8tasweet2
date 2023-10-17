@@ -9,11 +9,7 @@ import { getCampaignDetails } from "../../../store/actions";
 
 // Components
 import Section from "./Section";
-
-// Common Components
 import Loader from "../../../Components/Common/Loader";
-
-// Hooks
 import usePermission from "../../../Components/Hooks/usePermission";
 
 // UI & Utilities
@@ -21,17 +17,9 @@ import { Container } from "reactstrap";
 
 const CampaignDetails = () => {
   const dispatch = useDispatch();
+  
   const { id: campaignId } = useParams();
-
-  const {
-    campaign,
-    currentCampaignMember,
-    campaignMembers,
-    campaignGuarantees,
-    campaignElectionCommittees,
-    isCampaignSuccess
-  } = useSelector(campaignSelector);
-
+  const { campaign } = useSelector(campaignSelector);
   const { canViewCampaign } = usePermission();
 
   useEffect(() => {

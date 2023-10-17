@@ -1,0 +1,13 @@
+
+
+
+Campaign - الحملة الانتخابية
+ID	Role	            Name		             Category
+410	campaignModerator	مشرف إدارة الحملة	   Campaign
+420	campaignManager 	مدير الحملة            Campaign
+430	campaignAssistant	مدير مساعد الحملة      Campaign
+440	campaignCandidate	مرشح                    Campaign
+450	campaignSupervisor	منسق		            Campaign
+460	campaignGuarantor	ضامن		            Campaign
+470	campaignAttendant	محضر		            Campaign
+480	campaignSorter  	فارز		            Campaign

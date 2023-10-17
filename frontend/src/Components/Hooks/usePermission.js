@@ -1,29 +1,58 @@
 // Components/Hooks/usePermission.js
 import { useSelector } from 'react-redux';
 import { userSelector, campaignSelector } from 'Selectors';
-import computePermissions from 'Components/Utils/permissions'; // adjust the path accordingly
+
+// Define a List of Entities:
+const entities = [
+    'Configs', 'User', 'Group', 'Permission', 'ContentType',
+    'Election', 'ElectionCandidate', 'ElectionCommittee', 'ElectionCommitteeResult',
+    'Candidate',
+    'Campaign', 'CampaignMember', 'CampaignGuarantee', 'CampaignAttendee',
+    'Elector',
+    'Area', 'Category', 'Tag',
+    'OutStandingToken', 'LogEntry', 'Session', 'BlackListedToken',
+];
+
+// Define a List of Actions
+const actions = ['canAdd', 'canView', 'canChange', 'canDelete'];
+
+const computePermissions = (hasPermission) => {
+    let permissionsObject = {};
+
+    entities.forEach(entity => {
+        actions.forEach(action => {
+            const permission = `${action}${entity}`;
+            permissionsObject[permission] = hasPermission(permission);
+        });
+    });
+
+    return permissionsObject;
+};
+
 
 const usePermission = () => {
     const { currentUser } = useSelector(userSelector);
-    const { currentCampaignModerator, currentCampaignContributor, currentCampaignEditor, currentCampaignMember } = useSelector(campaignSelector);
+    const { currentCampaignMember } = useSelector(campaignSelector);
 
-    if (!currentUser || !currentUser.roles) {
-        throw new Error("Current user or user roles are not available.");
+    if (!currentUser) {
+        return {
+            isAdmin: false,
+            isEditor: false,
+            isContributor: false,
+            isModerator: false,
+            isSubscriber: false,
+            // ... Add other defaults as needed.
+        };
     }
-
-    const isAdmin = currentUser.roles.includes('isAdmin');
-    const isEditor = currentUser.roles.includes('isEditor');
-    const isModerator = currentUser.roles.includes('isModerator');
-    const isContributor = currentUser.roles.includes('isContributor');
-    const isSubscriber = currentUser.roles.includes('isSubscriber');
 
     // Extract permissions based on the user's roles
     const getPermissions = () => {
-        if (isAdmin) return currentUser.permissions;
-        if (isEditor) return currentCampaignEditor.permissions;
-        if (isModerator) return currentCampaignModerator.permissions;
-        if (isContributor) return currentCampaignContributor.permissions;
-        return currentCampaignMember.role.permissions;
+        const userPermissions = currentUser.permissions || [];
+        const campaignPermissions = currentCampaignMember?.permissions || [];
+        const combinedPermissions = [
+            ...new Set([...userPermissions, ...campaignPermissions])
+        ];
+        return combinedPermissions;
     };
 
     const permissions = getPermissions();
@@ -37,11 +66,6 @@ const usePermission = () => {
     return {
         // hasPermission,
         ...specificPermissions,  // spread out the specific permissions
-        isAdmin,
-        isEditor,
-        isContributor,
-        isModerator,
-        isSubscriber,
     };
 };
 

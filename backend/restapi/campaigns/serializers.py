@@ -10,6 +10,8 @@ from restapi.models import (
     Category,
 )
 
+from django.contrib.auth.models import Group, Permission
+
 # from restapi.serializers import (
 #     ElectionsSerializer,
 #     CandidatesSerializer,
@@ -78,36 +80,68 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 class CampaignMembersSerializer(serializers.ModelSerializer):
     """ Serializer for the CampaignMember model. """
     fullName = serializers.SerializerMethodField()
+    # roles = serializers.SerializerMethodField()  # Changed the field name to 'roles'
+    permissions = serializers.SerializerMethodField()
 
     class Meta:
         model = CampaignMember
         fields = ["id", "user", "campaign", "role", "supervisor", "committee", 
-                  "civil", "phone", "notes", "status", "fullName"]
+                  "civil", "phone", "notes", "status", "fullName",
+                   "permissions"]
 
     def get_fullName(self, obj):
         if obj.user:
             return f"{obj.user.first_name} {obj.user.last_name}"
         return "User not found"
 
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
+    # def get_roles(self, obj):
+    #     # Gets the role attribute for all the groups associated with the member
+    #     roles = [group.role for group in obj.roles.all()]
         
-        request = self.context.get('request')
-        current_user = request.user
-        if current_user.is_staff:
+    #     # Format each role to prepend "is" and capitalize the first letter
+    #     formatted_roles = ["is" + role.replace(" ", "").capitalize() for role in roles]
+        
+    #     return formatted_roles
+
+    def get_permissions(self, obj):
+        # Ensure that the campaign member has an associated role
+        if not obj.role:
+            return []
+
+        # Fetch permissions associated with the specific Group
+        group_permissions = list(Permission.objects.filter(group=obj.role).values_list('codename', flat=True))
+
+        # Format permissions using the format_permission method
+        formatted_permissions = [self.format_permission(permission) for permission in group_permissions]
+
+        return formatted_permissions
+
+    def format_permission(self, permission):
+        parts = permission.split('_')
+        camel_case_name = parts[0] + ''.join([part.capitalize() for part in parts[1:]])
+
+        return 'can' + camel_case_name[0].capitalize() + camel_case_name[1:]
+
+
+        def to_representation(self, instance):
+            rep = super().to_representation(instance)
+            
+            request = self.context.get('request')
+            current_user = request.user
+            if current_user.is_staff:
+                return rep
+
+            role = int(rep.get("role", 0))
+            
+            if role == 3:
+                if not (rep["id"] == instance.id or rep["supervisor"] == instance.id):
+                    return {}
+            elif role > 3:
+                supervisor_id = rep.get("supervisor")
+                if not (rep["id"] == instance.id or rep["id"] == supervisor_id):
+                    return {}
+
             return rep
-
-        role = int(rep.get("role", 0))
-        
-        if role == 3:
-            if not (rep["id"] == instance.id or rep["supervisor"] == instance.id):
-                return {}
-        elif role > 3:
-            supervisor_id = rep.get("supervisor")
-            if not (rep["id"] == instance.id or rep["id"] == supervisor_id):
-                return {}
-
-        return rep
 
 
 class CampaignGuaranteesSerializer(serializers.ModelSerializer):

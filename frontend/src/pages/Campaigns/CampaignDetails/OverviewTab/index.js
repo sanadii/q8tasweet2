@@ -22,6 +22,7 @@ const OverviewTab = () => {
     campaignDetails,
     currentCampaignMember,
     campaignMembers,
+    campaignRoles,
     campaignGuarantees,
     campaignElectionCommittees,
     campaignCandidates
@@ -33,23 +34,25 @@ const OverviewTab = () => {
   document.title = "Campaign Overview | Q8Tasweet";
 
   // Permissions
-  const { isAdmin, isEditor, isContributor, isModerator, isSubscriber, hasPermission } = usePermission();
+  const { canChangeConfigs } = usePermission();
 
   // TODO: Move to helper
   let committeeName = "Unknown";
 
-  // if (Array.isArray(campaignElectionCommittees)) {
-  //   const committeeObj = campaignElectionCommittees.find(
-  //     (committee) => committee.id === currentCampaignMember.committee
-  //   );
-  //   if (committeeObj) {
-  //     committeeName = committeeObj.name;
-  //   }
-  // }
+  // // // Find the role ID for 'campaignModerator'
+  const campaignModeratorRole = campaignRoles && campaignRoles.find(campaignRole => campaignRole.role === 'CampaignModerator');
+  const campaignModeratorRoleID = campaignModeratorRole ? campaignModeratorRole.id : null;
+  const campaignModerators = campaignMembers && campaignMembers.filter(member => member.role === campaignModeratorRoleID);
+
+  // // // Filter the campaignMembers to retrieve only those with the role of 'campaignModerator'
+  const campaignAdminRole = campaignRoles && campaignRoles.find(campaignRole => campaignRole.role === 'CampaignDirector');
+  const campaignAdminRoleID = campaignAdminRole ? campaignAdminRole.id : null;
+  const campaignAdmins = campaignMembers && campaignMembers.filter(member => member.role === campaignAdminRoleID);
+
 
   let roleName;
 
-  if (isAdmin) {
+  if (canChangeConfigs) {
     roleName = "ADMIN";
   } else {
     const roleObj = MemberRoleOptions.find(
@@ -91,14 +94,26 @@ const OverviewTab = () => {
             <CardBody>
               <h5 className="card-title mb-3"><strong>الإنتخابات</strong></h5>
               <ul>
-                <li>المرشح: <strong>{campaignDetails.candidate.name}</strong></li>
                 <li>الانتخابات: <strong>{campaignDetails.election.name}</strong></li>
                 <li>المرشحين: <strong>{(campaignCandidates?.length ?? 0)} مرشح</strong></li>
                 <li>المقاعد: <strong>{campaignDetails.election.seats} مقعد</strong></li>
                 <li>الأصوات: <strong>{campaignDetails.election.votes} صوت</strong></li>
               </ul>
               <hr />
-              {isAdmin ?
+              <h5 className="card-title mb-3"><strong>الإدارة</strong></h5>
+              <ul>
+                <li>المرشح: <strong>{campaignDetails.candidate.name}</strong></li>
+                {campaignAdmins && campaignAdmins.length > 0 &&
+                  <li>مدير الحملة: <strong>{campaignAdmins.map(moderator => moderator.fullName).join(' <br/> ')}</strong></li>
+                }
+                <li>مساعد المدير: <strong>-</strong></li>
+                {campaignModerators && campaignModerators.length > 0 &&
+                  <li>مشرف الحملة: <strong>{campaignModerators.map(moderator => moderator.fullName).join(' | ')}</strong></li>
+                }
+
+              </ul>
+              <hr />
+              {canChangeConfigs ?
                 <div>
                   <h5 className="card-title mb-3"><strong>الإدارة</strong></h5>
                   <ul className="text-danger">
