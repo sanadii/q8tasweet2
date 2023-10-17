@@ -10,4 +10,4 @@ class RestapiConfig(AppConfig):
         from . import signals  # this imports signals module which should register the signal handlers
 
         # Connect the remove_unwanted_permissions function to post_migrate signal
-        post_migrate.connect(signals.remove_unwanted_permissions, sender=self)
+        post_migrate.connect(signals.handle_permissions, sender=self)

@@ -11,7 +11,7 @@ from restapi.models import User
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from restapi.helper.models_helper import GroupCategories
+from restapi.auth.models import GroupCategories
 from django.core.exceptions import ObjectDoesNotExist
 
 @method_decorator(csrf_exempt, name='dispatch')

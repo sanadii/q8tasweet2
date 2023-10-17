@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser, Group, Permission, Perm
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxValueValidator
 
-from restapi.helper.models_helper import TrackModel, GenderOptions, GroupCategories, group_category_field, group_role_field
+from restapi.helper.models_helper import TrackModel, GenderOptions
 from restapi.helper.validators import today, civil_validator, phone_validator  
 
 class CustomAccountManager(BaseUserManager):
@@ -84,6 +84,17 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
 
 
 # Group Model
+class GroupCategories(models.IntegerChoices):
+    CORE = 1, 'إدارة الموقع'
+    ELECTION = 2, 'الانتخابات'
+    CAMPAIGN = 3, 'الحملات الانتخابية'
+    PARTY = 4, 'القوائم'
+    SUBSCRIBER = 5, 'المشتركين'
+    CONTRIBUTOR = 6, 'المساهمين'
+
+group_category_field = models.IntegerField(choices=GroupCategories.choices, default=GroupCategories.SUBSCRIBER)
+group_role_field = models.CharField(max_length=255, null=True, blank=True)
+
 Group.add_to_class('category', group_category_field)
 Group.add_to_class('role', group_role_field)
 

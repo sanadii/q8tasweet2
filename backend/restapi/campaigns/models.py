@@ -27,6 +27,10 @@ class Campaign(TrackModel, TaskModel):
             ("canAddCampaign", "Can Add Campaign"),
             ("canChangeCampaign", "Can Change Campaign"),
             ("canDeleteCampaign", "Can Delete Campaign"),
+            ("canChangeCampaignModerator", "can Change Campaign Moderator"),
+            ("canChangeCampaignCandidate", "can Change Campaign Candidate"),
+            ("canChangeCampaignManager", "can Change Campaign Manager"),
+            ("canChangeCampaignAssistant", "can Change Campaign Assistant"),
             ]
     def __str__(self):
         return f"{self.election_candidate.candidate.name} - Year"  # Assuming the candidate's name is accessible through the relation
@@ -102,3 +106,41 @@ class CampaignAttendee(TrackModel):
             ("canChangeCampaignAttendee", "Can Change Campaign Attendee"),
             ("canDeleteCampaignAttendee", "Can Delete Campaign Attendee"),
             ]
+        
+
+# ElectionParty
+
+# class Party(TrackModel):
+#     # name = models.CharField(max_length=255, blank=False, null=False)
+#     # image = models.ImageField(upload_to="parties/", blank=True, null=True)
+#     # tags = models.CharField(max_length=255, blank=True, null=True)
+
+#     class Meta:
+#         db_table = 'party'
+#         verbose_name = "Party"
+#         verbose_name_plural = "Parties"
+#         default_permissions = []
+#         permissions  = [
+#             ("canViewParty", "Can View Party"),
+#             ("canAddParty", "Can Add Party"),
+#             ("canChangeParty", "Can Change Party"),
+#             ("canDeleteParty", "Can Delete Party"),
+#             ]
+        
+
+# class CampaignParty(TrackModel):
+#     # campaign = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attendant_attendees')
+#     # election_party = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_attendees')
+
+#     class Meta:
+#         db_table = 'campaign_party'
+#         verbose_name = "Campaign Party"
+#         verbose_name_plural = "Campaign Parties"
+#         default_permissions = []
+#         permissions  = [
+#             ("canViewCampaignParty", "Can View Campaign Party"),
+#             ("canAddCampaignParty", "Can Add Campaign Party"),
+#             ("canChangeCampaignParty", "Can Change Campaign Party"),
+#             ("canDeleteCampaignParty", "Can Delete Campaign Party"),
+#             ]
+

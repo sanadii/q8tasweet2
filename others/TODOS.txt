@@ -200,3 +200,6 @@ GROUP
 101. Profile models
   User Profile model
   Candidate Profile Model
+
+
+  102. Reset all tables / rename all directories to make them apps

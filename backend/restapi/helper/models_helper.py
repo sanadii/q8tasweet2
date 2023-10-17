@@ -4,22 +4,7 @@ from django.utils import timezone
 from django.core.validators import RegexValidator
 
 # TODO: make sure dictionaries are all changed to id and name and any otherthing if needed
-class GroupCategories(models.IntegerChoices):
-    ADMIN = 1, 'إدارة الموقع'
-    CONTRIBUTOR = 2, 'مساهمين'
-    CAMPAIGN = 4, 'الحملة الانتخابية'
-    SUBSCRIBER = 5, 'مشترك'
 
-group_category_field = models.IntegerField(
-    choices=GroupCategories.choices,
-    default=GroupCategories.SUBSCRIBER,
-)
-
-group_role_field = models.CharField(
-    max_length=255,
-    null=True,
-    blank=True
-)  # Define your char field with desired attributes
 
 class StatusOptions(models.IntegerChoices):
     PUBLISHED = 1, 'منشور'
