@@ -11,7 +11,8 @@ import MembersViewModal from "./MembersViewModal";
 // Reactstrap (UI) imports 
 import { ModalBody, Modal, ModalHeader, ModalFooter, Button } from "reactstrap";
 
-export const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
+
+const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) => {
 
   // Set Constants
   const [onModalSubmit, setOnModalSubmit] = useState(null);
@@ -74,10 +75,13 @@ export const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
         <div className="hstack gap-2 justify-content-end">
           <Button
             color="light"
-            onClick={() => toggle(false)}
+            onClick={() => {
+              setModal(false);
+            }}
+            className="btn-light"
           >
-            Close
-          </Button>
+            إغلاق
+        </Button>
 
           {/* if ModalButtonText and ModalButtonText is not empty */}
           {ModalButtonText && ModalButtonText.length > 0 && (

@@ -5,15 +5,22 @@ from django.contrib.contenttypes.models import ContentType
 # Define the permissions for each model
 
 PERMISSIONS = {
+    'Config': {
+        'canViewConfig': ['superAdmin', 'admin'],
+        'canAddConfig': ['superAdmin', 'admin'],
+        'canChangeConfig': ['superAdmin', 'admin'],
+        'canDeleteConfig': ['superAdmin', 'admin'],
+    },
+
     'Campaign': {
         'canViewCampaign': [
-            'admin', 'campaignModerator', 'campaignCandidate', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
             'campaignManager', 'campaignSupervisor', 
             'campaignGuarantor', 'campaignAttendant', 'campaignSorter'
         ],
         'canAddCampaign': ['admin'],
         'canChangeCampaign': [
-            'admin', 'campaignModerator', 'campaignCandidate', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
             'campaignManager', 'campaignAssistant'
         ],
         'canDeleteCampaign': ['admin'],
@@ -21,68 +28,68 @@ PERMISSIONS = {
 
     'CampaignMember': {
         'canViewCampaignMember': [
-            'admin', 'campaignModerator', 'campaignCandidate', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
             'campaignManager', 'campaignSupervisor'
         ],
         'canAddCampaignMember': ['admin'],
         'canChangeCampaignMember': [
-            'admin', 'campaignModerator', 'campaignCandidate', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
             'campaignManager', 'campaignSupervisor'
         ],
         'canDeleteCampaignMember': ['admin'],
         'canChangeCampaignModerator': ['admin'],
-        'canChangeCampaignCandidate': ['admin', 'campaignModerator'],
+        'canChangeCampaignCandidate': ['superAdmin', 'admin', 'campaignModerator'],
         'canChangeCampaignManager': [
-            'admin', 'campaignModerator', 'campaignCandidate'
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate'
         ],
         'canChangeCampaignAssistant': [
-            'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager'
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager'
         ],
     },
 
     'CampaignGuarantee': {
         'canViewCampaignGuarantee': [
-            'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
             'campaignSupervisor', 'campaignGuarantor'
         ],
         'canAddCampaignGuarantee': [
-            'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
             'campaignSupervisor', 'campaignGuarantor'
         ],
         'canChangeCampaignGuarantee': [
-            'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
             'campaignSupervisor', 'campaignGuarantor'
         ],
         'canDeleteCampaignGuarantee': [
-            'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
             'campaignSupervisor', 'campaignGuarantor'
         ],
     },
 
     'CampaignAttendee': {
         'canViewCampaignAttendee': [
-            'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
             'campaignSupervisor', 'campaignGuarantor', 
             'campaignAttendant', 'campaignSorter'
         ],
-        'canAddCampaignAttendee': ['admin', 'campaignSorter'],
-        'canDeleteCampaignAttendee': ['admin', 'campaignSorter'],
-        'canChangeCampaignAttendee': ['admin', 'campaignSorter'],
+        'canAddCampaignAttendee': ['superAdmin', 'admin', 'campaignSorter'],
+        'canDeleteCampaignAttendee': ['superAdmin', 'admin', 'campaignSorter'],
+        'canChangeCampaignAttendee': ['superAdmin', 'admin', 'campaignSorter'],
     },
 
     'Elector': {
         'canViewElector': [
-            'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
             'campaignSupervisor', 'campaignGuarantor', 
             'campaignAttendant', 'campaignSorter'
         ],
     },
     
     # 'CampaignSorting': {
-    #     'canViewCampaignSorting': ['admin', 'campaignSorter'],
-    #     'canAddCampaignSorting': ['admin', 'campaignSorter'],
-    #     'canChangeCampaignSorting': ['admin', 'campaignSorter'],
-    #     'canDeleteCampaignSorting': ['admin', 'campaignSorter'],
+    #     'canViewCampaignSorting': ['superAdmin', 'admin', 'campaignSorter'],
+    #     'canAddCampaignSorting': ['superAdmin', 'admin', 'campaignSorter'],
+    #     'canChangeCampaignSorting': ['superAdmin', 'admin', 'campaignSorter'],
+    #     'canDeleteCampaignSorting': ['superAdmin', 'admin', 'campaignSorter'],
     # },
 }
 

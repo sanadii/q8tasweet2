@@ -111,18 +111,6 @@ const Section = () => {
                   <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
                   التاريخ: <strong >{campaign.election.dueDate}</strong>
                 </div>
-                {campaignModerators && campaignModerators.length > 0 &&
-                  <div className="me-2">
-                    <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
-                    المشرف الإداري: <strong>{campaignModerators.map(moderator => moderator.fullName).join(' | ')}</strong>
-                  </div>
-                }
-                {campaignAdmins && campaignAdmins.length > 0 &&
-                  <div className="me-2">
-                    <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
-                    مدير الحملة: <strong>{campaignAdmins.map(moderator => moderator.fullName).join(' | ')}</strong>
-                  </div>
-                }
 
               </div>
 

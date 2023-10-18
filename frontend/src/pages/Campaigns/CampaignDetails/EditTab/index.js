@@ -23,6 +23,7 @@ const EditTab = () => {
 
   document.title = "Starter | Q8Tasweet - React Admin & Dashboard Template";
 
+  // State Management
   const { currentUser } = useSelector(userSelector);
   const { currentCampaignMember, campaignMembers, campaignElectionCommittees } = useSelector(campaignSelector);
   const { campaignModerators } = useSelector(userSelector);

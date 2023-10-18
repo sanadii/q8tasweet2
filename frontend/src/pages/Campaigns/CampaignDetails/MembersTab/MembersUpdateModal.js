@@ -34,18 +34,26 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
   const roleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
 
-  const { id, campaign, role, committee, supervisor, phone, notes } = campaignMember || {};
+  // const { id, campaign, role, committee, supervisor, phone, notes } = campaignMember || {};
+  // console.log("campaignMember?", campaignMember )
 
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      id: id || "",
+      id: (campaignMember && campaignMember.id) || "",
       campaign: campaignId || "",
-      role: role || "",
-      committee: committee || "",
-      supervisor: supervisor || "",
-      phone: phone || "",
-      notes: notes || "",
+      role: (campaignMember && campaignMember.role) || "",
+      committee: (campaignMember && campaignMember.committee) || "",
+      supervisor: (campaignMember && campaignMember.supervisor) || "",
+      phone: (campaignMember && campaignMember.phone) || "",
+      notes: (campaignMember && campaignMember.notes) || "",
+      // id: id || "",
+      // campaign: campaignId || "",
+      // role: role || "",
+      // committee: committee || "",
+      // supervisor: supervisor || "",
+      // phone: phone || "",
+      // notes: notes || "",
     },
     validationSchema: Yup.object({
       role: Yup.number().integer().required("role is required"),
@@ -53,17 +61,21 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
       committee: Yup.number().integer(),
     }),
     onSubmit: (values) => {
-      dispatch(updateCampaignMember({
-        ...values,
+      const updatedCampaignMember = {
+        id: campaignMember ? campaignMember.id : 0,
         campaign: parseInt(values.campaign, 10),
         role: parseInt(values.role, 10),
         committee: parseInt(values.committee, 10),
-        supervisor: parseInt(values.supervisor, 10)
-      }));
+        supervisor: parseInt(values.supervisor, 10),
+        phone: values.phone,
+        notes: values.notes,
+      };
+      dispatch(updateCampaignMember(updatedCampaignMember));
+
       validation.resetForm();
     },
   });
-  
+
   const getRoleString = useCallback((roleId, roles) => {
     const roleObj = roles.find(role => role.id.toString() === roleId.toString());
     return roleObj ? roleObj.role : null;

@@ -55,7 +55,6 @@ const GuaranteesTab = () => {
     setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
   }, []);
 
-
   const handleCampaignGuaranteeClick = useCallback(
     (arg, modalMode) => {
       const campaignGuarantee = arg;

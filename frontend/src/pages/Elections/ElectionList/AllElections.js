@@ -31,6 +31,7 @@ const AllElections = () => {
   const [election, setElection] = useState(null);
   const [moderatorsMap, setModeratorsMap] = useState({});
   const [isEdit, setIsEdit] = useState(false);
+  console.log("election?", election)
 
 
   const {
@@ -65,7 +66,7 @@ const AllElections = () => {
   }, [moderators]);
 
 
-  // Modal
+  // Modal & Toggle
   const [modal, setModal] = useState(false);
 
   const toggle = useCallback(() => {

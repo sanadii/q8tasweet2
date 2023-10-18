@@ -71,12 +71,6 @@ class UserSerializer(serializers.ModelSerializer):
         user_permissions = list(obj.user_permissions.all().values_list('codename', flat=True))
         group_permissions = list(Permission.objects.filter(group__user=obj).values_list('codename', flat=True))
         all_permissions = list(set(user_permissions + group_permissions))
-        formatted_permissions = [self.format_permission(perm) for perm in all_permissions]  # <-- Change is here
-        return formatted_permissions
-    
-    def format_permission(self, permission):
-        parts = permission.split('_')
-        camel_case_name = parts[0] + ''.join([part.capitalize() for part in parts[1:]])
+        return all_permissions
 
-        return 'can' + camel_case_name[0].capitalize() + camel_case_name[1:]
 

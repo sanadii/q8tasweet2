@@ -45,13 +45,7 @@ const MembersTab = () => {
     deleteModal,
   } = useDelete(deleteCampaignMember);
 
-  // Constants
-  const [campaignMember, setCampaignMember] = useState([]);
-  const [modal, setModal] = useState(false);
-  const [modalMode, setModalMode] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  // Filters----------
+   // Filtering and fining Member Match
   const [filters, setFilters] = useState({
     global: "",
     role: null,
@@ -59,16 +53,24 @@ const MembersTab = () => {
 
   const matchingRole = campaignRoles.find(role => role.id === filters.role);
   const activeRole = matchingRole?.role;
-  // Toggle
-  const toggle = useCallback(() => {
-    setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
-  }, []);
 
-  const handleCampaignMemberClicks = () => {
-    setCampaignMember("");
-    setModalMode("AddModal");
-    toggle();
-  };
+  // Toggle Function
+  const [campaignMember, setCampaignMember] = useState(null);
+  const [modal, setModal] = useState(false);
+  const [modalMode, setModalMode] = useState(null);
+
+  console.log("campaignMember?", campaignMember)
+
+  const toggle = useCallback(() => {
+    if (modal) {
+      console.log("model set true false")
+      setModal(false);
+      // setCampaignMember(null);
+    } else {
+      setModal(true);
+      console.log("model set true")
+    }
+  }, [modal]);
 
   const handleCampaignMemberClick = useCallback(
     (arg, modalMode) => {
@@ -92,6 +94,12 @@ const MembersTab = () => {
     },
     [toggle]
   );
+
+  const handleCampaignMemberClicks = () => {
+    setCampaignMember("");
+    setModalMode("AddModal");
+    toggle();
+  };
 
   const columnsDefinition = [
     {
@@ -159,6 +167,9 @@ const MembersTab = () => {
     });
   }, [activeRole, columnsDefinition]);
 
+
+  // Table Filters
+
   const campaignMemberList = campaignMembers.filter(campaignMember => {
     let isValid = true;
 
@@ -179,10 +190,7 @@ const MembersTab = () => {
     }
 
     return isValid;
-});
-
-
-
+  });
   return (
     <React.Fragment>
       <DeleteModal
@@ -191,7 +199,8 @@ const MembersTab = () => {
         onCloseClick={() => setDeleteModal(false)}
       />
       <MembersModal
-        modal={isModalVisible}
+        modal={modal}
+        setModal={setModal}
         modalMode={modalMode}
         toggle={toggle}
         campaignMember={campaignMember}
@@ -214,12 +223,6 @@ const MembersTab = () => {
 
                 {campaignMembers && campaignMembers.length ? (
                   <TableContainer
-                    // Others to be investigateed
-                    modal={modal}
-                    setModal={setModal}
-                    modalMode="AddModal"
-                    setModalMode={setModalMode}
-                    toggle={toggle}
                     campaignMember={campaignMember}
 
                     // Filters----------

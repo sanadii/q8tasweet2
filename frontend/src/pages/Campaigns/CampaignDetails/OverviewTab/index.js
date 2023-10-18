@@ -1,6 +1,6 @@
 // Pages/Campaigns/CampaignDetails/index.js
 // React & Redux core
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -34,33 +34,42 @@ const OverviewTab = () => {
   document.title = "Campaign Overview | Q8Tasweet";
 
   // Permissions
-  const { canChangeConfigs } = usePermission();
+  const { canChangeConfig } = usePermission();
 
   // TODO: Move to helper
   let committeeName = "Unknown";
 
-  // // // Find the role ID for 'campaignModerator'
-  const campaignModeratorRole = campaignRoles && campaignRoles.find(campaignRole => campaignRole.role === 'CampaignModerator');
-  const campaignModeratorRoleID = campaignModeratorRole ? campaignModeratorRole.id : null;
-  const campaignModerators = campaignMembers && campaignMembers.filter(member => member.role === campaignModeratorRoleID);
-
-  // // // Filter the campaignMembers to retrieve only those with the role of 'campaignModerator'
-  const campaignAdminRole = campaignRoles && campaignRoles.find(campaignRole => campaignRole.role === 'CampaignDirector');
-  const campaignAdminRoleID = campaignAdminRole ? campaignAdminRole.id : null;
-  const campaignAdmins = campaignMembers && campaignMembers.filter(member => member.role === campaignAdminRoleID);
-
-
-  let roleName;
-
-  if (canChangeConfigs) {
-    roleName = "ADMIN";
-  } else {
-    const roleObj = MemberRoleOptions.find(
-      role => role.id === currentCampaignMember.role
-    );
-
-    roleName = roleObj ? roleObj.name : "DEFAULT_role"; // replace 'DEFAULT_role' with whatever default value you'd like
+  // Custom hook to get members with a specific role by role name
+  function useMembersWithRole(roleName, campaignRoles = [], campaignMembers = []) {
+    const [membersWithRole, setMembersWithRole] = useState([]);
+  
+    useEffect(() => {
+      const foundRole = campaignRoles.find(role => role.role === roleName);
+      const members = foundRole ? campaignMembers.filter(member => member.role === foundRole.id) : [];
+      setMembersWithRole(members);
+    }, [roleName, campaignRoles, campaignMembers]);
+  
+    return membersWithRole;
   }
+  
+  function useCurrentMemberRole(canChangeConfig, campaignRoles = [], currentCampaignMember = {}) {
+    if (canChangeConfig) {
+      return 'مدير عام النظام';
+    } else {
+      const roleObj = campaignRoles.find(role => role.id === currentCampaignMember.role);
+      return roleObj?.name || 'مشترك';
+    }
+  }
+    
+  // Usage of custom hooks
+  const campaignModerators = useMembersWithRole('campaignModerator', campaignRoles, campaignMembers);
+  const campaignManagers = useMembersWithRole('campaignManagers', campaignRoles, campaignMembers);
+  const currentMemberRole = useCurrentMemberRole(canChangeConfig, campaignRoles, currentCampaignMember);
+  
+  console.log("campaignModerators:", campaignModerators )
+  console.log("campaignManagers:", campaignManagers )
+  console.log("currentMemberRole:", currentMemberRole )
+
 
   const getGenderIcon = (gender) => {
     if (gender === 2) {
@@ -103,17 +112,19 @@ const OverviewTab = () => {
               <h5 className="card-title mb-3"><strong>الإدارة</strong></h5>
               <ul>
                 <li>المرشح: <strong>{campaignDetails.candidate.name}</strong></li>
-                {campaignAdmins && campaignAdmins.length > 0 &&
-                  <li>مدير الحملة: <strong>{campaignAdmins.map(moderator => moderator.fullName).join(' <br/> ')}</strong></li>
+                {campaignManagers && campaignManagers.length > 0 &&
+                  <li>مدير الحملة: <strong>{campaignManagers.map(moderator => moderator.fullName).join(' <br/> ')}</strong></li>
                 }
-                <li>مساعد المدير: <strong>-</strong></li>
-                {campaignModerators && campaignModerators.length > 0 &&
-                  <li>مشرف الحملة: <strong>{campaignModerators.map(moderator => moderator.fullName).join(' | ')}</strong></li>
-                }
+                {campaignModerators && campaignModerators.length > 0 && (
+                  <li>
+                    مشرف الحملة: <strong>{campaignModerators.map(moderator => moderator.fullName).join(' | ')}</strong>
+                  </li>
+                )}
+
 
               </ul>
               <hr />
-              {canChangeConfigs ?
+              {canChangeConfig ?
                 <div>
                   <h5 className="card-title mb-3"><strong>الإدارة</strong></h5>
                   <ul className="text-danger">
@@ -128,7 +139,7 @@ const OverviewTab = () => {
                   <ul>
                     <li>الإسم: <strong>{currentCampaignMember.fullName}</strong></li>
                     <li>رمز المستخدم: <strong>{currentUser.id}</strong></li>
-                    <li>العضوية: <strong>{roleName}</strong></li>
+                    <li>العضوية: <strong>{currentMemberRole}</strong></li>
                     <li>رمز العضوية: <strong>{currentCampaignMember.id}</strong></li>
                     {/* <li>اللجنة: <strong> {committeeName}</strong></li> */}
                   </ul>

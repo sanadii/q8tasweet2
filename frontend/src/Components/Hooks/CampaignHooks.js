@@ -1,6 +1,9 @@
 // hooks/CampaignHooks.js
 
 import { useMemo } from 'react';
+import usePermission from './usePermission';
+
+
 
 const useSupervisorMembers = (campaignRoles, campaignMembers) => {
   const supervisorRoleId = useMemo(() => {
@@ -27,52 +30,45 @@ const useSupervisorMembers = (campaignRoles, campaignMembers) => {
 // };
 
 const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
+  // Permissions
+  const {
+    canChangeConfig,
+    canChangeConfigs,
+    canChangeCampaign,
+    canChangeMember,
+    // canViewCampaignAttendees,
+  } = usePermission();
+
+
   return useMemo(() => {
     const currentRoleId = currentCampaignMember?.role;
     let excludedRoleStrings = [];
-    let excludedRoleIds = [];
 
-    const currentRoleObject = campaignRoles.find(role => role.id === currentRoleId);
-    const currentRole = currentRoleObject?.role;
-
-    switch (currentRole) {
-      case "CampaignDirector":
+    switch (true) {
+      case canChangeConfig:
         // No roles excluded for CampaignDirector.
         break;
-      case "candidateAdmin":
-        excludedRoleStrings = ["CampaignDirector", "CampaignCoordinator"];
+      case canChangeCampaign:
+        excludedRoleStrings = ["campaignManager"];
         break;
-      case "campaignCandidate":
-        excludedRoleStrings = ["CampaignDirector", "CampaignCoordinator", "campaignCandidate"];
-        break;
-      case "CampaignCoordinator":
-        excludedRoleStrings = ["CampaignDirector", "candidateAdmin", "campaignCandidate", "CampaignCoordinator"];
+      case canChangeMember:
+        excludedRoleStrings = ["campaignDirector", "candidateAdmin", "campaignCandidate", "CampaignCoordinator"];
         break;
       default:
         break;
     }
 
-    excludedRoleIds = campaignRoles
-      .filter(role => {
-        const isExcluded = excludedRoleStrings.includes(role.role);
-        if (isExcluded) {
-          console.log("Excluding role:", role.role);
-        }
-        return isExcluded;
-      })
-      .map(role => role.id);
-
-    const allRoleStrings = campaignRoles.map(role => role.role);
-
-    const displayedRoles = campaignRoles.filter(role => !excludedRoleIds.includes(role.id));
+    const displayedRoles = campaignRoles.filter((role) => {
+      const isExcluded = excludedRoleStrings.includes(role.role);
+      if (isExcluded) {
+        console.log("Excluding role:", role.role);
+      }
+      return !isExcluded;
+    });
 
     return displayedRoles;
-
-  }, [campaignRoles, currentCampaignMember]);
+  }, [campaignRoles, currentCampaignMember, canChangeConfig, canChangeCampaign, canChangeMember]);
 };
-
-
-
 
 export {
   useSupervisorMembers,

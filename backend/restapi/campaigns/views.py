@@ -1,6 +1,5 @@
 # from campaigns.models import Campaign
 from django.http import JsonResponse
-from django.http.response import JsonResponse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
@@ -76,7 +75,7 @@ class GetCampaignDetails(APIView):
         election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
 
-        campaign_roles = Group.objects.filter(Q(category=4))
+        campaign_roles = Group.objects.filter(Q(category=3)) #CampaignRoles
 
         return Response({
             "data": {

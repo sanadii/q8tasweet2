@@ -4,13 +4,12 @@ import { userSelector, campaignSelector } from 'Selectors';
 
 // Define a List of Entities:
 const entities = [
-    'Configs', 'User', 'Group', 'Permission', 'ContentType',
+    'Config', 'User', 'Group', 'Permission',
     'Election', 'ElectionCandidate', 'ElectionCommittee', 'ElectionCommitteeResult',
     'Candidate',
     'Campaign', 'CampaignMember', 'CampaignGuarantee', 'CampaignAttendee',
     'Elector',
     'Area', 'Category', 'Tag',
-    'OutStandingToken', 'LogEntry', 'Session', 'BlackListedToken',
 ];
 
 // Define a List of Actions
@@ -34,17 +33,6 @@ const usePermission = () => {
     const { currentUser } = useSelector(userSelector);
     const { currentCampaignMember } = useSelector(campaignSelector);
 
-    if (!currentUser) {
-        return {
-            isAdmin: false,
-            isEditor: false,
-            isContributor: false,
-            isModerator: false,
-            isSubscriber: false,
-            // ... Add other defaults as needed.
-        };
-    }
-
     // Extract permissions based on the user's roles
     const getPermissions = () => {
         const userPermissions = currentUser.permissions || [];
@@ -64,7 +52,6 @@ const usePermission = () => {
     const specificPermissions = computePermissions(hasPermission);
 
     return {
-        // hasPermission,
         ...specificPermissions,  // spread out the specific permissions
     };
 };

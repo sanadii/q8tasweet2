@@ -111,37 +111,28 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
         # Fetch permissions associated with the specific Group
         group_permissions = list(Permission.objects.filter(group=obj.role).values_list('codename', flat=True))
 
-        # Format permissions using the format_permission method
-        formatted_permissions = [self.format_permission(permission) for permission in group_permissions]
-
-        return formatted_permissions
-
-    def format_permission(self, permission):
-        parts = permission.split('_')
-        camel_case_name = parts[0] + ''.join([part.capitalize() for part in parts[1:]])
-
-        return 'can' + camel_case_name[0].capitalize() + camel_case_name[1:]
+        return group_permissions
 
 
-        def to_representation(self, instance):
-            rep = super().to_representation(instance)
-            
-            request = self.context.get('request')
-            current_user = request.user
-            if current_user.is_staff:
-                return rep
+    # def to_representation(self, instance):
+    #     rep = super().to_representation(instance)
+        
+    #     request = self.context.get('request')
+    #     current_user = request.user
+    #     if current_user.is_staff:
+    #         return rep
 
-            role = int(rep.get("role", 0))
-            
-            if role == 3:
-                if not (rep["id"] == instance.id or rep["supervisor"] == instance.id):
-                    return {}
-            elif role > 3:
-                supervisor_id = rep.get("supervisor")
-                if not (rep["id"] == instance.id or rep["id"] == supervisor_id):
-                    return {}
+    #     role = int(rep.get("role", 0))
+        
+    #     if role == 3:
+    #         if not (rep["id"] == instance.id or rep["supervisor"] == instance.id):
+    #             return {}
+    #     elif role > 3:
+    #         supervisor_id = rep.get("supervisor")
+    #         if not (rep["id"] == instance.id or rep["id"] == supervisor_id):
+    #             return {}
 
-            return rep
+    #     return rep
 
 
 class CampaignGuaranteesSerializer(serializers.ModelSerializer):

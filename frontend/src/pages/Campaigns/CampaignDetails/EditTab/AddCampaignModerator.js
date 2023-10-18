@@ -1,5 +1,5 @@
 // React & Redux core imports
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { getCampaignModerators, addNewCampaignMember, deleteCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
-// Components & Constants
+// Components, Constants & Hooks
 import { DeleteModal } from "Components/Common";
 import { useDelete } from "Components/Hooks";
 
@@ -19,9 +19,12 @@ import SimpleBar from "simplebar-react";
 const AddCampaignModerator = () => {
     const dispatch = useDispatch();
 
+    // State Managemenet
     const { campaignId, campaignMembers } = useSelector(campaignSelector);
     const { campaignModerators } = useSelector(userSelector);
 
+
+    // Fetch Data
     useEffect(() => {
         if (campaignModerators && !campaignModerators.length) {
             dispatch(getCampaignModerators());
@@ -86,7 +89,7 @@ const AddCampaignModerator = () => {
                                                             const newCampaignModerator = {
                                                                 campaign: campaignId,
                                                                 user: user.id,
-                                                                role: 14,
+                                                                role: 30,
                                                             };
                                                             dispatch(addNewCampaignMember(newCampaignModerator));
                                                         }}

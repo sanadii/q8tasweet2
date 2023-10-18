@@ -86,8 +86,8 @@ class GetModeratorUsers(APIView):
 class GetCampaignModerators(APIView):
     def get(self, request):
         try:
-            # Get the group object where role is 'campaignModerator'
-            group = Group.objects.get(role='CampaignModerator')
+            # Get the group object where role is 'campaignModerator' (or 'Editor' if it's the correct role)
+            group = Group.objects.get(role='moderator')  # Update 'campaignModerator' if needed
             
             # Get the users in the group with role 'campaignModerator'
             moderators = group.user_set.all()
