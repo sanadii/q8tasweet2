@@ -7,7 +7,7 @@ import usePermission from './usePermission';
 
 const useSupervisorMembers = (campaignRoles, campaignMembers) => {
   const supervisorRoleId = useMemo(() => {
-    return campaignRoles.find(role => role.role === "CampaignCoordinator")?.id;
+    return campaignRoles.find(role => role.role === "campaignSupervisor")?.id;
   }, [campaignRoles]);
 
   const supervisorMembers = useMemo(() => {
@@ -49,10 +49,10 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
         // No roles excluded for CampaignDirector.
         break;
       case canChangeCampaign:
-        excludedRoleStrings = ["campaignManager"];
+        excludedRoleStrings = ["campaignModerator", "campaignManager", "campaignCandidate"];
         break;
       case canChangeMember:
-        excludedRoleStrings = ["campaignDirector", "candidateAdmin", "campaignCandidate", "CampaignCoordinator"];
+        excludedRoleStrings = ["campaignModerator", "campaignManager", "campaignCandidate", "campaignSupervisor"];
         break;
       default:
         break;

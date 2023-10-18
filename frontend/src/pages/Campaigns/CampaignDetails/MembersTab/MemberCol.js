@@ -1,4 +1,14 @@
 import React from "react";
+import { usePermission, useDelete } from "Components/Hooks";
+
+
+// // Functions
+// const getUserRoleById = (userId, campaignMembers, campaignRoles) => {
+//     const user = campaignMembers.find(user => user.id === userId);
+//     const role = campaignRoles.find(role => role.id === user.role);
+//     return role.role;
+// };
+
 
 const Id = (cellProps) => {
     return (
@@ -112,7 +122,22 @@ const Supervisor = ({ cellProps, campaignMembers }) => {
 };
 
 const Actions = (props) => {
-    const { cellProps, handleCampaignMemberClick, onClickDelete, canChangeConfigs } = props;
+    const { cellProps, campaignMembers, campaignRoles, handleCampaignMemberClick, onClickDelete } = props;
+
+    // Permission Hook
+    const {
+        canChangeConfig,
+        canChangeCampaign,
+        canChangeCampaignModerator,
+        canChangeCampaignCandidate,
+        canChangeCampaignManager,
+        canViewCampaign,
+    } = usePermission();
+
+
+    const campaignMemberId = cellProps.row.original.role;
+    const campaignRole = campaignRoles.find((option) => option.id === campaignMemberId);
+    const campaignMemberRole = campaignRole.role;
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -126,19 +151,34 @@ const Actions = (props) => {
             >
                 <i className="ri-eye-fill align-bottom" />
             </button>
-            <>
-                <button
-                    to="#"
-                    className="btn btn-sm btn-soft-info edit-list"
-                    onClick={() => {
-                        const campaignMember = cellProps.row.original;
-                        handleCampaignMemberClick(campaignMember, "UpdateModal");
-                    }}
-                >
-                    <i className="ri-pencil-fill align-bottom" />
-                </button>
-                {canChangeConfigs && (
-
+            {
+                (canChangeConfig ||
+                    (canChangeCampaignManager
+                        && campaignMemberRole !== "campaignModerator"
+                        && campaignMemberRole !== "campaignCandidate"
+                        // && campaignMemberRole !== "campaignManager"
+                    ))
+                && (
+                    <button
+                        to="#"
+                        className="btn btn-sm btn-soft-info edit-list"
+                        onClick={() => {
+                            const campaignMember = cellProps.row.original;
+                            handleCampaignMemberClick(campaignMember, "UpdateModal");
+                        }}
+                    >
+                        <i className="ri-pencil-fill align-bottom" />
+                    </button>
+                )
+            }
+            {
+                (canChangeConfig ||
+                    (canChangeCampaignManager
+                        && campaignMemberRole !== "campaignModerator"
+                        && campaignMemberRole !== "campaignCandidate"
+                        // && campaignMemberRole !== "campaignManager"
+                    ))
+                && (
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-danger remove-list"
@@ -149,9 +189,8 @@ const Actions = (props) => {
                     >
                         <i className="ri-delete-bin-5-fill align-bottom" />
                     </button>
-                )}
-
-            </>
+                )
+            }
         </div>
     );
 };

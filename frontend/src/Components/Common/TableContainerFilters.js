@@ -48,6 +48,8 @@ const TableContainerFilters = ({
     isGlobalSearch,
 
     // Settings
+    activeTab,
+    setActiveTab,
     filters,
     setFilters,
     customPageSize,
@@ -76,7 +78,7 @@ const TableContainerFilters = ({
 
 
     // Then, use 'filteredElections' to render your table or list.
-    const [activeTab, setActiveTab] = useState("0");
+    // const [activeTab, setActiveTab] = useState("0");
 
     return (
         <React.Fragment>

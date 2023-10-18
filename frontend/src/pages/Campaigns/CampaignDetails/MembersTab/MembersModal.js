@@ -1,7 +1,5 @@
 // React & Redux core imports
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { electionSelector, campaignSelector } from 'Selectors';
+import React, { useState } from "react";
 
 // Component & Constants imports
 import MembersUpdateModal from "./MembersUpdateModal";
@@ -14,44 +12,10 @@ import { ModalBody, Modal, ModalHeader, ModalFooter, Button } from "reactstrap";
 
 const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) => {
 
-  // Set Constants
+  // State Constants
   const [onModalSubmit, setOnModalSubmit] = useState(null);
+  const { ModalTitle, ModalContent, ModalButtonText } = getModalDetails(modalMode);
 
-  let ModalTitle;
-  let ModalContent;
-  let ModalButtonText;
-  let modalName = "Campaign Member";
-
-  switch (modalMode) {
-    case "CallModal":
-      ModalTitle = modalName + " Call";
-      ModalContent = CallModal;
-      ModalButtonText = "Make Call";
-      break;
-    case "TextModal":
-      ModalTitle = modalName + " Text";
-      ModalContent = TextModal;
-      ModalButtonText = "Send Text";
-      break;
-    case "UpdateModal":
-      ModalTitle = "Update " + modalName;
-      ModalContent = MembersUpdateModal;
-      ModalButtonText = "Update" + modalName;
-      break;
-    case "AddModal":
-      ModalTitle = "Add " + modalName;
-      ModalContent = MembersAddModal;
-      break;
-    case "ViewModal":
-      ModalTitle = "View " + modalName;
-      ModalContent = MembersViewModal;
-      ModalButtonText = "Close";
-      break;
-    default:
-      ModalTitle = "Default Modal"; // A default title for other cases
-      ModalContent = DefaultModalContent;
-      ModalButtonText = "Close"; // A default button text
-  }
 
   return (
     <Modal
@@ -64,6 +28,7 @@ const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) =>
       <ModalHeader className="p-3 ps-4 bg-soft-success">
         {ModalTitle}
       </ModalHeader>
+
       <ModalBody className="p-4">
         <ModalContent
           campaignMember={campaignMember}
@@ -71,6 +36,7 @@ const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) =>
           toggle={toggle}
         />
       </ModalBody>
+
       <ModalFooter>
         <div className="hstack gap-2 justify-content-end">
           <Button
@@ -81,15 +47,15 @@ const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) =>
             className="btn-light"
           >
             إغلاق
-        </Button>
+          </Button>
 
           {/* if ModalButtonText and ModalButtonText is not empty */}
-          {ModalButtonText && ModalButtonText.length > 0 && (
+          {ModalButtonText && (
             <Button
               color="success"
               id="add-btn"
               onClick={() => {
-                if (onModalSubmit) onModalSubmit();
+                onModalSubmit();
                 toggle(false);
               }}
             >
@@ -101,6 +67,44 @@ const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) =>
     </Modal>
   );
 };
+
+const getModalDetails = (modalMode) => {
+  const modalName = "فريق الحملة";
+  let ModalTitle, ModalContent, ModalButtonText;
+
+  switch (modalMode) {
+    case "CallModal":
+      ModalTitle = modalName + "اتصال";
+      ModalContent = CallModal;
+      ModalButtonText = "اتصل";
+      break;
+    case "TextModal":
+      ModalTitle = modalName + "رسالة";
+      ModalContent = TextModal;
+      ModalButtonText = "ارسل";
+      break;
+    case "UpdateModal":
+      ModalTitle = "تعديل " + modalName;
+      ModalContent = MembersUpdateModal;
+      ModalButtonText = "تعديل";
+      break;
+    case "AddModal":
+      ModalTitle = "إضافة " + modalName;
+      ModalContent = MembersAddModal;
+      break;
+    case "ViewModal":
+      ModalTitle = "مشاهدة " + modalName;
+      ModalContent = MembersViewModal;
+      break;
+    default:
+      ModalTitle = "Default Modal"; // A default title for other cases
+      ModalContent = DefaultModalContent;
+      ModalButtonText = "Close"; // A default button text
+  }
+
+  return { ModalTitle, ModalContent, ModalButtonText };
+};
+
 
 const CallModal = () => {
   return <p>CallModal</p>;

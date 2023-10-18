@@ -28,10 +28,8 @@ const AllElections = () => {
   const { categories, subCategories } = useSelector(categorySelector);
   const { moderators } = useSelector(userSelector);
 
-  const [election, setElection] = useState(null);
   const [moderatorsMap, setModeratorsMap] = useState({});
-  const [isEdit, setIsEdit] = useState(false);
-  console.log("election?", election)
+
 
 
   const {
@@ -66,8 +64,11 @@ const AllElections = () => {
   }, [moderators]);
 
 
-  // Modal & Toggle
+  // Model & Toggle Function
+  const [election, setElection] = useState(null);
   const [modal, setModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  console.log("election?", election)
 
   const toggle = useCallback(() => {
     if (modal) {
@@ -108,7 +109,6 @@ const AllElections = () => {
         priority: election.priority,
         moderators: election.moderators,
       });
-      console.log("election:", election)
 
       setIsEdit(true);
       toggle();
@@ -123,6 +123,8 @@ const AllElections = () => {
     toggle();
   };
 
+  
+  // Table Columns
   const columns = useMemo(
     () => [
       {

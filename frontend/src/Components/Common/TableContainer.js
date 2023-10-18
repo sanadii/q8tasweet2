@@ -35,6 +35,8 @@ const TableContainer = ({
   isTestFilter,
 
   // Settings
+  activeTab,
+  setActiveTab,
   filters,
   setFilters,
   customPageSize,
@@ -175,6 +177,10 @@ const TableContainer = ({
             isGuarantorFilter={isGuarantorFilter}
             isResetFilters={isResetFilters}
             isTestFilter={isTestFilter}
+
+            // Settings
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
 
             // Constant ----------
             campaignMember={campaignMember}

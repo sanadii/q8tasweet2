@@ -5,7 +5,7 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports 
-import { useUserRoles, useSupervisorMembers, useCampaignRoles } from "Components/Hooks";
+import { useSupervisorMembers, useCampaignRoles } from "Components/Hooks";
 
 // Form validation imports
 import * as Yup from "yup";
@@ -16,6 +16,8 @@ import { Col, Row, ModalBody, Label, Input, Form, FormFeedback } from "reactstra
 
 const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   const dispatch = useDispatch();
+
+  // State Managemenet
   const { currentUser } = useSelector(userSelector);
   const {
     currentCampaignMember,
@@ -25,18 +27,21 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     campaignElectionCommittees
   } = useSelector(campaignSelector);
 
+
+  // Campaign Supervisor Options
+  const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
+  const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
+  console.log("filteredRoleOptions", filteredRoleOptions)
+
+  // Election Committee Options
   const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
 
   useEffect(() => {
     setCampaignCommitteeList(campaignElectionCommittees);
   }, [campaignElectionCommittees]);
 
-  const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
-  const roleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
 
-  // const { id, campaign, role, committee, supervisor, phone, notes } = campaignMember || {};
-  // console.log("campaignMember?", campaignMember )
-
+  // Form Validation
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -47,13 +52,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
       supervisor: (campaignMember && campaignMember.supervisor) || "",
       phone: (campaignMember && campaignMember.phone) || "",
       notes: (campaignMember && campaignMember.notes) || "",
-      // id: id || "",
-      // campaign: campaignId || "",
-      // role: role || "",
-      // committee: committee || "",
-      // supervisor: supervisor || "",
-      // phone: phone || "",
-      // notes: notes || "",
     },
     validationSchema: Yup.object({
       role: Yup.number().integer().required("role is required"),
@@ -76,6 +74,8 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     },
   });
 
+
+  // Show formFields based on Selected Role String
   const getRoleString = useCallback((roleId, roles) => {
     const roleObj = roles.find(role => role.id.toString() === roleId.toString());
     return roleObj ? roleObj.role : null;
@@ -87,88 +87,19 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     setSelectedRole(validation.values.role);
   }, [validation.values.role]);
 
-  const currentRoleString = getRoleString(selectedRole, campaignRoles);
+  const selectedRoleString = getRoleString(selectedRole, campaignRoles);
+
+
+  // Get formFields & Handle Form Submission
+  const formFields = useMemo(() => buildFields(currentUser, campaignMember, selectedRoleString, campaignCommitteeList, supervisorOptions, filteredRoleOptions), [selectedRoleString, campaignCommitteeList, supervisorOptions, filteredRoleOptions]);
 
   const handleUpdateButton = useCallback(() => validation.submitForm(), [validation]);
 
   useEffect(() => {
     setOnModalSubmit(() => handleUpdateButton);
     return () => setOnModalSubmit(null);
-  }, [handleUpdateButton]);
+  }, []);
 
-  // Field Definition Builder
-  const buildFields = () => {
-    const isCurrentUserCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
-
-    const defaultFields = [
-      isCurrentUserCampaignMember && {
-        id: "role-field",
-        label: "Role",
-        type: "select",
-        options: campaignRoles.map(role => ({
-          id: role.id,
-          label: role.name,
-          role: role.role,
-          value: role.id
-        })),
-        name: "role",
-      },
-      {
-        id: "phone-field",
-        label: "Mobile",
-        type: "text",
-        name: "phone"
-      },
-      {
-        id: "notes-field",
-        label: "Notes",
-        type: "textarea",
-        name: "notes"
-      }
-    ];
-
-    const conditionalFields = [
-      {
-        condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(currentRoleString),
-        field: {
-          id: "supervisor-field",
-          label: "المشرف",
-          type: "select",
-          options: supervisorOptions.map(supervisor => ({
-            id: supervisor.id,
-            label: supervisor.fullName,
-            value: supervisor.id
-          })),
-          name: "supervisor",
-          valueAccessor: (item) => item.fullName,
-        }
-      },
-      {
-        condition: ["campaignAttendant", "campaignSorter"].includes(currentRoleString),
-        field: {
-          id: "committee-field",
-          label: "Committee",
-          type: "select",
-          options: campaignCommitteeList.map(committee => ({
-            id: committee.id,
-            label: committee.name,
-            value: committee.id
-          })),
-
-          name: "committee",
-          valueAccessor: (item) => item.name,
-        }
-      }
-    ];
-
-    const filteredFields = conditionalFields
-      .filter(({ condition }) => condition)
-      .map(({ field }) => field);
-
-    return [...defaultFields, ...filteredFields].filter(Boolean);
-  };
-
-  const fields = useMemo(buildFields, [currentRoleString, campaignCommitteeList, supervisorOptions, roleOptions]);
 
 
   return (
@@ -189,7 +120,7 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
           </h4>
         </Row>
 
-        {fields.map((field) => (
+        {formFields.map((field) => (
           <Row key={field.id}>
             <Col lg={3} className="align-self-center">
               <Label for={field.id} className="mb-0">
@@ -205,25 +136,32 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values[field.name] || ""}
-                  invalid={
-                    validation.touched[field.name] && validation.errors[field.name]
-                  }
+                  invalid={validation.touched[field.name] && validation.errors[field.name] ? true : undefined}
+
                 />
-              ) : (
+              ) : field.type === "select" ? (
                 <Input
                   {...field}
-                  className={field.type === "select" ? "form-select" : ""}
+                  type="select"
+                  className="form-select"
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values[field.name] || ""}
                 >
-                  {field.type === "select" && <option value="">-- Select --</option>}
+                  <option value="">-- اختر --</option>
                   {field.options && field.options.map((option) => (
                     <option key={option.id} value={option.value}>
                       {option.label}
                     </option>
                   ))}
                 </Input>
+              ) : (
+                <Input
+                  {...field}
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values[field.name] || ""}
+                />
               )}
               {validation.touched[field.name] && validation.errors[field.name] && (
                 <FormFeedback type="invalid">
@@ -231,11 +169,82 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
                 </FormFeedback>
               )}
             </Col>
+
           </Row>
         ))}
       </ModalBody>
     </Form>
   );
+};
+
+// Field Definition Builder
+const buildFields = (currentUser, campaignMember, selectedRoleString, campaignCommitteeList, supervisorOptions, filteredRoleOptions) => {
+  const isCurrentUserCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
+
+  const defaultFields = [
+    isCurrentUserCampaignMember && {
+      id: "role-field",
+      label: "العضوية",
+      type: "select",
+      options: filteredRoleOptions.map(role => ({
+        id: role.id,
+        label: role.name,
+        role: role.role,
+        value: role.id
+      })),
+      name: "role",
+    },
+    {
+      id: "phone-field",
+      label: "الهاتف",
+      type: "text",
+      name: "phone"
+    },
+    {
+      id: "notes-field",
+      label: "ملاحظات",
+      type: "textarea",
+      name: "notes"
+    }
+  ];
+
+  const conditionalFields = [
+    {
+      condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(selectedRoleString),
+      field: {
+        id: "supervisor-field",
+        name: "supervisor",
+        label: "المشرف",
+        type: "select",
+        options: supervisorOptions.map(supervisor => ({
+          id: supervisor.id,
+          label: supervisor.fullName,
+          value: supervisor.id
+        })),
+        // valueAccessor: (item) => item.fullName,
+      }
+    },
+    {
+      condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
+      field: {
+        id: "committee-field",
+        name: "committee",
+        label: "اللجنة",
+        type: "select",
+        options: campaignCommitteeList.map(committee => ({
+          id: committee.id,
+          label: committee.name,
+          value: committee.id
+        })),
+      }
+    }
+  ];
+
+  const filteredFields = conditionalFields
+    .filter(({ condition }) => condition)
+    .map(({ field }) => field);
+
+  return [...defaultFields, ...filteredFields].filter(Boolean);
 };
 
 export default MembersUpdateModal;

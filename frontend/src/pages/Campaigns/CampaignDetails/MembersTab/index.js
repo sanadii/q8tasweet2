@@ -19,7 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const MembersTab = () => {
 
-  // States
+  // State Management
   const {
     currentCampaignMember,
     campaignGuarantees,
@@ -34,7 +34,7 @@ const MembersTab = () => {
 
   // Permission Hook
   const {
-    canChangeConfigs,
+    canChangeConfig,
   } = usePermission();
 
   // Delete Hook
@@ -45,30 +45,28 @@ const MembersTab = () => {
     deleteModal,
   } = useDelete(deleteCampaignMember);
 
-   // Filtering and fining Member Match
+  // Filtering and Member Matching
   const [filters, setFilters] = useState({
     global: "",
-    role: null,
+    role: "campaignManager",
   });
 
-  const matchingRole = campaignRoles.find(role => role.id === filters.role);
-  const activeRole = matchingRole?.role;
+  // Finding Active Role to Show Different Table Columns
+  const [activeTab, setActiveTab] = useState("campaignManager");
+  const activeRole = activeTab;
 
-  // Toggle Function
+  // Model & Toggle Function
   const [campaignMember, setCampaignMember] = useState(null);
   const [modal, setModal] = useState(false);
   const [modalMode, setModalMode] = useState(null);
 
-  console.log("campaignMember?", campaignMember)
 
   const toggle = useCallback(() => {
     if (modal) {
-      console.log("model set true false")
       setModal(false);
       // setCampaignMember(null);
     } else {
       setModal(true);
-      console.log("model set true")
     }
   }, [modal]);
 
@@ -101,6 +99,8 @@ const MembersTab = () => {
     toggle();
   };
 
+
+  // Table Columns
   const columnsDefinition = [
     {
       Header: "م.",
@@ -115,36 +115,37 @@ const MembersTab = () => {
     {
       Header: "الرتبة",
       accessor: "role",
+      ShowTo: ["campaignManager"],
       Cell: (cellProps) => <Role cellProps={cellProps} campaignRoles={campaignRoles} />
     },
     {
-      Header: "المضامين",
-      ShowTo: ["CampaignDirector", "CampaigaignAssistant", "CampaignCandidate", "CampaignCoordinator", "CampaignGuarantor", "manager"],
-      Cell: (cellProps) => <Guarantees cellProps={cellProps} campaignGuarantees={campaignGuarantees} />
-    },
-    {
       Header: "الفريق",
-      ShowTo: ["CampaignCandidate", "CampaignCoordinator"],
+      ShowTo: ["campaignManager", "campaignSupervisor"],
       Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
     },
     {
+      Header: "المضامين",
+      ShowTo: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManager"],
+      Cell: (cellProps) => <Guarantees cellProps={cellProps} campaignGuarantees={campaignGuarantees} />
+    },
+    {
       Header: "اللجنة",
-      ShowTo: ["CampaignAttendant", "CampaignSorter"],
+      ShowTo: ["campaignAttendant", "campaignSorter"],
       Cell: (cellProps) => <Committee cellProps={cellProps} campaignElectionCommittees={campaignElectionCommittees} />
     },
     {
       Header: "الحضور",
-      ShowTo: ["CampaignAttendant"],
+      ShowTo: ["campaignAttendant"],
       Cell: (cellProps) => <Attendees cellProps={cellProps} campaignAttendees={campaignAttendees} />
     },
     {
       Header: "تم الفرز",
-      ShowTo: ["CampaignSorter"],
+      ShowTo: ["campaignSorter"],
       Cell: (cellProps) => <Sorted cellProps={cellProps} />
     },
     {
       Header: "المشرف",
-      ShowTo: ["CampaignGuarantor", "CampaignAttendant", "CampaignSorter"],
+      ShowTo: ["campaignGuarantor", "campaignAttendant", "campaignSorter"],
       Cell: (cellProps) => <Supervisor campaignMembers={campaignMembers} cellProps={cellProps} />
     },
     {
@@ -154,7 +155,9 @@ const MembersTab = () => {
           cellProps={cellProps}
           handleCampaignMemberClick={handleCampaignMemberClick}
           onClickDelete={onClickDelete}
-          canChangeConfigs={canChangeConfigs}
+          canChangeConfig={canChangeConfig}
+          campaignMembers={campaignMembers}
+          campaignRoles={campaignRoles}
         />
       )
     }
@@ -225,7 +228,7 @@ const MembersTab = () => {
                   <TableContainer
                     campaignMember={campaignMember}
 
-                    // Filters----------
+                    // Filters---------- we need to get activeTab for proper filteration
                     isTableContainerFilter={true}
                     isGlobalFilter={true}
                     preGlobalFilteredRows={true}
@@ -234,6 +237,9 @@ const MembersTab = () => {
                     isResetFilters={true}
 
                     // Settings
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+
                     filters={filters}
                     setFilters={setFilters}
                     // preGlobalFilteredRows={true}

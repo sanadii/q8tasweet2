@@ -12,7 +12,7 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
     const CampaignManagerRoles = useMemo(() => {
         return campaignRoles
             .filter(role =>
-                ["CampaignDirector", "CampaignAssociate", "CampaignModerator", "CampaignCandidate"].includes(role.role)
+                ["campaignModerator", "campaignManager", "campaignCandidate"].includes(role.role)
             )
             .map(role => role.id);
     }, [campaignRoles]);
@@ -36,12 +36,13 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
 
         if (activeTab !== tab) {
             setActiveTab(tab);
-            if (roleIds === "all") {
-                setFilters(prevFilters => ({
-                    ...prevFilters,
-                    role: null
-                }));
-            } else if (Array.isArray(roleIds) && tab === "manager") {
+            // if (roleIds === "all") {
+            //     setFilters(prevFilters => ({
+            //         ...prevFilters,
+            //         role: null
+            //     }));
+            // } else 
+            if (Array.isArray(roleIds) && tab === "campaignManager") {
                 setFilters(prevFilters => ({
                     ...prevFilters,
                     role: CampaignManagerRoles
@@ -62,25 +63,25 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
                     className="nav-tabs-custom card-header-tabs border-bottom-0"
                     role="tablist"
                 >
-                    <NavItem>
+                    {/* <NavItem>
                         <NavLink
                             className={classnames(
-                                { active: activeTab === "0" },
+                                { active: activeTab === "all" },
                                 "fw-semibold"
                             )}
-                            onClick={(e) => ChangeCampaignRole(e, "0", "all", null)}
+                            onClick={(e) => ChangeCampaignRole(e, "all", "all", null)}
                             href="#"
                         >
                             الكل
                         </NavLink>
-                    </NavItem>
+                    </NavItem> */}
 
                     <NavLink
                         className={classnames(
-                            { active: activeTab === "manager" },
+                            { active: activeTab === "campaignManager" },
                             "fw-semibold"
                         )}
-                        onClick={(e) => ChangeCampaignRole(e, "manager", CampaignManagerRoles)}
+                        onClick={(e) => ChangeCampaignRole(e, "campaignManager", CampaignManagerRoles)}
                         href="#"
                     >
                         الإدارة
@@ -93,10 +94,10 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
                         <NavItem key={role.id}>
                             <NavLink
                                 className={classnames(
-                                    { active: activeTab === role.id.toString() },
+                                    { active: activeTab === role.role.toString() },
                                     "fw-semibold"
                                 )}
-                                onClick={(e) => ChangeCampaignRole(e, role.id.toString(), role.id)}
+                                onClick={(e) => ChangeCampaignRole(e, role.role.toString(), role.id)}
                                 href="#"
                             >
                                 {role.name}
