@@ -77,7 +77,7 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
         return representation
 
 
-class CampaignMembersSerializer(serializers.ModelSerializer):
+class CampaignMemberSerializer(serializers.ModelSerializer):
     """ Serializer for the CampaignMember model. """
     fullName = serializers.SerializerMethodField()
     # roles = serializers.SerializerMethodField()  # Changed the field name to 'roles'
@@ -135,7 +135,7 @@ class CampaignMembersSerializer(serializers.ModelSerializer):
     #     return rep
 
 
-class CampaignGuaranteesSerializer(serializers.ModelSerializer):
+class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 
     # get the data from Elector Model Directly
     full_name = serializers.CharField(source='civil.full_name', default="Not Found", read_only=True)
@@ -166,7 +166,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class CampaignAttendeesSerializer(serializers.ModelSerializer):
+class CampaignAttendeeSerializer(serializers.ModelSerializer):
     # Directly get the data from the Elector Model
     full_name = serializers.CharField(source='civil.full_name', default="Not Found", read_only=True)
     gender = serializers.IntegerField(source='civil.gender', default=-1, read_only=True)
@@ -193,7 +193,7 @@ class CampaignAttendeesSerializer(serializers.ModelSerializer):
 
 
 
-# For CampaignGuaranteesSerializer and CampaignAttendeesSerializer,
+# For CampaignGuaranteeSerializer and CampaignAttendeeSerializer,
 # you could have a method like this to avoid repeating the same logic
 def get_field_or_not_found(self, obj, field_name):
     try:

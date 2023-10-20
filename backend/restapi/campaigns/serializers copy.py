@@ -89,7 +89,7 @@ class campaignCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
 
 
-class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class CampaignMemberSerializer(AdminFieldMixin, serializers.ModelSerializer):
     from restapi.auth.serializers import UserSerializer
     user_details = UserSerializer(source='user', read_only=True)  # Nested User serializer
 
@@ -137,11 +137,11 @@ class CampaignMembersSerializer(AdminFieldMixin, serializers.ModelSerializer):
                     supervisor_id = data["supervisor"]
                     members = queryset.filter(Q(id=current_user_id) | Q(id=supervisor_id))
                 
-                data['filtered_members'] = CampaignMembersSerializer(members, many=True).data
+                data['filtered_members'] = CampaignMemberSerializer(members, many=True).data
 
         return data
 
-class CampaignGuaranteesSerializer(serializers.ModelSerializer):
+class CampaignGuaranteeSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
     membership_no = serializers.SerializerMethodField()
@@ -201,7 +201,7 @@ class CampaignGuaranteesSerializer(serializers.ModelSerializer):
 
 
 
-class CampaignAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
+class CampaignAttendeeSerializer(TrackMixin, serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     civil = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
@@ -267,7 +267,7 @@ class CampaignAttendeesSerializer(TrackMixin, serializers.ModelSerializer):
             return "Not Found"
 
 
-# For CampaignGuaranteesSerializer and CampaignAttendeesSerializer,
+# For CampaignGuaranteeSerializer and CampaignAttendeeSerializer,
 # you could have a method like this to avoid repeating the same logic
 def get_field_or_not_found(self, obj, field_name):
     try:

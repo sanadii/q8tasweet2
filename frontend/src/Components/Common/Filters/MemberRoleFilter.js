@@ -9,7 +9,7 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
     const { campaignRoles, campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
 
     // Get the IDs of roles that are in the managerial category
-    const CampaignManagerRoles = useMemo(() => {
+    const campaignSuperiorRoles = useMemo(() => {
         return campaignRoles
             .filter(role =>
                 ["campaignModerator", "campaignManager", "campaignCandidate"].includes(role.role)
@@ -19,8 +19,8 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
 
     // Compute the count of members with managerial roles
     const managerCounts = useMemo(() => {
-        return campaignMembers.filter(member => CampaignManagerRoles.includes(member.role)).length;
-    }, [CampaignManagerRoles, campaignMembers]);
+        return campaignMembers.filter(member => campaignSuperiorRoles.includes(member.role)).length;
+    }, [campaignSuperiorRoles, campaignMembers]);
 
     // Compute the count for each role
     const roleCounts = useMemo(() => {
@@ -42,10 +42,10 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
             //         role: null
             //     }));
             // } else 
-            if (Array.isArray(roleIds) && tab === "campaignManager") {
+            if (Array.isArray(roleIds) && tab === "campaignSuperior") {
                 setFilters(prevFilters => ({
                     ...prevFilters,
-                    role: CampaignManagerRoles
+                    role: campaignSuperiorRoles
                 }));
             } else {
                 setFilters(prevFilters => ({
@@ -55,6 +55,7 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
             }
         }
     };
+    console.log("activeTab?", activeTab)
 
     return (
         <React.Fragment>
@@ -78,10 +79,10 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
 
                     <NavLink
                         className={classnames(
-                            { active: activeTab === "campaignManager" },
+                            { active: activeTab === "campaignSuperior" },
                             "fw-semibold"
                         )}
-                        onClick={(e) => ChangeCampaignRole(e, "campaignManager", CampaignManagerRoles)}
+                        onClick={(e) => ChangeCampaignRole(e, "campaignSuperior", campaignSuperiorRoles)}
                         href="#"
                     >
                         الإدارة
@@ -90,7 +91,7 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
                         </span>
                     </NavLink>
 
-                    {campaignRoles.filter(role => !CampaignManagerRoles.includes(role.id)).map((role) => (
+                    {campaignRoles.filter(role => !campaignSuperiorRoles.includes(role.id)).map((role) => (
                         <NavItem key={role.id}>
                             <NavLink
                                 className={classnames(

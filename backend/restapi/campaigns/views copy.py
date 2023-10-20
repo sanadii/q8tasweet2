@@ -189,7 +189,7 @@ class GetCampaignDetails(APIView):
     def get_campaign_members_data(self, id, current_user_id):
         # Query for campaign members
         campaign_members_query = CampaignMember.objects.select_related('user').filter(campaign_id=id)
-        campaign_members_serializer = CampaignMembersSerializer(campaign_members_query, many=True)
+        campaign_members_serializer = CampaignMemberSerializer(campaign_members_query, many=True)
         campaign_members = campaign_members_serializer.data
 
         # Fetch the current user's campaign member details
@@ -197,7 +197,7 @@ class GetCampaignDetails(APIView):
         current_campaign_member_data = {}
 
         if current_campaign_member_query:
-            current_campaign_member_serializer = CampaignMembersSerializer(current_campaign_member_query)
+            current_campaign_member_serializer = CampaignMemberSerializer(current_campaign_member_query)
             current_campaign_member_data = current_campaign_member_serializer.data
 
             # Extract the fullName
@@ -251,7 +251,7 @@ class GetCampaignDetails(APIView):
 
         # Fetch CampaignGuarantee related to the campaign members
         campaign_guarantees_query = CampaignGuarantee.objects.filter(member__id__in=campaign_member_ids)
-        campaign_guarantees_serializer = CampaignGuaranteesSerializer(campaign_guarantees_query, many=True)
+        campaign_guarantees_serializer = CampaignGuaranteeSerializer(campaign_guarantees_query, many=True)
         campaign_guarantees = campaign_guarantees_serializer.data
         
         # Fetch election attendees for given election_id

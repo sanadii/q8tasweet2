@@ -131,7 +131,7 @@ const Actions = (props) => {
         canChangeCampaignModerator,
         canChangeCampaignCandidate,
         canChangeCampaignManager,
-        canViewCampaign,
+        canChangeCampaignMember,
     } = usePermission();
 
 
@@ -152,12 +152,17 @@ const Actions = (props) => {
                 <i className="ri-eye-fill align-bottom" />
             </button>
             {
-                (canChangeConfig ||
-                    (canChangeCampaignManager
+                (canChangeCampaignModerator
+                    || (canChangeCampaignManager
                         && campaignMemberRole !== "campaignModerator"
                         && campaignMemberRole !== "campaignCandidate"
-                        // && campaignMemberRole !== "campaignManager"
-                    ))
+                    )
+                    || (canChangeCampaignMember
+                        && campaignMemberRole !== "campaignModerator"
+                        && campaignMemberRole !== "campaignCandidate"
+                        && campaignMemberRole !== "campaignManager"
+                    )
+                )
                 && (
                     <button
                         to="#"
@@ -172,7 +177,7 @@ const Actions = (props) => {
                 )
             }
             {
-                (canChangeConfig ||
+                (canChangeCampaignModerator ||
                     (canChangeCampaignManager
                         && campaignMemberRole !== "campaignModerator"
                         && campaignMemberRole !== "campaignCandidate"

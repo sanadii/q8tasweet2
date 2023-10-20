@@ -15,7 +15,7 @@ You have similar code in multiple places to handle exceptions (e.g., `Electors.D
 Remove any unused imports and organize the remaining ones. You might consider grouping the imports from the same module together.
 
 ### 5. Improve Method Names:
-Ensure that method names are descriptive and follow a consistent naming convention. For instance, the method `get_serializers` in `CampaignMembersSerializer` might have a more descriptive name, and its purpose is not clear. 
+Ensure that method names are descriptive and follow a consistent naming convention. For instance, the method `get_serializers` in `CampaignMemberSerializer` might have a more descriptive name, and its purpose is not clear. 
 
 ### 6. Comments:
 Consider revisiting your comments to ensure they are helpful and not redundant. Clean out commented code that is not needed, or replace it with more descriptive comments explaining why something is done a certain way if needed.
@@ -48,7 +48,7 @@ class CampaignsSerializer(serializers.ModelSerializer):
             # ... other fields ...
         }
 
-# For CampaignGuaranteesSerializer and ElectionAttendeesSerializer,
+# For CampaignGuaranteeSerializer and ElectionAttendeesSerializer,
 # you could have a method like this to avoid repeating the same logic
 def get_field_or_not_found(self, obj, field_name):
     try:

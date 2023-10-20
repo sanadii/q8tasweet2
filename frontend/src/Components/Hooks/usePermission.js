@@ -7,7 +7,8 @@ const entities = [
     'Config', 'User', 'Group', 'Permission',
     'Election', 'ElectionCandidate', 'ElectionCommittee', 'ElectionCommitteeResult',
     'Candidate',
-    'Campaign', 'CampaignMember', 'CampaignManager', 'CampaignGuarantee', 'CampaignAttendee',
+    'Campaign', 'CampaignMember', 'CampaignGuarantee', 'CampaignAttendee',
+    'CampaignModerator', 'CampaignCandidate', 'campaignCoordinator',
     'Elector',
     'Area', 'Category', 'Tag',
 ];

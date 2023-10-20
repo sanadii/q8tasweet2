@@ -28,10 +28,10 @@ from restapi.campaigns.serializers import (
     CampaignsSerializer,
     # CampaignElectionSerializer,
     # campaignCandidateSerializer,
-    CampaignMembersSerializer,
-    CampaignGuaranteesSerializer,
+    CampaignMemberSerializer,
+    CampaignGuaranteeSerializer,
     CampaignDetailsSerializer,
-    CampaignAttendeesSerializer,
+    CampaignAttendeeSerializer,
 )
 
 from restapi.electors.serializers import (

@@ -2,15 +2,15 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 
-// Store & Selectors
-import { deleteCampaignMember } from "store/actions";
-import { campaignSelector } from 'Selectors';
-
 // Compontents, Constants, Hooks
 import MembersModal from "./MembersModal";
 import { DeleteModal, TableContainer, TableContainerHeader } from "Components/Common";
 import { usePermission, useDelete } from "Components/Hooks";
 import { Id, Name, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
+
+// Store & Selectors
+import { deleteCampaignMember } from "store/actions";
+import { campaignSelector } from 'Selectors';
 
 // UI & Utilities
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -48,11 +48,11 @@ const MembersTab = () => {
   // Filtering and Member Matching
   const [filters, setFilters] = useState({
     global: "",
-    role: "campaignManager",
+    role: [30, 31, 32], // SuperiorRoles TODO:
   });
 
   // Finding Active Role to Show Different Table Columns
-  const [activeTab, setActiveTab] = useState("campaignManager");
+  const [activeTab, setActiveTab] = useState("campaignSuperior"); // Initialize with "campaignSuperior"
   const activeRole = activeTab;
 
   // Model & Toggle Function
@@ -115,17 +115,17 @@ const MembersTab = () => {
     {
       Header: "الرتبة",
       accessor: "role",
-      ShowTo: ["campaignManager"],
+      ShowTo: ["campaignSuperior"],
       Cell: (cellProps) => <Role cellProps={cellProps} campaignRoles={campaignRoles} />
     },
     {
       Header: "الفريق",
-      ShowTo: ["campaignManager", "campaignSupervisor"],
+      ShowTo: ["campaignSupervisor"],
       Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
     },
     {
       Header: "المضامين",
-      ShowTo: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManager"],
+      ShowTo: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignSuperior"],
       Cell: (cellProps) => <Guarantees cellProps={cellProps} campaignGuarantees={campaignGuarantees} />
     },
     {
@@ -184,7 +184,7 @@ const MembersTab = () => {
         isValid = isValid && campaignMember.role === filters.role;
       }
     }
-
+    console.log("filters::", filters);
     // Check the global filter (e.g., for searching by name)
     if (filters.global) {
       isValid = isValid && campaignMember.user.name &&
@@ -194,6 +194,13 @@ const MembersTab = () => {
 
     return isValid;
   });
+
+  console.log("campaignMembers:", campaignMembers);
+  console.log("campaignRoles:", campaignRoles);
+
+
+  // Render your component with the data
+
   return (
     <React.Fragment>
       <DeleteModal

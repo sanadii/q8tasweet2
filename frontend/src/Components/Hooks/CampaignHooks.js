@@ -49,10 +49,10 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
         // No roles excluded for CampaignDirector.
         break;
       case canChangeCampaign:
-        excludedRoleStrings = ["campaignModerator", "campaignManager", "campaignCandidate"];
+        excludedRoleStrings = ["campaignModerator", "campaignCandidate"];
         break;
       case canChangeMember:
-        excludedRoleStrings = ["campaignModerator", "campaignManager", "campaignCandidate", "campaignSupervisor"];
+        excludedRoleStrings = ["campaignModerator", "campaignCoordinator", "campaignCandidate", "campaignSupervisor"];
         break;
       default:
         break;
