@@ -38,7 +38,7 @@ const Role = ({ cellProps, campaignRoles }) => {
 
     return (
         <p className="text-success">
-            <strong>{role ? role.name : "غير معرف"}</strong>
+            <strong>{role ? role.displayName : "غير معرف"}</strong>
         </p>
     );
 }
@@ -52,14 +52,31 @@ const Team = ({ cellProps, campaignMembers }) => {
     );
 };
 
-const Guarantees = ({ cellProps, campaignGuarantees }) => {
+const Guarantees = (props) => {
+    const { cellProps, campaignGuarantees, campaignRoles } = props;
+
+    // Permission Hook
+    const {
+        canChangeCampaignModerator,
+        canChangeCampaignCoordinator,
+        canChangeCampaignSupervisor,
+        canChangeCampaignMember,
+        canChangeCampaign,
+    } = usePermission();
+
     const memberId = cellProps.row.original.id;
     const guaranteeCountForMember = campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
-
+    const campaignMemberId = cellProps.row.original.role;
+    const campaignRole = campaignRoles.find((option) => option.id === campaignMemberId);
+    const campaignMemberRole = campaignRole.name;
     return (
-        <p>{guaranteeCountForMember}</p>
+        (!canChangeCampaignCoordinator &&
+            !["campaignModerator", "campaignCandidate", "campaignCoordinator"].includes(campaignMemberRole))
+            || canChangeCampaignSupervisor
+            ? <p>{guaranteeCountForMember}</p>
+            : <p>-</p>
     );
-};
+}
 
 const Attendees = ({ cellProps, campaignAttendees }) => {
     const userId = cellProps.row.original.user;
@@ -126,18 +143,16 @@ const Actions = (props) => {
 
     // Permission Hook
     const {
-        canChangeConfig,
-        canChangeCampaign,
         canChangeCampaignModerator,
         canChangeCampaignCandidate,
-        canChangeCampaignManager,
+        canChangeCampaignCoordinator,
         canChangeCampaignMember,
     } = usePermission();
 
-
     const campaignMemberId = cellProps.row.original.role;
     const campaignRole = campaignRoles.find((option) => option.id === campaignMemberId);
-    const campaignMemberRole = campaignRole.role;
+    const campaignMemberRole = campaignRole.name;
+
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -152,17 +167,12 @@ const Actions = (props) => {
                 <i className="ri-eye-fill align-bottom" />
             </button>
             {
-                (canChangeCampaignModerator
-                    || (canChangeCampaignManager
-                        && campaignMemberRole !== "campaignModerator"
-                        && campaignMemberRole !== "campaignCandidate"
-                    )
+                (canChangeCampaignCandidate
                     || (canChangeCampaignMember
                         && campaignMemberRole !== "campaignModerator"
                         && campaignMemberRole !== "campaignCandidate"
-                        && campaignMemberRole !== "campaignManager"
-                    )
-                )
+                        && campaignMemberRole !== "campaignCoordinator"
+                    ))
                 && (
                     <button
                         to="#"
@@ -177,11 +187,11 @@ const Actions = (props) => {
                 )
             }
             {
-                (canChangeCampaignModerator ||
-                    (canChangeCampaignManager
+                (canChangeCampaignModerator
+                    || (canChangeCampaignCandidate
                         && campaignMemberRole !== "campaignModerator"
                         && campaignMemberRole !== "campaignCandidate"
-                        // && campaignMemberRole !== "campaignManager"
+                        && campaignMemberRole !== "campaignCoordinator"
                     ))
                 && (
                     <button
@@ -196,6 +206,7 @@ const Actions = (props) => {
                     </button>
                 )
             }
+
         </div>
     );
 };

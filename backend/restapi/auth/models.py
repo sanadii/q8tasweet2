@@ -93,10 +93,10 @@ class GroupCategories(models.IntegerChoices):
     CONTRIBUTOR = 6, 'المساهمين'
 
 group_category_field = models.IntegerField(choices=GroupCategories.choices, default=GroupCategories.SUBSCRIBER)
-group_role_field = models.CharField(max_length=255, null=True, blank=True)
+group_display_name_field = models.CharField(max_length=255, null=True, blank=True)
 
 Group.add_to_class('category', group_category_field)
-Group.add_to_class('role', group_role_field)
+Group.add_to_class('display_name', group_display_name_field)
 
 
 

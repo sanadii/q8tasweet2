@@ -17,13 +17,13 @@ PERMISSIONS = {
     'Campaign': {
         'canViewCampaign': [
             'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
-            'campaignManager', 'campaignSupervisor', 
+            'campaignCoordinator', 'campaignSupervisor', 
             'campaignGuarantor', 'campaignAttendant', 'campaignSorter'
         ],
         'canAddCampaign': ['superAdmin','admin'],
         'canChangeCampaign': [
             'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
-            'campaignManager', 'campaignAssistant'
+            'campaignCoordinator'
         ],
         'canDeleteCampaign': ['admin'],
     },
@@ -31,43 +31,44 @@ PERMISSIONS = {
     'CampaignMember': {
         'canViewCampaignMember': [
             'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
-            'campaignManager', 'campaignSupervisor'
+            'campaignCoordinator', 'campaignSupervisor'
         ],
         'canAddCampaignMember': ['superAdmin','admin'],
         'canChangeCampaignMember': [
             'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
-            'campaignManager', 'campaignSupervisor'
+            'campaignCoordinator', 'campaignSupervisor'
         ],
         'canDeleteCampaignMember': ['superAdmin','admin'],
 
         # Additional for campaignMembers
         'canChangeCampaignModerator': ['superAdmin','admin'],
         'canChangeCampaignCandidate': ['superAdmin', 'admin', 'campaignModerator'],
-        'canChangeCampaignManager': ['superAdmin', 'admin', 'campaignModerator', 'campaignCandidate'], 
+        'canChangeCampaignCoordinator': ['superAdmin', 'admin', 'campaignModerator', 'campaignCandidate'], 
+        'canChangeCampaignSupervisor': ['superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator'], 
     },
 
     'CampaignGuarantee': {
         'canViewCampaignGuarantee': [
-            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator', 
             'campaignSupervisor', 'campaignGuarantor'
         ],
         'canAddCampaignGuarantee': [
-            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator', 
             'campaignSupervisor', 'campaignGuarantor'
         ],
         'canChangeCampaignGuarantee': [
-            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator', 
             'campaignSupervisor', 'campaignGuarantor'
         ],
         'canDeleteCampaignGuarantee': [
-            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator', 
             'campaignSupervisor', 'campaignGuarantor'
         ],
     },
 
     'CampaignAttendee': {
         'canViewCampaignAttendee': [
-            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator', 
             'campaignSupervisor', 'campaignGuarantor', 
             'campaignAttendant', 'campaignSorter'
         ],
@@ -78,7 +79,7 @@ PERMISSIONS = {
 
     'Elector': {
         'canViewElector': [
-            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignManager', 
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator', 
             'campaignSupervisor', 'campaignGuarantor', 
             'campaignAttendant', 'campaignSorter'
         ],
@@ -105,7 +106,7 @@ def set_permissions():
             )
             # Assign the permission to the groups
             for group_role in groups:
-                group, _ = Group.objects.get_or_create(role=group_role)
+                group, _ = Group.objects.get_or_create(name=group_role)
                 group.permissions.add(permission)
 
 set_permissions()

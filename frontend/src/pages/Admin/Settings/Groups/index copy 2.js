@@ -147,7 +147,6 @@ const Groups = () => {
     activeParentCategoryId
   } = useCategoryManager(categories, subCategories, validation);
 
-  console.log("activeParentCategoryId:", activeParentCategoryId);
 
   return (
     <React.Fragment>

@@ -5,22 +5,22 @@ import classnames from "classnames";
 import { campaignSelector } from 'Selectors';
 import { Nav, NavItem, NavLink } from "reactstrap";
 
-export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
+const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
     const { campaignRoles, campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
 
     // Get the IDs of roles that are in the managerial category
-    const campaignSuperiorRoles = useMemo(() => {
+    const campaignManagerRoles = useMemo(() => {
         return campaignRoles
             .filter(role =>
-                ["campaignModerator", "campaignManager", "campaignCandidate"].includes(role.role)
+                ["campaignModerator", "campaignCandidate", "campaignCoordinator", "campaignSupervisor"].includes(role.name)
             )
             .map(role => role.id);
     }, [campaignRoles]);
 
     // Compute the count of members with managerial roles
     const managerCounts = useMemo(() => {
-        return campaignMembers.filter(member => campaignSuperiorRoles.includes(member.role)).length;
-    }, [campaignSuperiorRoles, campaignMembers]);
+        return campaignMembers.filter(member => campaignManagerRoles.includes(member.role)).length;
+    }, [campaignManagerRoles, campaignMembers]);
 
     // Compute the count for each role
     const roleCounts = useMemo(() => {
@@ -36,16 +36,10 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
 
         if (activeTab !== tab) {
             setActiveTab(tab);
-            // if (roleIds === "all") {
-            //     setFilters(prevFilters => ({
-            //         ...prevFilters,
-            //         role: null
-            //     }));
-            // } else 
-            if (Array.isArray(roleIds) && tab === "campaignSuperior") {
+            if (Array.isArray(roleIds) && tab === "campaignManagers") {
                 setFilters(prevFilters => ({
                     ...prevFilters,
-                    role: campaignSuperiorRoles
+                    role: campaignManagerRoles
                 }));
             } else {
                 setFilters(prevFilters => ({
@@ -55,7 +49,6 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
             }
         }
     };
-    console.log("activeTab?", activeTab)
 
     return (
         <React.Fragment>
@@ -79,10 +72,10 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
 
                     <NavLink
                         className={classnames(
-                            { active: activeTab === "campaignSuperior" },
+                            { active: activeTab === "campaignManagers" },
                             "fw-semibold"
                         )}
-                        onClick={(e) => ChangeCampaignRole(e, "campaignSuperior", campaignSuperiorRoles)}
+                        onClick={(e) => ChangeCampaignRole(e, "campaignManagers", campaignManagerRoles)}
                         href="#"
                     >
                         الإدارة
@@ -91,23 +84,26 @@ export const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab 
                         </span>
                     </NavLink>
 
-                    {campaignRoles.filter(role => !campaignSuperiorRoles.includes(role.id)).map((role) => (
-                        <NavItem key={role.id}>
-                            <NavLink
-                                className={classnames(
-                                    { active: activeTab === role.role.toString() },
-                                    "fw-semibold"
-                                )}
-                                onClick={(e) => ChangeCampaignRole(e, role.role.toString(), role.id)}
-                                href="#"
-                            >
-                                {role.name}
-                                <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
-                                    {roleCounts[role.id]}
-                                </span>
-                            </NavLink>
-                        </NavItem>
+                    {campaignRoles.filter(role => !campaignManagerRoles.includes(role.id)).map((role) => (
+                        roleCounts[role.id] > 0 && ( // Only render if count is greater than 0
+                            <NavItem key={role.id}>
+                                <NavLink
+                                    className={classnames(
+                                        { active: activeTab === role.name.toString() },
+                                        "fw-semibold"
+                                    )}
+                                    onClick={(e) => ChangeCampaignRole(e, role.name.toString(), role.id)}
+                                    href="#"
+                                >
+                                    {role.displayName}
+                                    <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
+                                        {roleCounts[role.id]}
+                                    </span>
+                                </NavLink>
+                            </NavItem>
+                        )
                     ))}
+
                 </Nav>
             </div>
         </React.Fragment>

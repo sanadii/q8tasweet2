@@ -1,7 +1,7 @@
 // React, Redux & Store imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getElectors, addNewCampaignGuarantee, addNewCampaignAttendee } from "../../../../store/actions";
+import { getElectors } from "../../../../store/actions";
 import { Loader, TableContainer } from "Components/Common";
 import { campaignSelector, electorSelector } from 'Selectors';
 
@@ -11,10 +11,6 @@ import { Id, Name, Actions } from "./ElectorsCol";
 
 // Reactstrap (UI) imports
 import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
-
-// Utility imports
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export const ElectorsTab = () => {
   const dispatch = useDispatch();
@@ -96,15 +92,6 @@ export const ElectorsTab = () => {
     [toggle, campaignDetails.id]
   );
 
-  const getGenderIcon = (gender) => {
-    if (gender === 2) {
-      return <i className="mdi mdi-circle align-middle text-danger me-2"></i>;
-    } else if (gender === 1) {
-      return <i className="mdi mdi-circle align-middle text-info me-2"></i>;
-    }
-    return null;
-  };
-
   const columns = useMemo(
     () => [
       {
@@ -112,7 +99,6 @@ export const ElectorsTab = () => {
         accessor: row => ({ fullName: row.fullName, gender: row.gender }),
         Cell: (cellProps) => <Name {...cellProps} />
       },
-      
       {
         Header: "اجراءات",
         Cell: (cellProps) => <Actions
@@ -131,10 +117,10 @@ export const ElectorsTab = () => {
       campaignDetails.id,
       campaignGuarantees,
       campaignAttendees,
-      currentCampaignMember.committee,
-      currentCampaignMember.id,
-      currentCampaignMember.role,
-      currentCampaignMember.user.id,
+      currentCampaignMember?.committee,  // <-- safely accessing committee
+      currentCampaignMember?.id,
+      currentCampaignMember?.role,
+      currentCampaignMember?.user?.id,   // <-- safely accessing nested properties
       dispatch,
       electors,
     ]);

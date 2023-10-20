@@ -35,6 +35,8 @@ const MembersTab = () => {
   // Permission Hook
   const {
     canChangeConfig,
+    canChangeCampaignSupervisor,
+    canChangeCampaignCoordinator,
   } = usePermission();
 
   // Delete Hook
@@ -48,11 +50,11 @@ const MembersTab = () => {
   // Filtering and Member Matching
   const [filters, setFilters] = useState({
     global: "",
-    role: [30, 31, 32], // SuperiorRoles TODO:
+    role: [30, 31, 32, 33], // SuperiorRoles TODO:
   });
 
   // Finding Active Role to Show Different Table Columns
-  const [activeTab, setActiveTab] = useState("campaignSuperior"); // Initialize with "campaignSuperior"
+  const [activeTab, setActiveTab] = useState("campaignManagers"); // Initialize with "campaignManagers"
   const activeRole = activeTab;
 
   // Model & Toggle Function
@@ -115,38 +117,45 @@ const MembersTab = () => {
     {
       Header: "الرتبة",
       accessor: "role",
-      ShowTo: ["campaignSuperior"],
+      TabsToShow: ["campaignManagers"],
       Cell: (cellProps) => <Role cellProps={cellProps} campaignRoles={campaignRoles} />
     },
     {
       Header: "الفريق",
-      ShowTo: ["campaignSupervisor"],
+      TabsToShow: ["campaignSupervisor"],
       Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
     },
     {
       Header: "المضامين",
-      ShowTo: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignSuperior"],
-      Cell: (cellProps) => <Guarantees cellProps={cellProps} campaignGuarantees={campaignGuarantees} />
+      TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
+      Cell: (cellProps) => (
+        <Guarantees
+          cellProps={cellProps}
+          campaignGuarantees={campaignGuarantees}
+          campaignRoles={campaignRoles}
+        />
+      )
     },
     {
       Header: "اللجنة",
-      ShowTo: ["campaignAttendant", "campaignSorter"],
+      TabsToShow: ["campaignAttendant", "campaignSorter"],
       Cell: (cellProps) => <Committee cellProps={cellProps} campaignElectionCommittees={campaignElectionCommittees} />
     },
     {
       Header: "الحضور",
-      ShowTo: ["campaignAttendant"],
+      TabsToShow: ["campaignAttendant"],
       Cell: (cellProps) => <Attendees cellProps={cellProps} campaignAttendees={campaignAttendees} />
     },
     {
       Header: "تم الفرز",
-      ShowTo: ["campaignSorter"],
+      TabsToShow: ["campaignSorter"],
       Cell: (cellProps) => <Sorted cellProps={cellProps} />
     },
     {
       Header: "المشرف",
-      ShowTo: ["campaignGuarantor", "campaignAttendant", "campaignSorter"],
-      Cell: (cellProps) => <Supervisor campaignMembers={campaignMembers} cellProps={cellProps} />
+      TabsToShow: ["campaignGuarantor", "campaignAttendant", "campaignSorter"],
+      Cell: (cellProps) => <Supervisor campaignMembers={campaignMembers} cellProps={cellProps} />,
+      show: canChangeCampaignSupervisor // Add this line
     },
     {
       Header: "إجراءات",
@@ -165,12 +174,12 @@ const MembersTab = () => {
 
   const columns = useMemo(() => {
     return columnsDefinition.filter(column => {
-      if (!column.ShowTo) return true; // always show columns without a ShowTo key
-      return column.ShowTo.includes(activeRole);
+      if (column.show === false) return false; // Hide the column if show is explicitly set to false
+      if (!column.TabsToShow) return true; // always show columns without a TabsToShow key
+      return column.TabsToShow.includes(activeRole);
     });
   }, [activeRole, columnsDefinition]);
-
-
+  
   // Table Filters
 
   const campaignMemberList = campaignMembers.filter(campaignMember => {
@@ -184,7 +193,6 @@ const MembersTab = () => {
         isValid = isValid && campaignMember.role === filters.role;
       }
     }
-    console.log("filters::", filters);
     // Check the global filter (e.g., for searching by name)
     if (filters.global) {
       isValid = isValid && campaignMember.user.name &&
@@ -195,11 +203,6 @@ const MembersTab = () => {
     return isValid;
   });
 
-  console.log("campaignMembers:", campaignMembers);
-  console.log("campaignRoles:", campaignRoles);
-
-
-  // Render your component with the data
 
   return (
     <React.Fragment>

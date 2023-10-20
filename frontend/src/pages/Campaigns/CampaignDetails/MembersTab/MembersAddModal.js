@@ -1,5 +1,5 @@
 // React & Redux core imports
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -9,8 +9,6 @@ import { userSelector, campaignSelector } from 'Selectors';
 
 // UI Components & styling imports
 import { Input, ModalBody, Form } from "reactstrap";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import SimpleBar from "simplebar-react";
 
 const MembersAddModal = () => {
@@ -88,6 +86,7 @@ const MembersAddModal = () => {
                 const newCampaignMember = {
                   campaign: campaignId,
                   user: user.id,
+                  role: 39, // campaignMember
                 };
                 dispatch(addNewCampaignMember(newCampaignMember));
               }}

@@ -21,8 +21,6 @@ import SimpleBar from "simplebar-react";
 const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
   const dispatch = useDispatch();
 
-  console.log("CAMPAIGN ??:", campaign);
-
   // ------------ State Management ------------
   const { campaigns, isCampaignSuccess, error } = useSelector(campaignSelector);
   const { moderators } = useSelector(userSelector);
@@ -80,8 +78,6 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
           priority: values.priority,
           moderators: values.moderators,
         };
-        // console.log(newCampaign); // before calling dispatch in onSubmit
-        // Save new campaign
         dispatch(addNewCampaign(newCampaign));
       }
 
@@ -112,16 +108,6 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
       >
         <ModalBody className="modal-body">
           <Row className="g-3">
-            {console.log("campaign details:", campaign)}
-            {/* <p>
-              المرشح: <strong>{campaign.candidateName}</strong> [{campaign.candidateId}]
-              <br />
-              الانتخابات:
-              <strong>{campaign.electionName}</strong>  [{campaign.electionId}]
-              <br />
-              الموعد: <strong>{campaign.electionDueDate}</strong>
-            </p> */}
-
             <Col lg={12}>
               <div>
                 <Label for="description-field" className="form-label">

@@ -338,7 +338,6 @@ const CandidatesTab = () => {
               <div>
                 {candidateElectionList && candidateElectionList.length ? (
                   // Log the candidateElectionList array to the console
-                  (console.log(candidateElectionList),
                     (
                       <TableContainer
                         // Data
@@ -369,7 +368,7 @@ const CandidatesTab = () => {
                         theadClass="table-light table-nowrap"
                         thClass="table-light text-muted"
                       />
-                    ))
+                    )
                 ) : (
                   <Loader error={error} />
                 )}

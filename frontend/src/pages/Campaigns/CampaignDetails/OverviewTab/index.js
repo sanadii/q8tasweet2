@@ -9,7 +9,6 @@ import { userSelector, campaignSelector } from 'Selectors';
 
 // Components, Constants & Hooks
 import usePermission from "Components/Hooks/usePermission";
-import { MemberRoleOptions } from "Components/constants";
 import OverViewGuarantees from "./OverViewGuarantees";
 // import OverViewNotifications from "./Components/OverViewNotifications";
 
@@ -17,14 +16,11 @@ import OverViewGuarantees from "./OverViewGuarantees";
 import { Card, CardBody, Col, Row } from "reactstrap";
 
 const OverviewTab = () => {
-
   const {
     campaignDetails,
     currentCampaignMember,
     campaignMembers,
     campaignRoles,
-    campaignGuarantees,
-    campaignElectionCommittees,
     campaignCandidates
   } = useSelector(campaignSelector);
 
@@ -36,92 +32,60 @@ const OverviewTab = () => {
   // Permissions
   const { canChangeConfig } = usePermission();
 
-  // TODO: Move to helper
-  let committeeName = "Unknown";
-
   // Custom hook to get members with a specific role by role name
   function useMembersWithRole(roleName, campaignRoles = [], campaignMembers = []) {
     const [membersWithRole, setMembersWithRole] = useState([]);
-  
+
     useEffect(() => {
-      const foundRole = campaignRoles.find(role => role.role === roleName);
+      const foundRole = campaignRoles.find(roleObj => roleObj.name === roleName);
       const members = foundRole ? campaignMembers.filter(member => member.role === foundRole.id) : [];
       setMembersWithRole(members);
     }, [roleName, campaignRoles, campaignMembers]);
-  
+
     return membersWithRole;
   }
-  
+
   function useCurrentMemberRole(canChangeConfig, campaignRoles = [], currentCampaignMember = {}) {
     if (canChangeConfig) {
-      return 'مدير عام النظام';
+      return 'مدير النظام';
     } else {
       const roleObj = campaignRoles.find(role => role.id === currentCampaignMember.role);
       return roleObj?.name || 'مشترك';
     }
   }
-    
+
   // Usage of custom hooks
   const campaignModerators = useMembersWithRole('campaignModerator', campaignRoles, campaignMembers);
-  const campaignManagers = useMembersWithRole('campaignManagers', campaignRoles, campaignMembers);
+  const campaigCoordinators = useMembersWithRole('campaignCoordinator', campaignRoles, campaignMembers);
   const currentMemberRole = useCurrentMemberRole(canChangeConfig, campaignRoles, currentCampaignMember);
-  
-  console.log("campaignModerators:", campaignModerators )
-  console.log("campaignManagers:", campaignManagers )
-  console.log("currentMemberRole:", currentMemberRole )
-
-
-  const getGenderIcon = (gender) => {
-    if (gender === 2) {
-      return <i className="mdi mdi-circle align-middle text-danger me-2"></i>;
-    } else if (gender === 1) {
-      return <i className="mdi mdi-circle align-middle text-info me-2"></i>;
-    }
-    return null;
-  };
 
   return (
     <React.Fragment>
       <Row>
         <Col lg={3}>
-          {/* <Card>
-            <CardBody>
-              <h5 className="card-title mb-5">Complete Your Profile</h5>
-              <Progress
-                value={30}
-                color="danger"
-                className="animated-progess custom-progress progress-label"
-              >
-                <div className="label">30%</div>{" "}
-              </Progress>
-            </CardBody>
-          </Card> */}
-
-
-
           <Card>
             <CardBody>
               <h5 className="card-title mb-3"><strong>الإنتخابات</strong></h5>
               <ul>
                 <li>الانتخابات: <strong>{campaignDetails.election.name}</strong></li>
                 <li>المرشحين: <strong>{(campaignCandidates?.length ?? 0)} مرشح</strong></li>
-                <li>المقاعد: <strong>{campaignDetails.election.seats} مقعد</strong></li>
-                <li>الأصوات: <strong>{campaignDetails.election.votes} صوت</strong></li>
+                <li>المقاعد: <strong>{campaignDetails.election.electSeats} مقعد</strong></li>
+                <li>الأصوات: <strong>{campaignDetails.election.electVotes} صوت</strong></li>
               </ul>
               <hr />
               <h5 className="card-title mb-3"><strong>الإدارة</strong></h5>
               <ul>
-                <li>المرشح: <strong>{campaignDetails.candidate.name}</strong></li>
-                {campaignManagers && campaignManagers.length > 0 &&
-                  <li>مدير الحملة: <strong>{campaignManagers.map(moderator => moderator.fullName).join(' <br/> ')}</strong></li>
-                }
                 {campaignModerators && campaignModerators.length > 0 && (
                   <li>
-                    مشرف الحملة: <strong>{campaignModerators.map(moderator => moderator.fullName).join(' | ')}</strong>
+                    المراقب: <strong>{campaignModerators.map(moderator => moderator.fullName).join(' | ')}</strong>
                   </li>
                 )}
-
-
+                <li>المرشح: <strong>{campaignDetails.candidate.name}</strong></li>
+                {campaigCoordinators && campaigCoordinators.length > 0 &&
+                  <li>
+                    المنسق: <strong>{campaigCoordinators.map(coordinator => coordinator.fullName).join(' | ')}</strong>
+                  </li>
+                }
               </ul>
               <hr />
               {canChangeConfig ?

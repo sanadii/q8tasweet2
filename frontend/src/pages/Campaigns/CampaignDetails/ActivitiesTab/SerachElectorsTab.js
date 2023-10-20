@@ -255,10 +255,7 @@ const GuaranteesTab = ({ campaignGuarantees }) => {
                 <Link
                   to="#"
                   onClick={() => {
-                    // console.log("Click event triggered");
-                    // const campaignGuaranteeInfo = cellProps.row.original;
-                    // setCampaignGuaranteeInfo(campaignGuaranteeInfo);
-                    // console.log("campaignGuaranteeInfo", campaignGuaranteeInfo);
+                    // 
                   }}
                 >
                   <i className="ri-eye-fill align-bottom text-muted"></i>
@@ -317,12 +314,6 @@ const GuaranteesTab = ({ campaignGuarantees }) => {
     }
     return cols;
   }, [handleCampaignGuaranteeClick, checkedAll, activeTab]);
-
-  // // Export Modal
-  // const [isExportCSV, setIsExportCSV] = useState(false);
-  useEffect(() => {
-    console.log("campaignGuaranteeList:", campaignGuaranteeList);
-  }, [campaignGuaranteeList]);
 
   return (
     <React.Fragment>

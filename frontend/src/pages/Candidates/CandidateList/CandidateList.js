@@ -101,13 +101,7 @@ const ElectionList = () => {
     if (elections && !elections.length) {
       dispatch(getElections());
     }
-    // console.log("Elections:", elections); // log elections
   }, [dispatch, elections]);
-
-  useEffect(() => {
-    setElectionList(elections);
-    // console.log("Candidate List:", electionList); // log electionList
-  }, [elections]);
 
   // Moderators
   useEffect(() => {
@@ -182,13 +176,11 @@ const ElectionList = () => {
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedImage(e.target.files[0]);
-      // console.log("handleImageSelect called");
     }
   };
 
   const formData = new FormData();
   if (!selectedImage) {
-    // console.log("no selected image");
   } else {
     formData.append("image", selectedImage);
     formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
@@ -241,7 +233,6 @@ const ElectionList = () => {
           priority: parseInt(values.priority, 10),
           moderators: values.moderators,
         };
-        // console.log(updatedElection); // before calling dispatch in onSubmit
 
         // Update candidate
         dispatch(
@@ -266,7 +257,6 @@ const ElectionList = () => {
           priority: parseInt(values.priority, 10),
           moderators: values.moderators,
         };
-        // console.log(newElection); // before calling dispatch in onSubmit
         // Save new candidate
         dispatch(addElection({ candidate: newElection, formData: formData }));
       }
@@ -816,10 +806,7 @@ const ElectionList = () => {
                           if (selectedImage) {
                             const reader = new FileReader();
                             reader.onloadend = () => {
-                              // console.log(
-                              //   "Image loaded successfully:",
-                              //   reader.result
-                              // );
+                              //
                               const imgElement =
                                 document.querySelector(".avatar-xl");
                               if (imgElement) {

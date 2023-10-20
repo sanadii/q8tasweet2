@@ -34,12 +34,10 @@ const CampaignGrid = () => {
     if (campaigns && !campaigns.length) {
       dispatch(getCampaigns());
     }
-    // console.log("Campaigns:", campaigns); // log campaigns
   }, [dispatch, campaigns]);
 
   useEffect(() => {
     setCampaignList(campaigns);
-    // console.log("Campaign List:", campaignList); // log campaignList
   }, [campaigns]);
 
   // Moderators

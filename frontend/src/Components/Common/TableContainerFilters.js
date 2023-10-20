@@ -2,23 +2,23 @@ import React, { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
 import { Row } from "reactstrap";
 
-import {
-    GlobalFilter,
-    ResetFilters,
-    StatusFilter,
-    PriorityFilter,
-    CandidateGenderFilter,
-    GenderFilter,
-    // AttendeeGenderFilter,
-    GuaranteeStatusFilter,
-    GuarantorFilter,
-    ElectionCommitteeFilter,
-    GuaranteeAttendanceFilter,
-} from "./Filters";
-
-
+// Campaign Filters
 import MemberRoleFilter from "./Filters/MemberRoleFilter";
 import ElectionCategoryFilter from "./Filters/ElectionCategoryFilter";
+import GuaranteeStatusFilter from "./Filters/GuaranteeStatusFilter";
+import GuarantorFilter from "./Filters/GuarantorFilter";
+import GuaranteeAttendanceFilter from "./Filters/GuaranteeAttendanceFilter";
+import CandidateGenderFilter from "./Filters/CandidateGenderFilter";
+
+// General Filters
+import GlobalFilter from "./Filters/GlobalFilter";
+import GenderFilter from "./Filters/GenderFilter";
+import ElectionCommitteeFilter from "./Filters/ElectionCommitteeFilter";
+import PriorityFilter from "./Filters/PriorityFilter";
+import StatusFilter from "./Filters/StatusFilter";
+import ResetFilters from "./Filters/ResetFilters";
+import DefaultColumnFilter from "./Filters/DefaultColumnFilter";
+import SearchFilter from "./Filters/SearchFilter";
 
 
 const TableContainerFilters = ({

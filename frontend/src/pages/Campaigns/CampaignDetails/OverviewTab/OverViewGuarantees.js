@@ -1,6 +1,5 @@
-
-
 // Pages/Campaigns/CampaignDetails/Components/OverViewGuarantees.js
+
 // React & Redux core
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,14 +13,22 @@ import { MemberRoleOptions, GuaranteeStatusOptions } from "Components/constants"
 
 // UI & Utilities
 import { Card, CardBody, CardHeader, Col, Row, TabContent, Table, Progress, UncontrolledCollapse } from "reactstrap";
+import {
+    getGuaranteeCount,
+    aggregateGuarantors,
+    getAttendeesCountsForMember,
+    getAllStatusCount,
+    getAllAttendeesCount
+} from 'Components/Hooks/campaignCalculation';
 
-const STATUS_MAP = GuaranteeStatusOptions.reduce((acc, curr) => {
-    acc[curr.value] = curr.id;
-    return acc;
+const STATUS_MAP = GuaranteeStatusOptions.reduce((accumulator, currentValue) => {
+    accumulator[currentValue.value] = currentValue.id;
+    return accumulator;
 }, {});
 
 
 const OverViewGuarantees = () => {
+    // 1. Hooks & State
     const {
         currentCampaignMember,
         campaignMembers,
@@ -29,12 +36,7 @@ const OverViewGuarantees = () => {
         campaignElectionCommittees,
     } = useSelector(campaignSelector);
 
-
-    function getGuaranteeCount(memberId) {
-        // Assuming `campaignGuarantees` is an array of all guarantees:
-        return campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
-    }
-
+    // Get count of guarantees for a member based on status
     const getStatusCount = useCallback((memberId, statusValue) => {
         return campaignGuarantees.filter(guarantee =>
             guarantee.member === memberId &&
@@ -43,42 +45,13 @@ const OverViewGuarantees = () => {
     }, [campaignGuarantees]);
 
 
-
-    function getAttendeesCountsForMember(campaignGuarantees, memberId) {
-        let counts = {
-            "Attended": 0
-        };
-
-        campaignGuarantees.forEach((guarantee) => {
-            if (guarantee.member === memberId && guarantee.attended === true) {
-                counts["Attended"] += 1;
-            }
-        });
-
-        return counts;
-    }
-
-
-    // First, aggregate the guarantees based on the guarantor
-    const aggregatedGuarantors = campaignGuarantees.reduce((acc, curr) => {
-        const memberInfo = campaignMembers.find(member => member.id === curr.member);
-        const guarantorName = memberInfo ? memberInfo.fullName : 'Unknown';
-
-        if (curr.member in acc) {
-            acc[curr.member].count += 1;
-        } else {
-            acc[curr.member] = {
-                name: guarantorName,
-                count: 1,
-                member: curr.member  // Add this line
-            };
-        }
-        return acc;
-    }, {});
+    // Aggregate the guarantees based on the guarantor
+    const aggregatedGuarantors = aggregateGuarantors(campaignGuarantees, campaignMembers);
 
     // Transform the aggregated object back to an array
     const guarantorData = Object.values(aggregatedGuarantors);
 
+    // Get background class based on status option
     function getBgClassForStatus(columnIndex) {
         const statusOption = GuaranteeStatusOptions.find(option => option.id === columnIndex - 1);
         const bgClass = statusOption ? statusOption.bgClass : '';
@@ -92,8 +65,6 @@ const OverViewGuarantees = () => {
             return getStatusCount(memberId, statusOption.value); // Change to statusOption.id
         }
     }));
-
-
 
     const columns = useMemo(
         () => [
@@ -109,7 +80,7 @@ const OverViewGuarantees = () => {
                 Header: "المجموع",
                 Cell: (cellProps) => {
                     const memberId = cellProps.row.original.member;
-                    const totalCount = getGuaranteeCount(memberId);
+                    const totalCount = getGuaranteeCount(campaignGuarantees, memberId);
                     return <strong>{totalCount}</strong>;
                 },
             },
@@ -128,14 +99,9 @@ const OverViewGuarantees = () => {
     );
 
 
-    const [totals, setTotals] = useState({
-        totalGuarantees: 0,
-        totalNew: 0,
-        totalContacted: 0,
-        totalConfirmed: 0,
-        totalNotConfirmed: 0,
-        totalAttendees: 0,
-    });
+    const initialState = ["totalGuarantees", "totalNew", "totalContacted", "totalConfirmed", "totalNotConfirmed", "totalAttendees"].reduce((acc, key) => ({ ...acc, [key]: 0 }), {});
+    const [totals, setTotals] = useState(initialState);
+
 
     useEffect(() => {
         // Calculate totals
@@ -143,44 +109,65 @@ const OverViewGuarantees = () => {
             acc[statusOption.value] = getAllStatusCount(campaignGuarantees, statusOption.id);
             return acc;
         }, {});
+
+        const totalNew = totalGuaranteesByStatus['New'];
+        const totalContactedOnly = totalGuaranteesByStatus['Contacted'];
+        const totalConfirmed = totalGuaranteesByStatus['Confirmed'];
+        const totalContacted = totalContactedOnly + totalConfirmed;
+
+        const totalNotConfirmed = totalGuaranteesByStatus['Not Confirmed'];
         const totalAttendees = getAllAttendeesCount(campaignGuarantees);
 
         setTotals(prevTotals => {
             const updatedTotals = {
                 ...prevTotals,
                 totalGuarantees: campaignGuarantees.length,
+                totalNew,
+                totalContacted,
+                totalConfirmed,
+                totalNotConfirmed,
                 totalAttendees,
                 ...totalGuaranteesByStatus,
             };
+
+            const confirmedPercentage = (updatedTotals.totalContacted / updatedTotals.totalGuarantees) * 100;
+            const contactedPercentage = (updatedTotals.totalConfirmed / updatedTotals.totalGuarantees) * 100;
             const attendancePercentage = (updatedTotals.totalAttendees / updatedTotals.totalGuarantees) * 100;
 
+            // Check if calculations are valid
+            if (isNaN(confirmedPercentage) || isNaN(contactedPercentage)) {
+                console.error("Percentage calculations failed for confirmed or contacted values.");
+            }
+
             // Round to one decimal place
+            const roundedConfirmedPercentage = parseFloat(confirmedPercentage.toFixed(1));
+            const roundedContactedPercentage = parseFloat(contactedPercentage.toFixed(1));
             const roundedAttendancePercentage = parseFloat(attendancePercentage.toFixed(1));
 
-            return { ...updatedTotals, attendancePercentage: roundedAttendancePercentage };
+            return {
+                ...updatedTotals,
+                confirmedPercentage: roundedConfirmedPercentage,
+                contactedPercentage: roundedContactedPercentage,
+                attendancePercentage: roundedAttendancePercentage,
+            };
         });
     }, [campaignGuarantees]);
 
-    // Helper function to count guarantees with a specific status
-    const getAllStatusCount = (guarantees, status) => {
-        return guarantees.filter((guarantee) => guarantee.status === status).length;
-    };
-
-    // Helper function to count attendees
-    const getAllAttendeesCount = (guarantees) => {
-        return guarantees.filter((guarantee) => guarantee.attended === true).length;
-    };
 
     return (
-
-
         < Col lg={12} >
-
             <Row>
                 <Col sm={6}>
                     <Card>
                         <CardBody>
-                            <h5 className="card-title mb-3"><strong>المضامين: {totals.totalGuarantees}</strong></h5>
+                            <Row>
+                                <Col sm={6}>
+                                    <h5 className="card-title mb-3"><strong>المضامين: {totals.totalGuarantees}</strong></h5>
+                                </Col>
+                                <Col sm={6}>
+                                    <h5 className="card-title mb-3"><strong>الحضور: {totals.totalAttendees}</strong></h5>
+                                </Col>
+                            </Row>
                             <p>
                                 <span className="text-info">جديد:</span> <strong>{totals.totalNew}</strong> &nbsp;•&nbsp;
                                 <span className="text-warning">تم التواصل:</span> <strong>{totals.totalContacted}</strong> &nbsp;•&nbsp;
@@ -199,8 +186,8 @@ const OverViewGuarantees = () => {
 
                                 <div className="flex-grow-1">
                                     <div>
-                                        <Progress value={totals.attendancePercentage} color="warning" className="animated-progess custom-progress progress-label" >
-                                            <div className="label">{totals.attendancePercentage}%</div>
+                                        <Progress value={totals.confirmedPercentage} color="warning" className="animated-progess custom-progress progress-label" >
+                                            <div className="label">{totals.confirmedPercentage}%</div>
                                         </Progress>
                                     </div>
                                 </div>
@@ -218,8 +205,8 @@ const OverViewGuarantees = () => {
 
                                 <div className="flex-grow-1">
                                     <div>
-                                        <Progress value={totals.attendancePercentage} color="success" className="animated-progess custom-progress progress-label" >
-                                            <div className="label">{totals.attendancePercentage}%</div>
+                                        <Progress value={totals.contactedPercentage} color="success" className="animated-progess custom-progress progress-label" >
+                                            <div className="label">{totals.contactedPercentage}%</div>
                                         </Progress>
                                     </div>
                                 </div>
@@ -249,79 +236,14 @@ const OverViewGuarantees = () => {
                 <Col sm={6}>
                     <Card>
                         <CardBody>
-                            <h5 className="card-title mb-3"><strong>الحضور: {totals.totalAttendees}</strong></h5>
-                            <p>
-                                <span className="text-info">جديد:</span> <strong>{totals.totalNew}</strong> &nbsp;•&nbsp;
-                                <span className="text-warning">تم التواصل:</span> <strong>{totals.totalContacted}</strong> &nbsp;•&nbsp;
-                                <span className="text-success">مؤكد:</span> <strong>{totals.totalConfirmed}</strong> &nbsp;•&nbsp;
-                                <span className="text-danger">غير مؤكد:</span> <strong>{totals.totalNotConfirmed}</strong>
-                            </p>
-
-                            <div className="d-flex align-items-center py-2">
-                                <div className="flex-shrink-0 me-3">
-                                    <div className="avatar-xs">
-                                        <div className="avatar-title bg-light rounded-circle text-muted fs-16">
-                                            <i className="bx bx-select-multiple"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="d-flex align-items-center py-2"> تواصل</div>
-
-                                <div className="flex-grow-1">
-                                    <div>
-                                        <Progress value={totals.attendancePercentage} color="warning" className="animated-progess custom-progress progress-label" >
-                                            <div className="label">{totals.attendancePercentage}%</div>
-                                        </Progress>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="d-flex align-items-center py-2">
-                                <div className="flex-shrink-0 me-3">
-                                    <div className="avatar-xs">
-                                        <div className="avatar-title bg-light rounded-circle text-muted fs-16">
-                                            <i className="bx bx-select-multiple"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="d-flex align-items-center py-2"> مؤكد</div>
-
-                                <div className="flex-grow-1">
-                                    <div>
-                                        <Progress value={totals.attendancePercentage} color="success" className="animated-progess custom-progress progress-label" >
-                                            <div className="label">{totals.attendancePercentage}%</div>
-                                        </Progress>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="d-flex align-items-center py-2">
-                                <div className="flex-shrink-0 me-3">
-                                    <div className="avatar-xs">
-                                        <div className="avatar-title bg-light rounded-circle text-muted fs-16">
-                                            <i className="bx bx-select-multiple"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="d-flex align-items-center py-2"> حضور</div>
-
-                                <div className="flex-grow-1">
-                                    <div>
-                                        <Progress value={totals.attendancePercentage} color="info" className="animated-progess custom-progress progress-label" >
-                                            <div className="label">{totals.attendancePercentage}%</div>
-                                        </Progress>
-                                    </div>
-                                </div>
-                            </div>
+                            <p>قريبا</p>
                         </CardBody>
                     </Card>
                 </Col>
             </Row>
-
             <Card>
                 <CardBody>
                     <h5 className="card-title mb-3"><strong>المضامين</strong></h5>
-
                     <Row>
                         <Col>
                             <TableContainer

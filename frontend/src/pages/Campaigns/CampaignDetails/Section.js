@@ -78,7 +78,6 @@ const Section = () => {
   const visibleTabs = useMemo(() => tabs.filter(tab => !!permissions[tab.permission]), [tabs, permissions]);
 
   const renderTabContent = (tabId) => {
-    console.log(`Trying to render content for tab: ${tabId}`);
     return tabComponents[tabId] || null;
   };
     const [activeTab, setActiveTab] = useState(String(visibleTabs[0]?.tabId || 1));

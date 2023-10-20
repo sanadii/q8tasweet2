@@ -31,7 +31,6 @@ const AllCampaigns = () => {
     if (campaigns && !campaigns.length) {
       dispatch(getCampaigns());
     }
-    console.log("Campaigns:", campaigns); // log campaigns
   }, [dispatch, campaigns]);
 
   // Moderators
@@ -103,7 +102,6 @@ const AllCampaigns = () => {
         priority: campaign.priority,
         moderators: campaign.moderators,
       });
-      console.log("campaign:", campaign)
 
       setIsEdit(true);
       toggle();

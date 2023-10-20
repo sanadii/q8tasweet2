@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { GuaranteeStatusOptions, GenderOptions } from "Components/constants";
-import { addNewCampaignGuarantee, addNewCampaignAttendee } from "../../../../store/actions";
+import { addNewCampaignGuarantee, addNewCampaignAttendee } from "store/actions";
 import { usePermission } from "Components/Hooks";
 
 const Id = (cellProps) => {
@@ -36,9 +36,9 @@ const Name = (cellProps) => {
 const Actions = (props) => {
     const dispatch = useDispatch();
     const {
-        isAdmin,
+        canChangeConfig,
         canAddCampaignGuarantee,
-        canAddCampaignAttendee,
+        canViewCampaignAttendee,
     } = usePermission();
 
     const {
@@ -125,7 +125,7 @@ const Actions = (props) => {
                 </div>
             }
 
-            {canAddCampaignAttendee &&
+            {canChangeConfig || canViewCampaignAttendee &&
                 <div className="flex-shrink-0">
                     {renderElectorAttendeeButton()}
                 </div>

@@ -39,12 +39,12 @@ class PermissionSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['id', 'name', 'category', 'role']
+        fields = ['id', 'name', 'display_name', 'category']
 
 
 class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
-    roles = serializers.SerializerMethodField()  # Changed the field name to 'roles'
+    names = serializers.SerializerMethodField()  # Changed the field name to 'names'
     permissions = serializers.SerializerMethodField()
 
     class Meta:
@@ -52,20 +52,20 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email", 
                   "first_name", "last_name", "full_name", "image",
                   "is_active", "is_staff",
-                  'roles', 'permissions'
+                  'names', 'permissions'
                   ]
         
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
 
-    def get_roles(self, obj):
-        # Gets the role attribute for all the groups associated with the user
-        roles = [group.role for group in obj.groups.all()]
+    def get_names(self, obj):
+        # Gets the name attribute for all the groups associated with the user
+        names = [group.name for group in obj.groups.all()]
         
-        # Format each role to prepend "is" and capitalize the first letter
-        formatted_roles = ["is" + role.replace(" ", "").capitalize() for role in roles]
+        # Format each name to prepend "is" and capitalize the first letter
+        formatted_names = ["is" + name.replace(" ", "").capitalize() for name in names]
         
-        return formatted_roles
+        return formatted_names
 
     def get_permissions(self, obj):
         user_permissions = list(obj.user_permissions.all().values_list('codename', flat=True))

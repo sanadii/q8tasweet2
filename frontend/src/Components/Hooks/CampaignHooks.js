@@ -7,7 +7,7 @@ import usePermission from './usePermission';
 
 const useSupervisorMembers = (campaignRoles, campaignMembers) => {
   const supervisorRoleId = useMemo(() => {
-    return campaignRoles.find(role => role.role === "campaignSupervisor")?.id;
+    return campaignRoles.find(role => role.name === "campaignSupervisor")?.id;
   }, [campaignRoles]);
 
   const supervisorMembers = useMemo(() => {
@@ -17,51 +17,40 @@ const useSupervisorMembers = (campaignRoles, campaignMembers) => {
   return supervisorMembers;
 };
 
-// const useAttendantMembers = (campaignRoles, campaignMembers) => {
-//   const attendantRoleId = useMemo(() => {
-//     return campaignRoles.find(role => role.role === "campaignAttendant")?.id;
-//   }, [campaignRoles]);
-
-//   const attendantMembers = useMemo(() => {
-//     return campaignMembers.filter(member => member.role === attendantRoleId);
-//   }, [campaignMembers, attendantRoleId]);
-
-//   return attendantMembers;
-// };
 
 const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
   // Permissions
   const {
     canChangeConfig,
-    canChangeConfigs,
     canChangeCampaign,
     canChangeMember,
-    // canViewCampaignAttendees,
+    canChangeCampaignMember,
   } = usePermission();
 
 
   return useMemo(() => {
     const currentRoleId = currentCampaignMember?.role;
-    let excludedRoleStrings = [];
+    console.log("currentRoleId:", currentRoleId)
+    let excludedRoleStrings = ["campaignMember"]; // Excluded for all by default
 
     switch (true) {
       case canChangeConfig:
-        // No roles excluded for CampaignDirector.
+        excludedRoleStrings = ["campaignMember"];
         break;
       case canChangeCampaign:
-        excludedRoleStrings = ["campaignModerator", "campaignCandidate"];
+        excludedRoleStrings = ["campaignMember", "campaignModerator", "campaignCandidate"];
         break;
-      case canChangeMember:
-        excludedRoleStrings = ["campaignModerator", "campaignCoordinator", "campaignCandidate", "campaignSupervisor"];
+      case canChangeCampaignMember:
+        excludedRoleStrings = ["campaignMember", "campaignModerator", "campaignCoordinator", "campaignCandidate", "campaignSupervisor"];
         break;
       default:
         break;
     }
 
     const displayedRoles = campaignRoles.filter((role) => {
-      const isExcluded = excludedRoleStrings.includes(role.role);
+      const isExcluded = excludedRoleStrings.includes(role.name);
       if (isExcluded) {
-        console.log("Excluding role:", role.role);
+        console.log("Excluding role:", role.name);
       }
       return !isExcluded;
     });

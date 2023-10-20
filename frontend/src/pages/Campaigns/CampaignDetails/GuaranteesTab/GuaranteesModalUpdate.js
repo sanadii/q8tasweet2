@@ -27,7 +27,7 @@ const GuaranteesModalUpdate = ({
   const {campaignId, campaignElectionCommittees} = useSelector(campaignSelector); // Directly use without redundant useState
 
   const GurantorOptions = campaignMembers.filter(
-    (member) => member.role === 2 || member.role === 3 || member.role === 4
+    (member) => member.role === 31 || member.role === 32 || member.role === 33 || member.role === 34
   );
   const sortedGurantorOptions = GurantorOptions.sort((a, b) => a.role - b.role);
 

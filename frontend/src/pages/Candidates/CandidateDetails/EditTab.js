@@ -59,7 +59,7 @@ const EditTab = ({ candidate }) => {
     formData.append("image", selectedImage);
     formData.append("folder", "elections"); // Replace "elections" with the actual folder name
   } else {
-    console.log("No selected image");
+    //
   }
 
   const validation = useFormik({

@@ -31,7 +31,9 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   // Campaign Supervisor Options
   const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
   const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
-  console.log("filteredRoleOptions", filteredRoleOptions)
+  console.log("filteredRoleOptions:", filteredRoleOptions);
+  console.log("Original campaignRoles:", campaignRoles);
+
 
   // Election Committee Options
   const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
@@ -188,8 +190,8 @@ const buildFields = (currentUser, campaignMember, selectedRoleString, campaignCo
       type: "select",
       options: filteredRoleOptions.map(role => ({
         id: role.id,
-        label: role.name,
-        role: role.role,
+        label: role.displayName,
+        role: role.name,
         value: role.id
       })),
       name: "role",
