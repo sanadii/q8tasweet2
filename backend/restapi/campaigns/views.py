@@ -225,8 +225,8 @@ class UpdateCampaign(APIView):
         except Campaign.DoesNotExist:
             return Response({"error": "Campaign not found"}, status=404)
         
-        serializer = CampaignsSerializer(data=request.data, context={'request': request})
-        
+        serializer = CampaignsSerializer(instance=campaign, data=request.data, partial=True, context={'request': request})
+
         if serializer.is_valid():
             serializer.save()
             return Response({"data": serializer.data, "count": 0, "code": 200})

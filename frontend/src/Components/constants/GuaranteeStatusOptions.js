@@ -35,3 +35,8 @@ export const GuaranteeStatusOptions = [
 
   },
 ];
+
+export const STATUS_MAP = GuaranteeStatusOptions.reduce((accumulator, currentValue) => {
+  accumulator[currentValue.value] = currentValue.id;
+  return accumulator;
+}, {});

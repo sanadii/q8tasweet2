@@ -185,8 +185,11 @@ const Elections = (state = IntialState, action) => {
             ? { ...election, ...action.payload.data }
             : election
         ),
-        isElectionUpdate: true,
-        isElectionUpdateFail: false,
+        electionDetails: state.electionDetails.id.toString() === action.payload.data.id.toString()
+          ? { ...state.electionDetails, ...action.payload.data }
+          : state.electionDetails,
+        isCampaignUpdate: true,
+        isCampaignUpdateFail: false,
       };
     case UPDATE_ELECTION_FAIL:
       return {

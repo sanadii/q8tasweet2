@@ -81,7 +81,7 @@ const Campaigns = (state = IntialState, action) => {
 
             campaignElectionCandidates: action.payload.data.campaignElectionCandidates,
             campaignElectionCommittees: action.payload.data.campaignElectionCommittees,
-            
+
             isCampaignCreated: false,
             isCampaignSuccess: true,
           };
@@ -198,6 +198,9 @@ const Campaigns = (state = IntialState, action) => {
             ? { ...campaign, ...action.payload.data }
             : campaign
         ),
+        campaignDetails: state.campaignDetails.id.toString() === action.payload.data.id.toString()
+          ? { ...state.campaignDetails, ...action.payload.data }
+          : state.campaignDetails,
         isCampaignUpdate: true,
         isCampaignUpdateFail: false,
       };

@@ -71,7 +71,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
         notes: values.notes,
       };
       dispatch(updateCampaignMember(updatedCampaignMember));
-
       validation.resetForm();
     },
   });

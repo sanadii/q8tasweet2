@@ -13,7 +13,7 @@ class Campaign(TrackModel, TaskModel):
     # Media Coverage
     twitter = models.CharField(max_length=120, blank=True, null=True)
     instagram = models.CharField(max_length=120, blank=True, null=True)
-    website = models.URLField(max_length=120, blank=True, null=True)
+    website = models.CharField(max_length=120, blank=True, null=True)
 
     # Activities
 
