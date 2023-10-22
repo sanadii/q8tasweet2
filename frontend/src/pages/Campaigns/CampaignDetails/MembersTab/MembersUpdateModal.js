@@ -27,13 +27,11 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     campaignElectionCommittees
   } = useSelector(campaignSelector);
 
-
   // Campaign Supervisor Options
   const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
   const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
   console.log("filteredRoleOptions:", filteredRoleOptions);
   console.log("Original campaignRoles:", campaignRoles);
-
 
   // Election Committee Options
   const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
@@ -92,7 +90,18 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
 
 
   // Get formFields & Handle Form Submission
-  const formFields = useMemo(() => buildFields(currentUser, campaignMember, selectedRoleString, campaignCommitteeList, supervisorOptions, filteredRoleOptions), [selectedRoleString, campaignCommitteeList, supervisorOptions, filteredRoleOptions]);
+  const formFields = useMemo(
+    () =>
+      buildFields(
+        currentUser,
+        campaignMember,
+        selectedRoleString,
+        campaignCommitteeList,
+        supervisorOptions,
+        filteredRoleOptions
+      ),
+    [currentUser, campaignMember, selectedRoleString, campaignCommitteeList, supervisorOptions, filteredRoleOptions]
+  );
 
   const handleUpdateButton = useCallback(() => validation.submitForm(), [validation]);
 
@@ -185,6 +194,7 @@ const buildFields = (currentUser, campaignMember, selectedRoleString, campaignCo
   const defaultFields = [
     isCurrentUserCampaignMember && {
       id: "role-field",
+      name: "role",
       label: "العضوية",
       type: "select",
       options: filteredRoleOptions.map(role => ({
@@ -193,19 +203,18 @@ const buildFields = (currentUser, campaignMember, selectedRoleString, campaignCo
         role: role.name,
         value: role.id
       })),
-      name: "role",
     },
     {
       id: "phone-field",
+      name: "phone",
       label: "الهاتف",
       type: "text",
-      name: "phone"
     },
     {
       id: "notes-field",
+      name: "notes",
       label: "ملاحظات",
       type: "textarea",
-      name: "notes"
     }
   ];
 

@@ -16,6 +16,8 @@ const OverViewChart = ({ results }) => {
     const series = GuaranteeStatusOptions.map(option => results.statusCounts[option.value]);
     const labels = GuaranteeStatusOptions.map(option => option.name);
 
+    const description = "هذا المكون يعرض مخططًا دائريًا يمثل توزيع حالات الضمان بناءً على الأوضاع المختلفة.";
+
     const options = {
         chart: {
             height: 300,
@@ -34,21 +36,16 @@ const OverViewChart = ({ results }) => {
     };
     return (
         <React.Fragment>
-
-            <Row className="align-items-center">
-                <Col sm={6} className="d-flex justify-content-start align-items-center">
-                    <h5 className="card-title mb-3"><strong>المضامين: {results.totalGuarantees}</strong></h5>
-                </Col>
-            </Row>
+            <h5 className="card-title mb-3"><strong>المضامين: {results.totalGuarantees}</strong></h5>
+            <p>{description}</p>
             <ReactApexChart dir="rtl"
                 className="apex-charts"
                 series={series}
                 options={options}
                 type="pie"
-                height={230}
+                height={280}
             />
         </React.Fragment>
-
     )
 };
 

@@ -18,6 +18,10 @@ class Election(TrackModel, TaskModel):
     elect_votes = models.PositiveIntegerField(blank=True, null=True)
     elect_seats = models.PositiveIntegerField(blank=True, null=True)
 
+    # Calculations
+    first_winner_votes = models.PositiveIntegerField(blank=True, null=True)
+    last_winner_votes = models.PositiveIntegerField(blank=True, null=True)
+
     # Elector
     electors = models.PositiveIntegerField(blank=True, null=True)
     electors_males = models.PositiveIntegerField(blank=True, null=True)

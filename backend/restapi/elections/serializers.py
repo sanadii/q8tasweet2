@@ -20,6 +20,7 @@ class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "id", "name", "image", "due_date",
             "category", "sub_category",
             "elect_type", "elect_result", "elect_votes", "elect_seats",
+            "first_winner_votes", "last_winner_votes",
             "electors", "electors_males", "electors_females",
             "attendees", "attendees_males", "attendees_females",
         ]

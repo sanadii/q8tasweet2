@@ -1,26 +1,29 @@
 // campaignCalculation.js
+
 import { GuaranteeStatusOptions, STATUS_MAP } from "Components/constants";
 
+// Helper function to calculate percentage
+const calculatePercentage = (count, total) => {
+    const percentage = (count / total) * 100;
+    return isNaN(percentage) ? 0 : parseFloat(percentage.toFixed(1));
+};
+
+// Function to calculate campaign data
 export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
-    
-    // const targetVotes = campaignDetails.targetVotes;
-    // const targeetGuarantees = targetVotes/campaignGuarantees.length;
-    // const targeetConfirmed = targetVotes/targeetConfirmed.length;
-    // const targeetAttended = targetVotes/targeetAttended.length;
-    
-
-
     const statusCounts = {};
     const attendeesStatusCounts = {};
+
     GuaranteeStatusOptions.forEach(option => {
         statusCounts[option.value] = 0;
         attendeesStatusCounts[option.value] = 0;
     });
 
+    let targetVotes = campaignDetails.targetVotes;
     let totalGuarantees = campaignGuarantees.length;
+    let totalContactedGuarantees = 0;
+    let totalConfirmedGuarantees = 0; // Contacted + Confirmed
+    let totalConfirmedAttendees = 0;
     let totalAttendees = 0;
-    let contactedGuarantees = 0;
-    let confirmedGuarantees = 0;
 
     campaignGuarantees.forEach(guarantee => {
         const statusOption = GuaranteeStatusOptions.find(option => option.id === guarantee.status);
@@ -32,44 +35,43 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
             }
         }
         if (guarantee.status === STATUS_MAP.Contacted || guarantee.status === STATUS_MAP.Confirmed) {
-            contactedGuarantees++;
+            totalContactedGuarantees++;
         }
-        if (guarantee.status === STATUS_MAP.Contacted) {
-            confirmedGuarantees++;
+        if (guarantee.status === STATUS_MAP.Confirmed) {
+            totalConfirmedGuarantees++;
+        }
+        if (guarantee.status === STATUS_MAP.Confirmed && guarantee.attended === true) {
+            totalConfirmedAttendees++;
         }
     });
-
-    const calculatePercentage = (count) => {
-        const percentage = (count / totalGuarantees) * 100;
-        if (isNaN(percentage)) {
-            console.error("Percentage calculations failed for count:", count);
-            return 0;
-        }
-        return parseFloat(percentage.toFixed(1));
-    };
 
     const statusPercentages = {};
     const attendeesStatusPercentages = {};
 
     Object.keys(statusCounts).forEach(status => {
-        statusPercentages[status] = calculatePercentage(statusCounts[status]);
-        attendeesStatusPercentages[status] = calculatePercentage(attendeesStatusCounts[status]);
+        statusPercentages[status] = calculatePercentage(statusCounts[status], totalGuarantees);
+        attendeesStatusPercentages[status] = calculatePercentage(attendeesStatusCounts[status], totalAttendees);
     });
 
     return {
-        statusCounts,
+        targetVotes,
         totalGuarantees,
+        totalContactedGuarantees,
+        totalConfirmedGuarantees,
+        totalConfirmedAttendees,
         totalAttendees,
+
+        statusCounts,
         attendeesStatusCounts,
         statusPercentages,
         attendeesStatusPercentages,
-        contactedPercentage: calculatePercentage(contactedGuarantees),
-        confirmedPercentage: calculatePercentage(confirmedGuarantees),
-        attendedPercentage: calculatePercentage(totalAttendees)
+        contactedPercentage: calculatePercentage(totalContactedGuarantees, totalGuarantees),
+        confirmedPercentage: calculatePercentage(totalConfirmedGuarantees, totalGuarantees),
+        attendedPercentage: calculatePercentage(totalAttendees, totalGuarantees)
     };
-}
+};
 
-// Construct table with Guarantors
+// Function to aggregate guarantors
 export function aggregateGuarantors(guarantees, members) {
     const memberMap = members.reduce((map, member) => {
         map[member.id] = member.fullName;
@@ -91,23 +93,25 @@ export function aggregateGuarantors(guarantees, members) {
     }, {});
 }
 
-
+// Function to get aggregated guarantor data
 export function getAggregatedGuarantorData(campaignGuarantees, campaignMembers) {
     const aggregatedGuarantors = aggregateGuarantors(campaignGuarantees, campaignMembers);
     return Object.values(aggregatedGuarantors);
 }
 
-// For table calculations
+// Function to get guarantees counts for a member
 export function getGuaranteesCountsForMember(guarantees, memberId) {
     return guarantees.filter(guarantee => guarantee.member === memberId).length;
 }
 
+// Function to get attendees counts for a member
 export function getAttendeesCountsForMember(guarantees, memberId) {
     return guarantees.filter(
         guarantee => guarantee.member === memberId && guarantee.attended
     ).length;
 }
 
+// Function to get status count for a member
 export function getStatusCountForMember(campaignGuarantees, memberId, statusValue) {
     return campaignGuarantees.filter(guarantee =>
         guarantee.member === memberId &&
@@ -115,6 +119,7 @@ export function getStatusCountForMember(campaignGuarantees, memberId, statusValu
     ).length;
 }
 
+// Function to construct status columns
 export function constructStatusColumns(campaignGuarantees) {
     return GuaranteeStatusOptions.map(statusOption => ({
         Header: statusOption.name,
@@ -124,7 +129,3 @@ export function constructStatusColumns(campaignGuarantees) {
         }
     }));
 }
-
-
-
-
