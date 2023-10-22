@@ -72,23 +72,22 @@ const GuaranteeTarget = ({ results }) => {
         }]
     };
     return (
-        <Card className="h-100">
-            <CardBody>
-                <Row className="align-items-center">
-                    <Col sm={6} className="d-flex justify-content-start align-items-center">
-                        <h5 className="card-title mb-3"><strong>المضامين: {results.totalGuarantees}</strong></h5>
-                    </Col>
-                </Row>
+        <React.Fragment>
+            <Row className="align-items-center">
+                <Col sm={6} className="d-flex justify-content-start align-items-center">
+                    <h5 className="card-title mb-3"><strong>المضامين: {results.totalGuarantees}</strong></h5>
+                </Col>
+            </Row>
 
-                <ReactApexChart dir="rtl"
-                    className="apex-charts"
-                    series={series}
-                    options={options}
-                    type="radialBar"
-                    height={328.7}
-                />
-            </CardBody>
-        </Card>
+            <ReactApexChart dir="rtl"
+                className="apex-charts"
+                series={series}
+                options={options}
+                type="radialBar"
+                height={328.7}
+            />
+        </React.Fragment>
+
 
     );
 };

@@ -21,7 +21,8 @@ const OverviewTab = () => {
     currentCampaignMember,
     campaignMembers,
     campaignRoles,
-    campaignCandidates
+    campaignElectionCandidates,
+    campaignElectionCommittees,
   } = useSelector(campaignSelector);
 
   const {
@@ -68,9 +69,12 @@ const OverviewTab = () => {
               <h5 className="card-title mb-3"><strong>الإنتخابات</strong></h5>
               <ul>
                 <li>الانتخابات: <strong>{campaignDetails.election.name}</strong></li>
-                <li>المرشحين: <strong>{(campaignCandidates?.length ?? 0)} مرشح</strong></li>
+                <li>المرشحين: <strong>{(campaignElectionCandidates?.length ?? 0)} مرشح</strong></li>
                 <li>المقاعد: <strong>{campaignDetails.election.electSeats} مقعد</strong></li>
                 <li>الأصوات: <strong>{campaignDetails.election.electVotes} صوت</strong></li>
+                <li>اللجان: <strong>{(campaignElectionCommittees?.length ?? 0)} لجنة</strong></li>
+
+
               </ul>
               <hr />
               <h5 className="card-title mb-3"><strong>الإدارة</strong></h5>
@@ -115,26 +119,49 @@ const OverviewTab = () => {
         <Col lg={9}>
           <Card>
             <CardBody>
-              <h5 className="card-title mb-3">عن المرشح</h5>
-              {campaignDetails.candidate.description}
-              <Row>
-                <Col xs={6} md={4}>
+              <h5 className="card-title mb-3"><strong>عن المرشح</strong></h5>
+              {campaignDetails.description}
+              <Row className="flex-d">
+                <Col>
                   <div className="d-flex mt-4">
                     <div className="flex-shrink-0 avatar-xs align-self-center me-3">
                       <div className="avatar-title bg-light rounded-circle fs-16 text-primary">
-                        <i className="ri-user-2-fill"></i>
+                        <i className="ri-twitter-fill"></i>
                       </div>
                     </div>
                     <div className="flex-grow-1 overflow-hidden">
                       <p className="mb-1">تويتر :</p>
                       <h6 className="text-truncate mb-0">
-                        {campaignDetails.candidate.name}
+                        <Link
+                          to={`https://www.twitter.com/${campaignDetails.twitter}`}
+                          className="fw-semibold">
+                          {campaignDetails.twitter}
+                        </Link>
+                      </h6>
+                    </div>
+                  </div>
+                </Col>
+                <Col>
+                  <div className="d-flex mt-4">
+                    <div className="flex-shrink-0 avatar-xs align-self-center me-3">
+                      <div className="avatar-title bg-light rounded-circle fs-16 text-primary">
+                        <i className="ri-instagram-fill"></i>
+                      </div>
+                    </div>
+                    <div className="flex-grow-1 overflow-hidden">
+                      <p className="mb-1">انستقرام :</p>
+                      <h6 className="text-truncate mb-0">
+                        <Link
+                          to={`https://www.instagram.com/${campaignDetails.instagram}`}
+                          className="fw-semibold">
+                          {campaignDetails.instagram}
+                        </Link>
                       </h6>
                     </div>
                   </div>
                 </Col>
 
-                <Col xs={6} md={4}>
+                <Col>
                   <div className="d-flex mt-4">
                     <div className="flex-shrink-0 avatar-xs align-self-center me-3">
                       <div className="avatar-title bg-light rounded-circle fs-16 text-primary">
@@ -143,8 +170,10 @@ const OverviewTab = () => {
                     </div>
                     <div className="flex-grow-1 overflow-hidden">
                       <p className="mb-1">الموقع الإلكتروني :</p>
-                      <Link to="#" className="fw-semibold">
-                        www.Q8Tasweet.com
+                      <Link
+                        to={campaignDetails.website}
+                        className="fw-semibold">
+                        {campaignDetails.website}
                       </Link>
                     </div>
                   </div>

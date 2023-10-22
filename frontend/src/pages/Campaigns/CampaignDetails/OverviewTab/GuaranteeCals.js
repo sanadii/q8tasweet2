@@ -17,7 +17,7 @@ const GuaranteeCals = ({ campaignGuarantees, results }) => {
 
     return (
         <Card className="h-100">
-        <CardBody>
+            <CardBody>
                 <Row className="align-items-center">
                     <Col sm={6} className="d-flex justify-content-start align-items-center">
                         <h5 className="card-title mb-3"><strong>الحضور: {results.totalAttendees}</strong></h5>
@@ -54,7 +54,10 @@ const GuaranteeCals = ({ campaignGuarantees, results }) => {
 
                     <div className="flex-grow-1">
                         <div>
-                            <Progress value={results.contactedPercentage} color="success" className="animated-progess custom-progress progress-label" >
+                            <Progress
+                                value={results.contactedPercentage}
+                                color="success"
+                                className="animated-progess custom-progress progress-label" >
                                 <div className="label">{results.contactedPercentage}%</div>
                             </Progress>
                         </div>
