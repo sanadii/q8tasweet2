@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { ImageCampaignCard } from "../../../Components/Common";
+import { BreadCrumb, ImageCampaignCard } from "Components/Common";
 import { userSelector, campaignSelector, categorySelector } from 'Selectors';
 
 import { Link } from "react-router-dom";
 
-import { getCampaigns, getModeratorUsers, getCategories } from "../../../store/actions";
+import { getCampaigns, getModeratorUsers, getCategories } from "store/actions";
 
 
 const CampaignGrid = () => {

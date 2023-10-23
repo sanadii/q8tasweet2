@@ -7,27 +7,34 @@ from django.views.generic import TemplateView
 from rest_framework.schemas import get_schema_view
 from rest_framework.documentation import include_docs_urls
 
-from restapi.admin import (
-    candidate_admin_site,
-    election_admin_site,
-    campaign_admin_site,
-    elector_admin_site,
-    category_admin_site,
-    user_admin_site,
-    )
+# from restapi.admin import (
+#     candidate_admin_site,
+#     election_admin_site,
+#     campaign_admin_site,
+#     elector_admin_site,
+#     category_admin_site,
+#     user_admin_site,
+#     )
 
 urlpatterns = [
     # Django Admin
     path("admin/", admin.site.urls),
-    path('admin/restapi/elections/', election_admin_site.urls, name='election-admin'),
-    path('admin/restapi/candidates/', candidate_admin_site.urls, name='candidate-admin'),
-    path('admin/restapi/campaigns/', campaign_admin_site.urls, name='campaign-admin'),
-    path('admin/restapi/electors/', elector_admin_site.urls, name='elector-admin'),
-    path('admin/restapi/categories/', category_admin_site.urls, name='category-admin'),
-    path('admin/restapi/users/', user_admin_site.urls, name='user-admin'),
+    # path('admin/elections/', election_admin_site.urls, name='election-admin'),
+    # path('admin/candidates/', candidate_admin_site.urls, name='candidate-admin'),
+    # path('admin/campaigns/', campaign_admin_site.urls, name='campaign-admin'),
+    # path('admin/electors/', elector_admin_site.urls, name='elector-admin'),
+    # path('admin/categories/', category_admin_site.urls, name='category-admin'),
+    # path('admin/users/', user_admin_site.urls, name='user-admin'),
 
     # Applications
-    path("restapi/", include(("restapi.urls", "restapi"), namespace="restapi")),
+    # path("restapi/", include(("restapi.urls", "restapi"), namespace="restapi")),
+    path('campaigns/', include('apps.campaigns.urls')),
+    path('candidates/', include('apps.candidates.urls')),
+    path('categories/', include('apps.categories.urls')),
+    path('elections/', include('apps.elections.urls')),
+    path('electors/', include('apps.electors.urls')),
+    path('Config/', include('apps.configs.urls')),
+    path('auth/', include('apps.auths.urls')),
 
     # Schema & Documentation
     path("docs/", include_docs_urls(title="WorkspaceAPI")),

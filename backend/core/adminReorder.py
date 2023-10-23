@@ -4,47 +4,47 @@ ADMIN_REORDER = (
     'sites',
 
     # Election
-    {'app': 'restapi', 'label': 'Election', 'models': (
-        'restapi.Election',
-        'restapi.ElectionCandidate',
-        'restapi.ElectionCommittee',
-        'restapi.ElectionCommitteeResult'
+    {'app': 'elections', 'label': 'Election', 'models': (
+        'apps.election.Election',
+        'apps.election.ElectionCandidate',
+        'apps.election.ElectionCommittee',
+        'apps.election.ElectionCommitteeResult'
     )},
 
     # Candidate
-    {'app': 'restapi', 'label': 'Candidate', 'models': (
-        'restapi.Candidate',
+    {'app': 'candidates', 'label': 'Candidate', 'models': (
+        'apps.candidates.Candidate',
     )},
 
     # Campaign
-    {'app': 'restapi', 'label': 'Campaign', 'models': (
-        'restapi.Campaign',
-        'restapi.CampaignMember',
-        'restapi.CampaignGuarantee',
-        'restapi.CampaignAttendee'
+    {'app': 'campaigns', 'label': 'Campaign', 'models': (
+        'apps.campaigns.Campaign',
+        'apps.campaigns.CampaignMember',
+        'apps.campaigns.CampaignGuarantee',
+        'apps.campaigns.CampaignAttendee'
     )},
 
     # Elector
-    {'app': 'restapi', 'label': 'Elector', 'models': (
-        'restapi.Elector',
+    {'app': 'electors', 'label': 'Elector', 'models': (
+        'appas.electors.Elector',
     )},
 
     # Taxonomy
-    {'app': 'restapi', 'label': 'Taxonomies', 'models': (
-        'restapi.Category',
-        'restapi.Tag',
-        'restapi.Area',
+    {'app': 'categories', 'label': 'Taxonomies', 'models': (
+        'apps.categories.Category',
+        'apps.categories.Tag',
+        'apps.categories.Area',
     )},
     
     # Auth
     {'app': 'auth', 'label': 'Authorisation','models': (
-        'restapi.User',
-        'auth.Group',
-        'auth.Permission',
+        'apps.auths.User',
+        'apps.auths.Group',
+        'apps.auths.Permission',
     )},
 
     # Configurations
-    {'app': 'restapi', 'label': 'Configurations','models': (
-        'restapi.Config',
+    {'app': 'configs', 'label': 'Configurations','models': (
+        'apps.configs.Config',
     )},
 )

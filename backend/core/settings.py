@@ -30,11 +30,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     
+    # Third Party Apps
     "django.contrib.staticfiles",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     'admin_reorder',
-    "restapi",
-    "rest_framework_simplejwt.token_blacklist",
+
+    # Q8 Tasweet Apps
+    "apps.auths",
+    "apps.campaigns",
+    "apps.elections", "apps.categories",
+    "apps.candidates",
+    "apps.electors",
+    # "apps.profiles",
 ]
 
 MIDDLEWARE = [
@@ -64,7 +72,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "restapi.configs.context_processors.site_configs",
+                # "apps.configs.configs.context_processors.site_configs",
 
             ],
         },
@@ -143,7 +151,7 @@ CSRF_COOKIE_SECURE = False  # Set to True in a production environment with HTTPS
 CSRF_COOKIE_SAMESITE = 'None'  # or 'Lax' or 'Strict' depending on your needs
 
 # Custom user model
-AUTH_USER_MODEL = "restapi.User"
+AUTH_USER_MODEL = "auths.User"
 
 # JWT settings
 SIMPLE_JWT = {

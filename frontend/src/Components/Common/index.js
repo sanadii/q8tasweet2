@@ -1,5 +1,8 @@
 // Components/Common/index.js
 
+// Common Components
+export { default as BreadCrumb } from "./BreadCrumb";
+
 // Table use
 export { ExportCSVModal } from "./ExportCSVModal";
 export { default as TableContainer } from "./TableContainer";
