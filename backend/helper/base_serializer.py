@@ -1,7 +1,6 @@
-# restapi/base_serializer.py
+# helper/base_serializer.py
 from rest_framework import serializers
 from apps.auths.models import User
-# from restapi.models import User, Candidate, Election
 import json
 
 

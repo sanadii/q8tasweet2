@@ -28,7 +28,7 @@ import {
 // UI & Utilities
 import { Card, CardHeader, CardBody, Col, Row, Progress } from "reactstrap";
 import { DefaultProgressExample, BackgroundColorExample, LabelExample, MultipleBarsExample, HeightExample, StripedExample, AnimatedStripedExample, GradientExample, AnimatedExample, CustomExample, CustomProgressExample, ContentExample, ProgressWithStepExample, StepProgressArrowExample } from './UiProgressCode';
-import PreviewCardHeader from "Components/Common/PreviewCardHeader";
+import PreviewCardHeader from "Components/Common/Components/PreviewCardHeader";
 
 
 const OverViewGuarantees = () => {

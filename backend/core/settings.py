@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'admin_reorder',
 
     # Q8 Tasweet Apps
+    "core",
+    "management",
+    'apps.configs',
     "apps.auths",
     "apps.campaigns",
     "apps.elections", "apps.categories",
@@ -72,7 +75,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # "apps.configs.configs.context_processors.site_configs",
+                "apps.configs.configs.context_processors.site_configs",
 
             ],
         },

@@ -31,7 +31,7 @@ import React, {
   import classnames from "classnames";
   
   // Component Import
-  import Loader from "../../../Components/Common/Loader";
+  import Loader from "../../../Components/Common/Components/Loader";
 
 const AttendeesTab = ({ candidateElections }) => {
     return (

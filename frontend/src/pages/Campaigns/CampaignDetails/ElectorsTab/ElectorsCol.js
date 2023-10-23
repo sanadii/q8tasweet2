@@ -51,6 +51,10 @@ const Actions = (props) => {
         electors,
     } = props;
 
+    // if user is not a member (eg Admin, SuperAdmin), to open a model to assign the Guarantor / Attendand (+ Committee)
+    let campaignMember = currentCampaignMember ? currentCampaignMember.id : '';
+    let campaignUser = currentCampaignMember ? currentCampaignMember.user.id : '';
+    let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : '';
     const isElectorInGuarantees = campaignGuarantees.some(item => item.civil === cellProps.row.original.civil);
     const isElectorInAttendees = campaignAttendees.some(item => item.civil === cellProps.row.original.civil);
 
@@ -68,7 +72,7 @@ const Actions = (props) => {
                     e.preventDefault();
                     const newCampaignGuarantee = {
                         campaign: campaignDetails.id,
-                        member: currentCampaignMember.id,
+                        member: campaignMember,
                         civil: cellProps.row.original.civil,
                         status: 1,
                     };
@@ -92,9 +96,9 @@ const Actions = (props) => {
                 onClick={(e) => {
                     e.preventDefault();
                     const newCampaignAttendee = {
-                        user: currentCampaignMember.user,
+                        user: campaignUser,
                         election: campaignDetails.election.id,
-                        committee: currentCampaignMember.committee,
+                        committee: campaignCommittee,
                         civil: cellProps.row.original.civil,
                         status: 1,
                     };
@@ -125,7 +129,7 @@ const Actions = (props) => {
                 </div>
             }
 
-            {canChangeConfig || canViewCampaignAttendee &&
+            {(canChangeConfig || canViewCampaignAttendee) &&
                 <div className="flex-shrink-0">
                     {renderElectorAttendeeButton()}
                 </div>

@@ -8,7 +8,7 @@ import {
 import classnames from "classnames";
 
 // Component Import
-import Loader from "../../../Components/Common/Loader";
+import Loader from "../../../Components/Common/Components/Loader";
 
 const AttendeesTab = ({ electionCandidates }) => {
     return (

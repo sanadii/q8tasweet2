@@ -14,7 +14,7 @@ import SwiperCore, { Autoplay } from "swiper";
 // Components & Hooks
 import { ImageLarge, ImageCampaignBackground } from "Components/Common";
 import usePermission from "Components/Hooks/usePermission";
-import Loader from "Components/Common/Loader";
+import Loader from "Components/Common/Components/Loader";
 
 // Tabs
 import OverviewTab from "./OverviewTab";

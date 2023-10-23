@@ -2,11 +2,6 @@ import { APIClient } from "./api_helper";
 import * as url from "./url_helper";
 import axios from "axios";
 
-const restapi = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: { "Content-Type": "multipart/form-data" },
-});
-
 const api = new APIClient();
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
@@ -171,10 +166,6 @@ export const updateGroup = (group) => api.update(url.UPDATE_GROUP + "/" + group.
 export const deleteGroup = (group) => api.delete(url.DELETE_GROUP + "/" + group);
 
 // Images
-// export const uploadNewImage = (formData) => {
-//   return restapi.post("/uploadImage", formData);
-// };
-
 export const uploadNewImage = (formData) => api.upload(url.UPLOAD_IMAGE, formData);
 export const getImages = () => api.get(url.GET_IMAGES);
 // export const uploadNewImage = (formData) => api.create(url.UPLOAD_NEW_IMAGE, formData);

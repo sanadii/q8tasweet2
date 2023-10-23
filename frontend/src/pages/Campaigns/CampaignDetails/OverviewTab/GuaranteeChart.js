@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactApexChart from "react-apexcharts";
 import { Card, CardHeader, CardBody, Col, Row } from "reactstrap";
-import getChartColorsArray from "Components/Common/ChartsDynamicColor";
+import getChartColorsArray from "Components/Common/Charts/ChartsDynamicColor";
 import { GuaranteeStatusOptions } from "Components/constants";
 
 const OverViewChart = ({ results }) => {

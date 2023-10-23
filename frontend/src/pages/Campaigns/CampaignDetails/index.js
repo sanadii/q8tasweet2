@@ -9,7 +9,7 @@ import { getCampaignDetails } from "../../../store/actions";
 
 // Components
 import Section from "./Section";
-import Loader from "../../../Components/Common/Loader";
+import Loader from "../../../Components/Common/Components/Loader";
 import usePermission from "../../../Components/Hooks/usePermission";
 
 // UI & Utilities

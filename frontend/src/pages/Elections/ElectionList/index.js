@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row } from "reactstrap";
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
+import BreadCrumb from "../../../Components/Common/Components/BreadCrumb";
 import AllElections from "./AllElections";
 import Widgets from "./Widgets";
 

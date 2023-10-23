@@ -1,4 +1,4 @@
-import PrismCode from "Components/Common/Prism";
+import PrismCode from "Components/Common/Components/Prism";
 
 // Default Progress
 

@@ -19,7 +19,7 @@ import { userForgetPassword } from "../../store/actions";
 import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 
-import withRouter from "../../Components/Common/withRouter";
+import withRouter from "../../Components/Common/Components/withRouter";
 
 const ForgetPasswordPage = props => {
   const dispatch = useDispatch();

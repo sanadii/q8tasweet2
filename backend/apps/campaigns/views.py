@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import AuthenticationFailed
 
 # Models
-from apps.auths.models import User
+from apps.auths.models import User, Group
 from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from django.contrib.auth.models import Group
@@ -30,18 +30,15 @@ class GetCampaigns(APIView):
     def get(self, request):
         try:
             # Check if user is admin or superadmin (group.name)
-            admin_group_name = 'admin'
-            super_admin_group_name = 'superadmin'
-            
-            if (
-                request.user.groups.filter(Q(name=admin_group_name) | Q(name=super_admin_group_name)).exists()
-            ):
+            user_id = request.user.id
+
+            if User.objects.filter(pk=user_id, groups__name__in=["admin", "superAdmin"]).exists():
                 campaign_data = Campaign.objects.all()
+
             else:
-                current_user_id = request.user.id
 
                 # Step 1: Query the CampaignMember table
-                member_entries = CampaignMember.objects.filter(user_id=current_user_id)
+                member_entries = CampaignMember.objects.filter(user_id=user_id)
                 
                 # Step 2: Get corresponding Campaign
                 campaign_ids = [entry.campaign.id for entry in member_entries if entry.campaign]
@@ -61,9 +58,6 @@ class GetCampaigns(APIView):
             return Response({"error": str(auth_failed)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 class GetCampaignDetails(APIView):
@@ -86,6 +80,7 @@ class GetCampaignDetails(APIView):
 
 
         MANAGER_ROLES = {"admin", "campaignModerator", "campaignCandidate", "campaignCoordinator"}
+        SUPERVISOR_ROLES = {"campaignSupervisor"}
         MEMBER_ROLES = {"campaignSupervisor", "campaignGuarantor", "campaignAttendant", "campaignSorter"}
 
         # Fetch campaign members based on user/member role
@@ -93,7 +88,7 @@ class GetCampaignDetails(APIView):
             campaign_members = CampaignMember.objects.filter(campaign=campaign)
             campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
         
-        elif user_role in MEMBER_ROLES:
+        elif user_role in SUPERVISOR_ROLES:
             # If user is a supervisor, fetch members they manage and members with managerial roles
             # get_campaign_managed_members = get_campaign_managed_members
             campaign_managers = self.get_campaign_managers(campaign)
@@ -102,7 +97,7 @@ class GetCampaignDetails(APIView):
 
         else:
             # For other roles or non-members, return an empty query set
-            campaign_members = CampaignMember.objects.none()
+            campaign_managed_members = CampaignMember.objects.none()
 
         # Extract user ids from campaign_managed_members to further filter guarantees based on member's user
         managed_user_ids = campaign_managed_members.values_list('user__id', flat=True)
