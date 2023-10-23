@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactApexChart from "react-apexcharts";
-import { Card, CardBody, Col, Row } from "reactstrap";
+import { Card, CardHeader, CardBody, Col, Row } from "reactstrap";
 import getChartColorsArray from "Components/Common/ChartsDynamicColor";
 import { GuaranteeStatusOptions } from "Components/constants";
 
@@ -36,15 +36,24 @@ const OverViewChart = ({ results }) => {
     };
     return (
         <React.Fragment>
-            <h5 className="card-title mb-3"><strong>المضامين: {results.totalGuarantees}</strong></h5>
-            <p>{description}</p>
-            <ReactApexChart dir="rtl"
-                className="apex-charts"
-                series={series}
-                options={options}
-                type="pie"
-                height={280}
-            />
+            <Card>
+                <CardHeader>
+                    <h5 className="card-title">
+                        <strong className="float-end text-success">{results.totalGuarantees}</strong>
+                        <strong>المضامين</strong>
+                    </h5>
+                </CardHeader>
+                <CardBody>
+                    <p>{description}</p>
+                    <ReactApexChart dir="rtl"
+                        className="apex-charts"
+                        series={series}
+                        options={options}
+                        type="pie"
+                        height={280}
+                    />
+                </CardBody>
+            </Card>
         </React.Fragment>
     )
 };

@@ -24,7 +24,7 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     campaignId,
     campaignMembers,
     campaignRoles,
-    campaignElectionCommittees
+    campaignElectionCommittees,
   } = useSelector(campaignSelector);
 
   // Campaign Supervisor Options
@@ -77,7 +77,7 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   // Show formFields based on Selected Role String
   const getRoleString = useCallback((roleId, roles) => {
     const roleObj = roles.find(role => role.id.toString() === roleId.toString());
-    return roleObj ? roleObj.role : null;
+    return roleObj ? roleObj.name : null;
   }, [campaignRoles]);
 
   const [selectedRole, setSelectedRole] = useState(validation.values.role);
@@ -87,6 +87,7 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   }, [validation.values.role]);
 
   const selectedRoleString = getRoleString(selectedRole, campaignRoles);
+  console.log("selectedRoleString:", selectedRoleString)
 
 
   // Get formFields & Handle Form Submission
@@ -109,8 +110,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     setOnModalSubmit(() => handleUpdateButton);
     return () => setOnModalSubmit(null);
   }, []);
-
-
 
   return (
     <Form
@@ -217,6 +216,7 @@ const buildFields = (currentUser, campaignMember, selectedRoleString, campaignCo
       type: "textarea",
     }
   ];
+
 
   const conditionalFields = [
     {

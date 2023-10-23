@@ -19,8 +19,8 @@ const Navdata = () => {
   const [isCurrentState, setIscurrentState] = useState("Dashboard");
 
   const {
-    isAdmin,
-    isEditor,
+    canChangeConfig,
+    canViewCampaign,
     isContributor,
     isModerator,
     isSubscriber
@@ -45,11 +45,11 @@ const Navdata = () => {
   const SettingsMenu = useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings, isSettings);
 
   const menuItems = [
-    ...(isAdmin ? [...AdminMenu, ...SettingsMenu] : []),
+    ...(canChangeConfig ? [...AdminMenu, ...SettingsMenu] : []),
     // ...(isAdmin || isEditor ? EditorMenu : []),
     // ...(isAdmin || isModerator ? ModeratorMenu : []),
     // ...(isAdmin || isContributor ? ContributorMenu : []),
-    // ...(isAdmin || isSubscriber ? CampaignMenu : []),
+    ...(canViewCampaign || isSubscriber ? CampaignMenu : []),
 
   ];
 

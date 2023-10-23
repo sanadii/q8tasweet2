@@ -26,7 +26,7 @@ import {
 } from 'Components/Hooks/campaignCalculation';
 
 // UI & Utilities
-import { Card, CardBody, Col, Row, Progress } from "reactstrap";
+import { Card, CardHeader, CardBody, Col, Row, Progress } from "reactstrap";
 import { DefaultProgressExample, BackgroundColorExample, LabelExample, MultipleBarsExample, HeightExample, StripedExample, AnimatedStripedExample, GradientExample, AnimatedExample, CustomExample, CustomProgressExample, ContentExample, ProgressWithStepExample, StepProgressArrowExample } from './UiProgressCode';
 import PreviewCardHeader from "Components/Common/PreviewCardHeader";
 
@@ -91,34 +91,30 @@ const OverViewGuarantees = () => {
 
     return (
         < Col lg={12}>
-            <Card className="p-3"> {/* Added p-3 for padding to the Card */}
-                <CardBody className="p-3"> {/* Added p-3 for padding to the CardBody */}
-                    <Row className="mb-4 border p-3"> {/* Increased margin-bottom to mb-4 */}
-                        <GuaranteeTargetBar
-                            campaignDetails={campaignDetails}
-                            results={results}
-                        />
-                    </Row>
 
-                    <Row> {/* Added gx-3 for horizontal gutter space */}
-                    <Col sm={6} className="border p-3">
-                            <GuaranteeChart
-                                campaignDetails={campaignDetails}
-                                campaignGuarantees={campaignGuarantees}
-                                results={results}
-                            />
-                        </Col>
-                        <Col sm={6} className="border p-3">
-                            <GuaranteeRadialBar
-                                campaignDetails={campaignDetails}
-                                campaignGuarantees={campaignGuarantees}
-                                results={results}
-                            />
-                        </Col>
-             
-                    </Row>
-                </CardBody>
-            </Card>
+            <GuaranteeTargetBar
+                campaignDetails={campaignDetails}
+                results={results}
+            />
+
+            <Row>
+                <Col sm={6}>
+                    <GuaranteeChart
+                        campaignDetails={campaignDetails}
+                        campaignGuarantees={campaignGuarantees}
+                        results={results}
+                    />
+                </Col>
+                <Col sm={6}>
+                    <GuaranteeRadialBar
+                        campaignDetails={campaignDetails}
+                        campaignGuarantees={campaignGuarantees}
+                        results={results}
+                    />
+                </Col>
+
+            </Row>
+
 
             {/* <Row className="d-flex align-items-stretch pb-3">
       

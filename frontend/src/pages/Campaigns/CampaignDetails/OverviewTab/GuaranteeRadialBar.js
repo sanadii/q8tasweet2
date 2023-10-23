@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactApexChart from "react-apexcharts";
-import { Card, CardBody, Col, Row } from "reactstrap";
+import { Card, CardHeader, CardBody, Col, Row } from "reactstrap";
 import getChartColorsArray from "Components/Common/ChartsDynamicColor";
 import { GuaranteeStatusOptions } from "Components/constants";
 
@@ -80,19 +80,24 @@ const GuaranteeRadialBar = ({ results }) => {
         }]
     };
     return (
-        <React.Fragment>
-            <h5 className="card-title mb-3"><strong>الحضور: {results.totalConfirmedAttendees}</strong></h5>
-            <p>{description}</p>
-            <ReactApexChart dir="rtl"
-                className="apex-charts"
-                series={series}
-                options={options}
-                type="radialBar"
-                height={328.7}
-            />
-        </React.Fragment>
-
-
+        <Card>
+            <CardHeader>
+                <h5 className="card-title">
+                    <strong className="float-end text-success">{results.totalConfirmedAttendees}</strong>
+                    <strong>الحضور</strong>
+                </h5>
+            </CardHeader>
+            <CardBody>
+                <p>{description}</p>
+                <ReactApexChart dir="rtl"
+                    className="apex-charts"
+                    series={series}
+                    options={options}
+                    type="radialBar"
+                    height={328.7}
+                />
+            </CardBody>
+        </Card>
     );
 };
 
