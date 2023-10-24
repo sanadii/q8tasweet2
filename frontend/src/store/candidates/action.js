@@ -53,7 +53,7 @@ export const updateCandidate = (candidate) => ({
 
 export const updateCandidateSuccess = (candidate, candidateId) => ({
   type: UPDATE_CANDIDATE_SUCCESS,
-  payload: candidate, candidateId
+  payload: { candidate, candidateId }
 });
 
 export const updateCandidateFail = (error) => ({

@@ -65,9 +65,9 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       console.log('Form values:', values);
 
       if (isEdit) {
-        
-        const candidateId = candidate ? candidate.id : 0;
 
+        const candidateId = candidate ? candidate.id : 0;
+        console.log("candidateID:", candidateId)
         const formData = new FormData();
         formData.append('name', values.name);
         formData.append('gender', values.gender);
@@ -78,7 +78,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
         console.log('Updated Candidate:', updatedCandidate, candidateId);
 
         // Update candidate
-        dispatch(updateCandidate(updatedCandidate, candidateId));
+        dispatch(updateCandidate({ updatedCandidate, candidateId }));
       } else {
         const formData = new FormData();
         // if (selectedImage) {
