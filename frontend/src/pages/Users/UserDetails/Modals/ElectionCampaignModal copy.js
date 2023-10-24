@@ -167,18 +167,18 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
 
 
     // Add New ElectionCampaign Search & Filter
-    const [searchCandidateElectionInput, setSearchCandidateElectionInput] = useState("");
-    const [campaignList, setCandidateElectionList] = useState(candidateElectionList);
+    const [searchCandidateInput, setSearchCandidateInput] = useState("");
+    const [campaignList, setCandidateList] = useState(CandidateList);
 
     useEffect(() => {
         setCandidateList(
-            candidateElections.filter((candidateElection) =>
+            Candidates.filter((Candidate) =>
                 candidate.name
                     .toLowerCase()
-                    .includes(searchCandidateElectionInput.toLowerCase())
+                    .includes(searchCandidateInput.toLowerCase())
             )
         );
-    }, [candidateElections, searchCandidateElectionInput]);
+    }, [Candidates, searchCandidateInput]);
 
 
     return (
@@ -200,9 +200,9 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
                 style={{ maxHeight: "225px" }}
             >
                 <div className="vstack gap-3">
-                    {candidateElectionList.map((candidateElection) => (
+                    {CandidateList.map((Candidate) => (
                         <Form
-                            key={candidateElection.id}
+                            key={Candidate.id}
                             className="tablelist-form"
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -211,7 +211,7 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
                                         Math.floor(Math.random() * (100 - 20)) + 20
                                     ).toString(),
                                     election_id: election_id,
-                                    candidate_id: candidateElection.id,
+                                    candidate_id: Candidate.id,
                                 };
                                 dispatch(addNewElectionCampaign(newElectionCampaign));
                             }}
@@ -221,11 +221,11 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
                                     type="hidden"
                                     id="id-field"
                                     name="id"
-                                    value={candidateElection.id}
+                                    value={Candidate.id}
                                 />
                                 <div className="avatar-xs flex-shrink-0 me-3">
                                     <img
-                                        src={candidateElection.image}
+                                        src={Candidate.image}
                                         alt=""
                                         className="img-fluid rounded-circle"
                                     />
@@ -233,7 +233,7 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
                                 <div className="flex-grow-1">
                                     <h5 className="fs-13 mb-0">
                                         <Link to="#" className="text-body d-block">
-                                            {candidateElection.name}
+                                            {Candidate.name}
                                         </Link>
                                     </h5>
                                 </div>

@@ -52,26 +52,11 @@ export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
 
 
 // Candidates
-// Candidates
 export const GET_CANDIDATES = "/candidates/getCandidates";
 export const GET_CANDIDATE_DETAILS = "/candidates/getCandidateDetails";
 export const ADD_NEW_CANDIDATE = "/candidates/addNewCandidate";
 export const UPDATE_CANDIDATE = "/candidates/updateCandidate";
 export const DELETE_CANDIDATE = "/candidates/deleteCandidate";
-
-// Candidate Candidate
-export const GET_CANDIDATE_ELECTIONS = "/candidates/getCandidateElections";
-export const GET_CANDIDATE_ELECTION_DETAILS = "/candidates/getCandidateElectionDetails";
-export const ADD_NEW_CANDIDATE_ELECTION = "/candidates/addNewCandidateElection";
-export const UPDATE_CANDIDATE_ELECTION = "/candidates/updateCandidateElection";
-export const DELETE_CANDIDATE_ELECTION = "/candidates/deleteCandidateElection";
-
-// Candidate Campaign
-export const GET_CANDIDATE_CAMPAIGNS = "/candidates/getCandidateCampaigns";
-export const GET_CANDIDATE_CAMPAIGN_DETAILS = "/candidates/getCandidateCampaignDetails";
-export const ADD_NEW_CANDIDATE_CAMPAIGN = "/candidates/addNewCandidateCampaign";
-export const UPDATE_CANDIDATE_CAMPAIGN = "/candidates/updateCandidateCampaign";
-export const DELETE_CANDIDATE_CAMPAIGN = "/candidates/deleteCandidateCampaign";
 
 // Campaigns
 export const GET_CAMPAIGNS = "/campaigns/getCampaigns";
@@ -121,10 +106,10 @@ export const UPDATE_GROUP = "/auth/updateGroup";
 export const DELETE_GROUP = "/auth/deleteGroup";
 
 // Images
-export const UPLOAD_IMAGE = "/configs/uploadImage";
-export const GET_IMAGES = "/configs/uploadImage";
-export const DELETE_IMAGE = "/configs/uploadImage";
-export const UPDATE_IMAGE = "/configs/uploadImage";
+export const UPLOAD_IMAGE = "/media/uploadImage";
+export const GET_IMAGES = "/media/uploadImage";
+export const DELETE_IMAGE = "/media/uploadImage";
+export const UPDATE_IMAGE = "/media/uploadImage";
 
 // Category
 export const GET_CATEGORIES = "/categories/getCategories";

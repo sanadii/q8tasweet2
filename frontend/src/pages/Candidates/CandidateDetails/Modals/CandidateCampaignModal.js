@@ -149,33 +149,33 @@ export const CandidateCampaignModal = ({
 };
 
 const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
-  const { candidateElections, electionCampaigns } = useSelector((state) => ({
-    candidateElections: state.Elections.candidateElections,
+  const { Candidates, electionCampaigns } = useSelector((state) => ({
+    Candidates: state.Elections.Candidates,
     electionCampaigns: state.Elections.electionCampaigns,
   }));
 
-  // State for candidateElectionList
-  const [candidateElectionList, setCandidateElectionList] = useState(candidateElections);
+  // State for CandidateList
+  const [CandidateList, setCandidateList] = useState(Candidates);
 
   // State for electionCampaignList
   const [electionCampaignList, setElectionCampaignList] = useState(electionCampaigns);
 
-  // State for candidateElection search input
-  const [searchCandidateElectionInput, setSearchCandidateElectionInput] = useState('');
+  // State for Candidate search input
+  const [searchCandidateInput, setSearchCandidateInput] = useState('');
 
-  // Filtered list of candidateElections
-  const [filteredCandidateElectionList, setFilteredCandidateElectionList] = useState(electionCampaigns);
+  // Filtered list of Candidates
+  const [filteredCandidateList, setFilteredCandidateList] = useState(electionCampaigns);
 
-  // Update the filtered list when candidateElections or search input changes
+  // Update the filtered list when Candidates or search input changes
   useEffect(() => {
-    setFilteredCandidateElectionList(
-      candidateElectionList.filter((candidateElection) =>
-        candidateElection.name
+    setFilteredCandidateList(
+      CandidateList.filter((Candidate) =>
+        Candidate.name
           .toLowerCase()
-          .includes(searchCandidateElectionInput.toLowerCase())
+          .includes(searchCandidateInput.toLowerCase())
       )
     );
-  }, [candidateElectionList, searchCandidateElectionInput]);
+  }, [CandidateList, searchCandidateInput]);
 
   return (
     <>
@@ -184,8 +184,8 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
           type="text"
           className="form-control bg-light border-light"
           placeholder="Search here..."
-          value={searchCandidateElectionInput}
-          onChange={(e) => setSearchCandidateElectionInput(e.target.value)}
+          value={searchCandidateInput}
+          onChange={(e) => setSearchCandidateInput(e.target.value)}
         />
         <i className="ri-search-line search-icon"></i>
       </div>
@@ -196,15 +196,15 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
         style={{ maxHeight: "225px" }}
       >
         <div className="vstack gap-3">
-          {candidateElectionList.map((candidateElection) => (
+          {CandidateList.map((Candidate) => (
             <Form
-              key={candidateElection.id}
+              key={Candidate.id}
               className="tablelist-form"
               onSubmit={(e) => {
                 e.preventDefault();
                 const newElectionCampaign = {
                   id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-                  election_candidate: candidateElection.id,
+                  election_candidate: Candidate.id,
                 };
                 dispatch(addNewElectionCampaign(newElectionCampaign));
               }}
@@ -214,20 +214,20 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
                   type="hidden"
                   id="id-field"
                   name="id"
-                  value={candidateElection.id}
+                  value={Candidate.id}
                 />
-                <ImageCircle imagePath={candidateElection.image} />
+                <ImageCircle imagePath={Candidate.image} />
 
                 <div className="flex-grow-1">
                   <h5 className="fs-13 mb-0">
                     <Link to="#" className="text-body d-block">
-                      {candidateElection.name} - {candidateElection.id}
+                      {Candidate.name} - {Candidate.id}
                     </Link>
                   </h5>
                 </div>
                 <div className="flex-shrink-0">
                   {electionCampaignList.some(
-                    (item) => item.election_candidate === candidateElection.id
+                    (item) => item.election_candidate === Candidate.id
                   ) ? (
                     <p className="success mb-0 text-success">Added</p>
                   ) : (

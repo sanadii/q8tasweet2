@@ -112,7 +112,7 @@ class ElectionCommitteesSerializer(AdminFieldMixin, serializers.ModelSerializer)
         # Additional logic to customize instance updating
         return super().update(instance, validated_data)
 
-class ElectionCommitteeResultsSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class ElectionCommitteeResultSerializer(AdminFieldMixin, serializers.ModelSerializer):
     admin_serializer_classes = (TrackMixin,)
 
     class Meta:

@@ -5,17 +5,16 @@ import { addNewCandidate, updateCandidate } from "store/actions";
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "Common/Constants";
+
+// UI & Utilities Components
+import { CardHeader, Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 import SimpleBar from "simplebar-react";
 
 // Form and Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
-
-import { CardHeader, Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
-
 import avatar1 from 'assets/images/users/avatar-1.jpg';
-
 
 const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
   const dispatch = useDispatch();
@@ -37,20 +36,16 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
     // console.log("no selected image");
   } else {
     formData.append("image", selectedImage);
-    formData.append("folder", "candidates"); // replace "yourFolderName" with the actual folder name
+    formData.append("folder", "candidates");
   }
 
   // validation
   const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
     initialValues: {
       name: (candidate && candidate.name) || "",
-      image: (candidate && candidate.image) || "",
-      selectedImage: selectedImage,
+      image: selectedImage,
       gender: (candidate && candidate.gender) || 1,
-
-      // Candidate Specification
 
       // Admin
       status: (candidate && candidate.status) || 0,
@@ -59,52 +54,52 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
         candidate && Array.isArray(candidate.moderators)
           ? candidate.moderators.map((moderator) => moderator.id)
           : [],
-
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter Candidate Name"),
       status: Yup.number().integer().required('Status is required'),
       priority: Yup.number().integer().required('priority is required'),
-
-
     }),
-    onSubmit: (values) => {
-      if (isEdit) {
-        const updatedCandidate = {
-          id: candidate ? candidate.id : 0,
-          name: values.name,
-          gender: parseInt(values.gender, 10),
-          image: values.image,
-          selectedImage: selectedImage,
 
-          // Admin
-          status: parseInt(values.status, 10),
-          priority: parseInt(values.priority, 10),
-          moderators: values.moderators,
-        };
+    onSubmit: (values) => {
+      console.log('Form values:', values);
+
+      if (isEdit) {
+        
+        const candidateId = candidate ? candidate.id : 0;
+
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('gender', values.gender);
+        formData.append('status', values.status);
+        formData.append('priority', values.priority);
+        const updatedCandidate = formData;
+
+        console.log('Updated Candidate:', updatedCandidate, candidateId);
 
         // Update candidate
-        dispatch(
-          updateCandidate({ candidate: updatedCandidate, formData: formData })
-        );
+        dispatch(updateCandidate(updatedCandidate, candidateId));
       } else {
-        const newCandidate = {
-          name: values.name,
-          gender: values.gender,
-          image: values.image,
-          selectedImage: selectedImage,
+        const formData = new FormData();
+        // if (selectedImage) {
+        //   formData.append("image", selectedImage);
+        // }
 
-          // Admin
-          status: parseInt(values.status, 10),
-          priority: parseInt(values.priority, 10),
-          moderators: values.moderators,
-        };
-        dispatch(addNewCandidate({ candidate: newCandidate, formData: formData }));
+        // Append other fields if needed
+        formData.append("name", values.name);
+        formData.append("gender", values.gender);
+        formData.append("status", values.status);
+        formData.append("priority", values.priority);
+
+        // Create the new candidate object with FormData
+        const newCandidate = formData;
+        dispatch(addNewCandidate(newCandidate));
       }
 
       validation.resetForm();
       toggle();
     },
+
   });
 
   return (

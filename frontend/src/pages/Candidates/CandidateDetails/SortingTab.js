@@ -33,7 +33,7 @@ import classnames from "classnames";
 // Component Import
 import Loader from "../../../Common/Components/Components/Loader";
 
-const SortingTab = ({ candidateElections }) => {
+const SortingTab = ({ Candidates }) => {
   return (
       <React.Fragment>
           <Row className="g-4 mb-3">

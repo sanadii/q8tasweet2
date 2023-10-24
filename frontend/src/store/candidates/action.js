@@ -17,32 +17,6 @@ import {
 
   // Candidate Details
   GET_CANDIDATE_DETAILS,
-
-  // Candidate Candidate
-  GET_CANDIDATE_CANDIDATES,
-  ADD_NEW_CANDIDATE_CANDIDATE,
-  ADD_NEW_CANDIDATE_CANDIDATE_SUCCESS,
-  ADD_NEW_CANDIDATE_CANDIDATE_FAIL,
-  UPDATE_CANDIDATE_CANDIDATE,
-  UPDATE_CANDIDATE_CANDIDATE_SUCCESS,
-  UPDATE_CANDIDATE_CANDIDATE_FAIL,
-  DELETE_CANDIDATE_CANDIDATE,
-  DELETE_CANDIDATE_CANDIDATE_SUCCESS,
-  DELETE_CANDIDATE_CANDIDATE_FAIL,
-
-
-  // Candidate Campaign
-  GET_CANDIDATE_CAMPAIGNS,
-  ADD_NEW_CANDIDATE_CAMPAIGN,
-  ADD_NEW_CANDIDATE_CAMPAIGN_SUCCESS,
-  ADD_NEW_CANDIDATE_CAMPAIGN_FAIL,
-  UPDATE_CANDIDATE_CAMPAIGN,
-  UPDATE_CANDIDATE_CAMPAIGN_SUCCESS,
-  UPDATE_CANDIDATE_CAMPAIGN_FAIL,
-  DELETE_CANDIDATE_CAMPAIGN,
-  DELETE_CANDIDATE_CAMPAIGN_SUCCESS,
-  DELETE_CANDIDATE_CAMPAIGN_FAIL,
- 
 } from "./actionType";
 
 // Candidate Success / Error
@@ -77,9 +51,9 @@ export const updateCandidate = (candidate) => ({
   payload: candidate,
 });
 
-export const updateCandidateSuccess = (candidate) => ({
+export const updateCandidateSuccess = (candidate, candidateId) => ({
   type: UPDATE_CANDIDATE_SUCCESS,
-  payload: candidate,
+  payload: candidate, candidateId
 });
 
 export const updateCandidateFail = (error) => ({
@@ -120,103 +94,3 @@ export const deleteCandidateFail = (error) => ({
   payload: error,
 });
 
-// CandidateElections
-export const getCandidateElections = (candidate) => ({
-  type: GET_CANDIDATE_CANDIDATES,
-  payload: candidate,
-});
-
-// Candidate Candidates
-export const updateCandidateElection = candidateElection => ({
-  type: UPDATE_CANDIDATE_CANDIDATE,
-  payload: candidateElection,
-});
-export const updateCandidateElectionSuccess = candidateElection => ({
-  type: UPDATE_CANDIDATE_CANDIDATE_SUCCESS,
-  payload: candidateElection,
-});
-export const updateCandidateElectionFail = error => ({
-  type: UPDATE_CANDIDATE_CANDIDATE_FAIL,
-  payload: error,
-});
-
-export const addNewCandidateElection = candidateElection => ({
-  type: ADD_NEW_CANDIDATE_CANDIDATE,
-  payload: candidateElection,
-});
-
-export const addNewCandidateElectionSuccess = candidateElection => ({
-  type: ADD_NEW_CANDIDATE_CANDIDATE_SUCCESS,
-  payload: candidateElection,
-});
-
-export const addNewCandidateElectionFail = error => ({
-  type: ADD_NEW_CANDIDATE_CANDIDATE_FAIL,
-  payload: error,
-});
-
-export const deleteCandidateElection = candidateElection => ({
-  type: DELETE_CANDIDATE_CANDIDATE,
-  payload: candidateElection,
-});
-
-export const deleteCandidateElectionSuccess = candidateElection => ({
-  type: DELETE_CANDIDATE_CANDIDATE_SUCCESS,
-  payload: candidateElection,
-});
-
-export const deleteCandidateElectionFail = error => ({
-  type: DELETE_CANDIDATE_CANDIDATE_FAIL,
-  payload: error,
-});
-
-
-// Candidate Campaigns
-export const getCandidateCampaigns = (candidate) => ({
-  type: GET_CANDIDATE_CAMPAIGNS,
-  payload: candidate,
-});
-
-// Candidate Campaigns
-export const updateCandidateCampaign = candidateCampaign => ({
-  type: UPDATE_CANDIDATE_CAMPAIGN,
-  payload: candidateCampaign,
-});
-export const updateCandidateCampaignSuccess = candidateCampaign => ({
-  type: UPDATE_CANDIDATE_CAMPAIGN_SUCCESS,
-  payload: candidateCampaign,
-});
-export const updateCandidateCampaignFail = error => ({
-  type: UPDATE_CANDIDATE_CAMPAIGN_FAIL,
-  payload: error,
-});
-
-export const addNewCandidateCampaign = candidateCampaign => ({
-  type: ADD_NEW_CANDIDATE_CAMPAIGN,
-  payload: candidateCampaign,
-});
-
-export const addNewCandidateCampaignSuccess = candidateCampaign => ({
-  type: ADD_NEW_CANDIDATE_CAMPAIGN_SUCCESS,
-  payload: candidateCampaign,
-});
-
-export const addNewCandidateCampaignFail = error => ({
-  type: ADD_NEW_CANDIDATE_CAMPAIGN_FAIL,
-  payload: error,
-});
-
-export const deleteCandidateCampaign = candidateCampaign => ({
-  type: DELETE_CANDIDATE_CAMPAIGN,
-  payload: candidateCampaign,
-});
-
-export const deleteCandidateCampaignSuccess = candidateCampaign => ({
-  type: DELETE_CANDIDATE_CAMPAIGN_SUCCESS,
-  payload: candidateCampaign,
-});
-
-export const deleteCandidateCampaignFail = error => ({
-  type: DELETE_CANDIDATE_CAMPAIGN_FAIL,
-  payload: error,
-});

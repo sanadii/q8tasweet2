@@ -1,7 +1,6 @@
 # Category Model
 from django.db import models
 from helper.models_helper import TrackModel, TaskModel, GenderOptions
-from helper.validators import today
 
 class Candidate(TrackModel, TaskModel):
     # Basic Information

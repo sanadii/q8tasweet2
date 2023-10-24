@@ -34,7 +34,7 @@ import React, {
   //SimpleBar
   import SimpleBar from "simplebar-react";
   
-const GuaranteesTab = ({ candidateElections }) => {
+const GuaranteesTab = ({ Candidates }) => {
     return (
         <React.Fragment>
             <Row className="g-4 mb-3">

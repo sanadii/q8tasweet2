@@ -3,7 +3,7 @@ from django.urls import path, include
 from auths.views import *
 
 
-app_name = "users"
+app_name = "profiles"
 
 urlpatterns = [
     # User Profile

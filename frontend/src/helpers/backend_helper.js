@@ -95,28 +95,12 @@ export const addNewElectionAttendee = (electionAttendee) => api.create(url.ADD_N
 export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_ELECTION_ATTENDEE, electionAttendee);
 
 
-// Candidates 
 // Candidates
 export const getCandidates = () => api.get(url.GET_CANDIDATES);
 export const getCandidateDetails = (candidate) => api.get(url.GET_CANDIDATE_DETAILS + "/" + candidate.id);
 export const addNewCandidate = (candidate) => api.create(url.ADD_NEW_CANDIDATE, candidate);
-export const updateCandidate = (candidate) => api.update(url.UPDATE_CANDIDATE + "/" + candidate.id, candidate);
+export const updateCandidate = (candidate, candidateId) => api.update(url.UPDATE_CANDIDATE + "/" + candidateId, candidate);
 export const deleteCandidate = (candidate) => api.delete(url.DELETE_CANDIDATE + "/" + candidate);
-
-// CandidateElections
-export const getCandidateElections = (candidate) => api.get(url.GET_CANDIDATE_ELECTIONS + "/" + candidate.id);
-export const getCandidateElectionDetails = (candidate) => api.get(url.GET_CANDIDATE_ELECTION_DETAILS + "/" + candidate.id);
-export const addNewCandidateElection = (candidate) => api.create(url.ADD_NEW_CANDIDATE_ELECTION, candidate);
-export const updateCandidateElection = (candidate) => api.update(url.UPDATE_CANDIDATE_ELECTION + "/" + candidate.id, candidate);
-export const deleteCandidateElection = (candidate) => api.delete(url.DELETE_CANDIDATE_ELECTION + "/" + candidate);
-
-// CandidateCampaigns
-export const getCandidateCampaigns = (campaign) => api.get(url.GET_CANDIDATE_CAMPAIGNS + "/" + campaign.id);
-export const getCandidateCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign.id);
-export const addNewCandidateCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
-export const updateCandidateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
-export const deleteCandidateCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
-
 
 // Campaigns
 export const getCampaigns = () => api.get(url.GET_CAMPAIGNS);

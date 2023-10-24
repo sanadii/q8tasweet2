@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "apps.elections", "apps.categories",
     "apps.candidates",
     "apps.electors",
-    # "apps.profiles",
+    "apps.profiles",
 ]
 
 MIDDLEWARE = [

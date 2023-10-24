@@ -35,7 +35,7 @@ const AllCandidates = () => {
   }));
 
   const [candidate, setCandidate] = useState([]);
-  const [candidateElections, setCandidateElections] = useState([]);
+  const [Candidates, setCandidates] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
 
   // Candidate Data

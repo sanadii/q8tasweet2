@@ -2,10 +2,8 @@
 from django.http import JsonResponse
 from django.http.response import JsonResponse
 from django.db.models import Sum
-from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -15,15 +13,12 @@ from rest_framework.pagination import PageNumberPagination
 
 # Models
 from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee 
-from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
-from apps.candidates.models import Candidate
-from apps.electors.models import Elector
+from apps.elections.models import Election, ElectionCandidate, ElectionCommittee, ElectionCommitteeResult
 from apps.categories.models import Category
-from django.contrib.auth.models import Group, Permission
 
 # Serializers
 from apps.campaigns.serializers import CampaignsSerializer
-from apps.elections.serializers import ElectionsSerializer, ElectionCommitteesSerializer, ElectionCandidatesSerializer
+from apps.elections.serializers import ElectionsSerializer, ElectionCommitteesSerializer, ElectionCandidatesSerializer, ElectionCommitteeResultSerializer
 from helper.views_helper import CustomPagination
 
 
@@ -349,7 +344,7 @@ class GetPublicElectionDetails(APIView):
     #     for committee in committees:
     #         committee_id = committee["id"]
     #         committee_results = ElectionCommitteeResult.objects.filter(election_committee=committee_id)
-    #         results_serializer = ElectionCommitteeResultsSerializer(committee_results, many=True)
+    #         results_serializer = ElectionCommitteeResultSerializer(committee_results, many=True)
 
     #         for result in results_serializer.data:
     #             candidate_id = result["election_candidate"]
@@ -378,7 +373,7 @@ class GetPublicElectionDetails(APIView):
         for committee in committees:
             committee_id = str(committee["id"])
             committee_results = ElectionCommitteeResult.objects.filter(election_committee=committee_id)
-            results_serializer = ElectionCommitteeResultsSerializer(committee_results, many=True)
+            results_serializer = ElectionCommitteeResultSerializer(committee_results, many=True)
 
             # Initialize the committee in the results with default votes for each candidate
             transformed_results[committee_id] = {candidate_id: 0 for candidate_id in all_candidate_ids}

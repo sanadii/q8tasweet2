@@ -12,7 +12,7 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 
-const ElectionDetailsWidget = ({ candidate, candidateElections }) => {
+const ElectionDetailsWidget = ({ candidate, Candidates }) => {
   const moderators = Array.isArray(candidate.moderators)
     ? candidate.moderators
     : [];
@@ -41,10 +41,10 @@ const ElectionDetailsWidget = ({ candidate, candidateElections }) => {
     status = `${Math.ceil(remainingDays)} days remaining`;
   }
 
-  const maleCandidates = candidateElections.filter(
+  const maleCandidates = Candidates.filter(
     (candidate) => candidate.gender === 1
   ).length;
-  const femaleCandidates = candidateElections.filter(
+  const femaleCandidates = Candidates.filter(
     (candidate) => candidate.gender === 2
   ).length;
 
@@ -64,7 +64,7 @@ const ElectionDetailsWidget = ({ candidate, candidateElections }) => {
                   <p className="text-uppercase fw-semibold fs-12 text-white mb-1">
                     Candidates
                   </p>
-                  <h4 className="mb-0">{candidateElections.length}</h4>
+                  <h4 className="mb-0">{Candidates.length}</h4>
                   <p>
                     <b className="text-white mb-1">{maleCandidates} M / </b>{" "}
                     <b className="text-white mb-1">{femaleCandidates} F </b>

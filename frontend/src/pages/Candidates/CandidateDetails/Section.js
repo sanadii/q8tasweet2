@@ -28,7 +28,7 @@ import ResultsTab from "./ResultsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
-const Section = ({ candidate, electionCampaigns, candidateElections }) => {
+const Section = ({ candidate, electionCampaigns, Candidates }) => {
   //Tab
   const [activeTab, setActiveTab] = useState("1");
   const toggleTab = (tab) => {
@@ -301,7 +301,7 @@ const Section = ({ candidate, electionCampaigns, candidateElections }) => {
 
       <ElectionDetailsWidget
         candidate={candidate}
-        candidateElections={candidateElections}
+        Candidates={Candidates}
       />
       <Row>
         <Col lg={12}>
@@ -312,13 +312,13 @@ const Section = ({ candidate, electionCampaigns, candidateElections }) => {
               <TabPane tabId="1">
                 <OverviewTab
                   candidate={candidate}
-                  candidateElections={candidateElections}
+                  Candidates={Candidates}
                 />
               </TabPane>
 
               <TabPane tabId="2">
                 <CandidatesTab
-                candidateElections={candidateElections}
+                Candidates={Candidates}
                 />
               </TabPane>
 
@@ -331,13 +331,13 @@ const Section = ({ candidate, electionCampaigns, candidateElections }) => {
                 {/* if the prof */}
               </TabPane>
               <TabPane tabId="32">
-                {/* <GuaranteesTab candidateElections={candidateElections} /> */}
+                {/* <GuaranteesTab Candidates={Candidates} /> */}
               </TabPane>
               {/* <TabPane tabId="33">
-              <AttendeesTab candidateElections={candidateElections} />
+              <AttendeesTab Candidates={Candidates} />
             </TabPane> */}
               {/* <TabPane tabId="34">
-              <SortingTab candidateElections={candidateElections} />
+              <SortingTab Candidates={Candidates} />
             </TabPane> */}
               <TabPane tabId="4">
                 <ResultsTab candidate={candidate} />

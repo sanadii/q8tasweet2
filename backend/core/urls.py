@@ -26,14 +26,16 @@ urlpatterns = [
     # path('admin/categories/', category_admin_site.urls, name='category-admin'),
     # path('admin/users/', user_admin_site.urls, name='user-admin'),
 
-    # Applications
-    # path("restapi/", include(("restapi.urls", "restapi"), namespace="restapi")),
+    # Setting Apps
+    path('Config/', include('apps.configs.urls')),
+    path('media/', include('apps.media.urls')),
+
+    # Main Apps
     path('campaigns/', include('apps.campaigns.urls')),
     path('candidates/', include('apps.candidates.urls')),
     path('categories/', include('apps.categories.urls')),
     path('elections/', include('apps.elections.urls')),
     path('electors/', include('apps.electors.urls')),
-    path('Config/', include('apps.configs.urls')),
     path('auth/', include('apps.auths.urls')),
 
     # Schema & Documentation

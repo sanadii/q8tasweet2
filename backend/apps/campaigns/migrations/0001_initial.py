@@ -13,7 +13,6 @@ class Migration(migrations.Migration):
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("elections", "0001_initial"),
         ("electors", "0001_initial"),
-        ("auth", "0024_rename_role_group_display_name"),
     ]
 
     operations = [

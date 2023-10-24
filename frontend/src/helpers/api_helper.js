@@ -67,16 +67,16 @@ axios.interceptors.response.use(
   }
 );
 
-const uploadFile = (url, formData) => {
-  const config = {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      // You can also set other headers if necessary
-    },
-  };
+// const uploadFile = (url, formData) => {
+//   const config = {
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//       // You can also set other headers if necessary
+//     },
+//   };
 
-  return axios.post(url, formData, config);
-};
+//   return axios.post(url, formData, config);
+// };
 
 // Set Authorization
 const setAuthorization = (token) => {
@@ -114,9 +114,9 @@ class APIClient {
   };
 
   // Add the file upload method to your APIClient
-  upload = (url, formData) => {
-    return uploadFile(url, formData);
-  };
+  // upload = (url, formData) => {
+  //   return uploadFile(url, formData);
+  // };
 }
 
 const getLoggedinUser = () => {

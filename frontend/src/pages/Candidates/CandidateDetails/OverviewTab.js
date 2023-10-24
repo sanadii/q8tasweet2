@@ -26,7 +26,7 @@ import image5 from "../../../assets/images/small/img-5.jpg";
 //SimpleBar
 import SimpleBar from "simplebar-react";
 
-const OverviewTab = ({ candidate, candidateElections }) => {
+const OverviewTab = ({ candidate, Candidates }) => {
   const moderators = Array.isArray(candidate.moderators)
     ? candidate.moderators
     : [];

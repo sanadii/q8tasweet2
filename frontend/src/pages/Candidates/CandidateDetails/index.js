@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getElectionDetails,
-  // getCandidateElections,
+  // getCandidates,
   getElectionCampaigns,
 } from "../../../store/actions";
 import { isEmpty } from "lodash";
@@ -20,10 +20,10 @@ const ElectionDetails = () => {
     id: useParams().id,
   });
 
-  const { electionDetails, candidateElections, electionCampaigns } =
+  const { electionDetails, Candidates, electionCampaigns } =
     useSelector((state) => ({
       electionDetails: state.Elections.electionDetails,
-      candidateElections: state.Elections.candidateElections,
+      Candidates: state.Elections.Candidates,
       electionCampaigns: state.Elections.electionCampaigns,
       // error: state.Elections.error,
     }));
@@ -43,7 +43,7 @@ const ElectionDetails = () => {
         <Container fluid>
           <Section
             candidate={electionDetails}
-            candidateElections={candidateElections}
+            Candidates={Candidates}
             electionCampaigns={electionCampaigns}
           />
         </Container>

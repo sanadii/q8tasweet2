@@ -10,9 +10,6 @@ import helper.validators
 class Migration(migrations.Migration):
     initial = True
 
-    dependencies = [
-        ("auth", "0024_rename_role_group_display_name"),
-    ]
 
     operations = [
         migrations.CreateModel(

@@ -3,8 +3,8 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { deleteCandidateElection } from "../../../store/actions";
-import CandidateElectionModal from "./Modals/CandidateElectionModal";
+import { deleteCandidate } from "../../../store/actions";
+import CandidateModal from "./Modals/CandidateModal";
 
 // Utility and helper imports
 import { isEmpty } from "lodash";
@@ -29,21 +29,21 @@ import SimpleBar from "simplebar-react";
 const CandidatesTab = () => {
   const dispatch = useDispatch();
 
-  const { election_id, candidateElections, isCandidateElectionSuccess, isElectionSuccess, error } = useSelector((state) => ({
+  const { election_id, Candidates, isCandidateSuccess, isElectionSuccess, error } = useSelector((state) => ({
     election_id: state.Elections.electionDetails.id,
-    candidateElections: state.Elections.candidateElections,
-    isCandidateElectionSuccess: state.Elections.isCandidateElectionSuccess,
+    Candidates: state.Elections.Candidates,
+    isCandidateSuccess: state.Elections.isCandidateSuccess,
     isCandidatesSuccess: state.Candidates.isCandidatesSuccess,
     error: state.Candidates.error,
   }));
 
-  const [candidateElection, setCandidateElection] = useState([]);
-  const [candidateElectionList, setCandidateElectionList] =
-    useState(candidateElections);
+  const [Candidate, setCandidate] = useState([]);
+  const [CandidateList, setCandidateList] =
+    useState(Candidates);
 
   useEffect(() => {
-    setCandidateElectionList(candidateElections);
-  }, [candidateElections]);
+    setCandidateList(Candidates);
+  }, [Candidates]);
 
   // Modals: Delete, Set, Edit
   const [deleteModal, setDeleteModal] = useState(false);
@@ -55,46 +55,46 @@ const CandidatesTab = () => {
   const toggle = useCallback(() => {
     if (modal) {
       setModal(false);
-      setCandidateElection(null);
+      setCandidate(null);
     } else {
       setModal(true);
     }
   }, [modal]);
 
   // Delete Data
-  const handleDeleteCandidateElection = () => {
-    if (candidateElection) {
-      dispatch(deleteCandidateElection(candidateElection.id));
+  const handleDeleteCandidate = () => {
+    if (Candidate) {
+      dispatch(deleteCandidate(Candidate.id));
       setDeleteModal(false);
     }
   };
 
-  const onClickDelete = (candidateElection) => {
-    setCandidateElection(candidateElection);
+  const onClickDelete = (Candidate) => {
+    setCandidate(Candidate);
     setDeleteModal(true);
   };
 
   // Add Dataa
-  // handleCandidateElectionClicks Function
-  // const handleCandidateElectionClicks = () => {
-  //   setCandidateElection(""); // Changed from empty string to null
+  // handleCandidateClicks Function
+  // const handleCandidateClicks = () => {
+  //   setCandidate(""); // Changed from empty string to null
   //   setIsEdit(false);
   //   toggle();
   // };
 
   // Update Data
-  const handleCandidateElectionClick = useCallback(
+  const handleCandidateClick = useCallback(
     (arg) => {
-      const candidateElection = arg;
+      const Candidate = arg;
 
-      setCandidateElection({
+      setCandidate({
         // Basic Information
-        id: candidateElection.id,
-        election_id: candidateElection.election_id,
-        candidate_id: candidateElection.candidate_id,
-        name: candidateElection.name,
-        votes: candidateElection.votes,
-        remarks: candidateElection.remarks,
+        id: Candidate.id,
+        election_id: Candidate.election_id,
+        candidate_id: Candidate.candidate_id,
+        name: Candidate.name,
+        votes: Candidate.votes,
+        remarks: Candidate.remarks,
       });
 
       setIsEdit(true);
@@ -106,7 +106,7 @@ const CandidatesTab = () => {
   // Checked All
   const checkedAll = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".candidateElectionCheckBox");
+    const checkedEntry = document.querySelectorAll(".CandidateCheckBox");
 
     if (checkall.checked) {
       checkedEntry.forEach((checkedEntry) => {
@@ -127,7 +127,7 @@ const CandidatesTab = () => {
   const deleteMultiple = () => {
     const checkall = document.getElementById("checkBoxAll");
     selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteCandidateElection(element.value));
+      dispatch(deleteCandidate(element.value));
       setTimeout(() => {
         toast.clearWaitingQueue();
       }, 3000);
@@ -137,7 +137,7 @@ const CandidatesTab = () => {
   };
 
   const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".candidateElectionCheckBox:checked");
+    const checkedEntry = document.querySelectorAll(".CandidateCheckBox:checked");
     checkedEntry.length > 0
       ? setIsMultiDeleteButton(true)
       : setIsMultiDeleteButton(false);
@@ -159,7 +159,7 @@ const CandidatesTab = () => {
           return (
             <input
               type="checkbox"
-              className="candidateElectionCheckBox form-check-input"
+              className="CandidateCheckBox form-check-input"
               value={cellProps.row.original.id}
               onChange={() => deleteCheckbox()}
             />
@@ -179,27 +179,27 @@ const CandidatesTab = () => {
       {
         Header: "Candidate",
         filterable: true,
-        Cell: (candidateElection) => (
+        Cell: (Candidate) => (
           <>
             <div className="d-flex align-items-center">
               <div className="flex-shrink-0">
-                {candidateElection.row.original.image ? (
+                {Candidate.row.original.image ? (
                   // Use the ImageCircle component here
                   <ImageGenderCircle
-                    genderValue={candidateElection.row.original.gender}
-                    imagePath={candidateElection.row.original.image}
+                    genderValue={Candidate.row.original.gender}
+                    imagePath={Candidate.row.original.image}
                   />
                 ) : (
                   <div className="flex-shrink-0 avatar-xs me-2">
                     <div className="avatar-title bg-soft-success text-success rounded-circle fs-13">
-                      {candidateElection.row.original.name.charAt(0)}
+                      {Candidate.row.original.name.charAt(0)}
                     </div>
                   </div>
                 )}
               </div>
               <div className="flex-grow-1 ms-2 name">
-                {candidateElection.row.original.name}{" "}
-                {candidateElection.row.original.is_winner ? (
+                {Candidate.row.original.name}{" "}
+                {Candidate.row.original.is_winner ? (
                   <Badge color="success" className="badge-label">
                     {" "}
                     <i className="mdi mdi-circle-medium"></i> Winner{" "}
@@ -228,8 +228,8 @@ const CandidatesTab = () => {
                 to="#"
                 className="btn btn-sm btn-soft-primary edit-list"
                 onClick={() => {
-                  const candidateElection = cellProps.row.original;
-                  setCandidateElection(candidateElection);
+                  const Candidate = cellProps.row.original;
+                  setCandidate(Candidate);
                 }}
               >
                 <i className="ri-phone-line align-bottom" />
@@ -238,8 +238,8 @@ const CandidatesTab = () => {
                 to="#"
                 className="btn btn-sm btn-soft-success edit-list"
                 onClick={() => {
-                  const candidateElection = cellProps.row.original;
-                  setCandidateElection(candidateElection);
+                  const Candidate = cellProps.row.original;
+                  setCandidate(Candidate);
                 }}
               >
                 <i className="ri-question-answer-line align-bottom" />
@@ -248,8 +248,8 @@ const CandidatesTab = () => {
                 to="#"
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
-                  const candidateElection = cellProps.row.original;
-                  setCandidateElection(candidateElection);
+                  const Candidate = cellProps.row.original;
+                  setCandidate(Candidate);
                 }}
               >
                 <i className="ri-eye-fill align-bottom" />
@@ -258,8 +258,8 @@ const CandidatesTab = () => {
                 to="#"
                 className="btn btn-sm btn-soft-info edit-list"
                 onClick={() => {
-                  const candidateElection = cellProps.row.original;
-                  handleCandidateElectionClick(candidateElection);
+                  const Candidate = cellProps.row.original;
+                  handleCandidateClick(Candidate);
                 }}
               >
                 <i className="ri-pencil-fill align-bottom" />
@@ -268,8 +268,8 @@ const CandidatesTab = () => {
                 to="#"
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
-                  const candidateElection = cellProps.row.original;
-                  onClickDelete(candidateElection);
+                  const Candidate = cellProps.row.original;
+                  onClickDelete(Candidate);
                 }}
               >
                 <i className="ri-delete-bin-5-fill align-bottom" />
@@ -289,7 +289,7 @@ const CandidatesTab = () => {
         // id: "candidateId", // Make sure id property is defined here
       },
     ],
-    [handleCandidateElectionClick, checkedAll]
+    [handleCandidateClick, checkedAll]
   );
 
   // Export Modal
@@ -300,11 +300,11 @@ const CandidatesTab = () => {
       <ExportCSVModal
         show={isExportCSV}
         onCloseClick={() => setIsExportCSV(false)}
-        data={candidateElectionList}
+        data={CandidateList}
       />
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteCandidateElection}
+        onDeleteClick={handleDeleteCandidate}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
@@ -315,12 +315,12 @@ const CandidatesTab = () => {
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
       />
-      <CandidateElectionModal
+      <CandidateModal
         modal={modal} // boolean to control modal visibility
         setModal={setModal}
         isEdit={isEdit} // boolean to determine if editing
         toggle={toggle}
-        candidateElection={candidateElection}
+        Candidate={Candidate}
       />
 
       <Row>
@@ -333,17 +333,17 @@ const CandidatesTab = () => {
               Export
             </button>
           </div>
-          <Card id="candidateElectionList">
+          <Card id="CandidateList">
             <CardBody className="pt-0">
               <div>
-                {candidateElectionList && candidateElectionList.length ? (
-                  // Log the candidateElectionList array to the console
+                {CandidateList && CandidateList.length ? (
+                  // Log the CandidateList array to the console
                     (
                       <TableContainer
                         // Data
                         columns={columns}
-                        data2={candidateElectionList}
-                        data={candidateElectionList || []}
+                        data2={CandidateList}
+                        data={CandidateList || []}
                         customPageSize={50}
 
                         // Header
@@ -359,8 +359,8 @@ const CandidatesTab = () => {
                         isCandidateGenderFilter={true}
                         isMultiDeleteButton={isMultiDeleteButton}
                         SearchPlaceholder="Search for Candidate Candidates..."
-                        setCandidateElectionList={setCandidateElectionList}
-                        // handleCandidateElectionClick={handleCandidateElectionClicks}
+                        setCandidateList={setCandidateList}
+                        // handleCandidateClick={handleCandidateClicks}
 
                         // Styling
                         divClass="table-responsive table-card mb-3"
