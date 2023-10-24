@@ -58,7 +58,7 @@ const Settings = () => {
                                                 </Label>
                                             </div>
                                         </div>
-                                        <h5 className="fs-16 mb-1">Anna Adame</h5>
+                                        <h5 className="fs-16 mb-1">xxx</h5>
                                         <p className="text-muted mb-0">Lead Designer / Developer</p>
                                     </div>
                                 </CardBody>

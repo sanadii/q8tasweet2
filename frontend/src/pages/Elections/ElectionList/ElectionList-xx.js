@@ -4,10 +4,10 @@ import { Col, Modal, ModalBody, Row, Label, Input, Button, ModalHeader, FormFeed
 import { electionSelector, userSelector, categorySelector } from 'Selectors';
 
 // Custom component imports
-import { ImageCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
+import { ImageCircle, Loader, DeleteModal, TableContainer } from "../../../Common/Components";
 // import { TableContainer, DeleteModal, ImageCircle } from "../../../Components/Common";
 
-import { StatusOptions, PriorityOptions, ElectionTypeOptions, ElectionResultOptions } from "../../../Components/constants";
+import { StatusOptions, PriorityOptions, ElectionTypeOptions, ElectionResultOptions } from "../../../Common/Constants";
 
 import SimpleBar from "simplebar-react";
 import Flatpickr from "react-flatpickr";

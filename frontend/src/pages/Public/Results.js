@@ -4,7 +4,7 @@ import { Badge, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Card, Card
 import { electionSelector } from 'Selectors';
 
 // Component, Constants, Hooks Imports
-import { ImageGenderCircle, AvatarMedium, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Components/Common";
+import { ImageGenderCircle, AvatarMedium, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Common/Components";
 
 import { Container } from "reactstrap";
 import { useParams } from "react-router-dom";

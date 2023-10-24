@@ -9,6 +9,7 @@ export const userSelector = createSelector(
         // User Selectors
         users: usersState.users,
         moderators: usersState.moderators,
+        user: usersState.currentUser,
         currentUser: usersState.currentUser,
         campaignModerators: usersState.campaignModerators,
     })

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Components, Constants & Hooks
-import usePermission from "Components/Hooks/usePermission";
+import usePermission from "Common/Hooks/usePermission";
 import OverViewGuarantees from "./OverViewGuarantees";
 // import OverViewNotifications from "./Components/OverViewNotifications";
 

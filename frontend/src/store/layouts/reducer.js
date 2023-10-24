@@ -13,7 +13,7 @@ import {
   CHANGE_SIDEBAR_VISIBILITY
 } from './actionType';
 
-//constants
+//Constants
 import {
   layoutTypes,
   leftSidebarTypes,
@@ -26,7 +26,7 @@ import {
   leftSidebarImageTypes,
   preloaderTypes,
   sidebarVisibilitytypes
-} from "../../Components/constants/layout";
+} from "../../Common/Constants/layout";
 
 const INIT_STATE = {
   layoutType: layoutTypes.VERTICAL,

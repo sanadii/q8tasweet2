@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
-import { BreadCrumb, ImageCampaignCard } from "Components/Common";
+import { BreadCrumb, ImageCampaignCard } from "Common/Components";
 import { userSelector, campaignSelector, categorySelector } from 'Selectors';
 
 import { Link } from "react-router-dom";

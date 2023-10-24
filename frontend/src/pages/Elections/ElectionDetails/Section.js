@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import { electionSelector, categorySelector } from 'Selectors';
 
-import { ImageMedium } from "../../../Components/Common";
+import { ImageMedium } from "../../../Common/Components";
 import { Card, CardBody, CardFooter, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import classnames from "classnames";
 

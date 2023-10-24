@@ -13,8 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
 // ------------ Custom Components & ConstantsImports ------------
-import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "../../../Components/constants";
-import useCategoryManager from "../../../Components/Hooks/CategoryHooks";
+import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "../../../Common/Constants";
+import useCategoryManager from "../../../Common/Hooks/CategoryHooks";
 
 import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";

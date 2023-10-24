@@ -6,7 +6,7 @@ import { electionSelector } from 'Selectors';
 
 import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
 import ElectionCampaignModal from "./Modals/ElectionCampaignModal";
-import { ImageCandidateCampaign, DeleteModal } from "../../../Components/Common";
+import { ImageCandidateCampaign, DeleteModal } from "../../../Common/Components";
 
 const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
   const dispatch = useDispatch();

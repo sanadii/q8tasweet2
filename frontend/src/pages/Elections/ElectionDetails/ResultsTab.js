@@ -8,7 +8,7 @@ import { electionSelector } from 'Selectors';
 
 // Component and UI Library Imports
 import { Col, Row, Card, CardBody } from "reactstrap";
-import { ImageCandidateWinnerCircle, Loader, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { ImageCandidateWinnerCircle, Loader, TableContainer, TableContainerHeader } from "../../../Common/Components";
 
 // Utility and Third-Party Library Imports
 import { toast, ToastContainer } from "react-toastify";

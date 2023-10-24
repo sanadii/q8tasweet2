@@ -4,7 +4,7 @@ import { electionSelector, categorySelector } from 'Selectors';
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { updateElection } from "../../../store/actions";
-import useCategoryManager from "../../../Components/Hooks/CategoryHooks";
+import useCategoryManager from "../../../Common/Hooks/CategoryHooks";
 
 // Formik
 import * as Yup from "yup";
@@ -20,7 +20,7 @@ import Select from "react-select";
 
 import Dropzone from "react-dropzone";
 
-import { StatusOptions, PriorityOptions, RoleOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "../../../Components/constants";
+import { StatusOptions, PriorityOptions, RoleOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "../../../Common/Constants";
 
 const EditTab = ({ election }) => {
   const dispatch = useDispatch();

@@ -3,8 +3,8 @@
     "baseUrl": "src",
     "paths": {
       "Common/*": ["src/Components/Common/*"],
-      "constants/*": ["src/Components/constants/*"],
-      "Hooks/*": ["src/Components/Hooks/*"]
+      "constants/*": ["src/Common/Constants/*"],
+      "Hooks/*": ["src/Common/Hooks/*"]
     }
   },
   "include": ["src"]

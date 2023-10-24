@@ -19,7 +19,7 @@ import classnames from "classnames";
 import { Link } from "react-router-dom";
 
 // Custom component imports
-import { GenderCircle, ImageCircle, ImageGenderCircle, Loader, DeleteModal, TableContainer } from "../../../Components/Common";
+import { GenderCircle, ImageCircle, ImageGenderCircle, Loader, DeleteModal, TableContainer } from "../../../Common/Components";
 // import { TableContainer, DeleteModal, ImageCircle } from "../../../Components/Common";
 
 import {
@@ -28,7 +28,7 @@ import {
   ElectionTypeOptions,
   ElectionResultOptions,
   // TagOptions,
-} from "../../../Components/constants";
+} from "../../../Common/Constants";
 
 import SimpleBar from "simplebar-react";
 import Flatpickr from "react-flatpickr";

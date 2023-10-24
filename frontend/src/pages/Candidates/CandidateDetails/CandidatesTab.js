@@ -18,7 +18,7 @@ import {
   DeleteModal,
   ExportCSVModal,
   TableContainer,
-} from "../../../Components/Common";
+} from "../../../Common/Components";
 
 // Reactstrap (UI) imports
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";

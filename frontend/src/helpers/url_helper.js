@@ -121,10 +121,10 @@ export const UPDATE_GROUP = "/auth/updateGroup";
 export const DELETE_GROUP = "/auth/deleteGroup";
 
 // Images
-export const UPLOAD_IMAGE = "/media/uploadImage";
-export const GET_IMAGES = "/media/uploadImage";
-export const DELETE_IMAGE = "/media/uploadImage";
-export const UPDATE_IMAGE = "/media/uploadImage";
+export const UPLOAD_IMAGE = "/configs/uploadImage";
+export const GET_IMAGES = "/configs/uploadImage";
+export const DELETE_IMAGE = "/configs/uploadImage";
+export const UPDATE_IMAGE = "/configs/uploadImage";
 
 // Category
 export const GET_CATEGORIES = "/categories/getCategories";

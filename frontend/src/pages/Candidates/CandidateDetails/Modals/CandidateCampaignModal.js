@@ -7,7 +7,7 @@ import {
   updateCandidateCampaign,
 } from "../../../../store/actions";
 
-import { ImageCircle } from "../../../../Components/Common";
+import { ImageCircle } from "../../../../Common/Components";
 // Form validation imports
 import * as Yup from "yup";
 import { useFormik } from "formik";

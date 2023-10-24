@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 
 // Compontents, Constants, Hooks
 import MembersModal from "./MembersModal";
-import { DeleteModal, TableContainer, TableContainerHeader } from "Components/Common";
-import { usePermission, useDelete } from "Components/Hooks";
+import { DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
+import { usePermission, useDelete } from "Common/Hooks";
 import { Id, Name, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
 
 // Store & Selectors

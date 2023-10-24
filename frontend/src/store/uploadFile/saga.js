@@ -21,7 +21,7 @@ import {
 } from "./action";
 
 import { upload as uploadAPI } from "../../helpers/file_upload_helper";
-import { UPLOAD_CANCELED } from "../../helpers/constants";
+import { UPLOAD_CANCELED } from "../../helpers/Constants";
 
 function* uploadFile(action) {
   try {

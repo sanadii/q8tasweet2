@@ -1,11 +1,10 @@
 // React & Redux
-import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addNewCandidate, updateCandidate } from "../../../store/actions";
+import { addNewCandidate, updateCandidate } from "store/actions";
 
 // Custom Components & ConstantsImports
-import { GenderOptions, PriorityOptions, StatusOptions } from "../../../Components/constants";
+import { GenderOptions, PriorityOptions, StatusOptions } from "Common/Constants";
 import SimpleBar from "simplebar-react";
 
 // Form and Validation
@@ -13,7 +12,9 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { CardHeader, Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
+
+import avatar1 from 'assets/images/users/avatar-1.jpg';
 
 
 const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
@@ -24,6 +25,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
 
   // Image Upload Helper
   const [selectedImage, setSelectedImage] = useState(null);
+
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedImage(e.target.files[0]);
@@ -46,12 +48,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       name: (candidate && candidate.name) || "",
       image: (candidate && candidate.image) || "",
       selectedImage: selectedImage,
-      gender: (candidate && candidate.gender) || 0,
-      phone: (candidate && candidate.phone) || "",
-      email: (candidate && candidate.email) || "",
-      twitter: (candidate && candidate.twitter) || "",
-      instagram: (candidate && candidate.instagram) || "",
-      description: (candidate && candidate.description) || "",
+      gender: (candidate && candidate.gender) || 1,
 
       // Candidate Specification
 
@@ -79,14 +76,6 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
           gender: parseInt(values.gender, 10),
           image: values.image,
           selectedImage: selectedImage,
-          description: values.description,
-
-
-          // Contact
-          phone: values.phone,
-          email: values.email,
-          twitter: values.twitter,
-          instagram: values.instagram,
 
           // Admin
           status: parseInt(values.status, 10),
@@ -104,13 +93,6 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
           gender: values.gender,
           image: values.image,
           selectedImage: selectedImage,
-          description: values.description,
-
-          // Contact
-          phone: values.phone,
-          email: values.email,
-          twitter: values.twitter,
-          instagram: values.instagram,
 
           // Admin
           status: parseInt(values.status, 10),
@@ -130,7 +112,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       isOpen={modal}
       // toggle={toggle}
       centered
-      size="lg"
+      size="xs"
       className="border-0"
       modalClassName="modal fade zoomIn"
     >
@@ -147,17 +129,20 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       >
         <ModalBody className="modal-body">
           <Row className="g-3">
-            <Col lg={6}>
+            <CardHeader>
+              <h5><strong>المرشح</strong></h5>
+            </CardHeader>
+            <Col lg={8}>
               <div>
                 <Label for="name-field" className="form-label">
-                  Candidate Name
+                  اسم المرشح
                 </Label>
                 <Input
                   id="name-field"
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Candidate Name"
+                  placeholder="ادخل اسم المرشح"
                   validate={{
                     required: { value: true },
                   }}
@@ -178,7 +163,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
               </div>
               <div>
                 <Label for="gender-field" className="form-label">
-                  Gender
+                  النوع
                 </Label>
                 <Input
                   name="gender"
@@ -189,9 +174,6 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
                   onBlur={validation.handleBlur}
                   value={validation.values.gender || 0}
                 >
-                  <option key={0} value={0}>
-                    - اختر النوع -
-                  </option>
                   {GenderOptions.map((gender) => (
                     <option key={gender.id} value={gender.id}>
                       {gender.name}
@@ -204,40 +186,58 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
                   </FormFeedback>
                 ) : null}
               </div>
-
-              <div>
-                <Label for="description-field" className="form-label">
-                  Description
-                </Label>
-                <Input
-                  id="description-field"
-                  name="description"
-                  type="textarea"
-                  className="form-control"
-                  placeholder="Candidate Name"
-                  validate={{
-                    required: { value: true },
-                  }}
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.description || ""}
-                  invalid={
-                    validation.touched.description && validation.errors.description
-                      ? true
-                      : false
-                  }
-                />
-                {validation.touched.description && validation.errors.description ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.description}
-                  </FormFeedback>
-                ) : null}
-              </div>
             </Col>
-            <Col lg={6}>
-              <div>
+            <Col lg={4}>
+              <div className="profile-user position-relative d-inline-block mx-auto  mb-4">
+                <img
+                  src={validation.values.image}
+                  className="rounded-circle avatar-xl img-thumbnail user-profile-image"
+                  alt="user-profile"
+                />
+                <div className="avatar-xs p-0 rounded-circle profile-photo-edit">
+                  <Input
+                    id="profile-img-file-input"
+                    type="file"
+                    className="profile-img-file-input"
+                    accept="image/png, image/gif, image/jpeg"
+                    onChange={(e) => {
+                      const selectedImage = e.target.files[0];
+                      if (selectedImage) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          // Update the image src instead of background
+                          const imgElement = document.querySelector(".user-profile-image");
+                          if (imgElement) {
+                            imgElement.src = reader.result;
+                          }
+                        };
+                        reader.readAsDataURL(selectedImage);
+                      }
+                      // Handle image selection for validation and form submission
+                      handleImageSelect(e);
+                    }}
+                    onBlur={validation.handleBlur}
+                    invalid={
+                      validation.touched.image && validation.errors.image ? "true" : undefined
+                    }
+                  />
+                  {validation.touched.image && validation.errors.image ? (
+                    <FormFeedback type="invalid">
+                      {validation.errors.image}
+                    </FormFeedback>
+                  ) : null}
+                  <Label
+                    htmlFor="profile-img-file-input"
+                    className="profile-photo-edit avatar-xs">
+                    <span className="avatar-title rounded-circle bg-light text-body">
+                      <i className="ri-camera-fill"></i>
+                    </span>
+                  </Label>
+                </div>
+              </div>
+              {/* <div>
                 <Label for="emage-field" className="form-label">
-                  Upload Image
+                  تحميل صورة المرشح
                 </Label>
                 <div className="text-center">
                   <label
@@ -307,10 +307,67 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
                     {validation.errors.image}
                   </FormFeedback>
                 ) : null}
+              </div> */}
+            </Col>
+
+            <CardHeader>
+              <h5><strong>الإدارة</strong></h5>
+            </CardHeader>
+
+            <Col lg={6}>
+              <div>
+                <Label for="status-field" className="form-label">
+                  الحالة
+                </Label>
+                <Input
+                  name="status"
+                  type="select"
+                  className="form-select"
+                  id="ticket-field"
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.status || ""}
+                >
+                  {StatusOptions.map((status) => (
+                    <option key={status.id} value={status.id}>
+                      {status.name}
+                    </option>
+                  ))}
+                </Input>
+                {validation.touched.status && validation.errors.status ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.status}
+                  </FormFeedback>
+                ) : null}
+              </div>
+              <div>
+                <Label for="priority-field" className="form-label">
+                  الأولية
+                </Label>
+                <Input
+                  name="priority"
+                  type="select"
+                  className="form-select"
+                  id="priority-field"
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.priority || ""}
+                >
+                  {PriorityOptions.map((priority) => (
+                    <option key={priority.id} value={priority.id}>
+                      {priority.name}
+                    </option>
+                  ))}
+                </Input>
+                {validation.touched.priority && validation.errors.priority ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.priority}
+                  </FormFeedback>
+                ) : null}
               </div>
             </Col>
             <Col lg={6}>
-              <Label className="form-label">Moderators</Label>
+              <Label className="form-label">المراقب</Label>
               <SimpleBar style={{ maxHeight: "95px" }}>
                 <ul className="list-unstyled vstack gap-2 mb-0">
                   {moderators &&
@@ -377,59 +434,6 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
                 </ul>
               </SimpleBar>
             </Col>
-            {/* <p>Admin Use</p> */}
-            <Col lg={6}>
-              <div>
-                <Label for="status-field" className="form-label">
-                  Status
-                </Label>
-                <Input
-                  name="status"
-                  type="select"
-                  className="form-select"
-                  id="ticket-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.status || ""}
-                >
-                  {StatusOptions.map((status) => (
-                    <option key={status.id} value={status.id}>
-                      {status.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.status && validation.errors.status ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.status}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div>
-                <Label for="priority-field" className="form-label">
-                  Priority
-                </Label>
-                <Input
-                  name="priority"
-                  type="select"
-                  className="form-select"
-                  id="priority-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.priority || ""}
-                >
-                  {PriorityOptions.map((priority) => (
-                    <option key={priority.id} value={priority.id}>
-                      {priority.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.priority && validation.errors.priority ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.priority}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
           </Row>
         </ModalBody>
         <div className="modal-footer">
@@ -441,15 +445,15 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
               }}
               className="btn-light"
             >
-              Close
+              اغلاق
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
-              {!!isEdit ? "Update Candidate" : "Add Candidate"}
+              {!!isEdit ? "تحديث" : "إضافة"}
             </button>
           </div>
         </div>
       </Form>
-    </Modal>
+    </Modal >
   );
 };
 

@@ -4,8 +4,8 @@ import React from "react";
 
 
 // Components, Constants & Hooks
-import { GuaranteeStatusOptions } from "Components/constants";
-import { calculateCampaignData } from 'Components/Hooks/campaignCalculation';
+import { GuaranteeStatusOptions } from "Common/Constants";
+import { calculateCampaignData } from 'Common/Hooks/campaignCalculation';
 
 // UI & Utilities
 import { Card, CardBody, Col, Row, Progress } from "reactstrap";

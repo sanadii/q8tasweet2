@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate, Route } from "react-router-dom";
 import { setAuthorization } from "../helpers/api_helper";
 import { useSelector, useDispatch } from "react-redux";
-import { useProfile } from "../Components/Hooks/UserHooks";
+import { useProfile } from "../Common/Hooks/UserHooks";
 import { getCurrentUser, logoutUser } from "../store/actions";
 
 const AuthProtected = (props) => {

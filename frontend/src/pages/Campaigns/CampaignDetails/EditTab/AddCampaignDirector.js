@@ -8,8 +8,8 @@ import { addNewCampaignMember, deleteCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Components & Constants
-import { DeleteModal } from "Components/Common";
-import { useDelete } from "Components/Hooks";
+import { DeleteModal } from "Common/Components";
+import { useDelete } from "Common/Hooks";
 
 // UI Components & styling imports
 import { Card, Form, CardBody } from "reactstrap";

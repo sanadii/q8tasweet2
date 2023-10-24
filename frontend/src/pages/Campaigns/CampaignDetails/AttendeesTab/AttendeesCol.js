@@ -1,6 +1,6 @@
 import React from "react";
-import { GuaranteeStatusOptions, GenderOptions } from "Components/constants";
-import useUserRoles from "Components/Hooks/useUserRoles";
+import { GuaranteeStatusOptions, GenderOptions } from "Common/Constants";
+import useUserRoles from "Common/Hooks/useUserRoles";
 
 
 const Id = (cellProps) => {

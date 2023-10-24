@@ -1,21 +1,21 @@
-// ------------ React & Redux ------------
+// React & Redux
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Row, Card, CardBody } from "reactstrap";
 
-// ------------ Actions ------------
-import { getCandidates, deleteCandidate, getModeratorUsers } from "../../../store/actions";
+// Actions
+import { getCandidates, deleteCandidate, getModeratorUsers } from "store/actions";
 
-// ------------ Custom Components & ConstantsImports ------------
-import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+// Custom Components & ConstantsImports
+import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import CandidateModal from "./CandidateModal"
 import { Id, Name, Status, Priority, CreateBy, Moderators, Actions } from "./CandidateListCol";
 
-// ------------ Toast & Styles ------------
+// Toast & Styles
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ------------ React FilePond & Styles ------------
+// React FilePond & Styles
 import { registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -26,7 +26,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 const AllCandidates = () => {
   const dispatch = useDispatch();
 
-  // ------------ State Management ------------
+  // State Management
   const { candidates, moderators, isCandidateSuccess, error } = useSelector((state) => ({
     candidates: state.Candidates.candidates,
     moderators: state.Users.moderators,
@@ -105,7 +105,7 @@ const AllCandidates = () => {
         name: candidate.name,
         image:
           candidate && candidate.image
-            ? process.env.REACT_APP_API_URL + candidate.image
+            ? candidate.image
             : "",
 
         candidateCount: candidate.candidateCount,

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # Q8 Tasweet Apps
     "core",
     "management",
+    "apps.media",
     'apps.configs',
     "apps.auths",
     "apps.campaigns",

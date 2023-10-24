@@ -11,7 +11,7 @@ import { electionSelector } from 'Selectors';
 import ElectionCandidateModal from "./Modals/ElectionCandidateModal";
 
 // Common Components
-import { ImageCandidateWinnerCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { ImageCandidateWinnerCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
 
 // UI & Utilities
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";

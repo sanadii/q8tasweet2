@@ -1,32 +1,16 @@
 from django.http import JsonResponse
 from django.http.response import JsonResponse
-from django.db.models.query import QuerySet
-from django.db.models import Sum
-from django.db.models import Count
-from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-
-from http import HTTPStatus
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 
-# Models
-from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
-from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
+# Tasweet Apps
 from apps.candidates.models import Candidate
-from apps.electors.models import Elector
-from apps.categories.models import Category
-from django.contrib.auth.models import Group, Permission
-
-# Serializers
 from apps.candidates.serializers import CandidatesSerializer
-from apps.elections.serializers import ElectionsSerializer
-from apps.auths.serializers import UserSerializer
-from apps.electors.serializers import ElectorsSerializer
 from helper.views_helper import CustomPagination
 
 def index(request):

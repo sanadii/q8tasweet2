@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
-import BreadCrumb from "../../Components/Common/Components/BreadCrumb";
-import { ImageCampaignCard } from "../../Components/Common";
+import BreadCrumb from "../../Common/Components/Components/BreadCrumb";
+import { ImageCampaignCard } from "../../Common/Components";
 import { Link } from "react-router-dom";
 import { getElections } from "../../store/actions";
 

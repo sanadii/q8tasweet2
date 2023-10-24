@@ -7,7 +7,7 @@ import { addNewElectionCommittee, updateElectionCommittee } from "../../../../st
 import { electionSelector } from 'Selectors';
 
 // Constants & Component imports
-import { GenderOptions } from "../../../../Components/constants";
+import { GenderOptions } from "../../../../Common/Constants";
 
 // Form & validation imports
 import { useFormik } from "formik";

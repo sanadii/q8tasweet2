@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
-import withRouter from '../Components/Common/Components/withRouter';
+import withRouter from '../Common/Components/Components/withRouter';
 import { layoutSelector } from 'Selectors/layoutSelector';
 
 //import Components

@@ -14,8 +14,8 @@ import { getGroups, updateGroup, deleteGroup, addNewGroup } from "store/actions"
 import { authSelector } from 'Selectors';
 
 // Components & Hooks
-import DeleteModal from "Components/Common/Components/DeleteModal";
-import BreadCrumb from "Components/Common/Components/BreadCrumb";
+import DeleteModal from "Common/Components/Components/DeleteModal";
+import BreadCrumb from "Common/Components/Components/BreadCrumb";
 
 
 

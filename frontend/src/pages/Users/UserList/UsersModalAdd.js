@@ -12,7 +12,7 @@ import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Moda
 // -Components & Constants imports-
 import UserModalUpdate from "./UserModalUpdate";
 import UserModalAdd from "./UserModalAdd";
-import { GuaranteeStatusOptions } from "../../../../Components/constants";
+import { GuaranteeStatusOptions } from "../../../../Components/Constants";
 
 const UserModal = ({ modal, toggle, modalMode, elector }) => {
   const { campaignMembers } = useSelector(campaignSelector);

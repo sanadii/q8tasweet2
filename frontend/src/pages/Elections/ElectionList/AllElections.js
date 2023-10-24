@@ -8,11 +8,11 @@ import { getElections, deleteElection, getModeratorUsers, getCategories } from "
 
 // Components & Columns
 import ElectionModal from "./ElectionModal";
-import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Components/Common";
+import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
 // Hooks
-import { useDelete, useFetchDataIfNeeded } from "Components/Hooks"
+import { useDelete, useFetchDataIfNeeded } from "Common/Hooks"
 
 // UI, Styles & Notifications
 import { Col, Row, Card, CardBody } from "reactstrap";

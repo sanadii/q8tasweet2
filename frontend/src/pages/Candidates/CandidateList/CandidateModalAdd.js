@@ -8,7 +8,7 @@ import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Moda
 // -Components & Constants imports-
 import CandidateModalUpdate from "./CandidateModalUpdate";
 import CandidateModalAdd from "./CandidateModalAdd";
-import { GuaranteeStatusOptions } from "../../../../Components/constants";
+import { GuaranteeStatusOptions } from "../../../../Components/Constants";
 
 const CandidateModal = ({ modal, toggle, modalMode, elector }) => {
   const { campaignMembers } = useSelector(campaignSelector);
@@ -62,14 +62,14 @@ const CandidateModal = ({ modal, toggle, modalMode, elector }) => {
             <Col lg={6}>
               <div>
                 <Label for="name-field" className="form-label">
-                  Candidate Name
+                  اسم المرشح
                 </Label>
                 <Input
                   id="name-field"
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Candidate Name"
+                  placeholder="ادخل اسم المرشح"
                   validate={{
                     required: { value: true },
                   }}
@@ -92,7 +92,7 @@ const CandidateModal = ({ modal, toggle, modalMode, elector }) => {
             <Col lg={6}>
               <div>
                 <Label for="emage-field" className="form-label">
-                  Upload Image
+                  تحميل صورة المرشح
                 </Label>
                 <div className="text-center">
                   <label
@@ -163,134 +163,6 @@ const CandidateModal = ({ modal, toggle, modalMode, elector }) => {
                   </FormFeedback>
                 ) : null}
               </div>
-            </Col>
-            <Col lg={6}>
-              <Label for="candidate-type-field" className="form-label">
-                Candidate Type
-              </Label>
-              <Input
-                name="type"
-                type="select"
-                className="form-select"
-                id="ticket-field"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.type || ""}
-              >
-                {ElectionTypeOptions.map((type) => (
-                  <option key={type.id} value={type.value}>
-                    {type.name}
-                  </option>
-                ))}
-              </Input>
-              {validation.touched.type && validation.errors.type ? (
-                <FormFeedback type="invalid">
-                  {validation.errors.type}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={6}>
-              <Label for="candidate-result-field" className="form-label">
-                Result Type
-              </Label>
-              <Input
-                name="result"
-                type="select"
-                className="form-select"
-                id="ticket-field"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.result || ""}
-              >
-                {ElectionResultOptions.map((result) => (
-                  <option key={result.id} value={result.value}>
-                    {result.name}
-                  </option>
-                ))}
-              </Input>
-              {validation.touched.result && validation.errors.result ? (
-                <FormFeedback result="invalid">
-                  {validation.errors.result}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={6}>
-              <Label for="candidate-votes-field" className="form-label">
-                Number of Votes
-              </Label>
-              <Input
-                id="votes-field"
-                name="votes"
-                type="number"
-                value={validation.values.votes || ""}
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-              ></Input>
-              {validation.touched.votes && validation.errors.votes ? (
-                <FormFeedback votes="invalid">
-                  {validation.errors.votes}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={6}>
-              <Label for="candidate-seats-field" className="form-label">
-                Number of Seats
-              </Label>
-              <Input
-                id="seats-field"
-                name="seats"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.seats || ""}
-              ></Input>
-              {validation.touched.seats && validation.errors.seats ? (
-                <FormFeedback seats="invalid">
-                  {validation.errors.seats}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={6}>
-              <Label for="electors-field" className="form-label">
-                Number of Electors
-              </Label>
-              <Input
-                id="electors-field"
-                name="electors"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electors || ""}
-              ></Input>
-              {validation.touched.electors && validation.errors.seats ? (
-                <FormFeedback electors="invalid">
-                  {validation.errors.electors}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={6}>
-              <Label for="attendees-field" className="form-label">
-                Nunber of Attendees
-              </Label>
-              <Input
-                id="attendees-field"
-                name="attendees"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.attendees || ""}
-              ></Input>
-              {validation.touched.attendees && validation.errors.attendees ? (
-                <FormFeedback attendees="invalid">
-                  {validation.errors.attendees}
-                </FormFeedback>
-              ) : null}
             </Col>
             <hr />
 

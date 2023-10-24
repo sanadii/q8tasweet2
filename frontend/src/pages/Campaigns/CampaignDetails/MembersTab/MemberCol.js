@@ -1,5 +1,5 @@
 import React from "react";
-import { usePermission, useDelete } from "Components/Hooks";
+import { usePermission, useDelete } from "Common/Hooks";
 
 
 // // Functions

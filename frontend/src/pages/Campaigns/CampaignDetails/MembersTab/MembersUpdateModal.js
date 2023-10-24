@@ -5,7 +5,7 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports 
-import { useSupervisorMembers, useCampaignRoles } from "Components/Hooks";
+import { useSupervisorMembers, useCampaignRoles } from "Common/Hooks";
 
 // Form validation imports
 import * as Yup from "yup";
@@ -178,7 +178,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
                 </FormFeedback>
               )}
             </Col>
-
           </Row>
         ))}
       </ModalBody>

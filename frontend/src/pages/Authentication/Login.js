@@ -16,7 +16,7 @@ import { loginUser, socialLogin, resetLoginFlag } from "../../store/actions";
 
 import logoLight from "../../assets/images/logo-light.png";
 
-import withRouter from "../../Components/Common/Components/withRouter";
+import withRouter from "../../Common/Components/Components/withRouter";
 
 const Login = (props) => {
   const dispatch = useDispatch();

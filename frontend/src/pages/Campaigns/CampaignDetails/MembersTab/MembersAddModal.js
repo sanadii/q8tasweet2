@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Action & Selector imports
-import { getUsers, addNewCampaignMember } from "../../../../store/actions";
+import { getUsers, addNewCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // UI Components & styling imports

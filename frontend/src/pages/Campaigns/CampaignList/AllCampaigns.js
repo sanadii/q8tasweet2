@@ -7,7 +7,7 @@ import { userSelector, campaignSelector } from 'Selectors';
 import { getCampaigns, deleteCampaign, getModeratorUsers } from "../../../store/actions";
 
 // Constants & Component imports
-import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Components/Common";
+import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
 import CampaignModal from "./CampaignModal";
 import { Id, Name, DueDate, Status, Priority, CreateBy, Moderators, Actions } from "./CampaignListCol";
 
