@@ -1,5 +1,5 @@
 // React & Redux
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewCandidate, updateCandidate } from "store/actions";
 
@@ -14,16 +14,22 @@ import SimpleBar from "simplebar-react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
-import avatar1 from 'assets/images/users/avatar-1.jpg';
+import defaultAvatar from 'assets/images/users/default.jpg';
+
 
 const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
   const dispatch = useDispatch();
-
-  // State Management
   const moderators = useSelector((state) => state.Users.moderators);
+  const [selectedImage, setSelectedImage] = useState(candidate?.image || null);
 
-  // Image Upload Helper
-  const [selectedImage, setSelectedImage] = useState(null);
+  useEffect(() => {
+    // Reset selected image when candidate changes
+    if (candidate?.image) {
+      setSelectedImage(candidate.image);
+    } else {
+      setSelectedImage(null);
+    }
+  }, [candidate]);
 
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -31,75 +37,45 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
     }
   };
 
-  const formData = new FormData();
-  if (!selectedImage) {
-    // console.log("no selected image");
-  } else {
-    formData.append("image", selectedImage);
-    formData.append("folder", "candidates");
-  }
+  const initialValues = {
+    name: candidate?.name || "",
+    image: selectedImage || defaultAvatar,
+    gender: candidate?.gender || 1,
+    status: candidate?.status || 0,
+    priority: candidate?.priority || 1,
+    moderators: candidate?.moderators?.map((moderator) => moderator.id) || [],
+  };
 
-  // validation
   const validation = useFormik({
     enableReinitialize: true,
-    initialValues: {
-      name: (candidate && candidate.name) || "",
-      image: selectedImage,
-      gender: (candidate && candidate.gender) || 1,
-
-      // Admin
-      status: (candidate && candidate.status) || 0,
-      priority: (candidate && candidate.priority) || 1,
-      moderators:
-        candidate && Array.isArray(candidate.moderators)
-          ? candidate.moderators.map((moderator) => moderator.id)
-          : [],
-    },
+    initialValues,
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter Candidate Name"),
       status: Yup.number().integer().required('Status is required'),
       priority: Yup.number().integer().required('priority is required'),
     }),
-
     onSubmit: (values) => {
-      console.log('Form values:', values);
-
-      if (isEdit) {
-
-        const candidateId = candidate ? candidate.id : 0;
-        console.log("candidateID:", candidateId)
-        const formData = new FormData();
-        formData.append('name', values.name);
-        formData.append('gender', values.gender);
-        formData.append('status', values.status);
-        formData.append('priority', values.priority);
-        const updatedCandidate = formData;
-
-        console.log('Updated Candidate:', updatedCandidate, candidateId);
-
-        // Update candidate
-        dispatch(updateCandidate({ updatedCandidate, candidateId }));
-      } else {
-        const formData = new FormData();
-        // if (selectedImage) {
-        //   formData.append("image", selectedImage);
-        // }
-
-        // Append other fields if needed
-        formData.append("name", values.name);
-        formData.append("gender", values.gender);
-        formData.append("status", values.status);
-        formData.append("priority", values.priority);
-
-        // Create the new candidate object with FormData
-        const newCandidate = formData;
-        dispatch(addNewCandidate(newCandidate));
+      const formData = new FormData();
+      formData.append('id', candidate ? candidate.id : 0);
+      formData.append('name', values.name);
+      formData.append('gender', values.gender);
+      formData.append('status', values.status);
+      formData.append('priority', values.priority);
+      if (selectedImage && selectedImage !== defaultAvatar) {
+        formData.append("image", selectedImage);
       }
 
+      if (isEdit) {
+        dispatch(updateCandidate(formData));
+      } else {
+        dispatch(addNewCandidate(formData));
+      }
+      
+      // Reset form and selected image after dispatch
       validation.resetForm();
+      setSelectedImage(null);
       toggle();
     },
-
   });
 
   return (
@@ -230,85 +206,10 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
                   </Label>
                 </div>
               </div>
-              {/* <div>
-                <Label for="emage-field" className="form-label">
-                  تحميل صورة المرشح
-                </Label>
-                <div className="text-center">
-                  <label
-                    htmlFor="emage-field"
-                    className="mb-0"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="right"
-                    title=""
-                    data-bs-original-title="Select Image"
-                  >
-                    <div className="position-relative d-inline-block">
-                      <div className="position-absolute top-100 start-100 translate-middle">
-                        <div className="avatar-xs">
-                          <div className="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
-                            <i className="ri-image-fill"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="avatar-xl"
-                        style={{
-                          width: "250px",
-                          height: "250px",
-                          overflow: "hidden",
-                          cursor: "pointer", // Add this line
-                          backgroundImage: `url(${validation.values.image})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }}
-                      ></div>
-                    </div>
-                    <input
-                      className="form-control d-none"
-                      id="emage-field"
-                      type="file"
-                      accept="image/png, image/gif, image/jpeg"
-                      onChange={(e) => {
-                        handleImageSelect(e);
-                        const selectedImage = e.target.files[0];
-                        if (selectedImage) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            // console.log(
-                            //   "Image loaded successfully:",
-                            //   reader.result
-                            // );
-                            const imgElement =
-                              document.querySelector(".avatar-xl");
-                            if (imgElement) {
-                              imgElement.style.backgroundImage = `url(${reader.result})`;
-                            }
-                          };
-                          reader.readAsDataURL(selectedImage);
-                        }
-                      }}
-                      onBlur={validation.handleBlur}
-                      invalid={
-                        validation.touched.image && validation.errors.image
-                          ? "true"
-                          : undefined
-                      }
-                    />
-                  </label>
-                </div>
-                {validation.touched.image && validation.errors.image ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.image}
-                  </FormFeedback>
-                ) : null}
-              </div> */}
             </Col>
-
             <CardHeader>
               <h5><strong>الإدارة</strong></h5>
             </CardHeader>
-
             <Col lg={6}>
               <div>
                 <Label for="status-field" className="form-label">

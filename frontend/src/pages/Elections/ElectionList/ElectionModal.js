@@ -1,20 +1,19 @@
-// ------------ React & Redux ------------
-import React, { useState, useEffect, useCallback } from "react";
+// React & Redux
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import { electionSelector, categorySelector, userSelector } from 'Selectors';
 
-// ------------ Import Actions ------------
-import { addElection, updateElection, getCategories } from "../../../store/actions";
+// Import Actions
+import { addElection, updateElection, getCategories } from "store/actions";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 
-// ------------ Custom Components & ConstantsImports ------------
-import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "../../../Common/Constants";
-import useCategoryManager from "../../../Common/Hooks/CategoryHooks";
+// Custom Components & ConstantsImports
+import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "Common/Constants";
+import useCategoryManager from "Common/Hooks/CategoryHooks";
 
 import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";
@@ -22,7 +21,7 @@ import SimpleBar from "simplebar-react";
 const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
   const dispatch = useDispatch();
 
-  // ------------ State Management ------------
+  // State Management
   const { moderators } = useSelector(userSelector);
   const { isElectionSuccess, error } = useSelector(electionSelector);
   const { categories, subCategories } = useSelector(categorySelector);
@@ -45,8 +44,8 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       electors: (election && election.electors) || 0,
       attendees: (election && election.attendees) || 0,
 
-      // Admin
-      status: (election && election.status) || 0,
+      // Tasks
+      status: (election && election.status) || 1,
       priority: (election && election.priority) || 1,
       moderators:
         election && Array.isArray(election.moderators)
@@ -87,7 +86,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
 
         // Update election
         dispatch(
-          updateElection({ election: updatedElection })
+          updateElection(updatedElection)
         );
       } else {
         const newElection = {
@@ -109,7 +108,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
           priority: parseInt(values.priority, 10),
           moderators: values.moderators,
         };
-        dispatch(addElection({ election: newElection }));
+        dispatch(addElection(newElection));
       }
 
       validation.resetForm();
@@ -251,7 +250,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 name="electType"
                 type="select"
                 className="form-select"
-                id="ticket-field"
+                id="electType-field"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.electType || 1}
@@ -264,7 +263,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
               </Input>
               {validation.touched.electType && validation.errors.electType ? (
                 <FormFeedback type="invalid">
-                  {validation.errors.type}
+                  {validation.errors.electType}
                 </FormFeedback>
               ) : null}
             </Col>
@@ -273,7 +272,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 نتائج الانتخابات
               </Label>
               <Input
-                id="elect-result-field"
+                id="electResult-field"
                 name="electResult"
                 type="select"
                 className="form-select"
@@ -298,7 +297,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 عدد الأصوات
               </Label>
               <Input
-                id="elect-votes-field"
+                id="electVotes-field"
                 name="electVotes"
                 type="number"
                 value={validation.values.electVotes || 0}
@@ -316,7 +315,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
                 عدد المقاعد
               </Label>
               <Input
-                id="elect-seats-field"
+                id="electSeats-field"
                 name="electSeats"
                 type="number"
                 className="form-control"

@@ -67,16 +67,16 @@ function* onAddCandidate({ payload: candidate }) {
   }
 }
 
-function* onUpdateCandidate({ payload: { candidate, candidateId } }) {
+function* onUpdateCandidate({ payload: candidate }) {
   try {
-    const response = yield call(updateCandidate, candidate, candidateId);
+    const response = yield call(updateCandidate, candidate);
     yield put(updateCandidateSuccess(response));
-    toast.success("Candidate Updated Successfully", {
+    toast.success("تم تحديث المرشح بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     yield put(updateCandidateFail(error));
-    toast.error("Candidate Updated Failed", { autoClose: 2000 });
+    toast.error("خطأ في تحديث المرشح", { autoClose: 2000 });
   }
 }
 

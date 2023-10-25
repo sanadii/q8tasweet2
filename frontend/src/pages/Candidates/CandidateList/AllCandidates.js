@@ -103,6 +103,7 @@ const AllCandidates = () => {
       setCandidate({
         id: candidate.id,
         name: candidate.name,
+        gender: candidate.gender,
         image:
           candidate && candidate.image
             ? candidate.image
@@ -112,8 +113,8 @@ const AllCandidates = () => {
         description: candidate.description,
 
         // Admin
-        status: candidate.status,
-        priority: candidate.priority,
+        status: candidate.task.status,
+        priority: candidate.task.priority,
         moderators: candidate.moderators,
       });
 

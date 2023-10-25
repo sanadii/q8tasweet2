@@ -16,7 +16,7 @@ from django.contrib.auth.models import Group, Permission
 
 # Serializers
 from candidates.serializers import CandidatesSerializer
-from elections.serializers import ElectionsSerializer
+from elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
 from electors.serializers import ElectorsSerializer
 
@@ -93,7 +93,7 @@ class GetCampaigns(APIView):
         
 #         # Passing context with request to the serializer
 #         context = {"request": request}
-#         data_serializer = ElectionsSerializer(paginated_campaignss, many=True, context=context)
+#         data_serializer = ElectionSerializer(paginated_campaignss, many=True, context=context)
         
 #         return paginator.get_paginated_response(data_serializer.data)
 

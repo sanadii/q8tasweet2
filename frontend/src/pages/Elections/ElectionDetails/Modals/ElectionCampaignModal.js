@@ -3,13 +3,13 @@ import React, { useState, useEffect } from "react";
 
 // Redux imports
 import { useSelector, useDispatch } from "react-redux";
-import { addNewElectionCampaign } from "../../../../store/actions";
+import { addNewElectionCampaign } from "store/actions";
 
 // Router & navigation imports
 import { Link } from "react-router-dom";
 
 // Component imports
-import { ImageCircle } from "../../../../Common/Components";
+import { ImageCircle } from "Common/Components";
 
 // UI Components & styling imports
 import { ModalBody, Input, Modal, ModalHeader, Form } from "reactstrap";

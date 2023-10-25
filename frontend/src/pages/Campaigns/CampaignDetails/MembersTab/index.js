@@ -40,11 +40,7 @@ const MembersTab = () => {
   } = usePermission();
 
   // Delete Hook
-  const {
-    handleDeleteItem,
-    onClickDelete,
-    setDeleteModal,
-    deleteModal,
+  const {    handleDeleteItem,    onClickDelete,    setDeleteModal,    deleteModal,
   } = useDelete(deleteCampaignMember);
 
   // Filtering and Member Matching

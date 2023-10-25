@@ -1,4 +1,5 @@
 // CircleImage.js
+import { GenderOptions } from "Common/Constants";
 
 import React from "react";
 import { api } from "config";
@@ -121,15 +122,8 @@ export const ImageLarge = ({ imagePath }) => {
 export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner }) => {
   const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
 
-  let borderColor;
-
-  if (gender === 1) {
-    borderColor = "#4e8dff";
-  } else if (gender === 2) {
-    borderColor = "#ff4ef8";
-  } else {
-    borderColor = "#9e9e9e";
-  }
+  const genderObject = GenderOptions.find((g) => g.id === gender);
+  const borderColor = genderObject ? genderObject.color : "#9e9e9e";
 
   return (
     <div className="d-flex align-items-center">
@@ -156,6 +150,7 @@ export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner 
     </div>
   );
 };
+
 
 export const ImageCampaignBackground = ({ imagePath }) => {
   const imageUrl = imagePath ?

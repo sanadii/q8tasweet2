@@ -1,20 +1,18 @@
 // React & Redux imports
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaign, getCampaignModerators } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
-import { Link } from 'react-router-dom';
 
 // Component & Constants imports
 import AddCampaignModerator from "./AddCampaignModerator";
-import AddCampaignDirector from "./AddCampaignDirector";
 
 // Form validation imports
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // Reactstrap (UI) imports
-import { Col, Button, Row, ModalBody, Label, Input, Form, FormFeedback, Card, CardHeader, CardBody, ModalFooter } from "reactstrap";
+import { Col, Button, Row, Label, Input, Form, FormFeedback, Card, CardBody, ModalFooter } from "reactstrap";
 
 
 

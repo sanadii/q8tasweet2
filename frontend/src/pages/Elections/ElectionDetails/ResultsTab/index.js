@@ -3,12 +3,12 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 // Redux Related Imports
 import { useSelector, useDispatch } from "react-redux";
-import { updateElectionCommitteeResults } from "../../../store/actions";
+import { updateElectionCommitteeResults } from "store/actions";
 import { electionSelector } from 'Selectors';
 
 // Component and UI Library Imports
 import { Col, Row, Card, CardBody } from "reactstrap";
-import { ImageCandidateWinnerCircle, Loader, TableContainer, TableContainerHeader } from "../../../Common/Components";
+import { ImageCandidateWinnerCircle, Loader, TableContainer, TableContainerHeader } from "Common/Components";
 
 // Utility and Third-Party Library Imports
 import { toast, ToastContainer } from "react-toastify";

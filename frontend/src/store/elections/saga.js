@@ -134,39 +134,27 @@ function* getElectionDetails({ payload: election }) {
   }
 }
 
-function* onAddElection({ payload: { election, formData } }) {
+function* onAddElection({ payload: election }) {
   try {
-    // Check if formData contains an image
-    if (formData && formData.get("image")) {
-      // Dispatch the uploadNewImage action with the formData & Wait for the upload to succeed before proceeding
-      yield put(uploadNewImage(formData));
-      const { payload: uploadResponse } = yield take(UPLOAD_IMAGE_SUCCESS);
-
-      // Replace backslashes in image URL with forward slashes & update the image field in election object with new url
-      const formattedImageUrl = uploadResponse.url.replace(/\\/g, "/");
-      const updatedElection = {
-        ...election,
-        image: formattedImageUrl,
-      };
-
-      // Call the API function to add a new election & Dispatch the addElectionSuccess action with the received data
-      const addElectionResponse = yield call(addElection, updatedElection);
-      yield put(addElectionSuccess(addElectionResponse));
-
-      toast.success("Election Added Successfully", { autoClose: 2000 });
-    } else {
-      // Call the API function to add a new election without uploading an image
-      const addElectionResponse = yield call(addElection, election);
-      yield put(addElectionSuccess(addElectionResponse));
-
-      toast.success("Election Added Successfully", { autoClose: 2000 });
-    }
+    const response = yield call(addElection, election);
+    yield put(addElectionSuccess(response));
+    toast.success("تم إضافة الإنتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addElectionFail(error));
-    toast.error("Election Added Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة الإنتخابات", { autoClose: 2000 });
   }
 }
 
+function* onUpdateElection({ payload: election }) {
+  try {
+    const response = yield call(updateElection, election);
+    yield put(updateElectionSuccess(response));
+    toast.success("تم تحديث الإنتخابات بنجاح", { autoClose: 2000 });
+  } catch (error) {
+    yield put(updateElectionFail(error));
+    toast.error("خطأ في تحديث الإنتخابات", { autoClose: 2000 });
+  }
+}
 
 function* onDeleteElection({ payload: election }) {
   try {
@@ -176,40 +164,6 @@ function* onDeleteElection({ payload: election }) {
   } catch (error) {
     yield put(deleteElectionFail(error));
     toast.error("Election Delete Failed", { autoClose: 2000 });
-  }
-}
-
-function* onUpdateElection({ payload: { election, formData } }) {
-  try {
-    let uploadResponse;
-
-    // Check if an image is selected (formData contains a selected file)
-    if (formData && formData.get("image")) {
-      // Dispatch the uploadNewImage action with the formData & Wait for the upload to succeed before proceeding
-      yield put(uploadNewImage(formData));
-      const action = yield take([UPLOAD_IMAGE_SUCCESS, UPLOAD_IMAGE_FAIL]);
-      if (action.type === UPLOAD_IMAGE_SUCCESS) {
-        uploadResponse = action.payload;
-      } else {
-        throw new Error("Image Upload Failed");
-      }
-    }
-
-    // Replace backslashes in image URL with forward slashes & update the image field in the election object with the new URL
-    const formattedImageUrl = uploadResponse?.url?.replace(/\\/g, "/");
-    const updatedElection = {
-      ...election,
-      image: formattedImageUrl,
-    };
-
-    // Call the API function to update the election & Dispatch the updateElectionSuccess action with the received data
-    const updateElectionResponse = yield call(updateElection, updatedElection);
-    yield put(updateElectionSuccess(updateElectionResponse));
-
-    toast.success("Election Updated Successfully", { autoClose: 2000 });
-  } catch (error) {
-    yield put(updateElectionFail(error));
-    toast.error("Election Updated Failed", { autoClose: 2000 });
   }
 }
 

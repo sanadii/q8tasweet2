@@ -23,7 +23,7 @@
 #         })
 
 #     def get_election_data(self, election, context):
-#         return ElectionsSerializer(election, context=context).data
+#         return ElectionSerializer(election, context=context).data
 
 #     def get_election_candidates(self, election, election_candidates, context):
 

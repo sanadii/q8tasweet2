@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
-import { getCandidates, addNewElectionCandidate } from "../../../../store/actions";
+import { getCandidates, addNewElectionCandidate } from "store/actions";
 import { electionSelector, candidateSelector } from 'Selectors';
 
 // UI Components & styling imports

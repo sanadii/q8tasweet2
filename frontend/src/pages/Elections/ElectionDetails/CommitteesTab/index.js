@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { electionSelector } from 'Selectors';
 
-import { deleteElectionCommittee } from "../../../store/actions";
-import ElectionCommitteeModal from "./Modals/ElectionCommitteeModal";
+import { deleteElectionCommittee } from "store/actions";
+import ElectionCommitteeModal from "../Modals/ElectionCommitteeModal";
 
 // Utility and helper imports
 import { isEmpty } from "lodash";
@@ -13,7 +13,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
+import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "Common/Components";
 
 // Reactstrap (UI) imports
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";

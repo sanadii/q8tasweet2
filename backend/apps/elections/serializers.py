@@ -6,7 +6,7 @@ from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 # Models
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee, ElectionCommitteeResult
 
-class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Election model. """
     admin_serializer_classes = (TrackMixin, TaskMixin)
     name = serializers.SerializerMethodField('get_election_name')
@@ -21,6 +21,7 @@ class ElectionsSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "first_winner_votes", "last_winner_votes",
             "electors", "electors_males", "electors_females",
             "attendees", "attendees_males", "attendees_females",
+            "status", "priority"
         ]
 
     def get_election_name(self, obj):
@@ -74,7 +75,7 @@ class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer)
     admin_serializer_classes = (TrackMixin,)
 
     name = serializers.CharField(source='candidate.name', read_only=True)
-    gender = serializers.CharField(source='candidate.gender', read_only=True)
+    gender = serializers.IntegerField(source='candidate.gender', read_only=True)
     image = serializers.SerializerMethodField('get_candidate_image')
 
     class Meta:

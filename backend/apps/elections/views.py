@@ -18,7 +18,7 @@ from apps.categories.models import Category
 
 # Serializers
 from apps.campaigns.serializers import CampaignsSerializer
-from apps.elections.serializers import ElectionsSerializer, ElectionCommitteesSerializer, ElectionCandidatesSerializer, ElectionCommitteeResultSerializer
+from apps.elections.serializers import ElectionSerializer, ElectionCommitteesSerializer, ElectionCandidatesSerializer, ElectionCommitteeResultSerializer
 from helper.views_helper import CustomPagination
 
 
@@ -47,7 +47,7 @@ class GetElections(APIView):
         
         # Passing context with request to the serializer
         context = {"request": request}
-        data_serializer = ElectionsSerializer(paginated_elections, many=True, context=context)
+        data_serializer = ElectionSerializer(paginated_elections, many=True, context=context)
         
         return paginator.get_paginated_response(data_serializer.data)
 
@@ -70,7 +70,7 @@ class GetElectionDetails(APIView):
         })
 
     def get_election_data(self, election, context):
-        return ElectionsSerializer(election, context=context).data
+        return ElectionSerializer(election, context=context).data
 
     def get_election_candidates(self, election_candidates, context):
         return ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
@@ -87,10 +87,10 @@ class AddElection(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = ElectionsSerializer(data=request.data, context={'request': request})
+        serializer = ElectionSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -103,13 +103,17 @@ class UpdateElection(APIView):
         except Election.DoesNotExist:
             return Response({"error": "Election not found"}, status=404)
         
-        # Link the retrieved 'election' object with the serializer
-        serializer = ElectionsSerializer(election, data=request.data, context={'request': request}, partial=True)
+        print("Incoming data:", request.data)  # Debug statement
+        print("Current election state:", ElectionSerializer(election).data)  # Debug statement
+
+        serializer = ElectionSerializer(election, data=request.data, context={'request': request}, partial=True)
         
         if serializer.is_valid():
             serializer.save()
+            print("Updated election state:", ElectionSerializer(election).data)  # Debug statement
             return Response({"data": serializer.data, "count": 0, "code": 200})
         
+        print("Errors:", serializer.errors)  # Debug statement
         return Response(serializer.errors, status=400)
 
 class DeleteElection(APIView):
@@ -247,7 +251,7 @@ class GetPublicElections(APIView):
     
     def get(self, request):
         elections_data = Election.objects.all()
-        data_serializer = ElectionsSerializer(elections_data, many=True)
+        data_serializer = ElectionSerializer(elections_data, many=True)
 
         # Fetch categories with parent equal to NULL
         category_options = Category.objects.filter(parent__isnull=True)
@@ -301,7 +305,7 @@ class GetPublicElectionDetails(APIView):
 
     def get_election_data(self, id):
         election = Election.objects.get(id=id)
-        election_serializer = ElectionsSerializer(election)
+        election_serializer = ElectionSerializer(election)
         return election_serializer.data
 
     def get_election_candidates(self, id):

@@ -64,6 +64,17 @@ const AllElections = () => {
   }, [moderators]);
 
 
+  // Dates
+  const defaultdate = () => {
+    let d = new Date();
+    const year = d.getFullYear();
+    const month = ("0" + (d.getMonth() + 1)).slice(-2);
+    const day = ("0" + d.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  };
+
+  const [dueDate, setDate] = useState(defaultdate());
+
   // Model & Toggle Function
   const [election, setElection] = useState(null);
   const [modal, setModal] = useState(false);
@@ -97,16 +108,16 @@ const AllElections = () => {
         tags: election.tags,
 
         // Election Spesifications
-        type: election.type,
-        result: election.result,
-        votes: election.votes,
-        seats: election.seats,
+        electType: election.electType,
+        electResult: election.electResult,
+        electVotes: election.electVotes,
+        electSeats: election.seats,
         electors: election.electors,
         attendees: election.attendees,
 
         // Task
-        status: election.status,
-        priority: election.priority,
+        status: election.task.status,
+        priority: election.task.priority,
         moderators: election.moderators,
       });
 
@@ -123,7 +134,7 @@ const AllElections = () => {
     toggle();
   };
 
-  
+
   // Table Columns
   const columns = useMemo(
     () => [
@@ -191,7 +202,7 @@ const AllElections = () => {
         // useFilters: true,
 
         Cell: (cellProps) => {
-          return <Status status={cellProps.row.original.status} />;
+          return <Status status={cellProps.row.original.task.status} />;
         },
       },
       {
@@ -237,17 +248,6 @@ const AllElections = () => {
     ],
     [handleElectionClick, checkedAll]
   );
-
-  // Dates
-  const defaultdate = () => {
-    let d = new Date();
-    const year = d.getFullYear();
-    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-    const day = ("0" + d.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
-
-  const [dueDate, setDate] = useState(defaultdate());
 
   // Filters----------
   const [filters, setFilters] = useState({

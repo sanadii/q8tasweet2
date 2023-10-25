@@ -33,6 +33,50 @@ class GetCandidates(APIView):
         
         return paginator.get_paginated_response(data_serializer.data)
 
+class AddNewCandidate(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        serializer = CandidatesSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UpdateCandidate(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def patch(self, request, id):
+        try:
+            candidate = Candidate.objects.get(id=id)
+        except Candidate.DoesNotExist:
+            return Response({"error": "Candidate not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        data = request.data.copy()
+        if 'image' in data and data['image'] in ['null', 'remove']:
+            data['image'] = None
+
+        serializer = CandidatesSerializer(candidate, data=data, partial=True, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteCandidate(APIView):
+    def delete(self, request, id):
+        try:
+            candidate = Candidate.objects.get(id=id)
+            candidate.delete()
+            return JsonResponse({"data": "Candidate deleted successfully", "count": 1, "code": 200}, safe=False)
+        except Candidate.DoesNotExist:
+            return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)
+
+
 # class GetCandidateDetails(APIView):
 #     def get(self, request, id):
 #         candidate = get_object_or_404(Candidate, id=id)
@@ -64,50 +108,3 @@ class GetCandidates(APIView):
 #         candidate_candidate_ids = CandidateCandidates.objects.filter(candidate=candidate).values_list('id', flat=True)
 #         candidate_campaigns = Campaign.objects.filter(candidate_candidate__in=candidate_candidate_ids)
 #         return CampaignsSerializer(candidate_campaigns, many=True, context=context).data
-
-class AddNewCandidate(APIView):
-    permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
-
-    def post(self, request):
-        serializer = CandidatesSerializer(data=request.data, context={'request': request})
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class UpdateCandidate(APIView):
-    permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
-
-    def patch(self, request, id):
-        try:
-            candidate = Candidate.objects.get(id=id)
-        except Candidate.DoesNotExist:
-            return Response({"error": "Candidate not found"}, status=status.HTTP_404_NOT_FOUND)
-        
-        data = request.data.copy()
-
-        # Handle image removal
-        if 'image' in data and data['image'] in ['null', 'remove']:
-            data['image'] = None
-
-        serializer = CandidatesSerializer(candidate, data=data, partial=True)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"data": serializer.data, "count": 0, "code": 200})
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class DeleteCandidate(APIView):
-    def delete(self, request, id):
-        try:
-            candidate = Candidate.objects.get(id=id)
-            candidate.delete()
-            return JsonResponse({"data": "Candidate deleted successfully", "count": 1, "code": 200}, safe=False)
-        except Candidate.DoesNotExist:
-            return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)

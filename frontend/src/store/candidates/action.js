@@ -44,23 +44,6 @@ export const getCandidateDetails = (candidate) => ({
 });
 
 
-
-// Update Candidate
-export const updateCandidate = (candidate) => ({
-  type: UPDATE_CANDIDATE,
-  payload: candidate,
-});
-
-export const updateCandidateSuccess = (candidate, candidateId) => ({
-  type: UPDATE_CANDIDATE_SUCCESS,
-  payload: { candidate, candidateId }
-});
-
-export const updateCandidateFail = (error) => ({
-  type: UPDATE_CANDIDATE_FAIL,
-  payload: error,
-});
-
 // Add New Candidate
 export const addNewCandidate = (candidate) => ({
   type: ADD_NEW_CANDIDATE,
@@ -77,6 +60,39 @@ export const addNewCandidateFail = (error) => ({
   payload: error,
 });
 
+
+
+// Update Candidate
+// export const updateCandidateSuccess = (candidate) => ({
+//   type: UPDATE_CANDIDATE_SUCCESS,
+//   payload: candidate,
+// });
+
+// export const updateCandidate = (candidate) => {
+//   console.log("Candidate in updateCandidate:", candidate);
+
+//   return {
+//     type: UPDATE_CANDIDATE,
+//     payload: candidate,
+//   };
+// };
+
+// Update Candidate
+export const updateCandidate = (candidate) => ({
+  type: UPDATE_CANDIDATE,
+  payload: candidate,
+});
+
+export const updateCandidateSuccess = (candidate) => ({
+  type: UPDATE_CANDIDATE_SUCCESS,
+  payload: candidate,
+});
+
+
+export const updateCandidateFail = (error) => ({
+  type: UPDATE_CANDIDATE_FAIL,
+  payload: error,
+});
 
 // Delete Candidate
 export const deleteCandidate = (candidate) => ({

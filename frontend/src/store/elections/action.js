@@ -81,6 +81,21 @@ export const getElectionDetails = (election) => ({
   payload: election,
 });
 
+// Add New Election
+export const addElection = (election) => ({
+  type: ADD_ELECTION,
+  payload: election,
+});
+
+export const addElectionSuccess = (election) => ({
+  type: ADD_ELECTION_SUCCESS,
+  payload: election,
+});
+
+export const addElectionFail = (error) => ({
+  type: ADD_ELECTION_FAIL,
+  payload: error,
+});
 
 
 // Update Election
@@ -98,23 +113,6 @@ export const updateElectionFail = (error) => ({
   type: UPDATE_ELECTION_FAIL,
   payload: error,
 });
-
-// Add New Election
-export const addElection = (election) => ({
-  type: ADD_ELECTION,
-  payload: election,
-});
-
-export const addElectionSuccess = (election) => ({
-  type: ADD_ELECTION_SUCCESS,
-  payload: election,
-});
-
-export const addElectionFail = (error) => ({
-  type: ADD_ELECTION_FAIL,
-  payload: error,
-});
-
 
 // Delete Election
 export const deleteElection = (election) => ({

@@ -1,38 +1,27 @@
 // React imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 
 // Store & Selectors
-import { deleteElectionCandidate } from "../../../store/actions";
+import { deleteElectionCandidate } from "store/actions";
 import { electionSelector } from 'Selectors';
-
-// Components
-import ElectionCandidateModal from "./Modals/ElectionCandidateModal";
+import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Phone, Attended, Status, Guarantor, Actions } from "./CandidatesCol";
 
 // Common Components
-import { ImageCandidateWinnerCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
+import ElectionCandidateModal from "./ElectionCandidateModal";
+import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "Common/Components";
 
 // UI & Utilities
-import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
+import { Col, Row, Card, CardBody } from "reactstrap";
 import { isEmpty } from "lodash";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import SimpleBar from "simplebar-react";
-
 
 const CandidatesTab = () => {
   const dispatch = useDispatch();
 
-  const {
-    electionDetails,
-    electionCandidates,
-    isElectionCandidateSuccess,
-    isElectionSuccess,
+  const {    electionCandidates,
     error
   } = useSelector(electionSelector);
-
-  // const election_id = electionDetails.id;
 
   // Constants
   const [electionCandidate, setElectionCandidate] = useState([]);
@@ -151,122 +140,40 @@ const CandidatesTab = () => {
   const columns = useMemo(
     () => [
       {
-        Header: (
-          <input
-            type="checkbox"
-            id="checkBoxAll"
-            className="form-check-input"
-            onClick={() => checkedAll()}
-          />
-        ),
-        Cell: (cellProps) => {
-          return (
-            <input
-              type="checkbox"
-              className="electionCandidateCheckBox form-check-input"
-              value={cellProps.row.original.id}
-              onChange={() => deleteCheckbox()}
-            />
-          );
-        },
+        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
         id: "id",
       },
       {
         Header: "المركز",
         accessor: "position",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <p>{cellProps.row.original.position}</p>;
-        },
+        Cell: (cellProps) => <Position {...cellProps} />
       },
       {
         Header: "المرشح",
         filterable: true,
-        Cell: (electionCandidate) => (
-          <ImageCandidateWinnerCircle
-            gender={electionCandidate.row.original.gender}
-            name={electionCandidate.row.original.name}
-            imagePath={electionCandidate.row.original.image}
-            is_winner={electionCandidate.row.original.is_winner}
-          />
-        ),
+        Cell: (cellProps) => <Name {...cellProps} />
       },
       {
         Header: "الأصوات",
         accessor: "votes",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <p>{cellProps.row.original.votes}</p>;
-        },
+        Cell: (cellProps) => <Votes {...cellProps} />
       },
       {
         Header: "إجراءات",
-        Cell: (cellProps) => {
-          return (
-            <div className="list-inline hstack gap-2 mb-0">
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-primary edit-list"
-                onClick={() => {
-                  const electionCandidate = cellProps.row.original;
-                  setElectionCandidate(electionCandidate);
-                }}
-              >
-                <i className="ri-phone-line align-bottom" />
-              </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-success edit-list"
-                onClick={() => {
-                  const electionCandidate = cellProps.row.original;
-                  setElectionCandidate(electionCandidate);
-                }}
-              >
-                <i className="ri-question-answer-line align-bottom" />
-              </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-warning edit-list"
-                onClick={() => {
-                  const electionCandidate = cellProps.row.original;
-                  setElectionCandidate(electionCandidate);
-                }}
-              >
-                <i className="ri-eye-fill align-bottom" />
-              </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-info edit-list"
-                onClick={() => {
-                  const electionCandidate = cellProps.row.original;
-                  handleElectionCandidateClick(electionCandidate);
-                }}
-              >
-                <i className="ri-pencil-fill align-bottom" />
-              </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-danger remove-list"
-                onClick={() => {
-                  const electionCandidate = cellProps.row.original;
-                  onClickDelete(electionCandidate);
-                }}
-              >
-                <i className="ri-delete-bin-5-fill align-bottom" />
-              </button>
-            </div>
-          );
-        },
+        Cell: (cellProps) =>
+          <Actions
+            cellProps={cellProps}
+            setElectionCandidate={setElectionCandidate}
+            electionCandidate={electionCandidate}
+            handleElectionCandidateClick={handleElectionCandidateClick}
+            onClickDelete={onClickDelete}
+          />
       },
       {
         Header: "رمز",
         accessor: "candidate_id",
-        filterable: true,
-        enableGlobalFilter: false,
-        Cell: (cellProps) => {
-          return <p>{cellProps.row.original.id}</p>;
-        },
-        // id: "candidateId", // Make sure id property is defined here
+        Cell: (cellProps) => <Id {...cellProps} />
       },
     ],
     [handleElectionCandidateClick, checkedAll]

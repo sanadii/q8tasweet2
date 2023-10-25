@@ -3,11 +3,11 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
-import { addNewElectionCommittee, updateElectionCommittee } from "../../../../store/actions";
+import { addNewElectionCommittee, updateElectionCommittee } from "store/actions";
 import { electionSelector } from 'Selectors';
 
 // Constants & Component imports
-import { GenderOptions } from "../../../../Common/Constants";
+import { GenderOptions } from "Common/Constants";
 
 // Form & validation imports
 import { useFormik } from "formik";

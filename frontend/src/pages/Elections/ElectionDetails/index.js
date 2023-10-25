@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Store & Selectors
-import { getElectionDetails, getCategories } from "../../../store/actions";
+import { getElectionDetails, getCategories } from "store/actions";
 import { electionSelector, categorySelector } from 'Selectors';
 
 // Components

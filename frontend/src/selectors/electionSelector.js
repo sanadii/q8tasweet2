@@ -8,7 +8,10 @@ export const electionSelector = createSelector(
   (electionsState) => ({
     // Election Selectors
     elections: electionsState.elections,
+
+    election: electionsState.electionDetails,
     electionDetails: electionsState.electionDetails,
+    electionId: electionsState.electionDetails.id,
     electionCommittees: electionsState.electionCommittees,
     electionCandidates: electionsState.electionCandidates,
     electionCampaigns: electionsState.electionCampaigns,

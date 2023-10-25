@@ -5,6 +5,9 @@ import { categorySelector } from 'Selectors';
 import { Link } from "react-router-dom";
 import * as moment from "moment";
 
+// Component, Constants & Hooks
+import { StatusOptions, PriorityOptions } from 'Common/Constants';
+
 const handleValidDate = (duedate) => {
   const formattedDate = moment(duedate).format("YYYY-MM-DD");
   return formattedDate;
@@ -62,81 +65,37 @@ const Category = ({ category, subCategory }) => {
 };
 
 const Status = ({ status }) => {
-  let badgeClass;
-  let statusName;
+  const statusMapping = StatusOptions.reduce((acc, curr) => {
+    acc[curr.id] = curr;
+    return acc;
+  }, {});
 
-  switch (status) {
-    case 1:
-      statusName = "Published";
-      badgeClass = "badge-soft-success";
-      break;
-    case 2:
-      statusName = "Private";
-      badgeClass = "badge-soft-secondary";
-      break;
-    case 3:
-      statusName = "Pending Approval";
-      badgeClass = "badge-soft-warning";
-      break;
-    case 4:
-      statusName = "Missing Data";
-      badgeClass = "badge-soft-warning";
-      break;
-    case 5:
-      statusName = "Inprogress";
-      statusName = "Inprogress";
-      break;
-    case 6:
-      statusName = "New";
-      badgeClass = "badge-soft-info";
-      break;
-    case 9:
-      statusName = "Deleted";
-      badgeClass = "badge-soft-secondary";
-      break;
-    default:
-      statusName = "Unknown";
-      badgeClass = "badge-soft-primary";
-      break;
-  }
+  const { name, badgeClass } = statusMapping[status] || {
+    name: "غير معرف",
+    badgeClass: "badge bg-primary",
+  };
 
-  return (
-    <span className={`badge ${badgeClass} text-uppercase`}>
-      {statusName}
-    </span>
-  );
+  return <span className={`${badgeClass} text-uppercase`}>{name}</span>;
+
 };
 
 
 const Priority = ({ value }) => {
-  let badgeClass;
-  let priorityName;
+  const priorityMapping = PriorityOptions.reduce((acc, curr) => {
+    acc[curr.id] = curr;
+    return acc;
+  }, {});
 
-  switch (value) {
-    case 3:
-      priorityName = "High";
-      badgeClass = "badge bg-danger";
-      break;
-    case 2:
-      priorityName = "Medium";
-      badgeClass = "badge bg-warning";
-      break;
-    case 1:
-      priorityName = "Low";
-      badgeClass = "badge bg-success";
-      break;
-    default:
-      priorityName = "Unknown";
-      badgeClass = "badge bg-primary";
-      break;
-  }
+  const { name, badgeClass } = priorityMapping[value] || {
+    name: "غير معرف",
+    badgeClass: "badge bg-primary",
+  };
 
-  return (
-    <span className={`${badgeClass} text-uppercase`}>
-      {priorityName}
-    </span>
-  );
+  return <span className={`${badgeClass} text-uppercase`}>{name}</span>;
 };
+
+export default Priority;
+
 
 
 

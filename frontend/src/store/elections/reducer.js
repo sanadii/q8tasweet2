@@ -180,17 +180,24 @@ const Elections = (state = IntialState, action) => {
     case UPDATE_ELECTION_SUCCESS:
       return {
         ...state,
-        elections: state.elections.map((election) =>
-          election.id.toString() === action.payload.data.id.toString()
-            ? { ...election, ...action.payload.data }
-            : election
-        ),
-        electionDetails: state.electionDetails.id.toString() === action.payload.data.id.toString()
+        // Checking before accessing Elections to prevent error
+        elections: Array.isArray(state.elections)
+          ? state.elections.map((election) =>
+            election.id.toString() === action.payload.data.id.toString()
+              ? { ...election, ...action.payload.data }
+              : election
+          )
+          : state.elections,
+
+        // Checking before accessing Election Details to prevent error
+        electionDetails: state.electionDetails && state.electionDetails.id.toString() === action.payload.data.id.toString()
           ? { ...state.electionDetails, ...action.payload.data }
           : state.electionDetails,
+
         isCampaignUpdate: true,
         isCampaignUpdateFail: false,
       };
+      
     case UPDATE_ELECTION_FAIL:
       return {
         ...state,
@@ -245,11 +252,10 @@ const Elections = (state = IntialState, action) => {
     case UPDATE_ELECTION_CANDIDATE_SUCCESS:
       return {
         ...state,
-        electionCandidates: state.electionCandidates.map(
-          (electionCandidate) =>
-            electionCandidate.id.toString() === action.payload.data.id.toString()
-              ? { ...electionCandidate, ...action.payload.data }
-              : electionCandidate
+        electionCandidates: state.electionCandidates.map((electionCandidate) =>
+          electionCandidate.id.toString() === action.payload.data.id.toString()
+            ? { ...electionCandidate, ...action.payload.data }
+            : electionCandidate
         ),
         isElectionCandidateUpdate: true,
         isElectionCandidateUpdateFail: false,

@@ -1,20 +1,23 @@
 export const PriorityOptions = [
   {
-    id: 3,
-    name: "عالي",
-    value: "عالي",
-    description: "الانتخابات ذات الأولوية العالية. (عالي)",
+    id: 1,
+    name: "منخفض",
+    value: "low",
+    badgeClass: "badge bg-success",
+    description: "الانتخابات ذات الأولوية المنخفضة. (منخفض)",
   },
   {
     id: 2,
     name: "متوسط",
-    value: "متوسط",
+    value: "medium",
+    badgeClass: "badge bg-warning",
     description: "الانتخابات ذات الأولوية المتوسطة. (متوسط)",
   },
   {
-    id: 1,
-    name: "منخفض",
-    value: "منخفض",
-    description: "الانتخابات ذات الأولوية المنخفضة. (منخفض)",
+    id: 3,
+    name: "عالي",
+    value: "high",
+    badgeClass: "badge bg-danger",
+    description: "الانتخابات ذات الأولوية العالية. (عالي)",
   },
 ];

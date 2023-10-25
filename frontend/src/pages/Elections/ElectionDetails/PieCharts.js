@@ -2,12 +2,12 @@ import React from 'react';
 import ReactApexChart from "react-apexcharts";
 
 //Import images
-// import smallImage1 from '../../../../assets/images/small/img-1.jpg';
-// import smallImage2 from '../../../../assets/images/small/img-2.jpg';
-// import smallImage3 from '../../../../assets/images/small/img-3.jpg';
-// import smallImage4 from '../../../../assets/images/small/img-4.jpg';
+// import smallImage1 from 'assets/images/small/img-1.jpg';
+// import smallImage2 from 'assets/images/small/img-2.jpg';
+// import smallImage3 from 'assets/images/small/img-3.jpg';
+// import smallImage4 from 'assets/images/small/img-4.jpg';
 
-import getChartColorsArray from "../../../Common/Components/Charts/ChartsDynamicColor";
+import getChartColorsArray from "Common/Components/Charts/ChartsDynamicColor";
 
 const SimplePie = ({ dataColors, chartWidth, chartHeight }) => {
     var chartPieBasicColors = getChartColorsArray(dataColors);
