@@ -64,20 +64,22 @@ const useDelete = (deleteAction) => {
     // Basic delete actions
     handleDeleteItem,
     onClickDelete,
-    
-    // Multi-delete actions
-    handleDeleteMultiple,
-    isMultiDeleteButton,
-    
+
+
+
     // Modals
     setDeleteModal,
     deleteModal,
     setDeleteModalMulti,
     deleteModalMulti,
-    
+
     // Checkbox related
     checkedAll,
     deleteCheckbox,
+
+    // Multi-delete actions
+    handleDeleteMultiple,
+    isMultiDeleteButton,
   };
 };
 

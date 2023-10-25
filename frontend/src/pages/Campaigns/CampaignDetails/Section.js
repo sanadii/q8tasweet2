@@ -16,7 +16,7 @@ import { ImageLarge, ImageCampaignBackground } from "Common/Components";
 import usePermission from "Common/Hooks/usePermission";
 import Loader from "Common/Components/Components/Loader";
 
-// Tabs
+//import Tabs & Widges
 import OverviewTab from "./OverviewTab";
 import MembersTab from "./MembersTab";
 import GuaranteesTab from "./GuaranteesTab";
@@ -45,8 +45,6 @@ const Section = () => {
     canViewCampaignGuarantee,
     // canViewCampaignAttendees,
   } = usePermission();
-
-
 
   // Tabs
   const tabs = [

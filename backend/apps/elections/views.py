@@ -52,8 +52,10 @@ class GetElections(APIView):
         return paginator.get_paginated_response(data_serializer.data)
 
 class GetElectionDetails(APIView):
-    def get(self, request, id):
-        election = get_object_or_404(Election, id=id)
+    def get(self, request, slug):
+        election = get_object_or_404(Election, slug=slug)
+    # def get(self, request, id):
+    #     election = get_object_or_404(Election, id=id)
         context = {"request": request}
 
         election_candidates = ElectionCandidate.objects.filter(election=election).prefetch_related('candidate').only('id')

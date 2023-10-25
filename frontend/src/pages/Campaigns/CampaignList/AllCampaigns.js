@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Action & Selector imports
-import { getCampaigns, deleteCampaign, getModeratorUsers } from "../../../store/actions";
+import { getCampaigns, deleteCampaign, getModeratorUsers } from "store/actions";
 
 // Constants & Component imports
-import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
+import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import CampaignModal from "./CampaignModal";
 import { Id, Name, DueDate, Status, Priority, CreateBy, Moderators, Actions } from "./CampaignListCol";
 

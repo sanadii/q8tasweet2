@@ -5,11 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 // Store & Selectors
 import { deleteElectionCandidate } from "store/actions";
 import { electionSelector } from 'Selectors';
-import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Phone, Attended, Status, Guarantor, Actions } from "./CandidatesCol";
+import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
 
 // Common Components
 import ElectionCandidateModal from "./ElectionCandidateModal";
 import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "Common/Components";
+// import { calculateCandidatePosition } from "./CandidateCalculations"
+import { usePermission, useDelete } from "Common/Hooks";
 
 // UI & Utilities
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -19,17 +21,54 @@ import { toast, ToastContainer } from "react-toastify";
 const CandidatesTab = () => {
   const dispatch = useDispatch();
 
-  const {    electionCandidates,
-    error
-  } = useSelector(electionSelector);
+  const { election, electionCandidates, error } = useSelector(electionSelector);
 
   // Constants
   const [electionCandidate, setElectionCandidate] = useState([]);
   const [electionCandidateList, setElectionCandidateList] = useState(electionCandidates);
 
+  // Sort List by Candidate Position
   useEffect(() => {
-    setElectionCandidateList(electionCandidates);
-  }, [electionCandidates]);
+    const calculateCandidatePosition = (candidates) => {
+      // Sort candidates by votes in desending order
+      let sortedCandidates = [...candidates].sort((a, b) => b.votes - a.votes);
+
+      // Assign positions
+      for (let i = 0; i < sortedCandidates.length; i++) {
+        sortedCandidates[i].position = i + 1;
+      }
+
+      // Set isWinner property based on electSeats
+      const electSeats = election.electSeats || 0;
+      sortedCandidates = sortedCandidates.map(candidate => ({
+        ...candidate,
+        isWinner: candidate.position <= electSeats
+      }));
+
+      // Sort candidates by positions in ascending order (issue in react its always reversing)
+      sortedCandidates = sortedCandidates.sort((a, b) => b.position - a.position);
+      return sortedCandidates;
+    };
+
+    const sortedCandidates = calculateCandidatePosition(electionCandidates);
+    setElectionCandidateList(sortedCandidates);
+
+  }, [electionCandidates, election.electSeats]);
+
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    onClickDelete,
+    setDeleteModal,
+    deleteModal,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    checkedAll,
+    deleteCheckbox,
+    handleDeleteMultiple,
+    isMultiDeleteButton,
+  } = useDelete(deleteElectionCandidate);
+
 
   // Models
   const [modal, setModal] = useState(false);
@@ -44,31 +83,6 @@ const CandidatesTab = () => {
       setModal(true);
     }
   }, [modal]);
-
-  // Modals: Delete, Set, Edit
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
-
-  // Delete Data
-  const handleDeleteElectionCandidate = () => {
-    if (electionCandidate) {
-      dispatch(deleteElectionCandidate(electionCandidate.id));
-      setDeleteModal(false);
-    }
-  };
-
-  const onClickDelete = (electionCandidate) => {
-    setElectionCandidate(electionCandidate);
-    setDeleteModal(true);
-  };
-
-  // Add Dataa
-  // handleElectionCandidateClicks Function
-  // const handleElectionCandidateClicks = () => {
-  //   setElectionCandidate(""); // Changed from empty string to null
-  //   setIsEdit(false);
-  //   toggle();
-  // };
 
   // Update Data
   const handleElectionCandidateClick = useCallback(
@@ -90,46 +104,6 @@ const CandidatesTab = () => {
     [toggle]
   );
 
-  // Checked All
-  const checkedAll = useCallback(() => {
-    const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".electionCandidateCheckBox");
-
-    if (checkall.checked) {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = true;
-      });
-    } else {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = false;
-      });
-    }
-    deleteCheckbox();
-  }, []);
-
-  // Delete Multiple
-  const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
-  const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
-
-  const deleteMultiple = () => {
-    const checkall = document.getElementById("checkBoxAll");
-    selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteElectionCandidate(element.value));
-      setTimeout(() => {
-        toast.clearWaitingQueue();
-      }, 3000);
-    });
-    setIsMultiDeleteButton(false);
-    checkall.checked = false;
-  };
-
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".electionCandidateCheckBox:checked");
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
-  };
 
   const handleElectionCandidateClicks = () => {
     setElectionCandidate("");
@@ -161,14 +135,14 @@ const CandidatesTab = () => {
       },
       {
         Header: "إجراءات",
-        Cell: (cellProps) =>
+        Cell: (cellProps) => (
           <Actions
-            cellProps={cellProps}
+            {...cellProps}
             setElectionCandidate={setElectionCandidate}
-            electionCandidate={electionCandidate}
             handleElectionCandidateClick={handleElectionCandidateClick}
             onClickDelete={onClickDelete}
           />
+        )
       },
       {
         Header: "رمز",
@@ -191,39 +165,32 @@ const CandidatesTab = () => {
       />
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteElectionCandidate}
+        onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          deleteMultiple();
+          handleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
       />
       <ElectionCandidateModal
-        modal={modal} // boolean to control modal visibility
+        modal={modal}
         setModal={setModal}
-        isEdit={isEdit} // boolean to determine if editing
+        isEdit={isEdit}
         toggle={toggle}
         electionCandidate={electionCandidate}
       />
 
       <Row>
         <Col lg={12}>
-          {/* <div>
-            <button
-              className="btn btn-soft-success"
-              onClick={() => setIsExportCSV(true)}
-            >
-              Export
-            </button>
-          </div> */}
           <Card id="electionCandidateList">
             <CardBody>
               <div>
                 <TableContainerHeader
+                  // CSS: Table-border-Color
                   // Title
                   ContainerHeaderTitle="المرشحين"
 

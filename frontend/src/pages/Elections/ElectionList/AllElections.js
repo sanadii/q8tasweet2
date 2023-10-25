@@ -8,8 +8,8 @@ import { getElections, deleteElection, getModeratorUsers, getCategories } from "
 
 // Components & Columns
 import ElectionModal from "./ElectionModal";
-import { AvatarMedium, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
-import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
+import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
+import { Id, Name, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
 // Hooks
 import { useDelete, useFetchDataIfNeeded } from "Common/Hooks"
@@ -168,82 +168,55 @@ const AllElections = () => {
         },
       },
       {
-        name: "الإنتخابات",
+        Header: "الإنتخابات",
         title: "name",
         accessor: "name",
-        Cell: (cellProps) => cellProps.row ? <AvatarMedium row={cellProps.row} /> : null,
+        Cell: (cellProps) => <Name {...cellProps} />
 
       },
       {
         Header: "الموعد",
         accessor: "dueDate",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <DueDate {...cellProps} />;
-        },
+        Cell: (cellProps) => <DueDate {...cellProps} />
       },
       {
         Header: "المجموعة",
         accessor: "category",
-        filterable: false,
-        Cell: (cellProps) => {
-          return (
-            <Category
-              category={cellProps.row.original.category}
-              subCategory={cellProps.row.original.subCategory}
-            />
-          );
-        },
+        Cell: (cellProps) =>
+          <Category
+            category={cellProps.row.original.category}
+            subCategory={cellProps.row.original.subCategory}
+          />
       },
       {
         Header: "الحالة",
         accessor: "status",
-        filterable: true,
-        // useFilters: true,
-
-        Cell: (cellProps) => {
-          return <Status status={cellProps.row.original.task.status} />;
-        },
+        Cell: (cellProps) => <Status status={cellProps.row.original.task.status} />
       },
       {
         Header: "الأولية",
         accessor: "priority",
-        filterable: true,
-        Cell: (cellProps) => {
-          return <Priority {...cellProps} />;
-        },
+        Cell: (cellProps) => <Priority {...cellProps} />
       },
       {
         Header: "المشرفون",
         accessor: "moderators",
-        filterable: false,
-        Cell: (cell) => {
-          return <Moderators {...cell} />;
-        },
+        Cell: (cell) => <Moderators {...cell} />
       },
       {
         Header: "بواسطة",
         accessor: "createdBy",
-        filterable: false,
-        useFilters: true,
-
-        Cell: (cellProps) => {
-          return <CreateBy {...cellProps} />;
-        },
+        Cell: (cellProps) => <CreateBy {...cellProps} />
       },
       {
         Header: "إجراءات",
         accessor: "election",
-        filterable: false,
-        Cell: (cellProps) => {
-          return (
-            <Actions
-              {...cellProps}
-              handleElectionClick={handleElectionClick}
-              onClickDelete={onClickDelete}
-            />
-          );
-        },
+        Cell: (cellProps) =>
+          <Actions
+            {...cellProps}
+            handleElectionClick={handleElectionClick}
+            onClickDelete={onClickDelete}
+          />
       },
     ],
     [handleElectionClick, checkedAll]

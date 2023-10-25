@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
+    'django_extensions',
     'admin_reorder',
 
     # Q8 Tasweet Apps

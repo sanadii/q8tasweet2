@@ -4,7 +4,7 @@ import { Badge, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Card, Card
 import { electionSelector } from 'Selectors';
 
 // Component, Constants, Hooks Imports
-import { ImageGenderCircle, AvatarMedium, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Common/Components";
+import { ImageGenderCircle, AvatarSmall, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Common/Components";
 
 import { Container } from "reactstrap";
 import { useParams } from "react-router-dom";
@@ -125,7 +125,7 @@ const ElectionDetails = () => {
                 </div>
                 <div className="flex-grow-1 ms-2 name">
                   {candidate.name}{" "}
-                  {candidate.is_winner ? (
+                  {candidate.isWinner ? (
                     <Badge color="success" className="badge-label">
                       <i className="mdi mdi-circle-medium"></i> Winner
                     </Badge>
@@ -170,7 +170,7 @@ const ElectionDetails = () => {
           <div className="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
             <Row className="g-4">
               <div className="col-auto">
-                <AvatarMedium imagePath={electionDetails.image} />
+                <AvatarSmall imagePath={electionDetails.image} />
               </div>
 
               <Col>

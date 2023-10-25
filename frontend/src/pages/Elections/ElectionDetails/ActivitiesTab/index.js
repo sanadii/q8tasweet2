@@ -14,7 +14,7 @@ import image2 from "assets/images/small/img-2.jpg";
 import image3 from "assets/images/small/img-3.jpg";
 import image4 from "assets/images/small/img-4.jpg";
 
-const ActivitiesTab = ({ election }) => {
+const ActivitiesTab = () => {
     return (
         <React.Fragment>
             <Card>

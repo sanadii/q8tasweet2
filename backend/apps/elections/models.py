@@ -1,13 +1,20 @@
 # Election Model
 from django.db import models
-from helper.models_helper import TrackModel, TaskModel, ElectionTypeOptions, ElectionResultsOptions, StatusOptions, PriorityOptions, GenderOptions
 from django.db.models.signals import post_save, post_delete
+from django_extensions.db.fields import AutoSlugField
 from django.dispatch import receiver
 from django.db.models import Sum
+
+from django.utils.text import slugify
+import uuid
+
+from .utils import generate_slug
+from helper.models_helper import TrackModel, TaskModel, ElectionTypeOptions, ElectionResultsOptions, StatusOptions, PriorityOptions, GenderOptions
 from helper.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 
 class Election(TrackModel, TaskModel):
     # Basic Information
+    slug = AutoSlugField(populate_from='get_dynamic_slug', unique=True, null=True)
     due_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('categories.Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='category_elections')
     sub_category = models.ForeignKey('categories.Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategory_elections')
@@ -46,10 +53,19 @@ class Election(TrackModel, TaskModel):
             ]
 
     def __str__(self):
-        return f"{self.sub_category.name} - {self.due_date.year if self.due_date else 'No Date'}"
+        return f"{self.sub_category.name} - {self.due_date.year if self.due_date else 'لم يحدد بعد'}"
+    
+    def get_dynamic_slug(self):
+        return f"{self.sub_category.slug} - {self.due_date.year if self.due_date else 'tba'}"
 
-    def get_dynamic_name(self):
-        return f"{self.sub_category.name} - {self.due_date.year if self.due_date else 'No Date'}"
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.get_dynamic_slug() + '-' + str(uuid.uuid4())[:8])
+        super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.get_dynamic_slug() + '-' + str(uuid.uuid4())[:8])
+        super().save(*args, **kwargs)
 
 
 class ElectionCandidate(TrackModel):
@@ -57,7 +73,6 @@ class ElectionCandidate(TrackModel):
     candidate = models.ForeignKey('candidates.Candidate', on_delete=models.SET_NULL, null=True, blank=True, related_name="election_candidates")
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
-
 
     def update_votes(self):
         self.votes = self.committee_result_candidates.aggregate(Sum('votes'))['votes__sum'] or 0

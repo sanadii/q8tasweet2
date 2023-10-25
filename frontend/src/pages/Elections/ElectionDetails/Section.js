@@ -1,14 +1,20 @@
+// Pages/Elections/ElectionDetails/index.js
+// React & Redux core
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
+// Store & Selectors
 import { electionSelector, categorySelector } from 'Selectors';
 
+// Components & Hooks
 import { ImageMedium } from "Common/Components";
+
+// UI & Utilities
 import { Card, CardBody, CardFooter, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import classnames from "classnames";
 
-//import images
-import ElectionDetailsWidget from "./ElectionDetailsWidget";
+//import Tabs & Widges
+import ElectionDetailsWidget from "./OverviewTab/ElectionDetailsWidget";
 import OverviewTab from "./OverviewTab";
 import CandidatesTab from "./CandidatesTab";
 import CampaignsTab from "./CampaignsTab";
@@ -20,15 +26,65 @@ import SortingTab from "./SortingTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
+
+
+const NavTabs = ({ tabs, activeTab, toggleTab }) => (
+  <Nav className="nav-tabs-custom border-bottom-0" role="tablist">
+    {tabs.filter(Boolean).map((tab) => (  // Filter out falsy values before mapping
+      <NavItem key={tab.id}>
+        <NavLink
+          className={classnames({ active: activeTab === tab.id }, "fw-semibold")}
+          onClick={() => toggleTab(tab.id)}
+          href="#"
+        >
+          {tab.title}
+        </NavLink>
+      </NavItem>
+    ))}
+  </Nav>
+);
+
+
+
 const Section = () => {
 
   const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
-  const { categories, subCategories } = useSelector(categorySelector);
+  const { categories } = useSelector(categorySelector);
 
   const election = electionDetails;
   const categoryId = election.category; // assuming election object has a categoryId property
   const category = categories.find(cat => cat.id === categoryId);
   const electionCategoryName = category ? category.name : 'Category Not Found';
+
+  const mainTabs = [
+    { id: "1", title: "الملخص" },
+    { id: "2", title: "المرشحين" },
+    ...(election.electionResult === 2 ? [{ id: "3", title: "اللجان" }] : []),
+    ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية" }] : []),
+    { id: "5", title: "الفرز" },
+    // { id: "6", title: "عمليات المستخدم" },
+    { id: "7", title: "تعديل" }
+  ];
+
+  const campaignTabs = [
+    { id: "4", title: "Campaigns" },
+    { id: "42", title: "Guarantees" },
+    { id: "43", title: "Attendees" },
+    { id: "44", title: "Sorting" },
+  ];
+
+  const tabComponents = {
+    "1": <OverviewTab />,
+    "2": <CandidatesTab />,
+    "3": <CommitteesTab />,
+    "4": <CampaignsTab />,
+    // "42": <GuaranteesTab electionCandidates={electionCandidates} />,
+    // "43": <AttendeesTab electionCandidates={electionCandidates} />,
+    // "44": <SortingTab electionCandidates={electionCandidates} />,
+    // "5": <ResultsTab />,
+    // "6": <ActivitiesTab />,
+    "7": <EditTab />,
+  };
 
   //Tab
   const [activeTab, setActiveTab] = useState("1");
@@ -38,22 +94,12 @@ const Section = () => {
     }
   };
 
-  const [viewedProfileId, setViewedProfileId] = useState(null);
-
-  const toggleProfileView = (campaignId) => {
-    setViewedProfileId(viewedProfileId === campaignId ? null : campaignId);
-  };
-
-  // Passing it down to the child component
-
-  const [isProfileView, setIsProfileView] = useState(false);
-
   return (
     <React.Fragment>
       <Row>
         <Col lg={12}>
           <Card className="mt-n4 mx-n4">
-            <div className="bg-soft-warning">
+            <div className="bg-soft-info">
               <CardBody className="pb-0 px-4">
                 <Row className="mb-3">
                   <div className="col-md">
@@ -99,15 +145,15 @@ const Section = () => {
                         </div>
                         <div>
                           <div className="badge bg-danger fs-12 me-3">
-                            {election.type}
+                            {election.electType}
                           </div>
 
                           <div className="badge bg-warning fs-12 me-3">
-                            {election.votes} صوت
+                            {election.electVotes} صوت
                           </div>
 
                           <div className="badge bg-warning fs-12 me-3">
-                            {election.seats} مقاعد
+                            {election.electSeats} مقاعد
                           </div>
                         </div>
                       </div>
@@ -146,236 +192,26 @@ const Section = () => {
                     </div>
                   </div>
                 </Row>
-                <Nav className="nav-tabs-custom border-bottom-0" role="tablist">
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "1" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("1");
-                      }}
-                      href="#"
-                    >
-                      الملخص
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "2" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("2");
-                      }}
-                      href="#"
-                    >
-                      المرشحين
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "3" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("3");
-                      }}
-                      href="#"
-                    >
-                      اللجان
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "4" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("4");
-                      }}
-                      href="#"
-                    >
-                      الحملات الإنتخابية
-                    </NavLink>
-                  </NavItem>
-
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "5" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("5");
-                      }}
-                      href="#"
-                    >
-                      النتائج
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "6" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("6");
-                      }}
-                      href="#"
-                    >
-                      عمليات المستخدم
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "7" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("7");
-                      }}
-                      href="#"
-                    >
-                      تعديل
-                    </NavLink>
-                  </NavItem>
-                </Nav>
               </CardBody>
+              <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} />
               {activeTab.startsWith("4") && (
                 <CardFooter>
-                  <Nav
-                    className="nav-tabs-custom border-bottom-0"
-                    role="tablist"
-                  >
-                    <NavItem>
-                      <NavLink
-                        className={classnames(
-                          { active: activeTab === "4" },
-                          "fw-semibold"
-                        )}
-                        onClick={() => {
-                          toggleTab("4");
-                        }}
-                        href="#"
-                      >
-                        Campaigns
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames(
-                          { active: activeTab === "42" },
-                          "fw-semibold"
-                        )}
-                        onClick={() => {
-                          toggleTab("42");
-                        }}
-                        href="#"
-                      >
-                        Guarantees
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames(
-                          { active: activeTab === "43" },
-                          "fw-semibold"
-                        )}
-                        onClick={() => {
-                          toggleTab("43");
-                        }}
-                        href="#"
-                      >
-                        Attendees
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames(
-                          { active: activeTab === "44" },
-                          "fw-semibold"
-                        )}
-                        onClick={() => {
-                          toggleTab("44");
-                        }}
-                        href="#"
-                      >
-                        Sorting
-                      </NavLink>
-                    </NavItem>
-                  </Nav>
+                  <NavTabs tabs={campaignTabs} activeTab={activeTab} toggleTab={toggleTab} />
                 </CardFooter>
               )}
             </div>
           </Card>
         </Col>
       </Row>
-
-      <ElectionDetailsWidget
-        election={election}
-        electionCandidates={electionCandidates}
-      />
       <Row>
         <Col lg={12}>
-          {viewedProfileId ? (
-            <p>The campaign ID is {viewedProfileId}</p>
-          ) : (
-            <TabContent activeTab={activeTab} className="text-muted">
-              <TabPane tabId="1">
-                <OverviewTab
-                  election={election}
-                  electionCandidates={electionCandidates}
-                />
+          <TabContent activeTab={activeTab} className="text-muted">
+            {Object.entries(tabComponents).map(([key, component]) => (
+              <TabPane tabId={key} key={key}>
+                {component}
               </TabPane>
-
-              <TabPane tabId="2">
-                <CandidatesTab
-                  electionCandidates={electionCandidates}
-                />
-              </TabPane>
-
-              <TabPane tabId="3">
-                <CommitteesTab
-                  electionCommittees={electionCommittees}
-                  toggleProfileView={toggleProfileView}
-                  viewedProfileId={viewedProfileId}
-                />
-              </TabPane>
-
-              <TabPane tabId="4">
-                <CampaignsTab
-                  electionCampaigns={electionCampaigns}
-                  toggleProfileView={toggleProfileView}
-                  viewedProfileId={viewedProfileId}
-                />
-              </TabPane>
-              <TabPane tabId="42">
-                {/* <GuaranteesTab electionCandidates={electionCandidates} /> */}
-              </TabPane>
-              {/* <TabPane tabId="43">
-              <AttendeesTab electionCandidates={electionCandidates} />
-            </TabPane> */}
-              {/* <TabPane tabId="44">
-              <SortingTab electionCandidates={electionCandidates} />
-            </TabPane> */}
-              {/* <TabPane tabId="5">
-                <ResultsTab election={election} />
-              </TabPane> */}
-              <TabPane tabId="6">
-                <ActivitiesTab election={election} />
-              </TabPane>
-              <TabPane tabId="7">
-                <EditTab election={election} />
-              </TabPane>
-            </TabContent>
-          )}
+            ))}
+          </TabContent>
         </Col>
       </Row>
     </React.Fragment>

@@ -25,7 +25,7 @@ export { default as AvatarImage } from "./Images/AvatarImage";
 export {
   ImageCircle,
   ImageGenderCircle,
-  AvatarMedium,
+  AvatarSmall,
   ImageCandidateCampaign,
   ImageRoundedCircleXS,
   ImageCampaignCard,

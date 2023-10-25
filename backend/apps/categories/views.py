@@ -1,29 +1,12 @@
 # from apps.campaigns.models import Campaign
-from django.http import JsonResponse
-from django.http.response import JsonResponse
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
-from django.shortcuts import render
 from rest_framework.views import APIView
-
+from rest_framework.permissions import IsAuthenticated
 
 # Models
 from apps.categories.models import Category
 from apps.categories.serializers import CategoriesSerializer, SubCategoriesSerializer
 
-import ast 
-from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
-
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-
-from django.db.models import Count, Case, When, IntegerField
-from collections import defaultdict
-from rest_framework import status
-import jwt
-from django.conf import settings
 
 
 # class GetCampaigns(APIView):

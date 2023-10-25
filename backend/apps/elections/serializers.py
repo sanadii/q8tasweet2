@@ -15,7 +15,7 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     class Meta:
         model = Election
         fields = [
-            "id", "name", "image", "due_date",
+            "id", "name", "slug", "image", "due_date",
             "category", "sub_category",
             "elect_type", "elect_result", "elect_votes", "elect_seats",
             "first_winner_votes", "last_winner_votes",
@@ -28,7 +28,7 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
         sub_category = getattr(obj, 'sub_category', None)
         if sub_category:
             year = getattr(obj.due_date, 'year', None)
-            return f"{sub_category.name} - {year or 'No Due Date'}"
+            return f"{sub_category.name} - {year or ''}"
         return None
 
     def get_election_image(self, obj):

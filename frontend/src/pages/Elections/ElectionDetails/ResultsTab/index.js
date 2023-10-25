@@ -223,7 +223,7 @@ const ResultsTab = () => {
               gender={candidate.gender}
               name={candidate.name}
               imagePath={candidate.image}
-              is_winner={candidate.is_winner}
+              isWinner={candidate.isWinner}
             />
           );
         },

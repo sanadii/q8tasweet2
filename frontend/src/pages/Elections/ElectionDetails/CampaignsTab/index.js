@@ -8,7 +8,7 @@ import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle
 import ElectionCampaignModal from "../Modals/ElectionCampaignModal";
 import { ImageCandidateCampaign, DeleteModal } from "Common/Components";
 
-const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
+const CampaignsTab = () => {
   const dispatch = useDispatch();
   const { electionCampaigns } = useSelector(electionSelector);
 
@@ -26,6 +26,19 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
   // const toggleElectionCampaign = () => {
   //   setElectionCampaignModal(!electionCampaignModal);
   // };
+
+
+  // Toggle Profile View
+
+  const [viewedProfileId, setViewedProfileId] = useState(null);
+  const [isProfileView, setIsProfileView] = useState(false);
+
+  const toggleProfileView = (campaignId) => {
+    setViewedProfileId(viewedProfileId === campaignId ? null : campaignId);
+  };
+
+
+
 
   // Modals: Delete, Set, Edit
   const [deleteModal, setDeleteModal] = useState(false);

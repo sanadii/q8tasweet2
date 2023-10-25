@@ -1,4 +1,4 @@
-# backend/management/set_permissions.py
+# backend/management/groups_data.py
 from apps.auths.models import Group
 from django.contrib.contenttypes.models import ContentType
 

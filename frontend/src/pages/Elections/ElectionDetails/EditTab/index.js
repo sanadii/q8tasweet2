@@ -278,7 +278,7 @@ const EditTab = () => {
             ) : null}
             <Card>
               <CardHeader>
-                <h5>وصف الإنتخابات</h5>
+                <h5>إعدادات الإنتخابات</h5>
               </CardHeader>
               <CardBody>
                 <Row>
@@ -345,15 +345,15 @@ const EditTab = () => {
                 <Row>
                   <Col lg={6}>
                     <div className="mb-3">
-                      <Label htmlFor="seats-number-input" className="form-label">
+                      <Label htmlFor="electSeats-input" className="form-label">
                         عدد المقاعد للفائزين
                       </Label>
                       <input
-                        id="seats-number-input"
+                        id="electSeats-input"
                         name="electSeats" // Add this
                         type="number"
                         className="form-control"
-                        value={validation.values.seats || ""}
+                        value={validation.values.electSeats || ""}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                       />
@@ -361,15 +361,15 @@ const EditTab = () => {
                   </Col>
                   <Col lg={6}>
                     <div className="mb-3">
-                      <Label htmlFor="seats-number-input" className="form-label">
+                      <Label htmlFor="electVotes-input" className="form-label">
                         عدد الأصوات للناخبين
                       </Label>
                       <input
-                        id="votes-number-input"
+                        id="electVotes-input"
                         name="electVotes" // Add this
                         type="number"
                         className="form-control"
-                        value={validation.values.votes || ""}
+                        value={validation.values.electVotes || ""}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                       />

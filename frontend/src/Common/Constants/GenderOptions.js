@@ -4,6 +4,7 @@ export const GenderOptions = [
       name: "ذكر",
       pleural: "ذكور",
       color: "info",
+      borderColor: "#299cdb",
       description: "male",
     },
     {
@@ -11,6 +12,7 @@ export const GenderOptions = [
       name: "أنثى",
       pleural: "إناث",
       color: "pink",
+      borderColor: "#f672a7",
       description: "female",
     },
   ];

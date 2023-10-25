@@ -40,8 +40,7 @@ const MembersTab = () => {
   } = usePermission();
 
   // Delete Hook
-  const {    handleDeleteItem,    onClickDelete,    setDeleteModal,    deleteModal,
-  } = useDelete(deleteCampaignMember);
+  const { handleDeleteItem, onClickDelete, setDeleteModal, deleteModal } = useDelete(deleteCampaignMember);
 
   // Filtering and Member Matching
   const [filters, setFilters] = useState({
@@ -175,7 +174,7 @@ const MembersTab = () => {
       return column.TabsToShow.includes(activeRole);
     });
   }, [activeRole, columnsDefinition]);
-  
+
   // Table Filters
 
   const campaignMemberList = campaignMembers.filter(campaignMember => {

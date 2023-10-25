@@ -52,36 +52,33 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
   );
 };
 
-export const AvatarMedium = ({ row }) => {
+export const AvatarSmall = ({ row }) => {
   if (!row || !row.original) return null; // If row or row.original is undefined, don't render the component
 
-  const { id, image, name } = row.original;
+  const { id, image, name, slug } = row.original;
   const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
   return (
     <React.Fragment>
-
-      <div className="d-flex align-items-center">
-        <div className="avatar-md"> {/* To maintain the image size */}
+      <Link to={`/elections/${slug}`} className="d-flex align-items-center link-primary">
+        <div className="avatar-sm">
           <img
             src={imageUrl}
             alt={name}
             className="img-thumbnail rounded-circle"
           />
         </div>
-        <Link to={`/elections/${id}`} className="fw-medium link-primary flex-grow-1 ms-2 name">
-          <strong>
-            {name}
-          </strong>
-        </Link>
-      </div>
+        <strong className="ps-2">
+          {name}
+        </strong>
+      </Link>
     </React.Fragment>
   );
 };
 
 
 export const ImageMedium = ({ imagePath }) => {
-  const imageUrl = imagePath ? `${imagePath}` : `${mediaUrl}${defaultImagePath}`;
+  const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
 
   return (
     <React.Fragment>
@@ -119,12 +116,14 @@ export const ImageLarge = ({ imagePath }) => {
 };
 
 
-export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner }) => {
+export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, isWinner }) => {
   const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
 
   const genderObject = GenderOptions.find((g) => g.id === gender);
-  const borderColor = genderObject ? genderObject.color : "#9e9e9e";
+  const borderColor = genderObject ? genderObject.borderColor : "#9e9e9e";
 
+  console.log("genderObject:", genderObject)
+  console.log("borderColor:", borderColor)
   return (
     <div className="d-flex align-items-center">
       <div
@@ -141,7 +140,7 @@ export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, is_winner 
         <strong>
           {name}
         </strong>
-        {is_winner && (
+        {isWinner && (
           <Badge color="success" className="badge-label">
             <i className="mdi mdi-circle-medium"></i> فائز
           </Badge>

@@ -1,5 +1,9 @@
 # campaigns/models
 from django.db import models
+from django_extensions.db.fields import AutoSlugField
+from django.utils.text import slugify
+import uuid
+
 from django.contrib.auth.models import Group
 from helper.models_helper import TrackModel, TaskModel, GuaranteeStatusOptions
 from helper.validators import civil_validator, phone_validator
@@ -9,6 +13,7 @@ from helper.validators import civil_validator, phone_validator
 class Campaign(TrackModel, TaskModel):
     # Basic Information
     election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='candidate_campaigns')
+    slug = AutoSlugField(populate_from='get_dynamic_name', unique=True, null=True)
     description = models.TextField(blank=True, null=True)
     target_votes = models.PositiveIntegerField(blank=True, null=True)
 

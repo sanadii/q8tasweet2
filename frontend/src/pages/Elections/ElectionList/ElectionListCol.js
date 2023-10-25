@@ -7,6 +7,7 @@ import * as moment from "moment";
 
 // Component, Constants & Hooks
 import { StatusOptions, PriorityOptions } from 'Common/Constants';
+import { AvatarSmall } from "Common/Components";
 
 const handleValidDate = (duedate) => {
   const formattedDate = moment(duedate).format("YYYY-MM-DD");
@@ -17,7 +18,7 @@ const Id = (cell) => {
   return (
     <React.Fragment>
       <Link
-        to={`/elections/${cell.row.original.id}`}
+        to={`/elections/${cell.row.original.slug}`}
         className="fw-medium link-primary"
       >
         {cell.value}
@@ -26,15 +27,10 @@ const Id = (cell) => {
   );
 };
 
-const Name = (cell) => {
+const Name = (cellProps) => {
   return (
     <React.Fragment>
-      <Link
-        to={`/elections/${cell.row.original.id}`}
-        className="fw-medium link-primary"
-      >
-        {cell.value}
-      </Link>{" "}
+      <AvatarSmall row={cellProps.row} />
     </React.Fragment>
   );
 };

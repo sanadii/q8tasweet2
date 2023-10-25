@@ -5,13 +5,14 @@ import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownTo
 import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "Common/Components";
 import { electionSelector } from 'Selectors';
 
-
+// Components
+import ElectionDetailsWidget from "./ElectionDetailsWidget";
 //SimpleBar
 import SimpleBar from "simplebar-react";
 
-const OverviewTab = ({ election }) => {
+const OverviewTab = () => {
 
-  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
+  const { election, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
 
   const moderators = Array.isArray(election.moderators)
     ? election.moderators
@@ -19,6 +20,8 @@ const OverviewTab = ({ election }) => {
 
   return (
     <React.Fragment>
+      <ElectionDetailsWidget election={election} electionCandidates={electionCandidates} />
+
       <Row>
         <Col xl={9} lg={8}>
           <Card>

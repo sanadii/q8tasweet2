@@ -91,7 +91,7 @@ const ResultsTab = () => {
                                 </div>
                                 <div className="flex-grow-1 ms-2 name">
                                     {candidate.name}{" "}
-                                    {candidate.is_winner ? (
+                                    {candidate.isWinner ? (
                                         <Badge color="success" className="badge-label">
                                             <i className="mdi mdi-circle-medium"></i> Winner
                                         </Badge>
