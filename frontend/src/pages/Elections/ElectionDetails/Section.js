@@ -1,5 +1,3 @@
-// Pages/Elections/ElectionDetails/index.js
-// React & Redux core
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -8,6 +6,7 @@ import { electionSelector, categorySelector } from 'Selectors';
 
 // Components & Hooks
 import { ImageMedium } from "Common/Components";
+import { ImageLarge, SectionBackagroundImage } from "Common/Components";
 
 // UI & Utilities
 import { Card, CardBody, CardFooter, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
@@ -21,15 +20,18 @@ import CampaignsTab from "./CampaignsTab";
 import CommitteesTab from "./CommitteesTab";
 import GuaranteesTab from "./GuaranteesTab";
 import AttendeesTab from "./AttendeesTab";
-import SortingTab from "./SortingTab";
-// import ResultsTab from "./ResultsTab";
+// import SortingTab from "./SortingTab";
+import ResultsTab from "./ResultsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
 
-
 const NavTabs = ({ tabs, activeTab, toggleTab }) => (
-  <Nav className="nav-tabs-custom border-bottom-0" role="tablist">
+  <Nav
+    pills
+    className="animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1"
+    role="tablist"
+  >
     {tabs.filter(Boolean).map((tab) => (  // Filter out falsy values before mapping
       <NavItem key={tab.id}>
         <NavLink
@@ -37,7 +39,8 @@ const NavTabs = ({ tabs, activeTab, toggleTab }) => (
           onClick={() => toggleTab(tab.id)}
           href="#"
         >
-          {tab.title}
+          <i className={`${tab.icon} d-inline-block d-md-none`}></i>
+          <span className="d-none d-md-inline-block">{tab.title}</span>
         </NavLink>
       </NavItem>
     ))}
@@ -45,8 +48,9 @@ const NavTabs = ({ tabs, activeTab, toggleTab }) => (
 );
 
 
-
 const Section = () => {
+  // SwiperCore.use([Autoplay]);
+
 
   const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
   const { categories } = useSelector(categorySelector);
@@ -57,20 +61,20 @@ const Section = () => {
   const electionCategoryName = category ? category.name : 'Category Not Found';
 
   const mainTabs = [
-    { id: "1", title: "الملخص" },
-    { id: "2", title: "المرشحين" },
-    ...(election.electionResult === 2 ? [{ id: "3", title: "اللجان" }] : []),
-    ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية" }] : []),
-    { id: "5", title: "الفرز" },
-    // { id: "6", title: "عمليات المستخدم" },
-    { id: "7", title: "تعديل" }
+    { id: "1", title: "الملخص", icon: 'ri-activity-line', },
+    { id: "2", title: "المرشحين", icon: 'ri-activity-line', },
+    ...(election.electionResult === 2 ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
+    ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line', }] : []),
+    { id: "5", title: "الفرز", icon: 'ri-activity-line', },
+    // { id: "6", title: "عمليات المستخدم", icon: 'ri-activity-line', },
+    { id: "7", title: "تعديل", icon: 'ri-activity-line', }
   ];
 
   const campaignTabs = [
-    { id: "4", title: "Campaigns" },
-    { id: "42", title: "Guarantees" },
-    { id: "43", title: "Attendees" },
-    { id: "44", title: "Sorting" },
+    { id: "4", title: "Campaigns", icon: 'ri-activity-line', },
+    { id: "42", title: "Guarantees", icon: 'ri-activity-line', },
+    { id: "43", title: "Attendees", icon: 'ri-activity-line', },
+    { id: "44", title: "Sorting", icon: 'ri-activity-line', },
   ];
 
   const tabComponents = {
@@ -81,7 +85,7 @@ const Section = () => {
     // "42": <GuaranteesTab electionCandidates={electionCandidates} />,
     // "43": <AttendeesTab electionCandidates={electionCandidates} />,
     // "44": <SortingTab electionCandidates={electionCandidates} />,
-    // "5": <ResultsTab />,
+    "5": <ResultsTab />,
     // "6": <ActivitiesTab />,
     "7": <EditTab />,
   };
@@ -93,128 +97,106 @@ const Section = () => {
       setActiveTab(tab);
     }
   };
-
   return (
     <React.Fragment>
-      <Row>
-        <Col lg={12}>
-          <Card className="mt-n4 mx-n4">
-            <div className="bg-soft-info">
-              <CardBody className="pb-0 px-4">
-                <Row className="mb-3">
-                  <div className="col-md">
-                    <Row className="align-items-center g-3">
-                      <div className="col-md-auto">
-                        <div className="avatar-md">
-                          <div className="avatar-title bg-white rounded-circle">
-                            <ImageMedium
-                              imagePath={election.image}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-md">
-                        <div>
-                          <h4 className="fw-bold">
-                            {election.name}
-                          </h4>
-                          <div className="hstack gap-3 flex-wrap">
-                            <div>
-                              <i className="ri-building-line align-bottom me-1"></i>
-                              {electionCategoryName}
-                            </div>
-                            <div className="vr"></div>
-                            <div>
-                              يوم الإقتراع: &nbsp;
-                              <span className="fw-medium">
-                                <strong>
-                                  {election.dueDate}
-                                </strong>
-                              </span>
-                            </div>
-                            <div className="vr"></div>
-                            <div>
-                              الرمز: &nbsp;
-                              <span className="fw-medium">
-                                <strong>
-                                  {election.id}
-                                </strong>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <div className="badge bg-danger fs-12 me-3">
-                            {election.electType}
-                          </div>
-
-                          <div className="badge bg-warning fs-12 me-3">
-                            {election.electVotes} صوت
-                          </div>
-
-                          <div className="badge bg-warning fs-12 me-3">
-                            {election.electSeats} مقاعد
-                          </div>
-                        </div>
-                      </div>
-                    </Row>
-
-
-                  </div>
-                  <div className="col-md-auto">
-                    <div className="hstack gap-1 flex-wrap">
-                      <button
-                        type="button"
-                        className="btn py-0 fs-16 favourite-btn active"
-                      >
-                        <i className="ri-star-fill"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn py-0 fs-16 text-body"
-                      >
-                        <i className="ri-share-line"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn py-0 fs-16 text-body"
-                      >
-                        <i className="ri-flag-line"></i>
-                      </button>
-                    </div>
-                    <div className="hstack gap-3 flex-wrap">
-                      <div className="badge rounded-pill bg-info fs-12">
-                        {election.status}
-                      </div>
-                      <div className="badge rounded-pill bg-danger fs-12">
-                        {election.priority}
-                      </div>
-                    </div>
-                  </div>
-                </Row>
-              </CardBody>
-              <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} />
-              {activeTab.startsWith("4") && (
-                <CardFooter>
-                  <NavTabs tabs={campaignTabs} activeTab={activeTab} toggleTab={toggleTab} />
-                </CardFooter>
-              )}
+      <SectionBackagroundImage imagePath={election.image} />
+      <div className="pt-4 mb-4 mb-lg-3 pb-lg-2 profile-wrapper">
+        <Row className="g-4">
+          <div className="col-auto">
+            <ImageMedium imagePath={election.image} />
+          </div>
+          <Col>
+            <div className="p-2">
+              <h3 className="text-white mb-1">{election.name}</h3>
+              {/* <p className="text-white-75">{campaign.election.name}</p> */}
+              <div className="hstack text-white gap-1">
+                <div className="me-2">
+                  <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
+                  التاريخ: <strong >{election.dueDate}</strong>
+                </div>
+                <div className="me-2">
+                  <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
+                  الرمز: <strong >{election.id}</strong>
+                </div>
+              </div>
             </div>
-          </Card>
-        </Col>
-      </Row>
-      <Row>
+            <div className="col-md-auto">
+              <div className="hstack gap-3 flex-wrap">
+                <div className="badge rounded-pill bg-info fs-12">
+                  {election.status}
+                </div>
+                <div className="badge rounded-pill bg-danger fs-12">
+                  {election.priority}
+                </div>
+              </div>
+            </div>
+          </Col>
+          <Col xs={12} className="col-lg-auto order-last order-lg-0">
+            <Row className="text text-white-50 text-center">
+              <Col lg={4} xs={4}>
+                <div className="p-2">
+                  <h4 className="text-white mb-1">
+                    {electionCandidates?.length || 0}
+                  </h4>
+                  <p className="fs-14 mb-0">المرشحين</p>
+                </div>
+              </Col>
+
+              <Col lg={4} xs={4}>
+                <div className="p-2">
+                  <h4 className="text-white mb-1">
+                    {election.electSeats || 0}
+                  </h4>
+                  <p className="fs-14 mb-0">المقاعد</p>
+                </div>
+              </Col>
+              <Col lg={4} xs={4}>
+                <div className="p-2">
+                  <h4 className="text-white mb-1">
+                    {election.electVotes || 0}
+                  </h4>
+                  <p className="fs-14 mb-0">الأصوات</p>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <div className="col-md-auto">
+                <div className="hstack gap-1 flex-wrap">
+                  <button type="button" className="btn py-0 fs-16 text-white">
+                    <i className="ri-star-fill"></i>
+                  </button>
+                  <button type="button" className="btn py-0 fs-16 text-white">
+                    <i className="ri-share-line"></i>
+                  </button>
+                  <button type="button" className="btn py-0 fs-16 text-white">
+                    <i className="ri-flag-line"></i>
+                  </button>
+                </div>
+              </div>
+            </Row>
+          </Col>
+        </Row>
+      </div>
+      <Row> {/* NavTab  */}
         <Col lg={12}>
-          <TabContent activeTab={activeTab} className="text-muted">
+          <Row>
+            <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} />
+          </Row>
+          {activeTab.startsWith("4") && (
+            <Row>
+              <NavTabs tabs={campaignTabs} activeTab={activeTab} toggleTab={toggleTab} />
+            </Row>
+          )}
+          <TabContent activeTab={activeTab} className="pt-4">
             {Object.entries(tabComponents).map(([key, component]) => (
               <TabPane tabId={key} key={key}>
                 {component}
               </TabPane>
             ))}
           </TabContent>
-        </Col>
-      </Row>
-    </React.Fragment>
+        </Col >
+      </Row >
+    </React.Fragment >
   );
 };
 

@@ -151,13 +151,14 @@ export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, isWinner }
 };
 
 
-export const ImageCampaignBackground = ({ imagePath }) => {
+export const SectionBackagroundImage = ({ imagePath, length }) => {
   const imageUrl = imagePath ?
     `${mediaUrl}${imagePath}` :
     `${mediaUrl}${defaultCampaignBgPath}`;
 
   return (
-    <div className="profile-foreground position-relative mx-n4 mt-n4">
+    // <div className="profile-foreground position-relative mx-n4 mt-n4">
+    <div className="profile-foreground mx-n4 mt-n4">
       <div className="profile-wid-bg">
         <img src={imageUrl} alt="" className="profile-wid-img" />
       </div>

@@ -11,7 +11,6 @@ const ElectionList = () => {
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="قائمة الإنتخابات" pageTitle="قائمة الإنتخابات" />
-          <Widgets />
           <AllCandidates />
         </Container>
       </div>

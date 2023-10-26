@@ -4,7 +4,7 @@ import { Badge, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Card, Card
 import { electionSelector } from 'Selectors';
 
 // Component, Constants, Hooks Imports
-import { ImageGenderCircle, AvatarSmall, ImageCampaignBackground, TableContainer, TableContainerHeader } from "../../Common/Components";
+import { ImageGenderCircle, AvatarSmall, SectionBackagroundImage, TableContainer, TableContainerHeader } from "../../Common/Components";
 
 import { Container } from "reactstrap";
 import { useParams } from "react-router-dom";
@@ -166,7 +166,7 @@ const ElectionDetails = () => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <ImageCampaignBackground imagePath={electionDetails.image} />
+          <SectionBackagroundImage imagePath={electionDetails.image} />
           <div className="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
             <Row className="g-4">
               <div className="col-auto">

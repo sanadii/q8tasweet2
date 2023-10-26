@@ -7,10 +7,10 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
 
   useEffect(() => {
     // State management
-    if (isCurrentState === "adminDashboard") {
-      history("/dashboard");
-      document.body.classList.add("twocolumn-panel");
-    }
+    // if (isCurrentState === "adminDashboard") {
+    //   history("/dashboard");
+    //   document.body.classList.add("twocolumn-panel");
+    // }
     if (isCurrentState === "adminElections") {
       history("/elections");
       document.body.classList.add("twocolumn-panel");
@@ -34,16 +34,16 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       label: "قائمة الإدارة",
       isHeader: true,
     },
-    {
-      id: "adminDashboard",
-      label: "لوحة التحكم",
-      icon: "ri-dashboard-line",
-      link: "/dashboard",
-      click: function (e) {
-        e.preventDefault();
-        setIscurrentState("adminDashboard");
-      },
-    },
+    // {
+    //   id: "adminDashboard",
+    //   label: "لوحة التحكم",
+    //   icon: "ri-dashboard-line",
+    //   link: "/dashboard",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIscurrentState("adminDashboard");
+    //   },
+    // },
     {
       id: "elections",
       label: "الإنتخابات",

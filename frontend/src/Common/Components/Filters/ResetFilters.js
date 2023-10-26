@@ -20,7 +20,7 @@ const ResetFilters = ({ setFilters, activeTab, setActiveTab }) => {
                         guaranteeStatus: null,
                         global: ""
                     });
-
+                    // Need to specify it
                     setActiveTab("0");
                 }}
             >

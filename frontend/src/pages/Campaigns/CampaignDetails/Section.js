@@ -12,7 +12,7 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap
 import SwiperCore, { Autoplay } from "swiper";
 
 // Components & Hooks
-import { ImageLarge, ImageCampaignBackground } from "Common/Components";
+import { ImageLarge, SectionBackagroundImage } from "Common/Components";
 import usePermission from "Common/Hooks/usePermission";
 import Loader from "Common/Components/Components/Loader";
 
@@ -48,14 +48,14 @@ const Section = () => {
 
   // Tabs
   const tabs = [
-    { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', text: 'الملخص' },
-    { tabId: 2, permission: 'canViewCampaignMember', href: '#members', icon: 'ri-list-unordered', text: 'فريق العمل' },
-    { tabId: 3, permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', text: 'الضمانات' },
-    { tabId: 4, permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', text: 'الحضور' },
-    { tabId: 5, permission: 'canViewCampaignSorting', href: '#sorting', icon: 'ri-sort-line', text: 'الفرز' },
-    { tabId: 6, permission: 'canViewElector', href: '#electors', icon: 'ri-user-voice-line', text: 'الناخبين' },
-    { tabId: 7, permission: 'canViewActivitie', href: '#activities', icon: 'ri-activity-line', text: 'الأنشطة' },
-    { tabId: 9, permission: 'canViewCampaign', href: '#edit', icon: 'ri-activity-line', text: 'تعديل' },
+    { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', title: 'الملخص' },
+    { tabId: 2, permission: 'canViewCampaignMember', href: '#members', icon: 'ri-list-unordered', title: 'فريق العمل' },
+    { tabId: 3, permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', title: 'الضمانات' },
+    { tabId: 4, permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', title: 'الحضور' },
+    { tabId: 5, permission: 'canViewCampaignSorting', href: '#sorting', icon: 'ri-sort-line', title: 'الفرز' },
+    { tabId: 6, permission: 'canViewElector', href: '#electors', icon: 'ri-user-voice-line', title: 'الناخبين' },
+    { tabId: 7, permission: 'canViewActivitie', href: '#activities', icon: 'ri-activity-line', title: 'الأنشطة' },
+    { tabId: 9, permission: 'canViewCampaign', href: '#edit', icon: 'ri-activity-line', title: 'تعديل' },
   ];
 
   const tabComponents = {
@@ -78,7 +78,7 @@ const Section = () => {
   const renderTabContent = (tabId) => {
     return tabComponents[tabId] || null;
   };
-    const [activeTab, setActiveTab] = useState(String(visibleTabs[0]?.tabId || 1));
+  const [activeTab, setActiveTab] = useState(String(visibleTabs[0]?.tabId || 1));
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
@@ -92,7 +92,7 @@ const Section = () => {
 
   return (
     <React.Fragment>
-      <ImageCampaignBackground imagePath={campaign.election.image} />
+      <SectionBackagroundImage imagePath={campaign.election.image} />
       <div className="pt-4 mb-4 mb-lg-3 pb-lg-2 profile-wrapper">
         <Row className="g-4">
           <div className="col-auto">
@@ -108,9 +108,7 @@ const Section = () => {
                   <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
                   التاريخ: <strong >{campaign.election.dueDate}</strong>
                 </div>
-
               </div>
-
             </div>
           </Col>
           <Col xs={12} className="col-lg-auto order-last order-lg-0">
@@ -149,7 +147,7 @@ const Section = () => {
           </Col>
         </Row>
       </div>
-      <Row>
+      <Row> {/* NavTab  */}
         <Col lg={12}>
           <div>
             <div className="d-flex profile-wrapper">
@@ -166,7 +164,7 @@ const Section = () => {
                       onClick={() => toggleTab(tab.tabId)}
                     >
                       <i className={`${tab.icon} d-inline-block d-md-none`}></i>
-                      <span className="d-none d-md-inline-block">{tab.text}</span>
+                      <span className="d-none d-md-inline-block">{tab.title}</span>
                     </NavLink>
                   </NavItem>
                 ))

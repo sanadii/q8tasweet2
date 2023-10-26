@@ -29,7 +29,7 @@ export {
   ImageCandidateCampaign,
   ImageRoundedCircleXS,
   ImageCampaignCard,
-  ImageCampaignBackground,
+  SectionBackagroundImage,
   ImageCandidateWinnerCircle,
   ImageMedium,
   ImageLarge,

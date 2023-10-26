@@ -39,14 +39,14 @@ class Command(BaseCommand):
 
         # الجمعيات التعاونية
         # محافظة الأحمدي
-        {"id": 300, "name": "الاحمدي", "slug": "al-ahmadi", "parent": 3},
-        {"id": 301, "name": "الصباحية", "slug": "al-sabahiya", "parent": 3},
-        {"id": 302, "name": "الظهر", "slug": "al-dhahar", "parent": 3},
-        {"id": 303, "name": "الفحيحيل", "slug": "al-fahaheel", "parent": 3},
-        {"id": 304, "name": "الفنطاس", "slug": "al-fintas", "parent": 3},
-        {"id": 305, "name": "ضاحية جابر العلي", "slug": "jaber-al-ali", "parent": 3},
-        {"id": 306, "name": "على صباح السالم", "slug": "ali-sabah-al-salem", "parent": 3},
-        {"id": 307, "name": "هديه", "slug": "hadiya", "parent": 3},
+        {"id": 300, "name": "الاحمدي", "slug": "coop-alahmadi", "parent": 3},
+        {"id": 301, "name": "الصباحية", "slug": "coop-alsabahiya", "parent": 3},
+        {"id": 302, "name": "الظهر", "slug": "coop-aldhahar", "parent": 3},
+        {"id": 303, "name": "الفحيحيل", "slug": "coop-alfahaheel", "parent": 3},
+        {"id": 304, "name": "الفنطاس", "slug": "coop-alfintas", "parent": 3},
+        {"id": 305, "name": "ضاحية جابر العلي", "slug": "coop-jaber-alali", "parent": 3},
+        {"id": 306, "name": "على صباح السالم", "slug": "coop-ali-sabah-alsalem", "parent": 3},
+        {"id": 307, "name": "هديه", "slug": "coop-hadiya", "parent": 3},
 
         # محافظة الجهراء
         {"id": 308, "name": "الجهراء", "parent": 3},

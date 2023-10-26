@@ -7,7 +7,7 @@ import getChartColorsArray from "Common/Components/Charts/ChartsDynamicColor";
 import { GuaranteeStatusOptions } from "Common/Constants";
 
 const GuaranteeRadialBar = ({ results }) => {
-    const description = "هذا المكون يعرض مخططًا دائريًا لإظهار نسب مختلف حالات الضمان بناءً على البيانات المقدمة.";
+    const description = "عرض نسبي لوضع حالات المضامينن.";
 
     const dataColors = '["--vz-danger", "--vz-success", "--vz-warning", "--vz-info"]';
 

@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
 import { electionSelector, categorySelector, userSelector } from 'Selectors';
-import { getElections, deleteElection, getModeratorUsers, getCategories } from "store/actions";
+import { getElections, deleteElection, getCategories } from "store/actions";
 
 // Components & Columns
 import ElectionModal from "./ElectionModal";
 import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
-import { Id, Name, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
+import { Id, CheckboxHeader, CheckboxCell, Name, DueDate, Status, Priority, Category, CreateBy, Actions } from "./ElectionListCol";
 
 // Hooks
 import { useDelete, useFetchDataIfNeeded } from "Common/Hooks"
@@ -25,44 +25,25 @@ const AllElections = () => {
 
   // State Management
   const { elections, isElectionSuccess, error } = useSelector(electionSelector);
-  const { categories, subCategories } = useSelector(categorySelector);
-  const { moderators } = useSelector(userSelector);
+  const { categories } = useSelector(categorySelector);
 
-  const [moderatorsMap, setModeratorsMap] = useState({});
-
-
-
+  // Delete Hook
   const {
     handleDeleteItem,
     onClickDelete,
-    handleDeleteMultiple,
-    isMultiDeleteButton,
-    setDeleteModal,
     deleteModal,
-    setDeleteModalMulti,
-    deleteModalMulti,
+    setDeleteModal,
     checkedAll,
     deleteCheckbox,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    handleDeleteMultiple,
   } = useDelete(deleteElection);
 
   // Fetch Data If Needed Hook
   useFetchDataIfNeeded(elections, getElections);
   useFetchDataIfNeeded(categories, getCategories);
-  useFetchDataIfNeeded(moderators, getModeratorUsers);
-
-
-  // useGetModeratorList - TODO: Create A Hook
-  useEffect(() => {
-    Promise.resolve(moderators).then((moderatorsList) => {
-      const map = moderatorsList.reduce((acc, moderator) => {
-        acc[moderator.id] = moderator;
-        return acc;
-      }, {});
-
-      setModeratorsMap(map);
-    });
-  }, [moderators]);
-
 
   // Dates
   const defaultdate = () => {
@@ -92,7 +73,7 @@ const AllElections = () => {
   }, [modal]);
 
 
-  // Update Data ------------
+  // Update Data
   const handleElectionClick = useCallback(
     (arg) => {
       const election = arg;
@@ -118,7 +99,6 @@ const AllElections = () => {
         // Task
         status: election.task.status,
         priority: election.task.priority,
-        moderators: election.moderators,
       });
 
       setIsEdit(true);
@@ -139,37 +119,16 @@ const AllElections = () => {
   const columns = useMemo(
     () => [
       {
-        Header: (
-          <input
-            type="checkbox"
-            id="checkBoxAll"
-            className="form-check-input"
-            onClick={() => checkedAll()}
-          />
-        ),
-        Cell: (cellProps) => {
-          return (
-            <input
-              type="checkbox"
-              className="checkboxSelector form-check-input"
-              value={cellProps.row.original.id}
-              onChange={() => deleteCheckbox()}
-            />
-          );
-        },
-        id: "#",
+        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        accessor: "id",
+        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
       },
       {
         Header: "م.",
-        accessor: "id",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <Id {...cellProps} />;
-        },
+        Cell: (cellProps) => <Id {...cellProps} />
       },
       {
         Header: "الإنتخابات",
-        title: "name",
         accessor: "name",
         Cell: (cellProps) => <Name {...cellProps} />
 
@@ -197,11 +156,6 @@ const AllElections = () => {
         Header: "الأولية",
         accessor: "priority",
         Cell: (cellProps) => <Priority {...cellProps} />
-      },
-      {
-        Header: "المشرفون",
-        accessor: "moderators",
-        Cell: (cell) => <Moderators {...cell} />
       },
       {
         Header: "بواسطة",

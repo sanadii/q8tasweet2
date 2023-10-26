@@ -60,6 +60,9 @@ class GetElectionDetails(APIView):
 
         election_candidates = ElectionCandidate.objects.filter(election=election).prefetch_related('candidate').only('id')
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
+        election_campaigns = Campaign.objects.filter(election_candidate__election=election)
+
+        election_committee_results = self.get_election_committee_results(election, election_candidates, election_committees)
 
         return Response({
             "data": {
@@ -67,6 +70,10 @@ class GetElectionDetails(APIView):
                 "electionCandidates": self.get_election_candidates(election_candidates, context),
                 "electionCommittees": self.get_election_committees(election_committees, context),
                 "electionCampaigns": self.get_election_campaigns(election, context),
+
+                # Include Election Committee Results in the response
+                "electionCommitteeResult": election_committee_results,
+
             },
             "code": 200
         })
@@ -84,6 +91,33 @@ class GetElectionDetails(APIView):
         election_candidate_ids = ElectionCandidate.objects.filter(election=election).values_list('id', flat=True)
         election_campaigns = Campaign.objects.filter(election_candidate__in=election_candidate_ids)
         return CampaignsSerializer(election_campaigns, many=True, context=context).data
+    
+    def get_election_committee_results(self, election, election_candidates, election_committees):
+        # Calculate committee results using Django aggregation
+        results = ElectionCommitteeResult.objects.filter(
+            election_committee__in=election_committees,
+            election_candidate__in=election_candidates
+        ).values(
+            'election_committee',
+            'election_candidate'
+        ).annotate(
+            total_votes=Sum('votes')
+        )
+
+        # Organize results into a dictionary
+        committee_results = {}
+        for result in results:
+            committee_id = str(result['election_committee'])
+            candidate_id = str(result['election_candidate'])
+            votes = result['total_votes']
+
+            if committee_id not in committee_results:
+                committee_results[committee_id] = {}
+
+            committee_results[committee_id][candidate_id] = votes
+
+        return committee_results
+
 
 class AddElection(APIView):
     permission_classes = [IsAuthenticated]

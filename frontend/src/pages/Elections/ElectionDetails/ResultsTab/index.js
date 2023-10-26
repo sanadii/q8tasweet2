@@ -68,6 +68,10 @@ const ResultsTab = () => {
 
   // Function to transform the data
   const transformData = (data) => {
+    // Add a guard clause to handle null or undefined data
+    if (data === null || data === undefined) {
+      return [];
+    }
     const transformed = [];
     const totals = {};
 
@@ -151,7 +155,7 @@ const ResultsTab = () => {
         onBlur={handleBlur}
       />
     );
-};
+  };
 
 
   const CommitteeButton = ({ committeeId, committee }) => {
@@ -186,6 +190,11 @@ const ResultsTab = () => {
   };
 
   const createColumns = (data) => {
+
+    // Guard clause to handle undefined or null electionCommitteeResults
+    if (electionCommitteeResults === undefined || electionCommitteeResults === null) {
+      return null; // or render a loading indicator, error message, or empty state
+    }
     const columns = [
       {
         Header: 'المركز',
@@ -256,7 +265,14 @@ const ResultsTab = () => {
   useEffect(() => {
     setTransformedData(transformData(electionCommitteeResults));
   }, [electionCommitteeResults, modifiedData, editedData]); // added editedData to dependencies
-  const columns = useMemo(() => createColumns(electionCommitteeResults), [electionCommitteeResults, transformedData, editedData]);
+
+  const columns = useMemo(() => {
+    if (!electionCommitteeResults) {
+      return []; // Return an empty array or handle the case as needed
+    }
+    return createColumns(electionCommitteeResults);
+  }, [electionCommitteeResults, transformedData, editedData]);
+
 
   const reversedData = [...transformedData].reverse();
 

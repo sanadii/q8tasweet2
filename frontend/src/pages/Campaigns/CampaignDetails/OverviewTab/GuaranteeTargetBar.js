@@ -71,7 +71,7 @@ const GuaranteeTargetBar = ({ campaignDetails, results }) => {
                             </div>
                         </div>
                         <Col lg={6}>
-                            <p><strong>مراكز النجاح في الانتخابات الأخيرة - كيفان 2019: </strong></p>
+                            <p><strong>مراكز النجاح في الانتخابات الأخيرة: </strong></p>
                             <div className="pb-3">
                                 <Table>
                                     <tr>

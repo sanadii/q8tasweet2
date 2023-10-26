@@ -152,7 +152,7 @@ const AttendeesList = () => {
     const committee = campaignElectionCommittees.find(
       (committee) => committee && committee.id === committeeId
     );
-    return committee?.name || "Committee not found";
+    return committee?.name || "لا يوجد";
   }, [campaignElectionCommittees]); // campaignElectionCommittees as dependency
 
   const columns = useMemo(() => [

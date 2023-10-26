@@ -30,7 +30,7 @@ const ElectionDetails = () => {
   const [election, setElection] = useState({ id });
 
   useEffect(() => {
-    document.title = "الانتخابات | Q8Tasweet - React Admin & Dashboard Template";
+    document.title = "الانتخابات | كويت تصويت";
 
     if (election.id && !isEmpty(election)) {
       dispatch(getElectionDetails(election));

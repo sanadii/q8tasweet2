@@ -14,14 +14,34 @@ const handleValidDate = (duedate) => {
   return formattedDate;
 };
 
-const Id = (cell) => {
+const CheckboxHeader = (checkedAll) => (
+  // const { handleElectionClick, onClickDelete } = cellProps;
+
+  <input
+      type="checkbox"
+      id="checkBoxAll"
+      className="form-check-input"
+      onClick={checkedAll}
+  />
+);
+
+const CheckboxCell = ({ row, deleteCheckbox }) => (
+  <input
+      type="checkbox"
+      className="checkboxSelector form-check-input"
+      value={row.original.id}
+      onChange={deleteCheckbox}
+  />
+);
+
+const Id = (cellProps) => {
   return (
     <React.Fragment>
       <Link
-        to={`/elections/${cell.row.original.slug}`}
+        to={`/elections/${cellProps.row.original.slug}`}
         className="fw-medium link-primary"
       >
-        {cell.value}
+        {cellProps.row.original.id}
       </Link>{" "}
     </React.Fragment>
   );
@@ -158,6 +178,8 @@ const Actions = (props) => {
 };
 export {
   Id,
+  CheckboxHeader,
+  CheckboxCell,
   Name,
   CandidateCount,
   DueDate,

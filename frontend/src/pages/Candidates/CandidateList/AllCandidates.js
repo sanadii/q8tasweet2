@@ -52,20 +52,6 @@ const AllCandidates = () => {
     }
   }, [dispatch, moderators]);
 
-  const [moderatorsMap, setModeratorsMap] = useState({});
-
-  useEffect(() => {
-    Promise.resolve(moderators).then((moderatorsList) => {
-      const map = moderatorsList.reduce((acc, moderator) => {
-        acc[moderator.id] = moderator;
-        return acc;
-      }, {});
-
-      setModeratorsMap(map);
-    });
-  }, [moderators]);
-
-
   // Delete Candidate
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
@@ -104,12 +90,7 @@ const AllCandidates = () => {
         id: candidate.id,
         name: candidate.name,
         gender: candidate.gender,
-        image:
-          candidate && candidate.image
-            ? candidate.image
-            : "",
-
-        candidateCount: candidate.candidateCount,
+        image: candidate && candidate.image ? candidate.image : "",
         description: candidate.description,
 
         // Admin
@@ -202,25 +183,23 @@ const AllCandidates = () => {
         id: "#",
       },
       {
-        Header: "ID",
+        Header: "رمز",
         accessor: "id",
         filterable: false,
         Cell: (cellProps) => {
           return <Id {...cellProps} />;
         },
       },
-
       {
-        name: "Image",
+        name: "صورة",
         title: "Image",
         accessor: "image",
         Cell: (cellProps) => (
           <AvatarSmall imagePath={cellProps.row.original.image} />
         ),
       },
-
       {
-        Header: "Candidates",
+        Header: "المرشح",
         accessor: "name",
         filterable: false,
         Cell: (cellProps) => {
@@ -228,7 +207,7 @@ const AllCandidates = () => {
         },
       },
       {
-        Header: "Status",
+        Header: "الحالة",
         accessor: "status",
         filterable: true,
         // useFilters: true,
@@ -238,7 +217,7 @@ const AllCandidates = () => {
         },
       },
       {
-        Header: "Priority",
+        Header: "الأولية",
         accessor: "priority",
         filterable: true,
         Cell: (cellProps) => {
@@ -246,7 +225,7 @@ const AllCandidates = () => {
         },
       },
       {
-        Header: "Moderators",
+        Header: "المراقب",
         accessor: "moderators",
         filterable: false,
         Cell: (cell) => {
@@ -254,7 +233,7 @@ const AllCandidates = () => {
         },
       },
       {
-        Header: "Created By",
+        Header: "بواسطة",
         accessor: "createdBy",
         filterable: false,
         useFilters: true,
@@ -264,7 +243,7 @@ const AllCandidates = () => {
         },
       },
       {
-        Header: "Actions",
+        Header: "إجراءات",
         accessor: "candidate",
         filterable: false,
         Cell: (cellProps) => {
@@ -293,7 +272,7 @@ const AllCandidates = () => {
   const [dueDate, setDate] = useState(defaultdate());
 
 
-  // Filters----------
+  // Filters
   const [filters, setFilters] = useState({
     global: "",
     gender: null,
@@ -353,11 +332,11 @@ const AllCandidates = () => {
             <CardBody>
               <TableContainerHeader
                 // Title
-                ContainerHeaderTitle="Candidates"
+                ContainerHeaderTitle="المرشحين"
 
                 // Add Elector Button
                 isContainerAddButton={true}
-                AddButtonText="Add New Candidate"
+                AddButtonText="إضافة جديد"
                 isEdit={isEdit}
                 handleEntryClick={handleElectionClicks}
                 toggle={toggle}
@@ -377,7 +356,6 @@ const AllCandidates = () => {
                   isMultiDeleteButton={isMultiDeleteButton}
 
                   isContainerAddButton={true}
-                  AddButtonText="Add New Candidate"
                   isEdit={isEdit}
 
                   // Filters----------
@@ -392,7 +370,7 @@ const AllCandidates = () => {
                   // FilterSettings
                   filters={filters}
                   setFilters={setFilters}
-                  SearchPlaceholder="Search for elections or something..."
+                  SearchPlaceholder="البحث..."
 
                   // Table
                   columns={columns}

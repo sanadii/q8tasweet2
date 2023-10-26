@@ -47,7 +47,7 @@ class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     def get_elections_candidates(self):
-        from ..serializers import ElectionSerializer, CandidatesSerializer
+        from apps.elections.serializers import ElectionSerializer, CandidatesSerializer
 
         election = ElectionSerializer(read_only=True)
         candidate = CandidatesSerializer(read_only=True)

@@ -59,14 +59,14 @@ const CandidatesTab = () => {
   const {
     handleDeleteItem,
     onClickDelete,
-    setDeleteModal,
     deleteModal,
-    deleteModalMulti,
-    setDeleteModalMulti,
+    setDeleteModal,
     checkedAll,
     deleteCheckbox,
-    handleDeleteMultiple,
     isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    handleDeleteMultiple,
   } = useDelete(deleteElectionCandidate);
 
 

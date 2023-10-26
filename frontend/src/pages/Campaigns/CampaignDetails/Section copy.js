@@ -12,7 +12,7 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap
 import SwiperCore, { Autoplay } from "swiper";
 
 // Components & Hooks
-import { ImageLarge, ImageCampaignBackground } from "Common/Components";
+import { ImageLarge, SectionBackagroundImage } from "Common/Components";
 import usePermission from "Common/Hooks/usePermission";
 import Loader from "Common/Components/Components/Loader";
 
@@ -89,7 +89,7 @@ const Section = () => {
 
   return (
     <React.Fragment>
-      <ImageCampaignBackground imagePath={campaign.election.image} />
+      <SectionBackagroundImage imagePath={campaign.election.image} />
       <div className="pt-4 mb-4 mb-lg-3 pb-lg-2 profile-wrapper">
         <Row className="g-4">
           <div className="col-auto">

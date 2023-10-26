@@ -291,7 +291,7 @@ const EditTab = () => {
                         name="electType"
                         type="select"
                         className="form-select"
-                        id="election-type-field"
+                        id="electionType"
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                       // value={validation.values.type || ""}
@@ -314,17 +314,17 @@ const EditTab = () => {
                   <Col lg={6}>
 
                     <div className="mb-3">
-                      <Label for="election-type" className="form-label">
+                      <Label for="electResult" className="form-label">
                         عرض النتائج
                       </Label>
                       <Input
                         name="electResult"
                         type="select"
                         className="form-select"
-                        id="result-field"
+                        id="electResult-field"
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
-                        value={validation.values.result || ""}
+                        value={validation.values.electResult || ""}
                       >
                         {/* Placeholder option */}
                         {ElectionResultOptions.map((option) => (

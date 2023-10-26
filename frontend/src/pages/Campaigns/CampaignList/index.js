@@ -5,13 +5,13 @@ import AllCampaigns from "./AllCampaigns";
 import Widgets from "./Widgets";
 
 const CampaignList = () => {
-  document.title = "Campaigns List | Q8Tasweet - React Admin & Dashboard Template";
+  document.title = "الحملات الإنتخابية | كويت تصويت";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Campaigns List" pageTitle="Campaigns" />
-          <Widgets />
+          <BreadCrumb title="الحملات الإنتخابية" pageTitle="الحملات الإنتخابية" />
+          {/* <Widgets /> */}
           <AllCampaigns />
         </Container>
       </div>
