@@ -18,12 +18,17 @@ import ProfileActivities from "./ProfileActivities";
 import ProfileMember from "./ProfileMember";
 import ProfileDocuments from "./ProfileDocuments";
 
+const tabs = [
+  { id: "1", title: "الملف الشخصي", icon: "fas fa-home", href: "Profile-overview", Component: ProfileOverview },
+  // { id: "2", title: "الأنشطة", icon: "far fa-user", href: "Profile-activities", Component: ProfileActivities },
+  // { id: "3", title: "المشاريع", icon: "far fa-envelope", href: "Profile-Member", Component: ProfileMember },
+  // { id: "4", title: "مستندات", icon: "far fa-envelope", href: "Profile-documents", Component: ProfileDocuments },
+];
 
 const ViewProfile = () => {
   const dispatch = useDispatch();
   // Getting the user data from Redux state
   const { user } = useSelector(userSelector);
-
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -34,7 +39,6 @@ const ViewProfile = () => {
   SwiperCore.use([Autoplay]);
 
   const [activeTab, setActiveTab] = useState("1");
-  const [activityTab, setActivityTab] = useState("1");
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
@@ -42,11 +46,6 @@ const ViewProfile = () => {
     }
   };
 
-  const toggleActivityTab = (tab) => {
-    if (activityTab !== tab) {
-      setActivityTab(tab);
-    }
-  };
 
   document.title = "Profile | Q8Tasweet - React Admin & Dashboard Template";
 
@@ -109,100 +108,50 @@ const ViewProfile = () => {
 
           <Row>
             <Col lg={12}>
-              <div>
-                <div className="d-flex profile-wrapper">
-                  <Nav
-                    pills
-                    className="animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1"
-                    role="tablist"
+              <div className="d-flex profile-wrapper">
+                <Nav
+                  pills
+                  className="animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1"
+                  role="tablist"
+                >
+                  {tabs.map((tab) => (
+                    <NavItem key={tab.id}>
+                      <NavLink
+                        href={`#${tab.href}`}
+                        className={classnames({ active: activeTab === tab.id })}
+                        onClick={() => {
+                          toggleTab(tab.id);
+                        }}
+                      >
+                        <i className={`${tab.icon} line d-inline-block d-md-none`}></i>
+                        <span className="d-none d-md-inline-block">
+                          {tab.title}
+                        </span>
+                      </NavLink>
+                    </NavItem>
+                  ))}
+                </Nav>
+                <div className="flex-shrink-0">
+                  <Link
+                    to="/profile-edit"
+                    className="btn btn-success"
                   >
-                    <NavItem>
-                      <NavLink
-                        href="#overview-tab"
-                        className={classnames({ active: activeTab === "1" })}
-                        onClick={() => {
-                          toggleTab("1");
-                        }}
-                      >
-                        <i className="ri-airplay-fill d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">
-                          Overview
-                        </span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        href="#activities"
-                        className={classnames({ active: activeTab === "2" })}
-                        onClick={() => {
-                          toggleTab("2");
-                        }}
-                      >
-                        <i className="ri-list-unordered d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">
-                          Activities
-                        </span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        href="#projects"
-                        className={classnames({ active: activeTab === "3" })}
-                        onClick={() => {
-                          toggleTab("3");
-                        }}
-                      >
-                        <i className="ri-price-tag-line d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">
-                          Projects
-                        </span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        href="#documents"
-                        className={classnames({ active: activeTab === "4" })}
-                        onClick={() => {
-                          toggleTab("4");
-                        }}
-                      >
-                        <i className="ri-folder-4-line d-inline-block d-md-none"></i>{" "}
-                        <span className="d-none d-md-inline-block">
-                          Documents
-                        </span>
-                      </NavLink>
-                    </NavItem>
-                  </Nav>
-                  <div className="flex-shrink-0">
-                    <Link
-                      to="/profile-edit"
-                      className="btn btn-success"
-                    >
-                      <i className="ri-edit-box-line align-bottom"></i> تحديث الملف الشخصي
-                    </Link>
-                  </div>
+                    <i className="ri-edit-box-line align-bottom"></i> تحديث الملف الشخصي
+                  </Link>
                 </div>
-
-                <TabContent activeTab={activeTab} className="pt-4">
-                  <TabPane tabId="1">
-                    <ProfileOverview />
-                  </TabPane>
-                  <TabPane tabId="2">
-                    <ProfileActivities />
-                  </TabPane>
-
-                  <TabPane tabId="3">
-                    <Card>
-                      <CardBody>
-                        <ProfileMember />
-                      </CardBody>
-                    </Card>
-                  </TabPane>
-                  <TabPane tabId="4">
-                    <ProfileDocuments />
-                  </TabPane>
-                </TabContent>
               </div>
+              <TabContent
+                activeTab={activeTab}
+                className="pt-4"
+              >
+                {tabs.map((tab) => (
+                  <TabPane tabId={tab.id} key={tab.id}>
+
+                    <tab.Component />
+
+                  </TabPane>
+                ))}
+              </TabContent>
             </Col>
           </Row>
         </Container>

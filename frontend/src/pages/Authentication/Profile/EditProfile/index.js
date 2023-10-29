@@ -45,14 +45,15 @@ const ProfileEdit = () => {
                             <img src={progileBg} className="profile-wid-img" alt="" />
                             <div className="overlay-content">
                                 <div className="text-end p-3">
-                                    {/* <div className="p-0 ms-auto rounded-circle profile-photo-edit">
-                                        <Input id="profile-foreground-img-file-input" type="file"
+                                    <div className="p-0 ms-auto rounded-circle profile-photo-edit">
+                                        {/* <Input id="profile-foreground-img-file-input" type="file"
                                             className="profile-foreground-img-file-input" />
                                         <Label htmlFor="profile-foreground-img-file-input"
                                             className="profile-photo-edit btn btn-light">
                                             <i className="ri-image-edit-line align-bottom me-1"></i> تغيير الخلفية
-                                        </Label>
-                                    </div> */}
+                                        </Label> */}
+                                        <h1 className="text-white"> {user.fullName} </h1>
+                                    </div>
                                 </div>
                             </div>
                         </div>

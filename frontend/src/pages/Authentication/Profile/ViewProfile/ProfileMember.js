@@ -2,48 +2,49 @@ import React, { useState, useEffect } from "react"; // Removed unnecessary impor
 import { useSelector, useDispatch } from "react-redux";
 import { userSelector } from 'Selectors';
 
-import { Col, Pagination, PaginationItem, PaginationLink, Row } from "reactstrap";
+import { Card, CardBody, Col, Pagination, PaginationItem, PaginationLink, Row } from "reactstrap";
 import SwiperCore, { Autoplay } from "swiper";
 
 
 
 
 const ProfileMember = () => {
-    const dispatch = useDispatch();
-    // Getting the user data from Redux state
-    const { user } = useSelector(userSelector);
+  const dispatch = useDispatch();
+  // Getting the user data from Redux state
+  const { user } = useSelector(userSelector);
 
-    const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState("");
 
-    useEffect(() => {
-        if (user && user.id) {
-            setUserName(user.id);
-        }
-    }, [user]);
-    SwiperCore.use([Autoplay]);
+  useEffect(() => {
+    if (user && user.id) {
+      setUserName(user.id);
+    }
+  }, [user]);
+  SwiperCore.use([Autoplay]);
 
-    const [activeTab, setActiveTab] = useState("1");
-    const [activityTab, setActivityTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("1");
+  const [activityTab, setActivityTab] = useState("1");
 
-    const toggleTab = (tab) => {
-        if (activeTab !== tab) {
-            setActiveTab(tab);
-        }
-    };
+  const toggleTab = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  };
 
-    const toggleActivityTab = (tab) => {
-        if (activityTab !== tab) {
-            setActivityTab(tab);
-        }
-    };
+  const toggleActivityTab = (tab) => {
+    if (activityTab !== tab) {
+      setActivityTab(tab);
+    }
+  };
 
-    document.title = "Profile | Q8Tasweet - React Admin & Dashboard Template";
+  document.title = "Profile | Q8Tasweet - React Admin & Dashboard Template";
 
-    return (
-        <React.Fragment>
-
-            <Row>
-                {/* {(projects || []).map((item, key) => (
+  return (
+    <React.Fragment>
+      <Card>
+        <CardBody>
+          <Row>
+            {/* {(projects || []).map((item, key) => (
   <Col xxl={3} sm={6} key={key}>
     <Card
       className={`profile-project-card shadow-none profile-project-${item.cardBorderColor}`}
@@ -120,50 +121,52 @@ const ProfileMember = () => {
     </Card>
   </Col>
 ))} */}
-                <Col lg={12}>
-                    <Pagination
-                        listClassName="justify-content-center"
-                        className="pagination-separated mb-0"
-                    >
-                        <PaginationItem disabled>
-                            {" "}
-                            <PaginationLink to="#">
-                                {" "}
-                                <i className="mdi mdi-chevron-left" />{" "}
-                            </PaginationLink>{" "}
-                        </PaginationItem>
-                        <PaginationItem active>
-                            {" "}
-                            <PaginationLink to="#"> 1 </PaginationLink>{" "}
-                        </PaginationItem>
-                        <PaginationItem>
-                            {" "}
-                            <PaginationLink to="#"> 2 </PaginationLink>{" "}
-                        </PaginationItem>
-                        <PaginationItem>
-                            {" "}
-                            <PaginationLink to="#"> 3 </PaginationLink>{" "}
-                        </PaginationItem>
-                        <PaginationItem>
-                            {" "}
-                            <PaginationLink to="#"> 4 </PaginationLink>{" "}
-                        </PaginationItem>
-                        <PaginationItem>
-                            {" "}
-                            <PaginationLink to="#"> 5 </PaginationLink>{" "}
-                        </PaginationItem>
-                        <PaginationItem>
-                            {" "}
-                            <PaginationLink to="#">
-                                {" "}
-                                <i className="mdi mdi-chevron-right" />{" "}
-                            </PaginationLink>{" "}
-                        </PaginationItem>
-                    </Pagination>
-                </Col>
-            </Row>
-        </React.Fragment>
-    );
+            <Col lg={12}>
+              <Pagination
+                listClassName="justify-content-center"
+                className="pagination-separated mb-0"
+              >
+                <PaginationItem disabled>
+                  {" "}
+                  <PaginationLink to="#">
+                    {" "}
+                    <i className="mdi mdi-chevron-left" />{" "}
+                  </PaginationLink>{" "}
+                </PaginationItem>
+                <PaginationItem active>
+                  {" "}
+                  <PaginationLink to="#"> 1 </PaginationLink>{" "}
+                </PaginationItem>
+                <PaginationItem>
+                  {" "}
+                  <PaginationLink to="#"> 2 </PaginationLink>{" "}
+                </PaginationItem>
+                <PaginationItem>
+                  {" "}
+                  <PaginationLink to="#"> 3 </PaginationLink>{" "}
+                </PaginationItem>
+                <PaginationItem>
+                  {" "}
+                  <PaginationLink to="#"> 4 </PaginationLink>{" "}
+                </PaginationItem>
+                <PaginationItem>
+                  {" "}
+                  <PaginationLink to="#"> 5 </PaginationLink>{" "}
+                </PaginationItem>
+                <PaginationItem>
+                  {" "}
+                  <PaginationLink to="#">
+                    {" "}
+                    <i className="mdi mdi-chevron-right" />{" "}
+                  </PaginationLink>{" "}
+                </PaginationItem>
+              </Pagination>
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
+    </React.Fragment>
+  );
 };
 
 export default ProfileMember;

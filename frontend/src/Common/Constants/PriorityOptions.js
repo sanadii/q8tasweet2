@@ -3,7 +3,7 @@ export const PriorityOptions = [
     id: 1,
     name: "منخفض",
     value: "low",
-    badgeClass: "badge bg-success",
+    badgeClass: "badge bg-info",
     description: "الانتخابات ذات الأولوية المنخفضة. (منخفض)",
   },
   {

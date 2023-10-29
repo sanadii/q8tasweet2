@@ -4,7 +4,7 @@
 // Options
 export { StatusOptions, StatusBadge } from './StatusOptions';
 export { PriorityOptions, PriorityBadge } from './PriorityOptions';
-export * from './GenderOptions';
+export { GenderOptions } from './GenderOptions';
 
 // Member Options
 

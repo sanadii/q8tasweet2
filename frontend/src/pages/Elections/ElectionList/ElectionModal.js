@@ -371,8 +371,6 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
               ) : null}
             </Col>
             <hr />
-
-
             <Col lg={6}>
               <Label className="form-label">المشرفين</Label>
               <SimpleBar style={{ maxHeight: "95px" }}>

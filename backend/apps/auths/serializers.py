@@ -51,11 +51,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "email", "first_name", "last_name", "full_name", "image",
-                  "phone", "description", "is_active", "is_staff",
-                  "twitter", "instagram",
+                  'civil', 'gender', 'date_of_birth', 'description',
+                  'phone', 'twitter', 'instagram',
+                  'is_staff', 'is_active',
                   'groups', 'permissions'
                   ]
-        
+
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
 

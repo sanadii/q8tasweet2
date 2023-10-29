@@ -20,7 +20,6 @@ const EditSocialMedia = () => {
         onSubmit: (values) => {
             const updatedUser = {
                 id: user.id,
-
                 twitter: values.twitter,
                 instagram: values.instagram,
             };
@@ -71,7 +70,7 @@ const EditSocialMedia = () => {
                                 />
                             ))}
                         </div>
-                        <Button type="submit">Save Changes</Button>
+                        <Button type="submit">تحديث</Button>
                     </Form>
                 </CardBody>
             </Card>
