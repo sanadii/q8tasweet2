@@ -7,6 +7,7 @@ import { electionSelector, categorySelector } from 'Selectors';
 // Components & Hooks
 import { ImageMedium } from "Common/Components";
 import { ImageLarge, SectionBackagroundImage } from "Common/Components";
+import { StatusBadge, PriorityBadge } from "Common/Constants";
 
 // UI & Utilities
 import { Card, CardBody, CardFooter, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
@@ -52,10 +53,9 @@ const Section = () => {
   // SwiperCore.use([Autoplay]);
 
 
-  const { electionDetails, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
+  const { election, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
   const { categories } = useSelector(categorySelector);
 
-  const election = electionDetails;
   const categoryId = election.category; // assuming election object has a categoryId property
   const category = categories.find(cat => cat.id === categoryId);
   const electionCategoryName = category ? category.name : 'Category Not Found';
@@ -63,12 +63,13 @@ const Section = () => {
   const mainTabs = [
     { id: "1", title: "الملخص", icon: 'ri-activity-line', },
     { id: "2", title: "المرشحين", icon: 'ri-activity-line', },
-    ...(election.electionResult === 2 ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
+    ...(election.electResult === 2 ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
     ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line', }] : []),
-    { id: "5", title: "الفرز", icon: 'ri-activity-line', },
+    { id: "5", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
     // { id: "6", title: "عمليات المستخدم", icon: 'ri-activity-line', },
     { id: "7", title: "تعديل", icon: 'ri-activity-line', }
   ];
+  console.log("election.electionResult:", election.electionResult)
 
   const campaignTabs = [
     { id: "4", title: "Campaigns", icon: 'ri-activity-line', },
@@ -122,18 +123,14 @@ const Section = () => {
             </div>
             <div className="col-md-auto">
               <div className="hstack gap-3 flex-wrap">
-                <div className="badge rounded-pill bg-info fs-12">
-                  {election.status}
-                </div>
-                <div className="badge rounded-pill bg-danger fs-12">
-                  {election.priority}
-                </div>
+                <StatusBadge status={election.status} />
+                <PriorityBadge priority={election.priority} />
               </div>
             </div>
           </Col>
           <Col xs={12} className="col-lg-auto order-last order-lg-0">
             <Row className="text text-white-50 text-center">
-              <Col lg={4} xs={4}>
+              <Col lg={6} xs={6}>
                 <div className="p-2">
                   <h4 className="text-white mb-1">
                     {electionCandidates?.length || 0}
@@ -141,21 +138,12 @@ const Section = () => {
                   <p className="fs-14 mb-0">المرشحين</p>
                 </div>
               </Col>
-
-              <Col lg={4} xs={4}>
+              <Col lg={6} xs={6}>
                 <div className="p-2">
                   <h4 className="text-white mb-1">
                     {election.electSeats || 0}
                   </h4>
                   <p className="fs-14 mb-0">المقاعد</p>
-                </div>
-              </Col>
-              <Col lg={4} xs={4}>
-                <div className="p-2">
-                  <h4 className="text-white mb-1">
-                    {election.electVotes || 0}
-                  </h4>
-                  <p className="fs-14 mb-0">الأصوات</p>
                 </div>
               </Col>
             </Row>

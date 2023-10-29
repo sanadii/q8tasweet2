@@ -4,12 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Action & Selector imports
-import { getCampaigns, deleteCampaign, getModeratorUsers } from "store/actions";
+import { getCampaigns, deleteCampaign } from "store/actions";
 
 // Constants & Component imports
 import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import CampaignModal from "./CampaignModal";
-import { Id, Name, DueDate, Status, Priority, CreateBy, Moderators, Actions } from "./CampaignListCol";
+import { Id, Name, DueDate, Status, Priority, CreateBy, Actions } from "./CampaignListCol";
 
 // UI Components & styling imports
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -20,7 +20,6 @@ const AllCampaigns = () => {
   const dispatch = useDispatch();
 
   // State Management
-  const { moderators } = useSelector(userSelector);
   const { campaigns, isCampaignSuccess, error } = useSelector(campaignSelector);
   const [campaignList, setCampaignList] = useState(campaigns);
   const [campaign, setCampaign] = useState([]);
@@ -32,27 +31,6 @@ const AllCampaigns = () => {
       dispatch(getCampaigns());
     }
   }, [dispatch, campaigns]);
-
-  // Moderators
-  useEffect(() => {
-    if (moderators && !moderators.length) {
-      dispatch(getModeratorUsers());
-    }
-  }, [dispatch, moderators]);
-
-  const [moderatorsMap, setModeratorsMap] = useState({});
-
-  useEffect(() => {
-    Promise.resolve(moderators).then((moderatorsList) => {
-      const map = moderatorsList.reduce((acc, moderator) => {
-        acc[moderator.id] = moderator;
-        return acc;
-      }, {});
-
-      setModeratorsMap(map);
-    });
-  }, [moderators]);
-
 
   // Delete Campaign
   const [deleteModal, setDeleteModal] = useState(false);
@@ -100,7 +78,6 @@ const AllCampaigns = () => {
         // Task
         status: campaign.status,
         priority: campaign.priority,
-        moderators: campaign.moderators,
       });
 
       setIsEdit(true);
@@ -231,14 +208,14 @@ const AllCampaigns = () => {
           return <Priority {...cellProps} />;
         },
       },
-      {
-        Header: "Moderators",
-        accessor: "moderators",
-        filterable: false,
-        Cell: (cell) => {
-          return <Moderators {...cell} />;
-        },
-      },
+      // {
+      //   Header: "Moderators",
+      //   accessor: "moderators",
+      //   filterable: false,
+      //   Cell: (cell) => {
+      //     return <Moderators {...cell} />;
+      //   },
+      // },
       {
         Header: "Created By",
         accessor: "createdBy",

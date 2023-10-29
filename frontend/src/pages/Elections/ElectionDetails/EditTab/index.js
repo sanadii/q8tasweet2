@@ -33,23 +33,25 @@ const EditTab = () => {
 
       tags: (election && election.tags) || [],
 
-      status: (election && election.status) || 1,
-      priority: (election && election.priority) || 1,
-
       // Election Specification
       electType: (election && election.electType) || 1,
       electResult: (election && election.electResult) || 1,
       electVotes: (election && election.electVotes) || 0,
       electSeats: (election && election.electSeats) || 0,
+
+      // ElectionElectors
       electors: (election && election.electors) || 0,
       electorsMales: (election && election.electorsMales) || 0,
       electorsFemales: (election && election.electorsFemales) || 0,
 
+      // ElectionElectorAttendees
       attendees: (election && election.attendees) || 0,
       attendeesMales: (election && election.attendeesMales) || 0,
       attendeesFemales: (election && election.attendeesFemales) || 0,
 
       // System
+      status: (election && election.status) || 1,
+      priority: (election && election.priority) || 1,
       delet: (election && election.delet) || "",
     },
     validationSchema: Yup.object({
@@ -60,7 +62,7 @@ const EditTab = () => {
       priority: Yup.number().integer().required('priority is required'),
 
     }),
-    
+
     onSubmit: (values) => {
       const updatedElection = {
         id: electionId,
@@ -88,9 +90,9 @@ const EditTab = () => {
         status: values.status,
         priority: values.priority,
       };
-      dispatch(
-        updateElection(updatedElection)
-      );
+      dispatch(updateElection(updatedElection));
+      validation.resetForm();
+
     },
   });
 
@@ -172,7 +174,7 @@ const EditTab = () => {
           <Col lg={4}>
             <Card>
               <CardHeader>
-                <h5>التفاصيل</h5>
+                <h4>التفاصيل</h4>
               </CardHeader>
               <CardBody>
                 <Row>
@@ -270,15 +272,13 @@ const EditTab = () => {
                   </Col>
                 </Row>
               </CardBody>
-            </Card>
-            {validation.touched.priority && validation.errors.priority ? (
-              <FormFeedback type="invalid">
-                {validation.errors.priority}
-              </FormFeedback>
-            ) : null}
-            <Card>
+              {validation.touched.priority && validation.errors.priority ? (
+                <FormFeedback type="invalid">
+                  {validation.errors.priority}
+                </FormFeedback>
+              ) : null}
               <CardHeader>
-                <h5>إعدادات الإنتخابات</h5>
+                <h4>إعدادات الإنتخابات</h4>
               </CardHeader>
               <CardBody>
                 <Row>
@@ -381,10 +381,9 @@ const EditTab = () => {
 
           </Col>
           <Col lg={4}>
-
             <Card>
               <CardHeader>
-                <h5>الناخبين</h5>
+                <h4>الناخبين</h4>
               </CardHeader>
               <CardBody>
                 <Row>
@@ -438,10 +437,9 @@ const EditTab = () => {
                   </Col>
                 </Row>
               </CardBody>
-            </Card>
-            <Card>
+
               <CardHeader>
-                <h5>الحضور</h5>
+                <h4>الحضور</h4>
               </CardHeader>
               <CardBody>
                 <Row>
@@ -500,7 +498,7 @@ const EditTab = () => {
           <Col lg={4}>
             <div className="card">
               <CardHeader>
-                <h5>الإدارة</h5>
+                <h4>الإدارة</h4>
               </CardHeader>
               <CardBody>
                 <div className="mb-3">

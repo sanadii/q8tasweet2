@@ -4,7 +4,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, Group, Permission, PermissionsMixin, BaseUserManager
-from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxValueValidator
 
 from helper.models_helper import TrackModel, GenderOptions
@@ -42,9 +41,9 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)  # New
-    image = models.ImageField(upload_to='users/', null=True, blank=True)  # New
-    background = models.ImageField(upload_to='background/', null=True, blank=True)  # New
+    last_name = models.CharField(max_length=150, blank=True)
+    image = models.ImageField(upload_to='users/', null=True, blank=True)
+    background = models.ImageField(upload_to='background/', null=True, blank=True)
     
     # User Information
     civil = models.CharField(max_length=12, null=True, blank=True, validators=[civil_validator])
@@ -99,6 +98,30 @@ class User(TrackModel, AbstractBaseUser, PermissionsMixin):
             ("canChangeUser", "Can Change User"),
             ("canDeleteUser", "Can Delete User"),
             ]
+
+# class UserProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
+#     id = models.BigAutoField(primary_key=True)
+#     date_of_birth = models.DateField(null=True, blank=True, validators=[MaxValueValidator(limit_value=today)])
+#     description = models.TextField(_('description'), blank=True)
+
+#     # User Contact
+#     phone = models.CharField(max_length=8, blank=True, null=True, validators=[phone_validator])
+#     twitter = models.CharField(max_length=150, blank=True)  # New
+#     instagram = models.CharField(max_length=150, blank=True)  # New
+    
+#     def __str__(self):
+#         return self.user.username
+#     class Meta:
+#         db_table = 'auth_user_profile'
+#         verbose_name = "User Profile"
+#         verbose_name_plural = "User Profiles"
+#         default_permissions = []
+#         permissions  = [
+#             ("canViewUserProfile", "Can View User Profile"),
+#             ("canAddUserProfile", "Can Add User Profile"),
+#             ("canChangeUserProfile", "Can Change User Profile"),
+#             ("canDeleteUserProfile", "Can Delete User Profile"),
+#             ]
 
 # Group Model
 class GroupCategories(models.IntegerChoices):

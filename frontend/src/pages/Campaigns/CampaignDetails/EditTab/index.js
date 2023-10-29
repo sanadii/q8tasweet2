@@ -1,6 +1,8 @@
 // React & Redux imports
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
+// Store & Selectors
 import { updateCampaign, getCampaignModerators } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
@@ -34,7 +36,7 @@ const EditTab = () => {
     }
   }, [dispatch, campaignModerators]);
 
-  // validation
+  // Form validation and submission
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -128,7 +130,6 @@ const EditTab = () => {
                 </div>
               ))}
             </CardBody>
-
           </Card>
           <AddCampaignModerator />
         </Col>

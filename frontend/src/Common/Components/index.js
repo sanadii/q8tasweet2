@@ -8,6 +8,7 @@ export { default as getChartColorsArray } from "./Charts/ChartsDynamicColor";
 
 
 // Table use
+export { default as FieldComponent } from "./Components/FieldComponent";
 export { ExportCSVModal } from "./Components/ExportCSVModal";
 export { default as TableContainer } from "./Tables/TableContainer";
 export { default as TableHeaderContainer } from "./Tables/TableHeaderContainer";

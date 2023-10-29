@@ -1,9 +1,9 @@
 // React & Redux core
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
-import { electionSelector, categorySelector, userSelector } from 'Selectors';
+import { electionSelector, categorySelector } from 'Selectors';
 import { getElections, deleteElection, getCategories } from "store/actions";
 
 // Components & Columns
@@ -60,7 +60,6 @@ const AllElections = () => {
   const [election, setElection] = useState(null);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  console.log("election?", election)
 
   const toggle = useCallback(() => {
     if (modal) {

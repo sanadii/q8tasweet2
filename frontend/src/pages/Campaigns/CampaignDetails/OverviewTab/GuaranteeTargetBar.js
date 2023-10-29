@@ -1,21 +1,44 @@
-import React from 'react';
-import { Card, CardHeader, CardBody, Col, Row, Table, Progress } from "reactstrap";
+import React, { useState, useEffect } from 'react';
+import { Tooltip, Card, CardHeader, CardBody, Col, Row, Table, Progress } from "reactstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Marker = ({ percentage, color, label, total }) => {
+
+const Marker = ({ percentage, color, label, total, height }) => {
+    const [isComponentMounted, setComponentMounted] = useState(false);
+
+    useEffect(() => {
+        setComponentMounted(true);
+    }, []);
+
+    const uniqueId = `markerTooltip-${label.replace(/\s/g, '')}-${total}`;
+
     return (
-        <div className="marker" style={{ position: 'absolute', right: `${percentage}%`, bottom: 0, width: '2px', height: '40px', backgroundColor: color }}>
-            <span className="marker-label" style={{ position: 'absolute', bottom: '100%', right: '-50%', whiteSpace: 'nowrap' }}>
-                {label} <br /> ({total})
-            </span>
+        <div className="marker" style={{ position: 'absolute', right: `${percentage}%`, bottom: 0 }}>
+            <div style={{ width: '36px', position: 'absolute', right: '-3px', bottom: `${height}px`, zIndex: 1000 }}>
+                <div className={`bg-${color}`}  style={{ width: '8px', height: '8px', borderRadius: '50%', position: 'absolute', bottom: 0, right: 0 }} id={uniqueId}></div>
+                {isComponentMounted && (
+                    <Tooltip className="red" placement="top" isOpen={true} target={uniqueId} >
+                        {label} ({total})
+                    </Tooltip>
+                )}
+            </div>
+            <div className={`bg-${color}`} style={{ width: '2px', height: `${height}px` }}></div>
         </div>
     );
 };
 
 
 
+
+
+
+
 const GuaranteeTargetBar = ({ campaignDetails, results }) => {
-    const { targetVotes, election: { firstWinnerVotes, lastWinnerVotes } } = campaignDetails;
-    const medianWinnerVotes = 190; // This should be dynamic if possible
+    const firstWinnerVotes = campaignDetails.election.previousElection.firstWinner.votes
+    const medianWinnerVotes = campaignDetails.election.previousElection.medianWinner
+    const lastWinnerVotes = campaignDetails.election.previousElection.lastWinner.votes
+    const targetVotes = campaignDetails.targetVotes
+
     const endOfBar = firstWinnerVotes + (firstWinnerVotes / 10);
 
 
@@ -63,10 +86,10 @@ const GuaranteeTargetBar = ({ campaignDetails, results }) => {
                                 </Progress>
 
                                 <div className="position-absolute top-0" style={{ width: '100%', height: '100%' }}>
-                                    <Marker percentage={calculatePercentage(firstWinnerVotes)} color="green" label="الأول" total={firstWinnerVotes} />
-                                    <Marker percentage={calculatePercentage(lastWinnerVotes)} color="red" label="التاسع" total={lastWinnerVotes} />
-                                    <Marker percentage={calculatePercentage(medianWinnerVotes)} color="red" label="المتوسط" total={medianWinnerVotes} />
-                                    <Marker percentage={calculatePercentage(targetVotes)} color="blue" label="الهدف" total={targetVotes} />
+                                    <Marker percentage={calculatePercentage(firstWinnerVotes)} color="success" label="الأول" total={firstWinnerVotes} height={12} />
+                                    <Marker percentage={calculatePercentage(lastWinnerVotes)} color="danger" label="التاسع" total={lastWinnerVotes} height={12} />
+                                    <Marker percentage={calculatePercentage(medianWinnerVotes)} color="info" label="المتوسط" total={medianWinnerVotes} height={12} />
+                                    <Marker percentage={calculatePercentage(targetVotes)} color="primary" label="الهدف" total={targetVotes} height={56} />
                                 </div>
                             </div>
                         </div>

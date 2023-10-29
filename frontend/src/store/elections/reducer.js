@@ -197,7 +197,7 @@ const Elections = (state = IntialState, action) => {
         isCampaignUpdate: true,
         isCampaignUpdateFail: false,
       };
-      
+
     case UPDATE_ELECTION_FAIL:
       return {
         ...state,
@@ -350,28 +350,51 @@ const Elections = (state = IntialState, action) => {
         isElectionCommitteeDeleteFail: true,
       };
 
-    case UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS: {
-      const { data } = action.payload; // Extract data from payload
-      // Assume that your action has a committeeId which represents the id of the committee
-      // If it is nested within data, adjust it accordingly.
-      const committeeId = Object.keys(data)[0]; // Extract the first key from data object assuming it is the committeeId
 
-      // If there is no valid committeeId, just return the current state
-      if (!committeeId || !data[committeeId]) return state;
+    // We need to update electionCandidates.candidate.committeeVotes with the new value
+    case UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS: {
+      const { data } = action.payload;
+      const committeeIdStr = Object.keys(data)[0];
+      const committeeId = parseInt(committeeIdStr, 10);
+
+      if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
+
+      const updatedElectionCandidates = state.electionCandidates.map(candidate => {
+        const committeeVoteIndex = candidate.committeeVotes.findIndex(v => v.electionCommittee === committeeId);
+
+        // Update existing entry
+        const updatedVotes = [...candidate.committeeVotes];
+        updatedVotes[committeeVoteIndex] = {
+          electionCommittee: committeeId,
+          votes: data[committeeIdStr][candidate.id],
+        };
+
+        return {
+          ...candidate,
+          committeeVotes: updatedVotes,
+        };
+      });
+
 
       return {
         ...state,
         electionCommitteeResults: {
           ...state.electionCommitteeResults,
           [committeeId]: {
-            ...(state.electionCommitteeResults[committeeId] || {}), // Default to an empty object if it does not exist yet
-            ...data[committeeId]
-          }
+            ...(state.electionCommitteeResults[committeeId] || {}),
+            ...data[committeeIdStr],
+          },
         },
+        electionCandidates: updatedElectionCandidates,
         isElectionCommitteeResultUpdate: true,
         isElectionCommitteeResultUpdateFail: false,
       };
     }
+
+
+
+
+
 
     case UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL:
       return {

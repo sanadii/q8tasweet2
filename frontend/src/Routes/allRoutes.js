@@ -7,14 +7,16 @@ import ForgetPasswordPage from "pages/Authentication/ForgetPassword";
 import Logout from "pages/Authentication/Logout";
 import Register from "pages/Authentication/Register";
 
+
 // User profile
-import UserProfile from "pages/Authentication/Profile";
-import ProfileSettings from "pages/Authentication/Profile/Settings";
+import UserProfile from "pages/Authentication/Profile/ViewProfile";
+import ProfileEdit from "pages/Authentication/Profile/EditProfile";
 // user edit profile
+
 
 //Dashboard
 
-// ---ADMIN PAGES----------
+// ADMIN PAGES
 import Settings from "pages/Admin/Settings";
 import Categories from "pages/Admin/Settings/Categories";
 import Groups from "pages/Admin/Settings/Groups";
@@ -97,7 +99,7 @@ const authProtectedRoutes = [
 
   // ---------Admin---------
   // Admin Options
-  { path: "/settings", component: <Settings /> },
+  { path: "/profile-edit", component: <ProfileEdit /> },
   { path: "/settings/categories", component: <Categories /> },
   { path: "/settings/groups", component: <Groups /> },
 
@@ -124,9 +126,13 @@ const authProtectedRoutes = [
   // { path: "/members", component: <MemberList /> },
   // { path: "/members/:id", component: <MemberDetails /> },
 
+
+
   //User Profile
   { path: "/profile", component: <UserProfile /> },
-  { path: "/profile-settings", component: <ProfileSettings /> },
+  { path: "/profile-edit", component: <ProfileEdit /> },
+
+
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name

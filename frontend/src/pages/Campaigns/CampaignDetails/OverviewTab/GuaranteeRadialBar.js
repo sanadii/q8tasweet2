@@ -20,7 +20,6 @@ const GuaranteeRadialBar = ({ results }) => {
         Math.round((results.totalContactedGuarantees / 270) * 100),
         Math.round((results.totalGuarantees / 270) * 100),
     ];
-    const series2 = [results.totalGuarantees, results.totalContactedGuarantees, results.totalConfirmedGuarantees, results.totalConfirmedAttendees];
     var options = {
         chart: {
             height: 300,
@@ -55,7 +54,7 @@ const GuaranteeRadialBar = ({ results }) => {
             floating: true,
             fontSize: '16px',
             position: 'left',
-            offsetX: 120,
+            offsetX: 0,
             offsetY: 0,
             labels: {
                 useSeriesColors: true,

@@ -27,7 +27,7 @@ export const ImageCircle = ({ imagePath }) => {
 };
 
 export const ImageGenderCircle = ({ imagePath, genderValue }) => {
-  const imageUrl = `${mediaUrl}${imagePath}`;
+  const imageUrl = `${imagePath}`;
 
   let borderColor;
 
@@ -44,7 +44,7 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
       style={{
         display: "inline-block",
         borderRadius: "50%",
-        border: `3px solid ${borderColor}`,
+        border: `2px solid ${borderColor}`,
       }}
     >
       <img src={imageUrl} alt="" className="rounded-circle avatar-xs" />
@@ -122,8 +122,6 @@ export const ImageCandidateWinnerCircle = ({ gender, name, imagePath, isWinner }
   const genderObject = GenderOptions.find((g) => g.id === gender);
   const borderColor = genderObject ? genderObject.borderColor : "#9e9e9e";
 
-  console.log("genderObject:", genderObject)
-  console.log("borderColor:", borderColor)
   return (
     <div className="d-flex align-items-center">
       <div

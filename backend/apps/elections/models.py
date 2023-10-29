@@ -13,23 +13,24 @@ from helper.models_helper import TrackModel, TaskModel, ElectionTypeOptions, Ele
 from helper.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 
 class Election(TrackModel, TaskModel):
-    # Basic Information
-    slug = AutoSlugField(populate_from='get_dynamic_slug', unique=True, null=True)
+    # Election Essential Information
+    slug = models.SlugField(unique=True, null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('categories.Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='category_elections')
     sub_category = models.ForeignKey('categories.Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategory_elections')
 
-    # Election Options and Details
+    # Election Setting Options
     elect_type = models.IntegerField(choices=ElectionTypeOptions.choices, blank=True, null=True)
     elect_result = models.IntegerField(choices=ElectionResultsOptions.choices, blank=True, null=True)
     elect_votes = models.PositiveIntegerField(blank=True, null=True)
     elect_seats = models.PositiveIntegerField(blank=True, null=True)
 
-    # Calculations
+    # Calculations // TODO: Can be calculated on campaign creation
     first_winner_votes = models.PositiveIntegerField(blank=True, null=True)
     last_winner_votes = models.PositiveIntegerField(blank=True, null=True)
 
-    # Elector
+    # TODO: create ElectionElector Model
+    # Elector // This can go to another table TODO: Move to another table called ElectionElectors or ElectionNumbers
     electors = models.PositiveIntegerField(blank=True, null=True)
     electors_males = models.PositiveIntegerField(blank=True, null=True)
     electors_females = models.PositiveIntegerField(blank=True, null=True)
@@ -55,17 +56,24 @@ class Election(TrackModel, TaskModel):
     def __str__(self):
         return f"{self.sub_category.name} - {self.due_date.year if self.due_date else 'لم يحدد بعد'}"
     
-    def get_dynamic_slug(self):
-        return f"{self.sub_category.slug} - {self.due_date.year if self.due_date else 'tba'}"
-
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.get_dynamic_slug() + '-' + str(uuid.uuid4())[:8])
+        self.slug = slugify(f"{self.sub_category.slug}-{self.due_date.year if self.due_date else 'tba'}")
         super().save(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.get_dynamic_slug() + '-' + str(uuid.uuid4())[:8])
-        super().save(*args, **kwargs)
+# class ElectionProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
+#     election = models.OneToOneField('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_elections")
+
+#     class Meta:
+#         db_table = 'election_profile'
+#         verbose_name = "Election Profile"
+#         verbose_name_plural = "Election Profiles"
+#         default_permissions = []
+#         permissions  = [
+#             ("canViewElectionProfile", "Can View Election Profile"),
+#             ("canAddElectionProfile", "Can Add Election Profile"),
+#             ("canChangeElectionProfile", "Can Change Election Profile"),
+#             ("canDeleteElectionProfile", "Can Delete Election Profile"),
+#             ]
 
 
 class ElectionCandidate(TrackModel):
@@ -74,8 +82,10 @@ class ElectionCandidate(TrackModel):
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
 
+    #  Saving sum of votes from ElectionCommitteeResult for each candidate
     def update_votes(self):
-        self.votes = self.committee_result_candidates.aggregate(Sum('votes'))['votes__sum'] or 0
+        total_votes = ElectionCommitteeResult.objects.filter(election_candidate=self).aggregate(total_votes=Sum('votes'))['total_votes']
+        self.votes = total_votes if total_votes is not None else 0
         self.save()
 
     class Meta:

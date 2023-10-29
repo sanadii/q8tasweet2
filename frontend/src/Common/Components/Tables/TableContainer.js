@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
-import { useTable, useGlobalFilter, useAsyncDebounce, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
-import { Table, Row, Col, Button, Input, CardBody, CardHeader, CardFooter } from "reactstrap";
+import { useTable, useGlobalFilter, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
+import { Table, Row, Col, Button, Input, CardBody, CardFooter } from "reactstrap";
 import { DefaultColumnFilter } from "../Filters";
-import { TableContainerHeader, TableContainerFooter, TableContainerFilters } from "Common/Components";
+import { TableContainerFooter, TableContainerFilters } from "Common/Components";
 
 const TableContainer = ({
   // Global Header----------
@@ -45,7 +45,7 @@ const TableContainer = ({
   // Actions
   onTabChange,
   getBgClassForStatus,
-  
+
   // Data & Columns----------
   columns,
   data,
@@ -91,8 +91,8 @@ const TableContainer = ({
         selectedRowIds: 0,
         sortBy: [
           {
-            // id: 'total', // The ID of the accessor data in your column definition
-            // desc: true,
+            id: 'dueDate', // replace with the actual column ID or accessor for the due date
+            desc: true, // set to true to sort in descending order
           },
         ],
       },
@@ -106,7 +106,7 @@ const TableContainer = ({
   );
 
   const generateSortingIndicator = (column) => {
-    return column.isSorted ? (column.isSortedDesc ? " " : "") : "";
+    return column.isSorted ? (column.isSortedDesc ? " ↓" : " ↑") : " ↓↑";
   };
 
   const onChangeInSelect = (event) => {
@@ -138,7 +138,6 @@ const TableContainer = ({
   return (
     <Fragment>
       <CardBody>
-
         {isMobile && (
           <Row className="d-grid mb-4">
             <button

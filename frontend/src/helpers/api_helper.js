@@ -13,13 +13,13 @@ axios.interceptors.request.use(
     if (token) {
       config.headers["Authorization"] = "Bearer " + token;
     }
-    
+
     // Retrieve CSRF token from cookie and set it to header
     const csrfToken = getCookie('csrftoken');
     if (csrfToken) {
       config.headers["X-CSRFToken"] = csrfToken;
     }
-    
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -29,43 +29,79 @@ axios.interceptors.request.use(
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
       }
+    }
   }
   return cookieValue;
 }
 
 // Response interceptor to capture errors
+// Response interceptor to capture errors
 axios.interceptors.response.use(
   (response) => (response.data ? response.data : response),
   (error) => {
-    if (error.response && error.response.status === 401) {
-      sessionStorage.removeItem("authUser");
-      window.location.href = "/login";
+    if (error.response) {
+      const { status, data } = error.response;
+
+      // Check for unauthorized error
+      if (status === 401) {
+        sessionStorage.removeItem("authUser");
+        window.location.href = "/login";
+      }
+
+      let message;
+      switch (status) {
+        case 500:
+          message = "Internal Server Error";
+          break;
+        case 401:
+          message = "Invalid credentials";
+          break;
+        case 404:
+          message = "Sorry! The data you are looking for could not be found";
+          break;
+        default:
+          message = data.error || "An unexpected error occurred";
+      }
+
+      // Return the error message
+      return Promise.reject(message);
     }
-    let message;
-    switch (error.status) {
-      case 500:
-        message = "Internal Server Error";
-        break;
-      case 401:
-        message = "Invalid credentials";
-        break;
-      case 404:
-        message = "Sorry! the data you are looking for could not be found";
-        break;
-      default:
-        message = error.message || error;
-    }
-    return Promise.reject(message);
+
+    // For errors without a response, return a generic error message
+    return Promise.reject("An unexpected error occurred");
   }
 );
+// axios.interceptors.response.use(
+//   (response) => (response.data ? response.data : response),
+//   (error) => {
+//     if (error.response && error.response.status === 401) {
+//       sessionStorage.removeItem("authUser");
+//       window.location.href = "/login";
+//     }
+//     let message;
+//     switch (error.status) {
+//       case 500:
+//         message = "Internal Server Error";
+//         break;
+//       case 401:
+//         message = "Invalid credentials";
+//         break;
+//       case 404:
+//         message = "Sorry! the data you are looking for could not be found";
+//         break;
+//       default:
+//         message = error.message || error;
+//     }
+//     return Promise.reject(message);
+//   }
+// );
 
 // const uploadFile = (url, formData) => {
 //   const config = {
@@ -91,8 +127,8 @@ class APIClient {
   get = (url, params) => {
     const queryString = params
       ? Object.entries(params)
-          .map(([key, value]) => `${key}=${value}`)
-          .join("&")
+        .map(([key, value]) => `${key}=${value}`)
+        .join("&")
       : "";
     return axios.get(queryString ? `${url}?${queryString}` : url);
   };

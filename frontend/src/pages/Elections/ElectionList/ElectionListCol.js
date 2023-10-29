@@ -14,23 +14,21 @@ const handleValidDate = (duedate) => {
   return formattedDate;
 };
 
-const CheckboxHeader = (checkedAll) => (
-  // const { handleElectionClick, onClickDelete } = cellProps;
-
+const CheckboxHeader = ({ checkedAll }) => (
   <input
-      type="checkbox"
-      id="checkBoxAll"
-      className="form-check-input"
-      onClick={checkedAll}
+    type="checkbox"
+    id="checkBoxAll"
+    className="form-check-input"
+    onClick={checkedAll}
   />
 );
 
 const CheckboxCell = ({ row, deleteCheckbox }) => (
   <input
-      type="checkbox"
-      className="checkboxSelector form-check-input"
-      value={row.original.id}
-      onChange={deleteCheckbox}
+    type="checkbox"
+    className="checkboxSelector form-check-input"
+    value={row.original.id}
+    onChange={deleteCheckbox}
   />
 );
 

@@ -1,18 +1,20 @@
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
 from django.http.response import JsonResponse
-from apps.auths.serializers import *
-
-from apps.auths.models import User
 from django.contrib.auth.models import Group
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from apps.auths.models import GroupCategories
 from django.core.exceptions import ObjectDoesNotExist
+
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework.views import APIView
+
+
+from apps.auths.models import User
+from apps.auths.models import GroupCategories
+from apps.auths.serializers import UserSerializer, UserLoginSerializer, GroupSerializer
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserLogin(APIView):
@@ -38,6 +40,23 @@ class UserLogin(APIView):
             'access_token': access_token,
             'data': user_data
         })
+
+
+class ChangeUserPassword(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+
+        if not user.check_password(old_password):
+            return Response({'error': 'كلمة المرور السابقة غير صحيحة.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({'status': 'password set'}, status=status.HTTP_200_OK)
+
 
 
 class UserProfileUpdateAPIView(APIView):
@@ -109,18 +128,45 @@ class AddNewUser(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# class UpdateUser(APIView):
+#     permission_classes = [IsAuthenticated]
+#     parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+#     def patch(self, request, id):
+#         try:
+#             user = User.objects.get(id=id)
+#         except User.DoesNotExist:
+#             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+#         data = request.data.copy()
+#         if 'image' in data:
+#             if data['image'] in ['null', 'remove']:
+#                 data['image'] = None
+#             elif isinstance(data['image'], str) and data['image'].startswith('http'):
+#                 data.pop('image')  # Ignore the image field if it's a URL
+
+#         serializer = UserSerializer(user, data=data, partial=True, context={'request': request})
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({"data": serializer.data, "count": 0, "code": 200})
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class UpdateUser(APIView):
+    permission_classes = [IsAuthenticated]
+
     def patch(self, request, id):
         try:
             user = User.objects.get(id=id)
         except User.DoesNotExist:
-            return Response({"data": "User not found", "code": 404}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "User not found"}, status=404)
 
-        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer = UserSerializer(user, data=request.data, context={'request': request}, partial=True)
+        
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"data": serializer.data, "count": 0, "code": 200})
+        
+        return Response(serializer.errors, status=400)
 
 class GetCurrentUser(APIView):
     permission_classes = [IsAuthenticated]

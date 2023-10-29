@@ -28,7 +28,7 @@ urlpatterns = [
 
     # Setting Apps
     path('Config/', include('apps.configs.urls')),
-    path('media/', include('apps.media.urls')),
+    # path('media/', include('apps.media.urls')),
 
     # Main Apps
     path('campaigns/', include('apps.campaigns.urls')),

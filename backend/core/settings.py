@@ -39,15 +39,15 @@ INSTALLED_APPS = [
 
     # Q8 Tasweet Apps
     "core",
-    "management",
-    "apps.media",
+    # "management",
+    # "apps.media",
     'apps.configs',
     "apps.auths",
     "apps.campaigns",
-    "apps.elections", "apps.categories",
+    "apps.elections.apps.ElectionConfig",
+    "apps.categories",
     "apps.candidates",
     "apps.electors",
-    "apps.profiles",
 ]
 
 MIDDLEWARE = [

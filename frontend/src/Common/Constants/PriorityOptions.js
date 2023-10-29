@@ -21,3 +21,15 @@ export const PriorityOptions = [
     description: "الانتخابات ذات الأولوية العالية. (عالي)",
   },
 ];
+
+
+export const PriorityBadge = ({ priority }) => {
+  const entryPriority = PriorityOptions.find(option => option.id === priority);
+  if (!entryPriority) return null;
+
+  return (
+    <div className={`badge rounded-pill ${entryPriority.badgeClass} fs-12`}>
+      {entryPriority.name}
+    </div>
+  );
+};

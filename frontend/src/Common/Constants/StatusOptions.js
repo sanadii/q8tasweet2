@@ -58,6 +58,17 @@ export const StatusOptions = [
 ];
 
 
+export const StatusBadge = ({ status }) => {
+  const entryStatus = StatusOptions.find(option => option.id === status);
+  if (!entryStatus) return null;
+
+  return (
+    <div className={`badge rounded-pill ${entryStatus.badgeClass} fs-12`}>
+      {entryStatus.name}
+    </div>
+  );
+};
+
 // switch (status) {
 //   case 1:
 //     statusName = "Published";

@@ -1,6 +1,7 @@
 Serializers
 
-Your refactoring of the imports to remove the circular dependencies is indeed working well. Below are a few suggestions for improving the serializers’ code, based on readability, efficiency, and best practices:
+Your refactoring of the imports to remove the circular dependencies is indeed working well.
+Below are a few suggestions for improving the serializers’ code, based on readability, efficiency, and best practices:
 
 ### 1. Use SerializerMethodField for Consistency:
 When overriding the representation of fields, consider using `SerializerMethodField` for more consistent, readable, and maintainable code. This way, all additional fields follow a similar pattern.

@@ -2,13 +2,13 @@
 
 
 // Options
-export * from './StatusOptions';
-export * from './PriorityOptions';
+export { StatusOptions, StatusBadge } from './StatusOptions';
+export { PriorityOptions, PriorityBadge } from './PriorityOptions';
 export * from './GenderOptions';
 
 // Member Options
 
-export * from './ElectionTypes';
+export { ElectionTypeOptions, ElectionTypeBadge } from './ElectionTypeOptions';
 export * from './ElectionResults';
 export * from './Tags';
 

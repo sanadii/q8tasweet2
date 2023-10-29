@@ -3,7 +3,7 @@ export * from "./auth/register/actions";
 export * from "./auth/login/actions";
 export * from "./auth/forgetpwd/actions";
 export * from "./auth/profile/actions";
-export * from "./users/action";
+export * from "./auth/users/action";
 export * from "./groups/action";
 
 // Elections

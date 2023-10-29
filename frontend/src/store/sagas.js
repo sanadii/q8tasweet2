@@ -5,7 +5,7 @@ import AccountSaga from "./auth/register/saga";
 import AuthSaga from "./auth/login/saga";
 import ForgetSaga from "./auth/forgetpwd/saga";
 import ProfileSaga from "./auth/profile/saga";
-import UsersSaga from "./users/saga";
+import UsersSaga from "./auth/users/saga";
 import GroupsSaga from "./groups/saga";
 
 

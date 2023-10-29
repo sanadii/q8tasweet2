@@ -44,28 +44,29 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
-    names = serializers.SerializerMethodField()  # Changed the field name to 'names'
+    groups = serializers.SerializerMethodField()  # Changed the field name to 'names'
     permissions = serializers.SerializerMethodField()
+    image = serializers.ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", 
-                  "first_name", "last_name", "full_name", "image",
-                  "is_active", "is_staff",
-                  'names', 'permissions'
+        fields = ["id", "username", "email", "first_name", "last_name", "full_name", "image",
+                  "phone", "description", "is_active", "is_staff",
+                  "twitter", "instagram",
+                  'groups', 'permissions'
                   ]
         
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
 
-    def get_names(self, obj):
+    def get_groups(self, obj):
         # Gets the name attribute for all the groups associated with the user
-        names = [group.name for group in obj.groups.all()]
+        groups = [group.name for group in obj.groups.all()]
         
         # Format each name to prepend "is" and capitalize the first letter
-        formatted_names = ["is" + name.replace(" ", "").capitalize() for name in names]
+        formatted_groups = ["is" + name.replace(" ", "").capitalize() for name in groups]
         
-        return formatted_names
+        return formatted_groups
 
     def get_permissions(self, obj):
         user_permissions = list(obj.user_permissions.all().values_list('codename', flat=True))

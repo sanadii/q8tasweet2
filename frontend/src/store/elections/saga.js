@@ -269,9 +269,7 @@ function* onUpdateElectionCommittee({ payload: electionCommittee }) {
 
 function* onUpdateElectionCommitteeResults({ payload: electionCommitteeResult }) {
   try {
-    console.log('Payload:', electionCommitteeResult); // Add log to check the payload
     const response = yield call(updateElectionCommitteeResults, electionCommitteeResult);
-    console.log('API Response:', response); // Add log to check the API response
     yield put(updateElectionCommitteeResultsSuccess(response));
     toast.success("تم تحديث النتائج بنجاح", {
       autoClose: 2000,

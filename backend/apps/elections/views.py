@@ -51,6 +51,24 @@ class GetElections(APIView):
         
         return paginator.get_paginated_response(data_serializer.data)
 
+# class GetElections(APIView):
+#     permission_classes = [AllowAny]
+    
+#     def get(self, request, *args, **kwargs):
+#         # Get all elections and order them by due_date in descending order
+#         elections_data = Election.objects.all().order_by('-due_date')
+        
+#         # Use the paginator to paginate the queryset
+#         paginator = CustomPagination()
+#         paginated_elections = paginator.paginate_queryset(elections_data, request)
+        
+#         # Passing context with request to the serializer
+#         context = {"request": request}
+#         data_serializer = ElectionSerializer(paginated_elections, many=True, context=context)
+        
+#         return paginator.get_paginated_response(data_serializer.data)
+
+
 class GetElectionDetails(APIView):
     def get(self, request, slug):
         election = get_object_or_404(Election, slug=slug)
@@ -72,7 +90,7 @@ class GetElectionDetails(APIView):
                 "electionCampaigns": self.get_election_campaigns(election, context),
 
                 # Include Election Committee Results in the response
-                "electionCommitteeResult": election_committee_results,
+                "electionCommitteeResults": election_committee_results,
 
             },
             "code": 200
@@ -93,30 +111,32 @@ class GetElectionDetails(APIView):
         return CampaignsSerializer(election_campaigns, many=True, context=context).data
     
     def get_election_committee_results(self, election, election_candidates, election_committees):
-        # Calculate committee results using Django aggregation
+        # Step 1: Initialize results dictionary
+        committee_results = {str(committee.id): {str(candidate.id): 0 for candidate in election_candidates} for committee in election_committees}
+
+        # Step 2: Fetch and update results from the database
         results = ElectionCommitteeResult.objects.filter(
             election_committee__in=election_committees,
             election_candidate__in=election_candidates
         ).values(
-            'election_committee',
-            'election_candidate'
+            'election_committee_id',
+            'election_candidate_id'
         ).annotate(
             total_votes=Sum('votes')
         )
-
-        # Organize results into a dictionary
-        committee_results = {}
         for result in results:
-            committee_id = str(result['election_committee'])
-            candidate_id = str(result['election_candidate'])
+            committee_id = str(result['election_committee_id'])
+            candidate_id = str(result['election_candidate_id'])
             votes = result['total_votes']
-
-            if committee_id not in committee_results:
-                committee_results[committee_id] = {}
-
             committee_results[committee_id][candidate_id] = votes
 
-        return committee_results
+        # Step 3: Sort the candidates within each committee
+        sorted_committee_results = {}
+        for committee_id, candidates in committee_results.items():
+            sorted_candidates = sorted(candidates.items(), key=lambda x: (-x[1], x[0]))
+            sorted_committee_results[committee_id] = dict(sorted_candidates)
+
+        return sorted_committee_results
 
 
 class AddElection(APIView):
@@ -138,18 +158,13 @@ class UpdateElection(APIView):
             election = Election.objects.get(id=id)
         except Election.DoesNotExist:
             return Response({"error": "Election not found"}, status=404)
-        
-        print("Incoming data:", request.data)  # Debug statement
-        print("Current election state:", ElectionSerializer(election).data)  # Debug statement
 
         serializer = ElectionSerializer(election, data=request.data, context={'request': request}, partial=True)
         
         if serializer.is_valid():
             serializer.save()
-            print("Updated election state:", ElectionSerializer(election).data)  # Debug statement
             return Response({"data": serializer.data, "count": 0, "code": 200})
         
-        print("Errors:", serializer.errors)  # Debug statement
         return Response(serializer.errors, status=400)
 
 class DeleteElection(APIView):
@@ -359,15 +374,15 @@ class GetPublicElectionDetails(APIView):
         election_candidates.sort(key=lambda x: x["votes"])
 
         # Determine the number of seats from the election data
-        election = Election.objects.get(id=id)
-        number_of_seats = election.seats or 0
+        # election = Election.objects.get(id=id)
+        # number_of_seats = election.seats or 0
 
-        # Update the candidates" position and winner status
-        for idx, candidate in enumerate(election_candidates, start=1):
-            candidate["position"] = str(idx)
+        # # Update the candidates" position and winner status
+        # for idx, candidate in enumerate(election_candidates, start=1):
+        #     candidate["position"] = str(idx)
             
-            # Check if the candidate is a winner
-            candidate["is_winner"] = idx <= number_of_seats
+        #     # Check if the candidate is a winner
+        #     candidate["is_winner"] = idx <= number_of_seats
 
 
         return election_candidates
