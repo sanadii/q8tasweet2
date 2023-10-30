@@ -12,10 +12,8 @@ import SimpleBar from "simplebar-react";
 
 const AddElectionCandidate = ({ election }) => {
     const dispatch = useDispatch();
-
     const { electionCandidates } = useSelector(electionSelector);
     const { candidates } = useSelector(candidateSelector);
-
     const electionCandidateList = electionCandidates;
 
     // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS
@@ -79,11 +77,7 @@ const AddElectionCandidate = ({ election }) => {
                                     value={candidate.id}
                                 />
                                 <div className="avatar-xs flex-shrink-0 me-3">
-                                    <img
-                                        src={candidate.image}
-                                        alt=""
-                                        className="img-fluid rounded-circle"
-                                    />
+                                    <img src={candidate.image} alt="" className="img-fluid rounded-circle" />
                                 </div>
                                 <div className="flex-grow-1">
                                     <h5 className="fs-13 mb-0">
@@ -94,17 +88,11 @@ const AddElectionCandidate = ({ election }) => {
                                     {electionCandidateList.some(
                                         (item) => item.candidate === candidate.id
                                     ) ? (
-                                        <p
-                                            className="text-success"
-                                        >
+                                        <p className="text-success">
                                             تمت الإضافة
                                         </p>
                                     ) : (
-                                        <button
-                                            type="submit"
-                                            className="btn btn-light btn-sm"
-                                            id="add-btn"
-                                        >
+                                        <button type="submit" className="btn btn-light btn-sm" id="add-btn">
                                             أضف
                                         </button>
                                     )}

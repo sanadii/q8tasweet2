@@ -1,5 +1,5 @@
 // React & Redux core imports
-import React from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
@@ -8,6 +8,7 @@ import { electionSelector } from 'Selectors';
 
 // Constants & Component imports
 import AddElectionCandidate from "./AddElectionCandidate";
+import AddNewCandidate from "./AddNewCandidate";
 import EditElectionCandidate from "./EditElectionCandidate";
 
 // Form & validation imports
@@ -18,17 +19,35 @@ import "react-toastify/dist/ReactToastify.css";
 // UI Components & styling imports
 import { ModalBody, Modal, ModalHeader, ModalFooter, Button } from "reactstrap";
 
-export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electionCandidate }) => {
+export const ElectionCandidateModal = ({
+  modal,
+  toggle,
+  setModal,
+  isEdit,
+  electionCandidate,
+}) => {
   const dispatch = useDispatch();
-
   const { electionDetails } = useSelector(electionSelector);
   const election = electionDetails.id;
 
-  const openModal = () => setModal(!modal);
-  const toggleModal = () => {
+
+  const openModal = () => {
     setModal(!modal);
+    setIsAddNewCandidate(false);
+
   };
-  // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS
+
+  const toggleModal = () => { setModal(!modal); };
+
+  // Adding New Candidate From Scratch
+  const [isAddNewCandidate, setIsAddNewCandidate] = useState(false);
+
+  const handleAddNewCandidate = useCallback(() => {
+    setIsAddNewCandidate((prev) => !prev);
+    if (!modal) {
+      setModal(true);
+    }
+  }, [modal]);
 
   const handleButtonClick = () => {
     validation.submitForm();
@@ -42,9 +61,7 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
       id: (electionCandidate && electionCandidate.id) || "",
       election: (electionCandidate && electionCandidate.election) || "",
       candidate: (electionCandidate && electionCandidate.candidate) || "",
-      votes: (electionCandidate && electionCandidate.votes) || "",
       notes: (electionCandidate && electionCandidate.notes) || "",
-      name: (electionCandidate && electionCandidate.name) || "",
     },
 
     validationSchema: Yup.object({
@@ -55,10 +72,6 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
         const updatedElectionCandidate = {
           // Basic Information
           id: electionCandidate ? electionCandidate.id : 0,
-          election: election,
-          candidate: electionCandidate.candidate,
-          name: electionCandidate.name,
-          votes: values.votes,
           notes: values.notes,
         };
         dispatch(updateElectionCandidate(updatedElectionCandidate));
@@ -75,43 +88,53 @@ export const ElectionCandidateModal = ({ modal, toggle, setModal, isEdit, electi
     },
   });
   return (
-    <Modal isOpen={modal} toggle={openModal} centered className="border-0">
-      <ModalHeader className="p-3 ps-4 bg-soft-success">
-        {!!isEdit ? "تعديل مرشح الإنتخابات" : "إضافة مرشح جديد"}
+    <Modal isOpen={modal} toggle={openModal} centered>
+      <ModalHeader className="p-4 ps-4 bg-danger">
+        <span className="text-white">
+          {!!isEdit ? "تعديل مرشح الإنتخابات" : "إضافة المرشحين"}
+        </span>
       </ModalHeader>
-      <ModalBody className="p-2">
-        {!!isEdit ? (
+      <ModalBody>
+        {isEdit ? (
           <EditElectionCandidate
             validation={validation}
             formikInstance={validation}
             electionCandidate={electionCandidate}
           />
-        ) : (
-          <AddElectionCandidate
-            toggleModal={toggleModal}
-            election={election}
-            setModal={setModal}
-            dispatch={dispatch}
-          />
-        )}
+        ) : !!isAddNewCandidate ?
+          (
+            <AddNewCandidate
+              toggleModal={toggleModal}
+              election={election}
+              setModal={setIsAddNewCandidate}
+              dispatch={dispatch}
+            />
+          ) : (
+            <AddElectionCandidate
+              toggleModal={toggleModal}
+              election={election}
+              setModal={setIsAddNewCandidate}
+              dispatch={dispatch}
+            />
+          )}
       </ModalBody>
       <ModalFooter>
         <div className="hstack gap-2 justify-content-end">
-          <Button
-            color="light"
-            onClick={() => {
-              setModal(false);
-            }}
-          >
-            إغلاق
+          <Button color="light" onClick={() => { setModal(false); }}>
+            أغلق
           </Button>
-          {!!isEdit ? (
+          {isEdit ? (
             <Button color="success" id="add-btn" onClick={handleButtonClick}>
               تعديل
             </Button>
-          ) : null}
+          ) : (
+            <Button color="success" onClick={handleAddNewCandidate}>
+              {isAddNewCandidate ? "قائمة المرشحين" : "إضافة مرشح جديد"}
+            </Button>
+          )}
         </div>
       </ModalFooter>
+
     </Modal>
   );
 };

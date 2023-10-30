@@ -65,6 +65,7 @@ const AllCandidates = () => {
 
       setCandidate({
         id: candidate.id,
+        image: candidate.image,
         name: candidate.name,
         gender: candidate.gender,
         description: candidate.description,

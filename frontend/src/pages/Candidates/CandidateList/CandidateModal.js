@@ -1,49 +1,30 @@
 // React & Redux
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { addNewCandidate, updateCandidate } from "store/actions";
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "Common/Constants";
+import { FieldComponent } from "Common/Components";
 
 // UI & Utilities Components
-import { CardHeader, Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
-import SimpleBar from "simplebar-react";
+import { Col, Row, Form, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 
 // Form and Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
-import defaultAvatar from 'assets/images/users/default.jpg';
 
 
 const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
   const dispatch = useDispatch();
-  const moderators = useSelector((state) => state.Users.moderators);
-  const [selectedImage, setSelectedImage] = useState(candidate?.image || null);
-
-  useEffect(() => {
-    // Reset selected image when candidate changes
-    if (candidate?.image) {
-      setSelectedImage(candidate.image);
-    } else {
-      setSelectedImage(null);
-    }
-  }, [candidate]);
-
-  const handleImageSelect = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-    }
-  };
 
   const initialValues = {
     name: candidate?.name || "",
-    image: selectedImage || defaultAvatar,
+    image: candidate?.image || null, // Set to null if no image
     gender: candidate?.gender || 1,
     status: candidate?.status || 1,
     priority: candidate?.priority || 1,
-    moderators: candidate?.moderators?.map((moderator) => moderator.id) || [],
   };
 
   const validation = useFormik({
@@ -61,8 +42,9 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       formData.append('gender', values.gender);
       formData.append('status', values.status);
       formData.append('priority', values.priority);
-      if (selectedImage && selectedImage !== defaultAvatar) {
-        formData.append("image", selectedImage);
+
+      if (values.image instanceof File) {
+        formData.append("image", values.image);
       }
 
       if (isEdit) {
@@ -70,14 +52,101 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       } else {
         dispatch(addNewCandidate(formData));
       }
-      
+
       // Reset form and selected image after dispatch
       validation.resetForm();
-      setSelectedImage(null);
       toggle();
     },
   });
 
+  const fieldGroup = [
+    {
+      fieldGroupTitle: "المرشح",
+      rows: [
+        {
+          cols: [
+            {
+              fields: [
+                {
+                  id: "name-field",
+                  name: "name",
+                  label: "الاسم",
+                  type: "text",
+                  placeholder: "ادخل الاسم المرشح",
+                  colSize: 12,
+                },
+                {
+                  id: "gender-field",
+                  name: "gender",
+                  label: "النوع",
+                  type: "select",
+                  placeholder: "اختر النوع",
+                  colSize: 12,
+                  options: GenderOptions.map(gender => ({
+                    id: gender.id,
+                    label: gender.name,
+                    value: gender.id
+                  })),
+                },
+              ],
+              colSize: 8,
+            },
+            {
+              fields: [
+                {
+                  id: "image-field",
+                  name: "image",
+                  type: "image",
+                  placeholder: "صورة المرشح",
+                  colSize: 12,
+                },
+              ],
+              colSize: 4,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      fieldGroupTitle: "الإدارة",
+      rows: [
+        {
+          cols: [
+            {
+              fields: [
+                {
+                  id: "status-field",
+                  name: "status",
+                  label: "الحالة",
+                  type: "select",
+                  colSize: 6,
+                  options: StatusOptions.map(status => ({
+                    id: status.id,
+                    label: status.name,
+                    value: status.id
+                  })),
+                },
+                {
+                  id: "priority-field",
+                  name: "priority",
+                  label: "الأولية",
+                  type: "select",
+                  colSize: 6,
+                  options: PriorityOptions.map(priority => ({
+                    id: priority.id,
+                    label: priority.name,
+                    value: priority.id
+                  })),
+                },
+              ],
+              colSize: 12,
+            },
+          ],
+        },
+      ],
+    },
+
+  ];
   return (
     <Modal
       isOpen={modal}
@@ -99,238 +168,23 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
         }}
       >
         <ModalBody className="modal-body">
-          <Row className="g-3">
-            <CardHeader>
-              <h5><strong>المرشح</strong></h5>
-            </CardHeader>
-            <Col lg={8}>
-              <div>
-                <Label for="name-field" className="form-label">
-                  اسم المرشح
-                </Label>
-                <Input
-                  id="name-field"
-                  name="name"
-                  type="text"
-                  className="form-control"
-                  placeholder="ادخل اسم المرشح"
-                  validate={{
-                    required: { value: true },
-                  }}
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.name || ""}
-                  invalid={
-                    validation.touched.name && validation.errors.name
-                      ? true
-                      : false
-                  }
-                />
-                {validation.touched.name && validation.errors.name ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.name}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div>
-                <Label for="gender-field" className="form-label">
-                  النوع
-                </Label>
-                <Input
-                  name="gender"
-                  type="select"
-                  className="form-select"
-                  id="gender-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.gender || 0}
-                >
-                  {GenderOptions.map((gender) => (
-                    <option key={gender.id} value={gender.id}>
-                      {gender.name}
-                    </option>
+          {fieldGroup.map(group => (
+            <div className="pb-3" key={group.fieldGroupTitle}>
+              <h4><strong>{group.fieldGroupTitle}</strong></h4>
+              {group.rows.map((row, rowIndex) => (
+                <Row key={rowIndex}>
+                  {row.cols.map((col, colIndex) => (
+                    <Col md={col.colSize} key={colIndex}>
+                      {col.fields.map(field => (
+                        <FieldComponent field={field} validation={validation} key={field.id} />
+                      ))}
+                    </Col>
                   ))}
-                </Input>
-                {validation.touched.gender && validation.errors.gender ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.gender}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
-            <Col lg={4}>
-              <div className="profile-user position-relative d-inline-block mx-auto  mb-4">
-                <img
-                  src={validation.values.image}
-                  className="rounded-circle avatar-xl img-thumbnail user-profile-image"
-                  alt="user-profile"
-                />
-                <div className="avatar-xs p-0 rounded-circle profile-photo-edit">
-                  <Input
-                    id="profile-img-file-input"
-                    type="file"
-                    className="profile-img-file-input"
-                    accept="image/png, image/gif, image/jpeg"
-                    onChange={(e) => {
-                      const selectedImage = e.target.files[0];
-                      if (selectedImage) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          // Update the image src instead of background
-                          const imgElement = document.querySelector(".user-profile-image");
-                          if (imgElement) {
-                            imgElement.src = reader.result;
-                          }
-                        };
-                        reader.readAsDataURL(selectedImage);
-                      }
-                      // Handle image selection for validation and form submission
-                      handleImageSelect(e);
-                    }}
-                    onBlur={validation.handleBlur}
-                    invalid={
-                      validation.touched.image && validation.errors.image ? "true" : undefined
-                    }
-                  />
-                  {validation.touched.image && validation.errors.image ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.image}
-                    </FormFeedback>
-                  ) : null}
-                  <Label
-                    htmlFor="profile-img-file-input"
-                    className="profile-photo-edit avatar-xs">
-                    <span className="avatar-title rounded-circle bg-light text-body">
-                      <i className="ri-camera-fill"></i>
-                    </span>
-                  </Label>
-                </div>
-              </div>
-            </Col>
-            <CardHeader>
-              <h5><strong>الإدارة</strong></h5>
-            </CardHeader>
-            <Col lg={6}>
-              <div>
-                <Label for="status-field" className="form-label">
-                  الحالة
-                </Label>
-                <Input
-                  name="status"
-                  type="select"
-                  className="form-select"
-                  id="ticket-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.status || ""}
-                >
-                  {StatusOptions.map((status) => (
-                    <option key={status.id} value={status.id}>
-                      {status.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.status && validation.errors.status ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.status}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div>
-                <Label for="priority-field" className="form-label">
-                  الأولية
-                </Label>
-                <Input
-                  name="priority"
-                  type="select"
-                  className="form-select"
-                  id="priority-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.priority || ""}
-                >
-                  {PriorityOptions.map((priority) => (
-                    <option key={priority.id} value={priority.id}>
-                      {priority.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.priority && validation.errors.priority ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.priority}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
-            <Col lg={6}>
-              <Label className="form-label">المراقب</Label>
-              <SimpleBar style={{ maxHeight: "95px" }}>
-                <ul className="list-unstyled vstack gap-2 mb-0">
-                  {moderators &&
-                    moderators.map((moderator) => (
-                      <li key={moderator.id}>
-                        <div className="form-check d-flex align-items-center">
-                          <input
-                            name="moderators"
-                            className="form-check-input me-3"
-                            type="checkbox"
-                            onChange={(e) => {
-                              const selectedId = parseInt(e.target.value);
-                              const updatedModerators =
-                                validation.values.moderators.includes(
-                                  selectedId
-                                )
-                                  ? validation.values.moderators.filter(
-                                    (id) => id !== selectedId
-                                  )
-                                  : [
-                                    ...validation.values.moderators,
-                                    selectedId,
-                                  ];
-                              validation.setFieldValue(
-                                "moderators",
-                                updatedModerators
-                              );
-                            }}
-                            onBlur={validation.handleBlur}
-                            value={moderator.id}
-                            checked={validation.values.moderators.includes(
-                              moderator.id
-                            )}
-                            id={moderator.image}
-                          />
+                </Row>
+              ))}
+            </div>
+          ))}
 
-                          <label
-                            className="form-check-label d-flex align-items-center"
-                            htmlFor={moderator.image}
-                          >
-                            <span className="flex-shrink-0">
-                              <img
-                                src={
-                                  process.env.REACT_APP_API_URL +
-                                  moderator.image
-                                }
-                                alt=""
-                                className="avatar-xxs rounded-circle"
-                              />
-                            </span>
-                            <span className="flex-grow-1 ms-2">
-                              {moderator.firstName}
-                            </span>
-                          </label>
-                          {validation.touched.moderators &&
-                            validation.errors.moderators ? (
-                            <FormFeedback type="invalid">
-                              {validation.errors.moderators}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
-                      </li>
-                    ))}
-                </ul>
-              </SimpleBar>
-            </Col>
-          </Row>
         </ModalBody>
         <div className="modal-footer">
           <div className="hstack gap-2 justify-content-end">

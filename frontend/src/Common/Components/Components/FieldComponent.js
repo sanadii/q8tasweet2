@@ -1,9 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Label, Input, FormFeedback } from "reactstrap";
 import Flatpickr from "react-flatpickr";
+import defaultAvatar from 'assets/images/users/default.jpg';
+import { api } from "config";
+const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
+
+
 
 const FieldComponent = ({ field, validation }) => {
-    const { id, label, name, type, colSize, icon, iconBg, placeholder } = field;
+    const { id, label, name, type, colSize, icon, iconBg } = field;
+    const imageValue = validation.values.image;
+
+    const [imageSrc, setImageSrc] = useState(defaultAvatar);
+
+    useEffect(() => {
+        if (imageValue) {
+            if (typeof imageValue === 'string') {
+                if (imageValue.startsWith('http://') || imageValue.startsWith('https://')) {
+                    // If the URL is absolute, use it as is
+                    setImageSrc(imageValue);
+                } else {
+                    // If the URL is relative, prepend the media URL
+                    setImageSrc(`${mediaUrl}${imageValue}`);
+                }
+            } else if (imageValue instanceof File) {
+                // If imageValue is a File object
+                const objectUrl = URL.createObjectURL(imageValue);
+                setImageSrc(objectUrl);
+            }
+        } else {
+            setImageSrc(defaultAvatar);
+        }
+    }, [imageValue]);
+
+    const handleImageSelect = (e) => {
+        const selectedImage = e.target.files[0];
+        if (selectedImage) {
+            validation.setFieldValue("image", selectedImage);
+        }
+    };
 
     const dateformate = (e) => {
         const selectedDate = new Date(e);
@@ -15,6 +50,8 @@ const FieldComponent = ({ field, validation }) => {
         // Update the form field value directly with the formatted date
         validation.setFieldValue(name, formattedDate);
     };
+
+
     const renderInput = () => {
         switch (type) {
             case 'text':
@@ -67,7 +104,7 @@ const FieldComponent = ({ field, validation }) => {
                         value={validation.values[name] || ""}
                         invalid={validation.touched[name] && validation.errors[name]}
                     >
-                        <option value="">-- اختر --</option>
+                        {/* <option value="">-- اختر --</option> */}
                         {field.options &&
                             field.options.map((option) => (
                                 <option key={option.value} value={option.value}>
@@ -76,44 +113,43 @@ const FieldComponent = ({ field, validation }) => {
                             ))}
                     </Input>
                 );
-            case 'date':
+            case "image":
                 return (
-                    <Flatpickr
-                        type="date"
-                        name={name}
-                        id={id}
-                        className="form-control"
-                        placeholder={placeholder}
-                        options={{
-                            altInput: true,
-                            altFormat: "Y-m-d",
-                            dateFormat: "Y-m-d",
-                        }}
-                        onChange={(e) => dateformate(e)}
-                        // onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values[name] || ""}
-                        invalid={validation.touched[name] && validation.errors[name]}
-                    />
+                    <div className="profile-user position-relative d-inline-block mx-auto mb-4">
+                        <img
+                            src={imageSrc}
+                            className="rounded-circle avatar-xl img-thumbnail user-profile-image"
+                            alt="user-profile"
+                        />
+                        <div className="avatar-xs p-0 rounded-circle profile-photo-edit">
+                            <Input
+                                id={id}
+                                name={name}
+                                type="file"
+                                className="profile-img-file-input"
+                                accept="image/png, image/gif, image/jpeg"
+                                onChange={handleImageSelect}
+                                onBlur={validation.handleBlur}
+                                invalid={validation.touched[name] && validation.errors[name] ? true : undefined}
+                            />
+                            <Label htmlFor={id} className="profile-photo-edit avatar-xs">
+                                <span className="avatar-title rounded-circle bg-light text-body">
+                                    <i className="ri-camera-fill"></i>
+                                </span>
+                            </Label>
+                        </div>
+                        {validation.touched[name] && validation.errors[name] && (
+                            <FormFeedback type="invalid">
+                                {validation.errors[name]}
+                            </FormFeedback>
+                        )}
+                    </div>
                 );
-            case 'password':
-                return (
-                    <Input
-                        type="password"
-                        name={name}
-                        id={id}
-                        placeholder={`ادخل ${label}`}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values[name] || ""}
-                        invalid={validation.touched[name] && validation.errors[name]}
-                    />
-                );
+            // ... other cases
             default:
                 return null;
         }
     };
-
     return (
         <Col lg={colSize} className="mb-3">
             {!icon &&

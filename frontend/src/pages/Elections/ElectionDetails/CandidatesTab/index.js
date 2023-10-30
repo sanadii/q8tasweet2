@@ -104,12 +104,12 @@ const CandidatesTab = () => {
     [toggle]
   );
 
-
   const handleElectionCandidateClicks = () => {
     setElectionCandidate("");
     setIsEdit(false);
     toggle();
   };
+
 
   const columns = useMemo(
     () => [
@@ -197,7 +197,6 @@ const CandidatesTab = () => {
                   // Add Elector Button
                   isContainerAddButton={true}
                   AddButtonText="إضافة مرشح"
-                  isEdit={isEdit}
                   handleEntryClick={handleElectionCandidateClicks}
                   toggle={toggle}
 

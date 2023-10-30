@@ -39,13 +39,13 @@ class AddNewCandidate(APIView):
 
     def post(self, request):
         serializer = CandidatesSerializer(data=request.data, context={'request': request})
-        
         if serializer.is_valid():
-            serializer.save()
+            candidate = serializer.save()
+            if 'image' in request.FILES:
+                candidate.image = request.FILES['image']
+                candidate.save()
             return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class UpdateCandidate(APIView):
     permission_classes = [IsAuthenticated]
@@ -58,14 +58,19 @@ class UpdateCandidate(APIView):
             return Response({"error": "Candidate not found"}, status=status.HTTP_404_NOT_FOUND)
         
         data = request.data.copy()
-        if 'image' in data and data['image'] in ['null', 'remove']:
-            data['image'] = None
+        if 'image' in request.FILES:
+            candidate.image = request.FILES['image']
+            candidate.save()
+        elif 'image' in data and data['image'] in ['null', 'remove']:
+            candidate.image = None
+            candidate.save()
 
         serializer = CandidatesSerializer(candidate, data=data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response({"data": serializer.data, "count": 0, "code": 200})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class DeleteCandidate(APIView):
     def delete(self, request, id):
