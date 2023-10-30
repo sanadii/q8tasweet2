@@ -107,26 +107,51 @@ const Candidates = (state = IntialState, action) => {
         isCandidateAdd: false,
         isCandidateAddFail: true,
       };
-    case UPDATE_CANDIDATE_SUCCESS:
-      return {
-        ...state,
-        // Checking before accessing Candidates to prevent error
-        candidates: Array.isArray(state.candidates)
-          ? state.candidates.map((candidate) =>
-            candidate.id.toString() === action.payload.data.id.toString()
-              ? { ...candidate, ...action.payload.data }
-              : candidate
-          )
-          : state.candidates,
+      case UPDATE_CANDIDATE_SUCCESS:
+        return {
+          ...state,
+          // Checking before accessing Candidates to prevent error
+          candidates: Array.isArray(state.candidates)
+            ? state.candidates.map((candidate) =>
+              candidate.id.toString() === action.payload.data.id.toString()
+                ? { ...candidate, ...action.payload.data }
+                : candidate
+            )
+            : state.candidates,
+  
+          // Checking before accessing Candidate Details to prevent error
+          candidateDetails: state.candidateDetails
+            ? {
+              ...state.candidateDetails,
+              ...(action.payload.data || {}),
+            }
+            : action.payload.data || null,
+  
+          isCampaignUpdate: true,
+          isCampaignUpdateFail: false,
+        };
+  
+  
 
-        // Checking before accessing Candidate Details to prevent error
-        candidateDetails: state.candidateDetails && state.candidateDetails.id.toString() === action.payload.data.id.toString()
-          ? { ...state.candidateDetails, ...action.payload.data }
-          : state.candidateDetails,
+    // return {
+      //   ...state,
+      //   // Checking before accessing Candidates to prevent error
+      //   candidates: Array.isArray(state.candidates)
+      //     ? state.candidates.map((candidate) =>
+      //       candidate.id.toString() === action.payload.data.id.toString()
+      //         ? { ...candidate, ...action.payload.data }
+      //         : candidate
+      //     )
+      //     : state.candidates,
 
-        isCandidateUpdate: true,
-        isCandidateUpdateFail: false,
-      };
+      //   // Checking before accessing Candidate Details to prevent error
+      //   // candidateDetails: state.candidateDetails && state.candidateDetails.id.toString() === action.payload.data.id.toString()
+      //   //   ? { ...state.candidateDetails, ...action.payload.data }
+      //   //   : state.candidateDetails,
+
+      //   // isCandidateUpdate: true,
+      //   // isCandidateUpdateFail: false,
+      // };
 
     case UPDATE_CANDIDATE_FAIL:
       return {

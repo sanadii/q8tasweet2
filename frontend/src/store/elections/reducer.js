@@ -190,9 +190,12 @@ const Elections = (state = IntialState, action) => {
           : state.elections,
 
         // Checking before accessing Election Details to prevent error
-        electionDetails: state.electionDetails && state.electionDetails.id.toString() === action.payload.data.id.toString()
-          ? { ...state.electionDetails, ...action.payload.data }
-          : state.electionDetails,
+        electionDetails: state.electionDetails
+          ? {
+            ...state.electionDetails,
+            ...(action.payload.data || {}),
+          }
+          : action.payload.data || null,
 
         isCampaignUpdate: true,
         isCampaignUpdateFail: false,

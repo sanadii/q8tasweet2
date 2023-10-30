@@ -66,7 +66,7 @@ const CandidatesTab = () => {
     isMultiDeleteButton,
     deleteModalMulti,
     setDeleteModalMulti,
-    handleDeleteMultiple,
+    deleteMultiple,
   } = useDelete(deleteElectionCandidate);
 
 
@@ -171,7 +171,7 @@ const CandidatesTab = () => {
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          handleDeleteMultiple();
+          deleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}

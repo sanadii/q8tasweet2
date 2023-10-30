@@ -3,40 +3,42 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Row, Card, CardBody } from "reactstrap";
 
-// Actions
+// Store & Selectors
 import { getCandidates, deleteCandidate, getModeratorUsers } from "store/actions";
+import { candidateSelector } from 'Selectors';
 
-// Custom Components & ConstantsImports
-import { AvatarSmall, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
+// Custom Components, Constants & Hooks Imports
+import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import CandidateModal from "./CandidateModal"
-import { Id, Name, Status, Priority, CreateBy, Moderators, Actions } from "./CandidateListCol";
+import { Id, CheckboxHeader, CheckboxCell, Name, Status, Priority, CreateBy, Actions } from "./CandidateListCol";
+import { useDelete, useFetchDataIfNeeded } from "Common/Hooks"
 
 // Toast & Styles
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// React FilePond & Styles
-import { registerPlugin } from "react-filepond";
-import "filepond/dist/filepond.min.css";
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
-
 const AllCandidates = () => {
   const dispatch = useDispatch();
 
   // State Management
-  const { candidates, moderators, isCandidateSuccess, error } = useSelector((state) => ({
-    candidates: state.Candidates.candidates,
-    moderators: state.Users.moderators,
-    isCandidateSuccess: state.Candidates.isCandidateSuccess,
-    error: state.Candidates.error,
-  }));
-
+  const { candidates, isCandidateSuccess, error } = useSelector(candidateSelector);
+  const [modal, setModal] = useState(false);
   const [candidate, setCandidate] = useState([]);
-  const [Candidates, setCandidates] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    onClickDelete,
+    deleteModal,
+    setDeleteModal,
+    checkedAll,
+    deleteCheckbox,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    deleteMultiple,
+  } = useDelete(deleteCandidate);
 
   // Candidate Data
   useEffect(() => {
@@ -45,17 +47,6 @@ const AllCandidates = () => {
     }
   }, [dispatch, candidates]);
 
-  // Moderators
-  useEffect(() => {
-    if (moderators && !moderators.length) {
-      dispatch(getModeratorUsers());
-    }
-  }, [dispatch, moderators]);
-
-  // Delete Candidate
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
-  const [modal, setModal] = useState(false);
 
   const toggle = useCallback(() => {
     if (modal) {
@@ -63,23 +54,9 @@ const AllCandidates = () => {
       setCandidate(null);
     } else {
       setModal(true);
-      setDate(defaultdate());
     }
   }, [modal]);
 
-  // Delete Data
-  const onClickDelete = (candidate) => {
-    setCandidate(candidate);
-    setDeleteModal(true);
-  };
-
-  // Delete Data
-  const handleDeleteCandidate = () => {
-    if (candidate) {
-      dispatch(deleteCandidate(candidate.id));
-      setDeleteModal(false);
-    }
-  };
 
   // Update Data
   const handleCandidateClick = useCallback(
@@ -90,12 +67,11 @@ const AllCandidates = () => {
         id: candidate.id,
         name: candidate.name,
         gender: candidate.gender,
-        image: candidate && candidate.image ? candidate.image : "",
         description: candidate.description,
 
         // Admin
-        status: candidate.task.status,
-        priority: candidate.task.priority,
+        status: candidate.status,
+        priority: candidate.priority,
         moderators: candidate.moderators,
       });
 
@@ -112,135 +88,34 @@ const AllCandidates = () => {
     toggle();
   };
 
-  // Checked All
-  const checkedAll = useCallback(() => {
-    const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".candidateCheckBox");
-
-    if (checkall.checked) {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = true;
-      });
-    } else {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = false;
-      });
-    }
-    deleteCheckbox();
-  }, []);
-
-  // Delete Multiple
-  const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
-  const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
-
-  const deleteMultiple = () => {
-    const checkall = document.getElementById("checkBoxAll");
-    selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteCandidate(element.value));
-      setTimeout(() => {
-        toast.clearWaitingQueue();
-      }, 3000);
-    });
-    setIsMultiDeleteButton(false);
-    checkall.checked = false;
-  };
-
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".candidateCheckBox:checked");
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
-  };
-
-  // Add Data
-  const handleElectionClicks = () => {
-    setCandidate("");
-    setIsEdit(false);
-    toggle();
-  };
   const columns = useMemo(
     () => [
       {
-        Header: (
-          <input
-            type="checkbox"
-            id="checkBoxAll"
-            className="form-check-input"
-            onClick={() => checkedAll()}
-          />
-        ),
-        Cell: (cellProps) => {
-          return (
-            <input
-              type="checkbox"
-              className="candidateCheckBox form-check-input"
-              value={cellProps.row.original.id}
-              onChange={() => deleteCheckbox()}
-            />
-          );
-        },
-        id: "#",
-      },
-      {
-        Header: "رمز",
+        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
         accessor: "id",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <Id {...cellProps} />;
-        },
+        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
       },
       {
-        name: "صورة",
-        title: "Image",
-        accessor: "image",
-        Cell: (cellProps) => (
-          <AvatarSmall imagePath={cellProps.row.original.image} />
-        ),
+        Header: "م.",
+        Cell: (cellProps) => <Id {...cellProps} />
       },
       {
         Header: "المرشح",
         accessor: "name",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <Name {...cellProps} />;
-        },
+        Cell: Name,
       },
+
       {
         Header: "الحالة",
-        accessor: "status",
-        filterable: true,
-        // useFilters: true,
-
-        Cell: (cellProps) => {
-          return <Status status={cellProps.row.original.status} />;
-        },
+        Cell: (cellProps) => <Status {...cellProps} />
       },
       {
         Header: "الأولية",
-        accessor: "priority",
-        filterable: true,
-        Cell: (cellProps) => {
-          return <Priority {...cellProps} />;
-        },
-      },
-      {
-        Header: "المراقب",
-        accessor: "moderators",
-        filterable: false,
-        Cell: (cell) => {
-          return <Moderators {...cell} />;
-        },
+        Cell: (cellProps) => <Priority {...cellProps} />
       },
       {
         Header: "بواسطة",
-        accessor: "createdBy",
-        filterable: false,
-        useFilters: true,
-
-        Cell: (cellProps) => {
-          return <CreateBy {...cellProps} />;
-        },
+        Cell: (cellProps) => <CreateBy {...cellProps} />
       },
       {
         Header: "إجراءات",
@@ -259,18 +134,6 @@ const AllCandidates = () => {
     ],
     [handleCandidateClick, checkedAll]
   );
-
-  // Dates
-  const defaultdate = () => {
-    let d = new Date();
-    const year = d.getFullYear();
-    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-    const day = ("0" + d.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
-
-  const [dueDate, setDate] = useState(defaultdate());
-
 
   // Filters
   const [filters, setFilters] = useState({
@@ -308,7 +171,7 @@ const AllCandidates = () => {
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteCandidate}
+        onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
@@ -338,7 +201,7 @@ const AllCandidates = () => {
                 isContainerAddButton={true}
                 AddButtonText="إضافة جديد"
                 isEdit={isEdit}
-                handleEntryClick={handleElectionClicks}
+                handleEntryClick={handleCandidateClicks}
                 toggle={toggle}
 
                 // Delete Button

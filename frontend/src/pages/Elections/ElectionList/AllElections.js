@@ -38,7 +38,7 @@ const AllElections = () => {
     isMultiDeleteButton,
     deleteModalMulti,
     setDeleteModalMulti,
-    handleDeleteMultiple,
+    deleteMultiple,
   } = useDelete(deleteElection);
 
   // Fetch Data If Needed Hook
@@ -60,6 +60,9 @@ const AllElections = () => {
   const [election, setElection] = useState(null);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+
+  const [activeTab, setActiveTab] = useState("0"); // Initialize with "campaignManagers"
+  const activeRole = activeTab;
 
   const toggle = useCallback(() => {
     if (modal) {
@@ -130,7 +133,6 @@ const AllElections = () => {
         Header: "الإنتخابات",
         accessor: "name",
         Cell: (cellProps) => <Name {...cellProps} />
-
       },
       {
         Header: "الموعد",
@@ -148,8 +150,7 @@ const AllElections = () => {
       },
       {
         Header: "الحالة",
-        accessor: "status",
-        Cell: (cellProps) => <Status status={cellProps.row.original.task.status} />
+        Cell: (cellProps) => <Status {...cellProps} />
       },
       {
         Header: "الأولية",
@@ -215,7 +216,7 @@ const AllElections = () => {
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          handleDeleteMultiple();
+          deleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
@@ -262,6 +263,10 @@ const AllElections = () => {
                   filters={filters}
                   setFilters={setFilters}
                   SearchPlaceholder="البحث بالاسم..."
+
+                  // Settings
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
 
                   // Data----------
                   columns={columns}

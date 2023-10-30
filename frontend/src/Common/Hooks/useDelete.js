@@ -48,7 +48,7 @@ const useDelete = (deleteAction) => {
     setSelectedCheckBoxDelete(checkedEntry);
   };
 
-  const handleDeleteMultiple = () => {
+  const deleteMultiple = () => {
     const checkall = document.getElementById("checkBoxAll");
     selectedCheckBoxDelete.forEach((element) => {
       dispatch(deleteAction(element.value));
@@ -78,7 +78,7 @@ const useDelete = (deleteAction) => {
     deleteCheckbox,
 
     // Multi-delete actions
-    handleDeleteMultiple,
+    deleteMultiple,
     isMultiDeleteButton,
   };
 };

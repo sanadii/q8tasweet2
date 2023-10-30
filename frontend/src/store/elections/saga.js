@@ -34,11 +34,6 @@ import {
 } from "./actionType";
 
 import {
-  UPLOAD_IMAGE_SUCCESS,
-  UPLOAD_IMAGE_FAIL,
-} from "../uploadImage/actionType";
-
-import {
   // getElections, getElectionDetails, 
   // API Response
   ElectionApiResponseSuccess,
@@ -81,8 +76,6 @@ import {
   deleteElectionCampaignFail,
 
 } from "./action";
-
-import { uploadNewImage } from "../uploadImage/action";
 
 //Include Both Helper File with needed methods
 import {
@@ -147,11 +140,34 @@ function* onAddElection({ payload: election }) {
 
 function* onUpdateElection({ payload: election }) {
   try {
+    // Log that the onUpdateElection saga has started
+    console.log("onUpdateElection saga started");
+
+    // Make an API call to update the election
     const response = yield call(updateElection, election);
+
+    // Log the successful API response
+    console.log("API response:", response);
+
+    // Dispatch the updateElectionSuccess action
     yield put(updateElectionSuccess(response));
+
+    // Log a success message
+    console.log("Election updated successfully");
+
+    // Display a success toast message
     toast.success("تم تحديث الإنتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
+    // Log that an error occurred in the saga
+    console.error("Error in onUpdateElection saga:", error);
+
+    // Dispatch the updateElectionFail action with the error
     yield put(updateElectionFail(error));
+
+    // Log an error message
+    console.log("Error updating election:", error);
+
+    // Display an error toast message
     toast.error("خطأ في تحديث الإنتخابات", { autoClose: 2000 });
   }
 }

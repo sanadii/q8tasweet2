@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, Input, Label, Row, FormFeedback, Form } from "reactstrap";
+import { toast, ToastContainer } from "react-toastify";
 
 //Import Flatepicker
 import Flatpickr from "react-flatpickr";
@@ -611,8 +612,9 @@ const EditTab = () => {
                     })}
                   </ul>
                 </div>
-
               </CardBody>
+              <ToastContainer closeButton={false} limit={1} />
+
             </div>
           </Col>
         </Row>

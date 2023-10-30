@@ -41,7 +41,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
     name: candidate?.name || "",
     image: selectedImage || defaultAvatar,
     gender: candidate?.gender || 1,
-    status: candidate?.status || 0,
+    status: candidate?.status || 1,
     priority: candidate?.priority || 1,
     moderators: candidate?.moderators?.map((moderator) => moderator.id) || [],
   };

@@ -7,10 +7,10 @@ import * as moment from "moment";
 
 // Component, Constants & Hooks
 import { StatusOptions, PriorityOptions } from 'Common/Constants';
-import { AvatarSmall } from "Common/Components";
+import { AvatarList } from "Common/Components";
 
-const handleValidDate = (duedate) => {
-  const formattedDate = moment(duedate).format("YYYY-MM-DD");
+const handleValidDate = (dueDate) => {
+  const formattedDate = moment(dueDate).format("YYYY-MM-DD");
   return formattedDate;
 };
 
@@ -45,28 +45,17 @@ const Id = (cellProps) => {
   );
 };
 
-const Name = (cellProps) => {
-  return (
-    <React.Fragment>
-      <AvatarSmall row={cellProps.row} />
-    </React.Fragment>
-  );
-};
+const Name = (cellProps) => (
+  <AvatarList {...cellProps} dirName="elections" />
+);
 
-const CandidateCount = (cell) => {
-  return (
-    <React.Fragment>
-      <b>{cell.value}</b>
-    </React.Fragment>
-  );
-};
+const CandidateCount = (cell) => { <b>{cell.value}</b> };
 
-const DueDate = (cell) => {
-  return <React.Fragment>{handleValidDate(cell.value)}</React.Fragment>;
-};
 
-const Category = ({ category, subCategory }) => {
-  const { categories, subCategories } = useSelector(categorySelector);
+const DueDate = (cellProps) => (handleValidDate(cellProps.row.original.dueDate));
+
+const Category = ({ category }) => {
+  const { categories } = useSelector(categorySelector);
 
   const categoryName =
     categories.find((cat) => cat.id === category)?.name || "";
@@ -78,13 +67,13 @@ const Category = ({ category, subCategory }) => {
   );
 };
 
-const Status = ({ status }) => {
+const Status = (cellProps) => {
   const statusMapping = StatusOptions.reduce((acc, curr) => {
     acc[curr.id] = curr;
     return acc;
   }, {});
 
-  const { name, badgeClass } = statusMapping[status] || {
+  const { name, badgeClass } = statusMapping[cellProps.row.original.status] || {
     name: "غير معرف",
     badgeClass: "badge bg-primary",
   };
@@ -94,13 +83,13 @@ const Status = ({ status }) => {
 };
 
 
-const Priority = ({ value }) => {
+const Priority = (cellProps) => {
   const priorityMapping = PriorityOptions.reduce((acc, curr) => {
     acc[curr.id] = curr;
     return acc;
   }, {});
 
-  const { name, badgeClass } = priorityMapping[value] || {
+  const { name, badgeClass } = priorityMapping[cellProps.row.original.priority] || {
     name: "غير معرف",
     badgeClass: "badge bg-primary",
   };
@@ -108,7 +97,6 @@ const Priority = ({ value }) => {
   return <span className={`${badgeClass} text-uppercase`}>{name}</span>;
 };
 
-export default Priority;
 
 
 

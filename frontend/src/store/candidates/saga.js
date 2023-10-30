@@ -92,9 +92,6 @@ function* onDeleteCandidate({ payload: candidate }) {
 }
 
 
-
-
-
 // Watchers
 export function* watchGetCandidates() {
   yield takeEvery(GET_CANDIDATES, getCandidates);
@@ -116,7 +113,6 @@ export function* watchDeleteCandidate() {
 export function* watchGetCandidateDetails() {
   yield takeEvery(GET_CANDIDATE_DETAILS, getCandidateDetails);
 }
-
 
 
 function* candidateSaga() {

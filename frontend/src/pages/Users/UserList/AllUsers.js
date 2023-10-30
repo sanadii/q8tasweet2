@@ -7,7 +7,7 @@ import { Col, Row, Card, CardBody } from "reactstrap";
 import { getUsers, deleteUser, getModeratorUsers } from "../../../store/actions";
 
 // ------------ Custom Components & ConstantsImports ------------
-import { AvatarSmall, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
+import { AvatarList, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
 import UserModal from "./UsersModal";
 import { Id, Name, Username, Status, CreateBy, Actions } from "./UsersListCol";
 

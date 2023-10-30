@@ -58,18 +58,17 @@ axios.interceptors.response.use(
       let message;
       switch (status) {
         case 500:
-          message = "Internal Server Error";
+          message = "خطأ في الخادم الداخلي";
           break;
         case 401:
-          message = "Invalid credentials";
+          message = "بيانات الاعتماد غير صالحة";
           break;
         case 404:
-          message = "Sorry! The data you are looking for could not be found";
+          message = "عذرًا! البيانات التي تبحث عنها غير موجودة";
           break;
         default:
-          message = data.error || "An unexpected error occurred";
+          message = data.error || "حدث خطأ غير متوقع";
       }
-
       // Return the error message
       return Promise.reject(message);
     }

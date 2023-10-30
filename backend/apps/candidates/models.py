@@ -29,9 +29,8 @@ class Candidate(TrackModel, TaskModel):
         return self.name
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            transliterated_name = unidecode(self.name)
-            self.slug = slugify(transliterated_name) + '-' + str(uuid.uuid4())[:8]
+        # Generate a slug based on the name
+        self.slug = slugify(self.id)
         super().save(*args, **kwargs)
 
 # class CandidateProfile(TrackModel, AbstractBaseUser, PermissionsMixin):

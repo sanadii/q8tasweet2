@@ -9,10 +9,11 @@ from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 
 class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Election model. """
-    admin_serializer_classes = (TrackMixin, TaskMixin)
+    admin_serializer_classes = (TrackMixin)
     name = serializers.SerializerMethodField('get_election_name')
     image = serializers.SerializerMethodField('get_election_image')
     previous_election = serializers.SerializerMethodField()
+    due_date = serializers.DateField(format="%Y-%m-%d", input_formats=["%Y-%m-%d",], allow_null=True, required=False)
 
     class Meta:
         model = Election
@@ -20,7 +21,6 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "id", "name", "slug", "image", "due_date",
             "category", "sub_category", "previous_election",
             "elect_type", "elect_result", "elect_votes", "elect_seats",
-            # "first_winner_votes", "last_winner_votes",
             "electors", "electors_males", "electors_females",
             "attendees", "attendees_males", "attendees_females",
             "status", "priority"
@@ -42,7 +42,6 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
         return None
     
     # Used for Add / Update / Delete
-    due_date = serializers.DateField(format="%Y-%m-%d", input_formats=["%Y-%m-%d",], allow_null=True, required=False)
 
     def to_internal_value(self, data):
         # Convert string representation of due_date to date object
@@ -88,7 +87,6 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
             return data
         return None
-
 
     def create(self, validated_data):
         request = self.context.get("request")

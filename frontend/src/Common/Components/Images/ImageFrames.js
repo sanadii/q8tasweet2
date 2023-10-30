@@ -52,15 +52,15 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
   );
 };
 
-export const AvatarSmall = ({ row }) => {
-  if (!row || !row.original) return null; // If row or row.original is undefined, don't render the component
+export const AvatarList = ({ dirName, row }) => {
+  const { id, name, image, slug } = row.original;
 
-  const { id, image, name, slug } = row.original;
   const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
-  return (
-    <React.Fragment>
-      <Link to={`/elections/${slug}`} className="d-flex align-items-center link-primary">
+  if (dirName === "candidates") {
+    // If dirName is "candidate," don't render the link
+    return (
+      <div className="d-flex align-items-center">
         <div className="avatar-sm">
           <img
             src={imageUrl}
@@ -71,10 +71,29 @@ export const AvatarSmall = ({ row }) => {
         <strong className="ps-2">
           {name}
         </strong>
-      </Link>
-    </React.Fragment>
+      </div>
+    );
+  }
+
+  // For other dirName values, render the link
+  return (
+    <Link to={`/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
+      <div className="avatar-sm">
+        <img
+          src={imageUrl}
+          alt={name}
+          className="img-thumbnail rounded-circle"
+        />
+      </div>
+      <strong className="ps-2">
+        {name}
+      </strong>
+    </Link>
   );
 };
+
+
+
 
 
 export const ImageMedium = ({ imagePath }) => {

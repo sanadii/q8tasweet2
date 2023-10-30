@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+
 import { Card, CardBody, CardHeader, Container, Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from 'reactstrap';
 import { userSelector } from 'Selectors';
 import classnames from "classnames";
@@ -40,23 +42,40 @@ const ProfileEdit = () => {
         <React.Fragment>
             <div className="page-content">
                 <Container fluid>
-                    <div className="position-relative mx-n4 mt-n4">
-                        <div className="profile-wid-bg profile-setting-img">
-                            <img src={progileBg} className="profile-wid-img" alt="" />
-                            <div className="overlay-content">
-                                <div className="text-end p-3">
-                                    <div className="p-0 ms-auto rounded-circle profile-photo-edit">
-                                        {/* <Input id="profile-foreground-img-file-input" type="file"
-                                            className="profile-foreground-img-file-input" />
-                                        <Label htmlFor="profile-foreground-img-file-input"
-                                            className="profile-photo-edit btn btn-light">
-                                            <i className="ri-image-edit-line align-bottom me-1"></i> تغيير الخلفية
-                                        </Label> */}
-                                        <h1 className="text-white"> {user.fullName} </h1>
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="profile-foreground position-relative mx-n4 mt-n4">
+                        <div className="profile-wid-bg">
+                            {/* <img src={profileBg} alt="" className="profile-wid-img" /> */}
                         </div>
+                    </div>
+                    <div className="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
+                        <Row className="g-4">
+                            <div className="col-auto">
+                            </div>
+                            <Col>
+                                <div className="p-2">
+                                    <h3 className="text-white mb-1">{user.fullName}</h3>
+                                    <p className="text-white-75">{user.isStaff ? "مدير" : "مشترك"}</p>
+                                </div>
+                            </Col>
+                            <Col xs={12} className="col-lg-auto order-last order-lg-0">
+                            </Col>
+                        </Row>
+                        <Row className="g-4">
+                            <div className="col-auto">
+                            </div>
+                            <Col>
+                            </Col>
+                            <Col xs={12} className="col-lg-auto order-last order-lg-0">
+                                <div className="flex-shrink-0">
+                                    <Link
+                                        to="/profile"
+                                        className="btn btn-success"
+                                    >
+                                        <i className="ri-edit-box-line align-bottom"></i>الملف الشخصي
+                                    </Link>
+                                </div>
+                            </Col>
+                        </Row>
                     </div>
                     <Row className="mt-xxl-n4">
                         <Col xxl={3}>

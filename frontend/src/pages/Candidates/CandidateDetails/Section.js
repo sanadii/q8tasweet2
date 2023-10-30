@@ -70,43 +70,7 @@ const Section = ({ candidate, electionCampaigns, Candidates }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md">
-                        <div>
-                          <h4 className="fw-bold">
-                            {candidate.id}: {candidate.name}
-                          </h4>
-                          <div className="hstack gap-3 flex-wrap">
-                            <div>
-                              <i className="ri-building-line align-bottom me-1"></i>
-                              {candidate.category}
-                            </div>
-                            <div className="vr"></div>
-                            <div>
-                              Date :{" "}
-                              <span className="fw-medium">
-                                {candidate.duedate}
-                              </span>
-                            </div>
-                            <div className="vr"></div>
-                            <div className="badge rounded-pill bg-info fs-12">
-                              <i className="ri-send-plane-2-fill me-1 align-middle fw-medium"></i>{" "}
-                              <span className="mail-list-link">Detailed</span>
-                            </div>
-
-                            <div className="badge rounded-pill bg-info fs-12">
-                              <i className="ri-send-plane-2-fill me-1 align-middle fw-medium"></i>{" "}
-                              <span className="mail-list-link">Parties</span>
-                            </div>
-
-                            <div className="badge rounded-pill bg-info fs-12">
-                              <i className="ri-send-plane-2-fill me-1 align-middle fw-medium"></i>{" "}
-                              <span className="mail-list-link">
-                                4 votes / 10 Winners
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  
                     </Row>
                   </div>
                   <div className="col-md-auto">
@@ -141,93 +105,7 @@ const Section = ({ candidate, electionCampaigns, Candidates }) => {
                   </div>
                 </Row>
 
-                <Nav className="nav-tabs-custom border-bottom-0" role="tablist">
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "1" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("1");
-                      }}
-                      href="#"
-                    >
-                      Overview
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "2" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("2");
-                      }}
-                      href="#"
-                    >
-                      Candidates
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "3" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("3");
-                      }}
-                      href="#"
-                    >
-                      Campaigns
-                    </NavLink>
-                  </NavItem>
-
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "4" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("4");
-                      }}
-                      href="#"
-                    >
-                      Detail Results
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "5" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("5");
-                      }}
-                      href="#"
-                    >
-                      Activities
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames(
-                        { active: activeTab === "6" },
-                        "fw-semibold"
-                      )}
-                      onClick={() => {
-                        toggleTab("6");
-                      }}
-                      href="#"
-                    >
-                      Edit
-                    </NavLink>
-                  </NavItem>
-                </Nav>
+ 
               </CardBody>
               {activeTab.startsWith("3") && (
                 <CardFooter>
@@ -303,55 +181,7 @@ const Section = ({ candidate, electionCampaigns, Candidates }) => {
         candidate={candidate}
         Candidates={Candidates}
       />
-      <Row>
-        <Col lg={12}>
-          {viewedProfileId ? (
-            <p>The campaign ID is {viewedProfileId}</p>
-          ) : (
-            <TabContent activeTab={activeTab} className="text-muted">
-              <TabPane tabId="1">
-                <OverviewTab
-                  candidate={candidate}
-                  Candidates={Candidates}
-                />
-              </TabPane>
-
-              <TabPane tabId="2">
-                <CandidatesTab
-                Candidates={Candidates}
-                />
-              </TabPane>
-
-              <TabPane tabId="3">
-                <CampaignsTab
-                  electionCampaigns={electionCampaigns}
-                  toggleProfileView={toggleProfileView}
-                  viewedProfileId={viewedProfileId}
-                />
-                {/* if the prof */}
-              </TabPane>
-              <TabPane tabId="32">
-                {/* <GuaranteesTab Candidates={Candidates} /> */}
-              </TabPane>
-              {/* <TabPane tabId="33">
-              <AttendeesTab Candidates={Candidates} />
-            </TabPane> */}
-              {/* <TabPane tabId="34">
-              <SortingTab Candidates={Candidates} />
-            </TabPane> */}
-              <TabPane tabId="4">
-                <ResultsTab candidate={candidate} />
-              </TabPane>
-              <TabPane tabId="5">
-                <ActivitiesTab candidate={candidate} />
-              </TabPane>
-              <TabPane tabId="6">
-                {/* <EditTab candidate={candidate} /> */}
-              </TabPane>
-            </TabContent>
-          )}
-        </Col>
-      </Row>
+ 
     </React.Fragment>
   );
 };

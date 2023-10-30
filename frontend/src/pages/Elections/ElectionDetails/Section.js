@@ -69,7 +69,6 @@ const Section = () => {
     // { id: "6", title: "عمليات المستخدم", icon: 'ri-activity-line', },
     { id: "7", title: "تعديل", icon: 'ri-activity-line', }
   ];
-  console.log("election.electionResult:", election.electionResult)
 
   const campaignTabs = [
     { id: "4", title: "Campaigns", icon: 'ri-activity-line', },
@@ -91,6 +90,11 @@ const Section = () => {
     "7": <EditTab />,
   };
 
+  const electionName = election.name;
+  const electionImage = election.image;
+  const electionStatus = election.task?.status || 0;
+  const electionPriority = election.task?.priority || 0;
+
   //Tab
   const [activeTab, setActiveTab] = useState("1");
   const toggleTab = (tab) => {
@@ -100,15 +104,15 @@ const Section = () => {
   };
   return (
     <React.Fragment>
-      <SectionBackagroundImage imagePath={election.image} />
+      <SectionBackagroundImage imagePath={electionImage} />
       <div className="pt-4 mb-4 mb-lg-3 pb-lg-2 profile-wrapper">
         <Row className="g-4">
           <div className="col-auto">
-            <ImageMedium imagePath={election.image} />
+            <ImageMedium imagePath={electionImage} />
           </div>
           <Col>
             <div className="p-2">
-              <h3 className="text-white mb-1">{election.name}</h3>
+              <h3 className="text-white mb-1">{electionName}</h3>
               {/* <p className="text-white-75">{campaign.election.name}</p> */}
               <div className="hstack text-white gap-1">
                 <div className="me-2">
@@ -123,8 +127,8 @@ const Section = () => {
             </div>
             <div className="col-md-auto">
               <div className="hstack gap-3 flex-wrap">
-                <StatusBadge status={election.status} />
-                <PriorityBadge priority={election.priority} />
+                <StatusBadge status={electionStatus} />
+                <PriorityBadge priority={electionPriority} />
               </div>
             </div>
           </Col>

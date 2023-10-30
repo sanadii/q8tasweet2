@@ -8,7 +8,7 @@ import { getElections, deleteElection, getModeratorUsers, getCategories } from "
 
 // Components & Columns
 import ElectionModal from "./ElectionModal";
-import { AvatarSmall, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
+import { AvatarList, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
 import { Id, DueDate, Status, Priority, Category, CreateBy, Moderators, Actions } from "./ElectionListCol";
 
 // UI, Styles & Notifications
@@ -211,7 +211,7 @@ const AllElections = () => {
         name: "الإنتخابات",
         title: "name",
         accessor: "name",
-        Cell: (cellProps) => cellProps.row ? <AvatarSmall row={cellProps.row} /> : null,
+        Cell: (cellProps) => cellProps.row ? <AvatarList row={cellProps.row} /> : null,
 
       },
       {
