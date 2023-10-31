@@ -11,7 +11,7 @@ import {
   DELETE_USER,
   UPDATE_USER_PROFILE,
   CHANGE_USER_PASSWORD,
-  
+
   // Specific User(s)
   GET_CURRENT_USER,
   GET_MODERATOR_USERS,
@@ -82,16 +82,14 @@ function* getUserDetails({ payload: user }) {
   }
 }
 
-function* onAddNewUser({ payload: { user, formData } }) {
+function* onAddNewUser({ payload: user }) {
   try {
-    // Call the API function to add a new user & Dispatch the addNewUserSuccess action with the received data
-    const addNewUserResponse = yield call(addNewUser, formData);
-    yield put(addNewUserSuccess(addNewUserResponse));
-
-    toast.success("User Added Successfully", { autoClose: 2000 });
+    const response = yield call(addNewUser, user);
+    yield put(addNewUserSuccess(response));
+    toast.success("تم إضافة مستخدم بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addNewUserFail(error));
-    toast.error("User Added Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة مستخدم", { autoClose: 2000 });
   }
 }
 
@@ -99,11 +97,8 @@ function* onUpdateUser({ payload: user }) {
   try {
     const response = yield call(updateUser, user);
     yield put(updateUserSuccess(response));
-    toast.success("تم تحديث بيانات المستخدم بنجاح", {
-      autoClose: 2000,
-    });
+    toast.success("تم تحديث بيانات المستخدم بنجاح", { autoClose: 2000 });
   } catch (error) {
-    console.error('Saga Error:', error); // Log any error that occurs
     yield put(updateUserFail(error));
     toast.error("خطأ في تحديث بيانات المستخدم", { autoClose: 2000 });
   }

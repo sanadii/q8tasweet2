@@ -1,21 +1,21 @@
-// ------------ React & Redux ------------
+// React & Redux
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Row, Card, CardBody } from "reactstrap";
 
-// ------------ Actions ------------
-import { getUsers, deleteUser, getModeratorUsers } from "../../../store/actions";
+// Actions
+import { getUsers, deleteUser, getModeratorUsers } from "store/actions";
 
-// ------------ Custom Components & ConstantsImports ------------
-import { AvatarList, Loader, DeleteModal, TableContainer, TableContainerHeader } from "../../../Common/Components";
+// Custom Components & ConstantsImports
+import { AvatarList, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import UserModal from "./UsersModal";
 import { Id, Name, Username, Status, CreateBy, Actions } from "./UsersListCol";
 
-// ------------ Toast & Styles ------------
+// Toast & Styles
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ------------ React FilePond & Styles ------------
+// React FilePond & Styles
 import { registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -26,7 +26,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 const AllUsers = () => {
   const dispatch = useDispatch();
 
-  // ------------ State Management ------------
+  // State Management
   const { users, moderators, isUserSuccess, error } = useSelector((state) => ({
     users: state.Users.users,
     moderators: state.Users.moderators,
@@ -107,29 +107,10 @@ const AllUsers = () => {
       setUser({
         id: user.id,
         name: user.name,
-        image:
-          user && user.image ? process.env.REACT_APP_MEDIA_URL + user.image : "",
-
-        userCount: user.userCount,
-        description: user.description,
-
         firstName: user.firstName,
         lastName: user.lastName,
-        gender: user.gender,
-
-        civil: user.civil,
-        dateOfBirth: user.dateOfBirth,
-
-        // Contact
-        mobile: user.mobile,
+        phone: user.phone,
         email: user.email,
-        twitter: user.twitter,
-        instagram: user.instagram,
-
-        // Admin
-        isStaff: parseInt(user.status, 10),
-        isActive: parseInt(user.status, 10),
-
       });
 
       setIsEdit(true);
@@ -306,7 +287,7 @@ const AllUsers = () => {
                 isContainerAddButton={true}
                 AddButtonText="إضافة مستخدم"
                 isEdit={isEdit}
-                // handleEntryClick={handleElectionClicks}
+                handleEntryClick={handleUserClicks}
                 toggle={toggle}
 
                 // Delete Button

@@ -61,13 +61,13 @@ class UserSerializer(serializers.ModelSerializer):
         return f"{obj.first_name} {obj.last_name}"
 
     def get_groups(self, obj):
-        # Gets the name attribute for all the groups associated with the user
-        groups = [group.name for group in obj.groups.all()]
-        
-        # Format each name to prepend "is" and capitalize the first letter
-        formatted_groups = ["is" + name.replace(" ", "").capitalize() for name in groups]
-        
-        return formatted_groups
+        groups = obj.groups.all()
+        if groups.exists():
+            formatted_groups = ["is" + name.replace(" ", "").capitalize() for name in groups.values_list('name', flat=True)]
+            return formatted_groups
+        else:
+            return []
+
 
     def get_permissions(self, obj):
         user_permissions = list(obj.user_permissions.all().values_list('codename', flat=True))

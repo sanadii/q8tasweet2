@@ -145,6 +145,19 @@ const FieldComponent = ({ field, validation }) => {
                         )}
                     </div>
                 );
+            case 'password':
+                return (
+                    <Input
+                        type="password"
+                        name={name}
+                        id={id}
+                        placeholder={`ادخل ${label}`}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values[name] || ""}
+                        invalid={validation.touched[name] && validation.errors[name]}
+                    />
+                );
             // ... other cases
             default:
                 return null;

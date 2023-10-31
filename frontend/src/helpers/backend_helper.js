@@ -132,7 +132,7 @@ export const updateCampaignAttendee = (campaignAttendee) => api.put(url.UPDATE_C
 export const getUsers = () => api.get(url.GET_USERS);
 export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + user.id);
 
-export const addNewUser = (user) => api.upload(url.ADD_NEW_USER, user);
+export const addNewUser = (user) => api.create(url.ADD_NEW_USER, user);
 export const updateUser = (user) => api.update(url.UPDATE_USER_PROFILE + "/" + user.id, user);
 export const changeUserPassword = (user) => api.update(url.CHANGE_USER_PASSWORD + "/" + user.id, user);
 export const deleteUser = (user) => api.delete(url.DELETE_USER + "/" + user);
