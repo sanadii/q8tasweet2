@@ -140,34 +140,11 @@ function* onAddElection({ payload: election }) {
 
 function* onUpdateElection({ payload: election }) {
   try {
-    // Log that the onUpdateElection saga has started
-    console.log("onUpdateElection saga started");
-
-    // Make an API call to update the election
     const response = yield call(updateElection, election);
-
-    // Log the successful API response
-    console.log("API response:", response);
-
-    // Dispatch the updateElectionSuccess action
     yield put(updateElectionSuccess(response));
-
-    // Log a success message
-    console.log("Election updated successfully");
-
-    // Display a success toast message
     toast.success("تم تحديث الإنتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
-    // Log that an error occurred in the saga
-    console.error("Error in onUpdateElection saga:", error);
-
-    // Dispatch the updateElectionFail action with the error
     yield put(updateElectionFail(error));
-
-    // Log an error message
-    console.log("Error updating election:", error);
-
-    // Display an error toast message
     toast.error("خطأ في تحديث الإنتخابات", { autoClose: 2000 });
   }
 }
@@ -176,7 +153,7 @@ function* onDeleteElection({ payload: election }) {
   try {
     const response = yield call(deleteElection, election);
     yield put(deleteElectionSuccess({ election, ...response }));
-    toast.success("Election Delete Successfully", { autoClose: 2000 });
+    toast.success("تم حذف الانتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteElectionFail(error));
     toast.error("Election Delete Failed", { autoClose: 2000 });
@@ -199,10 +176,23 @@ function* onAddNewElectionCandidate({ payload: electionCandidate }) {
   try {
     const response = yield call(addNewElectionCandidate, electionCandidate);
     yield put(addElectionCandidateSuccess(response));
-    toast.success("ElectionCandidate Added Successfully", { autoClose: 2000 });
+    toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addElectionCandidateFail(error));
-    toast.error("ElectionCandidate Added Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة مرشح الانتخابات", { autoClose: 2000 });
+  }
+}
+
+function* onUpdateElectionCandidate({ payload: electionCandidate }) {
+  try {
+    const response = yield call(updateElectionCandidate, electionCandidate);
+    yield put(updateElectionCandidateSuccess(response));
+    toast.success("تم تحديث مرشح الانتخابات بنجاح", {
+      autoClose: 2000,
+    });
+  } catch (error) {
+    yield put(updateElectionCandidateFail(error));
+    toast.error("خطأ في تحديث مرشح الانتخابات", { autoClose: 2000 });
   }
 }
 
@@ -212,23 +202,10 @@ function* onDeleteElectionCandidate({ payload: electionCandidate }) {
     yield put(
       deleteElectionCandidateSuccess({ electionCandidate, ...response })
     );
-    toast.success("ElectionCandidate Delete Successfully", { autoClose: 2000 });
+    toast.success("تم حذف مرشح الانتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteElectionCandidateFail(error));
-    toast.error("ElectionCandidate Delete Failed", { autoClose: 2000 });
-  }
-}
-
-function* onUpdateElectionCandidate({ payload: electionCandidate }) {
-  try {
-    const response = yield call(updateElectionCandidate, electionCandidate);
-    yield put(updateElectionCandidateSuccess(response));
-    toast.success("ElectionCandidate Updated Successfully", {
-      autoClose: 2000,
-    });
-  } catch (error) {
-    yield put(updateElectionCandidateFail(error));
-    toast.error("ElectionCandidate Updated Failed", { autoClose: 2000 });
+    toast.error("خطأ في حذف مرشح الانتخابات", { autoClose: 2000 });
   }
 }
 
@@ -249,10 +226,10 @@ function* onAddNewElectionCommittee({ payload: electionCommittee }) {
   try {
     const response = yield call(addNewElectionCommittee, electionCommittee);
     yield put(addElectionCommitteeSuccess(response));
-    toast.success("ElectionCommittee Added Successfully", { autoClose: 2000 });
+    toast.success("تم إضافة لجنة الانتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addElectionCommitteeFail(error));
-    toast.error("ElectionCommittee Added Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة اللجنة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -262,10 +239,10 @@ function* onDeleteElectionCommittee({ payload: electionCommittee }) {
     yield put(
       deleteElectionCommitteeSuccess({ electionCommittee, ...response })
     );
-    toast.success("ElectionCommittee Delete Successfully", { autoClose: 2000 });
+    toast.success("تم حذف اللجنة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteElectionCommitteeFail(error));
-    toast.error("ElectionCommittee Delete Failed", { autoClose: 2000 });
+    toast.error("خطأ في حذف اللجنة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -273,12 +250,12 @@ function* onUpdateElectionCommittee({ payload: electionCommittee }) {
   try {
     const response = yield call(updateElectionCommittee, electionCommittee);
     yield put(updateElectionCommitteeSuccess(response));
-    toast.success("ElectionCommittee Updated Successfully", {
+    toast.success("تم تحديث اللجنة الإنتخابية بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     yield put(updateElectionCommitteeFail(error));
-    toast.error("ElectionCommittee Updated Failed", { autoClose: 2000 });
+    toast.error("خطأ في تحديث اللجنة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -313,10 +290,10 @@ function* onAddNewElectionCampaign({ payload: electionCampaign }) {
   try {
     const response = yield call(addNewElectionCampaign, electionCampaign);
     yield put(addElectionCampaignSuccess(response));
-    toast.success("ElectionCampaign Added Successfully", { autoClose: 2000 });
+    toast.success("تم إضافة الحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addElectionCampaignFail(error));
-    toast.error("ElectionCampaign Added Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -324,10 +301,10 @@ function* onDeleteElectionCampaign({ payload: electionCampaign }) {
   try {
     const response = yield call(deleteElectionCampaign, electionCampaign);
     yield put(deleteElectionCampaignSuccess({ electionCampaign, ...response }));
-    toast.success("ElectionCampaign Delete Successfully", { autoClose: 2000 });
+    toast.success("تم حذف الحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteElectionCampaignFail(error));
-    toast.error("ElectionCampaign Delete Failed", { autoClose: 2000 });
+    toast.error("خطأ في حذف الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -335,12 +312,12 @@ function* onUpdateElectionCampaign({ payload: electionCampaign }) {
   try {
     const response = yield call(updateElectionCampaign, electionCampaign);
     yield put(updateElectionCampaignSuccess(response));
-    toast.success("ElectionCampaign Updated Successfully", {
+    toast.success("تم تحديث الحملة الإنتخابية بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     yield put(updateElectionCampaignFail(error));
-    toast.error("ElectionCampaign Updated Failed", { autoClose: 2000 });
+    toast.error("خطأ في تحديث الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 

@@ -97,7 +97,7 @@ export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_E
 
 // Candidates
 export const getCandidates = () => api.get(url.GET_CANDIDATES);
-export const getCandidateDetails = (candidate) => api.get(url.GET_CANDIDATE_DETAILS + "/" + candidate.id);
+export const getCandidateDetails = (candidate) => api.get(url.GET_CANDIDATE_DETAILS + "/" + candidate);
 export const addNewCandidate = (candidate) => api.create(url.ADD_NEW_CANDIDATE, candidate);
 export const updateCandidate = (candidate) => api.update(url.UPDATE_CANDIDATE + "/" + candidate.get('id'), candidate);
 export const deleteCandidate = (candidate) => api.delete(url.DELETE_CANDIDATE + "/" + candidate);

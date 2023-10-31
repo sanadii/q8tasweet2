@@ -80,8 +80,8 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
                 last_winner = election_candidates[previous_election.elect_seats - 1] if previous_election.elect_seats > 0 else None
                 
                 data.update({
-                    "first_winner": ElectionCandidatesSerializer(first_winner).data,
-                    "last_winner": ElectionCandidatesSerializer(last_winner).data if last_winner else None,
+                    "first_winner": ElectionCandidateSerializer(first_winner).data,
+                    "last_winner": ElectionCandidateSerializer(last_winner).data if last_winner else None,
                     "median_winner": sum(candidate.votes for candidate in election_candidates[:previous_election.elect_seats]) // previous_election.elect_seats if previous_election.elect_seats > 0 else None,
                 })
 
@@ -111,7 +111,7 @@ class ElectionCandidateVoteSerializer(serializers.ModelSerializer):
         fields = ["election_committee", "votes"]
 
 
-class ElectionCandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the ElectionCandidate model. """
     admin_serializer_classes = (TrackMixin,)
 

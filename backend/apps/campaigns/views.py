@@ -18,7 +18,7 @@ from django.contrib.auth.models import Group
 
 # Serializers
 from apps.campaigns.serializers import CampaignsSerializer, CampaignMemberSerializer, CampaignGuaranteeSerializer
-from apps.elections.serializers import ElectionCandidatesSerializer, ElectionCommitteesSerializer
+from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteesSerializer
 from apps.auths.serializers import GroupSerializer
 
 from helper.views_helper import CustomPagination
@@ -63,7 +63,7 @@ class GetCampaigns(APIView):
 class GetCampaignDetails(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, id):
+    def get(self, request, slug):
         context = {"request": request}
         user_id = context["request"].user.id
         current_campaign_member = self.get_current_campaign_member(id, user_id, context)
@@ -73,7 +73,7 @@ class GetCampaignDetails(APIView):
         user_role = self.determine_user_role(id, user_id, campaign_roles)
 
         # Fetch campaign details and its associated models
-        campaign = get_object_or_404(Campaign, id=id)
+        campaign = get_object_or_404(Election, slug=slug)
         election_candidate = campaign.election_candidate
         election = election_candidate.election
         candidate = election_candidate.candidate
@@ -202,7 +202,7 @@ class GetCampaignDetails(APIView):
         return CampaignGuaranteeSerializer(campaign_attendeess, many=True, context=context).data
 
     def get_campaign_election_candidates(self, election_candidates, context):
-        return ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
+        return ElectionCandidateSerializer(election_candidates, many=True, context=context).data
 
     def get_campaign_election_committees(self, election_committees, context):
         return ElectionCommitteesSerializer(election_committees, many=True, context=context).data

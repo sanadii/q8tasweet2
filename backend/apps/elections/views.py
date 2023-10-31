@@ -18,7 +18,7 @@ from apps.categories.models import Category
 
 # Serializers
 from apps.campaigns.serializers import CampaignsSerializer
-from apps.elections.serializers import ElectionSerializer, ElectionCommitteesSerializer, ElectionCandidatesSerializer, ElectionCommitteeResultSerializer
+from apps.elections.serializers import ElectionSerializer, ElectionCommitteesSerializer, ElectionCandidateSerializer, ElectionCommitteeResultSerializer
 from helper.views_helper import CustomPagination
 
 
@@ -100,7 +100,7 @@ class GetElectionDetails(APIView):
         return ElectionSerializer(election, context=context).data
 
     def get_election_candidates(self, election_candidates, context):
-        return ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
+        return ElectionCandidateSerializer(election_candidates, many=True, context=context).data
 
     def get_election_committees(self, election_committees, context):
         return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
@@ -182,7 +182,7 @@ class AddNewElectionCandidate(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = ElectionCandidatesSerializer(data=request.data, context={'request': request})
+        serializer = ElectionCandidateSerializer(data=request.data, context={'request': request})
         
         if serializer.is_valid():
             serializer.save()
@@ -198,7 +198,7 @@ class UpdateElectionCandidate(APIView):
         except ElectionCandidate.DoesNotExist:
             return Response({"data": "Election candidate not found", "count": 0, "code": 404}, status=404)
         
-        serializer = ElectionCandidatesSerializer(instance=election_candidate, data=request.data, partial=True, context={'request': request})
+        serializer = ElectionCandidateSerializer(instance=election_candidate, data=request.data, partial=True, context={'request': request})
         
         if serializer.is_valid():
             serializer.save()
@@ -362,7 +362,7 @@ class GetPublicElectionDetails(APIView):
     def get_election_candidates(self, id):
         # Fetch the election candidates
         election_candidate = ElectionCandidate.objects.filter(election=id)
-        candidate_serializer = ElectionCandidatesSerializer(election_candidate, many=True)
+        candidate_serializer = ElectionCandidateSerializer(election_candidate, many=True)
         election_candidates = candidate_serializer.data
         
         # Aggregate votes for each candidate across all committees

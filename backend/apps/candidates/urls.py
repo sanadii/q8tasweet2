@@ -6,8 +6,11 @@ from .views import *
 app_name = "candidates"
 
 urlpatterns = [
-        # Candidate
+    # Candidate
     path("getCandidates", GetCandidates.as_view(), name="GetCandidates"),
+    path("getCandidateDetails/<slug:slug>", GetCandidateDetails.as_view(), name="GetCandidateDetails"),
+    path("getCandidateDetails/<int:id>", GetCandidateDetails.as_view(), name="GetCandidateDetails"),
+
     path("addNewCandidate", AddNewCandidate.as_view(), name="AddNewCandidate"),
     path("deleteCandidate/<int:id>", DeleteCandidate.as_view(), name="DeleteCandidate"),
     path("updateCandidate/<int:id>", UpdateCandidate.as_view(), name="UpdateCandidate"),

@@ -2,8 +2,15 @@ from unidecode import unidecode
 from django.db import models
 from django.utils.text import slugify
 import uuid
-
+import secrets
+import string
 from helper.models_helper import TrackModel, TaskModel, GenderOptions
+
+def generate_random_slug(length=6):
+    characters = string.ascii_letters + string.digits  # Letters and digits
+    random_slug = ''.join(secrets.choice(characters) for _ in range(length))
+    return random_slug
+
 
 class Candidate(TrackModel, TaskModel):
     # Basic Information
@@ -29,9 +36,11 @@ class Candidate(TrackModel, TaskModel):
         return self.name
 
     def save(self, *args, **kwargs):
-        # Generate a slug based on the name
-        self.slug = slugify(self.id)
+        if not self.slug:
+            self.slug = generate_random_slug()
         super().save(*args, **kwargs)
+
+
 
 # class CandidateProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
 #     candidate = models.OneToOneField('Candidate', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_candidates")

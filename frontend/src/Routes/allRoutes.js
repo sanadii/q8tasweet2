@@ -118,6 +118,7 @@ const authProtectedRoutes = [
 
   // ----------Common--------
   { path: "/elections/:id", component: <ElectionDetails /> },
+  { path: "/candidates/:slug", component: <CandidateDetails /> },
   { path: "/campaigns/:id", component: <CampaignDetails /> },
   // { path: "/campaigns/:id", component: <CampaignDetails /> },
   // { path: "/candidates/:id", component: <CandidateDetails /> },

@@ -7,7 +7,7 @@ from apps.auths.models import User
 
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
-class CandidatesSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class CandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Candidate model. """
     admin_serializer_classes = (TrackMixin,)
     image = serializers.SerializerMethodField()  # Use SerializerMethodField for custom serialization

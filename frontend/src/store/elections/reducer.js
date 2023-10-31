@@ -16,6 +16,7 @@ import {
   // Election Candidates
   GET_ELECTION_CANDIDATES,
   ADD_ELECTION_CANDIDATE_SUCCESS,
+  ADD_TO_ELECTION_AFTER_CANDIDATE_SUCCESS,
   ADD_ELECTION_CANDIDATE_FAIL,
   UPDATE_ELECTION_CANDIDATE_SUCCESS,
   UPDATE_ELECTION_CANDIDATE_FAIL,
@@ -241,6 +242,16 @@ const Elections = (state = IntialState, action) => {
         ...state,
         isElectionCandidateCreated: true,
         electionCandidates: [...state.electionCandidates, action.payload.data],
+        isElectionCandidateAdd: true,
+        isElectionCandidateAddFail: false,
+      };
+
+    // DO_AFTER_ADD_CANDIDATE_SUCCESS
+    case ADD_TO_ELECTION_AFTER_CANDIDATE_SUCCESS:
+      return {
+        ...state,
+        isElectionCandidateCreated: true,
+        electionCandidates: [...state.electionCandidates, action.payload.electionCandidate],
         isElectionCandidateAdd: true,
         isElectionCandidateAddFail: false,
       };

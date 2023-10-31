@@ -37,7 +37,7 @@
 #         election_candidates = sorted(election_candidates, key=lambda x: x.total_votes, reverse=True)
         
 #         # Now serialize
-#         election_candidates_serialized = ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
+#         election_candidates_serialized = ElectionCandidateSerializer(election_candidates, many=True, context=context).data
         
 #         number_of_seats = election.seats or 0
 #         for idx, candidate in enumerate(election_candidates_serialized, start=1):

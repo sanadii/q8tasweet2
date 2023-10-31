@@ -18,7 +18,7 @@ from apps.categories.models import Category
 from django.contrib.auth.models import Group, Permission
 
 # Serializers
-from candidates.serializers import CandidatesSerializer
+from candidates.serializers import CandidateSerializer
 from elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
 from electors.serializers import ElectorsSerializer
@@ -203,7 +203,7 @@ class GetCampaignDetails(APIView):
         return CampaignAttendeeSerializer(campaign_attendeess, many=True, context=context).data
 
     def get_campaign_election_candidates(self, election_candidates, context):
-        return ElectionCandidatesSerializer(election_candidates, many=True, context=context).data
+        return ElectionCandidateSerializer(election_candidates, many=True, context=context).data
 
     def get_campaign_election_committees(self, election_committees, context):
         return ElectionCommitteesSerializer(election_committees, many=True, context=context).data

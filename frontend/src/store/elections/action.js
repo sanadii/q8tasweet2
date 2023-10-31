@@ -20,6 +20,7 @@ import {
   GET_ELECTION_CANDIDATES,
   ADD_NEW_ELECTION_CANDIDATE,
   ADD_ELECTION_CANDIDATE_SUCCESS,
+  ADD_TO_ELECTION_AFTER_CANDIDATE_SUCCESS,
   ADD_ELECTION_CANDIDATE_FAIL,
   UPDATE_ELECTION_CANDIDATE,
   UPDATE_ELECTION_CANDIDATE_SUCCESS,
@@ -146,6 +147,10 @@ export const addElectionCandidateSuccess = electionCandidate => ({
   payload: electionCandidate,
 });
 
+export const addToElectionAfterCandidateSuccess = electionCandidate => ({
+  type: ADD_TO_ELECTION_AFTER_CANDIDATE_SUCCESS,
+  payload: electionCandidate,
+});
 export const addElectionCandidateFail = error => ({
   type: ADD_ELECTION_CANDIDATE_FAIL,
   payload: error,

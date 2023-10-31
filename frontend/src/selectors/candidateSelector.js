@@ -7,6 +7,9 @@ export const candidateSelector = createSelector(
     selectCandidatesState,
     (candidateState,) => ({
         candidates: candidateState.candidates,
+        candidateDetails: candidateState.candidateDetails,
+        candidateId: candidateState.candidateDetails.id,
+        candidate: candidateState.candidateDetails,
 
 
         isCandidateSuccess: candidateState.isCandidateSuccess,

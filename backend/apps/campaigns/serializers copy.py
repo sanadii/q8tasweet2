@@ -10,14 +10,14 @@ from electors.models import Elector
 from apps.categories.models import Category
 
 # Serializers
-from candidates.serializers import CandidatesSerializer
+from candidates.serializers import CandidateSerializer
 from elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
 
 class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Campaign model. """
     admin_serializer_classes = (TrackMixin, TaskMixin)
-    candidate = CandidatesSerializer(source='election_candidate.candidate', read_only=True)
+    candidate = CandidateSerializer(source='election_candidate.candidate', read_only=True)
     election = ElectionSerializer(source='election_candidate.election', read_only=True)
     
     class Meta: 
@@ -45,10 +45,10 @@ class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     def get_elections_candidates(self):
-        from ..serializers import ElectionSerializer, CandidatesSerializer
+        from ..serializers import ElectionSerializer, CandidateSerializer
 
         election = ElectionSerializer(read_only=True)
-        candidate = CandidatesSerializer(read_only=True)
+        candidate = CandidateSerializer(read_only=True)
         user = UserSerializer(read_only=True)  # Assuming the user field name is 'user'
         # image = serializers.ImageField(use_url=True)  # Ensure the image's URL is returned, not its data
 

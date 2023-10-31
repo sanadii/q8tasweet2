@@ -157,7 +157,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       modalClassName="modal fade zoomIn"
     >
       <ModalHeader className="p-3 bg-soft-info" toggle={toggle}>
-        {!!isEdit ? "Edit Candidate" : "Create Candidate"}
+        {!!isEdit ? "تحديث مرشح" : "إضافة مرشح"}
       </ModalHeader>
       <Form
         className="tablelist-form"

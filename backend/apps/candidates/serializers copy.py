@@ -9,7 +9,7 @@ from apps.categories.models import Category
 from django.contrib.auth.models import Group, Permission
 import json
 
-class CandidatesSerializer(serializers.ModelSerializer):
+class CandidateSerializer(serializers.ModelSerializer):
     moderators = serializers.SerializerMethodField()  # New custom field
 
     # Change to camelCase for react State use

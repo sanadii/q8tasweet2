@@ -13,7 +13,7 @@ from helper.validators import civil_validator, phone_validator
 class Campaign(TrackModel, TaskModel):
     # Basic Information
     election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='candidate_campaigns')
-    # slug = AutoSlugField(populate_from='get_dynamic_name', unique=True, null=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     target_votes = models.PositiveIntegerField(blank=True, null=True)
 

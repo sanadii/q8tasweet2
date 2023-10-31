@@ -57,24 +57,6 @@ export const AvatarList = ({ dirName, row }) => {
 
   const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
-  if (dirName === "candidates") {
-    // If dirName is "candidate," don't render the link
-    return (
-      <div className="d-flex align-items-center">
-        <div className="avatar-sm">
-          <img
-            src={imageUrl}
-            alt={name}
-            className="img-thumbnail rounded-circle"
-          />
-        </div>
-        <strong className="ps-2">
-          {name}
-        </strong>
-      </div>
-    );
-  }
-
   // For other dirName values, render the link
   return (
     <Link to={`/${dirName}/${slug}`} className="d-flex align-items-center link-primary">

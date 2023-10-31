@@ -10,6 +10,10 @@ import {
   ADD_NEW_CANDIDATE,
   DELETE_CANDIDATE,
   UPDATE_CANDIDATE,
+
+  // Election Candidates
+  ADD_NEW_ELECTION_CANDIDATE,
+
 } from "./actionType";
 
 import {
@@ -25,7 +29,13 @@ import {
   updateCandidateFail,
   deleteCandidateSuccess,
   deleteCandidateFail,
+
 } from "./action";
+
+import {
+  // Election Candidates
+  addToElectionAfterCandidateSuccess,
+} from "../elections/action";
 
 //Include Both Helper File with needed methods
 import {
@@ -57,13 +67,18 @@ function* getCandidateDetails({ payload: candidate }) {
 
 function* onAddCandidate({ payload: candidate }) {
   try {
-    console.log('Saga Payload:', candidate); // Log the payload here
     const response = yield call(addNewCandidate, candidate);
     yield put(addNewCandidateSuccess(response));
-    toast.success("Candidate Added Successfully", { autoClose: 2000 });
+    toast.success("تم إضافة المرشح بنجاح", { autoClose: 2000 });
+    if (response.electionCandidate) {
+      // Assuming that candidate.electionCandidate is the election object
+      yield put(addToElectionAfterCandidateSuccess(response));
+      toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
+    }
+
   } catch (error) {
     yield put(addNewCandidateFail(error));
-    toast.error("Candidate Added Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة المرشح", { autoClose: 2000 });
   }
 }
 
@@ -84,10 +99,10 @@ function* onDeleteCandidate({ payload: candidate }) {
   try {
     const response = yield call(deleteCandidate, candidate);
     yield put(deleteCandidateSuccess({ candidate, ...response }));
-    toast.success("Candidate Delete Successfully", { autoClose: 2000 });
+    toast.success("تم حذف المرشح بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteCandidateFail(error));
-    toast.error("Candidate Delete Failed", { autoClose: 2000 });
+    toast.error("خطأ في حذف المرشح", { autoClose: 2000 });
   }
 }
 
