@@ -5,7 +5,9 @@ from django.utils.text import slugify
 import uuid
 
 from django.contrib.auth.models import Group
-from helper.models_helper import TrackModel, TaskModel, GuaranteeStatusOptions
+
+from apps.configs.models import TrackModel, TaskModel
+from helper.models_helper import GuaranteeStatusOptions
 from helper.validators import civil_validator, phone_validator
 
 # from apps.campaigns.models import ElectionCandidate

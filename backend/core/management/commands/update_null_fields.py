@@ -6,6 +6,8 @@ class Command(BaseCommand):
     help = 'Updates null "deleted" fields to False'
 
     def handle(self, *args, **options):
+        print("Starting update_null_fields command...")
+        # Rest of the code
         for model in apps.get_models():
             # Check if the model has a 'deleted' field
             if 'deleted' in [field.name for field in model._meta.fields]:
@@ -17,4 +19,6 @@ class Command(BaseCommand):
                     # Update all instances where 'deleted' is null, setting it to False
                     updated_count = model.objects.filter(deleted__isnull=True).update(deleted=False)
                     self.stdout.write(self.style.SUCCESS(f'Successfully updated {updated_count} instances of {model.__name__}.deleted'))
+
+        print("Finished update_null_fields command.")
 

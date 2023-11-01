@@ -54,7 +54,7 @@ export function useCampaignMenu(iscurrentState, setIscurrentState) {
         id: campaign.id, // You can use a unique identifier here
         label: campaign.candidate.name, // Display campaign name
         icon: "ri-honour-line",
-        link: `/campaigns/${campaign.id}`, // Link to campaign details
+        link: `/campaigns/${campaign.slug}`, // Link to campaign details
         click: function (e) {
           e.preventDefault();
           // Handle clicking on a campaign menu item

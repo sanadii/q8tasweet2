@@ -1,10 +1,11 @@
 # backend/management/commands/populate_categories.py
 from django.core.files import File
 from django.core.management.base import BaseCommand
-from apps.categories.models import Category
+from apps.elections.models import ElectionCategory
 import os
 from django.db import transaction
 import random
+import time
 
 
 class Command(BaseCommand):
@@ -156,8 +157,8 @@ class Command(BaseCommand):
             # Create categories
             for category_data in self.CATEGORIES:
                 parent_id = category_data.get('parent')
-                parent = None if parent_id is None else Category.objects.get(id=parent_id)
-                category, created = Category.objects.update_or_create(id=category_data['id'], defaults={
+                parent = None if parent_id is None else ElectionCategory.objects.get(id=parent_id)
+                category, created = ElectionCategory.objects.update_or_create(id=category_data['id'], defaults={
                     'name': category_data['name'],
                     'slug': category_data['slug'],
                     'parent': parent
@@ -165,16 +166,22 @@ class Command(BaseCommand):
 
                 self.set_category_image(category, category_data['slug'])
 
+                # Pause for a moment (e.g., 1 second) before moving on to sub-categories
+                time.sleep(1)
+
+            self.stdout.write(self.style.SUCCESS('Parent categories created, pausing before sub-categories...'))
+
             # Create sub-categories
             for sub_category_data in self.SUB_CATEGORIES:
-                parent = Category.objects.get(id=sub_category_data.get('parent'))
-                category, created = Category.objects.update_or_create(id=sub_category_data['id'], defaults={
+                parent_id = sub_category_data.get('parent')
+                parent = ElectionCategory.objects.get(id=parent_id)
+                category, created = ElectionCategory.objects.update_or_create(id=sub_category_data['id'], defaults={
                     'name': sub_category_data['name'],
                     'slug': sub_category_data.get('slug', str(random.randint(1, 1000000))),
                     'parent': parent
                 })
 
-                slug = sub_category_data.get('slug') or category.parent.slug
+                slug = sub_category_data.get('slug') or parent.slug
                 self.set_category_image(category, slug)
 
-            self.stdout.write(self.style.SUCCESS('Population complete!'))
+        self.stdout.write(self.style.SUCCESS('Population complete!'))

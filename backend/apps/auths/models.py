@@ -6,7 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUserManager
 from django.core.validators import MaxValueValidator
 
-from helper.models_helper import TrackModel, GenderOptions
+from apps.configs.models import TrackModel
+from helper.models_helper import GenderOptions
 from helper.validators import today, civil_validator, phone_validator  
 
 class CustomAccountManager(BaseUserManager):

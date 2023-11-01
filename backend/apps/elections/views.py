@@ -12,13 +12,32 @@ from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 
 # Models
-from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee 
-from apps.elections.models import Election, ElectionCandidate, ElectionCommittee, ElectionCommitteeResult
-from apps.categories.models import Category
+from apps.campaigns.models import (
+    Campaign,
+    CampaignMember,
+    CampaignGuarantee,
+    CampaignAttendee,
+)
+
+from apps.elections.models import (
+    Election,
+    ElectionCategory,
+    ElectionCandidate,
+    ElectionCommittee,
+    ElectionCommitteeResult,
+)
+
 
 # Serializers
 from apps.campaigns.serializers import CampaignsSerializer
-from apps.elections.serializers import ElectionSerializer, ElectionCommitteesSerializer, ElectionCandidateSerializer, ElectionCommitteeResultSerializer
+from apps.elections.serializers import (
+    ElectionSerializer,
+    CategoriesSerializer,
+    SubCategoriesSerializer,
+    ElectionCommitteesSerializer,
+    ElectionCandidateSerializer,
+    ElectionCommitteeResultSerializer,
+)
 from helper.views_helper import CustomPagination
 
 
@@ -177,7 +196,7 @@ class DeleteElection(APIView):
             return JsonResponse({"data": "Election not found", "count": 0, "code": 404}, safe=False)
 
 
-# ElectionCandidate -----------------
+# ElectionCandidate
 class AddNewElectionCandidate(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -458,3 +477,57 @@ class GetPublicElectionDetails(APIView):
         campaign = Campaign.objects.filter(election_candidate__in=election_candidate_ids)
         campaign_serializer = CampaignsSerializer(campaign, many=True)
         return campaign_serializer.data
+
+
+class GetCategories(APIView):
+    def get(self, request):
+        categories = ElectionCategory.objects.filter(parent=None).exclude(id=0)
+        subcategories = ElectionCategory.objects.exclude(parent=None).exclude(id=0)
+        categories_serializer = CategoriesSerializer(categories, many=True)
+        subcategories_serializer = SubCategoriesSerializer(subcategories, many=True)
+        return Response({"data": {"categories": categories_serializer.data, "subCategories": subcategories_serializer.data}, "code": 200})
+
+
+
+class UpdateCategory(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, id):
+        try:
+            category = ElectionCategory.objects.get(id=id)
+        except ElectionCategory.DoesNotExist:
+            return Response({"error": "Category not found"}, status=404)
+
+        # Extract the desired fields from the request data
+        name = request.data.get("name")
+        image = request.data.get("image")
+        parent = request.data.get("parent")
+
+        updated_by = request.user
+
+        # Update the category object with the new values
+        category.name = name if name else category.name
+        if image:
+            category.image = image
+        if parent:
+            category.parent = Category.objects.get(id=parent)
+
+        # System
+        category.updated_by = updated_by
+
+        category.save()
+
+        # Prepare the updated category data for response
+        updated_category_data = self.prepare_updated_category_data(category)
+
+        return Response({"data": updated_category_data, "count": 0, "code": 200})
+
+    def prepare_updated_category_data(self, category):
+        updated_category_data = {
+            "id": category.id,
+            "name": category.name,
+            "image": category.image.url if category.image else None,
+            "parent": category.parent.id if category.parent else None,
+            "updatedBy": category.updated_by.username
+        }
+        return updated_category_data

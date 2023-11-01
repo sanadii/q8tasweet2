@@ -4,31 +4,7 @@ from django_extensions.db.fields import AutoSlugField
 from django.utils.text import slugify
 import uuid
 
-from helper.models_helper import TrackModel
-
-class Category(TrackModel):
-    name = models.CharField(max_length=255, null=True, blank=True)
-    slug = AutoSlugField(populate_from='get_dynamic_name', unique=True, null=True)
-    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
-    image = models.ImageField(upload_to="elections/", null=True, blank=True)
-    slug = models.SlugField(unique=True, null=True, blank=True)
-    description = models.TextField(max_length=255, null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-
-    class Meta:
-        db_table = "category"
-        verbose_name = "Category"
-        verbose_name_plural = "Category"
-        default_permissions = []
-
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name() + '-' + str(uuid.uuid4())[:8])
-        super().save(*args, **kwargs)
+from apps.configs.models import TrackModel
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)

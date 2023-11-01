@@ -5,7 +5,13 @@ from django.db.models import F
 
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 # Models
-from apps.elections.models import Election, ElectionCandidate, ElectionCommittee, ElectionCommitteeResult
+from apps.elections.models import (
+    Election,
+    ElectionCategory,
+    ElectionCandidate,
+    ElectionCommittee,
+    ElectionCommitteeResult,
+)
 
 class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Election model. """
@@ -101,6 +107,17 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
         # Here you can perform additional transformations if needed before updating the instance
         return super().update(instance, validated_data)
 
+
+class CategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ElectionCategory
+        fields = ["id", "name", "image", "parent"]
+
+# SUB-CATEGORIES
+class SubCategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ElectionCategory
+        fields = ["id", "name", "parent", "image"]
 
 class ElectionCandidateVoteSerializer(serializers.ModelSerializer):
     admin_serializer_classes = (TrackMixin,)

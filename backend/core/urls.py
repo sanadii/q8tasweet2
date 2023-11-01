@@ -1,4 +1,7 @@
-# restapi/urls.py
+"""
+This is the main ``urlconf`` for Q8Tasweet - it sets up patterns for
+all the various Q8Tasweet apps, third-party apps like docs and schema.
+"""
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -31,12 +34,12 @@ urlpatterns = [
     # path('media/', include('apps.media.urls')),
 
     # Main Apps
+    path('auth/', include('apps.auths.urls')),
     path('campaigns/', include('apps.campaigns.urls')),
     path('candidates/', include('apps.candidates.urls')),
     path('categories/', include('apps.categories.urls')),
     path('elections/', include('apps.elections.urls')),
     path('electors/', include('apps.electors.urls')),
-    path('auth/', include('apps.auths.urls')),
 
     # Schema & Documentation
     path("docs/", include_docs_urls(title="WorkspaceAPI")),

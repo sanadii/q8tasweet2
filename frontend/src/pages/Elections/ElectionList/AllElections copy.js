@@ -41,26 +41,7 @@ const AllElections = () => {
     }
   }, [dispatch, categories]);
 
-  // Moderators
-  useEffect(() => {
-    if (!moderators || !moderators.length) {
-      dispatch(getModeratorUsers());
-    }
-  }, [dispatch, moderators]);
 
-  // Moderators ------------
-  const [moderatorsMap, setModeratorsMap] = useState({});
-
-  useEffect(() => {
-    Promise.resolve(moderators).then((moderatorsList) => {
-      const map = moderatorsList.reduce((acc, moderator) => {
-        acc[moderator.id] = moderator;
-        return acc;
-      }, {});
-
-      setModeratorsMap(map);
-    });
-  }, [moderators]);
 
 
   // Delete Election ------------

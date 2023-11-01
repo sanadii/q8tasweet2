@@ -19,10 +19,6 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
   const dispatch = useDispatch();
 
   // State Management
-  const { moderators } = useSelector((state) => ({
-    // userId: state.Users.currentUser.id,
-    moderators: state.Users.moderators,
-  }));
 
   // Image Upload Helper
   const [selectedImage, setSelectedImage] = useState(null);
@@ -40,6 +36,12 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
     formData.append("image", selectedImage);
     formData.append("folder", "users"); // replace "yourFolderName" with the actual folder name
   }
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
 
   // validation
@@ -85,7 +87,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
           phone: values.phone,
           email: values.email,
           username: values.email,
-          password: values.phone,
+          password: values.password,
         };
         dispatch(addNewUser(newUser));
       }
@@ -128,13 +130,21 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
       placeholder: "ادخل رقم الهاتف",
       colSize: "6",
     },
+    {
+      id: "password-field",
+      name: "password",
+      label: "كلمة المرور",
+      type: showPassword ? "text" : "password",
+      placeholder: "ادخل كلمة المرور",
+      colSize: "6",
+      isEditPassword: true,
+    },
   ];
 
 
   return (
     <Modal
       isOpen={modal}
-      // toggle={toggle}
       centered
       size="md"
       className="border-0"
@@ -150,39 +160,51 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
           validation.handleSubmit();
           return false;
         }}
-        encType="multipart/form-data" // Add this attribute
+        encType="multipart/form-data"
       >
         <ModalBody className="modal-body">
           <Row>
-            {fields.map(field => (
-              <FieldComponent
-                key={field.id}
-                field={field}
-                validation={validation}
-              />
+            {fields.map((field) => (
+              // Conditionally render the password field based on showPassword
+              (!isEdit || field.isEditPassword || showPassword) && (
+                <FieldComponent
+                  key={field.id}
+                  field={field}
+                  validation={validation}
+                />
+              )
             ))}
           </Row>
         </ModalBody>
         <ModalFooter>
-          <div className="modal-footer">
-            <div className="hstack gap-2 justify-content-end">
-              <Button
-                type="button"
-                onClick={() => {
-                  setModal(false);
-                }}
-                className="btn-light"
-              >
-                أغلق
-              </Button>
-              <button type="submit" className="btn btn-success" id="add-btn">
-                {!!isEdit ? "تحديث" : "إضافة"}
-              </button>
-            </div>
+          {/* Add a button to toggle password visibility */}
+          {isEdit && (
+            <Button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="btn btn-secondary"
+            >
+              {showPassword ? "Hide Password" : "Change Password"}
+            </Button>
+          )}
+          <div className="hstack gap-2 justify-content-end">
+            <Button
+              type="button"
+              onClick={() => {
+                setModal(false);
+              }}
+              className="btn-light"
+            >
+              أغلق
+            </Button>
+            <button type="submit" className="btn btn-success" id="add-btn">
+              {!!isEdit ? "تحديث" : "إضافة"}
+            </button>
           </div>
         </ModalFooter>
       </Form>
     </Modal>
+
   );
 };
 

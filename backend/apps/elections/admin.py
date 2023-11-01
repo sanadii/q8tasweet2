@@ -1,7 +1,13 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 # Models
-from apps.elections.models import Election, ElectionCandidate, ElectionCommittee, ElectionCommitteeResult
+from apps.elections.models import (
+    Election,
+    ElectionCategory,
+    ElectionCandidate,
+    ElectionCommittee,
+    ElectionCommitteeResult,
+)
 
 from helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
@@ -60,8 +66,32 @@ class ElectionCommitteesAdmin(admin.ModelAdmin):
 class ElectionCommitteeResultsAdmin(admin.ModelAdmin):
     list_display = ['id']
 
+
+
+class CategoriesAdmin(admin.ModelAdmin):
+    list_display = ['name', 'parent', 'is_active']
+    search_fields = ['name']
+    # list_filter = ['parent', 'is_active']
+    prepopulated_fields = {"slug": ("name",)}
+    # readonly_fields = ReadOnlyTrackFields
+
+    fieldsets = [
+        ('Category Information', {'fields': ['name', 'parent', 'image', 'slug', 'description', 'is_active']}),
+        TrackAdminFields
+    ]
+    
+
+class CategoryAdminSite(AdminSite):
+    site_header = 'Category Administration'
+    site_title = 'Category Admin'
+    index_title = 'Category Admin'
+
+category_admin_site = CategoryAdminSite(name='category')
+
+
 # AdminSites
 admin.site.register(Election, ElectionsAdmin)
+admin.site.register(ElectionCategory, CategoriesAdmin)
 admin.site.register(ElectionCandidate, ElectionCandidatesAdmin)
 admin.site.register(ElectionCommittee, ElectionCommitteesAdmin)
 admin.site.register(ElectionCommitteeResult, ElectionCommitteeResultsAdmin)

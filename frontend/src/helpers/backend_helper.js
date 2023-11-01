@@ -59,7 +59,7 @@ export const postSocialLogin = (data) => api.create(url.SOCIAL_LOGIN, data);
 
 // Elections  //////////////////////////////
 export const getElections = () => api.get(url.GET_ELECTIONS);
-export const getElectionDetails = (election) => api.get(url.GET_ELECTION_DETAILS + "/" + election.id);
+export const getElectionDetails = (election) => api.get(url.GET_ELECTION_DETAILS + "/" + election);
 export const addElection = (election) => api.create(url.ADD_ELECTION, election);
 export const updateElection = (election) => api.update(url.UPDATE_ELECTION + "/" + election.id, election);
 export const deleteElection = (election) => api.delete(url.DELETE_ELECTION + "/" + election);
@@ -104,10 +104,10 @@ export const deleteCandidate = (candidate) => api.delete(url.DELETE_CANDIDATE + 
 
 // Campaigns
 export const getCampaigns = () => api.get(url.GET_CAMPAIGNS);
+export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign);
 export const addNewCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
 export const updateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
 export const deleteCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
-export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign.id);
 
 // CampaignMember
 export const getAllCampaignMembers = (member) => api.get(url.GET_ALL_CAMPAIGN_MEMBERS + "/" + member.id);

@@ -16,6 +16,11 @@ urlpatterns = [
     path("deleteElection/<int:id>", DeleteElection.as_view(), name="DeleteElection"),
     path("updateElection/<int:id>", UpdateElection.as_view(), name="UpdateElection"),
     
+
+    # Election Categories
+    path("getCategories", GetCategories.as_view(), name="GetCategories"),
+    path("updateCategory/<int:id>", UpdateCategory.as_view(), name="UpdateCategory"),
+
     # Election Candidate
     # path("getElectionCandidates/<int:election_id>", GetElectionCandidates.as_view(), name="getElectionCandidates"),
     path("addNewElectionCandidate", AddNewElectionCandidate.as_view(), name="AddNewElectionCandidate"),

@@ -14,11 +14,12 @@ import usePermission from "../../../Common/Hooks/usePermission";
 
 // UI & Utilities
 import { Container } from "reactstrap";
+import { isEmpty } from "lodash";
 
 const CampaignDetails = () => {
   const dispatch = useDispatch();
-  
-  const { id: campaignId } = useParams();
+
+  const { slug } = useParams();
   const { campaign } = useSelector(campaignSelector);
   const { canViewCampaign } = usePermission();
 
@@ -26,13 +27,17 @@ const CampaignDetails = () => {
     document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
   }, []);
 
+
   useEffect(() => {
-    if (campaignId) {
-      dispatch(getCampaignDetails({ id: campaignId }));
+    // Set the document title
+    document.title = "الانتخابات | كويت تصويت";
+
+    // Fetch campaign details if the slug is available and candidate is empty
+    if (slug && (isEmpty(campaign) || campaign.slug !== slug)) {
+      dispatch(getCampaignDetails(slug));
     }
-  }, [dispatch, campaignId]);
 
-
+  }, [dispatch, slug]);
 
   return (
     <div className="page-content">

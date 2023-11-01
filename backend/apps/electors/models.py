@@ -2,7 +2,9 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from helper.models_helper import TrackModel, GenderOptions
+
+from apps.configs.models import TrackModel
+from helper.models_helper import GenderOptions
 
 
 class Elector(models.Model):

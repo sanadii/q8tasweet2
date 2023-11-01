@@ -39,12 +39,6 @@ const CampaignGrid = () => {
     setCampaignList(campaigns);
   }, [campaigns]);
 
-  // Moderators
-  useEffect(() => {
-    if (moderators && !moderators.length) {
-      dispatch(getModeratorUsers());
-    }
-  }, [dispatch, moderators]);
 
   // const [moderatorsMap, setModeratorsMap] = useState({});
 

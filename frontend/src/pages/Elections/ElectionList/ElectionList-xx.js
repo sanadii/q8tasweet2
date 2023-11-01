@@ -60,26 +60,6 @@ const ElectionList = () => {
     // console.log("Election List:", electionList); // log electionList
   }, [elections]);
 
-  // Moderators
-  useEffect(() => {
-    if (moderators && !moderators.length) {
-      dispatch(getModeratorUsers());
-    }
-  }, [dispatch, moderators]);
-
-  const [moderatorsMap, setModeratorsMap] = useState({});
-
-  useEffect(() => {
-    Promise.resolve(moderators).then((moderatorsList) => {
-      const map = moderatorsList.reduce((acc, moderator) => {
-        acc[moderator.id] = moderator;
-        return acc;
-      }, {});
-
-      setModeratorsMap(map);
-    });
-  }, [moderators]);
-
 
   // User & id
   useEffect(() => {

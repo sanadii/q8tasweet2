@@ -16,39 +16,39 @@ import { isEmpty } from "lodash";
 
 const ElectionDetails = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { slug } = useParams();
 
   const { categories } = useSelector(categorySelector);
   const {
-    electionDetails,
+    election,
     electionCandidates,
     electionCampaigns,
     electionCommittees,
   } = useSelector(electionSelector);
 
-
-  const [election, setElection] = useState({ id });
-
   useEffect(() => {
+    // Set the document title
     document.title = "الانتخابات | كويت تصويت";
 
-    if (election.id && !isEmpty(election)) {
-      dispatch(getElectionDetails(election));
+    // Fetch election details if the slug is available and candidate is empty
+    if (slug && (isEmpty(election) || election.slug !== slug)) {
+      dispatch(getElectionDetails(slug));
     }
-
     if (categories && !categories.length) {
       dispatch(getCategories());
     }
-  }, [dispatch, election, categories]);
+
+  }, [dispatch, slug, categories]);
+
 
   return (
     <div className="page-content">
       <Container fluid>
         <Section
-          election={electionDetails}
-          electionCandidates={electionCandidates}
-          electionCampaigns={electionCampaigns}
-          electionCommittees={electionCommittees}
+          election={election}
+          electionCandidates={election}
+          electionCampaigns={election}
+          electionCommittees={election}
         />
       </Container>
     </div>

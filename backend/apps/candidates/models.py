@@ -4,7 +4,9 @@ from django.utils.text import slugify
 import uuid
 import secrets
 import string
-from helper.models_helper import TrackModel, TaskModel, GenderOptions
+
+from apps.configs.models import TrackModel, TaskModel
+from helper.models_helper import GenderOptions
 
 def generate_random_slug(length=6):
     characters = string.ascii_letters + string.digits  # Letters and digits

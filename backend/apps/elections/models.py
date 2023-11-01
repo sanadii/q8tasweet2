@@ -1,7 +1,7 @@
 # Election Model
 from django.db import models
 from django.db.models.signals import post_save, post_delete
-from django_extensions.db.fields import AutoSlugField
+from django_extensions.db.fields import AutoSlugField, SlugField
 from django.dispatch import receiver
 from django.db.models import Sum
 
@@ -9,15 +9,17 @@ from django.utils.text import slugify
 import uuid
 
 from .utils import generate_slug
-from helper.models_helper import TrackModel, TaskModel, ElectionTypeOptions, ElectionResultsOptions, StatusOptions, PriorityOptions, GenderOptions
+from apps.configs.models import TrackModel, TaskModel
+
+from helper.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions
 from helper.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 
 class Election(TrackModel, TaskModel):
     # Election Essential Information
     slug = models.SlugField(unique=True, null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
-    category = models.ForeignKey('categories.Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='category_elections')
-    sub_category = models.ForeignKey('categories.Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategory_elections')
+    category = models.ForeignKey('ElectionCategory', on_delete=models.SET_NULL, null=True, blank=True, related_name='category_elections')
+    sub_category = models.ForeignKey('ElectionCategory', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategory_elections')
 
     # Election Setting Options
     elect_type = models.IntegerField(choices=ElectionTypeOptions.choices, blank=True, null=True)
@@ -74,6 +76,23 @@ class Election(TrackModel, TaskModel):
 #             ("canChangeElectionProfile", "Can Change Election Profile"),
 #             ("canDeleteElectionProfile", "Can Delete Election Profile"),
 #             ]
+
+class ElectionCategory(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    slug = models.SlugField(unique=True, null=True)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to="elections/", null=True, blank=True)
+    description = models.TextField(max_length=255, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "election_category"
+        verbose_name = "Election Category"
+        verbose_name_plural = "Election  Category"
+        default_permissions = []
+
+    def __str__(self):
+        return self.name
 
 
 class ElectionCandidate(TrackModel):

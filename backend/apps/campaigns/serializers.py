@@ -5,10 +5,14 @@ from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 # Models
 from django.contrib.auth.models import Group, Permission
 from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
-from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
+from apps.elections.models import (
+    Election,
+    ElectionCategory,
+    ElectionCandidate,
+    ElectionCommittee,
+)
 from apps.candidates.models import Candidate
 from apps.electors.models import Elector
-from apps.categories.models import Category
 
 # Serializers
 from apps.candidates.serializers import CandidateSerializer
@@ -25,7 +29,7 @@ class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
     class Meta: 
         model = Campaign
         fields = [
-            "id", "election_candidate", "election", "candidate",
+            "id", "election_candidate", "election", "candidate", "slug",
             "description", "target_votes",
             "twitter", "instagram", "website",
             ]
