@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser, Group, Permission, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUserManager
 from django.core.validators import MaxValueValidator
 
 from helper.models_helper import TrackModel, GenderOptions
@@ -36,7 +36,7 @@ class CustomAccountManager(BaseUserManager):
         user.save()
         return user
 
-class User(TrackModel, AbstractBaseUser, PermissionsMixin):
+class User(TrackModel, AbstractUser):
     id = models.BigAutoField(primary_key=True)
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=150, unique=True)

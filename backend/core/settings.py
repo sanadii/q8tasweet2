@@ -156,7 +156,7 @@ CSRF_COOKIE_SECURE = False  # Set to True in a production environment with HTTPS
 CSRF_COOKIE_SAMESITE = 'None'  # or 'Lax' or 'Strict' depending on your needs
 
 # Custom user model
-AUTH_USER_MODEL = "auths.User"
+AUTH_USER_MODEL = 'auths.User'
 
 # JWT settings
 SIMPLE_JWT = {

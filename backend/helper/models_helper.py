@@ -1,7 +1,7 @@
-# models_elpers.py
+# models_helpers.py
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.core.validators import RegexValidator
 
 # TODO: make sure dictionaries are all changed to id and name and any otherthing if needed
 
@@ -28,7 +28,6 @@ class ElectionTypeOptions(models.IntegerChoices):
 class ElectionResultsOptions(models.IntegerChoices):
     FINAL = 1, "نتائج نهائية"
     DETAILED = 2, "نتائج تفصيلية"
-
 
 class GenderOptions(models.IntegerChoices):
     UNDEFINED = 0, 'Undefined'
@@ -79,26 +78,95 @@ class RoleOptions(models.IntegerChoices):
         
 #         return new_class
 
+User = settings.AUTH_USER_MODEL
+
 class TrackModel(models.Model):
-    created_by = models.ForeignKey('auths.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_created')
-    updated_by = models.ForeignKey('auths.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_updated')
-    deleted_by = models.ForeignKey('auths.user', on_delete=models.SET_NULL, null=True, blank=True, related_name='%(class)s_deleted')
+    """
+    TrackModel is an abstract base class that provides a comprehensive set of fields and methods to track the creation,
+    update, and deletion of model instances. It is designed to be inherited by other Django models to easily implement
+    and standardize these tracking features across different parts of the application.
+    """
+
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_created',
+        verbose_name='Created by',
+        help_text='The user who created this object.'
+    )
+    
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_updated'
+        verbose_name='Updated by',
+        help_text='The user who updated this object.'
+
+    )
+    
+    deleted_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        default=False,
+        related_name='%(class)s_deleted'
+        verbose_name='Deleted by',
+        help_text='The user who deleted this object.'
+
+    )
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
-    deleted = models.BooleanField(blank=True, null=True, default=False)
+    deleted = models.BooleanField(blank=True, default=False)
 
     class Meta:
         abstract = True
+        ordering = ['-created_at']
         # default_permissions = ()
 
+    # to check if the current user has permission to edit the object.
+    def is_editable(self, request):
+        """
+        Determines if the current user has permission to edit the instance.
+        It returns True if the user is a superuser or if they are the creator of the instance.
+        """
+        return request.user.is_superuser or (self.created_by and request.user == self.created_by)
 
     def save(self, *args, **kwargs):
-        # If instance has an ID, it means the instance already exists,
-        # hence we can update the `updated_at` field.
-        if self.id:
+        """
+        Overrides the default save method to update the 'updated_at' field when an instance is updated
+        and to set the 'deleted' flag to False when an instance is created.
+        """
+        if not self.id:
+            self.deleted = False
+        else:
             self.updated_at = timezone.now()
-        super(TrackModel, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
+
+    def delete(self, *args, **kwargs):
+        """
+        Marks the instance as deleted by setting the 'deleted' flag to True, updating the 'deleted_at' timestamp,
+        and setting the 'deleted_by' field to the current user.
+        """
+        self.deleted = True
+        self.deleted_at = timezone.now()
+        self.deleted_by = self.get_current_user()  # Implement this method to get the current user
+        self.save()
+
+    def restore(self, *args, **kwargs):
+        """
+        Reverts the deletion of an instance by resetting the 'deleted' flag, 'deleted_at' timestamp, and 'deleted_by' field.
+        """
+        self.deleted = False
+        self.deleted_at = None
+        self.deleted_by = None
+        self.save()
 
 class TaskModel(models.Model):
     status = models.IntegerField(choices=StatusOptions.choices, blank=True, null=True)
