@@ -81,5 +81,5 @@
 #     def get_election_campaigns_for_election(self, election, context):
 #         election_candidate_ids = election.electioncandidates_set.values_list("id", flat=True)
 #         election_campaigns = Campaign.objects.filter(election_candidate__in=election_candidate_ids)
-#         return CampaignsSerializer(election_campaigns, many=True, context=context).data
+#         return CampaignSerializer(election_campaigns, many=True, context=context).data
 

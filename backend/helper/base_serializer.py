@@ -23,6 +23,7 @@ class TrackMixin(serializers.BaseSerializer):  # Using BaseSerializer as it does
         return None
 
 
+
 class TaskMixin(serializers.BaseSerializer):
     def to_representation(self, obj):
         # Implement the logic to return the serialized data for task

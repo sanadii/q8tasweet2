@@ -14,8 +14,11 @@ from rest_framework.views import APIView
 
 from apps.auths.models import User
 from apps.auths.models import GroupCategories
+from apps.campaigns.models import Campaign, CampaignMember
 from apps.auths.serializers import UserSerializer, UserLoginSerializer, GroupSerializer
+from apps.campaigns.serializers import CampaignSerializer
 
+from utils.views import get_current_user_campaigns
 @method_decorator(csrf_exempt, name='dispatch')
 class UserLogin(APIView):
     permission_classes = [AllowAny]
@@ -40,7 +43,6 @@ class UserLogin(APIView):
             'access_token': access_token,
             'data': user_data
         })
-
 
 class ChangeUserPassword(APIView):
     permission_classes = [IsAuthenticated]
@@ -83,12 +85,19 @@ class BlacklistTokenUpdateView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-class GetUsers(APIView):
-    def get(self, request):
-        data_data = User.objects.all()
-        data_serializer = UserSerializer(data_data, many=True)
-        return Response({"data": data_serializer.data, "code": 200})
+from helper.views_helper import CustomPagination
 
+class GetUsers(APIView):
+    def get(self, request, *args, **kwargs):
+        user_data = User.objects.all()
+        paginator = CustomPagination()
+        paginated_users = paginator.paginate_queryset(user_data, request)
+
+        # Passing context with request to the serializer
+        context = {"request": request}
+        data_serializer = UserSerializer(paginated_users, many=True, context=context)
+
+        return paginator.get_paginated_response(data_serializer.data)
 
 class GetCurrentUser(APIView):
     permission_classes = [IsAuthenticated]
@@ -96,6 +105,11 @@ class GetCurrentUser(APIView):
     def get(self, request):
         user = request.user
         user_data = UserSerializer(user).data
+
+        # Get Related Campaigns. TODO: to be changed later for get Favourite // GetRelated Election / Campaigns
+        campaigns = get_current_user_campaigns(user)  # Call the function
+        user_data["campaigns"] = campaigns
+
         return Response({"data": user_data, "code": 200})
     
 class GetModeratorUsers(APIView):
@@ -166,7 +180,8 @@ class DeleteUser(APIView):
     def delete(self, request, id):
         try:
             user = User.objects.get(id=id)
-            user.delete(user=request.user)
+            # user.delete(user=request.user) #This to use deleted by in TrackModel
+            user.delete()
             return JsonResponse({"data": "User deleted successfully", "count": 1, "code": 200}, safe=False)
         except User.DoesNotExist:
             return JsonResponse({"data": "User not found", "count": 0, "code": 404}, safe=False)

@@ -9,14 +9,14 @@ from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 class CandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Candidate model. """
-    admin_serializer_classes = (TrackMixin,)
+    admin_serializer_classes = (TrackMixin, TaskMixin)
     image = serializers.SerializerMethodField()  # Use SerializerMethodField for custom serialization
 
     class Meta:
         model = Candidate
         fields = [
             "id", "name", "slug", "gender", "image",
-            "status", "priority",
+            # "status", "priority", #TODO: need to be removed when task is fixing on Add/Edit/Delete
         ]
 
     def get_image(self, obj):

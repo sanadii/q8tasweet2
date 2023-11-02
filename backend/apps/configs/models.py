@@ -116,15 +116,21 @@ class TrackModel(models.Model):
 
 
 
-    def delete(self, user=None, *args, **kwargs):
-        """
-        Marks the instance as deleted by setting the 'deleted' flag to True, updating the 'deleted_at' timestamp,
-        and setting the 'deleted_by' field to the current user.
-        """
-        self.deleted = True
-        self.deleted_at = timezone.now()
-        self.deleted_by = user
-        self.save()
+    # def delete(self, user=None, *args, **kwargs):
+    #     """
+    #     Marks the instance as deleted by setting the 'deleted' flag to True, updating the 'deleted_at' timestamp,
+    #     and setting the 'deleted_by' field to the current user.
+    #     """
+    #     self.deleted = True
+    #     self.deleted_at = timezone.now()
+    #     self.deleted_by = user
+    #     self.save()
+
+    # def hard_delete(self):
+    #     """
+    #     Permanently delete the instance from the database.
+    #     """
+    #     self.delete()
 
     def restore(self, *args, **kwargs):
         """

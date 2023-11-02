@@ -12,6 +12,7 @@ export const userSelector = createSelector(
         moderators: usersState.moderators,
         user: usersState.currentUser,
         currentUser: usersState.currentUser,
+        currentUserCampaigns: usersState.currentUser.campaigns,
         campaignModerators: usersState.campaignModerators,
     })
 );

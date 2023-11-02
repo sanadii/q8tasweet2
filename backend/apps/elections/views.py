@@ -29,7 +29,7 @@ from apps.elections.models import (
 
 
 # Serializers
-from apps.campaigns.serializers import CampaignsSerializer
+from apps.campaigns.serializers import CampaignSerializer
 from apps.elections.serializers import (
     ElectionSerializer,
     CategoriesSerializer,
@@ -127,7 +127,7 @@ class GetElectionDetails(APIView):
     def get_election_campaigns(self, election, context):
         election_candidate_ids = ElectionCandidate.objects.filter(election=election).values_list('id', flat=True)
         election_campaigns = Campaign.objects.filter(election_candidate__in=election_candidate_ids)
-        return CampaignsSerializer(election_campaigns, many=True, context=context).data
+        return CampaignSerializer(election_campaigns, many=True, context=context).data
     
     def get_election_committee_results(self, election, election_candidates, election_committees):
         # Step 1: Initialize results dictionary
@@ -236,7 +236,8 @@ class DeleteElectionCandidate(APIView):
         except ElectionCandidate.DoesNotExist:
             return Response({"data": "Election candidate not found", "count": 0, "code": 404}, status=404)
 
-# ElectionCandidate -----------------
+
+# ElectionCandidate
 class GetCommittees(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -475,7 +476,7 @@ class GetPublicElectionDetails(APIView):
     def get_campaigns_for_election(self, id):
         election_candidate_ids = ElectionCandidate.objects.filter(election=id).values_list("id", flat=True)
         campaign = Campaign.objects.filter(election_candidate__in=election_candidate_ids)
-        campaign_serializer = CampaignsSerializer(campaign, many=True)
+        campaign_serializer = CampaignSerializer(campaign, many=True)
         return campaign_serializer.data
 
 

@@ -39,7 +39,7 @@ class GetCampaigns(APIView):
                 
                 # Passing context with request to the serializer
                 context = {"request": request}
-                data_serializer = CampaignsSerializer(paginated_campaignss, many=True, context=context)
+                data_serializer = CampaignSerializer(paginated_campaignss, many=True, context=context)
                 
                 return paginator.get_paginated_response(data_serializer.data)
 
@@ -54,7 +54,7 @@ class GetCampaigns(APIView):
                 campaigns_data = Campaign.objects.filter(id__in=campaign_ids)
                 
                 # Step 3: Serialize the data
-                data_serializer = CampaignsSerializer(campaigns_data, many=True)
+                data_serializer = CampaignSerializer(campaigns_data, many=True)
 
                 return Response({
                     "data": data_serializer.data,
@@ -118,7 +118,7 @@ class GetCampaignDetails(APIView):
     def get_campaign_data(self, id):
         # Fetch the campaign details based on the given ID
         campaign = Campaign.objects.get(id=id)
-        campaign_serializer = CampaignsSerializer(campaign)
+        campaign_serializer = CampaignSerializer(campaign)
         campaign_data = campaign_serializer.data
         return campaign_data
 
@@ -235,7 +235,7 @@ class AddNewCampaign(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = CampaignsSerializer(data=request.data, context={'request': request})
+        serializer = CampaignSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
@@ -251,7 +251,7 @@ class UpdateCampaign(APIView):
         except Campaign.DoesNotExist:
             return Response({"error": "Campaign not found"}, status=404)
         
-        serializer = CampaignsSerializer(data=request.data, context={'request': request})
+        serializer = CampaignSerializer(data=request.data, context={'request': request})
         
         if serializer.is_valid():
             serializer.save()

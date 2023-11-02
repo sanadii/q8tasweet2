@@ -20,7 +20,7 @@ from apps.elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
 from apps.electors.serializers import ElectorsSerializer
 
-class CampaignsSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Campaign model. """
     admin_serializer_classes = (TrackMixin, TaskMixin)
     candidate = CandidateSerializer(source='election_candidate.candidate', read_only=True)

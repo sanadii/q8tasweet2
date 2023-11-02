@@ -158,4 +158,4 @@ class DeleteCandidate(APIView):
 #     def get_candidate_campaigns(self, candidate, context):
 #         candidate_candidate_ids = CandidateCandidates.objects.filter(candidate=candidate).values_list('id', flat=True)
 #         candidate_campaigns = Campaign.objects.filter(candidate_candidate__in=candidate_candidate_ids)
-#         return CampaignsSerializer(candidate_campaigns, many=True, context=context).data
+#         return CampaignSerializer(candidate_campaigns, many=True, context=context).data

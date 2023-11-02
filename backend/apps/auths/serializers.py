@@ -44,7 +44,8 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    admin_serializer_classes = (TrackMixin, TaskMixin)
+    """ Serializer for the Usel Model. """
+    admin_serializer_classes = (TrackMixin,)
     full_name = serializers.SerializerMethodField()
     image = serializers.ImageField(required=False)
     groups = serializers.SerializerMethodField()  # Changed the field name to 'names'

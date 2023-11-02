@@ -17,7 +17,7 @@ from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from django.contrib.auth.models import Group
 
 # Serializers
-from apps.campaigns.serializers import CampaignsSerializer, CampaignMemberSerializer, CampaignGuaranteeSerializer
+from apps.campaigns.serializers import CampaignSerializer, CampaignMemberSerializer, CampaignGuaranteeSerializer
 from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteesSerializer
 from apps.auths.serializers import GroupSerializer
 
@@ -56,7 +56,7 @@ class GetCampaigns(APIView):
             
             # Passing context with request to the serializer
             context = {"request": request}
-            data_serializer = CampaignsSerializer(paginated_campaigns, many=True, context=context)
+            data_serializer = CampaignSerializer(paginated_campaigns, many=True, context=context)
 
             return paginator.get_paginated_response(data_serializer.data)
 
@@ -96,7 +96,7 @@ class GetCampaignDetails(APIView):
         return Response({
             "data": {
                 "currentCampaignMember": current_campaign_member,
-                "campaignDetails": CampaignsSerializer(campaign, context=context).data,
+                "campaignDetails": CampaignSerializer(campaign, context=context).data,
                 "campaignMembers": CampaignMemberSerializer(campaign_members, many=True, context=context).data,
                 "campaignGuarantees": CampaignGuaranteeSerializer(campaign_guarantees, many=True, context=context).data,
                 "campaignAttendees": CampaignGuaranteeSerializer(campaign_attendees, many=True, context=context).data,
@@ -109,7 +109,7 @@ class GetCampaignDetails(APIView):
 
 
     def get_campaign_data(self, campaign, context):
-        return CampaignsSerializer(campaign, context=context).data
+        return CampaignSerializer(campaign, context=context).data
 
     def get_campaign_members(self, campaign_members, context):
         return CampaignMemberSerializer(campaign_members, many=True, context=context).data
@@ -192,7 +192,7 @@ class GetCampaignDetails(APIView):
 #         })
 
 #     def get_campaign_data(self, campaign, context):
-#         return CampaignsSerializer(campaign, context=context).data
+#         return CampaignSerializer(campaign, context=context).data
 
 
 #     def get_campaign_managed_members(self, current_campaign_member, user_role):
@@ -244,7 +244,7 @@ class AddNewCampaign(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = CampaignsSerializer(data=request.data, context={'request': request})
+        serializer = CampaignSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
@@ -260,7 +260,7 @@ class UpdateCampaign(APIView):
         except Campaign.DoesNotExist:
             return Response({"error": "Campaign not found"}, status=404)
         
-        serializer = CampaignsSerializer(instance=campaign, data=request.data, partial=True, context={'request': request})
+        serializer = CampaignSerializer(instance=campaign, data=request.data, partial=True, context={'request': request})
 
         if serializer.is_valid():
             serializer.save()

@@ -71,9 +71,8 @@ const AllCandidates = () => {
         description: candidate.description,
 
         // Admin
-        status: candidate.status,
-        priority: candidate.priority,
-        moderators: candidate.moderators,
+        status: candidate.task.status,
+        priority: candidate.task.priority,
       });
 
       setIsEdit(true);

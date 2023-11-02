@@ -15,7 +15,7 @@ from apps.elections.models import (
 
 class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Election model. """
-    admin_serializer_classes = (TrackMixin)
+    admin_serializer_classes = (TrackMixin, TaskMixin)
     name = serializers.SerializerMethodField('get_election_name')
     image = serializers.SerializerMethodField('get_election_image')
     previous_election = serializers.SerializerMethodField()

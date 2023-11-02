@@ -7,7 +7,7 @@ Below are a few suggestions for improving the serializers’ code, based on read
 When overriding the representation of fields, consider using `SerializerMethodField` for more consistent, readable, and maintainable code. This way, all additional fields follow a similar pattern.
 
 ### 2. Separate Concerns:
-The `to_representation` method in the `CampaignsSerializer` does quite a lot, consider breaking it down into smaller, more focused methods, each responsible for one specific piece of logic. You could potentially use multiple `SerializerMethodField` for this.
+The `to_representation` method in the `CampaignSerializer` does quite a lot, consider breaking it down into smaller, more focused methods, each responsible for one specific piece of logic. You could potentially use multiple `SerializerMethodField` for this.
 
 ### 3. Reuse Code:
 You have similar code in multiple places to handle exceptions (e.g., `Electors.DoesNotExist`). Consider refactoring to have a utility method/function that can be reused in multiple places.
@@ -27,7 +27,7 @@ If you find that you are defining the same fields in multiple serializers, consi
 ### Example Adjustments:
 
 ```python
-class CampaignsSerializer(serializers.ModelSerializer):
+class CampaignSerializer(serializers.ModelSerializer):
     
     candidate = serializers.SerializerMethodField()
     election = serializers.SerializerMethodField()
