@@ -5,37 +5,15 @@ import { Link } from "react-router-dom";
 
 // Import Actions
 import { addNewUser, updateUser } from "store/actions";
-
-
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 import { GenderOptions } from "Common/Constants"
 import { FieldComponent } from "Common/Components";
-
 import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
 const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
   const dispatch = useDispatch();
-
-  // State Management
-
-  // Image Upload Helper
-  const [selectedImage, setSelectedImage] = useState(null);
-  const handleImageSelect = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
-      // console.log("handleImageSelect called");
-    }
-  };
-
-  const formData = new FormData();
-  if (!selectedImage) {
-    // console.log("no selected image");
-  } else {
-    formData.append("image", selectedImage);
-    formData.append("folder", "users"); // replace "yourFolderName" with the actual folder name
-  }
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -43,6 +21,11 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
     setShowPassword(!showPassword);
   };
 
+  useEffect(() => {
+    if (!modal) {
+      setShowPassword(false);
+    }
+  }, [modal]);
 
   // validation
   const validation = useFormik({
@@ -54,11 +37,8 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
       username: (user && user.username) || "",
       firstName: (user && user.firstName) || "",
       lastName: (user && user.lastName) || "",
-      image: (user && user.image) || "",
-      selectedImage: selectedImage,
 
       phone: (user && user.phone) || "",
-      password: (user && user.phone) || "",
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("Please Enter First Name"),
@@ -74,7 +54,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
           lastName: values.lastName,
           phone: values.phone,
           email: values.email,
-          password: values.phone,
+          ...(values.password && { password: values.password }),
 
         };
 
@@ -87,7 +67,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
           phone: values.phone,
           email: values.email,
           username: values.email,
-          password: values.password,
+          password: showPassword ? values.password : values.phone,
         };
         dispatch(addNewUser(newUser));
       }
@@ -137,7 +117,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
       type: showPassword ? "text" : "password",
       placeholder: "ادخل كلمة المرور",
       colSize: "6",
-      isEditPassword: true,
+      // isEditPassword: true,
     },
   ];
 
@@ -165,8 +145,8 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
         <ModalBody className="modal-body">
           <Row>
             {fields.map((field) => (
-              // Conditionally render the password field based on showPassword
-              (!isEdit || field.isEditPassword || showPassword) && (
+              // Render all fields except the password field
+              (field.name !== "password" || showPassword) && (
                 <FieldComponent
                   key={field.id}
                   field={field}
@@ -175,18 +155,25 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
               )
             ))}
           </Row>
+          {/* Add a link to show the password field */}
+          <Row>
+            <Col>
+              <Link
+                to="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  togglePasswordVisibility();
+                }}
+              >
+                {isEdit && !showPassword ? (
+                  "لتغيير كلمة المرور"
+                ) : "لا لتغيير كلمة المرور"}
+
+              </Link>
+            </Col>
+          </Row>
         </ModalBody>
         <ModalFooter>
-          {/* Add a button to toggle password visibility */}
-          {isEdit && (
-            <Button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="btn btn-secondary"
-            >
-              {showPassword ? "Hide Password" : "Change Password"}
-            </Button>
-          )}
           <div className="hstack gap-2 justify-content-end">
             <Button
               type="button"
@@ -204,8 +191,8 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
         </ModalFooter>
       </Form>
     </Modal>
-
   );
 };
 
 export default UserModal;
+

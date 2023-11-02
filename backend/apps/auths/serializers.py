@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from apps.auths.models import User
 from django.contrib.auth.models import Group, Permission
+from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # USER
 
@@ -42,19 +43,19 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'display_name', 'category']
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    admin_serializer_classes = (TrackMixin, TaskMixin)
     full_name = serializers.SerializerMethodField()
+    image = serializers.ImageField(required=False)
     groups = serializers.SerializerMethodField()  # Changed the field name to 'names'
     permissions = serializers.SerializerMethodField()
-    image = serializers.ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name", "full_name", "image",
-                  'civil', 'gender', 'date_of_birth', 'description',
-                  'phone', 'twitter', 'instagram',
-                  'is_staff', 'is_active',
-                  'groups', 'permissions'
+        fields = ["id", "username", "email", "first_name", "last_name", 'phone',
+                  "image", 'civil', 'gender', 'date_of_birth', 'description',
+                  "full_name", 'twitter', 'instagram',
+                  'is_staff', 'is_active', 'groups', 'permissions'
                   ]
 
     def get_full_name(self, obj):
@@ -74,5 +75,19 @@ class UserSerializer(serializers.ModelSerializer):
         group_permissions = list(Permission.objects.filter(group__user=obj).values_list('codename', flat=True))
         all_permissions = list(set(user_permissions + group_permissions))
         return all_permissions
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user = request.user if request and hasattr(request, 'user') else None
+        instance = User.objects.create(**validated_data, created_by=user)
+        return instance
+
+
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        user = request.user if request and hasattr(request, 'user') else None
+        if user:
+            instance.updated_by = user
+        return super().update(instance, validated_data)
 
 

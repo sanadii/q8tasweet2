@@ -113,10 +113,10 @@ export const DELETE_IMAGE = "/media/uploadImage";
 export const UPDATE_IMAGE = "/media/uploadImage";
 
 // Category
-export const GET_CATEGORIES = "/categories/getCategories";
-export const DELETE_CATEGORY = "/categories/deleteCategory";
-export const ADD_NEW_CATEGORY = "/categories/addCategory";
-export const UPDATE_CATEGORY = "/categories/updateCategory";
+export const GET_CATEGORIES = "/elections/getCategories";
+export const DELETE_CATEGORY = "/elections/deleteCategory";
+export const ADD_NEW_CATEGORY = "/elections/addCategory";
+export const UPDATE_CATEGORY = "/elections/updateCategory";
 
 // Elector
 export const GET_ALL_ELECTORS = "/electors/getAllElectors";

@@ -89,6 +89,15 @@ class GetUsers(APIView):
         data_serializer = UserSerializer(data_data, many=True)
         return Response({"data": data_serializer.data, "code": 200})
 
+
+class GetCurrentUser(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        user_data = UserSerializer(user).data
+        return Response({"data": user_data, "code": 200})
+    
 class GetModeratorUsers(APIView):
     def get(self, request):
         # Get the group object for 'Moderator'
@@ -124,11 +133,13 @@ class AddNewUser(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
-            return Response({"data": serializer.data, "count": 1, "code": 200}, status=status.HTTP_201_CREATED)
-
+            new_user = serializer.save()
+            if 'password' in request.data:
+                password = request.data['password']
+                new_user.set_password(password)
+                new_user.save()
+            return Response({"data": UserSerializer(new_user, context={'request': request}).data, "count": 1, "code": 200}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 class UpdateUser(APIView):
     permission_classes = [IsAuthenticated]
@@ -139,27 +150,23 @@ class UpdateUser(APIView):
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
 
+        if 'password' in request.data:
+            if request.user != user and not request.user.is_superuser:
+                return Response({"error": "You do not have permission to change this user's password."}, status=403)
+            password = request.data.pop('password')
+            user.set_password(password)
+
         serializer = UserSerializer(user, data=request.data, context={'request': request}, partial=True)
-        
         if serializer.is_valid():
             serializer.save()
             return Response({"data": serializer.data, "count": 0, "code": 200})
-        
         return Response(serializer.errors, status=400)
-
-class GetCurrentUser(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user = request.user
-        user_data = UserSerializer(user).data
-        return Response({"data": user_data, "code": 200})
 
 class DeleteUser(APIView):
     def delete(self, request, id):
         try:
             user = User.objects.get(id=id)
-            user.delete()
+            user.delete(user=request.user)
             return JsonResponse({"data": "User deleted successfully", "count": 1, "code": 200}, safe=False)
         except User.DoesNotExist:
             return JsonResponse({"data": "User not found", "count": 0, "code": 404}, safe=False)

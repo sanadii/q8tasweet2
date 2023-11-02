@@ -9,6 +9,10 @@ from django.utils.html import format_html
 from utils.importing import import_dotted_path
 
 
+def get_current_user(request):
+    return request.user if request.user.is_authenticated else None
+
+
 def get_user_model():
     warnings.warn(
         "Mezzanine's get_user_model() is deprecated and will be removed in a "

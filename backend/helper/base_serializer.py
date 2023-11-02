@@ -13,7 +13,7 @@ class TrackMixin(serializers.BaseSerializer):  # Using BaseSerializer as it does
             'deleted_by': self.get_user_name(obj.deleted_by),
             'created_at': obj.created_at,
             'updated_at': obj.updated_at,
-            # 'deleted_at': obj.deleted_at,
+            'deleted_at': obj.deleted_at,
             'deleted': obj.deleted
             }
     

@@ -106,6 +106,16 @@ const Actions = (props) => {
           </button>
           <button
             to="#"
+            className="btn btn-sm btn-soft-warning edit-list"
+            onClick={() => {
+              const userData = cell.row.original;
+              handleUserClick(userData);
+            }}
+          >
+            <i className="ri-lock-fill align-bottom" />
+          </button>
+          <button
+            to="#"
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
               const userData = cell.row.original;
