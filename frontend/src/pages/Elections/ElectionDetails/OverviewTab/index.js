@@ -6,6 +6,7 @@ import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer,
 import { electionSelector } from 'Selectors';
 
 // Components
+import ElectionFinalResults from "./ElectionFinalResults"
 import ElectionDetailsWidget from "./ElectionDetailsWidget";
 import ElectionModerators from "./ElectionModerators";
 import ElectionCampaigns from "./ElectionCampaigns";
@@ -27,19 +28,19 @@ const OverviewTab = () => {
 
   return (
     <React.Fragment>
-      <ElectionDetailsWidget election={election} electionCandidates={electionCandidates} />
 
       <Row>
         <Col xl={9} lg={8}>
-
-          <ElectionDetails />
+          <ElectionFinalResults />
           <ElectionPrevious />
           <ElectionComments />
         </Col>
 
         <Col xl={3} lg={4}>
+          <ElectionDetails />
+          <ElectionDetailsWidget election={election} electionCandidates={electionCandidates} />
           {/* <ElectionModerators /> */}
-          <ElectionCampaigns />
+          {/* <ElectionCampaigns /> */}
           {/* <ElectionDatabase /> */}
         </Col>
       </Row>

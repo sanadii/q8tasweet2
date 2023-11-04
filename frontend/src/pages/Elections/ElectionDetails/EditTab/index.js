@@ -25,7 +25,6 @@ const EditTab = () => {
   const { election, electionId } = useSelector(electionSelector);
   const { categories, subCategories } = useSelector(categorySelector);
 
-  console.log("ELECTION: ", election)
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {

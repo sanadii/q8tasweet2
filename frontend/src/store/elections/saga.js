@@ -8,20 +8,23 @@ import {
   GET_ELECTIONS,
   GET_ELECTION_DETAILS,
   ADD_ELECTION,
-  DELETE_ELECTION,
   UPDATE_ELECTION,
+  DELETE_ELECTION,
 
   // Election Candidates
   GET_ELECTION_CANDIDATES,
   ADD_NEW_ELECTION_CANDIDATE,
-  DELETE_ELECTION_CANDIDATE,
   UPDATE_ELECTION_CANDIDATE,
+  DELETE_ELECTION_CANDIDATE,
+
+  // Election Candidate Votes
+  UPDATE_ELECTION_CANDIDATE_VOTES,
 
   // Election Committees
   GET_ELECTION_COMMITTEES,
   ADD_NEW_ELECTION_COMMITTEE,
-  DELETE_ELECTION_COMMITTEE,
   UPDATE_ELECTION_COMMITTEE,
+  DELETE_ELECTION_COMMITTEE,
 
   // Election Committee Results
   UPDATE_ELECTION_COMMITTEE_RESULTS,
@@ -29,8 +32,8 @@ import {
   // Election Campaign
   GET_ELECTION_CAMPAIGNS,
   ADD_NEW_ELECTION_CAMPAIGN,
-  DELETE_ELECTION_CAMPAIGN,
   UPDATE_ELECTION_CAMPAIGN,
+  DELETE_ELECTION_CAMPAIGN,
 } from "./actionType";
 
 import {
@@ -54,6 +57,10 @@ import {
   updateElectionCandidateFail,
   deleteElectionCandidateSuccess,
   deleteElectionCandidateFail,
+
+  // Election Candidate Votes
+  updateElectionCandidateVotesSuccess,
+  updateElectionCandidateVotesFail,
 
   // Election Committees
   addElectionCommitteeSuccess,
@@ -91,6 +98,9 @@ import {
   addNewElectionCandidate,
   updateElectionCandidate,
   deleteElectionCandidate,
+
+  // ElectionCandidateVotes
+  updateElectionCandidateVotes,
 
   // Election Committees
   getElectionCommittees as getElectionCommitteesApi,
@@ -208,7 +218,39 @@ function* onDeleteElectionCandidate({ payload: electionCandidate }) {
     toast.error("خطأ في حذف مرشح الانتخابات", { autoClose: 2000 });
   }
 }
+// Election Candidate Votes
+function* onUpdateElectionCandidateVotes({ payload: electionCandidateVotes }) {
+  try {
+    console.log("onUpdateElectionCandidateVotes saga started", electionCandidateVotes);
+    const response = yield call(updateElectionCandidateVotes, electionCandidateVotes);
+    console.log("Received response from update API:", response);
+    yield put(updateElectionCandidateVotesSuccess(response));
+    console.log("Dispatched updateElectionCandidateVotesSuccess");
+    toast.success("تم تحديث نتائج الإنتخابات بنجاح", {
+      autoClose: 2000,
+    });
+  } catch (error) {
+    console.error("Caught an error in onUpdateElectionCandidateVotes:", error);
+    yield put(updateElectionCandidateVotesFail(error));
+    console.log("Dispatched updateElectionCandidateVotesFail");
+    toast.error("خطأ في تحديث نتائج الإنتخابات", { autoClose: 2000 });
+  }
+}
 
+
+
+// function* onUpdateElectionCandidate({ payload: electionCandidate }) {
+//   try {
+//     const response = yield call(updateElectionCandidate, electionCandidate);
+//     yield put(updateElectionCandidateSuccess(response));
+//     toast.success("تم تحديث مرشح الانتخابات بنجاح", {
+//       autoClose: 2000,
+//     });
+//   } catch (error) {
+//     yield put(updateElectionCandidateFail(error));
+//     toast.error("خطأ في تحديث مرشح الانتخابات", { autoClose: 2000 });
+//   }
+// }
 
 // Election Committees
 function* getElectionCommittees({ payload: election }) {
@@ -362,6 +404,10 @@ export function* watchDeleteElectionCandidate() {
   yield takeEvery(DELETE_ELECTION_CANDIDATE, onDeleteElectionCandidate);
 }
 
+// Election Candidate Votes Watchers
+export function* watchUpdateElectionCandidateVotes() {
+  yield takeEvery(UPDATE_ELECTION_CANDIDATE_VOTES, onUpdateElectionCandidateVotes);
+}
 
 // Election Committees Watchers
 export function* watchGetElectionCommittees() {
@@ -419,6 +465,10 @@ function* electionSaga() {
     fork(watchAddNewElectionCandidate),
     fork(watchUpdateElectionCandidate),
     fork(watchDeleteElectionCandidate),
+
+    // ElectionCandidateVotes
+    fork(watchUpdateElectionCandidateVotes),
+
 
     // ElectionCommittees
     fork(watchGetElectionCommittees),

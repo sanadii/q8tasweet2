@@ -11,6 +11,7 @@ import { StatusBadge, PriorityBadge } from "Common/Constants";
 
 // UI & Utilities
 import { Card, CardBody, CardFooter, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
+import { Link } from "react-router-dom";
 import classnames from "classnames";
 
 //import Tabs & Widges
@@ -62,14 +63,14 @@ const Section = () => {
     { id: "2", title: "المرشحين", icon: 'ri-activity-line', },
     ...(election.electResult === 2 ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
     ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line', }] : []),
-    { id: "5", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
+    // { id: "5", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
     // { id: "6", title: "عمليات المستخدم", icon: 'ri-activity-line', },
-    { id: "7", title: "تعديل", icon: 'ri-activity-line', }
+    // { id: "7", title: "تعديل", icon: 'ri-activity-line', }
   ];
 
   const mainButtons = [
-    { id: "8", title: "تحديث النتائج", icon: 'ri-activity-line', },
-    { id: "9", title: "تعديل", icon: 'ri-activity-line', },
+    { id: "8", title: "تحديث النتائج", color: "primary",icon: 'ri-activity-line', },
+    { id: "9", title: "تعديل", color: "info", icon: 'ri-activity-line', },
   ];
 
   const campaignTabs = [
@@ -176,14 +177,27 @@ const Section = () => {
       </div>
       <Row> {/* NavTab  */}
         <Col lg={12}>
-          <Row>
+          <div className="d-flex profile-wrapper">
             <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} />
-          </Row>
+            <div className="flex-shrink-0">
+              {mainButtons.filter(Boolean).map((button) => (  // Filter out falsy values before mapping
+                <Link
+                  key={button.id}
+                  className={`btn btn-${button.color} me-2 `}
+                  onClick={() => toggleTab(button.id)}
+                >
+                  <i className="ri-edit-box-line align-bottom"></i>{button.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {activeTab.startsWith("4") && (
             <Row>
               <NavTabs tabs={campaignTabs} activeTab={activeTab} toggleTab={toggleTab} />
             </Row>
           )}
+
           <TabContent activeTab={activeTab} className="pt-4">
             {Object.entries(tabComponents).map(([key, component]) => (
               <TabPane tabId={key} key={key}>

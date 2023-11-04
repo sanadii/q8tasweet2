@@ -21,8 +21,6 @@ const useSaveCommitteeResults = (
             console.log("DataData:", committeeEditedData)
             dispatch(updateElectionCommitteeResults(updatedElectionCommitteeResult));
 
-
-
             // Reset edited data for this specific committee
             const updatededitedCommittee = { ...committeeEdited };
             delete updatededitedCommittee[committeeId];

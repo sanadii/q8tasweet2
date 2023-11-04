@@ -23,6 +23,11 @@ import {
   DELETE_ELECTION_CANDIDATE_SUCCESS,
   DELETE_ELECTION_CANDIDATE_FAIL,
 
+
+  // Election Candidate Votes
+  UPDATE_ELECTION_CANDIDATE_VOTES_SUCCESS,
+  UPDATE_ELECTION_CANDIDATE_VOTES_FAIL,
+
   // Election Committees
   GET_ELECTION_COMMITTEES,
   ADD_ELECTION_COMMITTEE_SUCCESS,
@@ -298,6 +303,34 @@ const Elections = (state = IntialState, action) => {
         error: action.payload,
         isElectionCandidateDelete: false,
         isElectionCandidateDeleteFail: true,
+      };
+
+
+    // Election Candidate Votes
+    case UPDATE_ELECTION_CANDIDATE_VOTES_SUCCESS:
+      return {
+
+        ...state,
+        electionCandidates: action.payload.data,
+        isElectionCandidateUpdate: true,
+        isElectionCandidateUpdateFail: false,
+
+
+        // ...state,
+        // electionCandidates: state.electionCandidates.map((electionCandidate) =>
+        //   electionCandidate.id.toString() === action.payload.data.id.toString()
+        //     ? { ...electionCandidate, ...action.payload.data }
+        //     : electionCandidate
+        // ),
+        // isElectionCandidateUpdate: true,
+        // isElectionCandidateUpdateFail: false,
+      };
+    case UPDATE_ELECTION_CANDIDATE_VOTES_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionCandidateUpdate: false,
+        isElectionCandidateUpdateFail: true,
       };
 
     // Election Committees

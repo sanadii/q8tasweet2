@@ -1,7 +1,7 @@
 import React from 'react';
 import { VotesInputField } from './FormComponents'; // Importing required component
 
-export const transformData = (data, committeeEdited, electionCandidates, handleEditCell) => {
+export const transformData = (data, committeeEdited, electionCandidates, handleCommitteeVoteChange) => {
 
     console.log("Original Data:", data);
 
@@ -56,7 +56,7 @@ export const transformData = (data, committeeEdited, electionCandidates, handleE
 
             // Assigning votes or input field based on edit mode
             row[`committee_${committeeId}`] = isColumnInEditMode
-                ? <VotesInputField candidateId={candidateId} committeeId={committeeId} votes={data[committeeId][candidateId] || 0} handleEditCell={handleEditCell} />
+                ? <VotesInputField candidateId={candidateId} committeeId={committeeId} votes={data[committeeId][candidateId] || 0} handleCommitteeVoteChange={handleCommitteeVoteChange} />
                 : data[committeeId][candidateId] || 0;
         }
 

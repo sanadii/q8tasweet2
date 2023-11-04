@@ -11,11 +11,33 @@ import SimpleBar from "simplebar-react";
 
 const OverviewCampaigns = () => {
 
-    const { election, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
+    const { election, electionCandidates } = useSelector(electionSelector);
 
-    const moderators = Array.isArray(election.moderators)
-        ? election.moderators
-        : [];
+    const electionDetailsList = [
+        {
+            id: 1,
+            name: "يوم الإقتراع",
+            value: election.dueDate,
+        },
+        {
+            id: 2,
+            name: "عدد المرشحين",
+            value: electionCandidates.length,
+        },
+        {
+            id: 3,
+            name: "عدد المقاعد",
+            value: election.electSeats,
+        },
+        {
+            id: 4,
+            name: "عدد الأصوات",
+            value: election.electVotes,
+        },
+        // Add more objects as needed
+    ];
+
+
 
     return (
         <React.Fragment>
@@ -26,42 +48,17 @@ const OverviewCampaigns = () => {
                     </h5>
                 </CardHeader>
                 <CardBody>
-                    <div className="text-muted">
-                        <div className="pt-3 buttom-top buttom-top-dashed mb-4">
-                            <Row>
-                                <Col lg={3} sm={6}>
-                                    <div>
-                                        <p className="mb-2 text-uppercase fw-medium">يوم الإقتراع:</p>
-                                        <h5 className="fs-15 mb-0">{election.dueDate}</h5>
-                                    </div>
-                                </Col>
-                                <Col lg={3} sm={6}>
-                                    <div>
-                                        <p className="mb-2 text-uppercase fw-medium">نوع الإنتخابات:</p>
-                                        <ElectionTypeBadge electType={election.electType} />
-                                    </div>
-                                </Col>
-                                <Col lg={3} sm={6}>
-                                    <div>
-                                        <p className="mb-2 text-uppercase fw-medium">عدد الأصوات:</p>
-                                        <div className="badge bg-info fs-12">
-                                            {election.electVotes} صوت
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col lg={3} sm={6}>
-                                    <div>
-                                        <p className="mb-2 text-uppercase fw-medium">
-                                            المقاعد:
-                                        </p>
-                                        <div className="badge bg-info fs-12">
-                                            {election.electSeats} مقاعد
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </div>
-                    </div>
+                    <table className="table">
+                        <tbody>
+                            {electionDetailsList.map((detail) => (
+                                <tr key={detail.id}>
+                                    <td>{detail.name}</td>
+                                    <td>{detail.value}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
                 </CardBody>
             </Card>
         </React.Fragment>

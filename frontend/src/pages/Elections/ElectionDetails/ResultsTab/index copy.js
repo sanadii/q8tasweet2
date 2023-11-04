@@ -27,7 +27,7 @@ const ResultsTab = () => {
     }));
   };
 
-  const handleEditCell = (candidateId, committeeId, value) => {
+  const handleCommitteeVoteChange = (candidateId, committeeId, value) => {
     setCommitteeEditedData(prev => ({
       ...prev,
       [committeeId]: {
@@ -140,7 +140,7 @@ const ResultsTab = () => {
     }, [votes]);
 
     const handleBlur = () => {
-      handleEditCell(candidateId, committeeId, localVote);
+      handleCommitteeVoteChange(candidateId, committeeId, localVote);
     };
 
     return (

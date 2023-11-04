@@ -25,6 +25,9 @@ export const ADD_NEW_ELECTION_CANDIDATE = "/elections/addNewElectionCandidate";
 export const UPDATE_ELECTION_CANDIDATE = "/elections/updateElectionCandidate";
 export const DELETE_ELECTION_CANDIDATE = "/elections/deleteElectionCandidate";
 
+// Election Candidate Votes
+export const UPDATE_ELECTION_CANDIDATE_VOTES = "/elections/updateElectionCandidateVotes";
+
 // Election Committee
 export const GET_ELECTION_COMMITTEES = "/elections/getElectionCommittees";
 export const GET_ELECTION_COMMITTEE_DETAILS = "/elections/getElectionCommitteeDetails";

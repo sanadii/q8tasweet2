@@ -31,11 +31,11 @@ const CandidatesTab = () => {
   const [electionCampaignList, setElectionCampaignList] = useState(electionCampaign);
 
 
-  const mainTabs = [
-    { id: "1", title: "النتائج", icon: 'ri-activity-line', },
-    { id: "2", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
-    { id: "3", title: "إضافة النتائج", icon: 'ri-activity-line', }
-  ];
+  // const mainTabs = [
+  //   { id: "1", title: "النتائج", icon: 'ri-activity-line', },
+  //   { id: "2", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
+  //   { id: "3", title: "إضافة النتائج", icon: 'ri-activity-line', }
+  // ];
 
   // Function to close the candidate modal
   const closeCandidateModal = () => {
@@ -189,27 +189,27 @@ const CandidatesTab = () => {
         filterable: true,
         Cell: (cellProps) => <Name {...cellProps} />
       },
+      // {
+      //   Header: "الأصوات",
+      //   accessor: "votes",
+      //   Cell: (cellProps) => <Votes {...cellProps} />
+      // },
       {
-        Header: "الأصوات",
-        accessor: "votes",
-        Cell: (cellProps) => <Votes {...cellProps} />
+        Header: "إجراءات",
+        Cell: (cellProps) => (
+          <Actions
+            {...cellProps}
+            setElectionCandidate={setElectionCandidate}
+            handleElectionCandidateClick={handleElectionCandidateClick}
+            onClickDelete={onClickDelete}
+          />
+        )
       },
-      // {
-      //   Header: "إجراءات",
-      //   Cell: (cellProps) => (
-      //     <Actions
-      //       {...cellProps}
-      //       setElectionCandidate={setElectionCandidate}
-      //       handleElectionCandidateClick={handleElectionCandidateClick}
-      //       onClickDelete={onClickDelete}
-      //     />
-      //   )
-      // },
-      // {
-      //   Header: "رمز",
-      //   accessor: "candidate_id",
-      //   Cell: (cellProps) => <Id {...cellProps} />
-      // },
+      {
+        Header: "رمز",
+        accessor: "candidate_id",
+        Cell: (cellProps) => <Id {...cellProps} />
+      },
     ],
     [handleElectionCandidateClick, checkedAll]
   );
@@ -285,8 +285,8 @@ const CandidatesTab = () => {
                   HandleSecondaryButton={handleElectionCampaignClicks}
                   SecondaryButtonText="إضافة حملة"
 
-                  HandleTertiaryButton={handleElectionResultClicks}
-                  TertiaryButtonText="إضافة نتائج"
+                  // HandleTertiaryButton={handleElectionResultClicks}
+                  // TertiaryButtonText="إضافة نتائج"
 
                   // Actions
                   // openCandidateModal={openCandidateModal}
@@ -298,7 +298,7 @@ const CandidatesTab = () => {
                   isMultiDeleteButton={isMultiDeleteButton}
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
-                <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} />
+                {/* <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} /> */}
 
                 {electionCandidateList && electionCandidateList.length ? (
                   <TableContainer

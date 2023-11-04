@@ -281,6 +281,47 @@ class DeleteElectionCommittee(APIView):
             return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+class UpdateElectionCandidateVotes(APIView):
+    def patch(self, request, *args, **kwargs):
+        # Extract the payload from the request
+        votes_data = request.data
+        
+        # This will hold any candidates that couldn't be found
+        not_found_candidates = []
+        # This will hold the candidates that have been updated
+        updated_candidates = []
+        
+        for candidate_id, votes in votes_data.items():
+            try:
+                # Find the candidate by id
+                candidate = ElectionCandidate.objects.get(id=candidate_id)
+                # Update the votes
+                candidate.votes = votes
+                candidate.save()
+                
+                # Append the updated candidate's data
+                updated_candidates.append(ElectionCandidateSerializer(candidate).data)
+            except ElectionCandidate.DoesNotExist:
+                # If candidate doesn't exist, add to the not_found list
+                not_found_candidates.append(candidate_id)
+        
+        # If there were any not found candidates, return a 404
+        if not_found_candidates:
+            return Response({
+                'status': 'error',
+                'message': 'Some candidates not found',
+                'not_found_candidates': not_found_candidates
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # If all candidates were found and updated, return a 200
+        return Response({
+            'status': 'success',
+            'message': 'Votes updated successfully',
+            'data': updated_candidates,
+            "count": 0,
+            "code": status.HTTP_200_OK
+        }, status=status.HTTP_200_OK)
+
 class UpdateElectionCommitteeResults(APIView):
     permission_classes = [IsAuthenticated]  # Assuming only authenticated users can update
 
@@ -334,6 +375,10 @@ class GetPublicElections(APIView):
             counts["Category"][category.name] = Election.objects.filter(category=category).count()
 
         return Response({"data": data_serializer.data, "counts": counts, "code": 200})
+
+
+
+
 
 class GetPublicElectionDetails(APIView):
     permission_classes = [AllowAny]

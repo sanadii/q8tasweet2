@@ -71,6 +71,9 @@ export const addNewElectionCandidate = (electionCandidate) => api.create(url.ADD
 export const updateElectionCandidate = (electionCandidate) => api.update(url.UPDATE_ELECTION_CANDIDATE + "/" + electionCandidate.id, electionCandidate);
 export const deleteElectionCandidate = (electionCandidate) => api.delete(url.DELETE_ELECTION_CANDIDATE + "/" + electionCandidate);
 
+// Election Candidate Votes
+export const updateElectionCandidateVotes = (electionCandidateVotes) => api.update(url.UPDATE_ELECTION_CANDIDATE_VOTES + "/" + "votes", electionCandidateVotes);
+
 // ElectionCommittees
 export const getElectionCommittees = (electionCommittee) => api.get(url.GET_ELECTION_COMMITTEES + "/" + electionCommittee.id);
 export const getElectionCommitteeDetails = (electionCommittee) => api.get(url.GET_ELECTION_COMMITTEE_DETAILS + "/" + electionCommittee.id);
