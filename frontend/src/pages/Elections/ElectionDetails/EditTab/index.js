@@ -25,35 +25,35 @@ const EditTab = () => {
   const { election, electionId } = useSelector(electionSelector);
   const { categories, subCategories } = useSelector(categorySelector);
 
+  console.log("ELECTION: ", election)
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      category: (election && election.category) || "",
-      subCategory: (election && election.subCategory) || "",
-      dueDate: (election && election.dueDate) || "",
-
-      tags: (election && election.tags) || [],
-
-      // Election Specification
-      electType: (election && election.electType) || 1,
-      electResult: (election && election.electResult) || 1,
-      electVotes: (election && election.electVotes) || 0,
-      electSeats: (election && election.electSeats) || 0,
-
-      // ElectionElectors
-      electors: (election && election.electors) || 0,
-      electorsMales: (election && election.electorsMales) || 0,
-      electorsFemales: (election && election.electorsFemales) || 0,
-
-      // ElectionElectorAttendees
-      attendees: (election && election.attendees) || 0,
-      attendeesMales: (election && election.attendeesMales) || 0,
-      attendeesFemales: (election && election.attendeesFemales) || 0,
-
+      category: election?.category ?? "",
+      subCategory: election?.subCategory ?? "",
+      dueDate: election?.dueDate ?? "",
+      tags: election?.tags ?? [],
+    
+      // Settings
+      electType: election?.electType ?? 1,
+      electResult: election?.electResult ?? 1,
+      electVotes: election?.electVotes ?? 0,
+      electSeats: election?.electSeats ?? 0,
+    
+      // Electors
+      electors: election?.electors ?? 0,
+      electorsMales: election?.electorsMales ?? 0,
+      electorsFemales: election?.electorsFemales ?? 0,
+    
+      // Attendees
+      attendees: election?.attendees ?? 0,
+      attendeesMales: election?.attendeesMales ?? 0,
+      attendeesFemales: election?.attendeesFemales ?? 0,
+            
       // System
-      status: (election && election.status) || 1,
-      priority: (election && election.priority) || 1,
-      delet: (election && election.delet) || "",
+      status: election?.task?.status ?? 1,
+      priority: election?.task?.priority ?? 1,
+      delet: election?.delet ?? "",
     },
     validationSchema: Yup.object({
       category: Yup.string().required("Please Enter Election Name"),

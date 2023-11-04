@@ -9,23 +9,52 @@ import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from
 
 // Common Components
 import ElectionCandidateModal from "./ElectionCandidateModal";
+import CampaignModal from "../CampaignsTab/CampaignModal";
 import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "Common/Components";
 // import { calculateCandidatePosition } from "./CandidateCalculations"
 import { usePermission, useDelete } from "Common/Hooks";
 
 // UI & Utilities
-import { Col, Row, Card, CardBody } from "reactstrap";
+import { Col, Row, Card, CardBody, Nav, NavItem, NavLink } from "reactstrap";
 import { isEmpty } from "lodash";
 import { toast, ToastContainer } from "react-toastify";
+import classnames from "classnames";
 
 const CandidatesTab = () => {
-  const dispatch = useDispatch();
 
   const { election, electionCandidates, error } = useSelector(electionSelector);
-
   // Constants
   const [electionCandidate, setElectionCandidate] = useState([]);
   const [electionCandidateList, setElectionCandidateList] = useState(electionCandidates);
+
+  const [electionCampaign, setElectionCampaign] = useState([]);
+  const [electionCampaignList, setElectionCampaignList] = useState(electionCampaign);
+
+
+  const mainTabs = [
+    { id: "1", title: "النتائج", icon: 'ri-activity-line', },
+    { id: "2", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
+    { id: "3", title: "إضافة النتائج", icon: 'ri-activity-line', }
+  ];
+
+  // Function to close the candidate modal
+  const closeCandidateModal = () => {
+    setCandidateModal(false);
+  };
+
+
+  // Function to close the campaign modal
+
+
+
+
+  // State for the candidate modal
+  const [candidateModal, setCandidateModal] = useState(false);
+  const [isEditCandidate, setIsEditCandidate] = useState(false);
+
+  // State for the campaign modal
+  const [campaignModal, setCampaignModal] = useState(false);
+  const [isEditCampaign, setIsEditCampaign] = useState(false);
 
   // Sort List by Candidate Position
   useEffect(() => {
@@ -69,7 +98,6 @@ const CandidatesTab = () => {
     deleteMultiple,
   } = useDelete(deleteElectionCandidate);
 
-
   // Models
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -97,19 +125,52 @@ const CandidatesTab = () => {
         votes: electionCandidate.votes,
         notes: electionCandidate.notes,
       });
+      // setCampaignModal(false);
+      setCandidateModal(true);
+      setIsEdit(true);
+      toggle();
 
+      console.log("CHECK: modal:", modal);
+      console.log("CHECK: isEdit:", isEdit);
+    },
+    [toggle]
+  );
+
+  const handleElectionCampaignClick = useCallback(
+    (arg) => {
+      const electionCampaign = arg;
+
+      setElectionCandidate({
+        id: electionCampaign.id,
+      });
+      // setCampaignModal(false);
+      setCampaignModal(true);
       setIsEdit(true);
       toggle();
     },
     [toggle]
   );
 
-  const handleElectionCandidateClicks = () => {
-    setElectionCandidate("");
+
+  const handleElectionCandidateClicks = (candidate = null) => {
+    setElectionCandidate(candidate);
+    setIsEditCandidate(!!candidate);
+    setCandidateModal(true);
     setIsEdit(false);
     toggle();
   };
 
+  const handleElectionCampaignClicks = (campaign = null) => {
+    setElectionCampaign(campaign);
+    setIsEditCampaign(!!campaign);
+    setCampaignModal(true);
+    setIsEdit(false);
+    toggle();
+  };
+
+  const handleElectionResultClicks = () => {
+    setActiveTab("8");
+  };
 
   const columns = useMemo(
     () => [
@@ -133,22 +194,22 @@ const CandidatesTab = () => {
         accessor: "votes",
         Cell: (cellProps) => <Votes {...cellProps} />
       },
-      {
-        Header: "إجراءات",
-        Cell: (cellProps) => (
-          <Actions
-            {...cellProps}
-            setElectionCandidate={setElectionCandidate}
-            handleElectionCandidateClick={handleElectionCandidateClick}
-            onClickDelete={onClickDelete}
-          />
-        )
-      },
-      {
-        Header: "رمز",
-        accessor: "candidate_id",
-        Cell: (cellProps) => <Id {...cellProps} />
-      },
+      // {
+      //   Header: "إجراءات",
+      //   Cell: (cellProps) => (
+      //     <Actions
+      //       {...cellProps}
+      //       setElectionCandidate={setElectionCandidate}
+      //       handleElectionCandidateClick={handleElectionCandidateClick}
+      //       onClickDelete={onClickDelete}
+      //     />
+      //   )
+      // },
+      // {
+      //   Header: "رمز",
+      //   accessor: "candidate_id",
+      //   Cell: (cellProps) => <Id {...cellProps} />
+      // },
     ],
     [handleElectionCandidateClick, checkedAll]
   );
@@ -156,6 +217,14 @@ const CandidatesTab = () => {
   // Export Modal
   const [isExportCSV, setIsExportCSV] = useState(false);
 
+  //Tab
+  const [activeTab, setActiveTab] = useState("1");
+
+  const toggleTab = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  };
   return (
     <React.Fragment>
       <ExportCSVModal
@@ -176,34 +245,60 @@ const CandidatesTab = () => {
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
       />
+
       <ElectionCandidateModal
-        modal={modal}
-        setModal={setModal}
+        modal={candidateModal}
+        setModal={setCandidateModal}
         isEdit={isEdit}
         toggle={toggle}
         electionCandidate={electionCandidate}
       />
 
+      <CampaignModal
+        modal={campaignModal}
+        setModal={setCampaignModal}
+        isEdit={isEditCampaign}
+        toggle={toggle}
+        electionCampaign={electionCampaign}
+      />
+
+
       <Row>
         <Col lg={12}>
           <Card id="electionCandidateList">
+
             <CardBody>
+
               <div>
                 <TableContainerHeader
+                  // NEW
+                  isElectionCandidateButtons={true}
+
                   // CSS: Table-border-Color
                   // Title
-                  ContainerHeaderTitle="المرشحين"
+                  ContainerHeaderTitle="المرشحين والنتائج"
 
-                  // Add Elector Button
-                  isContainerAddButton={true}
-                  AddButtonText="إضافة مرشح"
-                  handleEntryClick={handleElectionCandidateClicks}
+                  // Buttons
+                  HandlePrimaryButton={handleElectionCandidateClicks}
+                  PrimaryButtonText="إضافة مرشح"
+
+                  HandleSecondaryButton={handleElectionCampaignClicks}
+                  SecondaryButtonText="إضافة حملة"
+
+                  HandleTertiaryButton={handleElectionResultClicks}
+                  TertiaryButtonText="إضافة نتائج"
+
+                  // Actions
+                  // openCandidateModal={openCandidateModal}
+                  // handleEntryClick={handleElectionCandidateClicks}
+
                   toggle={toggle}
 
                   // Delete Button
                   isMultiDeleteButton={isMultiDeleteButton}
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
+                <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} />
 
                 {electionCandidateList && electionCandidateList.length ? (
                   <TableContainer
@@ -212,17 +307,16 @@ const CandidatesTab = () => {
                     data={electionCandidateList || []}
                     customPageSize={50}
 
-                    // Header
-                    setIsEdit={setIsEdit}
-                    toggle={toggle}
-
                     // Filters
                     isGlobalFilter={true}
                     isCandidateGenderFilter={true}
                     isMultiDeleteButton={isMultiDeleteButton}
                     SearchPlaceholder="البحث...."
-                    setElectionCandidateList={setElectionCandidateList}
-                    // handleElectionCandidateClick={handleElectionCandidateClicks}
+
+                    // Actions NO NEED
+                    // handleEntryClick={handleElectionCandidateClicks}
+                    // setElectionCandidateList={setElectionCandidateList}
+                    // handleElectionCampaignClick={handleElectionCampaignClicks}
 
                     // Styling
                     divClass="table-responsive table-card mb-3"
@@ -244,3 +338,24 @@ const CandidatesTab = () => {
 };
 
 export default CandidatesTab;
+
+const NavTabs = ({ tabs, activeTab, toggleTab }) => (
+  <Nav
+    pills
+    className="animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1"
+    role="tablist"
+  >
+    {tabs.filter(Boolean).map((tab) => (  // Filter out falsy values before mapping
+      <NavItem key={tab.id}>
+        <NavLink
+          className={classnames({ active: activeTab === tab.id }, " bg-warning text-white fw-semibold")}
+          onClick={() => toggleTab(tab.id)}
+          href="#"
+        >
+          <i className={`${tab.icon} text-info d-inline-block d-md-none`}></i>
+          <span className="d-none d-md-inline-block">{tab.title}</span>
+        </NavLink>
+      </NavItem>
+    ))}
+  </Nav>
+);

@@ -8,10 +8,8 @@ import { getElections, deleteElection, getCategories } from "store/actions";
 
 // Components & Columns
 import ElectionModal from "./ElectionModal";
-import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import { Id, CheckboxHeader, CheckboxCell, Name, DueDate, Status, Priority, Category, CreateBy, Actions } from "./ElectionListCol";
-
-// Hooks
+import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import { useDelete, useFetchDataIfNeeded } from "Common/Hooks"
 
 // UI, Styles & Notifications
@@ -40,6 +38,7 @@ const AllElections = () => {
     setDeleteModalMulti,
     deleteMultiple,
   } = useDelete(deleteElection);
+  console.log("checkedAll: ", checkedAll)
 
   // Fetch Data If Needed Hook
   useFetchDataIfNeeded(elections, getElections);
@@ -60,7 +59,6 @@ const AllElections = () => {
   const [election, setElection] = useState(null);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
   const [activeTab, setActiveTab] = useState("0"); // Initialize with "campaignManagers"
   const activeRole = activeTab;
 
@@ -236,7 +234,7 @@ const AllElections = () => {
                 // Title
                 ContainerHeaderTitle="الإنتخابات"
 
-                // Add Elector Button
+                // Add Button
                 isContainerAddButton={true}
                 AddButtonText="إضافة إنتخابات"
                 isEdit={isEdit}
@@ -260,13 +258,11 @@ const AllElections = () => {
                   isResetFilters={true}
 
                   // Filter Settings
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
                   filters={filters}
                   setFilters={setFilters}
                   SearchPlaceholder="البحث بالاسم..."
-
-                  // Settings
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
 
                   // Data----------
                   columns={columns}

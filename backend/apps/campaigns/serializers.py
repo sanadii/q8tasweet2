@@ -83,8 +83,7 @@ class CampaignMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = CampaignMember
         fields = ["id", "user", "campaign", "role", "supervisor", "committee", 
-                  "civil", "phone", "notes", "status", "fullName",
-                   "permissions"]
+                  "civil", "phone", "notes", "status", "fullName", "permissions"]
 
     def get_fullName(self, obj):
         if obj.user:

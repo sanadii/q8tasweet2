@@ -8,7 +8,6 @@ from django.db.models import Sum
 from django.utils.text import slugify
 import uuid
 
-from .utils import generate_slug
 from apps.configs.models import TrackModel, TaskModel
 
 from helper.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions

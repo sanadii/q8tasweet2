@@ -203,3 +203,19 @@ GROUP
 
 
   102. Reset all tables / rename all directories to make them apps
+
+
+  103. User Can write message (Election)
+  def user_can_vote(self, user):
+  """ 
+  Return False if user already voted
+  """
+  user_votes = user.vote_set.all()
+  qs = user_votes.filter(poll=self)
+  if qs.exists():
+      return False
+  return True
+
+@property
+def get_vote_count(self):
+  return self.vote_set.count()

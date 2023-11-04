@@ -1,39 +1,14 @@
 // Component Import
-import React, {
-    useState,
-    useEffect,
-    useSelector,
-    useDispatch,
-    useMemo,
-    useCallback,
-  } from "react";
-  import { Link } from "react-router-dom";
-  import {
-    Card,
-    CardBody,
-    Col,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    Input,
-    Modal,
-    Row,
-    UncontrolledDropdown,
-    ModalBody,
-    ModalHeader,
-    Nav,
-    NavItem,
-    NavLink,
-    TabContent,
-    TabPane,
-  } from "reactstrap";
-  
-  import classnames from "classnames";
-  
+import React from "react";
+import { Link } from "react-router-dom";
+import { Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Input, Modal, Row, UncontrolledDropdown, ModalBody, ModalHeader, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 
-  //SimpleBar
-  import SimpleBar from "simplebar-react";
-  
+import classnames from "classnames";
+
+
+//SimpleBar
+import SimpleBar from "simplebar-react";
+
 const GuaranteesTab = ({ electionCandidates }) => {
     return (
         <React.Fragment>

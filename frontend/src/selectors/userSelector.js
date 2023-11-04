@@ -7,6 +7,7 @@ export const userSelector = createSelector(
     selectUsersState,
     (usersState,) => ({
         // User Selectors
+        isUserSuccess: usersState.isUserSuccess,
         error: usersState.error,
         users: usersState.users,
         moderators: usersState.moderators,

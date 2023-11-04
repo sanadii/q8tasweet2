@@ -1,19 +1,19 @@
 // React & Redux
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, Row, Card, CardBody } from "reactstrap";
 
 // Store & Selectors
 import { getCandidates, deleteCandidate, getModeratorUsers } from "store/actions";
 import { candidateSelector } from 'Selectors';
 
 // Custom Components, Constants & Hooks Imports
-import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import CandidateModal from "./CandidateModal"
 import { Id, CheckboxHeader, CheckboxCell, Name, Status, Priority, CreateBy, Actions } from "./CandidateListCol";
+import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
 import { useDelete, useFetchDataIfNeeded } from "Common/Hooks"
 
 // Toast & Styles
+import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -22,9 +22,6 @@ const AllCandidates = () => {
 
   // State Management
   const { candidates, isCandidateSuccess, error } = useSelector(candidateSelector);
-  const [modal, setModal] = useState(false);
-  const [candidate, setCandidate] = useState([]);
-  const [isEdit, setIsEdit] = useState(false);
 
   // Delete Hook
   const {
@@ -47,6 +44,10 @@ const AllCandidates = () => {
     }
   }, [dispatch, candidates]);
 
+  // Model & Toggle Function
+  const [candidate, setCandidate] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   const toggle = useCallback(() => {
     if (modal) {
@@ -104,7 +105,6 @@ const AllCandidates = () => {
         accessor: "name",
         Cell: Name,
       },
-
       {
         Header: "الحالة",
         Cell: (cellProps) => <Status {...cellProps} />
@@ -197,9 +197,9 @@ const AllCandidates = () => {
                 // Title
                 ContainerHeaderTitle="المرشحين"
 
-                // Add Elector Button
+                // Add Button
                 isContainerAddButton={true}
-                AddButtonText="إضافة جديد"
+                AddButtonText="إضافة مرشح"
                 isEdit={isEdit}
                 handleEntryClick={handleCandidateClicks}
                 toggle={toggle}
@@ -211,15 +211,6 @@ const AllCandidates = () => {
 
               {isCandidateSuccess && candidates.length ? (
                 <TableContainer
-                  // Header
-                  isTableContainerHeader={true}
-                  setDeleteModalMulti={setDeleteModalMulti}
-                  setIsEdit={setIsEdit}
-                  toggle={toggle}
-                  isMultiDeleteButton={isMultiDeleteButton}
-
-                  isContainerAddButton={true}
-                  isEdit={isEdit}
 
                   // Filters----------
                   isTableContainerFilter={true}
@@ -238,16 +229,14 @@ const AllCandidates = () => {
                   // Table
                   columns={columns}
                   data={candidateList || []}
-
+                  customPageSize={20}
 
                   // useFilters={true}
-                  customPageSize={20}
                   className="custom-header-css"
                   divClass="table-responsive table-card mb-3"
                   tableClass="align-middle table-nowrap mb-0"
                   theadClass="table-light table-nowrap"
                   thClass="table-light text-muted"
-                  handleEntryClick={handleCandidateClicks}
                 />
               ) : (
                 <Loader error={error} />

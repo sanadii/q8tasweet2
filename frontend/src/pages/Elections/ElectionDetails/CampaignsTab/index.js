@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { electionSelector } from 'Selectors';
 
 import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
-import ElectionCampaignModal from "../Modals/ElectionCampaignModal";
+import CampaignModal from "./CampaignModal";
 import { ImageCandidateCampaign, DeleteModal } from "Common/Components";
 
 const CampaignsTab = () => {
@@ -22,9 +22,9 @@ const CampaignsTab = () => {
     setElectionCampaignList(electionCampaigns);
   }, [electionCampaigns]);
 
-  // const [electionCampaignModal, setElectionCampaignModal] = useState(false);
+  // const [CampaignModal, setCampaignModal] = useState(false);
   // const toggleElectionCampaign = () => {
-  //   setElectionCampaignModal(!electionCampaignModal);
+  //   setCampaignModal(!CampaignModal);
   // };
 
 
@@ -70,7 +70,7 @@ const CampaignsTab = () => {
 
   return (
     <React.Fragment>
-      <ElectionCampaignModal
+      <CampaignModal
         modal={modal} // boolean to control modal visibility
         setModal={setModal}
         isEdit={isEdit} // boolean to determine if editing

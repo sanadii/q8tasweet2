@@ -11,14 +11,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 
-# Models
-from apps.campaigns.models import (
-    Campaign,
-    CampaignMember,
-    CampaignGuarantee,
-    CampaignAttendee,
-)
+# Campaign App
+from apps.campaigns.models import Campaign
+from apps.campaigns.serializers import CampaignSerializer
 
+# Election App
 from apps.elections.models import (
     Election,
     ElectionCategory,
@@ -27,9 +24,6 @@ from apps.elections.models import (
     ElectionCommitteeResult,
 )
 
-
-# Serializers
-from apps.campaigns.serializers import CampaignSerializer
 from apps.elections.serializers import (
     ElectionSerializer,
     CategoriesSerializer,
@@ -38,6 +32,8 @@ from apps.elections.serializers import (
     ElectionCandidateSerializer,
     ElectionCommitteeResultSerializer,
 )
+
+# Utils
 from helper.views_helper import CustomPagination
 
 

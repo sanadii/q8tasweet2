@@ -21,7 +21,6 @@ from django.db.models import Q
 
 from apps.campaigns.models import Campaign, CampaignMember
 from apps.campaigns.serializers import CampaignMemberSerializer
-
 from apps.auths.serializers import GroupSerializer
 
 
@@ -55,11 +54,13 @@ def get_current_user_campaigns( user):
         serializer = CampaignSerializer(all_campaigns, many=True)
         return serializer.data
 
+
 def get_campaign_roles(context):
     """
     Retrieves a list of campaign roles from the database, specifically roles categorized as "CampaignRoles".
     It returns these roles as serialized data using the GroupSerializer.
     The context parameter is provided to ensure proper serialization.
+    Status: Working fine
     """
 
     campaign_roles = Group.objects.filter(Q(category=3))  # CampaignRoles
@@ -75,6 +76,7 @@ def determine_user_role(campaign_id, user_id, context):
     It returns the user's role within the campaign or "admin" if they have higher privileges.
     If the user is not found within the campaign and doesn't have admin privileges, it returns None.
     # TODO: check if superadmin or admin first
+    Status: Working fine
     """
     campaign_roles = Group.objects.filter(Q(category=3))  # CampaignRoles
     current_campaign_member = get_current_campaign_member(campaign_id, user_id, context)
@@ -99,13 +101,18 @@ def is_higher_privilege(user_id):
 
 def get_current_campaign_member(campaign_id, user_id, context):
     """
-    Retrieves information about the current campaign member, identified by both campaign_id and user_id.
-    It fetches the campaign member from the database and serializes it using CampaignMemberSerializer.
+    Retrieves a list of the current campaign's member.
+    Identified by both campaign_id and user_id.
+    It fetches campaign members from the database and serializes it using CampaignMemberSerializer.
     If the campaign member is found, it returns the serialized data; otherwise, it returns None.
     """    
-    current_campaign_member_query = CampaignMember.objects.select_related('user').filter(campaign_id=campaign_id, user_id=user_id).first()
-    if current_campaign_member_query:
-        return CampaignMemberSerializer(current_campaign_member_query, context=context).data
+    current_campaign_member = CampaignMember.objects.select_related('user').filter(
+        campaign_id=campaign_id, user_id=user_id
+        ).first()
+    print("current_campaign_member_query", current_campaign_member) #OK
+
+    if current_campaign_member:
+        return CampaignMemberSerializer(current_campaign_member, context=context).data
     return None
 
 
@@ -118,7 +125,8 @@ def get_campaign_members_by_role(campaign, user_role, current_campaign_member):
     if user_role in MANAGER_ROLES:
         campaign_members = CampaignMember.objects.filter(campaign=campaign)
         campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
-    
+        print("campaign_members XXX: ", campaign_members)
+
     elif user_role in SUPERVISOR_ROLES:
         campaign_managers = get_campaign_managers(campaign)
         campaign_managed_members = get_campaign_managed_members(current_campaign_member, user_role)

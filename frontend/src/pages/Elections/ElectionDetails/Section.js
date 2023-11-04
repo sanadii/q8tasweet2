@@ -50,9 +50,6 @@ const NavTabs = ({ tabs, activeTab, toggleTab }) => (
 
 
 const Section = () => {
-  // SwiperCore.use([Autoplay]);
-
-
   const { election, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
   const { categories } = useSelector(categorySelector);
 
@@ -70,6 +67,11 @@ const Section = () => {
     { id: "7", title: "تعديل", icon: 'ri-activity-line', }
   ];
 
+  const mainButtons = [
+    { id: "8", title: "تحديث النتائج", icon: 'ri-activity-line', },
+    { id: "9", title: "تعديل", icon: 'ri-activity-line', },
+  ];
+
   const campaignTabs = [
     { id: "4", title: "Campaigns", icon: 'ri-activity-line', },
     { id: "42", title: "Guarantees", icon: 'ri-activity-line', },
@@ -77,17 +79,21 @@ const Section = () => {
     { id: "44", title: "Sorting", icon: 'ri-activity-line', },
   ];
 
+
+  const [activeTab, setActiveTab] = useState("1");
+
   const tabComponents = {
     "1": <OverviewTab />,
-    "2": <CandidatesTab />,
+    "2": <CandidatesTab setActiveTab={setActiveTab} />,
     "3": <CommitteesTab />,
     "4": <CampaignsTab />,
     // "42": <GuaranteesTab electionCandidates={electionCandidates} />,
     // "43": <AttendeesTab electionCandidates={electionCandidates} />,
     // "44": <SortingTab electionCandidates={electionCandidates} />,
-    "5": <ResultsTab />,
+    // "5": <ResultsTab />,
     // "6": <ActivitiesTab />,
-    "7": <EditTab />,
+    "8": <ResultsTab />,
+    "9": <EditTab />,
   };
 
   const electionName = election.name;
@@ -96,7 +102,6 @@ const Section = () => {
   const electionPriority = election.task?.priority || 0;
 
   //Tab
-  const [activeTab, setActiveTab] = useState("1");
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
@@ -151,7 +156,7 @@ const Section = () => {
                 </div>
               </Col>
             </Row>
-            <Row>
+            {/* <Row>
               <div className="col-md-auto">
                 <div className="hstack gap-1 flex-wrap">
                   <button type="button" className="btn py-0 fs-16 text-white">
@@ -165,7 +170,7 @@ const Section = () => {
                   </button>
                 </div>
               </div>
-            </Row>
+            </Row> */}
           </Col>
         </Row>
       </div>

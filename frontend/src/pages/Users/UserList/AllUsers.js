@@ -1,17 +1,19 @@
 // React & Redux
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, Row, Card, CardBody } from "reactstrap";
 
-// Actions
-import { getUsers, deleteUser, getModeratorUsers } from "store/actions";
+// Store & Selectors
+import { getUsers, deleteUser } from "store/actions";
+import { userSelector } from 'Selectors';
 
 // Custom Components & ConstantsImports
+import UserModal from "./UserModal";
+import { Id, CheckboxHeader, CheckboxCell, Name, Username, Actions } from "./UserListCol";
 import { AvatarList, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
-import UserModal from "./UsersModal";
-import { Id, Name, Username, Status, CreateBy, Actions } from "./UsersListCol";
+import { useDelete } from "Common/Hooks"
 
 // Toast & Styles
+import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,16 +29,27 @@ const AllUsers = () => {
   const dispatch = useDispatch();
 
   // State Management
-  const { users, moderators, isUserSuccess, error } = useSelector((state) => ({
-    users: state.Users.users,
-    moderators: state.Users.moderators,
-    isUserSuccess: state.Users.isUserSuccess,
-    error: state.Users.error,
-  }));
+  const { users, isUserSuccess, error } = useSelector(userSelector);
 
-  const [userList, setUserList] = useState(users);
+
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    onClickDelete,
+    deleteModal,
+    setDeleteModal,
+    checkedAll,
+    deleteCheckbox,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    deleteMultiple,
+  } = useDelete(deleteUser);
+
+  console.log("checkedAll: ", checkedAll)
+  // Model & Toggle Function
   const [user, setUser] = useState([]);
-  const [userElections, setUserElections] = useState([]);
+  const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
   // User Data
@@ -46,39 +59,14 @@ const AllUsers = () => {
     }
   }, [dispatch, users]);
 
-  useEffect(() => {
-    setUserList(users);
-  }, [users]);
-
-
-  // Delete User
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
-  const [modal, setModal] = useState(false);
-
   const toggle = useCallback(() => {
     if (modal) {
       setModal(false);
       setUser(null);
     } else {
       setModal(true);
-      setDate(defaultdate());
     }
   }, [modal]);
-
-  // Delete Data
-  const onClickDelete = (user) => {
-    setUser(user);
-    setDeleteModal(true);
-  };
-
-  // Delete Data
-  const handleDeleteUser = () => {
-    if (user) {
-      dispatch(deleteUser(user.id));
-      setDeleteModal(false);
-    }
-  };
 
   // Update Data
   const handleUserClick = useCallback(
@@ -107,77 +95,20 @@ const AllUsers = () => {
     toggle();
   };
 
-  // Checked All
-  const checkedAll = useCallback(() => {
-    const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".userCheckBox");
-
-    if (checkall.checked) {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = true;
-      });
-    } else {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = false;
-      });
-    }
-    deleteCheckbox();
-  }, []);
-
-  // Delete Multiple
-  const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
-  const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
-
-  const deleteMultiple = () => {
-    const checkall = document.getElementById("checkBoxAll");
-    selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteUser(element.value));
-      setTimeout(() => {
-        toast.clearWaitingQueue();
-      }, 3000);
-    });
-    setIsMultiDeleteButton(false);
-    checkall.checked = false;
-  };
-
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".userCheckBox:checked");
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
-  };
-
   const columns = useMemo(
     () => [
       {
-        Header: (
-          <input
-            type="checkbox"
-            id="checkBoxAll"
-            className="form-check-input"
-            onClick={() => checkedAll()}
-          />
-        ),
-        Cell: (cellProps) => {
-          return (
-            <input
-              type="checkbox"
-              className="userCheckBox form-check-input"
-              value={cellProps.row.original.id}
-              onChange={() => deleteCheckbox()}
-            />
-          );
-        },
-        id: "#",
+        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        accessor: "id",
+        Cell: (cellProps) =>
+          <CheckboxCell
+            {...cellProps}
+            deleteCheckbox={deleteCheckbox}
+          />,
       },
       {
-        Header: "الرمز",
-        accessor: "id",
-        filterable: false,
-        Cell: (cellProps) => {
-          return <Id {...cellProps} />;
-        },
+        Header: "م.",
+        Cell: (cellProps) => <Id {...cellProps} />
       },
       {
         Header: "الإسم",
@@ -193,16 +124,6 @@ const AllUsers = () => {
         filterable: false,
         Cell: (cellProps) => {
           return <Username {...cellProps} />;
-        },
-      },
-      {
-        Header: "الحالة",
-        accessor: "status",
-        filterable: true,
-        // useFilters: true,
-
-        Cell: (cellProps) => {
-          return <Status status={cellProps.row.original.status} />;
         },
       },
       {
@@ -223,22 +144,24 @@ const AllUsers = () => {
     [handleUserClick, checkedAll]
   );
 
-  // Dates
-  const defaultdate = () => {
-    let d = new Date();
-    const year = d.getFullYear();
-    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-    const day = ("0" + d.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
+  // Filters----------
+  const [filters, setFilters] = useState({
+    global: "",
+  });
 
-  const [dueDate, setDate] = useState(defaultdate());
+  const userList = users.filter(user => {
+    let isValid = true;
 
+    if (filters.global) {
+      isValid = isValid && user.fullName && typeof user.fullName === 'string' && user.fullName.toLowerCase().includes(filters.global.toLowerCase());
+    }
+    return isValid;
+  });
   return (
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteUser}
+        onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
@@ -277,45 +200,38 @@ const AllUsers = () => {
               />
 
               {isUserSuccess && users.length ? (
+
                 <TableContainer
+                  // Filters----------
+                  isTableContainerFilter={true}
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isResetFilters={true}
+
+                  // Filter Settings
+                  filters={filters}
+                  setFilters={setFilters}
+                  SearchPlaceholder="البحث بالاسم..."
+
                   // Header
                   isTableContainerHeader={true}
                   setIsEdit={setIsEdit}
                   toggle={toggle}
                   isContainerAddButton={true}
                   isEdit={isEdit}
-                  // Filters
-                  isGlobalFilter={true}
-                  preGlobalFilteredRows={true}
-                  isUserGenderFilter={true}
-                  // isGlobalSearch={true}
-                  // isUserListFilter={true}
-                  // isCustomerFilter={isCustomerFilter}
-                  // FieldFiters
-                  isFieldFilter={true}
-                  isResetFilters={true}
-                  isStatusFilter={true}
-                  // isTestFilter={true}
 
-                  // Table
+
+                  // Data----------
                   columns={columns}
                   data={userList || []}
-                  setUserList={setUserList}
-                  // isStatusFilter={true}
-                  // isGlobalPagination={true}
-                  // isColumnFilter={true} // Change the prop name
-                  // isUserSuserFilter={true}
-                  // isSuserFilter={true}
-
-                  SearchPlaceholder="Search for users or something..."
-                  // useFilters={true}
                   customPageSize={20}
+
+                  // Styling----------
                   className="custom-header-css"
                   divClass="table-responsive table-card mb-3"
                   tableClass="align-middle table-nowrap mb-0"
                   theadClass="table-light table-nowrap"
                   thClass="table-light text-muted"
-                  handleEntryClick={handleUserClicks}
                 />
               ) : (
                 <Loader error={error} />

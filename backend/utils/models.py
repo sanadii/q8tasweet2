@@ -5,13 +5,40 @@ from django.contrib.auth import get_user_model as django_get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Field, Model
 from django.utils.html import format_html
+from slugify import slugify
 
+from django.apps import apps
 from utils.importing import import_dotted_path
 
 
 def get_current_user(request):
     return request.user if request.user.is_authenticated else None
 
+
+def generate_slug(value):
+    """
+    Generate a unique slug for a given value.
+    Currently Not used
+    """
+    # Slugify the value
+    Election = apps.get_model('elections', 'Election')
+
+    slug = slugify(value, separator="-", lowercase=True, max_length=50)
+
+    # Check if the slug already exists in the Election model
+    existing_slugs = Election.objects.filter(slug__startswith=slug).values_list('slug', flat=True)
+
+    if slug not in existing_slugs:
+        return slug
+
+    # If the slug already exists, append a number to make it unique
+    counter = 1
+    new_slug = f"{slug}-{counter}"
+    while new_slug in existing_slugs:
+        counter += 1
+        new_slug = f"{slug}-{counter}"
+
+    return new_slug
 
 def get_user_model():
     warnings.warn(

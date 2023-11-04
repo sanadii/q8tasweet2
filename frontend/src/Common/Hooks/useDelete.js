@@ -27,7 +27,8 @@ const useDelete = (deleteAction) => {
   const checkedAll = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
     const checkedEntries = document.querySelectorAll(".checkboxSelector");
-
+    console.log("checked Entries:", checkedEntries);
+    
     if (checkall.checked) {
       checkedEntries.forEach(entry => {
         entry.checked = true;

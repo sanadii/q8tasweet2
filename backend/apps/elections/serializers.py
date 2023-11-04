@@ -29,7 +29,6 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "elect_type", "elect_result", "elect_votes", "elect_seats",
             "electors", "electors_males", "electors_females",
             "attendees", "attendees_males", "attendees_females",
-            "status", "priority"
         ]
 
     def get_election_name(self, obj):

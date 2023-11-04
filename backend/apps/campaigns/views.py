@@ -77,8 +77,7 @@ class GetCampaignDetails(APIView):
         current_campaign_member = get_current_campaign_member(campaign.id, user_id, context)
 
         # Fetch campaign members based on user/member role
-        campaign_members = get_campaign_members_by_role(campaign, user_role, current_campaign_member)
-        campaign_managed_members = get_campaign_members_by_role(campaign, user_role, current_campaign_member)
+        campaign_members, campaign_managed_members = get_campaign_members_by_role(campaign, user_role, current_campaign_member)
 
         # Extract user ids from campaign_managed_members to further filter guarantees based on member's user
         campaign_guarantees = CampaignGuarantee.objects.filter(

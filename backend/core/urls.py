@@ -1,5 +1,5 @@
 """
-This is the main ``urlconf`` for Q8Tasweet - it sets up patterns for
+This is the main ``urls`` for Q8Tasweet - it sets up patterns for
 all the various Q8Tasweet apps, third-party apps like docs and schema.
 """
 from django.contrib import admin

@@ -23,6 +23,7 @@ const CheckboxHeader = ({ checkedAll }) => (
   />
 );
 
+
 const CheckboxCell = ({ row, deleteCheckbox }) => (
   <input
     type="checkbox"
@@ -73,7 +74,7 @@ const Status = (cellProps) => {
     return acc;
   }, {});
 
-  const { name, badgeClass } = statusMapping[cellProps.row.original.status] || {
+  const { name, badgeClass } = statusMapping[cellProps.row.original.task.status] || {
     name: "غير معرف",
     badgeClass: "badge bg-primary",
   };
@@ -89,7 +90,7 @@ const Priority = (cellProps) => {
     return acc;
   }, {});
 
-  const { name, badgeClass } = priorityMapping[cellProps.row.original.priority] || {
+  const { name, badgeClass } = priorityMapping[cellProps.row.original.task.priority] || {
     name: "غير معرف",
     badgeClass: "badge bg-primary",
   };

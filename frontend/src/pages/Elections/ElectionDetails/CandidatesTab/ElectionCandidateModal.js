@@ -34,7 +34,6 @@ export const ElectionCandidateModal = ({
   const openModal = () => {
     setModal(!modal);
     setIsAddNewCandidate(false);
-
   };
 
   const toggleModal = () => { setModal(!modal); };
