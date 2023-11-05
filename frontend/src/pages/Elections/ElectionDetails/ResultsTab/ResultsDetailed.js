@@ -43,6 +43,7 @@ const ResultsDetailed = () => {
     [electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election]
   );
 
+  console.log("electionCandidates: ", electionCandidates)
   // Detailed Results: Handle Save Committee Results
   const handleSaveCommitteeResults = useSaveCommitteeResults(
     committeeEditedData,
@@ -58,10 +59,11 @@ const ResultsDetailed = () => {
       {
         Header: 'المركز',
         accessor: 'position',
+
       },
       {
         Header: "المرشح",
-        accessor: 'name',
+        // accessor: 'name',
         Cell: (cellProps) =>
           <ImageCandidateWinnerCircle
             gender={cellProps.row.original.gender}
@@ -76,6 +78,16 @@ const ResultsDetailed = () => {
         Header: 'المجموع',
         accessor: 'total',
       },
+      {
+        Header: 'الأصوات',
+        // accessor: 'votes',
+        Cell: (electionCandidates) => (
+          <>
+            {electionCandidates.row.original.votes}
+          </>
+        ),
+      }
+
     ];
     // Add columns for each committee
     electionCommittees.forEach((committee) => {
@@ -96,12 +108,16 @@ const ResultsDetailed = () => {
     return columns;
   }
 
+
+  
   const columns = useMemo(() => {
     if (!electionCandidates) {
       return [];
     }
     return createColumns();
   }, [electionCandidates, transformedData, committeeEdited]);
+
+
 
   return (
     <React.Fragment>

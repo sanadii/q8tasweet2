@@ -27,7 +27,6 @@ const CommitteeButton = ({ committeeId, committee, isEdited, hasChanges, handleS
 };
 
 
-// ResultInputField is a controlled component for vote input that localizes its state and synchronizes it with the parent component's state onBlur.
 export const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
   const [localVotes, setLocalVotes] = useState(value);
 
@@ -59,6 +58,60 @@ export const ResultInputField = ({ candidateId, committeeId, value, onChange }) 
   );
 };
 
+// Final Result Input field
+// export const ResultInputField = (({ candidateId, value, onChange }) => {
+//   const [localVotes, setLocalVotes] = useState(value);
+
+//    useEffect(() => {
+//     setLocalVotes(value);
+//   }, [value]);
+
+//   const handleBlur = () => {
+//     onChange(candidateId, localVotes);
+//   };
+
+//   return (
+//     <input
+//       type="number"
+//       maxLength="5"
+//       pattern="\d*"
+//       style={{ width: "5em" }}
+//       value={localVotes}
+//       onChange={(e) => setLocalVotes(e.target.value)}
+//       onBlur={handleBlur}
+//     />
+//   );
+// });
+
+// // VoteInput.displayName = 'VoteInput'; // Add this line to define a display name
+
+// // ResultInputField is a controlled component for vote input that localizes its state and synchronizes it with the parent component's state onBlur.
+// const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
+//   const [localVote, setLocalVotes] = useState(value);
+
+//   useEffect(() => {
+//     setLocalVotes(value);
+//   }, [value]);
+
+//   const handleBlur = () => {
+//     onChange(localVote);
+//   };
+
+//   return (
+//     <input
+//       key={`${candidateId}-${committeeId}`}
+//       type="text"
+//       maxLength="5"
+//       pattern="\d*"
+//       inputMode="numeric"
+//       style={{ width: "5em" }}
+//       value={localVote}
+//       onChange={(e) => setLocalVotes(e.target.value)}
+//       onBlur={handleBlur}
+//     />
+//   );
+// };
+
 // createVoteInputField is a factory function to create a ResultInputField component with bound parameters.
 const createVoteInputField = (candidateId, committeeId, votes, handleCommitteeVoteChange) => {
   return (
@@ -87,33 +140,25 @@ const transformData = (electionCandidates, electionCommittees, committeeEdited, 
   if (!electionCandidates || !electionCommittees || !election) return [];
 
   const candidatesWithTotalVotes = electionCandidates.map(candidate => {
+    const totalVotes = calculateTotalVotes(candidate, electionCommittees);
     const transformedCandidate = {
       'candidate.id': candidate.id,
       position: candidate.position,
       name: candidate.name,
-      votes: candidate.votes,
-      total: calculateTotalVotes(candidate, electionCommittees),
+      total: totalVotes
     };
 
     electionCommittees.forEach(committee => {
       const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
       const votes = committeeEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
       transformedCandidate[`committee_${committee.id}`] = committeeEdited[committee.id]
-        ? <ResultInputField
-          candidateId={candidate.id}
-          committeeId={committee.id}
-          value={votes}
-          onChange={(value) => handleCommitteeVoteChange(candidate.id, committee.id, value)}
-        />
-
+        ? createVoteInputField(candidate.id, committee.id, votes, handleCommitteeVoteChange)
         : votes;
-
     });
 
     return transformedCandidate;
   });
 
-  
   const calculateCandidatePosition = (candidates) => {
     const sortedCandidates = [...candidates].sort((a, b) => b.total - a.total);
     sortedCandidates.forEach((candidate, index) => {
