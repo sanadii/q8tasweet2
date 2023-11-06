@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 
-const CommitteeButton = ({ committeeId, committee, isEdited, hasChanges, handleSaveCommitteeResults, toggleCommitteeToEdit }) => {
+const CommitteeVoteButton = ({ committeeId, committee, isEdited, hasChanges, handleSaveCommitteeResults, toggleCommitteeToEdit }) => {
     const buttonText = isEdited ? (hasChanges ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `Committee ${committeeId}`);
     const buttonClass = isEdited ? (hasChanges ? 'btn-success' : 'btn-danger') : 'btn-info';
 
@@ -21,5 +21,5 @@ const CommitteeButton = ({ committeeId, committee, isEdited, hasChanges, handleS
 
 
 export {
-    CommitteeButton,
+    CommitteeVoteButton,
 };

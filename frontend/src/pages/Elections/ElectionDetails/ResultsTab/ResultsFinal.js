@@ -7,7 +7,7 @@ import { Button, Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import { updateElectionCandidateVotes } from "store/actions";
 
-import { ResultInputField } from './ResultHelper';
+import { ResultInputField } from './CommitteeResultHelper';
 
 const ResultsFinal = () => {
   const dispatch = useDispatch();

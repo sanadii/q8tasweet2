@@ -9,7 +9,7 @@ import { electionSelector } from 'Selectors';
 import { TableContainer, TableContainerHeader } from "Common/Components";
 import { ImageCandidateWinnerCircle } from "Common/Components";
 
-import { transformData, useSaveCommitteeResults, CommitteeButton } from './ResultHelper'; // Importing the transformData function
+import { transformData, useSaveCommitteeResults, CommitteeVoteButton } from './CommitteeResultHelper'; // Importing the transformData function
 
 // Utility and Third-Party Library Imports
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -43,7 +43,6 @@ const ResultsDetailed = () => {
     [electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election]
   );
 
-  console.log("electionCandidates: ", electionCandidates)
   // Detailed Results: Handle Save Committee Results
   const handleSaveCommitteeResults = useSaveCommitteeResults(
     committeeEditedData,
@@ -93,7 +92,7 @@ const ResultsDetailed = () => {
     electionCommittees.forEach((committee) => {
       columns.push({
         Header: () => (
-          <CommitteeButton
+          <CommitteeVoteButton
             committeeId={committee.id}
             committee={committee}
             isEdited={committeeEdited[committee.id]}
