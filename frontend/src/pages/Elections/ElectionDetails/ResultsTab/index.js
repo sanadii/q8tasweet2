@@ -9,8 +9,12 @@ import { electionSelector } from 'Selectors';
 import { TableContainer, TableContainerHeader } from "Common/Components";
 import { ImageCandidateWinnerCircle } from "Common/Components";
 
-import { transformCommitteeCandidateData, useSaveCommitteeResults, CommitteeVoteButton } from './CommitteeResultHelper'; // Importing the transformCommitteeCandidateData function
-import { transformCandidateData, useSaveCandidateResults, CandidateVoteButton } from './CandidateResultHelper'; // Importing the transformCommitteeCandidateData function
+import {
+  HeaderVoteButton,
+  transformResulteData,
+  useSaveCommitteeResults,
+} from './ResultHelper';
+
 
 // Utility and Third-Party Library Imports
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -21,199 +25,149 @@ const ResultsTab = () => {
   const { election, electionCandidates, electionCommittees } = useSelector(electionSelector);
   const electionResult = election.electResult;
 
+  // Results: States
+  const [resultFieldEdited, setResultFieldEdited] = useState({});
+  const [resultFieldEditedData, setResultFieldEditedData] = useState({});
 
 
-
-  // Detailed Results: States -----------------------------------------------------------
-  const [committeeEdited, setCommitteeEdited] = useState({}); // Can Carry Arrays
-  const [committeeEditedData, setCommitteeEditedData] = useState({});
-
-  // Detailed Results: Toggle Committee To Edit Mode
-  const toggleCommitteeToEdit = (committeeId) => {
-    setCommitteeEdited(prev => ({ ...prev, [committeeId]: !prev[committeeId] }));
+  // Results: Toggle Vote Column To Edit / Save / Close Mode
+  const toggleRowToEdit = (committeeId) => {
+    if (committeeId !== undefined) { // or simply `if (committeeId)` if `committeeId` is never 0 or null
+      setResultFieldEdited(prev => ({ ...prev, [committeeId]: !prev[committeeId] }));
+    } else {
+      setResultFieldEdited(prev => !prev);
+    }
   };
 
-  // Detailed Results: Handle Editing Cells
-  const handleCommitteeVoteChange = (candidateId, committeeId, newValue) => {
-    setCommitteeEditedData(prev => ({
-      ...prev,
-      [committeeId]: { ...prev[committeeId], [candidateId]: newValue }
-    }));
+
+  // Results: Handle Editing Cells
+  const handleResultVoteChange = (candidateId, newValue, committeeId) => {
+    console.log("committeeId:", committeeId, "candidateId:", candidateId, "newValue:", newValue)
+    setResultFieldEditedData(prev => {
+      // Check if the committeeId is provided
+      if (committeeId !== undefined) { // or simply `if (committeeId)` if `committeeId` is never 0 or null
+        return {
+          ...prev, [committeeId]: { ...(prev[committeeId] || {}), [candidateId]: newValue }
+        };
+      } else {
+        return {
+          ...prev, [candidateId]: newValue
+        };
+      }
+    });
   };
 
-  // Detailed Results: Transformed Data [Taking ElectionCommitteeResults together with the committeeEdited]
+
+  // Detailed Results: Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
   const transformedCommitteeCandidateData = useMemo(
-    () => transformCommitteeCandidateData(electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election),
-    [electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election]
+    () => transformResulteData(
+      electionCandidates,
+      electionCommittees,
+      resultFieldEdited,
+      handleResultVoteChange,
+      election
+    ),
+    [
+      electionCandidates,
+      electionCommittees,
+      resultFieldEdited,
+      handleResultVoteChange,
+      election]
   );
 
 
-  // Detailed Results: Handle Save Committee Results
-  const handleSaveCommitteeResults = useSaveCommitteeResults(
-    committeeEditedData,
-    committeeEdited,
-    setCommitteeEdited,
-    setCommitteeEditedData,
-    toggleCommitteeToEdit
+  // Detailed Results: Handle Save Committee Results --------------------
+  const handleSavResults = useSaveCommitteeResults(
+    resultFieldEditedData,
+    resultFieldEdited,
+    setResultFieldEdited,
+    setResultFieldEditedData,
+    toggleRowToEdit
   );
 
 
 
-  // // Final Results: States -----------------------------------------------------------
-  const [candidateEdited, setCandidateEdited] = useState(false); // Can Carry Arrays
-  const [candidateEditedData, setCandidateEditedData] = useState({});
-
-
-  // // Final Results: Toggle Committee To Edit Mode
-  const toggleCandidateToEdit = () => {
-    setCandidateEdited(prev => !prev);
-
-  };
-
-
-  // // Final Results: Handle Editing Cells
-  const handleCandidateVoteChange = (candidateId, newValue) => {
-    setCandidateEditedData(prev => ({
-      ...prev, [candidateId]: newValue
-    }));
-  };
-
-  // // Final Results: Transformed Data [Taking ElectionCommitteeResults together with the candidateEdited]
-  const transformedCandidateData = useMemo(
-    () => transformCandidateData(election, electionCandidates, candidateEdited, handleCandidateVoteChange),
-    [election, electionCandidates, candidateEdited, handleCandidateVoteChange]
-  );
-
-  // // Final Results: Handle Save Committee Results
-  const handleSaveCandidateResults = useSaveCandidateResults(
-    candidateEditedData,
-    candidateEdited,
-    setCandidateEdited,
-    setCandidateEditedData,
-    toggleCommitteeToEdit
-  );
-
-  // 
-
-
-  const createCommitteeCandidateVoteColumns = (data) => {
-    const columns = [
+  // Creating the columns for both Final and Detailed Results
+  const createColumnsBasedOnElectionResult = (result) => {
+    // Base columns that are always present
+    const baseColumns = [
       {
         Header: 'المركز',
         accessor: 'position',
-
       },
       {
-        Header: "المرشح",
-        // accessor: 'name',
-        Cell: (cellProps) =>
+        Header: 'المرشح',
+        Cell: ({ row }) => (
           <ImageCandidateWinnerCircle
-            gender={cellProps.row.original.gender}
-            name={cellProps.row.original.name}
-            imagePath={cellProps.row.original.image}
-            isWinner={cellProps.row.original.isWinner}
-          />,
-      },
-
-      // ResultDetailed: Table
-      {
-        Header: 'المجموع',
-        accessor: 'total',
+            gender={row.original.gender}
+            name={row.original.name}
+            imagePath={row.original.image}
+            isWinner={row.original.isWinner}
+          />
+        ),
       },
     ];
-    // Add columns for each committee
-    electionCommittees.forEach((committee) => {
-      columns.push({
+
+    // Columns for when electionResult is 1
+    if (result === 1) {
+      return [
+        ...baseColumns,
+        {
+          Header: () => (
+            <HeaderVoteButton
+              isCandidateEdited={resultFieldEdited}
+              hasChanges={resultFieldEditedData && Object.keys(resultFieldEditedData).length > 0}
+              handleSavResults={handleSavResults}
+              toggleRowToEdit={toggleRowToEdit}
+            />
+          ),
+          accessor: 'votes',
+        },
+      ];
+    }
+
+    // Columns for when electionResult is 2
+    if (result === 2 && electionCandidates) {
+      const committeeColumns = electionCommittees.map(committee => ({
         Header: () => (
-          <CommitteeVoteButton
+          <HeaderVoteButton
             committeeId={committee.id}
             committee={committee}
-            isEdited={committeeEdited[committee.id]}
-            hasChanges={committeeEditedData[committee.id] && Object.keys(committeeEditedData[committee.id]).length > 0}
-            handleSaveCommitteeResults={handleSaveCommitteeResults}
-            toggleCommitteeToEdit={toggleCommitteeToEdit}
+            isCommitteeEdited={resultFieldEdited[committee.id]}
+            hasChanges={resultFieldEditedData[committee.id] && Object.keys(resultFieldEditedData[committee.id]).length > 0}
+            handleSavResults={handleSavResults}
+            toggleRowToEdit={toggleRowToEdit}
           />
         ),
         accessor: `committee_${committee.id}`,
-      });
-    });
-    return columns;
-  }
+      }));
 
-  const createCandidateVoteColumns = (data) => {
-    const columns = [
-      {
-        Header: 'المركز',
-        accessor: 'position',
-      },
-      {
-        Header: "المرشح",
-        // accessor: 'name',
-        Cell: (cellProps) =>
-          <ImageCandidateWinnerCircle
-            gender={cellProps.row.original.gender}
-            name={cellProps.row.original.name}
-            imagePath={cellProps.row.original.image}
-            isWinner={cellProps.row.original.isWinner}
-          />,
-      },
-    ];
-    // Add the vote field / value
-    columns.push({
-      Header: () => (
-        <CandidateVoteButton
-          // candidateVotes={candidateVotes}
-          isCandidateEdited={candidateEdited}
-          hasChanges={candidateEditedData && Object.keys(candidateEditedData).length > 0}
-          handleSaveCandidateResults={handleSaveCandidateResults}
-          toggleCandidateToEdit={toggleCandidateToEdit}
-          onChange={handleCandidateVoteChange}
+      return [
+        ...baseColumns,
+        { Header: 'المجموع', accessor: 'total' },
+        ...committeeColumns,
+      ];
+    }
 
-        />
-      ),
-      accessor: 'votes',
-    });
-    return columns;
-  }
+    return [];
+  };
 
-
-  let electionCandidateList;
-
-  if (electionResult === 1) {
-    electionCandidateList = transformedCandidateData
-
-    // isCandidateEdited = candidateEdited
-    // hasChanges = candidateEditedData && Object.keys(candidateEditedData).length > 0
-    // handleSaveCandidateResults = handleSaveCandidateResults
-    // toggleCandidateToEdit = toggleCandidateToEdit
-    // onChange = handleCandidateVoteChange
-
-
-  } else if (electionResult === 2) {
-    electionCandidateList = transformedCommitteeCandidateData;
-
-    // committeeId = committee.id
-    // committee = committee
-    // isEdited = committeeEdited[committee.id]
-    // hasChanges = committeeEditedData[committee.id] && Object.keys(committeeEditedData[committee.id]).length > 0
-    // handleSaveCommitteeResults = handleSaveCommitteeResults
-    // toggleCommitteeToEdit = toggleCommitteeToEdit
-  }
+  const electionCandidateList = electionResult === 1
+    ? transformedCommitteeCandidateData
+    : electionResult === 2
+      ? transformedCommitteeCandidateData
+      : [];
 
   const columns = useMemo(() => {
-    if (electionResult === 1) {
-      return createCandidateVoteColumns();
+    return createColumnsBasedOnElectionResult(electionResult);
+  }, [
+    electionResult,
+    electionCandidates,
+    electionCommittees,
+    resultFieldEdited,
+    resultFieldEditedData,
+  ]);
 
-    } if (electionResult === 2) {
-      if (!electionCandidates) {
-        return [];
-      }
-      return createCommitteeCandidateVoteColumns();
-
-    } else {
-      return [];
-    }
-  }, [electionCandidates, transformedCandidateData, transformedCommitteeCandidateData, committeeEdited, candidateEdited]);
 
 
 
@@ -229,6 +183,7 @@ const ResultsTab = () => {
                   ContainerHeaderTitle="النتائج التفصيلية"
                 />
                 <TableContainer
+
                   // Data
                   columns={columns}
                   data={electionCandidateList}

@@ -11,7 +11,7 @@ import { electionSelector } from 'Selectors';
 import { Loader, ExportCSVModal, TableContainer, TableContainerHeader } from "Common/Components";
 // import { calculateCandidatePosition } from "./CandidateCalculations"
 import { usePermission, useDelete } from "Common/Hooks";
-import { transformCommitteeCandidateData } from '../ResultsTab/CommitteeResultHelper'; // Importing the transformData function
+import { transformResulteData } from '../ResultsTab/ResultHelper'; // Importing the transformData function
 
 // UI & Utilities
 import { Col, Row, Card, CardHeader, CardBody, Nav, NavItem, NavLink } from "reactstrap";
@@ -34,7 +34,7 @@ const CandidatesTab = () => {
 
 
   const transformedData = useMemo(
-    () => transformCommitteeCandidateData(
+    () => transformResulteData(
       electionCandidates,
       electionCommittees,
       // committeeEdited,
