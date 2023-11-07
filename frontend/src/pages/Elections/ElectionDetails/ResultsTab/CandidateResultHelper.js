@@ -1,29 +1,30 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from "react-redux";
-import { updateElectionCommitteeResults } from "store/actions";
+import { updateElectionCandidateVotes } from "store/actions";
 
 
-// CommitteeVoteButton is responsible for rendering a button with different texts and classes
-// based on whether the committee is being edited or has changes.
+// CandidateVoteButton is responsible for rendering a button with different texts and classes
+// based on whether the Candidate is being edited or has changes.
 // Used Directly in the table columns as a Header
 
-const CommitteeVoteButton = ({ committeeId, committee, isEdited, hasChanges, handleSaveCommitteeResults, toggleCommitteeToEdit }) => {
-  const buttonText = isEdited ? (hasChanges ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `Committee ${committeeId}`);
-  const buttonClass = isEdited ? (hasChanges ? 'btn-success' : 'btn-danger') : 'btn-info';
+const CandidateVoteButton = ({ isCandidateEdited, hasChanges, handleSaveCandidateResults, toggleCandidateToEdit }) => {
+  // Determine the button text based on the editing state
+  const buttonText = isCandidateEdited ? (hasChanges ? 'حفظ' : 'اغلاق') : 'تعديل';
+  const buttonClass = isCandidateEdited ? (hasChanges ? 'btn-success' : 'btn-danger') : 'btn-info';
 
-  console.log("isEdited?", isEdited)
+  console.log("isCandidateEdited?", isCandidateEdited, "hasChanges?", hasChanges)
+
 
   const handleClick = () => {
-    if (isEdited && hasChanges) {
-      handleSaveCommitteeResults(committeeId);
+    if (isCandidateEdited && hasChanges) {
+      handleSaveCandidateResults();
+      // console.log("committeeId::", committeeId)
     }
-    toggleCommitteeToEdit(committeeId);
+    toggleCandidateToEdit('votes');
   };
 
   return (
-    <button
-      onClick={handleClick}
-      className={`btn btn-sm ml-2 ${buttonClass}`}>
+    <button onClick={handleClick} className={`btn btn-sm ml-2 ${buttonClass}`}>
       {buttonText}
     </button>
   );
@@ -41,13 +42,7 @@ const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
   }, [value]);
 
   const handleBlur = () => {
-    // If committeeId is provided, use it alongside candidateId to call onChange
-    if (committeeId) {
-      onChange(localVotes);
-    } else {
-      // If no committeeId is provided, call onChange with candidateId and localVotes
-      onChange(candidateId, localVotes);
-    }
+    onChange(candidateId, localVotes); // Always pass candidateId as the first argument and the new vote value as the second
   };
   console.log("candidateIdcandidateId: ", candidateId); // Check what you receive when the input changes
   console.log("newValuenewValue: ", value); // Check what you receive when the input changes
@@ -66,44 +61,30 @@ const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
   );
 };
 
-// createVoteInputField is a factory function to create a ResultInputField component with bound parameters.
 
-// calculateTotalVotes is a utility function to sum up the votes for a candidate across all committees.
-const calculateTotalVotes = (candidate, electionCommittees) => {
-  return electionCommittees.reduce((total, committee) => {
-    const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
-    return total + (committeeVote?.votes || 0);
-  }, 0);
-};
-
-
-// transformData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
+// transformCandidateData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
 // including calculating the total votes and candidate positions.
-const transformData = (electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election) => {
-  if (!electionCandidates || !electionCommittees || !election) return [];
+const transformCandidateData = (election, electionCandidates, candidateEdited, handleCandidateVoteChange) => {
+  if (!electionCandidates || !election) return [];
 
   const candidatesWithTotalVotes = electionCandidates.map(candidate => {
+    const votes = candidate.votes ?? 0;
     const transformedCandidate = {
-      'candidate.id': candidate.id,
+      candidateId: candidate.id,
       position: candidate.position,
       name: candidate.name,
-      votes: candidate.votes,
-      total: calculateTotalVotes(candidate, electionCommittees),
-    };
-
-    electionCommittees.forEach(committee => {
-      const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
-      const votes = committeeEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
-      transformedCandidate[`committee_${committee.id}`] = committeeEdited[committee.id]
+      image: candidate.imagePath,
+      gender: candidate.gender,
+      isWinner: candidate.isWinner,
+      // Here we check if the candidate is being edited and accordingly return a component or the votes
+      votes: candidateEdited
         ? <ResultInputField
           candidateId={candidate.id}
-          committeeId={committee.id}
           value={votes}
-          onChange={(value) => handleCommitteeVoteChange(candidate.id, committee.id, value)}
+          onChange={handleCandidateVoteChange}
         />
-
-        : votes;
-    });
+        : votes,
+    };
 
     return transformedCandidate;
   });
@@ -123,42 +104,20 @@ const transformData = (electionCandidates, electionCommittees, committeeEdited, 
 
 
 
-// useSaveCommitteeResults is a custom hook that dispatches an action to save committee results and handles local state updates related to editing.
-const useSaveCommitteeResults = (committeeEditedData, committeeEdited, setCommitteeEdited, setCommitteeEditedData, toggleCommitteeToEdit) => {
+// useSaveCandidateResults is a custom hook that dispatches an action to save committee results and handles local state updates related to editing.
+const useSaveCandidateResults = (candidateEditedData, candidateEdited, setCommitteeEdited, toggleCandidateToEdit) => {
   const dispatch = useDispatch();
+  console.log("GOOD:", candidateEditedData) // im getting this
 
-  return useCallback((committeeId) => {
-    if (committeeEditedData[committeeId]) {
-      const updatedElectionCommitteeResult = {
-        id: committeeId,
-        data: committeeEditedData[committeeId]
-      };
-      console.log("DataData:", committeeEditedData)
-      dispatch(updateElectionCommitteeResults(updatedElectionCommitteeResult));
-
-      // Reset edited data for this specific committee
-      const updatededitedCommittee = { ...committeeEdited };
-      delete updatededitedCommittee[committeeId];
-      setCommitteeEdited(updatededitedCommittee);
-
-      // Reset the modified data for this committee if needed
-      const updatedModifiedData = { ...committeeEditedData };
-      delete updatedModifiedData[committeeId];
-      setCommitteeEditedData(updatedModifiedData);
-
-      // Toggle edit mode off immediately, don’t wait for the action to complete
-      toggleCommitteeToEdit(committeeId);
-    } else {
-      // If no modifications are there but user still clicked save, simply toggle off the edit mode
-      toggleCommitteeToEdit(committeeId);
-    }
-  }, [committeeEditedData, dispatch, committeeEdited, setCommitteeEdited, setCommitteeEditedData, toggleCommitteeToEdit]);
+  return useCallback(() => {
+    dispatch(updateElectionCandidateVotes(candidateEditedData));
+    console.log("BAD::", candidateEditedData) // but this is empty
+  }, [candidateEditedData, dispatch]);
 };
 
 export {
-  transformData,
-  CommitteeVoteButton,
-  // CandidateVoteButton,
-  useSaveCommitteeResults,
+  transformCandidateData,
+  CandidateVoteButton,
+  useSaveCandidateResults,
   ResultInputField
 }

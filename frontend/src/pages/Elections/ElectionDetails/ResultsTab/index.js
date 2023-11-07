@@ -9,7 +9,8 @@ import { electionSelector } from 'Selectors';
 import { TableContainer, TableContainerHeader } from "Common/Components";
 import { ImageCandidateWinnerCircle } from "Common/Components";
 
-import { transformData, useSaveCommitteeResults, CommitteeVoteButton } from './CommitteeResultHelper'; // Importing the transformData function
+import { transformCommitteeCandidateData, useSaveCommitteeResults, CommitteeVoteButton } from './CommitteeResultHelper'; // Importing the transformCommitteeCandidateData function
+import { transformCandidateData, useSaveCandidateResults, CandidateVoteButton } from './CandidateResultHelper'; // Importing the transformCommitteeCandidateData function
 
 // Utility and Third-Party Library Imports
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -19,42 +20,6 @@ import "react-toastify/dist/ReactToastify.css";
 const ResultsTab = () => {
   const { election, electionCandidates, electionCommittees } = useSelector(electionSelector);
   const electionResult = election.electResult;
-
-
-  console.log("electionCandidates 1:", electionCandidates)
-
-
-  // // Detailed Results: States -----------------------------------------------------------
-  // // const [committeeEdited, setCommitteeEdited] = useState({}); // Can Carry Arrays
-  // // const [committeeEditedData, setCommitteeEditedData] = useState({});
-
-  // // Detailed Results: Toggle Committee To Edit Mode
-  // const toggleCommitteeToEdit = (committeeId) => {
-  //   setCommitteeEdited(prev => ({ ...prev, [committeeId]: !prev[committeeId] }));
-  // };
-
-  // // Detailed Results: Handle Editing Cells
-  // const handleCommitteeVoteChange = (candidateId, committeeId, newValue) => {
-  //   setCommitteeEditedData(prev => ({
-  //     ...prev,
-  //     [committeeId]: { ...prev[committeeId], [candidateId]: newValue }
-  //   }));
-  // };
-
-  // // Detailed Results: Transformed Data [Taking ElectionCommitteeResults together with the committeeEdited]
-  // const transformedData = useMemo(
-  //   () => transformData(electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election),
-  //   [electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election]
-  // );
-
-  // // Detailed Results: Handle Save Committee Results
-  // const handleSaveCommitteeResults = useSaveCommitteeResults(
-  //   committeeEditedData,
-  //   committeeEdited,
-  //   setCommitteeEdited,
-  //   setCommitteeEditedData,
-  //   toggleCommitteeToEdit
-  // );
 
 
 
@@ -77,12 +42,11 @@ const ResultsTab = () => {
   };
 
   // Detailed Results: Transformed Data [Taking ElectionCommitteeResults together with the committeeEdited]
-  const transformedData = useMemo(
-    () => transformData(electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election),
+  const transformedCommitteeCandidateData = useMemo(
+    () => transformCommitteeCandidateData(electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election),
     [electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election]
   );
 
-  console.log("electionCandidates 2:", electionCandidates)
 
   // Detailed Results: Handle Save Committee Results
   const handleSaveCommitteeResults = useSaveCommitteeResults(
@@ -92,6 +56,44 @@ const ResultsTab = () => {
     setCommitteeEditedData,
     toggleCommitteeToEdit
   );
+
+
+
+  // // Final Results: States -----------------------------------------------------------
+  const [candidateEdited, setCandidateEdited] = useState(false); // Can Carry Arrays
+  const [candidateEditedData, setCandidateEditedData] = useState({});
+
+
+  // // Final Results: Toggle Committee To Edit Mode
+  const toggleCandidateToEdit = () => {
+    setCandidateEdited(prev => !prev);
+
+  };
+
+
+  // // Final Results: Handle Editing Cells
+  const handleCandidateVoteChange = (candidateId, newValue) => {
+    setCandidateEditedData(prev => ({
+      ...prev, [candidateId]: newValue
+    }));
+  };
+
+  // // Final Results: Transformed Data [Taking ElectionCommitteeResults together with the candidateEdited]
+  const transformedCandidateData = useMemo(
+    () => transformCandidateData(election, electionCandidates, candidateEdited, handleCandidateVoteChange),
+    [election, electionCandidates, candidateEdited, handleCandidateVoteChange]
+  );
+
+  // // Final Results: Handle Save Committee Results
+  const handleSaveCandidateResults = useSaveCandidateResults(
+    candidateEditedData,
+    candidateEdited,
+    setCandidateEdited,
+    setCandidateEditedData,
+    toggleCommitteeToEdit
+  );
+
+  // 
 
 
   const createCommitteeCandidateVoteColumns = (data) => {
@@ -155,38 +157,53 @@ const ResultsTab = () => {
             isWinner={cellProps.row.original.isWinner}
           />,
       },
-      {
-        Header: 'الأصوات',
-        // accessor: 'votes',
-        Cell: (cellProps) => (
-          <>
-            {cellProps.row.original.votes}
-          </>
-        ),
-      }
     ];
-    // Add columns for each committee
-    electionCommittees.forEach((committee) => {
-      columns.push({
-        Header: () => (
-          <CommitteeVoteButton
-            committeeId={committee.id}
-            committee={committee}
-            isEdited={committeeEdited[committee.id]}
-            hasChanges={committeeEditedData[committee.id] && Object.keys(committeeEditedData[committee.id]).length > 0}
-            handleSaveCommitteeResults={handleSaveCommitteeResults}
-            toggleCommitteeToEdit={toggleCommitteeToEdit}
-          />
-        ),
-        accessor: `committee_${committee.id}`,
-      });
+    // Add the vote field / value
+    columns.push({
+      Header: () => (
+        <CandidateVoteButton
+          // candidateVotes={candidateVotes}
+          isCandidateEdited={candidateEdited}
+          hasChanges={candidateEditedData && Object.keys(candidateEditedData).length > 0}
+          handleSaveCandidateResults={handleSaveCandidateResults}
+          toggleCandidateToEdit={toggleCandidateToEdit}
+          onChange={handleCandidateVoteChange}
+
+        />
+      ),
+      accessor: 'votes',
     });
     return columns;
+  }
+
+
+  let electionCandidateList;
+
+  if (electionResult === 1) {
+    electionCandidateList = transformedCandidateData
+
+    // isCandidateEdited = candidateEdited
+    // hasChanges = candidateEditedData && Object.keys(candidateEditedData).length > 0
+    // handleSaveCandidateResults = handleSaveCandidateResults
+    // toggleCandidateToEdit = toggleCandidateToEdit
+    // onChange = handleCandidateVoteChange
+
+
+  } else if (electionResult === 2) {
+    electionCandidateList = transformedCommitteeCandidateData;
+
+    // committeeId = committee.id
+    // committee = committee
+    // isEdited = committeeEdited[committee.id]
+    // hasChanges = committeeEditedData[committee.id] && Object.keys(committeeEditedData[committee.id]).length > 0
+    // handleSaveCommitteeResults = handleSaveCommitteeResults
+    // toggleCommitteeToEdit = toggleCommitteeToEdit
   }
 
   const columns = useMemo(() => {
     if (electionResult === 1) {
       return createCandidateVoteColumns();
+
     } if (electionResult === 2) {
       if (!electionCandidates) {
         return [];
@@ -196,7 +213,7 @@ const ResultsTab = () => {
     } else {
       return [];
     }
-  }, [electionCandidates, transformedData, committeeEdited]);
+  }, [electionCandidates, transformedCandidateData, transformedCommitteeCandidateData, committeeEdited, candidateEdited]);
 
 
 
@@ -214,7 +231,7 @@ const ResultsTab = () => {
                 <TableContainer
                   // Data
                   columns={columns}
-                  data={transformedData}
+                  data={electionCandidateList}
                   customPageSize={50}
                   isTableContainerFooter={true}
 

@@ -77,13 +77,13 @@ const calculateTotalVotes = (candidate, electionCommittees) => {
 };
 
 
-// transformData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
+// transformCommitteeCandidateData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
 // including calculating the total votes and candidate positions.
-const transformData = (electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election) => {
+const transformCommitteeCandidateData = (electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election) => {
   if (!electionCandidates || !electionCommittees || !election) return [];
 
   const candidatesWithTotalVotes = electionCandidates.map(candidate => {
-    const transformedCandidate = {
+    const transformedCommitteeCandidate = {
       'candidate.id': candidate.id,
       position: candidate.position,
       name: candidate.name,
@@ -94,7 +94,7 @@ const transformData = (electionCandidates, electionCommittees, committeeEdited, 
     electionCommittees.forEach(committee => {
       const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
       const votes = committeeEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
-      transformedCandidate[`committee_${committee.id}`] = committeeEdited[committee.id]
+      transformedCommitteeCandidate[`committee_${committee.id}`] = committeeEdited[committee.id]
         ? <ResultInputField
           candidateId={candidate.id}
           committeeId={committee.id}
@@ -105,7 +105,7 @@ const transformData = (electionCandidates, electionCommittees, committeeEdited, 
         : votes;
     });
 
-    return transformedCandidate;
+    return transformedCommitteeCandidate;
   });
 
 
@@ -156,7 +156,7 @@ const useSaveCommitteeResults = (committeeEditedData, committeeEdited, setCommit
 };
 
 export {
-  transformData,
+  transformCommitteeCandidateData,
   CommitteeVoteButton,
   // CandidateVoteButton,
   useSaveCommitteeResults,
