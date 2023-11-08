@@ -8,26 +8,32 @@ import { updateElectionCommitteeResults, updateElectionCandidateVotes } from "st
 // Used Directly in the table columns as a Header
 
 const HeaderVoteButton = ({
-  committee, committeeId,
-  isCandidateEdited, isCommitteeEdited,
+  committee,
+  committeeId,
+  isEdited,
+  candidateVoteFieldEdited,
+  committeeVoteFieldEdited,
   hasChanges,
-  handleSaveCandidateResults,
-  handleSavResults,
-  toggleRowToEdit,
+  handleSaveResults,
+  toggleColumnToEdit,
 }) => {
   // Determine the button text and class based on the editing state
-  const buttonClass = isCommitteeEdited || isCandidateEdited ? (hasChanges ? 'btn-success' : 'btn-danger') : 'btn-info';
-  const buttonText = isCommitteeEdited || isCandidateEdited ? (hasChanges ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
+  const buttonText = isEdited ? (hasChanges ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
+  const buttonClass = isEdited ? (hasChanges ? 'btn-success' : 'btn-danger') : 'btn-info';
+
+  console.log("Button: isEdited: ", isEdited, "hasChanges: ", hasChanges)
 
   const handleClick = () => {
-    if (isCommitteeEdited && hasChanges) {
-      handleSavResults(committeeId);
-    } else if (isCandidateEdited && hasChanges) {
-      handleSavResults();
+    if (hasChanges && committeeId) {
+      handleSaveResults(committeeId);
+
+
+    } else if (hasChanges && !committeeId) {
+      handleSaveResults();
       console.log("handleSaveCandidateResults is called")
     }
 
-    toggleRowToEdit(committeeId);
+    toggleColumnToEdit(committeeId);
   };
 
   return (
@@ -56,8 +62,8 @@ const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
       onChange(candidateId, localVotes);
     }
   };
-  console.log("candidateIdcandidateId: ", candidateId); // Check what you receive when the input changes
-  console.log("newValuenewValue: ", value); // Check what you receive when the input changes
+  // console.log("candidateIdcandidateId: ", candidateId); // Check what you receive when the input changes
+  // console.log("newValuenewValue: ", value); // Check what you receive when the input changes
 
   return (
     <input
@@ -83,53 +89,69 @@ const calculateTotalVotes = (candidate, electionCommittees) => {
 };
 
 
-// transformResulteData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
+// transformResultData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
 // including calculating the total votes and candidate positions.
-const transformResulteData = (
+
+const transformResultData = (
   electionCandidates,
   electionCommittees,
-  resultFieldEdited,
+  candidateVoteFieldEdited,
+  committeeVoteFieldEdited,
   handleResultVoteChange,
   election
 ) => {
-
   if (!electionCandidates || !electionCommittees || !election) return [];
 
-  const candidatesWithTotalVotes = electionCandidates.map(candidate => {
-    const votes = candidate.votes ?? 0;
+  console.log(`Rendering isEdited mode: ${candidateVoteFieldEdited}`);
+  console.log(`Rendering isEdited mode: ${committeeVoteFieldEdited}`);
+
+
+  const candidatesWithTotalVotes = electionCandidates.map((candidate) => {
+    const candidateVotes = candidate.votes ?? 0;
+
+
     const transformedCommitteeCandidate = {
-      candidateId: candidate.id,
+      'candidate.id': candidate.id,
       position: candidate.position,
       name: candidate.name,
       gender: candidate.gender,
+
       image: candidate.imagePath,
       isWinner: candidate.isWinner,
       total: calculateTotalVotes(candidate, electionCommittees),
 
-      // Differentiation
-      votes: resultFieldEdited
-        ? <ResultInputField
+      // Conditionally render ResultInputField or display votes based on edit mode
+      votes:
+        // candidateVoteFieldEdited ? (
+        <ResultInputField
           candidateId={candidate.id}
-          value={votes}
-          onChange={(value) => handleResultVoteChange(candidate.id, value)}
+          value={candidateVotes}
+          onChange={(newValue) => handleResultVoteChange(candidate.id, undefined, newValue)} // Pass `undefined` for `committeeId`
         />
-        : votes,
+      // ) : (
+      //   candidateVotes
+      // ),
     };
 
-    // Creating committee for Detailed Results
-    electionCommittees.forEach(committee => {
-      const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
-      const votes = resultFieldEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
-      transformedCommitteeCandidate[`committee_${committee.id}`] = resultFieldEdited[committee.id]
-        ? <ResultInputField
-          candidateId={candidate.id}
-          committeeId={committee.id}
-          value={votes}
-          onChange={(value) => handleResultVoteChange(committee.id, candidate.id, value)}
-        />
-        : votes;
-    });
+    // console.log("transformedCommitteeCandidate: ", transformedCommitteeCandidate)
+    console.log("candidateVoteFieldEdited: ", candidateVoteFieldEdited)
 
+
+    if (electionCommittees.length > 0) {
+      electionCommittees.forEach(committee => {
+        const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
+        const votes = committeeVoteFieldEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
+        transformedCommitteeCandidate[`committee_${committee.id}`] = committeeVoteFieldEdited[committee.id]
+          ? <ResultInputField
+            candidateId={candidate.id}
+            committeeId={committee.id}
+            value={votes}
+            onChange={(value) => handleResultVoteChange(candidate.id, committee.id, value)}
+          />
+
+          : votes;
+      });
+    }
 
     return transformedCommitteeCandidate;
   });
@@ -152,15 +174,17 @@ const transformResulteData = (
 // useSaveCommitteeResults is a custom hook that dispatches an action to save committee results and handles local state updates related to editing.
 const useSaveCommitteeResults = (
   resultFieldEditedData,
-  resultFieldEdited,
-  setResultFieldEdited,
+  candidateVoteFieldEdited,
+  committeeVoteFieldEdited,
+  setCandidateVoteFieldEdited,
+  setCommitteeVoteFieldEdited,
   setResultFieldEditedData,
-  toggleRowToEdit
+  toggleColumnToEdit
 ) => {
   const dispatch = useDispatch();
-  console.log("resultFieldEditedData: ", resultFieldEditedData)
+  // console.log("resultFieldEditedData: ", resultFieldEditedData)
   return useCallback((committeeId, candidateId) => {
-    if (resultFieldEditedData[committeeId]) {
+    if (committeeId) {
       const updatedElectionCommitteeResult = {
         id: committeeId,
         data: resultFieldEditedData[committeeId]
@@ -168,9 +192,9 @@ const useSaveCommitteeResults = (
       dispatch(updateElectionCommitteeResults(updatedElectionCommitteeResult));
 
       // Reset edited data for this specific committee
-      const updatededitedCommittee = { ...resultFieldEdited };
+      const updatededitedCommittee = { ...committeeVoteFieldEdited };
       delete updatededitedCommittee[committeeId];
-      setResultFieldEdited(updatededitedCommittee);
+      setCommitteeVoteFieldEdited(updatededitedCommittee);
 
       // Reset the modified data for this committee if needed
       const updatedModifiedData = { ...resultFieldEditedData };
@@ -178,21 +202,24 @@ const useSaveCommitteeResults = (
       setResultFieldEditedData(updatedModifiedData);
 
       // Toggle edit mode off immediately, don’t wait for the action to complete
-      toggleRowToEdit(committeeId);
+      toggleColumnToEdit(committeeId);
 
-    } if (resultFieldEditedData) {
+    } else if (!committeeId) {
+      //   // console.log("resultFieldEditedData:", resultFieldEditedData)
       dispatch(updateElectionCandidateVotes(resultFieldEditedData));
     } else {
       // If no modifications are there but user still clicked save, simply toggle off the edit mode
-      toggleRowToEdit(committeeId);
+      toggleColumnToEdit('votes');
     }
   }, [
     resultFieldEditedData,
     dispatch,
-    resultFieldEdited,
-    setResultFieldEdited,
+    candidateVoteFieldEdited,
+    committeeVoteFieldEdited,
+    setCandidateVoteFieldEdited,
+    setCommitteeVoteFieldEdited,
     setResultFieldEditedData,
-    toggleRowToEdit
+    toggleColumnToEdit
   ]);
 };
 
@@ -200,8 +227,6 @@ const useSaveCommitteeResults = (
 export {
   HeaderVoteButton,
   ResultInputField,
-
   useSaveCommitteeResults,
-
-  transformResulteData,
+  transformResultData,
 }
