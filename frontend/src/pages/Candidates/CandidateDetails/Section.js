@@ -16,7 +16,7 @@ import {
 import classnames from "classnames";
 
 //import images
-import slack from "../../../assets/images/brands/slack.png";
+import slack from "assets/images/brands/slack.png";
 import ElectionDetailsWidget from "./ElectionDetailsWidget";
 import OverviewTab from "./OverviewTab";
 import CandidatesTab from "./CandidatesTab";

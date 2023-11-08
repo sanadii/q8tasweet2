@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { electionSelector } from 'Selectors';
-import { TableContainer, TableContainerHeader, ImageCandidateWinnerCircle } from "Common/Components";
+import { TableContainer, TableContainerHeader, ImageCandidateWinnerCircle } from "components";
 import { Button, Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import { updateElectionCandidateVotes } from "store/actions";

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 
 // Import Images
-import error500 from "../../../assets/images/error500.png";
+import error500 from "assets/images/error500.png";
 
 const Error500 = () => {
 document.title ="500 Error | Q8Tasweet - React Admin & Dashboard Template";

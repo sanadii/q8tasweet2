@@ -7,8 +7,8 @@ import { electionSelector } from 'Selectors';
 import { updateElectionCandidateVotes } from "store/actions";
 
 // Component and UI Library Imports
-import { TableContainer, TableContainerHeader } from "Common/Components";
-import { ImageCandidateWinnerCircle } from "Common/Components";
+import { TableContainer, TableContainerHeader } from "components";
+import { ImageCandidateWinnerCircle } from "components";
 
 import { ResultInputField, transformData, useSaveCommitteeResults, CommitteeVoteButton } from './ResultHelper'; // Importing the transformData function
 

@@ -5,7 +5,7 @@ import { userSelector } from 'Selectors';
 import { updateUser } from "store/actions";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FieldComponent } from "Common/Components";
+import { FieldComponent } from "components";
 
 const EditSocialMedia = () => {
     const { user } = useSelector(userSelector);

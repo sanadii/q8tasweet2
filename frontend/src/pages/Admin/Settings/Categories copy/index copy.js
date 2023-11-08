@@ -3,8 +3,8 @@ import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeade
 import SimpleBar from "simplebar-react";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import DeleteModal from "../../../../Common/Components/Components/DeleteModal";
-import BreadCrumb from "../../../../Common/Components/Components/BreadCrumb";
+import DeleteModal from "../../../../components/Components/DeleteModal";
+import BreadCrumb from "../../../../components/Components/BreadCrumb";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";

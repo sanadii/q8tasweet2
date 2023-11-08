@@ -9,7 +9,7 @@ import { addNewElectionCampaign } from "store/actions";
 import { Link } from "react-router-dom";
 
 // Component imports
-import { ImageCircle } from "Common/Components";
+import { ImageCircle } from "components";
 
 // UI Components & styling imports
 import { ModalBody, Input, Modal, ModalHeader, Form } from "reactstrap";

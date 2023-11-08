@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { electionSelector } from 'Selectors';
 
 // Component and UI Library Imports
-import { TableContainer, TableContainerHeader } from "Common/Components";
+import { TableContainer, TableContainerHeader } from "components";
 import { Id, Position, Name, Total } from "./ResultsCol";
 import { CommitteeButton } from "./FormComponents";
 import { transformData } from './transformData'; // Importing the transformData function

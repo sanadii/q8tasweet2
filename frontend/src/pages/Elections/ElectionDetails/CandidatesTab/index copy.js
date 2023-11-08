@@ -9,9 +9,9 @@ import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from
 
 // Common Components
 import ElectionCandidateModal from "./ElectionCandidateModal";
-import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "Common/Components";
+import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
 // import { calculateCandidatePosition } from "./CandidateCalculations"
-import { usePermission, useDelete } from "Common/Hooks";
+import { usePermission, useDelete } from "hooks";
 
 // UI & Utilities
 import { Col, Row, Card, CardBody } from "reactstrap";

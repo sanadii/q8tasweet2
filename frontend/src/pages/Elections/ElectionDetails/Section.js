@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 import { electionSelector, categorySelector } from 'Selectors';
 
 // Components & Hooks
-import { ImageMedium } from "Common/Components";
-import { ImageLarge, SectionBackagroundImage } from "Common/Components";
-import { StatusBadge, PriorityBadge } from "Common/Constants";
+import { ImageMedium } from "components";
+import { ImageLarge, SectionBackagroundImage } from "components";
+import { StatusBadge, PriorityBadge } from "constants";
 
 // UI & Utilities
 import { Card, CardBody, CardFooter, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";

@@ -7,7 +7,7 @@ import { logoutUser } from "../../store/actions";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
-import withRouter from "../../Common/Components/Components/withRouter";
+import withRouter from "../../components/Components/withRouter";
 
 const Logout = (props) => {
   const dispatch = useDispatch();

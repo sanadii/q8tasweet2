@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Row } from 'reactstrap';
 
 //import images
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
+import avatar1 from "assets/images/users/avatar-1.jpg";
 
 import AuthSlider from '../authCarousel';
 

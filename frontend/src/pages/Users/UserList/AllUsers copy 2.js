@@ -9,8 +9,8 @@ import { userSelector } from 'Selectors';
 // Custom Components & ConstantsImports
 import UserModal from "./UserModal";
 import { Id, CheckboxHeader, CheckboxCell, Name, Username, Actions } from "./UserListCol";
-import { AvatarList, Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
-import { useDelete } from "Common/Hooks"
+import { AvatarList, Loader, DeleteModal, TableContainer, TableContainerHeader } from "components";
+import { useDelete } from "hooks"
 
 // Toast & Styles
 import { Col, Row, Card, CardBody } from "reactstrap";

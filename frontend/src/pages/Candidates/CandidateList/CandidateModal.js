@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import { addNewCandidate, updateCandidate } from "store/actions";
 
 // Custom Components & ConstantsImports
-import { GenderOptions, PriorityOptions, StatusOptions } from "Common/Constants";
-import { FieldComponent } from "Common/Components";
+import { GenderOptions, PriorityOptions, StatusOptions } from "constants";
+import { FieldComponent } from "components";
 
 // UI & Utilities Components
 import { Col, Row, Form, Modal, ModalHeader, ModalBody, Button } from "reactstrap";

@@ -9,7 +9,7 @@ import { layoutSelector } from 'Selectors/layoutSelector';
 // Import Data
 import navdata from "../LayoutMenuData";
 //i18n
-import withRouter from 'Common/Components/Components/withRouter';
+import withRouter from 'components/Components/withRouter';
 import { useSelector } from 'react-redux';
 
 

@@ -12,8 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 
 // Custom Components & ConstantsImports
-import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "Common/Constants";
-import useCategoryManager from "Common/Hooks/CategoryHooks";
+import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "constants";
+import useCategoryManager from "hooks/CategoryHooks";
 
 import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";

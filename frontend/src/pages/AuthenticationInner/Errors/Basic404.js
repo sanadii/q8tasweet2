@@ -4,7 +4,7 @@ import { Col, Container, Row } from 'reactstrap';
 import ParticlesAuth from "../ParticlesAuth";
 
 // Import Images
-import error from "../../../assets/images/error.svg";
+import error from "assets/images/error.svg";
 
 const Basic404 = () => {
 document.title ="404 Error Basic | Q8Tasweet - React Admin & Dashboard Template";

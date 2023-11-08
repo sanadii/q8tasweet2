@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import * as moment from "moment";
 
 // Component, Constants & Hooks
-import { StatusOptions, PriorityOptions } from 'Common/Constants';
-import { AvatarList } from "Common/Components";
+import { StatusOptions, PriorityOptions } from 'constants';
+import { AvatarList } from "components";
 
 const handleValidDate = (dueDate) => {
   const formattedDate = moment(dueDate).format("YYYY-MM-DD");

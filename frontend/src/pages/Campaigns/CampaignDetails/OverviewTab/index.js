@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { campaignSelector } from 'Selectors';
 
 // Components, Constants & Hooks
-import usePermission from "Common/Hooks/usePermission";
+import usePermission from "hooks/usePermission";
 import OverViewGuarantees from "./OverViewGuarantees";
 import OverviewSidebar from "./OverviewSidebar";
 import OverviewCandidate from "./OverviewCandidate";

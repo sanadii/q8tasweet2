@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 // Store & Selectors
 import { userSelector, campaignSelector } from 'Selectors';
-import usePermission from "Common/Hooks/usePermission";
+import usePermission from "hooks/usePermission";
 
 // UI & Utilities
 import { Card, CardBody, Col, Row } from "reactstrap";

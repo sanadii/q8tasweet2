@@ -9,8 +9,8 @@ import { candidateSelector } from 'Selectors';
 // Custom Components, Constants & Hooks Imports
 import CandidateModal from "./CandidateModal"
 import { Id, CheckboxHeader, CheckboxCell, Name, Status, Priority, CreateBy, Actions } from "./CandidateListCol";
-import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "Common/Components";
-import { useDelete, useFetchDataIfNeeded } from "Common/Hooks"
+import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "components";
+import { useDelete, useFetchDataIfNeeded } from "hooks"
 
 // Toast & Styles
 import { Col, Row, Card, CardBody } from "reactstrap";

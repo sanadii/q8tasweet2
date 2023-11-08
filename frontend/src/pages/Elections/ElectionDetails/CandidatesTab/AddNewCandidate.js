@@ -5,8 +5,8 @@ import { addNewCandidate, updateCandidate } from "store/actions";
 import { electionSelector } from 'Selectors';
 
 // Custom Components & ConstantsImports
-import { GenderOptions, PriorityOptions, StatusOptions } from "Common/Constants";
-import { FieldComponent } from "Common/Components";
+import { GenderOptions, PriorityOptions, StatusOptions } from "constants";
+import { FieldComponent } from "components";
 
 // UI & Utilities Components
 import { Col, Row, Form } from "reactstrap";

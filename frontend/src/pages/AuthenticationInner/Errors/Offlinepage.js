@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 
 // Import Images
-// import offlineImg from "../../../assets/images/auth-offline.gif";
+// import offlineImg from "assets/images/auth-offline.gif";
 
 const Offlinepage = () => {
     document.title = "Offline Page | Q8Tasweet - React Admin & Dashboard Template";

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 
 // Import Images
-import error400cover from "../../../assets/images/error400-cover.png";
+import error400cover from "assets/images/error400-cover.png";
 
 const Cover404 = () => {
 document.title="404 Error Cover | Q8Tasweet - React Admin & Dashboard Template";

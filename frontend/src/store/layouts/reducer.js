@@ -26,7 +26,7 @@ import {
   leftSidebarImageTypes,
   preloaderTypes,
   sidebarVisibilitytypes
-} from "../../Common/Constants/layout";
+} from "constants/layout";
 
 const INIT_STATE = {
   layoutType: layoutTypes.VERTICAL,

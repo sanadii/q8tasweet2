@@ -12,10 +12,10 @@ import { useFormik } from "formik";
 
 // Reactstrap (UI) imports
 import { Button, Row, Form } from "reactstrap";
-import { FieldComponent } from "Common/Components";
+import { FieldComponent } from "components";
 
 
-import { GenderOptions } from "Common/Constants"
+import { GenderOptions } from "constants"
 
 const EditPersonalDetails = () => {
     const dispatch = useDispatch();

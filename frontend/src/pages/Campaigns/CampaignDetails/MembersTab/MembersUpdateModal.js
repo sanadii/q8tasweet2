@@ -5,7 +5,7 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports 
-import { useSupervisorMembers, useCampaignRoles } from "Common/Hooks";
+import { useSupervisorMembers, useCampaignRoles } from "hooks";
 
 // Form validation imports
 import * as Yup from "yup";

@@ -3,8 +3,8 @@
 import React from 'react';
 import ReactApexChart from "react-apexcharts";
 import { Card, CardHeader, CardBody, Col, Row } from "reactstrap";
-import getChartColorsArray from "Common/Components/Charts/ChartsDynamicColor";
-import { GuaranteeStatusOptions } from "Common/Constants";
+import getChartColorsArray from "components/Charts/ChartsDynamicColor";
+import { GuaranteeStatusOptions } from "constants";
 
 const GuaranteeRadialBar = ({ results }) => {
     const description = "عرض نسبي لوضع حالات المضامينن.";

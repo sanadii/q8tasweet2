@@ -7,7 +7,7 @@ import { addNewElectionCommittee, updateElectionCommittee } from "store/actions"
 import { electionSelector } from 'Selectors';
 
 // Constants & Component imports
-import { GenderOptions } from "Common/Constants";
+import { GenderOptions } from "constants";
 
 // Form & validation imports
 import { useFormik } from "formik";

@@ -9,13 +9,13 @@ import logoDark from "../assets/images/logo-dark.png";
 import logoLight from "../assets/images/logo-light.png";
 
 //import Components
-import SearchOption from '../Common/Components/Filters/SearchOption';
-import WebAppsDropdown from '../Common/Components/Components/WebAppsDropdown';
-import MyCartDropdown from '../Common/Components/Components/MyCartDropdown';
-import FullScreenDropdown from '../Common/Components/Filters/FullScreenDropdown';
-import NotificationDropdown from '../Common/Components/Components/NotificationDropdown';
-import ProfileDropdown from '../Common/Components/Components/ProfileDropdown';
-import LightDark from '../Common/Components/Components/LightDark';
+import SearchOption from '../components/Filters/SearchOption';
+import WebAppsDropdown from '../components/Components/WebAppsDropdown';
+import MyCartDropdown from '../components/Components/MyCartDropdown';
+import FullScreenDropdown from '../components/Filters/FullScreenDropdown';
+import NotificationDropdown from '../components/Components/NotificationDropdown';
+import ProfileDropdown from '../components/Components/ProfileDropdown';
+import LightDark from '../components/Components/LightDark';
 
 import { changeSidebarVisibility } from '../store/actions';
 import { useSelector, useDispatch } from "react-redux";

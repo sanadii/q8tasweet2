@@ -14,8 +14,8 @@ import GuaranteeTarget from "./GuaranteeRadialBar"
 import GuaranteeRadialBar from "./GuaranteeRadialBar"
 
 
-import { Loader, TableContainer } from "Common/Components";
-import { GuaranteeStatusOptions } from "Common/Constants";
+import { Loader, TableContainer } from "components";
+import { GuaranteeStatusOptions } from "constants";
 import {
     calculateCampaignData,
     getGuaranteesCountsForMember,
@@ -23,12 +23,12 @@ import {
     getAggregatedGuarantorData,
     getStatusCountForMember,
     constructStatusColumns,
-} from 'Common/Hooks/campaignCalculation';
+} from 'hooks/campaignCalculation';
 
 // UI & Utilities
 import { Card, CardHeader, CardBody, Col, Row, Progress } from "reactstrap";
 import { DefaultProgressExample, BackgroundColorExample, LabelExample, MultipleBarsExample, HeightExample, StripedExample, AnimatedStripedExample, GradientExample, AnimatedExample, CustomExample, CustomProgressExample, ContentExample, ProgressWithStepExample, StepProgressArrowExample } from './UiProgressCode';
-import PreviewCardHeader from "Common/Components/Components/PreviewCardHeader";
+import PreviewCardHeader from "components/Components/PreviewCardHeader";
 
 
 const OverViewGuarantees = () => {

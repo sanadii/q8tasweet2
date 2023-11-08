@@ -1,5 +1,5 @@
 import React from 'react';
-import withRouter from '../../Common/Components/Components/withRouter';
+import withRouter from '../../components/Components/withRouter';
 
 const ParticlesAuth = ({ children }) => {
     return (

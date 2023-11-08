@@ -5,7 +5,7 @@ import { updateCampaignGuarantee } from "store/actions";
 import { campaignSelector } from 'Selectors';
 
 // Component & Constants imports
-import { GuaranteeStatusOptions, GenderOptions } from "Common/Constants";
+import { GuaranteeStatusOptions, GenderOptions } from "constants";
 
 // Form & Validation imports
 import * as Yup from "yup";

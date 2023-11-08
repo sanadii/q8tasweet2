@@ -25,7 +25,7 @@ import {
   ImageGenderCircle,
   ImageCandidateCampaign,
   DeleteModal,
-} from "../../../Common/Components";
+} from "../../../components";
 
 import CandidateCampaignModal from "./Modals/CandidateCampaignModal";
 

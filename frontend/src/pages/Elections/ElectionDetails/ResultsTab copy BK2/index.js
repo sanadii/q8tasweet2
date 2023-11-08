@@ -6,8 +6,8 @@ import { useSelector } from "react-redux";
 import { electionSelector } from 'Selectors';
 
 // Component and UI Library Imports
-import { TableContainer, TableContainerHeader } from "Common/Components";
-import { ImageCandidateWinnerCircle } from "Common/Components";
+import { TableContainer, TableContainerHeader } from "components";
+import { ImageCandidateWinnerCircle } from "components";
 
 import { transformCommitteeCandidateData, useSaveCommitteeResults, CommitteeVoteButton } from './CommitteeResultHelper'; // Importing the transformCommitteeCandidateData function
 import { transformCandidateData, useSaveCandidateResults, CandidateVoteButton } from './CandidateResultHelper'; // Importing the transformCommitteeCandidateData function

@@ -2,9 +2,15 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "Common/*": ["src/Components/Common/*"],
-      "constants/*": ["src/Common/Constants/*"],
-      "Hooks/*": ["src/Common/Hooks/*"]
+      "components/*": ["src/components/*"],
+      "constants/*": ["src/constants/*"],
+      "hooks/*": ["src/hooks/*"]
+
+      // "Hooks/*": ["src/hooks/*"]
+      // "Hooks/*": ["src/hooks/*"]
+      // "Hooks/*": ["src/hooks/*"]
+      // "Hooks/*": ["src/hooks/*"]
+      // "Hooks/*": ["src/hooks/*"]
     }
   },
   "include": ["src"]

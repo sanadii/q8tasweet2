@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from "reactstrap";
-import { ImageGenderCircle, } from "Common/Components";
+import { ImageGenderCircle, } from "components";
 import { electionSelector } from 'Selectors';
 
 //SimpleBar

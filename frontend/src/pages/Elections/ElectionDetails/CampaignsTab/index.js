@@ -6,7 +6,7 @@ import { electionSelector } from 'Selectors';
 
 import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
 import CampaignModal from "./CampaignModal";
-import { ImageCandidateCampaign, DeleteModal } from "Common/Components";
+import { ImageCandidateCampaign, DeleteModal } from "components";
 
 const CampaignsTab = () => {
   const dispatch = useDispatch();

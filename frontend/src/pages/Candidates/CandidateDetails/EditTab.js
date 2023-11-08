@@ -32,7 +32,7 @@ import {
   ElectionTypeOptions,
   ElectionResultOptions,
   TagOptions,
-} from "../../../Common/Constants";
+} from "constants";
 
 const EditTab = ({ candidate }) => {
   // const { id } = useParams(); // Access the id parameter from the URL

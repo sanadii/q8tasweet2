@@ -4,7 +4,7 @@ import { electionSelector, categorySelector } from 'Selectors';
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { updateElection } from "store/actions";
-import useCategoryManager from "Common/Hooks/CategoryHooks";
+import useCategoryManager from "hooks/CategoryHooks";
 
 // Formik
 import * as Yup from "yup";
@@ -17,7 +17,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import Dropzone from "react-dropzone";
-import { StatusOptions, PriorityOptions, RoleOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "Common/Constants";
+import { StatusOptions, PriorityOptions, RoleOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "constants";
 
 const EditTab = () => {
   const dispatch = useDispatch();

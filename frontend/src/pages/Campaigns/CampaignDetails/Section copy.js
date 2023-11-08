@@ -12,9 +12,9 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap
 import SwiperCore, { Autoplay } from "swiper";
 
 // Components & Hooks
-import { ImageLarge, SectionBackagroundImage } from "Common/Components";
-import usePermission from "Common/Hooks/usePermission";
-import Loader from "Common/Components/Components/Loader";
+import { ImageLarge, SectionBackagroundImage } from "components";
+import usePermission from "hooks/usePermission";
+import Loader from "components/Components/Loader";
 
 //import Tabs & Widges
 import OverviewTab from "./OverviewTab";

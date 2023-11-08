@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux"; // Don't forget to import useSelector
 import { useNavigate } from "react-router-dom";
 import { updateIconSidebar } from './Menus/utils';  // adjust the path according to your directory structure
-import usePermission from '../Common/Hooks/usePermission'; // adjust the path
+import usePermission from '../hooks/usePermission'; // adjust the path
 
 // Menus
 import { useAdminMenu } from './Menus/AdminMenu';
