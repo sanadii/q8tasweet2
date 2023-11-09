@@ -404,24 +404,38 @@ const Elections = (state = IntialState, action) => {
       const committeeIdStr = Object.keys(data)[0];
       const committeeId = parseInt(committeeIdStr, 10);
 
+      // If committeeIdStr is not present, or it's not a number, or data[committeeIdStr] is not present, return the current state.
       if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
 
       const updatedElectionCandidates = state.electionCandidates.map(candidate => {
-        const committeeVoteIndex = candidate.committeeVotes.findIndex(v => v.electionCommittee === committeeId);
+        // If committeeId is 0, we are updating the candidate's direct votes
+        if (committeeId === 0) {
+          return {
+            ...candidate,
+            votes: data[committeeIdStr][candidate.id.toString()] || candidate.votes,
+          };
+        } else {
+          // If committeeId is not 0, we are updating the committeeVotes
+          const committeeVoteIndex = candidate.committeeVotes.findIndex(v => v.electionCommittee === committeeId);
 
-        // Update existing entry
-        const updatedVotes = [...candidate.committeeVotes];
-        updatedVotes[committeeVoteIndex] = {
-          electionCommittee: committeeId,
-          votes: data[committeeIdStr][candidate.id],
-        };
+          // If the committeeVote does not exist, we don't update anything
+          if (committeeVoteIndex === -1) {
+            return candidate;
+          }
 
-        return {
-          ...candidate,
-          committeeVotes: updatedVotes,
-        };
+          // Update existing entry
+          const updatedVotes = [...candidate.committeeVotes];
+          updatedVotes[committeeVoteIndex] = {
+            ...updatedVotes[committeeVoteIndex],
+            votes: data[committeeIdStr][candidate.id.toString()],
+          };
+
+          return {
+            ...candidate,
+            committeeVotes: updatedVotes,
+          };
+        }
       });
-
 
       return {
         ...state,
@@ -437,6 +451,7 @@ const Elections = (state = IntialState, action) => {
         isElectionCommitteeResultUpdateFail: false,
       };
     }
+
 
 
 

@@ -326,7 +326,29 @@ class UpdateElectionCommitteeResults(APIView):
     permission_classes = [IsAuthenticated]  # Assuming only authenticated users can update
 
     def patch(self, request, id):
-        # Loop through the candidates and update/insert the votes
+        # Initialize the output dictionary
+        output = {"0": {}} if id == 0 else {}
+
+        # If id is 0, update the ElectionCandidate votes
+        if id == 0:
+            for candidate_id, votes in request.data.get("data", {}).items():
+                try:
+                    candidate = ElectionCandidate.objects.get(id=candidate_id)
+                    # Update the votes, ensuring that votes is an integer
+                    candidate.votes = int(votes)
+                    candidate.save()
+                    # Add the candidate's votes to the output under committee "0"
+                    output["0"][str(candidate_id)] = int(votes)
+                except ElectionCandidate.DoesNotExist:
+                    # Handle the case where the ElectionCandidate does not exist
+                    return Response({"message": f"Candidate with id {candidate_id} does not exist.", "code": 404}, status=404)
+                except ValueError:
+                    # Handle the case where votes is not a valid integer
+                    return Response({"message": f"Invalid votes value for candidate {candidate_id}.", "code": 400}, status=400)
+            # Return a success response with the consistent structure
+            return Response({"data": output, "count": len(output["0"]), "code": 200})
+
+        # For all other ids, perform the usual update_or_create operation
         for candidate_id, votes in request.data.get("data", {}).items():
             obj, created = ElectionCommitteeResult.objects.update_or_create(
                 election_committee_id=id,
@@ -336,23 +358,25 @@ class UpdateElectionCommitteeResults(APIView):
                     "updated_by": request.user
                 }
             )
-        # Once the patch operation is done, fetch all relevant results
-        results = ElectionCommitteeResult.objects.filter(election_committee_id=id)
-        
-        # Process these results into your desired structure
-        output = {}
-        for result in results:
-            committee_id = str(result.election_committee.id)  # Converted to string as it is key in dictionary
-            candidate_id = str(result.election_candidate.id)  # Converted to string as it is key in dictionary
-            votes = result.votes
-            
-            if committee_id not in output:
-                output[committee_id] = {}
-                
-            output[committee_id][candidate_id] = votes
-        
+            # Add the candidate's votes to the output
+            committee_id_str = str(obj.election_committee_id)
+            if committee_id_str not in output:
+                output[committee_id_str] = {}
+            output[committee_id_str][str(candidate_id)] = votes
+
+        # Once the patch operation is done, fetch all relevant results if not id == 0
+        if id != 0:
+            results = ElectionCommitteeResult.objects.filter(election_committee_id=id)
+            # Update the output with the actual results
+            for result in results:
+                committee_id_str = str(result.election_committee.id)
+                candidate_id_str = str(result.election_candidate.id)
+                output[committee_id_str][candidate_id_str] = result.votes
+
         # If "output" is the main key in response
-        return Response({"data": output, "count": 1, "code": 200})
+        return Response({"data": output, "count": sum(len(candidates) for candidates in output.values()), "code": 200})
+
+
 
 class GetPublicElections(APIView):
     permission_classes = [AllowAny]

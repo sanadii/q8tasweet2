@@ -42,7 +42,7 @@ const ResultsTab = () => {
   };
 
   // Detailed Results: Transformed Data [Taking ElectionCommitteeResults together with the committeeEdited]
-  const transformedCommitteeCandidateData = useMemo(
+  const transformedResultData = useMemo(
     () => transformCommitteeCandidateData(electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election),
     [electionCandidates, electionCommittees, committeeEdited, handleCommitteeVoteChange, election]
   );
@@ -190,7 +190,7 @@ const ResultsTab = () => {
 
 
   } else if (electionResult === 2) {
-    electionCandidateList = transformedCommitteeCandidateData;
+    electionCandidateList = transformedResultData;
 
     // committeeId = committee.id
     // committee = committee
@@ -213,7 +213,7 @@ const ResultsTab = () => {
     } else {
       return [];
     }
-  }, [electionCandidates, transformedCandidateData, transformedCommitteeCandidateData, committeeEdited, candidateEdited]);
+  }, [electionCandidates, transformedCandidateData, transformedResultData, committeeEdited, candidateEdited]);
 
 
 

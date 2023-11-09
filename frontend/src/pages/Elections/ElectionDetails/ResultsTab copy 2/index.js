@@ -26,18 +26,18 @@ const ResultsTab = () => {
   const electionResult = election.electResult;
 
   // Results: States
-  const [committeeVoteFieldEdited, setCommitteeVoteFieldEdited] = useState({});
+  const [columnEdited, setColumnEdited] = useState({});
   const [candidateVoteFieldEdited, setCandidateVoteFieldEdited] = useState(false);
-  const [resultFieldEditedData, setResultFieldEditedData] = useState({});
+  const [voteFieldEditedData, setVoteFieldEditedData] = useState({});
 
-  console.log("index: committeeVoteFieldEdited: ", committeeVoteFieldEdited)
+  console.log("index: columnEdited: ", columnEdited)
   console.log("index: candidateVoteFieldEdited: ", candidateVoteFieldEdited)
-  console.log("index: resultFieldEditedData: ", resultFieldEditedData)
+  console.log("index: voteFieldEditedData: ", voteFieldEditedData)
 
   // Results: Toggle Vote Column To Edit / Save / Close Mode
   const toggleColumnToEdit = (committeeId) => {
     if (committeeId !== undefined) { // or simply `if (committeeId)` if `committeeId` is never 0 or null
-      setCommitteeVoteFieldEdited(prev => ({ ...prev, [committeeId]: !prev[committeeId] }));
+      setColumnEdited(prev => ({ ...prev, [committeeId]: !prev[committeeId] }));
 
     } else {
       setCandidateVoteFieldEdited(prev => !prev);
@@ -47,13 +47,13 @@ const ResultsTab = () => {
 
 
   // Results: Handle Editing Cells
-  const handleResultVoteChange = useCallback((candidateId, committeeId, newValue) => {
-    // console.log("handleResultVoteChange", { candidateId, committeeId, newValue });
+  const handleVoteFieldChange = useCallback((candidateId, committeeId, newValue) => {
+    // console.log("handleVoteFieldChange", { candidateId, committeeId, newValue });
 
-    setResultFieldEditedData(prev => {
+    setVoteFieldEditedData(prev => {
       // If election Result is Detailed (committeeId is provided)
       if (committeeId) {
-        // console.log("we have been toggled, resultFieldEditedData: ", resultFieldEditedData)
+        // console.log("we have been toggled, voteFieldEditedData: ", voteFieldEditedData)
 
         return {
           ...prev, [committeeId]: {
@@ -76,20 +76,20 @@ const ResultsTab = () => {
 
 
   // Detailed Results: Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
-  const transformedCommitteeCandidateData = useMemo(
+  const transformedResultData = useMemo(
     () => transformResultData(
       electionCandidates,
       electionCommittees,
       candidateVoteFieldEdited,
-      committeeVoteFieldEdited,
-      handleResultVoteChange,
+      columnEdited,
+      handleVoteFieldChange,
       election
     ),
     [
       electionCandidates,
       electionCommittees,
-      committeeVoteFieldEdited,
-      handleResultVoteChange,
+      columnEdited,
+      handleVoteFieldChange,
       election
     ]
   );
@@ -97,19 +97,19 @@ const ResultsTab = () => {
 
   // Detailed Results: Handle Save Committee Results --------------------
   const handleSaveResults = useSaveCommitteeResults(
-    resultFieldEditedData,
-    committeeVoteFieldEdited,
+    voteFieldEditedData,
+    columnEdited,
     candidateVoteFieldEdited,
     setCandidateVoteFieldEdited,
-    setCommitteeVoteFieldEdited,
-    setResultFieldEditedData,
+    setColumnEdited,
+    setVoteFieldEditedData,
     toggleColumnToEdit
   );
 
 
 
   // Creating the columns for both Final and Detailed Results
-  const createColumnsBasedOnElectionResult = (result) => {
+  const createColumns = (result) => {
     // Base columns that are always present
     const baseColumns = [
       {
@@ -138,7 +138,7 @@ const ResultsTab = () => {
             <HeaderVoteButton
               // candidateVoteFieldEdited={candidateVoteFieldEdited}
               isEdited={candidateVoteFieldEdited}
-              hasChanges={resultFieldEditedData && Object.keys(resultFieldEditedData).length > 0}
+              hasChanges={voteFieldEditedData && Object.keys(voteFieldEditedData).length > 0}
               handleSaveResults={handleSaveResults}
               toggleColumnToEdit={toggleColumnToEdit}
             />
@@ -155,9 +155,9 @@ const ResultsTab = () => {
           <HeaderVoteButton
             committeeId={committee.id}
             committee={committee}
-            isEdited={committeeVoteFieldEdited[committee.id]}
-            // committeeVoteFieldEdited={committeeVoteFieldEdited[committee.id]}
-            hasChanges={resultFieldEditedData[committee.id] && Object.keys(resultFieldEditedData[committee.id]).length > 0}
+            isEdited={columnEdited[committee.id]}
+            // columnEdited={columnEdited[committee.id]}
+            hasChanges={voteFieldEditedData[committee.id] && Object.keys(voteFieldEditedData[committee.id]).length > 0}
             handleSaveResults={handleSaveResults}
             toggleColumnToEdit={toggleColumnToEdit}
           />
@@ -176,20 +176,20 @@ const ResultsTab = () => {
   };
 
   const electionCandidateList = electionResult === 1
-    ? transformedCommitteeCandidateData
+    ? transformedResultData
     : electionResult === 2
-      ? transformedCommitteeCandidateData
+      ? transformedResultData
       : [];
 
   const columns = useMemo(() => {
-    return createColumnsBasedOnElectionResult(electionResult);
+    return createColumns(electionResult);
   }, [
     electionResult,
     electionCandidates,
     electionCommittees,
     candidateVoteFieldEdited,
-    committeeVoteFieldEdited,
-    resultFieldEditedData,
+    columnEdited,
+    voteFieldEditedData,
   ]);
 
 
