@@ -1,5 +1,5 @@
 // React Core and Hooks
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 
 // Redux Related Imports
 import { useSelector } from "react-redux";
@@ -11,7 +11,7 @@ import { ImageCandidateWinnerCircle } from "components";
 
 import {
   HeaderVoteButton,
-  transformResulteData,
+  transformResultData,
   useSaveCommitteeResults,
 } from './ResultHelper';
 
@@ -26,63 +26,84 @@ const ResultsTab = () => {
   const electionResult = election.electResult;
 
   // Results: States
-  const [resultFieldEdited, setResultFieldEdited] = useState({});
+  const [committeeVoteFieldEdited, setCommitteeVoteFieldEdited] = useState({});
+  const [candidateVoteFieldEdited, setCandidateVoteFieldEdited] = useState(false);
   const [resultFieldEditedData, setResultFieldEditedData] = useState({});
 
+  console.log("index: committeeVoteFieldEdited: ", committeeVoteFieldEdited)
+  console.log("index: candidateVoteFieldEdited: ", candidateVoteFieldEdited)
+  console.log("index: resultFieldEditedData: ", resultFieldEditedData)
 
   // Results: Toggle Vote Column To Edit / Save / Close Mode
-  const toggleRowToEdit = (committeeId) => {
+  const toggleColumnToEdit = (committeeId) => {
     if (committeeId !== undefined) { // or simply `if (committeeId)` if `committeeId` is never 0 or null
-      setResultFieldEdited(prev => ({ ...prev, [committeeId]: !prev[committeeId] }));
+      setCommitteeVoteFieldEdited(prev => ({ ...prev, [committeeId]: !prev[committeeId] }));
+
     } else {
-      setResultFieldEdited(prev => !prev);
+      setCandidateVoteFieldEdited(prev => !prev);
+      console.log("are we awake?")
     }
   };
 
 
   // Results: Handle Editing Cells
-  const handleResultVoteChange = (candidateId, newValue, committeeId) => {
-    console.log("committeeId:", committeeId, "candidateId:", candidateId, "newValue:", newValue)
+  const handleResultVoteChange = useCallback((candidateId, committeeId, newValue) => {
+    // console.log("handleResultVoteChange", { candidateId, committeeId, newValue });
+
     setResultFieldEditedData(prev => {
-      // Check if the committeeId is provided
-      if (committeeId !== undefined) { // or simply `if (committeeId)` if `committeeId` is never 0 or null
+      // If election Result is Detailed (committeeId is provided)
+      if (committeeId) {
+        // console.log("we have been toggled, resultFieldEditedData: ", resultFieldEditedData)
+
         return {
-          ...prev, [committeeId]: { ...(prev[committeeId] || {}), [candidateId]: newValue }
+          ...prev, [committeeId]: {
+            ...(prev[committeeId] || {}), [candidateId]: newValue
+          },
         };
-      } else {
+
+      }
+      // If election Result is Final(committeeId is not provided)
+      else {
         return {
-          ...prev, [candidateId]: newValue
+          ...prev, [candidateId]: newValue,
         };
       }
     });
-  };
+  }, []);
+
+
+  // console.log("Index: candidateVoteFieldEdited:", candidateVoteFieldEdited)
 
 
   // Detailed Results: Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
   const transformedCommitteeCandidateData = useMemo(
-    () => transformResulteData(
+    () => transformResultData(
       electionCandidates,
       electionCommittees,
-      resultFieldEdited,
+      candidateVoteFieldEdited,
+      committeeVoteFieldEdited,
       handleResultVoteChange,
       election
     ),
     [
       electionCandidates,
       electionCommittees,
-      resultFieldEdited,
+      committeeVoteFieldEdited,
       handleResultVoteChange,
-      election]
+      election
+    ]
   );
 
 
   // Detailed Results: Handle Save Committee Results --------------------
-  const handleSavResults = useSaveCommitteeResults(
+  const handleSaveResults = useSaveCommitteeResults(
     resultFieldEditedData,
-    resultFieldEdited,
-    setResultFieldEdited,
+    committeeVoteFieldEdited,
+    candidateVoteFieldEdited,
+    setCandidateVoteFieldEdited,
+    setCommitteeVoteFieldEdited,
     setResultFieldEditedData,
-    toggleRowToEdit
+    toggleColumnToEdit
   );
 
 
@@ -115,10 +136,11 @@ const ResultsTab = () => {
         {
           Header: () => (
             <HeaderVoteButton
-              isCandidateEdited={resultFieldEdited}
+              // candidateVoteFieldEdited={candidateVoteFieldEdited}
+              isEdited={candidateVoteFieldEdited}
               hasChanges={resultFieldEditedData && Object.keys(resultFieldEditedData).length > 0}
-              handleSavResults={handleSavResults}
-              toggleRowToEdit={toggleRowToEdit}
+              handleSaveResults={handleSaveResults}
+              toggleColumnToEdit={toggleColumnToEdit}
             />
           ),
           accessor: 'votes',
@@ -133,10 +155,11 @@ const ResultsTab = () => {
           <HeaderVoteButton
             committeeId={committee.id}
             committee={committee}
-            isCommitteeEdited={resultFieldEdited[committee.id]}
+            isEdited={committeeVoteFieldEdited[committee.id]}
+            // committeeVoteFieldEdited={committeeVoteFieldEdited[committee.id]}
             hasChanges={resultFieldEditedData[committee.id] && Object.keys(resultFieldEditedData[committee.id]).length > 0}
-            handleSavResults={handleSavResults}
-            toggleRowToEdit={toggleRowToEdit}
+            handleSaveResults={handleSaveResults}
+            toggleColumnToEdit={toggleColumnToEdit}
           />
         ),
         accessor: `committee_${committee.id}`,
@@ -164,7 +187,8 @@ const ResultsTab = () => {
     electionResult,
     electionCandidates,
     electionCommittees,
-    resultFieldEdited,
+    candidateVoteFieldEdited,
+    committeeVoteFieldEdited,
     resultFieldEditedData,
   ]);
 
