@@ -7,6 +7,8 @@ import { updateCampaign, getCampaignModerators } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports
+
+import { FormFields } from "components"
 import AddCampaignModerator from "./AddCampaignModerator";
 
 // Form validation imports
@@ -65,7 +67,7 @@ const EditTab = () => {
 
 
   // Conditionally add role if the campaign exists and is not the currentUser.
-  const fields = [
+  const formFields = [
     {
       id: "description-field",
       name: "description",
@@ -85,19 +87,19 @@ const EditTab = () => {
       id: "twitter-field",
       name: "twitter",
       label: "تويتر",
-      type: "text",
+      type: "social",
     },
     {
       id: "instagram-field",
       name: "instagram",
       label: "انستقرام",
-      type: "text",
+      type: "social",
     },
     {
       id: "website-field",
       name: "website",
       label: "الموقع الالكتروني",
-      type: "text",
+      type: "social",
     },
   ];
 
@@ -117,17 +119,11 @@ const EditTab = () => {
                 <h5 className="card-title mb-0 flex-grow-1">التواصل الإجتماعي</h5>
               </div>
               {socialMediaFields.map(field => (
-                <div key={field.id} className="mb-3 d-flex align-items-center">
-                  <div className="avatar-xs d-block flex-shrink-0 me-3">
-                    <span className="avatar-title rounded-circle fs-16">
-                      <i className={`ri-${field.name}-fill`}></i>
-                    </span>
-                  </div>
-                  <InputComponent
-                    field={field}
-                    validation={validation}
-                  />
-                </div>
+                <FormFields
+                  key={field.id}
+                  field={field}
+                  validation={validation}
+                />
               ))}
             </CardBody>
           </Card>
@@ -140,30 +136,14 @@ const EditTab = () => {
               <div className="d-flex align-items-center mb-4">
                 <h5 className="card-title mb-0 flex-grow-1">تعديل الحملة الإنتخابية</h5>
               </div>
-              {fields.map(field => {
-                const { id, label, name, type, options, valueAccessor } = field;
+              {formFields.map(field => (
+                <FormFields
+                  key={field.id}
+                  field={field}
+                  validation={validation}
+                />
+              ))}
 
-                return (
-                  <Row key={id} className="mb-3 align-items-center"> {/* Added consistent margin and alignment */}
-                    <Col lg={2} className="align-self-center">
-                      <Label for={id}>{label}</Label>
-                    </Col>
-                    <Col lg={10}>
-                      <InputComponent
-                        field={field}
-                        validation={validation}
-                        valueAccessor={valueAccessor}
-                        options={options}
-                      />
-                      {validation.touched[name] && validation.errors[name] && (
-                        <FormFeedback type="invalid">
-                          {validation.errors[name]}
-                        </FormFeedback>
-                      )}
-                    </Col>
-                  </Row>
-                );
-              })}
 
               <ModalFooter>
                 <Row className="mt-3">

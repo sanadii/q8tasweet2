@@ -20,6 +20,9 @@ export { default as RightSidebar } from "./Components/RightSidebar";
 export { default as WebAppsDropdown } from "./Components/WebAppsDropdown";
 export { default as withRouter } from "./Components/withRouter";
 
+// Form Components
+export { default as FormFields } from "./Forms/FormFields";
+
 
 // Table use
 export { default as FieldComponent } from "./Tables/FieldComponent";
