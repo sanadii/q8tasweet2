@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Col, Label, Input, FormFeedback } from "reactstrap";
+import { Row, Col, Label, Input, FormFeedback } from "reactstrap";
 import Flatpickr from "react-flatpickr";
 import defaultAvatar from 'assets/images/users/default.jpg';
 import { api } from "config";
@@ -7,7 +7,7 @@ const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}
 
 
 
-const FormFields = ({ field, validation }) => {
+const FormFields = ({ field, validation, inLineStyle }) => {
     const { id, label, name, type, colSize, icon, iconBg } = field;
     const imageValue = validation.values.image;
 
@@ -54,6 +54,11 @@ const FormFields = ({ field, validation }) => {
 
     const renderInput = () => {
         switch (type) {
+            case 'seperator':
+                return <hr />;
+            case 'title':
+                return <h4>{label}</h4>;
+
             case 'text':
             case 'tel':
             case 'email':
@@ -71,6 +76,7 @@ const FormFields = ({ field, validation }) => {
                             type={type !== 'social' ? type : 'text'}
                             name={name}
                             id={id}
+                            className="form-control"
                             placeholder={`ادخل ${label}`}
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
@@ -79,12 +85,24 @@ const FormFields = ({ field, validation }) => {
                         />
                     </div>
                 );
+            case 'number':
+                return (
+                    <Input
+                        type="number"
+                        id={id}
+                        name={name}
+                        placeholder={`اكتب ${label}`}
+                        value={validation.values[name] || 0}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                    ></Input>
+                )
             case 'textarea':
                 return (
                     <Input
                         type="textarea"
-                        name={name}
                         id={id}
+                        name={name}
                         placeholder={`اكتب ${label}`}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
@@ -96,13 +114,14 @@ const FormFields = ({ field, validation }) => {
                 return (
                     <Input
                         type="select"
-                        className="form-select"
+                        className="form-control"
                         name={name}
                         id={id}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values[name] || ""}
                         invalid={validation.touched[name] && validation.errors[name]}
+
                     >
                         {/* <option value="">-- اختر --</option> */}
                         {field.options &&
@@ -158,24 +177,61 @@ const FormFields = ({ field, validation }) => {
                         invalid={validation.touched[name] && validation.errors[name]}
                     />
                 );
+            case 'date':
+                return (
+                    <Flatpickr
+                        name={name}
+                        id={id}
+                        className="form-control"
+                        placeholder={`اختر ${label}`}
+                        options={{
+                            altInput: true,
+                            altFormat: "Y-m-d",
+                            dateFormat: "Y-m-d",
+                        }}
+                        onChange={(e) => dateformate(e)}
+                        value={validation.values.dueDate || ""}
+                    />
+                );
             // ... other cases
             default:
                 return null;
         }
     };
     return (
-        <Col lg={colSize} className="mb-3">
-            {!icon &&
-                <Label htmlFor={id} className="form-label">{label}</Label>
-            }
+        <FormFieldLayout inLineStyle={inLineStyle} label={label} id={id} colSize={colSize} type={type}>
             {renderInput()}
-            {validation.touched[name] && validation.errors[name] && (
+            {type !== 'separator' && type !== 'title' && validation.touched[name] && validation.errors[name] && (
                 <FormFeedback type="invalid">
                     {validation.errors[name]}
                 </FormFeedback>
             )}
+        </FormFieldLayout>
+    );
+
+};
+
+const FormFieldLayout = ({ inLineStyle, label, id, children, colSize, type }) => {
+    if (type === 'separator' || type === 'title') {
+        return <>{children}</>;
+    }
+
+    return inLineStyle ? (
+        <Row key={id} className="mb-3">
+            <Col lg={3} className="align-self-center">
+                <Label htmlFor={id} className="form-label">{label}</Label>
+            </Col>
+            <Col lg={9}>
+                {children}
+            </Col>
+        </Row>
+    ) : (
+        <Col lg={colSize} className="">
+            <Label htmlFor={id} className="form-label">{label}</Label>
+            {children}
         </Col>
     );
 };
+
 
 export default FormFields;
