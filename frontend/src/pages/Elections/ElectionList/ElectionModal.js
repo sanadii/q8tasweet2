@@ -13,7 +13,7 @@ import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBo
 
 // Custom Components & ConstantsImports
 import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "constants";
-import useCategoryManager from "hooks/CategoryHooks";
+import { useCategoryManager } from "hooks";
 
 import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";

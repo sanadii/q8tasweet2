@@ -11,4 +11,4 @@ const useFetchDataIfNeeded = (data, fetchDataAction) => {
   }, [dispatch, data, fetchDataAction]);
 };
 
-export default useFetchDataIfNeeded;
+export { useFetchDataIfNeeded };

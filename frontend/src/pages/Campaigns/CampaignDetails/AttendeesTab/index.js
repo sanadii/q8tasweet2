@@ -7,7 +7,7 @@ import { campaignSelector } from 'Selectors';
 // Component imports
 import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "components";
 import AttendeesModal from "./AttendeesModal";
-import useUserRoles from "hooks/useUserRoles";
+import { useUserRoles } from "hooks";
 import { Id, Name, Attendant, Actions } from "./AttendeesCol";
 
 // Utility imports

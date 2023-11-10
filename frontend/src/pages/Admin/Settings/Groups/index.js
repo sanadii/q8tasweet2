@@ -10,7 +10,7 @@ import { authSelector } from 'Selectors';
 // Components & Hooks
 import DeleteModal from "components/Components/DeleteModal";
 import BreadCrumb from "components/Components/BreadCrumb";
-import useGroupManager from "hooks/GroupHook"
+import { useGroupManager } from "hooks"
 
 // Formik & Validations
 import { useFormik } from "formik";

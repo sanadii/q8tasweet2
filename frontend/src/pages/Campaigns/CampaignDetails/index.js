@@ -10,7 +10,7 @@ import { getCampaignDetails } from "../../../store/actions";
 // Components
 import Section from "./Section";
 import Loader from "../../../components/Components/Loader";
-import usePermission from "../../../hooks/usePermission";
+import { usePermission } from 'hooks';
 
 // UI & Utilities
 import { Container } from "reactstrap";

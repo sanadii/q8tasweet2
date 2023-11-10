@@ -1,6 +1,6 @@
 // PermissionsContext.js
 import React, { createContext, useContext } from 'react';
-import usePermission from './hooks/usePermission';
+import { usePermission } from 'hooks';
 
 const PermissionsContext = createContext();
 

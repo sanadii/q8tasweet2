@@ -62,4 +62,4 @@ const useGroupManager = (categories, groups, validation) => {
   };
 };
 
-export default useGroupManager;
+export { useGroupManager };

@@ -28,7 +28,7 @@ const useDelete = (deleteAction) => {
     const checkall = document.getElementById("checkBoxAll");
     const checkedEntries = document.querySelectorAll(".checkboxSelector");
     console.log("checked Entries:", checkedEntries);
-    
+
     if (checkall.checked) {
       checkedEntries.forEach(entry => {
         entry.checked = true;
@@ -84,4 +84,4 @@ const useDelete = (deleteAction) => {
   };
 };
 
-export default useDelete;
+export { useDelete };

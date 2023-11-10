@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import DeleteModal from "components/Components/DeleteModal";
 import BreadCrumb from "components/Components/BreadCrumb";
 import { categorySelector } from 'Selectors';
-import useCategoryManager from "hooks/CategoryHooks";
+import { useCategoryManager } from "hooks";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";

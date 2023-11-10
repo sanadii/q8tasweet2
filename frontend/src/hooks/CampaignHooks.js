@@ -1,7 +1,7 @@
 // hooks/CampaignHooks.js
 
 import { useMemo } from 'react';
-import usePermission from './usePermission';
+import { usePermission } from 'hooks';
 
 
 
@@ -61,6 +61,5 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
 
 export {
   useSupervisorMembers,
-  // useAttendantMembers,
   useCampaignRoles
 };

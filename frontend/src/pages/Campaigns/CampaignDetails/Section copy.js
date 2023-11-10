@@ -13,7 +13,7 @@ import SwiperCore, { Autoplay } from "swiper";
 
 // Components & Hooks
 import { ImageLarge, SectionBackagroundImage } from "components";
-import usePermission from "hooks/usePermission";
+import { usePermission } from 'hooks';
 import Loader from "components/Components/Loader";
 
 //import Tabs & Widges

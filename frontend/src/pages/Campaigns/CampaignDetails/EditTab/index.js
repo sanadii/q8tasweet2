@@ -7,7 +7,6 @@ import { updateCampaign, getCampaignModerators } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports
-
 import { FormFields } from "components"
 import AddCampaignModerator from "./AddCampaignModerator";
 
@@ -16,20 +15,17 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // Reactstrap (UI) imports
-import { Col, Button, Row, Label, Input, Form, FormFeedback, Card, CardBody, ModalFooter } from "reactstrap";
+import { Col, Button, Row, Input, Form, FormFeedback, Card, CardBody, ModalFooter } from "reactstrap";
 
 
 
 const EditTab = () => {
   const dispatch = useDispatch();
-
   document.title = "Starter | Q8Tasweet - React Admin & Dashboard Template";
 
   // State Management
-  const { currentUser } = useSelector(userSelector);
-  const { campaignId, campaign, campaignMembers, campaignElectionCommittees } = useSelector(campaignSelector);
+  const { campaignId, campaign } = useSelector(campaignSelector);
   const { campaignModerators } = useSelector(userSelector);
-
 
 
   useEffect(() => {
@@ -65,9 +61,8 @@ const EditTab = () => {
     },
   });
 
-
   // Conditionally add role if the campaign exists and is not the currentUser.
-  const formFields = [
+  const campaignFields = [
     {
       id: "description-field",
       name: "description",
@@ -82,24 +77,33 @@ const EditTab = () => {
     },
   ];
 
-  const socialMediaFields = [
+  const campaignSocialFields = [
     {
       id: "twitter-field",
       name: "twitter",
       label: "تويتر",
       type: "social",
+      colSize: 12,
+      icon: "ri-twitter-fill",
+      iconBg: "bg-info text-light",
     },
     {
       id: "instagram-field",
       name: "instagram",
       label: "انستقرام",
       type: "social",
+      colSize: 12,
+      icon: "ri-instagram-fill",
+      iconBg: "bg-danger",
     },
     {
       id: "website-field",
       name: "website",
       label: "الموقع الالكتروني",
       type: "social",
+      colSize: 12,
+      icon: "ri-instagram-fill",
+      iconBg: "bg-danger",
     },
   ];
 
@@ -112,13 +116,13 @@ const EditTab = () => {
       }}
     >
       <Row>
-        <Col xxl={3}>
+        <Col lg={3} md={12}>
           <Card>
             <CardBody>
               <div className="d-flex align-items-center mb-4">
                 <h5 className="card-title mb-0 flex-grow-1">التواصل الإجتماعي</h5>
               </div>
-              {socialMediaFields.map(field => (
+              {campaignSocialFields.map(field => (
                 <FormFields
                   key={field.id}
                   field={field}
@@ -130,21 +134,19 @@ const EditTab = () => {
           <AddCampaignModerator />
         </Col>
 
-        <Col xxl={9}>
+        <Col lg={9} md={12}>
           <Card>
             <CardBody>
               <div className="d-flex align-items-center mb-4">
                 <h5 className="card-title mb-0 flex-grow-1">تعديل الحملة الإنتخابية</h5>
               </div>
-              {formFields.map(field => (
+              {campaignFields.map(field => (
                 <FormFields
                   key={field.id}
                   field={field}
                   validation={validation}
                 />
               ))}
-
-
               <ModalFooter>
                 <Row className="mt-3">
                   <Col className="text-end">

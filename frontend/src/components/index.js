@@ -8,17 +8,20 @@ export { default as getChartColorsArray } from "./Charts/ChartsDynamicColor";
 // Common Components
 export { default as BreadCrumb } from "./Components/BreadCrumb";
 export { default as DeleteModal } from "./Components/DeleteModal";
-export { default as LightDark } from "./Components/LightDark";
 export { default as Loader } from "./Components/Loader";
-export { default as MyCartDropdown } from "./Components/MyCartDropdown";
-export { default as NotificationDropdown } from "./Components/NotificationDropdown";
-export { default as PreviewCardHeader } from "./Components/PreviewCardHeader";
 export { default as Prism } from "./Components/Prism";
 export { default as ProfileDropdown } from "./Components/ProfileDropdown";
 export { default as ReviewSlider } from "./Components/ReviewSlider";
+export { default as withRouter } from "./Components/withRouter";
+
+// Layout
 export { default as RightSidebar } from "./Components/RightSidebar";
 export { default as WebAppsDropdown } from "./Components/WebAppsDropdown";
-export { default as withRouter } from "./Components/withRouter";
+export { default as PreviewCardHeader } from "./Components/PreviewCardHeader";
+export { default as MyCartDropdown } from "./Components/MyCartDropdown";
+export { default as NotificationDropdown } from "./Components/NotificationDropdown";
+export { default as LightDark } from "./Components/LightDark";
+
 
 // Form Components
 export { default as FormFields } from "./Forms/FormFields";

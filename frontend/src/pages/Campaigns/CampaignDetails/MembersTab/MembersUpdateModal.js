@@ -8,11 +8,12 @@ import { userSelector, campaignSelector } from 'Selectors';
 import { useSupervisorMembers, useCampaignRoles } from "hooks";
 
 // Form validation imports
+import { FormFields } from "components"
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // Reactstrap (UI) imports
-import { Col, Row, ModalBody, Label, Input, Form, FormFeedback } from "reactstrap";
+import { Row, ModalBody, Form } from "reactstrap";
 
 const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   const dispatch = useDispatch();
@@ -89,21 +90,61 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   const selectedRoleString = getRoleString(selectedRole, campaignRoles);
   console.log("selectedRoleString:", selectedRoleString)
 
+  const isCurrentUserCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
+
+  const fields = [
+    isCurrentUserCampaignMember && {
+      id: "role-field",
+      name: "role",
+      label: "العضوية",
+      type: "select",
+      options: filteredRoleOptions.map(role => ({
+        id: role.id,
+        label: role.displayName,
+        role: role.name,
+        value: role.id
+      })),
+    },
+    {
+      id: "supervisor-field",
+      name: "supervisor",
+      label: "المشرف",
+      type: "select",
+      options: supervisorOptions.map(supervisor => ({
+        id: supervisor.id,
+        label: supervisor.fullName,
+        value: supervisor.id
+      })),
+      condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(selectedRoleString),
+    },
+    {
+      id: "committee-field",
+      name: "committee",
+      label: "اللجنة",
+      type: "select",
+      options: campaignCommitteeList.map(committee => ({
+        id: committee.id,
+        label: committee.name,
+        value: committee.id
+      })),
+      condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
+    },
+    {
+      id: "phone-field",
+      name: "phone",
+      label: "الهاتف",
+      type: "text",
+    },
+    {
+      id: "notes-field",
+      name: "notes",
+      label: "ملاحظات",
+      type: "textarea",
+    },
+  ].filter(Boolean); // This will remove any falsey values from the array, e.g., if isCurrentUserCampaignMember is false
+
 
   // Get formFields & Handle Form Submission
-  const formFields = useMemo(
-    () =>
-      buildFields(
-        currentUser,
-        campaignMember,
-        selectedRoleString,
-        campaignCommitteeList,
-        supervisorOptions,
-        filteredRoleOptions
-      ),
-    [currentUser, campaignMember, selectedRoleString, campaignCommitteeList, supervisorOptions, filteredRoleOptions]
-  );
-
   const handleUpdateButton = useCallback(() => validation.submitForm(), [validation]);
 
   useEffect(() => {
@@ -128,132 +169,25 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
             </strong>
           </h4>
         </Row>
-
-        {formFields.map((field) => (
-          <Row key={field.id}>
-            <Col lg={3} className="align-self-center">
-              <Label for={field.id} className="mb-0">
-                {field.label}
-              </Label>
-            </Col>
-            <Col lg={9}>
-              {field.type === "textarea" ? (
-                <textarea
-                  {...field}
-                  className="form-control"
-                  placeholder={`Enter ${field.label}`}
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values[field.name] || ""}
-                  invalid={validation.touched[field.name] && validation.errors[field.name] ? true : undefined}
-
-                />
-              ) : field.type === "select" ? (
-                <Input
-                  {...field}
-                  type="select"
-                  className="form-select"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values[field.name] || ""}
-                >
-                  <option value="">-- اختر --</option>
-                  {field.options && field.options.map((option) => (
-                    <option key={option.id} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </Input>
-              ) : (
-                <Input
-                  {...field}
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values[field.name] || ""}
-                />
-              )}
-              {validation.touched[field.name] && validation.errors[field.name] && (
-                <FormFeedback type="invalid">
-                  {validation.errors[field.name]}
-                </FormFeedback>
-              )}
-            </Col>
-          </Row>
-        ))}
+        {
+          fields.map(field => {
+            // Only render the field if the condition is undefined (meaning always render)
+            // or if the condition is true
+            return (field.condition === undefined || field.condition) && (
+              <FormFields
+                key={field.id}
+                field={field}
+                validation={validation}
+              />
+            );
+          })
+        }
       </ModalBody>
     </Form>
   );
 };
 
 // Field Definition Builder
-const buildFields = (currentUser, campaignMember, selectedRoleString, campaignCommitteeList, supervisorOptions, filteredRoleOptions) => {
-  const isCurrentUserCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
 
-  const defaultFields = [
-    isCurrentUserCampaignMember && {
-      id: "role-field",
-      name: "role",
-      label: "العضوية",
-      type: "select",
-      options: filteredRoleOptions.map(role => ({
-        id: role.id,
-        label: role.displayName,
-        role: role.name,
-        value: role.id
-      })),
-    },
-    {
-      id: "phone-field",
-      name: "phone",
-      label: "الهاتف",
-      type: "text",
-    },
-    {
-      id: "notes-field",
-      name: "notes",
-      label: "ملاحظات",
-      type: "textarea",
-    }
-  ];
-
-
-  const conditionalFields = [
-    {
-      condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(selectedRoleString),
-      field: {
-        id: "supervisor-field",
-        name: "supervisor",
-        label: "المشرف",
-        type: "select",
-        options: supervisorOptions.map(supervisor => ({
-          id: supervisor.id,
-          label: supervisor.fullName,
-          value: supervisor.id
-        })),
-        // valueAccessor: (item) => item.fullName,
-      }
-    },
-    {
-      condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
-      field: {
-        id: "committee-field",
-        name: "committee",
-        label: "اللجنة",
-        type: "select",
-        options: campaignCommitteeList.map(committee => ({
-          id: committee.id,
-          label: committee.name,
-          value: committee.id
-        })),
-      }
-    }
-  ];
-
-  const filteredFields = conditionalFields
-    .filter(({ condition }) => condition)
-    .map(({ field }) => field);
-
-  return [...defaultFields, ...filteredFields].filter(Boolean);
-};
 
 export default MembersUpdateModal;

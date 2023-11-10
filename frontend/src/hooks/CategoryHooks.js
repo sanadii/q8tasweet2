@@ -60,4 +60,4 @@ const useCategoryManager = (categories, subCategories, validation) => {
   };
 };
 
-export default useCategoryManager;
+export { useCategoryManager };

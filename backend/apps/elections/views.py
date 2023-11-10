@@ -103,7 +103,6 @@ class GetElectionDetails(APIView):
                 "electionCandidates": self.get_election_candidates(election_candidates, context),
                 "electionCommittees": self.get_election_committees(election_committees, context),
                 "electionCampaigns": self.get_election_campaigns(election, context),
-
                 # Include Election Committee Results in the response
                 "electionCommitteeResults": election_committee_results,
 

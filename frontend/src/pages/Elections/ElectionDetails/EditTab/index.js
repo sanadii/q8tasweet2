@@ -4,7 +4,7 @@ import { electionSelector, categorySelector } from 'Selectors';
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { updateElection } from "store/actions";
-import useCategoryManager from "hooks/CategoryHooks";
+import { useCategoryManager } from "hooks";
 
 // Formik
 import * as Yup from "yup";
@@ -32,23 +32,23 @@ const EditTab = () => {
       subCategory: election?.subCategory ?? "",
       dueDate: election?.dueDate ?? "",
       tags: election?.tags ?? [],
-    
+
       // Settings
       electType: election?.electType ?? 1,
       electResult: election?.electResult ?? 1,
       electVotes: election?.electVotes ?? 0,
       electSeats: election?.electSeats ?? 0,
-    
+
       // Electors
       electors: election?.electors ?? 0,
       electorsMales: election?.electorsMales ?? 0,
       electorsFemales: election?.electorsFemales ?? 0,
-    
+
       // Attendees
       attendees: election?.attendees ?? 0,
       attendeesMales: election?.attendeesMales ?? 0,
       attendeesFemales: election?.attendeesFemales ?? 0,
-            
+
       // System
       status: election?.task?.status ?? 1,
       priority: election?.task?.priority ?? 1,

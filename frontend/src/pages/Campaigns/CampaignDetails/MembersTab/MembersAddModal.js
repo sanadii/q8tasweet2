@@ -14,11 +14,8 @@ import SimpleBar from "simplebar-react";
 const MembersAddModal = () => {
   const dispatch = useDispatch();
 
-  const { campaignDetails, campaignMembers, campaignElectionCommittees } = useSelector(campaignSelector);
+  const { campaignId, campaignMembers, campaignElectionCommittees } = useSelector(campaignSelector);
   const { users } = useSelector(userSelector);
-
-  const campaignId = campaignDetails.id;
-  const campaignMemberList = campaignMembers;
 
   // Dispatch getMember TODO: MOVE TO ELECTION DETAILS
   useEffect(() => {
@@ -53,10 +50,6 @@ const MembersAddModal = () => {
   useEffect(() => {
     setElectionCommitteeList(campaignElectionCommittees);
   }, [campaignElectionCommittees]);
-
-  const supervisorMembers = campaignMembers.filter(
-    (member) => member.role === 3
-  );
 
   return (
     <ModalBody className="p-4">

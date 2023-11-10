@@ -33,4 +33,4 @@ const useUserRoles = () => {
     };
 }
 
-export default useUserRoles;
+export { useUserRoles };

@@ -1,17 +1,21 @@
 // Components/Hooks/index.js
-export { default as useDelete } from "./useDelete";
-export { default as useFetchDataIfNeeded } from "./useFetchDataIfNeeded";
-export { default as usePermission } from "./usePermission";
-export { default as useUserRoles } from "./useUserRoles";
-export { useProfile } from "./UserHooks";
-export { default as GroupHook } from "./GroupHook";
-export { default as CategoryHooks } from "./CategoryHooks";
 
+// Users & Permissions
+export { useProfile } from "./UserHooks";
+export { usePermission } from "./usePermission";
+export { useUserRoles } from "./useUserRoles";
+export { useGroupManager } from "./GroupHook";
+
+
+// Elections & Election Categories
+export { useCategoryManager } from "./CategoryHooks";
+
+
+// Candidates
 
 // Campaigns
-export {
-    useSupervisorMembers,
-    // useAttendantMembers,
-    useCampaignRoles
-} from "./CampaignHooks";
+export { useSupervisorMembers, useCampaignRoles } from "./CampaignHooks";
 
+// Global
+export { useDelete } from "./useDelete";
+export { useFetchDataIfNeeded } from "./useFetchDataIfNeeded";
