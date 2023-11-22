@@ -161,29 +161,26 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
       }}
     >
       <ModalBody className="vstack gap-3">
-        <Row>
-          <input type="hidden" id="id-field" />
-          <h4>
-            <strong>
-              [{validation.values.id}] {validation.values.fullName}
-            </strong>
-          </h4>
-        </Row>
+        <input type="hidden" id="id-field" />
+        <h4>
+          <strong>
+            [{validation.values.id}] {validation.values.fullName}
+          </strong>
+        </h4>
         {
           fields.map(field => {
-            // Only render the field if the condition is undefined (meaning always render)
-            // or if the condition is true
             return (field.condition === undefined || field.condition) && (
               <FormFields
                 key={field.id}
                 field={field}
                 validation={validation}
+                inLineStyle={true}
               />
             );
           })
         }
       </ModalBody>
-    </Form>
+    </Form >
   );
 };
 

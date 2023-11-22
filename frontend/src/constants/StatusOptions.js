@@ -1,4 +1,4 @@
-export const StatusOptions = [
+const StatusOptions = [
   {
     id: 1,
     name: "جديد",
@@ -58,7 +58,7 @@ export const StatusOptions = [
 ];
 
 
-export const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status }) => {
   const entryStatus = StatusOptions.find(option => option.id === status);
   if (!entryStatus) return null;
 
@@ -103,3 +103,9 @@ export const StatusBadge = ({ status }) => {
 //     badgeClass = "badge-soft-primary";
 //     break;
 // }
+
+export {
+  StatusBadge,
+  StatusOptions,
+
+};

@@ -9,21 +9,18 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
+import { Row, Form, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 
 // Custom Components & ConstantsImports
+import { FormFields } from "components";
 import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "constants";
 import { useCategoryManager } from "hooks";
 
-import Flatpickr from "react-flatpickr";
-import SimpleBar from "simplebar-react";
 
 const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
   const dispatch = useDispatch();
 
   // State Management
-  const { moderators } = useSelector(userSelector);
-  const { isElectionSuccess, error } = useSelector(electionSelector);
   const { categories, subCategories } = useSelector(categorySelector);
 
   // validation
@@ -31,20 +28,16 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
     initialValues: {
-      dueDate: (election && election.dueDate) || null,
       category: (election && election.category) || null,
       subCategory: (election && election.subCategory) || null,
+      dueDate: (election && election.dueDate) || null,
       tags: (election && election.tags) || [],
-
-      // Election Specification
       electType: (election && election.electType) || 1,
       electResult: (election && election.electResult) || 1,
       electVotes: (election && election.electVotes) || 0,
       electSeats: (election && election.electSeats) || 0,
       electors: (election && election.electors) || 0,
       attendees: (election && election.attendees) || 0,
-
-      // Tasks
       status: (election && election.status) || 1,
       priority: (election && election.priority) || 1,
       moderators:
@@ -63,22 +56,16 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       if (isEdit) {
         const updatedElection = {
           id: election ? election.id : 0,
-          dueDate: values.dueDate,
-
-          // Taxonomies
           category: values.category,
           subCategory: values.subCategory,
+          dueDate: values.dueDate,
           tags: Array.isArray(values.tags) ? values.tags : [],
-
-          // Election Spesifications
           electType: values.electType,
           electResult: values.electResult,
           electVotes: values.electVotes,
           electSeats: values.electSeats,
           electors: values.electors,
           attendees: values.attendees,
-
-          // Admin
           status: parseInt(values.status, 10),
           priority: parseInt(values.priority, 10),
           moderators: values.moderators,
@@ -90,20 +77,14 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
         );
       } else {
         const newElection = {
-          dueDate: values.dueDate,
-
-          // Taxonomies
           category: parseInt(values.category, 10),
           subCategory: parseInt(values.subCategory, 10),
+          dueDate: values.dueDate,
           tags: Array.isArray(values.tags) ? values.tags : [],
-
-          // Election Spesifications
           electType: values.electType,
           electResult: values.electResult,
           electVotes: values.electVotes,
           electSeats: values.electSeats,
-
-          // Admin
           status: parseInt(values.status, 10),
           priority: parseInt(values.priority, 10),
           moderators: values.moderators,
@@ -123,16 +104,147 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
     activeParentCategoryId
   } = useCategoryManager(categories, subCategories, validation);
 
-  const dateformate = (e) => {
-    const selectedDate = new Date(e);
-    const formattedDate = `${selectedDate.getFullYear()}-${(
-      "0" +
-      (selectedDate.getMonth() + 1)
-    ).slice(-2)}-${("0" + selectedDate.getDate()).slice(-2)}`;
+  const fields = [
+    // Existing fields
+    {
+      id: "category-field",
+      name: "category",
+      label: "تصنيف الانتخابات",
+      type: "select",
+      options: categoryOptions,
+      options: categoryOptions.map(category => ({
+        id: category.id,
+        label: category.name,
+        value: category.id
+      })),
+      onChange: (e) => {
+        validation.handleChange(e);
+        changeSubCategoriesOptions(e);
+      },
+      colSize: 4,
+    },
+    {
+      id: "subCategory-field",
+      name: "subCategory",
+      label: "تصنيف الإنتخابات",
+      type: "select",
+      options: subCategoryOptions.map(subCategory => ({
+        id: subCategory.id,
+        label: subCategory.name,
+        value: subCategory.id
+      })),
+      colSize: 4,
+    },
+    {
+      id: "dueDate-field",
+      name: "dueDate",
+      label: "الموعد",
+      type: "date",
+      colSize: 4,
+    },
+    {
+      id: "electType-field",
+      name: "electType",
+      label: "نوع الانتخابات",
+      type: "select",
+      options: ElectionTypeOptions,
+      options: ElectionTypeOptions.map(electionType => ({
+        id: electionType.id,
+        label: electionType.name,
+        value: electionType.id
+      })),
+      colSize: 4,
+    },
+    // Additional fields
+    {
+      id: "electResult-field",
+      name: "electResult",
+      label: "نتائج الانتخابات",
+      type: "select",
+      options: ElectionResultOptions.map(electionResult => ({
+        id: electionResult.id,
+        label: electionResult.name,
+        value: electionResult.id
+      })),
+      colSize: 4,
+    },
+    {
+      id: "electVotes-field",
+      name: "electVotes",
+      label: "عدد الأصوات",
+      type: "number",
+      colSize: 4,
+    },
+    {
+      id: "electSeats-field",
+      name: "electSeats",
+      label: "عدد المقاعد",
+      type: "number",
+      colSize: 4,
+    },
+    {
+      id: "electors-field",
+      name: "electors",
+      label: "عدد الناخبين",
+      type: "number",
+      colSize: 4,
+    },
+    {
+      id: "attendees-field",
+      name: "attendees",
+      label: "عدد الحضور",
+      type: "number",
+      colSize: 4,
+    },
+    // Special case for moderators - needs a custom component
+    // {
+    //   id: "moderators",
+    //   name: "moderators",
+    //   label: "المشرفين",
+    //   type: "checkbox-group",
+    //   options: moderators, // Assuming 'moderators' is an array of moderator objects
+    //   colSize: 6,
+    // },
+    {
+      id: "seperator",
+      type: "seperator",
+      colSize: 12,
+    },
+    {
+      id: "title",
+      type: "title",
+      label: "الإدارة",
+      colSize: 12,
+    },
+    {
+      id: "status-field",
+      name: "status",
+      label: "الحالة",
+      type: "select",
+      options: StatusOptions,
+      options: StatusOptions.map(status => ({
+        id: status.id,
+        label: status.name,
+        value: status.id
+      })),
+      colSize: 6,
+    },
+    {
+      id: "priority-field",
+      name: "priority",
+      label: "الأولية",
+      type: "select",
+      options: PriorityOptions,
+      options: PriorityOptions.map(priority => ({
+        id: priority.id,
+        label: priority.name,
+        value: priority.id
+      })),
 
-    // Update the form field value directly with the formatted date
-    validation.setFieldValue("dueDate", formattedDate);
-  };
+      colSize: 6,
+    },
+  ];
+
 
   return (
     <Modal
@@ -144,7 +256,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       modalClassName="modal fade zoomIn"
     >
       <ModalHeader className="p-3 bg-soft-info" toggle={toggle}>
-        {!!isEdit ? "Edit Election" : "Create Election"}
+        {!!isEdit ? "تحديث الإنتخابات" : "إضافة أنتخابات"}
       </ModalHeader>
       <Form
         className="tablelist-form"
@@ -156,342 +268,17 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       >
         <ModalBody className="modal-body">
           <Row className="g-3">
-            <Col lg={4}>
-              <div>
-                <Label for="category-field" className="form-label">
-                  تصنيف الانتخابات
-                </Label>
-                <Input
-                  name="category"
-                  type="select"
-                  className="form-select"
-                  id="category-field"
-                  onChange={(e) => {
-                    validation.handleChange(e);
-                    changeSubCategoriesOptions(e);
-                  }}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.category || ""}
-                >
-                  <option value="">Choose Category</option>
-                  {categoryOptions.map((category) => (
-                    <option key={category.id} value={parseInt(category.id)}>
-                      {category.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.category && validation.errors.category ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.category}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
-
-            <Col lg={4}>
-              <div>
-                <Label for="sub-category-field" className="form-label">
-                  تصنيف الإنتخابات
-                </Label>
-                <Input
-                  name="subCategory"
-                  type="select"
-                  className="form-select"
-                  id="sub-category-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.subCategory || ""}
-                >
-                  <option value="">التصنيف الفرعي</option>
-                  {subCategoryOptions.map((subCategory) => (
-                    <option key={subCategory.id} value={subCategory.id}>
-                      {subCategory.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.subCategory &&
-                  validation.errors.subCategory ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.subCategory}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
-            <Col lg={4}>
-              <div>
-                <Label for="dueDate-field" className="form-label">
-                  الموعد
-                </Label>
-                <Flatpickr
-                  name="dueDate"
-                  id="dueDate-field"
-                  className="form-control"
-                  placeholder="Select a dueDate"
-                  options={{
-                    altInput: true,
-                    altFormat: "Y-m-d",
-                    dateFormat: "Y-m-d",
-                  }}
-                  onChange={(e) => dateformate(e)}
-                  value={validation.values.dueDate || ""}
-                />
-                {validation.touched.dueDate && validation.errors.dueDate ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.dueDate}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
-            <Col lg={4}>
-              <Label for="electType-field" className="form-label">
-                نوع الانتخابات
-              </Label>
-              <Input
-                name="electType"
-                type="select"
-                className="form-select"
-                id="electType-field"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electType || 1}
-              >
-                {ElectionTypeOptions.map((electType) => (
-                  <option key={electType.id} value={electType.id}>
-                    {electType.name}
-                  </option>
-                ))}
-              </Input>
-              {validation.touched.electType && validation.errors.electType ? (
-                <FormFeedback type="invalid">
-                  {validation.errors.electType}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="electResult-field" className="form-label">
-                نتائج الانتخابات
-              </Label>
-              <Input
-                id="electResult-field"
-                name="electResult"
-                type="select"
-                className="form-select"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electResult || 1}
-              >
-                {ElectionResultOptions.map((electResult) => (
-                  <option key={electResult.id} value={electResult.id}>
-                    {electResult.name}
-                  </option>
-                ))}
-              </Input>
-              {validation.touched.electResult && validation.errors.electResult ? (
-                <FormFeedback type="invalid">
-                  {validation.errors.electResult}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="electVotes-field" className="form-label">
-                عدد الأصوات
-              </Label>
-              <Input
-                id="electVotes-field"
-                name="electVotes"
-                type="number"
-                value={validation.values.electVotes || 0}
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-              ></Input>
-              {validation.touched.electVotes && validation.errors.electVotes ? (
-                <FormFeedback electVotes="invalid">
-                  {validation.errors.electVotes}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="electSeats-field" className="form-label">
-                عدد المقاعد
-              </Label>
-              <Input
-                id="electSeats-field"
-                name="electSeats"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electSeats || 0}
-              ></Input>
-              {validation.touched.electSeats && validation.errors.electSeats ? (
-                <FormFeedback electSeats="invalid">
-                  {validation.errors.electSeats}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="electors-field" className="form-label">
-                عدد الناخبين
-              </Label>
-              <Input
-                id="electors-field"
-                name="electors"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.electors || 0}
-              ></Input>
-              {validation.touched.electors && validation.errors.electSeats ? (
-                <FormFeedback electors="invalid">
-                  {validation.errors.electors}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <Col lg={4}>
-              <Label for="attendees-field" className="form-label">
-                عدد الحضور
-              </Label>
-              <Input
-                id="attendees-field"
-                name="attendees"
-                type="number"
-                className="form-control"
-                placeholder="0"
-                onChange={validation.handleChange}
-                onBlur={validation.handleBlur}
-                value={validation.values.attendees || 0}
-              ></Input>
-              {validation.touched.attendees && validation.errors.attendees ? (
-                <FormFeedback attendees="invalid">
-                  {validation.errors.attendees}
-                </FormFeedback>
-              ) : null}
-            </Col>
-            <hr />
-            <Col lg={6}>
-              <Label className="form-label">المشرفين</Label>
-              <SimpleBar style={{ maxHeight: "95px" }}>
-                <ul className="list-unstyled vstack gap-2 mb-0">
-                  {moderators &&
-                    moderators.map((moderator) => (
-                      <li key={moderator.id}>
-                        <div className="form-check d-flex align-items-center">
-                          <input
-                            name="moderators"
-                            className="form-check-input me-3"
-                            type="checkbox"
-                            onChange={(e) => {
-                              const selectedId = parseInt(e.target.value);
-                              const updatedModerators =
-                                validation.values.moderators.includes(
-                                  selectedId
-                                )
-                                  ? validation.values.moderators.filter(
-                                    (id) => id !== selectedId
-                                  )
-                                  : [
-                                    ...validation.values.moderators,
-                                    selectedId,
-                                  ];
-                              validation.setFieldValue(
-                                "moderators",
-                                updatedModerators
-                              );
-                            }}
-                            onBlur={validation.handleBlur}
-                            value={moderator.id}
-                            checked={validation.values.moderators.includes(
-                              moderator.id
-                            )}
-                            id={moderator.image}
-                          />
-
-                          <label
-                            className="form-check-label d-flex align-items-center"
-                            htmlFor={moderator.image}
-                          >
-                            <span className="flex-shrink-0">
-                              <img
-                                src={
-                                  process.env.REACT_APP_API_URL +
-                                  moderator.image
-                                }
-                                alt=""
-                                className="avatar-xxs rounded-circle"
-                              />
-                            </span>
-                            <span className="flex-grow-1 ms-2">
-                              {moderator.firstName}
-                            </span>
-                          </label>
-                          {validation.touched.moderators &&
-                            validation.errors.moderators ? (
-                            <FormFeedback type="invalid">
-                              {validation.errors.moderators}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
-                      </li>
-                    ))}
-                </ul>
-              </SimpleBar>
-            </Col>
-            {/* <p>Admin Use</p> */}
-            <Col lg={6}>
-              <div>
-                <Label for="status-field" className="form-label">
-                  الحالة
-                </Label>
-                <Input
-                  name="status"
-                  type="select"
-                  className="form-select"
-                  id="ticket-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.status || ""}
-                >
-                  {StatusOptions.map((status) => (
-                    <option key={status.id} value={status.id}>
-                      {status.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.status && validation.errors.status ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.status}
-                  </FormFeedback>
-                ) : null}
-              </div>
-              <div>
-                <Label for="priority-field" className="form-label">
-                  الأولية
-                </Label>
-                <Input
-                  name="priority"
-                  type="select"
-                  className="form-select"
-                  id="priority-field"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.priority || ""}
-                >
-                  {PriorityOptions.map((priority) => (
-                    <option key={priority.id} value={priority.id}>
-                      {priority.name}
-                    </option>
-                  ))}
-                </Input>
-                {validation.touched.priority && validation.errors.priority ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.priority}
-                  </FormFeedback>
-                ) : null}
-              </div>
-            </Col>
+            {
+              fields.map(field => {
+                return (field.condition === undefined || field.condition) && (
+                  <FormFields
+                    key={field.id}
+                    field={field}
+                    validation={validation}
+                  />
+                );
+              })
+            }
           </Row>
         </ModalBody>
         <div className="modal-footer">
@@ -506,7 +293,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
               إغلاق
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
-              {!!isEdit ? "Update Election" : "Add Election"}
+              {!!isEdit ? " تحديث الإنتخابات" : "إضافة إنتخابات"}
             </button>
           </div>
         </div>

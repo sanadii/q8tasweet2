@@ -2,17 +2,17 @@
 
 
 // Options
-export { StatusOptions, StatusBadge } from './StatusOptions';
-export { PriorityOptions, PriorityBadge } from './PriorityOptions';
-export { GenderOptions } from './GenderOptions';
+export { StatusOptions, StatusBadge } from "./StatusOptions";
+export { PriorityOptions, PriorityBadge } from "./PriorityOptions";
+export { GenderOptions } from "./GenderOptions";
 
 // Member Options
 
-export { ElectionTypeOptions, ElectionTypeBadge } from './ElectionTypeOptions';
-export * from './ElectionResults';
-export * from './Tags';
+export { ElectionTypeOptions, ElectionTypeBadge } from "./ElectionTypeOptions";
+export * from "./ElectionResults";
+export { TagOptions } from "./Tags";
 
 // Campaigns
-export * from './MemberRoleOptions';
-export * from './MemberStatusOptions';
-export * from './GuaranteeStatusOptions';
+export * from "./MemberRoleOptions";
+export * from "./MemberStatusOptions";
+export * from "./GuaranteeStatusOptions";
