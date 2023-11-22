@@ -11,7 +11,9 @@ export const userSelector = createSelector(
         error: usersState.error,
         users: usersState.users,
         moderators: usersState.moderators,
+
         user: usersState.currentUser,
+        userId: usersState.currentUser.id,
         currentUser: usersState.currentUser,
         currentUserCampaigns: usersState.currentUser.campaigns,
         campaignModerators: usersState.campaignModerators,

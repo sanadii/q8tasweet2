@@ -29,7 +29,6 @@ We build on the shoulders of giants with the following technologies:
 * [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) a mock store for your testing your redux async action creators and middleware
 * [expect](https://github.com/mjackson/expect) Write better assertions
 * [Nock](https://github.com/pgte/nock) HTTP mocking and expectations library
-* [istanbul](https://github.com/gotwarlost/istanbul) to generate coverage when running mocha
 
 **Backend**
 

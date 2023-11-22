@@ -45,6 +45,6 @@ ADMIN_REORDER = (
 
     # Configurations
     {'app': 'configs', 'label': 'Configurations','models': (
-        'apps.configs.Config',
+        'apps.configs.Configs',
     )},
 )

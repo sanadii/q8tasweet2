@@ -22,7 +22,9 @@ export const campaignSelector = createSelector(
     isCampaignSuccess: campaignsState.isCampaignSuccess,
     campaignError: campaignsState.error,
 
+    // CurrentCampaignMember
     currentCampaignMember: campaignsState.currentCampaignMember,
+    // currentCampaignMemberCommittee: campaignsState.currentCampaignMember.committee,
     electors: campaignsState.electors,
 
     campaignRoles: campaignsState.campaignRoles,

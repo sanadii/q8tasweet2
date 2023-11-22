@@ -37,6 +37,7 @@ class CustomAccountManager(BaseUserManager):
         user.save()
         return user
 
+
 class User(TrackModel, AbstractUser):
     id = models.BigAutoField(primary_key=True)
     email = models.EmailField(_('email address'), unique=True)

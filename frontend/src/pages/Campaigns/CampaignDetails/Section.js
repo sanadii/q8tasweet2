@@ -52,7 +52,7 @@ const Section = () => {
     { tabId: 2, permission: 'canViewCampaignMember', href: '#members', icon: 'ri-list-unordered', title: 'فريق العمل' },
     { tabId: 3, permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', title: 'الضمانات' },
     { tabId: 4, permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', title: 'الحضور' },
-    { tabId: 5, permission: 'canViewCampaignSorting', href: '#sorting', icon: 'ri-sort-line', title: 'الفرز' },
+    { tabId: 5, permission: 'canViewCampaign', href: '#sorting', icon: 'ri-sort-line', title: 'الفرز' },
     { tabId: 6, permission: 'canViewElector', href: '#electors', icon: 'ri-user-voice-line', title: 'الناخبين' },
     { tabId: 7, permission: 'canViewActivitie', href: '#activities', icon: 'ri-activity-line', title: 'الأنشطة' },
     { tabId: 9, permission: 'canViewCampaign', href: '#edit', icon: 'ri-activity-line', title: 'تعديل' },

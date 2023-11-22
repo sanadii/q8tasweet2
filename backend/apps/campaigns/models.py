@@ -117,39 +117,21 @@ class CampaignAttendee(TrackModel):
             ]
         
 
-# ElectionParty
+class CampaignSorting(TrackModel):
+    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='sorter_sortees')
+    electionCandidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
+    committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_sortees')
+    votes = models.PositiveIntegerField(default=0)
+    notes = models.TextField(blank=True, null=True)
 
-# class Party(TrackModel):
-#     # name = models.CharField(max_length=255, blank=False, null=False)
-#     # image = models.ImageField(upload_to="parties/", blank=True, null=True)
-#     # tags = models.CharField(max_length=255, blank=True, null=True)
-
-#     class Meta:
-#         db_table = 'party'
-#         verbose_name = "Party"
-#         verbose_name_plural = "Parties"
-#         default_permissions = []
-#         permissions  = [
-#             ("canViewParty", "Can View Party"),
-#             ("canAddParty", "Can Add Party"),
-#             ("canChangeParty", "Can Change Party"),
-#             ("canDeleteParty", "Can Delete Party"),
-#             ]
-        
-
-# class CampaignParty(TrackModel):
-#     # campaign = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attendant_attendees')
-#     # election_party = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_attendees')
-
-#     class Meta:
-#         db_table = 'campaign_party'
-#         verbose_name = "Campaign Party"
-#         verbose_name_plural = "Campaign Parties"
-#         default_permissions = []
-#         permissions  = [
-#             ("canViewCampaignParty", "Can View Campaign Party"),
-#             ("canAddCampaignParty", "Can Add Campaign Party"),
-#             ("canChangeCampaignParty", "Can Change Campaign Party"),
-#             ("canDeleteCampaignParty", "Can Delete Campaign Party"),
-#             ]
-
+    class Meta:
+        db_table = 'campaign_sorting'
+        verbose_name = "Campaign Sorting"
+        verbose_name_plural = "Campaign Sortings"
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaignSorting", "Can View Campaign Sorting"),
+            ("canAddCampaignSorting", "Can Add Campaign Sorting"),
+            ("canChangeCampaignSorting", "Can Change Campaign Sorting"),
+            ("canDeleteCampaignSorting", "Can Delete Campaign Sorting"),
+            ]

@@ -36,6 +36,9 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
+    # Socket & Channels
+    'daphne',
+
     "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -91,14 +94,14 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "apps.configs.configs.context_processors.site_configs",
-
+                # "apps.configs.configs.context_processors.site_configs",
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
+ASGI_APPLICATION = 'core.asgi.application'
 
 
 # Database: TODO: To be outside of settings
