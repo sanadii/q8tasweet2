@@ -31,12 +31,12 @@ import {
   DELETE_CAMPAIGN_ATTENDEE,
   UPDATE_CAMPAIGN_ATTENDEE,
   GET_CAMPAIGN_ATTENDEE_DETAILS,
+
+  // Campaign Sorting
+  GET_ALL_CAMPAIGN_SORTING,
+  GET_CAMPAIGN_COMMITTEE_SORTING,
 } from "./actionType";
 
-import {
-  UPLOAD_IMAGE_SUCCESS,
-  UPLOAD_IMAGE_FAIL,
-} from "../uploadImage/actionType";
 
 import {
   // getCampaigns, getCampaignDetails,
@@ -76,9 +76,12 @@ import {
   deleteCampaignAttendeeSuccess,
   deleteCampaignAttendeeFail,
 
+  // Campaign Sorting
+  getAllCampaignSortingSuccess,
+  getAllCampaignSortingFail,
+  getCampaignCommitteeSortingSuccess,
+  getCampaignCommitteeSortingFail,
 } from "./action";
-
-import { uploadNewImage } from "../uploadImage/action";
 
 //Include Both Helper File with needed methods
 import {
@@ -90,24 +93,25 @@ import {
 
   // Campaign Members
   getAllCampaignMembers as getAllCampaignMembersApi,
-  // getCampaignMemberDetails as getCampaignMemberDetailsApi,
   addNewCampaignMember,
   updateCampaignMember,
   deleteCampaignMember,
 
   // Campaign Guarantees
   getAllCampaignGuarantees as getAllCampaignGuaranteesApi,
-  // getCampaignGuaranteeDetails as getCampaignGuaranteeDetailsApi,
   addNewCampaignGuarantee,
   updateCampaignGuarantee,
   deleteCampaignGuarantee,
 
   // Campaign Attendees
   getAllCampaignAttendees as getAllCampaignAttendeesApi,
-  // getCampaignAttendeeDetails as getCampaignAttendeeDetailsApi,
   addNewCampaignAttendee,
   updateCampaignAttendee,
   deleteCampaignAttendee,
+
+  // Campaign Sorting
+  getAllCampaignSorting as getAllCampaignSortingApi,
+  getCampaignCommitteeSorting as getCampaignCommitteeSortingApi,
 
 } from "../../helpers/backend_helper";
 
@@ -267,6 +271,7 @@ function* onUpdateCampaignGuarantee({ payload: campaignGuarantee }) {
 // CampaignAttendees
 function* getAllCampaignAttendees({ payload: campaign }) {
   try {
+    console.log("getAllCampaignAttendees: SAGA?")
     const response = yield call(getAllCampaignAttendeesApi, campaign);
     yield put(
       CampaignApiResponseSuccess(GET_CAMPAIGN_ATTENDEES, response.data)
@@ -310,6 +315,29 @@ function* onUpdateCampaignAttendee({ payload: campaignAttendee }) {
   } catch (error) {
     yield put(updateCampaignAttendeeFail(error));
     toast.error("CampaignAttendee Updated Failed", { autoClose: 2000 });
+  }
+}
+
+// Campaign Sorting
+function* getAllCampaignSorting() {
+  try {
+    const response = yield call(getAllCampaignSortingApi);
+    yield put(
+      CampaignApiResponseSuccess(GET_ALL_CAMPAIGN_SORTING, response.data)
+    );
+  } catch (error) {
+    yield put(CampaignApiResponseError(GET_ALL_CAMPAIGN_SORTING, error));
+  }
+}
+
+function* getCampaignCommitteeSorting(){
+  try {
+    const response = yield call(getCampaignCommitteeSortingApi);
+    yield put(
+      CampaignApiResponseSuccess(GET_CAMPAIGN_COMMITTEE_SORTING, response.data)
+    );
+  } catch (error) {
+    yield put(CampaignApiResponseError(GET_CAMPAIGN_COMMITTEE_SORTING, error));
   }
 }
 
@@ -387,6 +415,14 @@ export function* watchDeleteCampaignAttendee() {
   yield takeEvery(DELETE_CAMPAIGN_ATTENDEE, onDeleteCampaignAttendee);
 }
 
+// Campaign Sorting Watchers
+export function* watchGetAllCampaignSorting() {
+  yield takeEvery(GET_ALL_CAMPAIGN_SORTING, getAllCampaignSorting);
+}
+
+export function* watchGetCampaignCommitteeSorting() {
+  yield takeEvery(GET_CAMPAIGN_COMMITTEE_SORTING, getCampaignCommitteeSorting);
+}
 
 function* campaignSaga() {
   yield all([
@@ -418,7 +454,9 @@ function* campaignSaga() {
     fork(watchUpdateCampaignAttendee),
     fork(watchDeleteCampaignAttendee),
 
-
+// Campaign Sorting
+    fork(watchGetAllCampaignSorting),
+    fork(watchGetCampaignCommitteeSorting),
   ]);
 }
 

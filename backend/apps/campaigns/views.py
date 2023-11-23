@@ -12,13 +12,13 @@ from rest_framework.exceptions import AuthenticationFailed
 
 # Models
 from apps.auths.models import User, Group
-from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
+from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee, CampaignSorting
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from django.contrib.auth.models import Group
 
 # Serializers
-from apps.campaigns.serializers import CampaignSerializer, CampaignMemberSerializer, CampaignGuaranteeSerializer
-from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteesSerializer
+from apps.campaigns.serializers import CampaignSerializer, CampaignMemberSerializer, CampaignGuaranteeSerializer, CampaignSortingSerializer
+from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteeSerializer
 from apps.auths.serializers import GroupSerializer
 
 from helper.views_helper import CustomPagination
@@ -91,6 +91,14 @@ class GetCampaignDetails(APIView):
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
         campaign_attendees = CampaignAttendee.objects.filter(election=election).select_related('election')
 
+        # Prepare data for each election candidate
+        election_candidates_data = []
+        for candidate in election_candidates:
+            candidate_data = ElectionCandidateSerializer(candidate, context=context).data
+            candidate_sorting = CampaignSorting.objects.filter(electionCandidate=candidate)
+            candidate_data["sorting"] = CampaignSortingSerializer(candidate_sorting, many=True, context=context).data
+            election_candidates_data.append(candidate_data)
+
         # Further processing, returning response or any other operations can continue here...
         return Response({
             "data": {
@@ -100,144 +108,12 @@ class GetCampaignDetails(APIView):
                 "campaignGuarantees": CampaignGuaranteeSerializer(campaign_guarantees, many=True, context=context).data,
                 "campaignAttendees": CampaignGuaranteeSerializer(campaign_attendees, many=True, context=context).data,
                 "campaignElectionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
-                "campaignElectionCommittees": ElectionCommitteesSerializer(election_committees, many=True, context=context).data,
+                "campaignElectionCommittees": ElectionCommitteeSerializer(election_committees, many=True, context=context).data,
+                "campaignElectionSorting": CampaignSortingSerializer(election_candidates_data, many=True, context=context).data,
                 "campaign_roles": get_campaign_roles(context),
             },
             "code": 200
         })
-
-
-    def get_campaign_data(self, campaign, context):
-        return CampaignSerializer(campaign, context=context).data
-
-    def get_campaign_members(self, campaign_members, context):
-        return CampaignMemberSerializer(campaign_members, many=True, context=context).data
-        
-    def get_campaign_guarantees(self, campaign_guarantees, context):
-        return CampaignGuaranteeSerializer(campaign_guarantees, many=True, context=context).data
-
-    def get_campaign_attendees(self, campaign_attendeess, context):
-        return CampaignGuaranteeSerializer(campaign_attendeess, many=True, context=context).data
-
-    def get_campaign_election_candidates(self, election_candidates, context):
-        return ElectionCandidateSerializer(election_candidates, many=True, context=context).data
-
-    def get_campaign_election_committees(self, election_committees, context):
-        return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
-
-    # Add any other helper methods here
-
-# class GetCampaignDetails(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request, slug):
-#         campaign = get_object_or_404(Campaign, slug=slug)
-#         campaign_id = campaign.id
-#         context = {"request": request}
-#         user_id = context["request"].user.id
-#         user_role = determine_user_role(campaign_id, user_id, context)
-
-#         current_campaign_member = get_current_campaign_member(campaign_id, user_id, context)
-
-#         # Fetch campaign details and its associated models
-#         election_candidate = campaign.election_candidate
-#         election = election_candidate.election
-#         candidate = election_candidate.candidate
-
-
-#         MANAGER_ROLES = {"admin", "campaignModerator", "campaignCandidate", "campaignCoordinator"}
-#         SUPERVISOR_ROLES = {"campaignSupervisor"}
-#         MEMBER_ROLES = {"campaignSupervisor", "campaignGuarantor", "campaignAttendant", "campaignSorter"}
-        
-
-#         # Fetch campaign members based on user/member role
-#         if user_role in MANAGER_ROLES:
-#             campaign_members = CampaignMember.objects.filter(campaign=campaign)
-#             campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
-        
-#         elif user_role in SUPERVISOR_ROLES:
-#             # If user is a supervisor, fetch members they manage and members with managerial roles
-#             # get_campaign_managed_members = get_campaign_managed_members
-#             campaign_managers = self.get_campaign_managers(campaign)
-#             campaign_managed_members = self.get_campaign_managed_members(current_campaign_member, user_role)
-#             campaign_members = campaign_managers | campaign_managed_members
-
-#         else:
-#             # For other roles or non-members, return an empty query set
-#             campaign_managed_members = CampaignMember.objects.none()
-
-#         # Extract user ids from campaign_managed_members to further filter guarantees based on member's user
-#         managed_user_ids = campaign_managed_members.values_list('user__id', flat=True)
-#         campaign_guarantees = CampaignGuarantee.objects.filter(campaign=campaign, member__user__id__in=managed_user_ids).select_related('campaign')
-#         campaign_attendeess = CampaignAttendee.objects.filter(election=election).select_related('election')
-
-#         # Fetch other related details based on the current campaign
-#         election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
-#         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
-
-#         # Further processing, returning response or any other operations can continue here...
-#         return Response({
-#             "data": {
-#                 "currentCampaignMember": current_campaign_member,
-#                 "campaignDetails": self.get_campaign_data(campaign, context),
-#                 "campaignMembers": self.get_campaign_members(campaign_members, context),
-#                 "campaignGuarantees": self.get_campaign_guarantees(campaign_guarantees, context),
-#                 "campaignAttendees": self.get_campaign_attendees(campaign_attendeess, context),
-#                 "campaignElectionCandidates": self.get_campaign_election_candidates(election_candidates, context),
-#                 "campaignElectionCommittees": self.get_campaign_election_committees(election_committees, context),
-#                 "campaign_roles": get_campaign_roles(context),
-#             },
-#             "code": 200
-#         })
-
-#     def get_campaign_data(self, campaign, context):
-#         return CampaignSerializer(campaign, context=context).data
-
-
-#     def get_campaign_managed_members(self, current_campaign_member, user_role):
-#         """Get members managed by the given supervisor."""
-#         campaign_member_id = current_campaign_member.get('id')
-#         current_campaign_member = CampaignMember.objects.filter(id=campaign_member_id)
-
-#         # if supervisor, get the member managed by supervisor together with current member (supervisor)
-#         if user_role == "campaignSupervisor":
-#             campaign_supervised_members = CampaignMember.objects.filter(supervisor_id=campaign_member_id)
-#             campaign_managed_members = current_campaign_member | campaign_supervised_members
-#         else:
-#             campaign_managed_members = current_campaign_member
-
-#         return campaign_managed_members
-
-
-#     def get_campaign_managers(self, campaign):
-#         """Get members with managerial roles in the campaign."""
-        
-#         # Define the roles for campaign managers
-#         manager_roles = ["campaignModerator", "campaignCandidate", "campaignCoordinator" ]
-        
-#         campaign_managers = CampaignMember.objects.select_related('role').filter(
-#             campaign=campaign,
-#             role__name__in=manager_roles
-#         )
-        
-#         return campaign_managers
-
-#     def get_campaign_members(self, campaign_members, context):
-#         return CampaignMemberSerializer(campaign_members, many=True, context=context).data
-        
-#     def get_campaign_guarantees(self, campaign_guarantees, context):
-#         return CampaignGuaranteeSerializer(campaign_guarantees, many=True, context=context).data
-
-#     def get_campaign_attendees(self, campaign_attendeess, context):
-#         return CampaignGuaranteeSerializer(campaign_attendeess, many=True, context=context).data
-
-#     def get_campaign_election_candidates(self, election_candidates, context):
-#         return ElectionCandidateSerializer(election_candidates, many=True, context=context).data
-
-#     def get_campaign_election_committees(self, election_committees, context):
-#         return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
-
-#     # Add any other helper methods here
 
 class AddNewCampaign(APIView):
     permission_classes = [IsAuthenticated]
@@ -403,3 +279,14 @@ class DeleteCampaignAttendee(APIView):
         except CampaignAttendee.DoesNotExist:
             return Response({"data": "Campaign Attendee not found", "count": 0, "code": 404}, status=404)
       
+class GetAllCampaignSorting(APIView):
+    def get(self, request, format=None):
+        sortings = CampaignSorting.objects.all()
+        serializer = CampaignSortingSerializer(sortings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class GetCampaignCommitteeSorting(APIView):
+    def get(self, request, format=None):
+        sortings = CampaignSorting.objects.all()
+        serializer = CampaignSortingSerializer(sortings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

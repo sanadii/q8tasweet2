@@ -1,11 +1,8 @@
 from django.http.response import JsonResponse
 from django.contrib.auth.models import Group
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
@@ -14,14 +11,13 @@ from rest_framework.views import APIView
 
 from apps.auths.models import User
 from apps.auths.models import GroupCategories
-from apps.campaigns.models import Campaign, CampaignMember
 from apps.auths.serializers import UserSerializer, UserLoginSerializer, GroupSerializer
-from apps.campaigns.serializers import CampaignSerializer
 
 from utils.views import get_current_user_campaigns
-@method_decorator(csrf_exempt, name='dispatch')
+
 class UserLogin(APIView):
     permission_classes = [AllowAny]
+    
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')

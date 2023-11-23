@@ -131,6 +131,13 @@ export const deleteCampaignAttendee = (campaignAttendee) => api.delete(url.DELET
 export const addNewCampaignAttendee = (campaignAttendee) => api.create(url.ADD_NEW_CAMPAIGN_ATTENDEE, campaignAttendee);
 export const updateCampaignAttendee = (campaignAttendee) => api.put(url.UPDATE_CAMPAIGN_ATTENDEE, campaignAttendee);
 
+// CampaignSorting
+export const getAllCampaignSorting = () => api.get(url.GET_ALL_CAMPAIGN_SORTING);
+export const getCampaignCommitteeSorting = () => api.get(url.GET_CAMPAIGN_COMMITTEE_SORTING);
+// export const deleteCampaignSorting = (campaignSorting) => api.delete(url.DELETE_CAMPAIGN_SORTING + "/" + campaignSorting);
+// export const addNewCampaignSorting = (campaignSorting) => api.create(url.ADD_NEW_CAMPAIGN_SORTING, campaignSorting);
+// export const updateCampaignSorting = (campaignSorting) => api.update(url.UPDATE_CAMPAIGN_SORTING + "/" + campaignSorting.id, campaignSorting);
+
 // Users
 export const getUsers = () => api.get(url.GET_USERS);
 export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + user.id);

@@ -15,7 +15,6 @@ import {
 
   // Campaign Members
   GET_ALL_CAMPAIGN_MEMBERS,
-  // GET_CAMPAIGN_MEMBER_DETAILS,
   ADD_NEW_CAMPAIGN_MEMBER_SUCCESS,
   ADD_NEW_CAMPAIGN_MEMBER_FAIL,
   UPDATE_CAMPAIGN_MEMBER_SUCCESS,
@@ -25,7 +24,6 @@ import {
 
   // Campaign Guarantees
   GET_ALL_CAMPAIGN_GUARANTEES,
-  // GET_CAMPAIGN_GUARANTEE_DETAILS,
   ADD_NEW_CAMPAIGN_GUARANTEE_SUCCESS,
   ADD_NEW_CAMPAIGN_GUARANTEE_FAIL,
   UPDATE_CAMPAIGN_GUARANTEE_SUCCESS,
@@ -35,13 +33,17 @@ import {
 
   // Campaign Attendees
   GET_CAMPAIGN_ATTENDEES,
-  // GET_CAMPAIGN_ATTENDEE_DETAILS,
   ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS,
   ADD_NEW_CAMPAIGN_ATTENDEE_FAIL,
   UPDATE_CAMPAIGN_ATTENDEE_SUCCESS,
   UPDATE_CAMPAIGN_ATTENDEE_FAIL,
   DELETE_CAMPAIGN_ATTENDEE_SUCCESS,
   DELETE_CAMPAIGN_ATTENDEE_FAIL,
+
+  // Campaign Sorting
+  GET_ALL_CAMPAIGN_SORTING,
+  GET_CAMPAIGN_COMMITTEE_SORTING,
+
 } from "./actionType";
 
 const IntialState = {
@@ -51,6 +53,7 @@ const IntialState = {
   campaignDetails: [],
   campaignGuarantees: [],
   campaignAttendees: [],
+  campaignSorting: [],
 
   campaignElectionCandidates: [],
   campaignElectionCommittees: [],
@@ -106,6 +109,13 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignAttendeeCreated: false,
             isCampaignAttendeeSuccess: true,
           };
+        case GET_ALL_CAMPAIGN_SORTING:
+          return {
+            ...state,
+            campaignSorting: action.payload.data,
+            isCampaignCreated: false,
+            isCampaignSuccess: true,
+          };
 
         default:
           return { ...state };
@@ -156,6 +166,13 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignAttendeeSuccess: true,
           };
         }
+        case GET_ALL_CAMPAIGN_SORTING:
+          return {
+            ...state,
+            error: action.payload.error,
+            isCampaignCreated: false,
+            isCampaignSuccess: true,
+          };
 
         default:
           return { ...state };
@@ -416,7 +433,12 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignAttendeeDelete: false,
         isCampaignAttendeeDeleteFail: true,
       };
-
+    case GET_ALL_CAMPAIGN_SORTING: {
+      return {
+        ...state,
+        isCampaignCreated: false,
+      };
+    }
 
     default:
       return { ...state };

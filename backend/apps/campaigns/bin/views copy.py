@@ -247,7 +247,7 @@ class GetCampaignDetails(APIView):
     def get_election_related_data(self, election_id):
         # Fetch ElectionCommittee based on the election ID
         election_committees_query = ElectionCommittee.objects.filter(election=election_id)
-        election_committees_serializer = ElectionCommitteesSerializer(election_committees_query, many=True)
+        election_committees_serializer = ElectionCommitteeSerializer(election_committees_query, many=True)
         election_committees = election_committees_serializer.data
 
         # Fetch ElectionCandidate for the same election

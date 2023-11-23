@@ -206,7 +206,7 @@ class GetCampaignDetails(APIView):
         return ElectionCandidateSerializer(election_candidates, many=True, context=context).data
 
     def get_campaign_election_committees(self, election_committees, context):
-        return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
+        return ElectionCommitteeSerializer(election_committees, many=True, context=context).data
 
 class AddNewCampaign(APIView):
     permission_classes = [IsAuthenticated]

@@ -28,7 +28,7 @@ from apps.elections.serializers import (
     ElectionSerializer,
     CategoriesSerializer,
     SubCategoriesSerializer,
-    ElectionCommitteesSerializer,
+    ElectionCommitteeSerializer,
     ElectionCandidateSerializer,
     ElectionCommitteeResultSerializer,
 )
@@ -117,7 +117,7 @@ class GetElectionDetails(APIView):
         return ElectionCandidateSerializer(election_candidates, many=True, context=context).data
 
     def get_election_committees(self, election_committees, context):
-        return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
+        return ElectionCommitteeSerializer(election_committees, many=True, context=context).data
 
     def get_election_campaigns(self, election, context):
         election_candidate_ids = ElectionCandidate.objects.filter(election=election).values_list('id', flat=True)
@@ -238,7 +238,7 @@ class GetCommittees(APIView):
     
     def get(self, request):
         committees_data = ElectionCommittee.objects.all()
-        data_serializer = ElectionCommitteesSerializer(committees_data, many=True)
+        data_serializer = ElectionCommitteeSerializer(committees_data, many=True)
 
         return Response({"data": data_serializer.data, "counts": 1, "code": 200})
 
@@ -246,7 +246,7 @@ class AddNewElectionCommittee(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = ElectionCommitteesSerializer(data=request.data, context={'request': request})
+        serializer = ElectionCommitteeSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
             serializer.save(created_by=request.user)
@@ -262,7 +262,7 @@ class UpdateElectionCommittee(APIView):
         except ElectionCommittee.DoesNotExist:
             return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = ElectionCommitteesSerializer(committee, data=request.data, partial=True)
+        serializer = ElectionCommitteeSerializer(committee, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({"data": serializer.data, "count": 1, "code": status.HTTP_200_OK})
@@ -473,7 +473,7 @@ class GetPublicElectionDetails(APIView):
 
     def get_election_committees(self, id):
         election_committees = ElectionCommittee.objects.filter(election=id)
-        committees_serializer = ElectionCommitteesSerializer(election_committees, many=True)
+        committees_serializer = ElectionCommitteeSerializer(election_committees, many=True)
         return committees_serializer.data
 
     # # Showing Candidate results in all Committees

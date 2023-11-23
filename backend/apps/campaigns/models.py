@@ -117,7 +117,7 @@ class CampaignAttendee(TrackModel):
             ]
         
 
-class CampaignSorting(TrackModel):
+class CampaignSorting(models.Model):
     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='sorter_sortees')
     electionCandidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
     committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_sortees')

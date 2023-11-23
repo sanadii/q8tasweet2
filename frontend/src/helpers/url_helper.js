@@ -88,6 +88,13 @@ export const DELETE_CAMPAIGN_ATTENDEE = "/campaigns/deleteCampaignAttendee";
 export const ADD_NEW_CAMPAIGN_ATTENDEE = "/campaigns/addNewCampaignAttendee";
 export const UPDATE_CAMPAIGN_ATTENDEE = "/campaigns/updateCampaignAttendee";
 
+// CampaignSorting
+export const GET_ALL_CAMPAIGN_SORTING = "/campaigns/getAllCampaignSorting";
+export const GET_CAMPAIGN_COMMITTEE_SORTING = "/campaigns/getCampaignCommitteeSorting";
+// export const DELETE_CAMPAIGN_SORTING = "/campaigns/deleteCampaignSorting";
+// export const ADD_NEW_CAMPAIGN_SORTING = "/campaigns/addNewCampaignSorting";
+// export const UPDATE_CAMPAIGN_SORTING = "/campaigns/updateCampaignSorting";
+
 // USERS
 export const GET_USERS = "/auth/getUsers";
 export const GET_USER_DETAILS = "/auth/getUserDetails";

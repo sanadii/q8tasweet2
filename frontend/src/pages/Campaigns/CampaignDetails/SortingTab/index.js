@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
+import { getAllCampaignSorting } from "store/actions";
+
 import { Col, Row, Card, CardHeader, Table, Button, Input } from 'reactstrap';
 
 import { campaignSelector, userSelector } from 'Selectors';
 
 const SortingTab = ({ candidatesData }) => {
-  const { campaign, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
+  const dispatch = useDispatch();
+
+  const { campaign, campaignSorting, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
   const { userId } = useSelector(userSelector);
 
   const committee = currentCampaignMember && currentCampaignMember.committee ? currentCampaignMember.committee : 0;
   const [candidates, setCandidates] = useState(campaignElectionCandidates);
 
-
-
   // State for WebSocket URL
   const [socketUrl, setSocketUrl] = useState(null);
   const [socket, setSocket] = useState(null);
+
+  // Campaign Data
+  useEffect(() => {
+    if (campaignSorting && !campaignSorting.length) {
+      dispatch(getAllCampaignSorting());
+    }
+    console.log("getAllCampaignAttendees: INDEX?")
+
+  }, [dispatch, campaignSorting]);
+
 
   useEffect(() => {
     // Build the WebSocket URL
@@ -35,11 +47,46 @@ const SortingTab = ({ candidatesData }) => {
     };
   }, [campaign]);
 
+
+
+  useEffect(() => {
+    if (socket) {
+      socket.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (message.type === 'vote_update') {
+          setCandidates(candidates.map(candidate =>
+            candidate.id === message.electionCandidate_id ? { ...candidate, votes: message.votes } : candidate
+          ));
+        }
+      };
+    }
+  }, [socket, candidates]);
+
+
+
+  // Define sendVoteUpdate as an arrow function
+  const sendVoteUpdate = (candidateId, newVotes) => {
+    if (socket) {
+      socket.send(JSON.stringify({
+        type: 'vote_update',
+        electionCandidate_id: candidateId,  // Changed from candidate_id
+        votes: newVotes,
+      }));
+    }
+  };
+
+
   // Function to increment votes
   const incrementVotes = (candidateId) => {
     setCandidates(candidates.map(candidate =>
       candidate.id === candidateId ? { ...candidate, votes: candidate.votes + 1 } : candidate
     ));
+    const newVotes = candidates.find(candidate => candidate.id === candidateId).votes + 1;
+    sendVoteUpdate(candidateId, newVotes);
+    setCandidates(candidates.map(candidate =>
+      candidate.id === candidateId ? { ...candidate, votes: newVotes } : candidate
+    ));
+
   };
 
   // Function to decrement votes
@@ -47,6 +94,12 @@ const SortingTab = ({ candidatesData }) => {
     setCandidates(candidates.map(candidate =>
       candidate.id === candidateId ? { ...candidate, votes: Math.max(0, candidate.votes - 1) } : candidate
     ));
+    const newVotes = Math.max(0, candidates.find(candidate => candidate.id === candidateId).votes - 1);
+    sendVoteUpdate(candidateId, newVotes);
+    setCandidates(candidates.map(candidate =>
+      candidate.id === candidateId ? { ...candidate, votes: newVotes } : candidate
+    ));
+
   };
 
   const handleNotesChange = (candidateId, newNotes) => {
@@ -117,9 +170,9 @@ const SortingTab = ({ candidatesData }) => {
 
                       </td>
                       <td>
-                        <Button onClick={() => handleSubmit(candidate)}>Submit</Button>
+                        <Button onClick={() => handleSubmit(candidate)}>ملاحضات</Button>
+                        <Button onClick={() => handleSubmit(candidate)}>تعديل</Button>
                       </td>
-
                     </tr>
                   ))}
                 </tbody>

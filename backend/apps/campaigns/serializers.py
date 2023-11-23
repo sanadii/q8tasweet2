@@ -4,7 +4,7 @@ from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # Models
 from django.contrib.auth.models import Group, Permission
-from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
+from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee, CampaignSorting
 from apps.elections.models import (
     Election,
     ElectionCategory,
@@ -16,7 +16,7 @@ from apps.electors.models import Elector
 
 # Serializers
 from apps.candidates.serializers import CandidateSerializer
-from apps.elections.serializers import ElectionSerializer
+from apps.elections.serializers import ElectionSerializer, ElectionCandidateSerializer, ElectionCommitteeSerializer
 from apps.auths.serializers import UserSerializer
 from apps.electors.serializers import ElectorsSerializer
 
@@ -188,6 +188,12 @@ class CampaignAttendeeSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+
+class CampaignSortingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CampaignSorting
+        fields = '__all__'
 
 # For CampaignGuaranteeSerializer and CampaignAttendeeSerializer,
 # you could have a method like this to avoid repeating the same logic

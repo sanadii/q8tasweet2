@@ -47,7 +47,7 @@
 #         return election_candidates_serialized
 
 #     def get_election_committees(self, election_committees, context):
-#         return ElectionCommitteesSerializer(election_committees, many=True, context=context).data
+#         return ElectionCommitteeSerializer(election_committees, many=True, context=context).data
 
 #     # Showing Committee Results for Candidate of This Election Only
 #     def get_election_committee_results(self, election, election_committees):

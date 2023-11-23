@@ -155,7 +155,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class ElectionCommitteesSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class ElectionCommitteeSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the ElectionCommittee model. """
     admin_serializer_classes = (TrackMixin,)
     

@@ -52,6 +52,10 @@ import {
   DELETE_CAMPAIGN_ATTENDEE,
   DELETE_CAMPAIGN_ATTENDEE_SUCCESS,
   DELETE_CAMPAIGN_ATTENDEE_FAIL,
+
+  // Campaign Sorting
+  GET_ALL_CAMPAIGN_SORTING,
+  GET_CAMPAIGN_COMMITTEE_SORTING,
 } from "./actionType";
 
 // Campaign Success / Error
@@ -271,3 +275,25 @@ export const deleteCampaignAttendeeFail = (error) => ({
   type: DELETE_CAMPAIGN_ATTENDEE_FAIL,
   payload: error,
 });
+
+
+// Campaign Sorting
+// export const getAllCampaignSorting = () => ({
+//   type: GET_ALL_CAMPAIGN_SORTING,
+// });
+
+
+export const getAllCampaignSorting = () => {
+  // If you need a console log for debugging, you can uncomment the following line
+  console.log("getAllCampaignAttendees: ACTION?")
+
+  return {
+    type: GET_ALL_CAMPAIGN_SORTING,
+  };
+};
+export const getCampaignCommitteeSorting = (campaignCommittee) => ({
+  type: GET_CAMPAIGN_COMMITTEE_SORTING,
+  payload: campaignCommittee,
+});
+
+
