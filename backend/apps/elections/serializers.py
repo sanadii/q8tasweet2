@@ -13,6 +13,8 @@ from apps.elections.models import (
     ElectionCommitteeResult,
 )
 
+from apps.campaigns.models import CampaignSorting
+
 class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Election model. """
     admin_serializer_classes = (TrackMixin, TaskMixin)
@@ -126,6 +128,11 @@ class ElectionCandidateVoteSerializer(serializers.ModelSerializer):
         # fields = "__all__"
         fields = ["election_committee", "votes"]
 
+class ElectionCandidateSortingVoteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CampaignSorting
+        fields = '__all__'
 
 class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the ElectionCandidate model. """
@@ -135,10 +142,11 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     gender = serializers.IntegerField(source='candidate.gender', read_only=True)
     image = serializers.SerializerMethodField('get_candidate_image')
     committee_votes = ElectionCandidateVoteSerializer(source='committee_result_candidates', many=True, read_only=True)
+    committee_sorting = ElectionCandidateSortingVoteSerializer(source='election_candiddate_sortings', many=True, read_only=True)
 
     class Meta:
         model = ElectionCandidate
-        fields = ["id", "election", "candidate", "name", "gender", "image", "votes", "notes", "committee_votes"]
+        fields = ["id", "election", "candidate", "name", "gender", "image", "votes", "notes", "committee_votes", "committee_sorting"]
 
     def get_candidate_image(self, obj):
         if obj.candidate and obj.candidate.image:

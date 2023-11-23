@@ -1,150 +1,109 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getAllCampaignSorting } from "store/actions";
-
 import { Col, Row, Card, CardHeader, Table, Button, Input } from 'reactstrap';
-
 import { campaignSelector, userSelector } from 'Selectors';
 
-const SortingTab = ({ candidatesData }) => {
+const SortingTab = () => {
   const dispatch = useDispatch();
-
-  const { campaign, campaignSorting, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
+  const { campaign, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
   const { userId } = useSelector(userSelector);
 
-  const committee = currentCampaignMember && currentCampaignMember.committee ? currentCampaignMember.committee : 0;
-  const [candidates, setCandidates] = useState(campaignElectionCandidates);
-
-  // State for WebSocket URL
-  const [socketUrl, setSocketUrl] = useState(null);
+  const committeeId = 5;
+  const [candidatesData, setCandidatesData] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  // Campaign Data
+  // Consolidate candidate data with vote counts
+  const consolidateCandidateData = () => {
+    return campaignElectionCandidates.map(candidate => {
+      const committeeSortingForCandidate = candidate.committeeSorting.find(sorting =>
+        sorting.committee === committeeId && sorting.electionCandidate === candidate.id);
+
+      return {
+        ...candidate,
+        votesForCommittee: committeeSortingForCandidate ? committeeSortingForCandidate.votes : 0
+      };
+    });
+  };
+
+  // Update the WebSocket from slug & url
   useEffect(() => {
-    if (campaignSorting && !campaignSorting.length) {
-      dispatch(getAllCampaignSorting());
-    }
-    console.log("getAllCampaignAttendees: INDEX?")
-
-  }, [dispatch, campaignSorting]);
-
-
-  useEffect(() => {
-    // Build the WebSocket URL
     const { slug } = campaign;
     const wsUrl = `ws://127.0.0.1:8000/ws/campaigns/${slug}/`;
-    setSocketUrl(wsUrl);
-
-    // Create and open the WebSocket connection
     const newSocket = new WebSocket(wsUrl);
     setSocket(newSocket);
 
-    // Clean up on unmount
+    // Initial data setup
+    setCandidatesData(consolidateCandidateData());
+
     return () => {
-      if (newSocket) {
-        newSocket.close();
-      }
+      if (newSocket) newSocket.close();
     };
   }, [campaign]);
-
-
 
   useEffect(() => {
     if (socket) {
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
         if (message.type === 'vote_update') {
-          setCandidates(candidates.map(candidate =>
-            candidate.id === message.electionCandidate_id ? { ...candidate, votes: message.votes } : candidate
-          ));
+          setCandidatesData(candidatesData.map(candidate => {
+            if (candidate.id === message.electionCandidate_id && message.committee === committeeId) {
+              return { ...candidate, votesForCommittee: message.votes };
+            }
+            return candidate;
+          }));
         }
       };
     }
-  }, [socket, candidates]);
+  }, [socket, candidatesData]);
 
-
-
-  // Define sendVoteUpdate as an arrow function
   const sendVoteUpdate = (candidateId, newVotes) => {
     if (socket) {
       socket.send(JSON.stringify({
         type: 'vote_update',
-        electionCandidate_id: candidateId,  // Changed from candidate_id
+        electionCandidate_id: candidateId,
         votes: newVotes,
+        committee: committeeId,
       }));
     }
   };
 
-
-  // Function to increment votes
-  const incrementVotes = (candidateId) => {
-    setCandidates(candidates.map(candidate =>
-      candidate.id === candidateId ? { ...candidate, votes: candidate.votes + 1 } : candidate
-    ));
-    const newVotes = candidates.find(candidate => candidate.id === candidateId).votes + 1;
-    sendVoteUpdate(candidateId, newVotes);
-    setCandidates(candidates.map(candidate =>
-      candidate.id === candidateId ? { ...candidate, votes: newVotes } : candidate
-    ));
-
+  const updateVotes = (candidateId, increment) => {
+    setCandidatesData(candidatesData.map(candidate => {
+      if (candidate.id === candidateId) {
+        const newVotes = increment ? candidate.votesForCommittee + 1 : Math.max(0, candidate.votesForCommittee - 1);
+        sendVoteUpdate(candidateId, newVotes);
+        return { ...candidate, votesForCommittee: newVotes };
+      }
+      return candidate;
+    }));
   };
 
-  // Function to decrement votes
-  const decrementVotes = (candidateId) => {
-    setCandidates(candidates.map(candidate =>
-      candidate.id === candidateId ? { ...candidate, votes: Math.max(0, candidate.votes - 1) } : candidate
-    ));
-    const newVotes = Math.max(0, candidates.find(candidate => candidate.id === candidateId).votes - 1);
-    sendVoteUpdate(candidateId, newVotes);
-    setCandidates(candidates.map(candidate =>
-      candidate.id === candidateId ? { ...candidate, votes: newVotes } : candidate
-    ));
-
-  };
+  const incrementVotes = candidateId => updateVotes(candidateId, true);
+  const decrementVotes = candidateId => updateVotes(candidateId, false);
 
   const handleNotesChange = (candidateId, newNotes) => {
-    setCandidates(candidates.map(candidate =>
+    setCandidatesData(candidatesData.map(candidate =>
       candidate.id === candidateId ? { ...candidate, notes: newNotes } : candidate
     ));
   };
-
-
-  const handleSubmit = (candidate) => {
-    // Prepare data for channel submission
-    const submissionData = {
-      user: userId,
-      electionCandidate: candidate.id,
-      committee: committee.id,
-      votes: candidate.votes,
-      notes: candidate.notes,
-    };
-
-    // TODO: Submit data through channel
-    console.log('Submitting:', submissionData);
-  };
-
-
-  document.title = "الفرز | كويت تصويت";
 
   return (
     <React.Fragment>
       <Row>
         <Col lg={12}>
           <Card>
-            <CardHeader>
-              <h4><b>الفرز</b></h4>
-            </CardHeader>
+            <CardHeader><h4><b>الفرز</b></h4></CardHeader>
             <div style={{ maxWidth: '100%', overflowX: 'auto' }}>
               <Table style={{ width: 'auto', minWidth: '300px' }}>
                 <thead>
                   <tr>
                     <th style={{ whiteSpace: 'nowrap' }}>اسم المرشح</th>
                     <th style={{ width: '200px', textAlign: 'center', whiteSpace: 'nowrap' }}>الأصوات</th>
-                    <th>ملاحضات</th>
+                    <th>إجراءات</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {candidates.map((candidate, index) => (
+                  {candidatesData.map((candidate, index) => (
                     <tr key={index}>
                       <td style={{ whiteSpace: 'nowrap' }}>{candidate.name}</td>
                       <td style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
@@ -153,7 +112,7 @@ const SortingTab = ({ candidatesData }) => {
                         </Button>
                         {' '}
                         <span style={{ margin: '0 10px', display: 'inline-block', width: '30px', textAlign: 'center' }}>
-                          {candidate.votes}
+                          {candidate.votesForCommittee}
                         </span>
                         {' '}
                         <Button color="danger" className="btn-icon" outline onClick={() => decrementVotes(candidate.id)}>
@@ -161,17 +120,24 @@ const SortingTab = ({ candidatesData }) => {
                         </Button>
                       </td>
                       <td>
-                        <Input
-                          type="text"
-                          value={candidate.notes || ''}  // Fallback to an empty string if notes is null/undefined
-                          onChange={(e) => handleNotesChange(candidate.id, e.target.value)}
-                          placeholder="Enter notes"
-                        />
-
-                      </td>
-                      <td>
-                        <Button onClick={() => handleSubmit(candidate)}>ملاحضات</Button>
-                        <Button onClick={() => handleSubmit(candidate)}>تعديل</Button>
+                        <button
+                          to="#"
+                          className="btn btn-sm btn-soft-warning edit-list me-2"
+                          onClick={() => {
+                          }}
+                        >
+                          <i className="ri-eye-fill align-bottom pe-2" />
+                          تعديل
+                        </button>
+                        <button
+                          to="#"
+                          className="btn btn-sm btn-soft-info edit-list me-2"
+                          onClick={() => {
+                          }}
+                        >
+                          <i className="ri-pencil-fill align-bottom pe-2" />
+                          ملاحضات
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -182,7 +148,6 @@ const SortingTab = ({ candidatesData }) => {
         </Col>
       </Row>
     </React.Fragment>
-
   );
 };
 

@@ -23,13 +23,15 @@ class CampaignSortingConsumer(AsyncWebsocketConsumer):
         if text_data_json['type'] == 'vote_update':
             electionCandidate_id = text_data_json['electionCandidate_id']
             new_votes = text_data_json['votes']
-            await self.update_vote_count(electionCandidate_id, new_votes)
+            committee_id = text_data_json['committee']
+            await self.update_vote_count(electionCandidate_id, new_votes, committee_id)
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'send_vote_update',
                     'electionCandidate_id': electionCandidate_id,
                     'votes': new_votes,
+                    'committee': committee_id,
                 }
             )
 
@@ -38,19 +40,21 @@ class CampaignSortingConsumer(AsyncWebsocketConsumer):
             'type': 'vote_update',
             'electionCandidate_id': event['electionCandidate_id'],
             'votes': event['votes'],
+            'committee': event['committee'],
         }))
 
     @sync_to_async
-    def update_vote_count(self, electionCandidate_id, new_votes):
+    def update_vote_count(self, electionCandidate_id, new_votes, committee_id):
         try:
-            sorting_entry = CampaignSorting.objects.get(electionCandidate_id=electionCandidate_id)
+            # Updated to filter by both candidate ID and committee ID
+            sorting_entry = CampaignSorting.objects.get(electionCandidate_id=electionCandidate_id, committee_id=committee_id)
             sorting_entry.votes = new_votes
             sorting_entry.save()
-            print(f"Vote count updated for candidate {electionCandidate_id} to {new_votes}")
+            print(f"Vote count updated for candidate {electionCandidate_id} in committee {committee_id} to {new_votes}")
         except CampaignSorting.DoesNotExist:
-            # Consider creating a new entry if it doesn't exist
-            sorting_entry = CampaignSorting.objects.create(electionCandidate_id=electionCandidate_id, votes=new_votes)
-            print(f"New CampaignSorting entry created for candidate {electionCandidate_id} with votes {new_votes}")
+            # Create a new entry if it doesn't exist
+            sorting_entry = CampaignSorting.objects.create(electionCandidate_id=electionCandidate_id, votes=new_votes, committee_id=committee_id)
+            print(f"New CampaignSorting entry created for candidate {electionCandidate_id} in committee {committee_id} with votes {new_votes}")
 
 
 # class ChatConsumer(AsyncWebsocketConsumer):

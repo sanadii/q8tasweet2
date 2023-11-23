@@ -188,7 +188,6 @@ class CampaignAttendeeSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-
 class CampaignSortingSerializer(serializers.ModelSerializer):
 
     class Meta:
