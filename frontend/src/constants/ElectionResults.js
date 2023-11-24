@@ -9,4 +9,9 @@ export const ElectionResultOptions = [
     name: "النتائج التفصيلية",
     value: "النتائج التفصيلية",
   },
+  {
+    id: 3,
+    name: "نتائج الفرز",
+    value: "نتائج الفرز",
+  },
 ];

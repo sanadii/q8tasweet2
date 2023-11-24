@@ -80,6 +80,7 @@ const ResultsTab = () => {
       },
       {
         Header: 'المرشح',
+        accessor: 'name',
         Cell: ({ row }) => (
           <ImageCandidateWinnerCircle
             gender={row.original.gender}
@@ -170,6 +171,8 @@ const ResultsTab = () => {
                   data={transformedResultData}
                   customPageSize={50}
                   isTableContainerFooter={true}
+                  sortBy="name"
+                  sortAsc={true}
 
                   // Styling
                   divClass="table-responsive table-card mb-3"

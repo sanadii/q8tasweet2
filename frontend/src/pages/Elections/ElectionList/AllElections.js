@@ -268,6 +268,8 @@ const AllElections = () => {
                   columns={columns}
                   data={electionList || []}
                   customPageSize={20}
+                  sortBy="dueDate"
+                  sortDesc={true}
 
                   // Styling----------
                   className="custom-header-css"

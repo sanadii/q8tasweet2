@@ -95,20 +95,18 @@ const transformResultData = (
       image: candidate.imagePath,
       isWinner: candidate.isWinner,
       total: calculateTotalVotes(candidate, electionCommittees),
-
     };
 
     // Candidate Vote Field
     const noCommittee = "0";
     transformedResultFieldsData[`votes`] = columnEdited[0]
       ? <ResultInputField
-        committeeId={noCommittee}
-        candidateId={candidate.id}
-        value={candidateVotes}
-        onChange={(value) => handleVoteFieldChange(noCommittee, candidate.id, value)} // Pass `undefined` for `committeeId`
-      />
-      :
-      candidateVotes
+          committeeId={noCommittee}
+          candidateId={candidate.id}
+          value={candidateVotes}
+          onChange={(value) => handleVoteFieldChange(noCommittee, candidate.id, value)}
+        />
+      : candidateVotes;
 
     // Committee Candidate Vote Field
     if (electionCommittees.length > 0) {
@@ -117,29 +115,95 @@ const transformResultData = (
         const votes = columnEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
         transformedResultFieldsData[`committee_${committee.id}`] = columnEdited[committee.id]
           ? <ResultInputField
-            committeeId={committee.id}
-            candidateId={candidate.id}
-            value={votes}
-            onChange={(value) => handleVoteFieldChange(committee.id, candidate.id, value)}
-          />
-
+              committeeId={committee.id}
+              candidateId={candidate.id}
+              value={votes}
+              onChange={(value) => handleVoteFieldChange(committee.id, candidate.id, value)}
+            />
           : votes;
       });
     }
     return transformedResultFieldsData;
   });
 
-
+  // Calculate positions and determine winners, but do not sort by position
   const calculateCandidatePosition = (candidates) => {
     const sortedCandidates = [...candidates].sort((a, b) => b.total - a.total);
     sortedCandidates.forEach((candidate, index) => {
       candidate.position = index + 1;
       candidate.isWinner = candidate.position <= (election.electSeats || 0);
     });
-    return sortedCandidates.sort((a, b) => b.position - a.position);
+    return candidates; // Return the original list without sorting by position
   };
+
   return calculateCandidatePosition(candidatesWithTotalVotes);
 };
+
+
+// const transformResultData = (
+//   electionCandidates,
+//   electionCommittees,
+//   columnEdited,
+//   handleVoteFieldChange,
+//   election
+// ) => {
+//   if (!electionCandidates || !electionCommittees || !election) return [];
+
+//   const candidatesWithTotalVotes = electionCandidates.map((candidate) => {
+//     const candidateVotes = candidate.votes ?? 0;
+//     const transformedResultFieldsData = {
+//       'candidate.id': candidate.id,
+//       position: candidate.position,
+//       name: candidate.name,
+//       gender: candidate.gender,
+//       image: candidate.imagePath,
+//       isWinner: candidate.isWinner,
+//       total: calculateTotalVotes(candidate, electionCommittees),
+
+//     };
+
+//     // Candidate Vote Field
+//     const noCommittee = "0";
+//     transformedResultFieldsData[`votes`] = columnEdited[0]
+//       ? <ResultInputField
+//         committeeId={noCommittee}
+//         candidateId={candidate.id}
+//         value={candidateVotes}
+//         onChange={(value) => handleVoteFieldChange(noCommittee, candidate.id, value)} // Pass `undefined` for `committeeId`
+//       />
+//       :
+//       candidateVotes
+
+//     // Committee Candidate Vote Field
+//     if (electionCommittees.length > 0) {
+//       electionCommittees.forEach(committee => {
+//         const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
+//         const votes = columnEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
+//         transformedResultFieldsData[`committee_${committee.id}`] = columnEdited[committee.id]
+//           ? <ResultInputField
+//             committeeId={committee.id}
+//             candidateId={candidate.id}
+//             value={votes}
+//             onChange={(value) => handleVoteFieldChange(committee.id, candidate.id, value)}
+//           />
+
+//           : votes;
+//       });
+//     }
+//     return transformedResultFieldsData;
+//   });
+
+
+//   const calculateCandidatePosition = (candidates) => {
+//     const sortedCandidates = [...candidates].sort((a, b) => b.total - a.total);
+//     sortedCandidates.forEach((candidate, index) => {
+//       candidate.position = index + 1;
+//       candidate.isWinner = candidate.position <= (election.electSeats || 0);
+//     });
+//     return sortedCandidates.sort((a, b) => b.position - a.position);
+//   };
+//   return calculateCandidatePosition(candidatesWithTotalVotes);
+// };
 
 
 

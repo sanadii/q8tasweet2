@@ -72,33 +72,33 @@ def determine_user_role(campaign_id, user_id, context):
     """
     Determines the role of a user within a campaign. 
     Parameters: campaign_id (the identifier of the campaign), user_id (the identifier of the user), and context (for serialization).
-    It first attempts to find the user's role within the campaign.
-    If the user is not part of the campaign, it checks if the user has admin privileges.
-    It returns the user's role within the campaign or "admin" if they have higher privileges.
-    If the user is not found within the campaign and doesn't have admin privileges, it returns None.
-    # TODO: check if superadmin or admin first
-    Status: Working fine
+    It first checks if the user has admin or superAdmin privileges.
+    If not, it attempts to find the user's role within the campaign.
+    It returns the user's role within the campaign, "admin" if they have higher privileges, or None otherwise.
     """
-    campaign_roles = Group.objects.filter(Q(category=3))  # CampaignRoles
-    current_campaign_member = get_current_campaign_member(campaign_id, user_id, context)
-    
-    # If the user is not part of the campaign, then check for admin roles
-    if not current_campaign_member:
-        return "admin" if is_higher_privilege(user_id) else None
-    
-    # Convert campaign_roles to a dictionary for faster lookup & Fetch role name
-    role_lookup = {role.id: role.name for role in campaign_roles}
-    return role_lookup.get(current_campaign_member.get('role'))
+    # Check if user is admin or superAdmin first
+    if is_higher_privilege(user_id):
+        return "admin"
 
+    # Fetch campaign roles
+    campaign_roles = Group.objects.filter(Q(category=3))  # Assuming category=3 represents campaign roles
+    # Convert campaign_roles to a dictionary for faster lookup
+    role_lookup = {role.id: role.name for role in campaign_roles}
+
+    # Get the current campaign member's role
+    current_campaign_member = get_current_campaign_member(campaign_id, user_id, context)
+    if current_campaign_member:
+        return role_lookup.get(current_campaign_member.get('role'))
+
+    # Return None if user is neither admin nor part of the campaign
+    return None
 
 def is_higher_privilege(user_id):
     """
-    Checks if a user, identified by user_id, has higher privileges ("admin" or "superAdmin")
+    Checks if a user has higher privileges ("admin" or "superAdmin")
     It directly filters the User model and returns True if the user has higher privileges, otherwise False.
     """    
-    # Directly filtering without fetching the user first
     return User.objects.filter(pk=user_id, groups__name__in=["admin", "superAdmin"]).exists()
-
 
 def get_current_campaign_member(campaign_id, user_id, context):
     """

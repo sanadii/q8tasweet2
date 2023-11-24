@@ -73,6 +73,9 @@ class GetCampaignDetails(APIView):
         campaign = get_object_or_404(Campaign, slug=slug)
         context = {"request": request}
         user_id = context["request"].user.id
+
+        # Does User have Higher Privilage? Admin? Moderator?
+
         user_role = determine_user_role(campaign.id, user_id, context)
         current_campaign_member = get_current_campaign_member(campaign.id, user_id, context)
 

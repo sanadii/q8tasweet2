@@ -96,17 +96,25 @@ PERMISSIONS = {
 def set_permissions():
     for model, permissions in PERMISSIONS.items():
         print(f"Fetching ContentType for model: {model}")
-        
-        content_type = ContentType.objects.get(model=model.lower())
-        for permission_codename, groups in permissions.items():
-            # Create the permission if it doesn't exist
-            permission, _ = Permission.objects.get_or_create(
-                codename=permission_codename,
-                content_type=content_type
-            )
-            # Assign the permission to the groups
-            for group_role in groups:
-                group, _ = Group.objects.get_or_create(name=group_role)
-                group.permissions.add(permission)
+
+        try:
+            content_type = ContentType.objects.get(model=model.lower())
+            for permission_codename, groups in permissions.items():
+                # Create the permission if it doesn't exist
+                permission, created = Permission.objects.get_or_create(
+                    codename=permission_codename,
+                    content_type=content_type
+                )
+                # Assign the permission to the groups
+                for group_role in groups:
+                    group, _ = Group.objects.get_or_create(name=group_role)
+                    group.permissions.add(permission)
+            if created:
+                print(f"Created new ContentType for {model}")
+        except ContentType.MultipleObjectsReturned:
+            print(f"Error: Multiple ContentType entries found for model {model}. Please resolve duplicates.")
+        except ContentType.DoesNotExist:
+            print(f"Error: ContentType not found for model {model}.")
+
 
 set_permissions()

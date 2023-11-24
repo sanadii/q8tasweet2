@@ -7,7 +7,7 @@ import { Row, Col, Card, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Badge } from 'reactstrap'; // Or your preferred UI library if not using reactstrap
 
-const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
+const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL.slice(0, -1) : api.MEDIA_URL;
 const defaultImagePath = 'media/candidates/default.jpg';
 
 const defaultCandidatePath = 'media/candidates/default.jpg';

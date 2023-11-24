@@ -15,6 +15,7 @@ class ElectionTypeOptions(models.IntegerChoices):
 class ElectionResultsOptions(models.IntegerChoices):
     FINAL = 1, "نتائج نهائية"
     DETAILED = 2, "نتائج تفصيلية"
+    SORTING = 3, "نتائج الفرز"
 
 class GenderOptions(models.IntegerChoices):
     UNDEFINED = 0, 'Undefined'

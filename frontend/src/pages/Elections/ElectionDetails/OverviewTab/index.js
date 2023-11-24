@@ -6,7 +6,7 @@ import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer,
 import { electionSelector } from 'Selectors';
 
 // Components
-import ElectionFinalResults from "./ElectionFinalResults"
+import ElectionResults from "./ElectionResults"
 import ElectionDetailsWidget from "./ElectionDetailsWidget";
 import ElectionModerators from "./ElectionModerators";
 import ElectionCampaigns from "./ElectionCampaigns";
@@ -31,7 +31,7 @@ const OverviewTab = () => {
 
       <Row>
         <Col xl={9} lg={8}>
-          <ElectionFinalResults />
+          <ElectionResults />
           <ElectionPrevious />
           <ElectionComments />
         </Col>

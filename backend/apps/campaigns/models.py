@@ -42,7 +42,13 @@ class Campaign(TrackModel, TaskModel):
             ("canChangeCampaignAssistant", "can Change Campaign Assistant"),
             ]
     def __str__(self):
-        return f"{self.election_candidate.candidate.name} - Year"  # Assuming the candidate's name is accessible through the relation
+        return f"{self.election_candidate.candidate.name} - Year"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = uuid.uuid4().hex[:8].upper()
+
+        super().save(*args, **kwargs)  # Call the "real" save() method
 
 class CampaignProfile(TrackModel, TaskModel):
     campaign = models.OneToOneField('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_campaigns")

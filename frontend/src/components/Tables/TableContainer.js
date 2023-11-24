@@ -50,6 +50,11 @@ const TableContainer = ({
   columns,
   data,
 
+  // Table Sorting ----------
+  sortBy,
+  sortAsc,
+  sortDesc,
+
   // Table Styling----------
   tableClass,
   theadClass,
@@ -91,8 +96,9 @@ const TableContainer = ({
         selectedRowIds: 0,
         sortBy: [
           {
-            id: 'dueDate', // replace with the actual column ID or accessor for the due date
-            desc: true, // set to true to sort in descending order
+            id: sortBy, // replace with the actual column ID or accessor for the due date
+            asc: sortAsc,
+            desc: sortDesc,
           },
         ],
       },

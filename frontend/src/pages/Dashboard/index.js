@@ -1,19 +1,24 @@
 import React from "react";
-import { useSelector } from "react-redux"; // Don't forget to import useSelector
+import { useSelector } from "react-redux";
 
-import ElectionList from "../Elections/ElectionList";
-import CampaignGrid from "../Campaigns/CampaignList/CampaignGrid";
+import { Container, Row } from "reactstrap";
+import { BreadCrumb } from "components";
 
 
 const Dashboard = () => {
-    document.title = "Elections List | Q8Tasweet - React Admin & Dashboard Template";
+    document.title = "الصفحة الرئيسية - كويت تصويت";
 
     const currentUser = useSelector(state => state.Users.currentUser);
     const isStaff = currentUser?.isStaff;
 
     return (
         <React.Fragment>
-            {isStaff ? <ElectionList /> : <CampaignGrid />}
+            <div className="page-content">
+                <Container fluid>
+                    <BreadCrumb title="الصفحة الرئيسية" pageTitle="الصفحة الرئيسية" />
+                    <p>welcome to Q8 Tasweet</p>
+                </Container>
+            </div>
         </React.Fragment>
     );
 };
