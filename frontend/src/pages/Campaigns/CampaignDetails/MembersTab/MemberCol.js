@@ -24,7 +24,7 @@ const Name = (cellProps) => {
             <div className="flex-shrink-0">
             </div>
             <div className="flex-grow-1 ms-2 name">
-                {cellProps.row.original.fullName}{" "}
+                {cellProps.row.original.name}{" "}
                 {cellProps.row.original.status}
             </div>
         </div>
@@ -132,7 +132,7 @@ const Supervisor = ({ cellProps, campaignMembers }) => {
     return (
         <p className="text-success">
             <strong>
-                {supervisor ? supervisor.fullName : "Not Found"}
+                {supervisor ? supervisor.name : "Not Found"}
             </strong>
         </p>
     );

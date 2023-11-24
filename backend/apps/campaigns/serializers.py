@@ -76,16 +76,16 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
 class CampaignMemberSerializer(serializers.ModelSerializer):
     """ Serializer for the CampaignMember model. """
-    fullName = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
     # roles = serializers.SerializerMethodField()  # Changed the field name to 'roles'
     permissions = serializers.SerializerMethodField()
 
     class Meta:
         model = CampaignMember
         fields = ["id", "user", "campaign", "role", "supervisor", "committee", 
-                  "civil", "phone", "notes", "status", "fullName", "permissions"]
+                  "civil", "phone", "notes", "status", "name", "permissions"]
 
-    def get_fullName(self, obj):
+    def get_name(self, obj):
         if obj.user:
             return f"{obj.user.first_name} {obj.user.last_name}"
         return "User not found"

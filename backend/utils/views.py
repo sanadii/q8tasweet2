@@ -57,7 +57,8 @@ def get_current_user_campaigns( user):
 
 def get_campaign_roles(context):
     """
-    Retrieves a list of campaign roles from the database, specifically roles categorized as "CampaignRoles".
+    Retrieves a list of campaign roles from the database,
+    which are specifically roles categorized as "CampaignRoles".
     It returns these roles as serialized data using the GroupSerializer.
     The context parameter is provided to ensure proper serialization.
     Status: Working fine

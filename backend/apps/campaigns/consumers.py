@@ -21,40 +21,45 @@ class CampaignSortingConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         if text_data_json['type'] == 'vote_update':
-            electionCandidate_id = text_data_json['electionCandidate_id']
+            election_candidate_id = text_data_json['electionCandidateId']
             new_votes = text_data_json['votes']
-            committee_id = text_data_json['committee']
-            await self.update_vote_count(electionCandidate_id, new_votes, committee_id)
+            election_committee_id = text_data_json['electionCommitteeId']
+            await self.update_vote_count(election_candidate_id, new_votes, election_committee_id)
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'send_vote_update',
-                    'electionCandidate_id': electionCandidate_id,
+                    'electionCandidateId': election_candidate_id,
                     'votes': new_votes,
-                    'committee': committee_id,
+                    'electionCommitteeId': election_committee_id,
                 }
             )
+            print(f"Received message: {text_data}")  # Debugging line
+
 
     async def send_vote_update(self, event):
-        await self.send(text_data=json.dumps({
+        # Prepare the message
+        message = {
             'type': 'vote_update',
-            'electionCandidate_id': event['electionCandidate_id'],
+            'electionCandidateId': event['electionCandidateId'],
             'votes': event['votes'],
-            'committee': event['committee'],
-        }))
+            'electionCommitteeId': event['electionCommitteeId'],
+        }
+        print(f"Sending message to group: {message}")  # Debugging line
+        await self.send(text_data=json.dumps(message))
 
     @sync_to_async
-    def update_vote_count(self, electionCandidate_id, new_votes, committee_id):
+    def update_vote_count(self, election_candidate_id, new_votes, election_committee_id):
         try:
             # Updated to filter by both candidate ID and committee ID
-            sorting_entry = CampaignSorting.objects.get(electionCandidate_id=electionCandidate_id, committee_id=committee_id)
+            sorting_entry = CampaignSorting.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
             sorting_entry.votes = new_votes
             sorting_entry.save()
-            print(f"Vote count updated for candidate {electionCandidate_id} in committee {committee_id} to {new_votes}")
+            print(f"Vote count updated for candidate {election_candidate_id} in committee {election_committee_id} to {new_votes}")
         except CampaignSorting.DoesNotExist:
             # Create a new entry if it doesn't exist
-            sorting_entry = CampaignSorting.objects.create(electionCandidate_id=electionCandidate_id, votes=new_votes, committee_id=committee_id)
-            print(f"New CampaignSorting entry created for candidate {electionCandidate_id} in committee {committee_id} with votes {new_votes}")
+            sorting_entry = CampaignSorting.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
+            print(f"New CampaignSorting entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
 
 
 # class ChatConsumer(AsyncWebsocketConsumer):

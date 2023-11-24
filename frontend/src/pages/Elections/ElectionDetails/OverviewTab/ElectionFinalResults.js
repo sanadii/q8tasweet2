@@ -1,48 +1,75 @@
 // React imports
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { ImageCandidateWinnerCircle } from "components";
+import { Loader, TableContainer, ImageCandidateWinnerCircle } from "components";
 
 // Store & Selectors
 import { electionSelector } from 'Selectors';
-// import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
-
-// Common Components
-import { Loader, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
-// import { calculateCandidatePosition } from "./CandidateCalculations"
-import { usePermission, useDelete } from "hooks";
-import { transformResultData } from '../ResultsTab/ResultHelper'; // Importing the transformData function
 
 // UI & Utilities
-import { Col, Row, Card, CardHeader, CardBody, Nav, NavItem, NavLink } from "reactstrap";
-import { isEmpty } from "lodash";
+import { Card, CardHeader, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
-import classnames from "classnames";
 
 const CandidatesTab = () => {
 
   const { election, electionCandidates, electionCommittees, error } = useSelector(electionSelector);
 
   // Constants
-  const [electionCandidate, setElectionCandidate] = useState([]);
   const [electionCandidateList, setElectionCandidateList] = useState(electionCandidates);
-
-  const [electionCampaign, setElectionCampaign] = useState([]);
-  const [electionCampaignList, setElectionCampaignList] = useState(electionCampaign);
-
   const [showDetailedResults, setShowDetailedResults] = useState(false);
+  const CampaignSlug = 'UmUXPn8A';
+  const committeeId = 5;
+  const [socket, setSocket] = useState(null);
+
+  // Update the WebSocket from slug & url
+  useEffect(() => {
+    const wsUrl = `ws://127.0.0.1:8000/ws/campaigns/${CampaignSlug}/`;
+    const newSocket = new WebSocket(wsUrl);
+
+    newSocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("WebSocket Data Received:", data); // Log the received data
+      if (data.type === 'vote_update') {
+        console.log(`Updating votes for candidate ${data.electionCandidateId} in committee ${data.electionCommitteeId} to ${data.votes}`);
+        updateSortingData(data.electionCandidateId, data.votes, data.electionCommitteeId);
+      }
+    };
+
+    setSocket(newSocket);
+
+    return () => {
+      if (newSocket) newSocket.close();
+    };
+  }, [CampaignSlug]);
 
 
-  const transformedData = useMemo(
-    () => transformResultData(
-      electionCandidates,
-      electionCommittees,
-      // committeeEdited,
-      // handleEditCell,
-      election // Passing election as an argument
-    ),
-    [electionCandidates, electionCommittees, election]
-  );
+
+  // Function to update sorting data for a specific candidate and committee
+  const updateSortingData = (candidateId, newVotes, electionCommitteeId) => {
+    setElectionCandidateList(prevCandidates => {
+      return prevCandidates.map(candidate => {
+        if (candidate.id === candidateId) {
+          // Update the committeeSorting array with the new vote count for the specific committee
+          const updatedCommitteeSorting = candidate.committeeSorting.map(committeeSort => {
+            if (committeeSort.electionCommittee === electionCommitteeId) {
+              return { ...committeeSort, votes: newVotes };
+            }
+            return committeeSort;
+          });
+
+          // Recalculate the total votes by summing up the votes from all committees
+          const totalVotes = updatedCommitteeSorting.reduce((sum, sort) => sum + sort.votes, 0);
+
+          // Return the candidate with the updated committeeSorting and total votes
+          return { ...candidate, committeeSorting: updatedCommitteeSorting, votes: totalVotes };
+        }
+        return candidate;
+      });
+    });
+  };
+
+  
+  
 
   // Sort List by Candidate Position
   useEffect(() => {
@@ -76,6 +103,8 @@ const CandidatesTab = () => {
   const toggleDetailedResults = () => {
     setShowDetailedResults((prev) => !prev);
   };
+
+
   const columns = useMemo(() => {
     const baseColumns = [
       {
@@ -105,10 +134,11 @@ const CandidatesTab = () => {
         baseColumns.push({
           Header: committee.name,
           accessor: (row) => {
-            const committeeVotes = row.committeeVotes || [];
-            const committeeVote = committeeVotes.find((vote) => vote.electionCommittee === committee.id);
+            // const committeeVotes = row.committeeVotes || [];
+            // const committeeSorting = row.committeeSorting || [];
+            const committeeVote = row.committeeSorting.find(sort => sort.electionCommittee === committee.id);
             return committeeVote ? committeeVote.votes : 0;
-          },
+                  },
           Cell: (cellProps) => <strong>{cellProps.value}</strong>,
         });
       });
@@ -118,6 +148,7 @@ const CandidatesTab = () => {
   }, [showDetailedResults, electionCommittees]);
 
 
+  console.log("Current Election Candidate List:", electionCandidateList);
 
   return (
     <React.Fragment>

@@ -7,62 +7,62 @@ import { updateElectionCommitteeResults, updateElectionCandidateVotes } from "st
 // based on whether the committee is being edited or has changes.
 // Used Directly in the table columns as a Header
 
-const HeaderVoteButton = ({
-  committee,
-  committeeId,
-  isEdited,
-  hasChanges,
-  handleSaveResults,
-  toggleColumnToEdit,
-}) => {
-  // Determine the button text and class based on the editing state
-  const buttonText = isEdited ? (hasChanges ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
-  const buttonClass = isEdited ? (hasChanges ? 'btn-success' : 'btn-danger') : 'btn-info';
+// const HeaderVoteButton = ({
+//   committee,
+//   committeeId,
+//   isEdited,
+//   hasChanges,
+//   handleSaveResults,
+//   toggleColumnToEdit,
+// }) => {
+//   // Determine the button text and class based on the editing state
+//   const buttonText = isEdited ? (hasChanges ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
+//   const buttonClass = isEdited ? (hasChanges ? 'btn-success' : 'btn-danger') : 'btn-info';
 
-  const handleClick = () => {
-    if (hasChanges && committeeId) {
-      handleSaveResults(committeeId);
-    }
-    toggleColumnToEdit(committeeId);
-  };
+//   const handleClick = () => {
+//     if (hasChanges && committeeId) {
+//       handleSaveResults(committeeId);
+//     }
+//     toggleColumnToEdit(committeeId);
+//   };
 
-  return (
-    <button onClick={handleClick} className={`btn btn-sm ml-2 ${buttonClass}`}>
-      {buttonText}
-    </button>
-  );
-};
+//   return (
+//     <button onClick={handleClick} className={`btn btn-sm ml-2 ${buttonClass}`}>
+//       {buttonText}
+//     </button>
+//   );
+// };
 
 
 // ResultInputField is a controlled component for vote input that localizes its state and synchronizes it with the parent component's state onBlur.
-const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
-  const [localVotes, setLocalVotes] = useState(value);
+// const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
+//   const [localVotes, setLocalVotes] = useState(value);
 
-  useEffect(() => {
-    setLocalVotes(value);
-  }, [value]);
+//   useEffect(() => {
+//     setLocalVotes(value);
+//   }, [value]);
 
-  const handleBlur = () => {
-    // If committeeId is provided, use it alongside candidateId to call onChange
-    if (committeeId) {
-      onChange(localVotes);
-    }
+//   const handleBlur = () => {
+//     // If committeeId is provided, use it alongside candidateId to call onChange
+//     if (committeeId) {
+//       onChange(localVotes);
+//     }
 
-  };
+//   };
 
-  return (
-    <input
-      key={`${candidateId}-${committeeId}`}
-      type="number"
-      maxLength="5"
-      pattern="\d*"
-      style={{ width: "5em" }}
-      value={localVotes}
-      onChange={(e) => setLocalVotes(e.target.value)}
-      onBlur={handleBlur}
-    />
-  );
-};
+//   return (
+//     <input
+//       key={`${candidateId}-${committeeId}`}
+//       type="number"
+//       maxLength="5"
+//       pattern="\d*"
+//       style={{ width: "5em" }}
+//       value={localVotes}
+//       onChange={(e) => setLocalVotes(e.target.value)}
+//       onBlur={handleBlur}
+//     />
+//   );
+// };
 
 
 // calculateTotalVotes is a utility function to sum up the votes for a candidate across all committees.

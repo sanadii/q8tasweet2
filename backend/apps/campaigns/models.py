@@ -119,8 +119,8 @@ class CampaignAttendee(TrackModel):
 
 class CampaignSorting(models.Model):
     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='sorter_sortees')
-    electionCandidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
-    committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_sortees')
+    election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
+    election_committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sortees')
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
 

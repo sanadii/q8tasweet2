@@ -95,7 +95,7 @@ class GetCampaignDetails(APIView):
         election_candidates_data = []
         for candidate in election_candidates:
             candidate_data = ElectionCandidateSerializer(candidate, context=context).data
-            candidate_sorting = CampaignSorting.objects.filter(electionCandidate=candidate)
+            candidate_sorting = CampaignSorting.objects.filter(election_candidate=candidate)
             candidate_data["sorting"] = CampaignSortingSerializer(candidate_sorting, many=True, context=context).data
             election_candidates_data.append(candidate_data)
 
