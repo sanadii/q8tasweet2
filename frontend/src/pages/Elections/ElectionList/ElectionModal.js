@@ -253,9 +253,9 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       centered
       size="lg"
       className="border-0"
-      modalClassName="modal fade zoomIn"
+      modalClassName="modal fadeInLeft zoomIn"
     >
-      <ModalHeader className="p-3 bg-soft-info" toggle={toggle}>
+      <ModalHeader className="p-3 bg-soft-danger" toggle={toggle}>
         {!!isEdit ? "تحديث الإنتخابات" : "إضافة أنتخابات"}
       </ModalHeader>
       <Form

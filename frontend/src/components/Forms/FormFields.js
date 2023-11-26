@@ -10,8 +10,8 @@ const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}
 const FormFields = ({ field, validation, inLineStyle }) => {
     const { id, label, name, type, colSize, icon, iconBg } = field;
     const imageValue = validation.values.image;
-
     const [imageSrc, setImageSrc] = useState(defaultAvatar);
+    const [passwordShow, setPasswordShow] = useState(false);
 
     useEffect(() => {
         if (imageValue) {
@@ -166,16 +166,31 @@ const FormFields = ({ field, validation, inLineStyle }) => {
                 );
             case 'password':
                 return (
-                    <Input
-                        type="password"
-                        name={name}
-                        id={id}
-                        placeholder={`ادخل ${label}`}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values[name] || ""}
-                        invalid={validation.touched[name] && validation.errors[name]}
-                    />
+                    <div className="position-relative auth-pass-inputgroup mb-3">
+
+                        <Input
+                            type={passwordShow ? "text" : "password"}
+                            name={name}
+                            className="form-control pe-5"
+
+                            id={id}
+                            placeholder={`ادخل ${label}`}
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={validation.values[name] || ""}
+                            invalid={validation.touched[name] && validation.errors[name]}
+                        />
+                        <button
+                            className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
+                            type="button"
+                            id="password-addon"
+                            onClick={() => setPasswordShow(!passwordShow)}
+                        >
+                            {" "}
+                            <i className="ri-eye-fill align-middle"></i>{" "}
+                        </button>
+
+                    </div>
                 );
             case 'date':
                 return (
@@ -226,7 +241,7 @@ const FormFieldLayout = ({ inLineStyle, label, id, children, colSize, type }) =>
             </Col>
         </Row>
     ) : (
-        <Col lg={colSize} className="">
+        <Col lg={colSize} className="mb-3">
             <Label htmlFor={id} className="form-label">{label}</Label>
             {children}
         </Col>

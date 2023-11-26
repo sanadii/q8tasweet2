@@ -11,6 +11,9 @@ app_name = "users"
 urlpatterns = [
     # Authentication
     path("userLogin", UserLogin.as_view(), name="UserLogin"),
+    path("userRegister", UserRegister.as_view(), name="UserRegister"),
+
+    
     path("postProfile/", UserProfileUpdateAPIView.as_view(), name="user_profile_update"),
     # path("user/", UserCreate.as_view(), name="listpost"),
     path("auth/", include("rest_framework.urls", namespace="rest_framework")),

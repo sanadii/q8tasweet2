@@ -74,7 +74,7 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
 // Function to aggregate guarantors
 export function aggregateGuarantors(guarantees, members) {
     const memberMap = members.reduce((map, member) => {
-        map[member.id] = member.fullName;
+        map[member.id] = member.name;
         return map;
     }, {});
 

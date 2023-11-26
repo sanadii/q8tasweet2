@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Card, CardBody, Col, Container, Input, Label, Row,Button } from 'reactstrap';
 import ParticlesAuth from "../ParticlesAuth";
 
-
 //import images
 import logoLight from "assets/images/logo-light.png";
 

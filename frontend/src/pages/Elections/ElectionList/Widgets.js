@@ -4,7 +4,8 @@ import { Card, CardBody, Col, Row } from "reactstrap";
 import { electionSelector } from 'Selectors';
 
 const Widgets = () => {
-  // ------------ State Management ------------
+  
+  // State Management
   const { elections } = useSelector(electionSelector);
 
   const electionStatuses = ["Active", "Cancelled", "Deleted", "Archived"];

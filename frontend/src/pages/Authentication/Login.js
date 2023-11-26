@@ -1,22 +1,23 @@
+// React & Redux core
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+
+// Store & Selectors
+import { loginUser, socialLogin, resetLoginFlag } from "store/actions";
+
+// UI, Styles & Notifications
 import { Card, CardBody, Col, Container, Input, Label, Row, Button, Form, FormFeedback, Alert, Spinner } from "reactstrap";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import { createSelector } from 'reselect';
 
-//redux
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+// Assets & Components
+import logoLight from "assets/images/logo-light.png";
+import { withRouter, FormFields } from "components";
 
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
-// actions
-import { loginUser, socialLogin, resetLoginFlag } from "../../store/actions";
-
-import logoLight from "../../assets/images/logo-light.png";
-
-import withRouter from "../../components/Components/withRouter";
 
 const Login = (props) => {
   const dispatch = useDispatch();
@@ -54,13 +55,14 @@ const Login = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      email: userLogin.email || "" || "",
-      password: userLogin.password || "" || "",
+      email: userLogin.email || "",
+      password: userLogin.password || "",
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your Email"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
+
     onSubmit: (values) => {
       dispatch(loginUser(values, props.router.navigate));
     },
@@ -69,9 +71,6 @@ const Login = (props) => {
   const signIn = (type) => {
     dispatch(socialLogin(type, props.router.navigate));
   };
-
-  //handleTwitterLoginResponse
-  // const twitterResponse = e => {}
 
   //for facebook and google authentication
   const socialResponse = (type) => {
@@ -86,7 +85,26 @@ const Login = (props) => {
     }
   }, [dispatch, error]);
 
-  document.title = "تسجيل الدخول | Q8Tasweet - React Admin & Dashboard Template";
+
+  const fields = [
+    // Existing fields
+    {
+      id: "email-field",
+      name: "email",
+      label: "الإيميل",
+      type: "email",
+      // colSize: 12,
+    },
+    {
+      id: "password-field",
+      name: "password",
+      label: "كلمة المرور",
+      type: "password",
+      // colSize: 12,
+    },
+  ]
+
+  document.title = "تسجيل الدخول | كويت تصويت";
   return (
     <React.Fragment>
       <ParticlesAuth>
@@ -101,7 +119,7 @@ const Login = (props) => {
                     </Link>
                   </div>
                   <p className="mt-3 fs-15 fw-medium">
-                    كويت تصويت - مساعدك لأنتخابات موثوقة
+                    كويت تصويت - مساعدك لإنتخابات موثوقة
                   </p>
                 </div>
               </Col>
@@ -129,76 +147,22 @@ const Login = (props) => {
                         }}
                         action="#"
                       >
+                        {
+                          fields.map(field => {
+                            return (field.condition === undefined || field.condition) && (
+                              <FormFields
+                                key={field.id}
+                                field={field}
+                                validation={validation}
+                              />
+                            );
+                          })
+                        }
                         <div className="mb-3">
-                          <Label htmlFor="email" className="form-label">
-                            الإيميل
-                          </Label>
-                          <Input
-                            name="email"
-                            className="form-control"
-                            placeholder="Enter email"
-                            type="email"
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values.email || ""}
-                            invalid={
-                              validation.touched.email &&
-                                validation.errors.email
-                                ? true
-                                : false
-                            }
-                          />
-                          {validation.touched.email &&
-                            validation.errors.email ? (
-                            <FormFeedback type="invalid">
-                              {validation.errors.email}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
-
-                        <div className="mb-3">
-                          {/* <div className="float-end">
+                          <div className="float-end">
                             <Link to="/forgot-password" className="text-muted">
-                              Forgot password?
+                              نسيت كلمة السر
                             </Link>
-                          </div> */}
-                          <Label
-                            className="form-label"
-                            htmlFor="password-input"
-                          >
-                            الرقم السري
-                          </Label>
-                          <div className="position-relative auth-pass-inputgroup mb-3">
-                            <Input
-                              name="password"
-                              value={validation.values.password || ""}
-                              type={passwordShow ? "text" : "password"}
-                              className="form-control pe-5"
-                              placeholder="Enter Password"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              invalid={
-                                validation.touched.password &&
-                                  validation.errors.password
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.password &&
-                              validation.errors.password ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.password}
-                              </FormFeedback>
-                            ) : null}
-                            <button
-                              className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
-                              type="button"
-                              id="password-addon"
-                              onClick={() => setPasswordShow(!passwordShow)}
-                            >
-                              {" "}
-                              <i className="ri-eye-fill align-middle"></i>{" "}
-                            </button>
                           </div>
                         </div>
 
@@ -239,15 +203,8 @@ const Login = (props) => {
                 </Card>
 
                 <div className="mt-4 text-center">
-                  <p className="mb-0">
-                    Don't have an account ?{" "}
-                    <Link
-                      to="/register"
-                      className="fw-semibold text-primary text-decoration-underline"
-                    >
-                      {" "}
-                      Signup{" "}
-                    </Link>{" "}
+                  <p className="mb-0 text-white">ليس لديك حساب؟
+                    <Link to="/register" className="fw-semibold text-white text-decoration-underline"> سجل الآن </Link>
                   </p>
                 </div>
               </Col>

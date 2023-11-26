@@ -1,24 +1,26 @@
+// React & Redux core
 import React, { useEffect } from "react";
-import { Row, Col, CardBody, Card, Alert, Container, Input, Label, Form, FormFeedback, Button } from "reactstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+
+// Store & Selectors
+import { registerUser, apiError, resetRegisterFlag } from "store/actions";
+
+// Assets & components 
+import logoLight from "assets/images/logo-light.png";
+import { FormFields } from "components";
+import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
+
+
+// UI, Styles & Notifications
+import { Row, Col, CardBody, Card, Alert, Container, Form } from "reactstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Formik Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-// action
-import { registerUser, apiError, resetRegisterFlag } from "../../store/actions";
-
-//redux
-import { useSelector, useDispatch } from "react-redux";
-
-import { Link, useNavigate } from "react-router-dom";
-
-//import images 
-import logoLight from "../../assets/images/logo-light.png";
-import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 
 const Register = () => {
     const history = useNavigate();
@@ -31,21 +33,29 @@ const Register = () => {
         initialValues: {
             email: '',
             firstName: '',
+            lastName: '',
             password: '',
-            confirm_password: ''
+            confirmPassword: ''
         },
-        validationSchema : Yup.object().shape({
+        validationSchema: Yup.object().shape({
             email: Yup.string()
-              .email('Please enter a valid email address')
-              .required('Please enter your email'),
-            firstName: Yup.string().required('Please enter your username'),
+                .email('الرجاء إدخال عنوان بريد إلكتروني صالح')
+                .required('الرجاء إدخال بريدك الإلكتروني'),
+
+            firstName: Yup.string()
+                .required('الرجاء إدخال اسم المستخدم الخاص بك'),
+
+            lastName: Yup.string()
+                .required('الرجاء إدخال اسم المستخدم الخاص بك'),
+
             password: Yup.string()
-            .min(6, 'Password must be at least 6 characters')
-            .required('Password is required'),
-            confirm_password: Yup.string()
-            .oneOf([Yup.ref('password'), null], 'Passwords must match')
-            .required('Confirm password is required')
-        }),   
+                .min(6, 'يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل')
+                .required('كلمة المرور مطلوبة'),
+
+            confirmPassword: Yup.string()
+                .oneOf([Yup.ref('password'), null], 'يجب أن تتطابق كلمات المرور')
+                .required('تأكيد كلمة المرور مطلوب')
+        }),
         onSubmit: (values) => {
             dispatch(registerUser(values));
         }
@@ -72,7 +82,41 @@ const Register = () => {
 
     }, [dispatch, success, error, history]);
 
-    document.title = "Basic SignUp | Q8Tasweet - React Admin & Dashboard Template";
+
+    const fields = [
+        {
+            id: "first-name-field",
+            name: "firstName",
+            label: "الاسم الأول",
+            type: "text",
+        },
+        {
+            id: "last-name-field",
+            name: "lastName",
+            label: "الاسم الأخير",
+            type: "text",
+        },
+        {
+            id: "email-field",
+            name: "email",
+            label: "الإيميل",
+            type: "email",
+        },
+        {
+            id: "password-field",
+            name: "password",
+            label: "كلمة المرور",
+            type: "password",
+        },
+        {
+            id: "confirm-password-field",
+            name: "confirmPassword",
+            label: "تأكيد كلمة المرور",
+            type: "password",
+        },
+    ]
+
+    document.title = "إنشاء حساب جديد | كويت تصويت";
 
     return (
         <React.Fragment>
@@ -98,8 +142,8 @@ const Register = () => {
 
                                     <CardBody className="p-4">
                                         <div className="text-center mt-2">
-                                            <h5 className="text-primary">Create New Account</h5>
-                                            <p className="text-muted">Get your free velzon account now</p>
+                                            <h5 className="text-primary">تسجيل حساب جديد</h5>
+                                            <p className="text-muted">سجل حسابك الجديد مع كويت تصويت</p>
                                         </div>
                                         <div className="p-2 mt-4">
                                             <Form
@@ -115,120 +159,46 @@ const Register = () => {
                                                         {toast("Your Redirect To Login Page...", { position: "top-right", hideProgressBar: false, className: 'bg-success text-white', progress: undefined, toastId: "" })}
                                                         <ToastContainer autoClose={2000} limit={1} />
                                                         <Alert color="success">
-                                                            Register User Successfully and Your Redirect To Login Page...
+                                                            تم تسجيل المستخدم بنجاح وسيتم توجيهك إلى صفحة تسجيل الدخول...
                                                         </Alert>
                                                     </>
                                                 ) : null}
 
                                                 {error && error ? (
-                                                    <Alert color="danger"><div>
-                                                        {/* {registrationError} */}
-                                                        Email has been Register Before, Please Use Another Email Address... </div></Alert>
+                                                    <Alert color="danger">
+                                                        <div>
+                                                            تم تسجيل هذا البريد الإلكتروني مسبقًا، يرجى استخدام عنوان بريد إلكتروني آخر...
+                                                        </div>
+                                                    </Alert>
                                                 ) : null}
 
-                                                <div className="mb-3">
-                                                    <Label htmlFor="useremail" className="form-label">Email <span className="text-danger">*</span></Label>
-                                                    <Input
-                                                        id="email"
-                                                        name="email"
-                                                        className="form-control"
-                                                        placeholder="Enter email address"
-                                                        type="email"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.email || ""}
-                                                        invalid={
-                                                            validation.touched.email && validation.errors.email ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.email && validation.errors.email ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.email}</div></FormFeedback>
-                                                    ) : null}
-
-                                                </div>
-                                                <div className="mb-3">
-                                                    <Label htmlFor="username" className="form-label">Username <span className="text-danger">*</span></Label>
-                                                    <Input
-                                                        name="firstName"
-                                                        type="text"
-                                                        placeholder="Enter username"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.firstName || ""}
-                                                        invalid={
-                                                            validation.touched.firstName && validation.errors.firstName ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.firstName && validation.errors.firstName ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.firstName}</div></FormFeedback>
-                                                    ) : null}
-
-                                                </div>
-
-                                                <div className="mb-3">
-                                                    <Label htmlFor="userpassword" className="form-label">Password <span className="text-danger">*</span></Label>
-                                                    <Input
-                                                        name="password"
-                                                        type="password"
-                                                        placeholder="Enter Password"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.password || ""}
-                                                        invalid={
-                                                            validation.touched.password && validation.errors.password ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.password && validation.errors.password ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.password}</div></FormFeedback>
-                                                    ) : null}
-
-                                                </div>
-
-                                                <div className="mb-2">
-                                                    <Label htmlFor="confirmPassword" className="form-label">Confirm Password <span className="text-danger">*</span></Label>
-                                                    <Input
-                                                        name="confirm_password"
-                                                        type="password"
-                                                        placeholder="Confirm Password"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.confirm_password || ""}
-                                                        invalid={
-                                                            validation.touched.confirm_password && validation.errors.confirm_password ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.confirm_password && validation.errors.confirm_password ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.confirm_password}</div></FormFeedback>
-                                                    ) : null}
-
-                                                </div>
-
-                                                <div className="mb-4">
-                                                    <p className="mb-0 fs-12 text-muted fst-italic">By registering you agree to the Q8Tasweet
-                                                        <Link to="#" className="text-primary text-decoration-underline fst-normal fw-medium">Terms of Use</Link></p>
+                                                {
+                                                    fields.map(field => {
+                                                        return (field.condition === undefined || field.condition) && (
+                                                            <FormFields
+                                                                key={field.id}
+                                                                field={field}
+                                                                validation={validation}
+                                                                inLineStyle={true}
+                                                            />
+                                                        );
+                                                    })
+                                                }
+                                                <div className="p-2">
+                                                    <p className="mb-0 fs-12 text-muted fst-italic">
+                                                        بالتسجيل، فإنك توافق على شروط الاستخدام الخاصة بـ<strong> كويت تصويت</strong>
+                                                        {/* <Link to="#" className="text-primary text-decoration-underline fst-normal fw-medium">شروط الإستخدام</Link>*/}
+                                                    </p>
                                                 </div>
 
                                                 <div className="mt-4">
-                                                    <button className="btn btn-success w-100" type="submit">Sign Up</button>
-                                                </div>
-
-                                                <div className="mt-4 text-center">
-                                                    <div className="signin-other-title">
-                                                        <h5 className="fs-13 mb-4 title text-muted">Create account with</h5>
-                                                    </div>
-
-                                                    <div>
-                                                        <button type="button" className="btn btn-primary btn-icon waves-effect waves-light"><i className="ri-facebook-fill fs-16"></i></button>{" "}
-                                                        <button type="button" className="btn btn-danger btn-icon waves-effect waves-light"><i className="ri-google-fill fs-16"></i></button>{" "}
-                                                        <button type="button" className="btn btn-dark btn-icon waves-effect waves-light"><i className="ri-github-fill fs-16"></i></button>{" "}
-                                                        <button type="button" className="btn btn-info btn-icon waves-effect waves-light"><i className="ri-twitter-fill fs-16"></i></button>
-                                                    </div>
+                                                    <button className="btn btn-success w-100" type="submit">إنشاء حساب</button>
                                                 </div>
                                             </Form>
                                         </div>
                                     </CardBody>
                                 </Card>
-                                <div className="mt-4 text-center">
+                                <div className="mt-4 text-center ">
                                     <p className="mb-0">Already have an account ? <Link to="/login" className="fw-semibold text-primary text-decoration-underline"> Signin </Link> </p>
                                 </div>
                             </Col>

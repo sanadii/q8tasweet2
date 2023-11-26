@@ -14,6 +14,11 @@ from apps.auths.models import GroupCategories
 from apps.auths.serializers import UserSerializer, UserLoginSerializer, GroupSerializer
 
 from utils.views import get_current_user_campaigns
+# from utils.auths import generate_username
+
+
+import random
+from django.contrib.auth import get_user_model
 
 class UserLogin(APIView):
     permission_classes = [AllowAny]
@@ -40,6 +45,39 @@ class UserLogin(APIView):
             'data': user_data
         })
 
+
+
+
+User = get_user_model()
+
+class UserRegister(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        # Extract username from email or generate a new one
+        email = request.data.get('email')
+        username = self.generate_username(email)
+        request.data['username'] = username
+
+        serializer = UserSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            # Pass 'created_by' as an argument to the save method
+            new_user = serializer.save(created_by=None)
+            return Response({
+                "data": UserSerializer(new_user, context={'request': request}).data,
+                "count": 1,
+                "code": 200
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def generate_username(self, email):
+        base_username = email.split('@')[0]
+        username = base_username
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{random.randint(1, 99)}"
+        return username
+
+
 class ChangeUserPassword(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -54,8 +92,6 @@ class ChangeUserPassword(APIView):
         user.set_password(new_password)
         user.save()
         return Response({'status': 'password set'}, status=status.HTTP_200_OK)
-
-
 
 class UserProfileUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
