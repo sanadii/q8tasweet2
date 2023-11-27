@@ -1,9 +1,24 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Row, Col, ModalBody } from "reactstrap";
+import { userSelector, campaignSelector } from 'Selectors';
+
+import { useSupervisorMembers, useCampaignRoles } from "hooks";
 
 const MembersViewModal = ({ campaignMember }) => {
 
+  const {
+    currentCampaignMember,
+    campaignId,
+    campaignMembers,
+    campaignRoles,
+    campaignElectionCommittees,
+  } = useSelector(campaignSelector);
+
+  const campaignSupervisors = useSupervisorMembers(campaignRoles, campaignMembers);
+  const electionCommittees = useCampaignRoles(campaignElectionCommittees, campaignMembers);
+
+  console.log("campaignMember: ", campaignMember)
   const displayField = (label, value) => {
     if (!value) return null;
 
@@ -26,11 +41,11 @@ const MembersViewModal = ({ campaignMember }) => {
           </h4>
         </Row>
 
-        {displayField("Role", campaignMember?.role)}
-        {displayField("Mobile", campaignMember?.phone)}
-        {/* {campaignMember?.role > 3 && displayField("Supervisor", supervisorMembers.find(supervisor => supervisor.id === campaignMember.supervisor)?.user?.name)}
-        {campaignMember?.role > 4 && displayField("Committee", campaignElectionCommittees.find(committee => committee.id === campaignMember.committee)?.name)} */}
-        {displayField("Notes", campaignMember?.notes)}
+        {displayField("الرتبة", campaignMember?.role)}
+        {displayField("تليفون", campaignMember?.phone)}
+        {displayField("المشرف", campaignSupervisors.find(supervisor => supervisor.id === campaignMember.supervisor)?.name)}
+        {displayField("اللجنة", electionCommittees.find(committee => committee.id === campaignMember.committee)?.name)}
+        {displayField("ملاحضات", campaignMember?.notes)}
       </ModalBody>
     </div>
   );

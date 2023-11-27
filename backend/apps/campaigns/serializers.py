@@ -147,8 +147,8 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
         model = CampaignGuarantee
         fields = [
             "id", "campaign", "member",
-            "civil", "full_name", "gender", "attended",
-            "phone", "notes", "status",
+            "civil", "full_name", "gender", 
+            "phone", "notes", "status", "attended",
             "membership_no", "box_no", "enrollment_date", "relationship", "elector_notes",
             ]
 

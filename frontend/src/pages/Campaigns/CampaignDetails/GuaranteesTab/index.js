@@ -65,9 +65,9 @@ const GuaranteesTab = () => {
         civil: campaignGuarantee.civil,
         fullName: campaignGuarantee.fullName,
         gender: campaignGuarantee.gender,
-        boxNo: campaignGuarantee.box_no,
-        membershipNo: campaignGuarantee.membership_no,
-        enrollmentDate: campaignGuarantee.enrollment_date,
+        boxNo: campaignGuarantee.boxNo,
+        membershipNo: campaignGuarantee.membershipNo,
+        enrollmentDate: campaignGuarantee.enrollmentDate,
         phone: campaignGuarantee.phone,
         status: campaignGuarantee.status,
         notes: campaignGuarantee.notes,
@@ -134,7 +134,7 @@ const GuaranteesTab = () => {
       },
       {
         Header: "الاسم",
-        accessor: row => ({ fullName: row.fullName, gender: row.gender }),
+        accessor: row => ({ name: row.name, gender: row.gender }),
         Cell: (cellProps) => <Name {...cellProps} />
       },
       {
@@ -186,7 +186,7 @@ const GuaranteesTab = () => {
     if (filters.global) {
       const globalSearch = filters.global.toLowerCase();
 
-      const nameIncludes = campaignGuarantee.fullName && typeof campaignGuarantee.fullName === 'string' && campaignGuarantee.fullName.toLowerCase().includes(globalSearch);
+      const nameIncludes = campaignGuarantee.name && typeof campaignGuarantee.name === 'string' && campaignGuarantee.name.toLowerCase().includes(globalSearch);
       const civilIncludes = campaignGuarantee.civil && typeof campaignGuarantee.civil === 'number' && String(campaignGuarantee.civil).includes(globalSearch);
 
       isValid = isValid && (nameIncludes || civilIncludes);

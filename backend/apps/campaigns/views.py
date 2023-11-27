@@ -17,7 +17,14 @@ from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from django.contrib.auth.models import Group
 
 # Serializers
-from apps.campaigns.serializers import CampaignSerializer, CampaignMemberSerializer, CampaignGuaranteeSerializer, CampaignSortingSerializer
+from apps.campaigns.serializers import (
+    CampaignSerializer,
+    CampaignMemberSerializer,
+    CampaignGuaranteeSerializer,
+    CampaignAttendeeSerializer, 
+    CampaignSortingSerializer
+    )
+
 from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteeSerializer
 from apps.auths.serializers import GroupSerializer
 
@@ -244,8 +251,7 @@ class AddNewCampaignAttendee(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        # Assuming you have a serializer for CampaignAttendee
-        serializer = CampaignGuaranteeSerializer(data=request.data, context={'request': request})
+        serializer = CampaignAttendeeSerializer(data=request.data, context={'request': request})
         
         if serializer.is_valid():
             serializer.save()

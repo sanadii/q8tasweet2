@@ -1,8 +1,6 @@
 // hooks/CampaignHooks.js
-
 import { useMemo } from 'react';
 import { usePermission } from 'hooks';
-
 
 
 const useSupervisorMembers = (campaignRoles, campaignMembers) => {
@@ -30,7 +28,6 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
 
   return useMemo(() => {
     const currentRoleId = currentCampaignMember?.role;
-    console.log("currentRoleId:", currentRoleId)
     let excludedRoleStrings = ["campaignMember"]; // Excluded for all by default
 
     switch (true) {

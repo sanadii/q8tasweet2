@@ -84,7 +84,7 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
     );
     return (
         <p className="text-success">
-            <strong>{member ? member.fullName : "Not Found"}</strong>
+            <strong>{member ? member.name : "Not Found"}</strong>
         </p>
     );
 }

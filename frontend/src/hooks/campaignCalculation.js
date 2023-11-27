@@ -72,6 +72,7 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
 };
 
 // Function to aggregate guarantors
+// Used in OverViewGuarantees to create a table for Guarantees Follow up
 export function aggregateGuarantors(guarantees, members) {
     const memberMap = members.reduce((map, member) => {
         map[member.id] = member.name;
@@ -80,18 +81,32 @@ export function aggregateGuarantors(guarantees, members) {
 
     return guarantees.reduce((acc, curr) => {
         const guarantorName = memberMap[curr.member] || 'Unknown';
-        if (curr.member in acc) {
-            acc[curr.member].count += 1;
-        } else {
+        if (!(curr.member in acc)) {
             acc[curr.member] = {
                 name: guarantorName,
-                count: 1,
-                member: curr.member,
+                id: curr.member,
+                total: 0,
+                status: {
+                    new: 0,
+                    contacted: 0,
+                    confirmed: 0,
+                    notConfirmed: 0,
+                },
+                attended: 0,
             };
         }
+
+        acc[curr.member].total += 1;
+        if (curr.status === STATUS_MAP.New) acc[curr.member].status.new += 1;
+        if (curr.status === STATUS_MAP.Contacted) acc[curr.member].status.contacted += 1;
+        if (curr.status === STATUS_MAP.Confirmed) acc[curr.member].status.confirmed += 1;
+        if (curr.status !== STATUS_MAP.Confirmed) acc[curr.member].status.notConfirmed += 1;
+        if (curr.attended) acc[curr.member].attended += 1;
+
         return acc;
     }, {});
 }
+
 
 // Function to get aggregated guarantor data
 export function getAggregatedGuarantorData(campaignGuarantees, campaignMembers) {
@@ -99,17 +114,25 @@ export function getAggregatedGuarantorData(campaignGuarantees, campaignMembers) 
     return Object.values(aggregatedGuarantors);
 }
 
-// Function to get guarantees counts for a member
-export function getGuaranteesCountsForMember(guarantees, memberId) {
-    return guarantees.filter(guarantee => guarantee.member === memberId).length;
+
+// Function to construct status columns
+export function constructStatusColumns(campaignGuarantees) {
+    return GuaranteeStatusOptions.map(statusOption => ({
+        Header: statusOption.name,
+        accessor: (rowData) => {
+            const memberId = rowData.id;
+            console.log("rowData: ", rowData)
+            return getStatusCountForMember(campaignGuarantees, memberId, statusOption.value);
+        }
+    }));
 }
 
-// Function to get attendees counts for a member
-export function getAttendeesCountsForMember(guarantees, memberId) {
-    return guarantees.filter(
-        guarantee => guarantee.member === memberId && guarantee.attended
-    ).length;
+// Table: Get background class based on status option
+export function getBgClassForStatus(columnIndex) {
+    const statusOption = GuaranteeStatusOptions.find(option => option.id === columnIndex - 2);
+    return statusOption ? statusOption.bgClass : '';
 }
+
 
 // Function to get status count for a member
 export function getStatusCountForMember(campaignGuarantees, memberId, statusValue) {
@@ -119,13 +142,15 @@ export function getStatusCountForMember(campaignGuarantees, memberId, statusValu
     ).length;
 }
 
-// Function to construct status columns
-export function constructStatusColumns(campaignGuarantees) {
-    return GuaranteeStatusOptions.map(statusOption => ({
-        Header: statusOption.name,
-        accessor: (rowData) => {
-            const memberId = rowData.member;
-            return getStatusCountForMember(campaignGuarantees, memberId, statusOption.value);
-        }
-    }));
-}
+// Function to get guarantees counts for a member
+// export function getGuaranteesCountsForMember(guarantees, memberId) {
+//     return guarantees.filter(guarantee => guarantee.member === memberId).length;
+// }
+
+// Function to get attendees counts for a member
+// export function getAttendeesCountsForMember(guarantees, memberId) {
+//     return guarantees.filter(
+//         guarantee => guarantee.member === memberId && guarantee.attended
+//     ).length;
+// }
+

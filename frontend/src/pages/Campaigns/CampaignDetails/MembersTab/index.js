@@ -75,7 +75,7 @@ const MembersTab = () => {
         id: campaignMember.id,
         campaignId: campaignMember.campaign,
         userId: campaignMember.user.id,
-        name: campaignMember.user.name,
+        name: campaignMember.name,
         role: campaignMember.role,
         supervisor: campaignMember.supervisor,
         committee: campaignMember.committee,

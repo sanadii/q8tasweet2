@@ -4,6 +4,8 @@ import { Col, Row, Table } from "reactstrap";
 
 const GuaranteesModalView = ({ campaignGuarantee }) => {
 
+  console.log("campaignGuarantee:", campaignGuarantee)
+  
   return (
     <React.Fragment>
       <Row>
@@ -18,26 +20,26 @@ const GuaranteesModalView = ({ campaignGuarantee }) => {
             </thead>
             <tbody>
               <tr>
-                <td className="fw-medium">Name / Gender</td>{" "}
+                <td className="fw-medium">الاسم</td>{" "}
                 <td>
-                  {campaignGuarantee.full_name} {campaignGuarantee.gender}
+                  {campaignGuarantee.fullName} {campaignGuarantee.gender}
                 </td>
               </tr>
               <tr>
-                <td className="fw-medium">CID</td>
+                <td className="fw-medium">الرقم المدني</td>
                 <td>{campaignGuarantee.civil}</td>
               </tr>
               <tr>
-                <td className="fw-medium">Box Number</td>
+                <td className="fw-medium">رقم الصندوق</td>
                 <td>{campaignGuarantee.box_no}</td>
               </tr>
               <tr>
-                <td className="fw-medium">Member Number</td>
-                <td>{campaignGuarantee.membership_no}</td>
+                <td className="fw-medium">رقم العضوية</td>
+                <td>{campaignGuarantee.membershipNo}</td>
               </tr>
               <tr>
-                <td className="fw-medium">Enrolment Date</td>
-                <td>{campaignGuarantee.enrollment_date}</td>
+                <td className="fw-medium">تاريخ الالتحاق</td>
+                <td>{campaignGuarantee.enrollmentDate}</td>
               </tr>
             </tbody>
           </Table>
@@ -46,30 +48,30 @@ const GuaranteesModalView = ({ campaignGuarantee }) => {
           <Table size="sm">
             <thead className="bg-primary text-white">
               <tr>
-                <th colSpan="2" className="text-center">Guarantee Info</th>
+                <th colSpan="2" className="text-center">معلومات الضامن</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="fw-medium">Guarantor [ID]</td>
+                <td className="fw-medium">الضامن</td>
                 <td>
                   {campaignGuarantee.member}
                   {/* Here, you can display the guarantor ID directly or map the ID to a name or other details if available */}
                 </td>
               </tr>
               <tr>
-                <td className="fw-medium">Mobile</td>
+                <td className="fw-medium">تليفون</td>
                 <td>{campaignGuarantee.phone}</td>
               </tr>
               <tr>
-                <td className="fw-medium">Status</td>
+                <td className="fw-medium">الحالة</td>
                 <td>
                   {campaignGuarantee.status}
                   {/* Similarly, you can display the status directly or map it to a human-readable name if you have that data */}
                 </td>
               </tr>
               <tr>
-                <td className="fw-medium">Notes</td>
+                <td className="fw-medium">ملاحضات</td>
                 <td>{campaignGuarantee.notes}</td>
               </tr>
             </tbody>

@@ -1,4 +1,3 @@
-// Pages/Campaigns/CampaignDetails/Components/OverViewGuarantees.js
 // React & Redux core
 import React, { useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
@@ -15,46 +14,22 @@ import GuaranteeRadialBar from "./GuaranteeRadialBar"
 
 
 import { Loader, TableContainer } from "components";
-import { GuaranteeStatusOptions } from "constants";
 import {
     calculateCampaignData,
-    getGuaranteesCountsForMember,
-    getAttendeesCountsForMember,
     getAggregatedGuarantorData,
-    getStatusCountForMember,
     constructStatusColumns,
+    getBgClassForStatus,
 } from 'hooks/campaignCalculation';
 
 // UI & Utilities
-import { Card, CardHeader, CardBody, Col, Row, Progress } from "reactstrap";
-import { DefaultProgressExample, BackgroundColorExample, LabelExample, MultipleBarsExample, HeightExample, StripedExample, AnimatedStripedExample, GradientExample, AnimatedExample, CustomExample, CustomProgressExample, ContentExample, ProgressWithStepExample, StepProgressArrowExample } from './UiProgressCode';
-import PreviewCardHeader from "components/Components/PreviewCardHeader";
+import { Card, CardBody, Col, Row } from "reactstrap";
 
 
 const OverViewGuarantees = () => {
-    // 1. Hooks & State
-    const {
-        campaignDetails,
-        campaignMembers,
-        campaignGuarantees,
-    } = useSelector(campaignSelector);
-
-    // Aggregate the guarantees based on the guarantor & Transform to an array
+    // State management
+    const { campaignDetails, campaignMembers, campaignGuarantees } = useSelector(campaignSelector);
     const results = calculateCampaignData(campaignDetails, campaignGuarantees);
     const guarantorData = getAggregatedGuarantorData(campaignGuarantees, campaignMembers);
-
-    // Table: Get background class based on status option
-    function getBgClassForStatus(columnIndex) {
-        const statusOption = GuaranteeStatusOptions.find(option => option.id === columnIndex - 1);
-        return statusOption ? statusOption.bgClass : '';
-    }
-
-    // Table: Get count of guarantees for a member based on status
-    const getStatusCount = useCallback((memberId, statusValue) => {
-        return getStatusCountForMember(campaignGuarantees, memberId, statusValue);
-    }, [campaignGuarantees]);
-
-    // Table: maping status options to columns
     const statusColumns = constructStatusColumns(campaignGuarantees);
 
     // Table: Get count of guarantees for a member
@@ -63,35 +38,23 @@ const OverViewGuarantees = () => {
             {
                 Header: "الفريق",
                 accessor: "name",
-                Cell: (cellProps) => {
-                    const guarantor = cellProps.row.original;
-                    return <b>{guarantor.name}</b>;
-                },
+                Cell: (cellProps) => (<b>{cellProps.row.original.name}</b>)
             },
             {
-                Header: "المجموع",
-                Cell: (cellProps) => {
-                    const memberId = cellProps.row.original.member;
-                    const totalCount = getGuaranteesCountsForMember(campaignGuarantees, memberId);
-                    return <strong>{totalCount}</strong>;
-                },
+                Header: "المضامين",
+                Cell: (cellProps) => (<b>{cellProps.row.original.total}</b>)
             },
-            ...statusColumns, // Spread the dynamically generated columns here
             {
                 Header: "الحضور",
-                Cell: (cellProps) => {
-                    const memberId = cellProps.row.original.member;
-                    const totalCount = getAttendeesCountsForMember(campaignGuarantees, memberId);
-                    return <strong>{totalCount}</strong>;
-                },
+                Cell: (cellProps) => (<b>{cellProps.row.original.attended}</b>)
             },
+            ...statusColumns,
         ],
-        [campaignGuarantees, getStatusCount]
+        [campaignGuarantees]
     );
 
     return (
         < Col lg={12}>
-
             <GuaranteeTargetBar
                 campaignDetails={campaignDetails}
                 results={results}
@@ -112,7 +75,6 @@ const OverViewGuarantees = () => {
                         results={results}
                     />
                 </Col>
-
             </Row>
 
 
@@ -129,16 +91,16 @@ const OverViewGuarantees = () => {
 
             <Card>
                 <CardBody>
-                    <h5 className="card-title mb-3"><strong>المضامين</strong></h5>
+                    <h5 className="card-title mb-3"><strong>الضامنين</strong></h5>
                     <Row>
                         <Col>
                             <TableContainer
-                                // Data----------
+                                // Data
                                 columns={columns}
                                 data={guarantorData || []}  // Here's the change
                                 customPageSize={50}
 
-                                // Styling----------
+                                // Styling
                                 className="custom-header-css"
                                 divClass="table-responsive table-card mb-2"
                                 tableClass="align-middle table-nowrap"

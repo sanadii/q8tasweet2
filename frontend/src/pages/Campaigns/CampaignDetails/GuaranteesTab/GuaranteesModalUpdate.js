@@ -142,7 +142,7 @@ const GuaranteesModalUpdate = ({
               </thead>
               <tbody>
                 <tr>
-                  <td className="fw-medium">الضامن [رمز]</td>
+                  <td className="fw-medium">الضامن</td>
                   <td>
                     <Input
                       name="member"
@@ -170,7 +170,7 @@ const GuaranteesModalUpdate = ({
                         }
                         return (
                           <option key={guarantor.id} value={guarantor.id}>
-                            {prefix} {guarantor.fullName}
+                            {prefix} {guarantor.name}
                           </option>
                         );
                       })}

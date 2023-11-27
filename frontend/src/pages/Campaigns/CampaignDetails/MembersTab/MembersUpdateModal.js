@@ -1,5 +1,5 @@
 // React & Redux
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // Reactstrap (UI) imports
-import { Row, ModalBody, Form } from "reactstrap";
+import { ModalBody, Form } from "reactstrap";
 
 const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   const dispatch = useDispatch();
@@ -31,10 +31,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   // Campaign Supervisor Options
   const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
   const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
-  console.log("filteredRoleOptions:", filteredRoleOptions);
-  console.log("Original campaignRoles:", campaignRoles);
-
-  // Election Committee Options
   const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
 
   useEffect(() => {
@@ -47,7 +43,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     enableReinitialize: true,
     initialValues: {
       id: (campaignMember && campaignMember.id) || "",
-      campaign: campaignId || "",
       role: (campaignMember && campaignMember.role) || "",
       committee: (campaignMember && campaignMember.committee) || "",
       supervisor: (campaignMember && campaignMember.supervisor) || "",
@@ -60,12 +55,15 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
       committee: Yup.number().integer(),
     }),
     onSubmit: (values) => {
+
+      const requiresSupervisor = ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(getRoleString(values.role, campaignRoles));
+      const requiresCommittee = ["campaignAttendant", "campaignSorter"].includes(getRoleString(values.role, campaignRoles));
+
       const updatedCampaignMember = {
         id: campaignMember ? campaignMember.id : 0,
-        campaign: parseInt(values.campaign, 10),
         role: parseInt(values.role, 10),
-        committee: parseInt(values.committee, 10),
-        supervisor: parseInt(values.supervisor, 10),
+        supervisor: requiresSupervisor ? parseInt(values.supervisor, 10) : '',
+        committee: requiresCommittee ? parseInt(values.committee, 10) : '',
         phone: values.phone,
         notes: values.notes,
       };
@@ -88,7 +86,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   }, [validation.values.role]);
 
   const selectedRoleString = getRoleString(selectedRole, campaignRoles);
-  console.log("selectedRoleString:", selectedRoleString)
 
   const isCurrentUserCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
 
@@ -110,11 +107,14 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
       name: "supervisor",
       label: "المشرف",
       type: "select",
-      options: supervisorOptions.map(supervisor => ({
-        id: supervisor.id,
-        label: supervisor.fullName,
-        value: supervisor.id
-      })),
+      options: [
+        { id: '', label: '- اختر المشرف - ', value: '' }, // Add this default option
+        ...supervisorOptions.map(supervisor => ({
+          id: supervisor.id,
+          label: supervisor.name,
+          value: supervisor.id
+        }))
+      ],
       condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(selectedRoleString),
     },
     {
@@ -122,11 +122,14 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
       name: "committee",
       label: "اللجنة",
       type: "select",
-      options: campaignCommitteeList.map(committee => ({
-        id: committee.id,
-        label: committee.name,
-        value: committee.id
-      })),
+      options: [
+        { id: '', label: '- اختر اللجنة - ', value: '' }, // Add this default option
+        ...campaignCommitteeList.map(committee => ({
+          id: committee.id,
+          label: committee.name,
+          value: committee.id
+        }))
+      ],
       condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
     },
     {
@@ -183,8 +186,5 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     </Form >
   );
 };
-
-// Field Definition Builder
-
 
 export default MembersUpdateModal;
