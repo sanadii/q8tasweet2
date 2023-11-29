@@ -9,7 +9,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django_asgi_app = get_asgi_application()
 
 # Import channels routing here to avoid early import of Django models
-from apps.campaigns import routing
+from webSocket import routing
 
 application = ProtocolTypeRouter({
     'http': django_asgi_app,

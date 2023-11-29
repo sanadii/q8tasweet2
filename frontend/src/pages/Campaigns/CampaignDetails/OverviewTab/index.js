@@ -11,7 +11,7 @@ import { usePermission } from 'hooks';
 import OverViewGuarantees from "./OverViewGuarantees";
 import OverviewSidebar from "./OverviewSidebar";
 import OverviewCandidate from "./OverviewCandidate";
-import OverviewNotifications from "./OverviewNotifications";
+// import OverviewNotifications from "./OverviewNotifications";
 
 // UI & Utilities
 import { Col, Row } from "reactstrap";

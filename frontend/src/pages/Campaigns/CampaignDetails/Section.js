@@ -1,6 +1,6 @@
 // Pages/Campaigns/CampaignDetails/index.js
 // React & Redux core
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import classnames from "classnames";
 
@@ -26,6 +26,7 @@ import ElectorsTab from "./ElectorsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
+import { useSocket } from 'hooks'; // Update with the correct path
 
 const Section = () => {
   SwiperCore.use([Autoplay]);
@@ -89,6 +90,9 @@ const Section = () => {
   if (!campaign.candidate) {
     return <Loader />;
   }
+
+  // Socket
+
 
   return (
     <React.Fragment>
