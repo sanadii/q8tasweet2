@@ -121,7 +121,6 @@ export function constructStatusColumns(campaignGuarantees) {
         Header: statusOption.name,
         accessor: (rowData) => {
             const memberId = rowData.id;
-            console.log("rowData: ", rowData)
             return getStatusCountForMember(campaignGuarantees, memberId, statusOption.value);
         }
     }));

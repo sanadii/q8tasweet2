@@ -58,8 +58,19 @@ export const postJwtForgetPwd = (data) => api.create(url.POST_JWT_PASSWORD_FORGE
 export const postSocialLogin = (data) => api.create(url.SOCIAL_LOGIN, data);
 
 // Elections  //////////////////////////////
-export const getElections = () => api.get(url.GET_ELECTIONS);
-export const getElectionDetails = (election) => api.get(url.GET_ELECTION_DETAILS + "/" + election);
+// export const getElections = () => api.get(url.GET_ELECTIONS);
+export const getElections = (view) => {
+  const params = new URLSearchParams();
+  if (view) params.append('view', view);
+  return api.get(`${url.GET_ELECTIONS}?${params.toString()}`);
+};
+
+export const getElectionDetails = (electionSlug, view) => {
+  const params = new URLSearchParams();
+  if (view) params.append('view', view);
+  return api.get(`${url.GET_ELECTION_DETAILS}/${electionSlug}?${params.toString()}`);
+};
+
 export const addElection = (election) => api.create(url.ADD_ELECTION, election);
 export const updateElection = (election) => api.update(url.UPDATE_ELECTION + "/" + election.id, election);
 export const deleteElection = (election) => api.delete(url.DELETE_ELECTION + "/" + election);

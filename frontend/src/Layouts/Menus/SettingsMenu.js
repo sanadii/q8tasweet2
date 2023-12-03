@@ -10,11 +10,11 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
 
   useEffect(() => {
     if (isCurrentState === "options") {
-      history("/options");
+      history("/dashboard/options");
       document.body.classList.add("twocolumn-panel");
     }
     if (isCurrentState === "categories") {
-      history("/categories");
+      history("/dashboard/categories");
       document.body.classList.add("twocolumn-panel");
     }
   }, [history, isCurrentState]);
@@ -43,7 +43,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
         {
           id: "options",
           label: "الإعدادات",
-          link: "/settings",
+          link: "/dashboard/settings",
           parentId: "settings",
           click: function (e) {
             e.preventDefault();
@@ -53,7 +53,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
         {
           id: "categories",
           label: "التصنيف",
-          link: "/settings/categories",
+          link: "/dashboard/settings/categories",
           parentId: "settings",
           click: function (e) {
             e.preventDefault();
@@ -63,7 +63,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
         {
           id: "groups",
           label: "المجموعات",
-          link: "/settings/groups",
+          link: "/dashboard/settings/groups",
           parentId: "settings",
           click: function (e) {
             e.preventDefault();

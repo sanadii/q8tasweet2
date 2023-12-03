@@ -24,7 +24,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       document.body.classList.add("twocolumn-panel");
     }
     if (isCurrentState === "adminUsers") {
-      history("/admin/users");
+      history("/dashboard/users");
       document.body.classList.add("twocolumn-panel");
     }
   }, [history, isCurrentState]);
@@ -48,7 +48,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       id: "elections",
       label: "الإنتخابات",
       icon: "ri-dashboard-line",
-      link: "/admin/elections",
+      link: "/dashboard/elections",
       click: function (e) {
         e.preventDefault();
         setIscurrentState("adminElections");
@@ -58,7 +58,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       id: "candidates",
       label: "المرشحين",
       icon: "ri-account-pin-box-line",
-      link: "/admin/candidates",
+      link: "/dashboard/candidates",
       click: function (e) {
         e.preventDefault();
         setIscurrentState("adminCandidates");
@@ -68,7 +68,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       id: "campaigns",
       label: "الحملات الإنتخابية",
       icon: "ri-honour-line",
-      link: "/admin/campaigns",
+      link: "/dashboard/campaigns",
       click: function (e) {
         e.preventDefault();
         setIscurrentState("adminCampaigns");
@@ -78,7 +78,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       id: "users",
       label: "المستخدمين",
       icon: "ri-honour-line",
-      link: "/admin/users",
+      link: "/dashboard/users",
       click: function (e) {
         e.preventDefault();
         setIscurrentState("adminUsers");

@@ -99,28 +99,28 @@ class Command(BaseCommand):
 
             # الأندية الرياضية
             # محافظة العاصمة
-            {"id": 4001, "name": "الكويت", "parent": 4},
-            {"id": 4002, "name": "العربي", "parent": 4},
-            {"id": 4003, "name": "كاظمة", "parent": 4},
-            {"id": 4004, "name": "الصليبيخات", "parent": 4},
+            {"id": 4001, "name": "الكويت", "slug": "sportclub-kuwait", "parent": 4},
+            {"id": 4002, "name": "العربي", "slug": "sportclub-arabi", "parent": 4},
+            {"id": 4003, "name": "كاظمة", "slug": "sportclub-kazma", "parent": 4},
+            {"id": 4004, "name": "الصليبيخات", "slug": "sportclub-sulaibekhat", "parent": 4},
 
             # محافظة حولي
-            {"id": 4005, "name": "القادسية", "parent": 4},
-            {"id": 4006, "name": "اليرموك", "parent": 4},
-            {"id": 4007, "name": "السالمية", "parent": 4},
+            {"id": 4005, "name": "القادسية", "slug": "sportclub-qadsia", "parent": 4},
+            {"id": 4006, "name": "اليرموك", "slug": "sportclub-yarmouk", "parent": 4},
+            {"id": 4007, "name": "السالمية", "slug": "sportclub-salmiya", "parent": 4},
 
             # محافظة الفروانية
-            {"id": 4008, "name": "التضامن", "parent": 4},
-            {"id": 4009, "name": "النصر", "parent": 4},
-            {"id": 4010, "name": "خيطان", "parent": 4},
+            {"id": 4008, "name": "التضامن", "slug": "sportclub-tadamon", "parent": 4},
+            {"id": 4009, "name": "النصر", "slug": "sportclub-naser", "parent": 4},
+            {"id": 4010, "name": "خيطان", "slug": "sportclub-khaitan", "parent": 4},
 
             # محافظة الأحمدي
-            {"id": 4011, "name": "الشباب", "parent": 4},
-            {"id": 4012, "name": "الساحل", "parent": 4},
-            {"id": 4013, "name": "الفحيحيل", "parent": 4},
+            {"id": 4011, "name": "الشباب", "slug": "sportclub-shabab", "parent": 4},
+            {"id": 4012, "name": "الساحل", "slug": "sportclub-sahel", "parent": 4},
+            {"id": 4013, "name": "الفحيحيل", "slug": "sportclub-fahaheel", "parent": 4},
 
             # محافظة الجهراء
-            {"id": 4014, "name": "الجهراء", "parent": 4},
+            {"id": 4014, "name": "الجهراء", "slug": "sportclub-jahra", "parent": 4},
 
             # محافظة مبارك الكبير
             {"id": 4015, "name": "القرين", "parent": 4},
@@ -146,7 +146,7 @@ class Command(BaseCommand):
         ]
     
     def set_category_image(self, category, slug):
-        category.image = f"/elections/{slug}.png"
+        category.image = f"elections/{slug}.png"
         category.save()
         self.stdout.write(self.style.SUCCESS(f'Image set for {category.name}: /elections/{slug}.png'))
 

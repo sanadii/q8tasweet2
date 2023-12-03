@@ -5,9 +5,10 @@ import { deleteCampaignAttendee } from "store/actions";
 import { campaignSelector } from 'Selectors';
 
 // Component imports
-import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "components";
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "components";
+import { useDelete, useFilter, useUserRoles } from "hooks";
+
 import AttendeesModal from "./AttendeesModal";
-import { useUserRoles } from "hooks";
 import { Id, Name, Attendant, Actions } from "./AttendeesCol";
 
 // Utility imports
@@ -219,32 +220,8 @@ const AttendeesList = () => {
     [handleCampaignAttendeeClick, findCommitteeById, findUserById, isAdmin, isAttendant]
   );
 
-  // Filters----------
-  const [filters, setFilters] = useState({
-    global: "",
-    gender: null,
-    committee: null,
-    member: null,
-  });
-
-  const campaignAttendeeList = campaignAttendees.filter(campaignAttendee => {
-    let isValid = true;
-    if (filters.global) {
-      const globalSearch = filters.global.toLowerCase();
-
-      const nameIncludes = campaignAttendee.full_name && typeof campaignAttendee.full_name === 'string' && campaignAttendee.full_name.toLowerCase().includes(globalSearch);
-      const civilIncludes = campaignAttendee.civil && typeof campaignAttendee.civil === 'number' && String(campaignAttendee.civil).includes(globalSearch);
-
-      isValid = isValid && (nameIncludes || civilIncludes);
-    }
-    if (filters.gender !== null) {
-      isValid = isValid && campaignAttendee.gender === filters.gender;
-    }
-    if (filters.committee !== null) {
-      isValid = isValid && campaignAttendee.committee === filters.committee;
-    }
-    return isValid;
-  });
+  // Filters
+  const { filteredData: campaignAttendeeList, filters, setFilters } = useFilter(campaignAttendees);
 
 
 
@@ -289,36 +266,41 @@ const AttendeesList = () => {
                   isMultiDeleteButton={isMultiDeleteButton}
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
+
+                <TableFilters
+                  // Filters
+                  // dataToFilter={}
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isGenderFilter={true}
+                  isCommitteeFilter={true}
+                  isResetFilters={true}
+
+                  // Settings
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                  onTabChange={handleTabChange}
+                  filters={filters}
+                  setFilters={setFilters}
+                  SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
+                />
+
+
                 {campaignAttendeeList ? (
                   <TableContainer
-                    // Filters----------
-                    isTableContainerFilter={true}
-                    isGenderFilter={true}
-                    isCommitteeFilter={true}
-                    isResetFilters={true}
-
-                    // Settings
-                    filters={filters}
-                    setFilters={setFilters}
-
-                    // Global Filters
-                    isGlobalFilter={true}
-                    preGlobalFilteredRows={true}
-                    SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
-                    onTabChange={handleTabChange}
-
-                    // Data----------
+                    // Data
                     columns={columns}
                     data={campaignAttendeeList || []}
                     customPageSize={50}
 
 
-                    // Styling----------
+                    // Styling
                     className="custom-header-css"
                     divClass="table-responsive table-card mb-2"
                     tableClass="align-middle table-nowrap"
                     theadClass="table-light"
                   />
+
                 ) : (
                   <Loader error={error} />
                 )}

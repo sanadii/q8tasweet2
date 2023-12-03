@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 
 // Compontents, Constants, Hooks
 import MembersModal from "./MembersModal";
-import { DeleteModal, TableContainer, TableContainerHeader } from "components";
-import { usePermission, useDelete } from "hooks";
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "components";
+import { usePermission, useFilter, useDelete } from "hooks";
 import { Id, Name, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
 
 // Store & Selectors
@@ -43,10 +43,7 @@ const MembersTab = () => {
   const { handleDeleteItem, onClickDelete, setDeleteModal, deleteModal } = useDelete(deleteCampaignMember);
 
   // Filtering and Member Matching
-  const [filters, setFilters] = useState({
-    global: "",
-    role: [30, 31, 32, 33], // SuperiorRoles TODO:
-  });
+
 
   // Finding Active Role to Show Different Table Columns
   const [activeTab, setActiveTab] = useState("campaignManagers"); // Initialize with "campaignManagers"
@@ -176,28 +173,7 @@ const MembersTab = () => {
   }, [activeRole, columnsDefinition]);
 
   // Table Filters
-
-  const campaignMemberList = campaignMembers.filter(campaignMember => {
-    let isValid = true;
-
-    // Check the role if there's a filter set for it
-    if (filters.role !== null) {
-      if (Array.isArray(filters.role)) {
-        isValid = isValid && filters.role.includes(campaignMember.role);
-      } else {
-        isValid = isValid && campaignMember.role === filters.role;
-      }
-    }
-    // Check the global filter (e.g., for searching by name)
-    if (filters.global) {
-      isValid = isValid && campaignMember.user.name &&
-        typeof campaignMember.user.name === 'string' &&
-        campaignMember.user.name.toLowerCase().includes(filters.global.toLowerCase());
-    }
-
-    return isValid;
-  });
-
+  const { filteredData: campaignMemberList, filters, setFilters } = useFilter(campaignMembers);
 
   return (
     <React.Fragment>
@@ -206,6 +182,7 @@ const MembersTab = () => {
         onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
+
       <MembersModal
         modal={modal}
         setModal={setModal}
@@ -213,70 +190,58 @@ const MembersTab = () => {
         toggle={toggle}
         campaignMember={campaignMember}
       />
-      <Row>
-        <Col lg={12}>
-          <Card id="memberList">
-            <CardBody>
-              <div>
-                <TableContainerHeader
-                  // Title
-                  ContainerHeaderTitle="فريق العمل"
 
-                  // Add Button
-                  isAddButton={true}
-                  AddButtonText="اضافة عضو"
-                  handleAddButtonClick={handleCampaignMemberClicks}
-                  toggle={toggle}
-                />
+      <Card id="memberList">
+        <CardBody>
+          <div>
+            <TableContainerHeader
+              // Title
+              ContainerHeaderTitle="فريق العمل"
 
-                {campaignMembers && campaignMembers.length ? (
-                  <TableContainer
-                    campaignMember={campaignMember}
+              // Add Button
+              isAddButton={true}
+              AddButtonText="اضافة عضو"
+              handleAddButtonClick={handleCampaignMemberClicks}
+              toggle={toggle}
+            />
 
-                    // Filters---------- we need to get activeTab for proper filteration
-                    isTableContainerFilter={true}
-                    isGlobalFilter={true}
-                    preGlobalFilteredRows={true}
+            <TableFilters
+              // Filters
+              isGlobalFilter={true}
+              preGlobalFilteredRows={true}
+              isMemberRoleFilter={true}
+              isResetFilters={true}
 
-                    isMemberRoleFilter={true}
-                    isResetFilters={true}
-
-                    // Settings
-                    activeTab={activeTab}
-                    setActiveTab={setActiveTab}
-
-                    filters={filters}
-                    setFilters={setFilters}
-                    // preGlobalFilteredRows={true}
-                    SearchPlaceholder="البحث..."
-
-                    // Actions
-                    // onTabChange={handleTabChange}
+              // Settings
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              filters={filters}
+              setFilters={setFilters}
+              SearchPlaceholder="البحث..."
+            />
 
 
-                    // Data----------
-                    columns={columns}
-                    data={campaignMemberList || []}
-                    // setCampaignMemberList={setCampaignMemberList}
-                    customPageSize={50}
-                    // TODO: to find out what is this for and how to be used with the table
-                    // handleItemClick={() => handleCampaignMemberClick(campaignMember, "AddModal")}
+            {campaignMembers && campaignMembers.length ? (
+              <TableContainer
+                // Data----------
+                columns={columns}
+                data={campaignMemberList || []}
+                customPageSize={50}
 
-                    // Styling----------
-                    className="custom-header-css"
-                    divClass="table-responsive table-card mb-2"
-                    tableClass="align-middle table-nowrap"
-                    theadClass="table-light"
-                  />
-                ) : (
-                  <p>لا يوجد فريق عمل</p>
-                )}
-              </div>
-              <ToastContainer closeButton={false} limit={1} />
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
+                // Styling----------
+                className="custom-header-css"
+                divClass="table-responsive table-card mb-2"
+                tableClass="align-middle table-nowrap"
+                theadClass="table-light"
+              />
+
+            ) : (
+              <p>لا يوجد فريق عمل</p>
+            )}
+          </div>
+          <ToastContainer closeButton={false} limit={1} />
+        </CardBody>
+      </Card>
     </React.Fragment>
   );
 };

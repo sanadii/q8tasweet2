@@ -1,6 +1,20 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
+
+// Public
+import Public from "pages/Public";
+import ElectionGrid from "pages/Public/ElectionGrid";
+import CandidateGrid from "pages/Public/CandidateGrid";
+import AboutUs from "pages/Public/AboutUs";
+
+// Elections
+import ContactUs from "pages/Public/ContactUs";
+import PublicElectionDetails from "pages/Public/PublicElectionDetails";
+
+import Results from "pages/Public/Results";
+
+
 // Auth
 import Login from "pages/Authentication/Login";
 import ForgetPasswordPage from "pages/Authentication/ForgetPassword";
@@ -45,10 +59,7 @@ import UserList from "pages/Users/UserList";
 
 
 
-// Public Pages
-// Elections
-import ElectionGrid from "pages/Public/ElectionGrid";
-import Results from "pages/Public/Results";
+
 
 // //AuthenticationInner pages
 import BasicSignIn from "pages/AuthenticationInner/Login/BasicSignIn";
@@ -85,70 +96,17 @@ import Offlinepage from "pages/AuthenticationInner/Errors/Offlinepage";
 // import FileManager from "pages/FileManager";
 // import ToDoList from "pages/ToDo";
 
-const authProtectedRoutes = [
-  { path: "/dashboard", component: <Dashboard /> },
-  { path: "/index", component: <Dashboard /> },
-
-  // Admin: Options, settings, Saved, Favourites,Switch Account, User Activities
-  // Website: Name, Description, email, whatsapp,
-  // Account & Profile
-  // Personal Details
-  // Emails
-  // Notifications
-  // Like & Follow
-
-  // ---------Admin---------
-  // Admin Options
-  { path: "/profile-edit", component: <ProfileEdit /> },
-  { path: "/settings/categories", component: <Categories /> },
-  { path: "/settings/groups", component: <Groups /> },
-
-  // Admin Lists
-  { path: "/admin/campaigns", component: <CampaignList /> },
-  { path: "/admin/candidates/", component: <CandidateList /> },
-  { path: "/admin/elections/", component: <ElectionList /> },
-  { path: "/admin/users/", component: <UserList /> },
-
-
-
-  // -------Subscribers------
-  { path: "/campaigns", component: <CampaignGrid /> },
-
-
-
-  // ----------Common--------
-  { path: "/elections/:slug", component: <ElectionDetails /> },
-  { path: "/candidates/:slug", component: <CandidateDetails /> },
-  { path: "/campaigns/:slug", component: <CampaignDetails /> },
-  // { path: "/campaigns/:id", component: <CampaignDetails /> },
-  // { path: "/candidates/:id", component: <CandidateDetails /> },
-
-  // Members
-  // { path: "/members", component: <MemberList /> },
-  // { path: "/members/:id", component: <MemberDetails /> },
-
-
-
-  //User Profile
-  { path: "/profile", component: <UserProfile /> },
-  { path: "/profile-edit", component: <ProfileEdit /> },
-
-
-
-  // this route should be at the end of all other routes
-  // eslint-disable-next-line react/display-name
-  {
-    path: "/",
-    exact: true,
-    component: <Navigate to="/dashboard" />,
-  },
-  { path: "*", component: <Navigate to="/dashboard" /> },
-];
-
 // Public Routes
 const publicRoutes = [
-  // Others
-  // { path: "/alphabet", component: <Alphabet /> },
+  // Public Pages
+  { path: "/", component: <Public /> },
+  { path: "elections/:slug", component: <PublicElectionDetails /> },
+  { path: "elections", component: <ElectionGrid /> },
+  { path: "candidates", component: <CandidateGrid /> },
+  { path: "about-us", component: <AboutUs /> },
+  { path: "contact-us", component: <ContactUs /> },
+  // { path: "/campaigns", component: <CampaignGrid /> },
+
 
   // Authentication Pages
   { path: "/logout", component: <Logout /> },
@@ -157,13 +115,7 @@ const publicRoutes = [
   { path: "/register", component: <Register /> },
 
 
-  // Election Pages
-  { path: "/public", component: <ElectionGrid /> },
-  { path: "/public/elections/:id", component: <Results /> },
-
   //AuthenticationInner pages
-  { path: "/auth-signin-basic", component: <BasicSignIn /> },
-  { path: "/auth-signin-cover", component: <CoverSignIn /> },
   { path: "/auth-signup-basic", component: <BasicSignUp /> },
   { path: "/auth-signup-cover", component: <CoverSignUp /> },
   { path: "/auth-pass-reset-basic", component: <BasicPasswReset /> },
@@ -186,4 +138,42 @@ const publicRoutes = [
   { path: "/auth-offline", component: <Offlinepage /> },
 ];
 
-export { authProtectedRoutes, publicRoutes };
+const dashboardRoutes = [
+  { path: "/dashboard", component: <Dashboard /> },
+
+  // Admin Lists
+  { path: "/dashboard/elections/", component: <ElectionList /> },
+  { path: "/dashboard/candidates/", component: <CandidateList /> },
+  { path: "/dashboard/campaigns", component: <CampaignList /> },
+  { path: "/dashboard/users/", component: <UserList /> },
+  { path: "/dashboard/settings/categories", component: <Categories /> },
+  { path: "/dashboard/settings/groups", component: <Groups /> },
+
+  // Single Page
+  { path: "/dashboard/elections/:slug", component: <ElectionDetails /> },
+  { path: "/dashboard/candidates/:slug", component: <CandidateDetails /> },
+  { path: "/dashboard/campaigns/:slug", component: <CampaignDetails /> },
+
+  // Members
+  // { path: "/members", component: <MemberList /> },
+  // { path: "/members/:id", component: <MemberDetails /> },
+
+
+  //User Profile
+  { path: "/dashboard/profile", component: <UserProfile /> },
+  { path: "/dashboard/profile-edit", component: <ProfileEdit /> },
+
+]
+
+const authProtectedRoutes = [
+  // User Profile
+  { path: "/profile-edit", component: <ProfileEdit /> },
+
+  // Redirects and Error Handling
+  { path: "/", exact: true, component: <Navigate to="/dashboard" /> },
+  { path: "*", component: <Navigate to="/dashboard" /> },
+];
+
+
+
+export { authProtectedRoutes, dashboardRoutes, publicRoutes };

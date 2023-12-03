@@ -77,14 +77,16 @@ export const ElectionApiResponseError = (actionType, error) => ({
 
 
 // Get Elections
-export const getElections = () => ({
+export const getElections = (view) => ({
   type: GET_ELECTIONS,
+  payload: view,
+
 });
 
 // Election Details
-export const getElectionDetails = (election) => ({
+export const getElectionDetails = (election, view) => ({
   type: GET_ELECTION_DETAILS,
-  payload: election,
+  payload: election, view
 });
 
 // Add New Election

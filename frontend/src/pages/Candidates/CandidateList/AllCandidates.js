@@ -9,8 +9,8 @@ import { candidateSelector } from 'Selectors';
 // Custom Components, Constants & Hooks Imports
 import CandidateModal from "./CandidateModal"
 import { Id, CheckboxHeader, CheckboxCell, Name, Status, Priority, CreateBy, Actions } from "./CandidateListCol";
-import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "components";
-import { useDelete, useFetchDataIfNeeded } from "hooks"
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "components";
+import { useDelete, useFilter } from "hooks"
 
 // Toast & Styles
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -136,36 +136,10 @@ const AllCandidates = () => {
   );
 
   // Filters
-  const [filters, setFilters] = useState({
-    global: "",
-    gender: null,
-    status: null,
-    priority: null,
-  });
+  const { filteredData: candidateList, filters, setFilters } = useFilter(candidates);
 
-  const candidateList = candidates.filter(candidate => {
-    let isValid = true;
-
-    if (filters.global) {
-      isValid = isValid && candidate.name && typeof candidate.name === 'string' && candidate.name.toLowerCase().includes(filters.global.toLowerCase());
-
-    }
-
-    if (filters.gender !== null) {
-      isValid = isValid && candidate.gender === filters.gender;
-    }
-
-    if (filters.status !== null) {
-      isValid = isValid && candidate.status === filters.status;
-    }
-
-    if (filters.priority !== null) {
-      isValid = isValid && candidate.priority === filters.priority;
-    }
-
-    return isValid;
-  });
-
+  console.log("filters: ", filters);
+  console.log("filters: candidateList: ", candidateList);
 
   return (
     <React.Fragment>
@@ -208,25 +182,24 @@ const AllCandidates = () => {
                 isMultiDeleteButton={isMultiDeleteButton}
                 setDeleteModalMulti={setDeleteModalMulti}
               />
+              <TableFilters
+                // Filters
+                isGlobalFilter={true}
+                preGlobalFilteredRows={true}
+                isGenderFilter={true}
+                isStatusFilter={true}
+                isPriorityFilter={true}
+                isResetFilters={true}
+
+                // Settings
+                filters={filters}
+                setFilters={setFilters}
+                SearchPlaceholder="البحث..."
+              />
 
               {isCandidateSuccess && candidates.length ? (
                 <TableContainer
-
-                  // Filters----------
-                  isTableContainerFilter={true}
-                  isGlobalFilter={true}
-                  preGlobalFilteredRows={true}
-                  isGenderFilter={true}
-                  isStatusFilter={true}
-                  isPriorityFilter={true}
-                  isResetFilters={true}
-
-                  // FilterSettings
-                  filters={filters}
-                  setFilters={setFilters}
-                  SearchPlaceholder="البحث..."
-
-                  // Table
+                  // Table Data
                   columns={columns}
                   data={candidateList || []}
                   customPageSize={20}

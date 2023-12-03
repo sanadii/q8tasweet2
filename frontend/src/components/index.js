@@ -31,6 +31,7 @@ export { default as FormFields } from "./Forms/FormFields";
 export { default as FieldComponent } from "./Tables/FieldComponent";
 export { ExportCSVModal } from "./Tables/ExportCSVModal";
 export { default as TableContainer } from "./Tables/TableContainer";
+export { default as TableFilters } from "./Tables/TableFilters";
 export { default as TableHeaderContainer } from "./Tables/TableHeaderContainer";
 export { default as TableContainerHeader } from "./Tables/TableContainerHeader";
 export { default as TableContainerFooter } from "./Tables/TableContainerFooter";

@@ -37,7 +37,7 @@ const Id = (cellProps) => {
   return (
     <React.Fragment>
       <Link
-        to={`/elections/${cellProps.row.original.slug}`}
+        to={`/dashboard/elections/${cellProps.row.original.slug}`}
         className="fw-medium link-primary"
       >
         {cellProps.row.original.id}

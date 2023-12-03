@@ -13,7 +13,7 @@ const Id = (cell) => {
   return (
     <React.Fragment>
       <Link
-        to={`/campaigns/${cell.row.original.id}`}
+        to={`/dashboard/campaigns/${cell.row.original.id}`}
         className="fw-medium link-primary"
       >
         {cell.value}
@@ -26,7 +26,7 @@ const Name = (cell) => {
   return (
     <React.Fragment>
       <Link
-        to={`/campaigns/${cell.row.original.slug}`}
+        to={`/dashboard/campaigns/${cell.row.original.slug}`}
         className="fw-medium link-primary"
       >
         {cell.value}
