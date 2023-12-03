@@ -107,6 +107,7 @@ export const DELETE_USER = "/auth/deleteUser";
 export const GET_CURRENT_USER = "/auth/getCurrentUser";
 export const GET_MODERATOR_USERS = "/auth/getModeratorUsers";
 export const GET_CAMPAIGN_MODERATORS = "/auth/getCampaignModerators";
+export const GET_CAMPAIGN_SORTERS = "/auth/getCampaignSorters";
 
 
 // GROUPS

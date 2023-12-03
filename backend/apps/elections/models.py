@@ -61,6 +61,9 @@ class Election(TrackModel, TaskModel):
         self.slug = slugify(f"{self.sub_category.slug}-{self.due_date.year if self.due_date else 'tba'}")
         super().save(*args, **kwargs)
 
+
+
+
 # class ElectionProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
 #     election = models.OneToOneField('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_elections")
 
@@ -163,6 +166,33 @@ class ElectionCommitteeResult(TrackModel):
     def __str__(self):
         return f"{self.election_committee.name} - {self.election_candidate.candidate.name} - Votes: {self.votes}"
 
+class ElectionCommitteeSorter(TrackModel, TaskModel):
+    election_committee = models.ForeignKey('ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_committees')
+    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_users')
+
+
+
+    class Meta:
+        # managed = False
+        db_table = "election_committee_sorter"
+        verbose_name = "Election Committee Sorter"
+        verbose_name_plural = "Election Committee Sorters"
+        default_permissions = []
+        permissions  = [
+            ("canViewElectionCommitteeSorter", "Can View Election Committee Sorter"),
+            ("canAddElectionCommitteeSorter", "Can Add Election Committee Sorter"),
+            ("canChangeElectionCommitteeSorter", "Can Change Election Committee Sorter"),
+            ("canDeleteElectionCommitteeSorter", "Can Delete Election Committee Sorter"),
+            ]
+
+    def __str__(self):
+        return f"{self.election.name}"
+    
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(f"{self.sub_category.slug}-{self.due_date.year if self.due_date else 'tba'}")
+    #     super().save(*args, **kwargs)
+
+
 @receiver(post_save, sender=ElectionCommitteeResult)
 def update_candidate_votes_on_save(sender, instance, **kwargs):
     if instance.election_candidate:  # <--- Handling potential None
@@ -173,3 +203,4 @@ def update_candidate_votes_on_save(sender, instance, **kwargs):
 def update_candidate_votes_on_delete(sender, instance, **kwargs):
     if instance.election_candidate:  # <--- Handling potential None
         instance.election_candidate.update_votes()
+

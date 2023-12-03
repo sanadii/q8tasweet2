@@ -1,156 +1,153 @@
 import React, { useState, useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
-import { Card, CardHeader, CardBody } from "reactstrap";
+import { Card, CardHeader, CardBody, Button, Input, FormGroup, Label, Col, Row } from 'reactstrap';
 
 const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws';
-const PUBLIC_CHANNEL_URL = `${SERVER_BASE_URL}/GlobalChannel/public/`;
-const PRIVATE_CHANNEL_URL = `${SERVER_BASE_URL}/GlobalChannel/private/`;
+const GLOBAL_CHANNEL = 'GlobalChannel';
 
-const READY_STATE_OPEN = 1;
-
-const MessageType = {
-    PUBLIC: 'public',
-    PRIVATE: 'private',
-};
-
-const generateAsyncUrlGetter = (url, timeout = 2000) => () => {
+const getChannelUrl = (channel, timeout = 2000) => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve(url);
+            resolve(`${SERVER_BASE_URL}/${GLOBAL_CHANNEL}/${channel === 'global' ? '' : channel + '/'}`);
         }, timeout);
     });
 };
+
+const channels = [
+    { channel: 'public' },
+    { channel: 'private' },
+    { channel: 'special' },
+    { channel: 'global' },
+];
+
+const READY_STATE_OPEN = 1;
 
 export const WebSocketChannels = () => {
     const [currentSocketUrl, setCurrentSocketUrl] = useState(null);
     const [messageHistory, setMessageHistory] = useState([]);
     const [inputtedMessage, setInputtedMessage] = useState('');
-    const [messageType, setMessageType] = useState(null); // Store the message type
+    const [selectedMessageChannel, setselectedMessageChannel] = useState(channels[0].channel); // default to the first channel channel
 
-    const { sendMessage, lastMessage, readyState } = useWebSocket(
-        currentSocketUrl,
-        {
-            share: true,
-            shouldReconnect: () => false,
-        }
-    );
+    const [messageChannel, setMessageChannel] = useState('global');
+
+    const { sendMessage, lastMessage, readyState } = useWebSocket(currentSocketUrl, {
+        share: true,
+        shouldReconnect: () => false,
+    });
 
     const handleSendMessage = () => {
-        if (readyState === READY_STATE_OPEN) {
-            if (messageType) {
-                const message = JSON.stringify({ type: messageType, message: inputtedMessage });
-                sendMessage(message);
-            } else {
-                console.error('Message type is not set.');
-            }
+        if (readyState === READY_STATE_OPEN && selectedMessageChannel) {
+            sendMessage(JSON.stringify({ channel: selectedMessageChannel, message: inputtedMessage }));
         } else {
-            console.error('WebSocket connection is not open.');
+            console.error('WebSocket connection is not open or message channel is not set.');
         }
     };
 
     useEffect(() => {
         if (lastMessage !== null) {
-            try {
-                const data = JSON.parse(lastMessage.data);
-                setMessageHistory(prev => [...prev, { type: data.type, message: data.message }]);
-                console.log("lastMessage.data : ", lastMessage.data);
-                console.log("lastMessage: ", lastMessage);
-            } catch (e) {
-                console.error("Error parsing message:", e);
-            }
+            const data = JSON.parse(lastMessage.data);
+            setMessageHistory(prev => [...prev, { channel: data.channel, message: data.message }]);
         }
     }, [lastMessage]);
 
-    // Filter messages based on message type
-    const allMessages = messageHistory;
-    const privateMessages = messageHistory.filter((msg) => msg.type === MessageType.PRIVATE);
-    const publicMessages = messageHistory.filter((msg) => msg.type === MessageType.PUBLIC);
 
-    const connectionStatus = () => {
-        switch (readyState) {
-            case WebSocket.CONNECTING:
-                return "Connecting...";
-            case WebSocket.OPEN:
-                return "Connected";
-            case WebSocket.CLOSING:
-                return "Disconnecting...";
-            case WebSocket.CLOSED:
-                return "Disconnected";
-            default:
-                return "Unknown State";
+    // Function to determine the status of each channel
+    const determineChannelStatus = (channelChannel) => {
+        const isConnected = readyState === WebSocket.OPEN && messageChannel === channelChannel;
+        let statusText, statusClass;
+
+        if (readyState === WebSocket.CONNECTING) {
+            statusText = 'Connecting';
+            statusClass = "info";
+        } else if (readyState === WebSocket.CLOSING) {
+            statusText = 'Closing';
+            statusClass = "warning";
+        } else if (isConnected) {
+            statusText = 'Connected';
+            statusClass = "success"; // Change this to "warning" for a warning color
+        } else {
+            statusText = 'Connect';
+            statusClass = "danger"; // Change this to "danger" for a danger color
         }
+
+        return {
+            text: statusText,
+            class: statusClass,
+        };
     };
 
-    return (
-        <Card>
-            <CardHeader>
-                <h5>WebSocket</h5>
-            </CardHeader>
-            <CardBody>
-                <div>
-                    Whatever you send will be echoed from the Server
-                    <div>
-                        <input
-                            type={'text'}
-                            value={inputtedMessage}
-                            onChange={(e) => setInputtedMessage(e.target.value)}
-                        />
-                        <button onClick={handleSendMessage} disabled={readyState !== READY_STATE_OPEN}>
-                            Send
-                        </button>
-                    </div>
-                    Select Socket Server:
-                    <br />
-                    <button
-                        onClick={() => {
-                            setCurrentSocketUrl(generateAsyncUrlGetter(PUBLIC_CHANNEL_URL));
-                            setMessageType(MessageType.PUBLIC); // Set message type to public
-                        }}
-                        disabled={currentSocketUrl === PUBLIC_CHANNEL_URL}
-                    >
-                        PUBLIC CHANNEL
-                    </button>
-                    <button
-                        onClick={() => {
-                            setCurrentSocketUrl(generateAsyncUrlGetter(PRIVATE_CHANNEL_URL));
-                            setMessageType(MessageType.PRIVATE); // Set message type to private
-                        }}
-                        disabled={currentSocketUrl === PRIVATE_CHANNEL_URL}
-                    >
-                        PRIVATE CHANNEL
-                    </button>
 
-                    <p>WebSocket Status: {connectionStatus()}</p>
-                </div>
-            </CardBody>
-            {/* Display private, public, and all messages in separate columns */}
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ flex: 1 }}>
-                    <h6>Private Messages</h6>
-                    <ul>
-                        {privateMessages.map((msg, index) => (
-                            <li key={index}>{msg.message}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div style={{ flex: 1 }}>
-                    <h6>Public Messages</h6>
-                    <ul>
-                        {publicMessages.map((msg, index) => (
-                            <li key={index}>{msg.message}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div style={{ flex: 1 }}>
-                    <h6>All Messages</h6>
-                    <ul>
-                        {allMessages.map((msg, index) => (
-                            <li key={index}>{msg.message}</li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-        </Card>
+    return (
+        <React.Fragment>
+            <Card>
+                <CardHeader>
+                    <h5>Global Channel</h5>
+                </CardHeader>
+                <CardBody>
+                    <FormGroup>
+                        <Label>Message:</Label>
+                        <div className="input-group">
+                            <Input
+                                channel="text"
+                                placeholder="Enter your message"
+                                value={inputtedMessage}
+                                onChange={(e) => setInputtedMessage(e.target.value)}
+                                className="me-2"
+                            />
+                            <Input
+                                type="select"
+                                value={selectedMessageChannel}
+                                onChange={(e) => setselectedMessageChannel(e.target.value)}
+                                className="me-2"
+                            >
+                                {channels.map((channel, index) => (
+                                    <option key={index} value={channel.channel}>
+                                        {channel.channel.charAt(0).toUpperCase() + channel.channel.slice(1)}
+                                    </option>
+                                ))}
+                            </Input>
+                            <Button color="primary" onClick={handleSendMessage}>
+                                Send Message
+                            </Button>
+                        </div>
+                    </FormGroup>
+                </CardBody>
+            </Card>
+
+
+            <Row>
+                {channels.map((channel) => (
+                    <Col md={3} key={channel.channel}>
+                        <Card>
+                            <CardHeader>
+                                <h4>
+                                    {`${channel.channel.charAt(0).toUpperCase() + channel.channel.slice(1)} Channel`}
+                                </h4>
+                                <Button
+                                    color={determineChannelStatus(channel.channel).class}
+                                    onClick={async () => {
+                                        const url = await getChannelUrl(channel.channel);
+                                        setCurrentSocketUrl(url);
+                                        setMessageChannel(channel.channel);
+                                    }}
+                                    disabled={currentSocketUrl === `${SERVER_BASE_URL}/${GLOBAL_CHANNEL}/${channel.channel === 'global' ? '' : channel.channel + '/'}`}
+                                >
+                                    {determineChannelStatus(channel.channel).text}
+                                </Button>
+                            </CardHeader>
+                            <CardBody>
+                                <h6>{channel.channel.charAt(0).toUpperCase() + channel.channel.slice(1)} Messages</h6>
+                                <ul>
+                                    {messageHistory.filter(msg => msg.channel === channel.channel).map((msg, idx) => (
+                                        <li key={idx}>{msg.message}</li>
+                                    ))}
+                                </ul>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+        </React.Fragment >
     );
 };
 

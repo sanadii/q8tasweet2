@@ -151,6 +151,7 @@ export const deleteUser = (user) => api.delete(url.DELETE_USER + "/" + user);
 export const getCurrentUser = () => api.get(url.GET_CURRENT_USER);
 export const getModeratorUsers = () => api.get(url.GET_MODERATOR_USERS);
 export const getCampaignModerators = () => api.get(url.GET_CAMPAIGN_MODERATORS);
+export const getCampaignSorters = () => api.get(url.GET_CAMPAIGN_SORTERS);
 
 
 // Groups

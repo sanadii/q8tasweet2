@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 import { electionSelector } from 'Selectors';
 
 import { deleteElectionCommittee } from "store/actions";
-import ElectionCommitteeModal from "../Modals/ElectionCommitteeModal";
+import CommitteeModal from "./CommitteeModal";
+import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Position, Votes, Actions } from "./CommitteesCol";
+import { usePermission, useDelete } from "hooks";
 
 // Utility and helper imports
 import { isEmpty } from "lodash";
@@ -13,7 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
+import { DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
 
 // Reactstrap (UI) imports
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
@@ -22,18 +24,28 @@ import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
 import SimpleBar from "simplebar-react";
 
 const CommitteesTab = () => {
-  const dispatch = useDispatch();
-
   const { electionDetails, electionCommittees, error } = useSelector(electionSelector);
-  const election_id = electionDetails.id;
-
   const [electionCommittee, setElectionCommittee] = useState([]);
 
   // Modals: Delete, Set, Edit
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+
+
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    onClickDelete,
+    deleteModal,
+    setDeleteModal,
+    checkedAll,
+    deleteCheckbox,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    deleteMultiple,
+  } = useDelete(deleteElectionCommittee);
+
 
   // Toggle for Add / Edit Models
   const toggle = useCallback(() => {
@@ -45,18 +57,7 @@ const CommitteesTab = () => {
     }
   }, [modal]);
 
-  // Delete Data
-  const handleDeleteElectionCommittee = () => {
-    if (electionCommittee) {
-      dispatch(deleteElectionCommittee(electionCommittee.id));
-      setDeleteModal(false);
-    }
-  };
 
-  const onClickDelete = (electionCommittee) => {
-    setElectionCommittee(electionCommittee);
-    setDeleteModal(true);
-  };
 
   // Add Dataa
   // handleElectionCommitteeClicks Function
@@ -88,46 +89,6 @@ const CommitteesTab = () => {
     [toggle]
   );
 
-  // Checked All
-  const checkedAll = useCallback(() => {
-    const checkall = document.getElementById("checkBoxAll");
-    const checkedEntry = document.querySelectorAll(".electionCommitteeCheckBox");
-
-    if (checkall.checked) {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = true;
-      });
-    } else {
-      checkedEntry.forEach((checkedEntry) => {
-        checkedEntry.checked = false;
-      });
-    }
-    deleteCheckbox();
-  }, []);
-
-  // Delete Multiple
-  const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
-  const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
-
-  const deleteMultiple = () => {
-    const checkall = document.getElementById("checkBoxAll");
-    selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteElectionCommittee(element.value));
-      setTimeout(() => {
-        toast.clearWaitingQueue();
-      }, 3000);
-    });
-    setIsMultiDeleteButton(false);
-    checkall.checked = false;
-  };
-
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".electionCommitteeCheckBox:checked");
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
-  };
 
   const handleElectionCommitteeClicks = () => {
     setElectionCommittee("");
@@ -138,98 +99,35 @@ const CommitteesTab = () => {
   const columns = useMemo(
     () => [
       {
-        Header: (
-          <input
-            type="checkbox"
-            id="checkBoxAll"
-            className="form-check-input"
-            onClick={() => checkedAll()}
-          />
-        ),
-        Cell: (cellProps) => {
-          return (
-            <input
-              type="checkbox"
-              className="electionCommitteeCheckBox form-check-input"
-              value={cellProps.row.original.id}
-              onChange={() => deleteCheckbox()}
-            />
-          );
-        },
-        id: "#",
+        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
+        id: "id",
       },
       {
         Header: "اللجنة",
         filterable: true,
-        Cell: (electionCommittee) => (
-          <>
-            <div className="d-flex align-items-center">
-              <div className="flex-grow-1 ms-2 name">
-                <strong>
-                  {electionCommittee.row.original.name}
-                </strong>
-              </div>
-            </div>
-          </>
-        ),
+        Cell: (cellProps) => <Name {...cellProps} />
       },
       {
         Header: "النوع",
         filterable: true,
-        Cell: (electionCommittee) => (
-          <>
-            {electionCommittee.row.original.gender}
-          </>
-        ),
+        Cell: (cellProps) => <Gender {...cellProps} />
       },
       {
         Header: "إجراءات",
-        Cell: (cellProps) => {
-          return (
-            <div className="list-inline hstack gap-2 mb-0">
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-warning edit-list"
-                onClick={() => {
-                  const electionCommittee = cellProps.row.original;
-                  setElectionCommittee(electionCommittee);
-                }}
-              >
-                <i className="ri-eye-fill align-bottom" />
-              </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-info edit-list"
-                onClick={() => {
-                  const electionCommittee = cellProps.row.original;
-                  handleElectionCommitteeClick(electionCommittee);
-                }}
-              >
-                <i className="ri-pencil-fill align-bottom" />
-              </button>
-              <button
-                to="#"
-                className="btn btn-sm btn-soft-danger remove-list"
-                onClick={() => {
-                  const electionCommittee = cellProps.row.original;
-                  onClickDelete(electionCommittee);
-                }}
-              >
-                <i className="ri-delete-bin-5-fill align-bottom" />
-              </button>
-            </div>
-          );
-        },
+        Cell: (cellProps) => (
+          <Actions
+            {...cellProps}
+            setElectionCommittee={setElectionCommittee}
+            handleElectionCommitteeClick={handleElectionCommitteeClick}
+            onClickDelete={onClickDelete}
+          />
+        )
       },
       {
         Header: "رمز",
-        accessor: "candidate_id",
-        filterable: true,
-        enableGlobalFilter: false,
-        Cell: (cellProps) => {
-          return <p>{cellProps.row.original.id}</p>;
-        },
-        // id: "candidateId", // Make sure id property is defined here
+        accessor: "committee_id",
+        Cell: (cellProps) => <Id {...cellProps} />
       },
     ],
     [handleElectionCommitteeClick, checkedAll]
@@ -268,7 +166,7 @@ const CommitteesTab = () => {
       />
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteElectionCommittee}
+        onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
@@ -279,7 +177,7 @@ const CommitteesTab = () => {
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
       />
-      <ElectionCommitteeModal
+      <CommitteeModal
         modal={modal}
         setModal={setModal}
         isEdit={isEdit}
@@ -332,6 +230,7 @@ const CommitteesTab = () => {
                   // Settings
                   filters={filters}
                   setFilters={setFilters}
+                  isMultiDeleteButton={isMultiDeleteButton}
 
                   SearchPlaceholder="البحث..."
                   // handleElectionCommitteeClick={handleElectionCommitteeClicks}

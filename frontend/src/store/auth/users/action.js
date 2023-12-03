@@ -25,6 +25,7 @@ import {
   GET_CURRENT_USER,
   GET_MODERATOR_USERS,
   GET_CAMPAIGN_MODERATORS,
+  GET_CAMPAIGN_SORTERS,
 
 
 } from "./actionType";
@@ -130,4 +131,9 @@ export const getModeratorUsers = () => ({
 export const getCampaignModerators = () => ({
   type: GET_CAMPAIGN_MODERATORS,
 });
+
+export const getCampaignSorters = () => ({
+  type: GET_CAMPAIGN_SORTERS,
+});
+
 

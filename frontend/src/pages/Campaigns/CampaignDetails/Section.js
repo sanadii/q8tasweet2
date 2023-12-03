@@ -26,7 +26,6 @@ import ElectorsTab from "./ElectorsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
-import { useSocket } from 'hooks'; // Update with the correct path
 
 const Section = () => {
   SwiperCore.use([Autoplay]);
@@ -90,9 +89,6 @@ const Section = () => {
   if (!campaign.candidate) {
     return <Loader />;
   }
-
-  // Socket
-
 
   return (
     <React.Fragment>

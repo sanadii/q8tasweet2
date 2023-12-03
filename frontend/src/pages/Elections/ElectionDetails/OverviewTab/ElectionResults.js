@@ -112,7 +112,7 @@ const ElectionResults = () => {
 
   // Update the WebSocket from slug & url
   useEffect(() => {
-    const wsUrl = `ws://127.0.0.1:8000/ws/campaigns/${CampaignSlug}/`;
+    const wsUrl = `ws://127.0.0.1:8000/ws/sorting/${CampaignSlug}/`;
     const newSocket = new WebSocket(wsUrl);
 
     newSocket.onmessage = (event) => {

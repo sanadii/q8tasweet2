@@ -20,6 +20,8 @@ export const electionSelector = createSelector(
     electionAttendees: electionsState.electionAttendees,
     electionCommitteeResults: electionsState.electionCommitteeResults,
 
+
+    campaignSorters: electionsState.campaignSorters,
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,
 

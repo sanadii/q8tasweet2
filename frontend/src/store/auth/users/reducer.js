@@ -20,7 +20,7 @@ import {
   GET_CURRENT_USER,
   GET_MODERATOR_USERS,
   GET_CAMPAIGN_MODERATORS,
-
+  GET_CAMPAIGN_SORTERS
 } from "./actionType";
 
 const IntialState = {
@@ -72,6 +72,15 @@ const Users = (state = IntialState, action) => {
             isUserCreated: false,
             isUserSuccess: true,
           };
+        case GET_CAMPAIGN_SORTERS:
+          return {
+            ...state,
+            campaignSorters: action.payload.data,
+            isUserCreated: false,
+            isUserSuccess: true,
+          };
+
+
         default:
           return { ...state };
       }
@@ -108,6 +117,13 @@ const Users = (state = IntialState, action) => {
             isUserSuccess: true,
           };
         case GET_CAMPAIGN_MODERATORS:
+          return {
+            ...state,
+            error: action.payload.error,
+            isUserCreated: false,
+            isUserSuccess: true,
+          };
+        case GET_CAMPAIGN_SORTERS:
           return {
             ...state,
             error: action.payload.error,
@@ -215,6 +231,12 @@ const Users = (state = IntialState, action) => {
       };
     }
     case GET_CAMPAIGN_MODERATORS: {
+      return {
+        ...state,
+        isUserCreated: false,
+      };
+    }
+    case GET_CAMPAIGN_SORTERS: {
       return {
         ...state,
         isUserCreated: false,

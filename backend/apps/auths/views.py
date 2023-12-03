@@ -173,6 +173,25 @@ class GetCampaignModerators(APIView):
         except ObjectDoesNotExist:
             return Response({"data": [], "code": 200, "message": "No moderators found."})
     
+
+class GetCampaignSorters(APIView):
+    def get(self, request):
+        try:
+            # Get the group object where name is 'campaignModerator' (or 'Editor' if it's the correct name)
+            group = Group.objects.get(name='moderator')  # Update 'campaignModerator' if needed
+            
+            # Get the users in the group with name 'campaignModerator'
+            moderators = group.user_set.all()
+            
+            # Serialize the data
+            data_serializer = UserSerializer(moderators, many=True)
+
+            return Response({"data": data_serializer.data, "code": 200})
+        except ObjectDoesNotExist:
+            return Response({"data": [], "code": 200, "message": "No moderators found."})
+        
+
+    
 class AddNewUser(APIView):
     permission_classes = [IsAuthenticated]
 

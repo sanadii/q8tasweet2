@@ -9,8 +9,14 @@ export const Dashboard = ({ }) => {
 
     return (
         <React.Fragment>
-            <WebSocketChannels />
-        </React.Fragment>
+            <div className="page-content">
+                <Container fluid>
+                    <BreadCrumb title="الصفحة الرئيسية" pageTitle="الصفحة الرئيسية" />
+
+                    <WebSocketChannels />
+                </Container>
+            </div>
+        </React.Fragment >
 
     );
 };

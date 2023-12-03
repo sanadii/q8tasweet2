@@ -3,15 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { campaignSelector, userSelector } from 'Selectors';
 import { TableContainer } from 'components';
 import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
+import { useSocket } from 'hooks'; // Update with the correct path
 
-const SortingTab = ({ socket }) => {
+const SortingTab = () => {
   const { campaign, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
   const { userId } = useSelector(userSelector);
 
   // Logic committee is not set by the campaign Moderators
   const committeeId = currentCampaignMember.committee;
-  const campaignSlug = campaign.slug;
   const [candidatesSorting, setCandidatesSorting] = useState([]);
+  const campaignSlug = campaign.slug;
 
 
   // Initialize candidatesSorting state and WebSocket
@@ -25,7 +26,17 @@ const SortingTab = ({ socket }) => {
   }, [campaignElectionCandidates]);
 
 
-  const updateSortingVoteState = (candidateId, newVotes) => {
+  const handleWebSocketMessage = useCallback((event) => {
+    const message = JSON.parse(event.data);
+    if (message.type === 'vote_update' && message.electionCommitteeId === committeeId) {
+      updateSortingVotes(message.electionCandidateId, message.votes);
+    }
+  }, [committeeId]);
+
+  const [socket, send] = useSocket('sorting', campaignSlug, handleWebSocketMessage);
+
+
+  const updateSortingVotes = (candidateId, newVotes) => {
     setCandidatesSorting(prevSorting => prevSorting.map(sortItem => {
       if (sortItem.candidateId === candidateId) {
         return { ...sortItem, committeeVote: newVotes };
@@ -35,7 +46,7 @@ const SortingTab = ({ socket }) => {
   };
 
 
-  const sendSortingVotesUpdate = (candidateId, newVotes) => {
+  const sendVoteUpdate = (candidateId, newVotes) => {
     if (socket) {
       socket.send(JSON.stringify({
         type: 'vote_update',
@@ -43,24 +54,24 @@ const SortingTab = ({ socket }) => {
         electionCommitteeId: committeeId,
         votes: newVotes
       }));
-      updateSortingVoteState(candidateId, newVotes); // Immediate state update for better UX
+      updateSortingVotes(candidateId, newVotes); // Immediate state update for better UX
     }
   };
 
 
-  const crementingVotes = (candidateId, increment) => {
+  const updateVotes = (candidateId, increment) => {
     const candidate = candidatesSorting.find(c => c.candidateId === candidateId);
     if (candidate) {
       const newVotes = increment ? candidate.committeeVote + 1 : Math.max(0, candidate.committeeVote - 1);
-      updateSortingVoteState(candidateId, newVotes); // Immediate state update
-      sendSortingVotesUpdate(candidateId, newVotes); // Send WebSocket message
+      updateSortingVotes(candidateId, newVotes); // Immediate state update
+      sendVoteUpdate(candidateId, newVotes); // Send WebSocket message
     } else {
       console.error(`Candidate with ID ${candidateId} not found in candidatesSorting state`);
     }
   };
 
-  const incrementVotes = candidateId => crementingVotes(candidateId, true);
-  const decrementVotes = candidateId => crementingVotes(candidateId, false);
+  const incrementVotes = candidateId => updateVotes(candidateId, true);
+  const decrementVotes = candidateId => updateVotes(candidateId, false);
 
   // Define columns for the table
   const columns = useMemo(() => {

@@ -35,6 +35,7 @@ urlpatterns = [
     path('getCurrentUser', GetCurrentUser.as_view(), name="GetCurrentUser"),
     path("getModeratorUsers", GetModeratorUsers.as_view(), name="GetModeratorUsers"),
     path("getCampaignModerators", GetCampaignModerators.as_view(), name="GetCampaignModerators"),
+    path("getCampaignSorters", GetCampaignSorters.as_view(), name="GetCampaignSorters"),
 
 
     # Groups

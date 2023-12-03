@@ -16,6 +16,7 @@ import {
   GET_CURRENT_USER,
   GET_MODERATOR_USERS,
   GET_CAMPAIGN_MODERATORS,
+  GET_CAMPAIGN_SORTERS,
 } from "./actionType";
 
 import {
@@ -43,6 +44,7 @@ import {
   // // Specific User(s)
   // getModeratorUsers,
   // getCampaignModerators,
+  // getCampaignSorters,
 } from "./action";
 
 import { uploadNewImage } from "../../uploadImage/action";
@@ -60,7 +62,7 @@ import {
   getCurrentUser as getCurrentUserApi,
   getModeratorUsers as getModeratorUsersApi,
   getCampaignModerators as getCampaignModeratorsApi,
-
+  getCampaignSorters as getCampaignSortersApi,
 } from "../../../helpers/backend_helper";
 
 function* getUsers() {
@@ -158,6 +160,17 @@ function* getCampaignModerators() {
   }
 }
 
+function* getCampaignSorters() {
+  try {
+    const response = yield call(getCampaignSortersApi);
+    yield put(UserApiResponseSuccess(GET_CAMPAIGN_SORTERS, response.data));
+  } catch (error) {
+    yield put(UserApiResponseError(GET_CAMPAIGN_SORTERS, error));
+  }
+}
+
+
+
 // Watchers
 export function* watchGetUsers() {
   yield takeEvery(GET_USERS, getUsers);
@@ -188,6 +201,10 @@ export function* watchGetModeratorUsers() {
 export function* watchGetCampaignModerators() {
   yield takeEvery(GET_CAMPAIGN_MODERATORS, getCampaignModerators);
 }
+export function* watchGetCampaignSorters() {
+  yield takeEvery(GET_CAMPAIGN_SORTERS, getCampaignSorters);
+}
+
 
 function* userSaga() {
   yield all([
@@ -203,6 +220,7 @@ function* userSaga() {
     fork(watchGetCurrentUser),
     fork(watchGetModeratorUsers),
     fork(watchGetCampaignModerators),
+    fork(watchGetCampaignSorters),
 
   ]);
 }
