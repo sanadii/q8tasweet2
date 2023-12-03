@@ -28,7 +28,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
     {
       id: "home",
       label: "الرئيسية",
-      icon: "ri-dashboard-line",
+      icon: "ri-home-8-line",
       link: "/",
       click: function (e) {
         e.preventDefault();
@@ -37,7 +37,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
     }, {
       id: "elections",
       label: "الإنتخابات",
-      icon: "ri-dashboard-line",
+      icon: "ri-archive-line",
       link: "/elections",
       click: function (e) {
         e.preventDefault();
@@ -57,7 +57,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
     {
       id: "about-us",
       label: "من نحن",
-      icon: "ri-account-pin-box-line",
+      icon: "ri-bookmark-3-line",
       link: "/about-us",
       click: function (e) {
         e.preventDefault();
@@ -67,12 +67,14 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
     {
       id: "contact-us",
       label: "اتصل بنا",
-      icon: "ri-account-pin-box-line",
+      icon: "ri-wechat-line",
       link: "/contact-us",
       click: function (e) {
         e.preventDefault();
         setIscurrentState("publicContactUs");
       },
+
+      // ri-briefcase-line
     },
   ];
 }

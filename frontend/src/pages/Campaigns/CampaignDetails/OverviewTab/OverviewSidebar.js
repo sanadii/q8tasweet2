@@ -1,15 +1,8 @@
-// Pages/Campaigns/campaign/index.js
-// React & Redux core
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-
-// Store & Selectors
+import { Card, CardBody } from "reactstrap";
 import { userSelector, campaignSelector } from 'Selectors';
-import { usePermission } from 'hooks';
-
-// UI & Utilities
-import { Card, CardBody, Col, Row } from "reactstrap";
+import { usePermission, useCampaignMemberRoles, useCurrentCampaignMemberRole } from 'hooks';
 
 const OverviewSidebar = () => {
     const {
@@ -22,36 +15,42 @@ const OverviewSidebar = () => {
     } = useSelector(campaignSelector);
     const { currentUser } = useSelector(userSelector);
 
-
     // Permissions
     const { canChangeConfig } = usePermission();
 
-    // Custom hook to get members with a specific role by role name
-    function useMembersWithRole(roleName, campaignRoles = [], campaignMembers = []) {
-        const [membersWithRole, setMembersWithRole] = useState([]);
+    // Format role names
+    // Get roles
+    const campaignModerators = useCampaignMemberRoles('campaignModerator', campaignRoles, campaignMembers);
+    const campaignCandidates = useCampaignMemberRoles('campaignCandidate', campaignRoles, campaignMembers);
+    const campaignCoordinators = useCampaignMemberRoles('campaignCoordinator', campaignRoles, campaignMembers);
+    const currentMemberRole = useCurrentCampaignMemberRole(canChangeConfig, campaignRoles, campaignMembers);
 
-        useEffect(() => {
-            const foundRole = campaignRoles.find(roleObj => roleObj.name === roleName);
-            const members = foundRole ? campaignMembers.filter(member => member.role === foundRole.id) : [];
-            setMembersWithRole(members);
-        }, [roleName, campaignRoles, campaignMembers]);
+    // Format role names
+    const formatRoleNames = (members) => members.map(member => member.name).join(' | ');
 
-        return membersWithRole;
-    }
 
-    function useCurrentMemberRole(canChangeConfig, campaignRoles = [], currentCampaignMember = {}) {
-        if (canChangeConfig) {
-            return 'مدير النظام';
-        } else {
-            const roleObj = campaignRoles.find(role => role.id === currentCampaignMember.role);
-            return roleObj?.name || 'مشترك';
-        }
-    }
-
-    // Usage of custom hooks
-    const campaignModerators = useMembersWithRole('campaignModerator', campaignRoles, campaignMembers);
-    const campaigCoordinators = useMembersWithRole('campaignCoordinator', campaignRoles, campaignMembers);
-    const currentMemberRole = useCurrentMemberRole(canChangeConfig, campaignRoles, currentCampaignMember);
+    const electionDetails = [
+        {
+            name: 'الانتخابات',
+            data: campaign.election.name,
+        },
+        {
+            name: 'المرشحين',
+            data: `${campaignElectionCandidates?.length ?? 0} مرشح`,
+        },
+        {
+            name: 'المقاعد',
+            data: `${campaign.election.electSeats} مقعد`,
+        },
+        {
+            name: 'الأصوات',
+            data: `${campaign.election.electVotes} صوت`,
+        },
+        {
+            name: 'اللجان',
+            data: `${campaignElectionCommittees?.length ?? 0} لجنة`,
+        },
+    ];
 
     return (
         <React.Fragment>
@@ -59,26 +58,16 @@ const OverviewSidebar = () => {
                 <CardBody>
                     <h5 className="card-title mb-3"><strong>الإنتخابات</strong></h5>
                     <ul>
-                        <li>الانتخابات: <strong>{campaign.election.name}</strong></li>
-                        <li>المرشحين: <strong>{(campaignElectionCandidates?.length ?? 0)} مرشح</strong></li>
-                        <li>المقاعد: <strong>{campaign.election.electSeats} مقعد</strong></li>
-                        <li>الأصوات: <strong>{campaign.election.electVotes} صوت</strong></li>
-                        <li>اللجان: <strong>{(campaignElectionCommittees?.length ?? 0)} لجنة</strong></li>
+                        {electionDetails.map((detail, index) => (
+                            <li key={index}>{detail.name}: <strong className="text-info">{detail.data}</strong></li>
+                        ))}
                     </ul>
                     <hr />
                     <h5 className="card-title mb-3"><strong>الإدارة</strong></h5>
                     <ul>
-                        {campaignModerators && campaignModerators.length > 0 && (
-                            <li>
-                                المراقب: <strong>{campaignModerators.map(moderator => moderator.fullName).join(' | ')}</strong>
-                            </li>
-                        )}
-                        <li>المرشح: <strong>{campaign.candidate.name}</strong></li>
-                        {campaigCoordinators && campaigCoordinators.length > 0 &&
-                            <li>
-                                المنسق: <strong>{campaigCoordinators.map(coordinator => coordinator.fullName).join(' | ')}</strong>
-                            </li>
-                        }
+                        {campaignModerators.length > 0 && <li>المراقب: <strong className="text-info">{formatRoleNames(campaignModerators)}</strong></li>}
+                        {campaignCandidates.length > 0 && <li>المرشح: <strong className="text-info">{formatRoleNames(campaignCandidates)}</strong></li>}
+                        {campaignCoordinators.length > 0 && <li>المنسق: <strong className="text-info">{formatRoleNames(campaignCoordinators)}</strong></li>}
                     </ul>
                     <hr />
                     {canChangeConfig ?

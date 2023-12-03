@@ -68,9 +68,26 @@ const Sidebar = ({ layoutType }) => {
           <div id="scrollbar">
             <Container fluid>
               <div id="two-column-menu"></div>
-              <ul className="navbar-nav" id="navbar-nav">
-                <HorizontalLayout />
-              </ul>
+              <div className="navbar-header">
+                <div className="d-flex">
+
+                  <ul className="navbar-nav" id="navbar-nav">
+                    <HorizontalLayout />
+                  </ul>
+                </div>
+                <div className="d-flex align-items-center">
+                  <Link to="/login" className="logo logo-dark">
+                    <button
+                      className="btn btn-success me-2"
+                    >
+                      <i className="ri-user-line align-bottom pe-2"></i> دخول
+                    </button>
+                  </Link>
+                  <Link to="/register" className="logo logo-dark">
+                    <i className="ri-user-line align-bottom pe-2"></i> <span>اشتراك</span>
+                  </Link>
+                </div>
+              </div>
             </Container>
           </div>
         ) : layoutType === 'twocolumn' ? (

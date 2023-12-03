@@ -76,22 +76,10 @@ const Public = () => {
                                             <h5 className="card-title mb-0">الإنتخابات</h5>
                                         </div>
                                         <div className="flex-shrink-0 mt-4 mt-lg-0">
-                                            <ul className="nav nav-pills filter-btns" role="tablist">
-                                                <li className="nav-item" role="presentation">
-                                                    <button type="button" data-filter="all" onClick={() => setCategory("All")} className={displayCategory === "All" ? "nav-link fw-medium active" : "nav-link fw-medium"}>الكل</button>
-                                                </li>
-                                                <li className="nav-item" role="presentation">
-                                                    <button type="button" data-filter="upto-15" onClick={() => setCategory("upto-15")} className={displayCategory === "upto-15" ? "nav-link fw-medium active" : "nav-link fw-medium"}>Up to 15%</button>
-                                                </li>
-                                                <li className="nav-item" role="presentation">
-                                                    <button type="button" data-filter="upto-30" onClick={() => setCategory("upto-30")} className={displayCategory === "upto-30" ? "nav-link fw-medium active" : "nav-link fw-medium"}>Up to 30%</button>
-                                                </li>
-                                                <li className="nav-item" role="presentation">
-                                                    <button type="button" data-filter="upto-40" onClick={() => setCategory("upto-40")} className={displayCategory === "upto-40" ? "nav-link fw-medium active" : "nav-link fw-medium"}>Up to 40%</button>
-                                                </li>
-                                            </ul>
+                                            <Link className="text-muted" to="/elections">
+                                                مشاهدة الكل <i className="ri-arrow-right-line align-bottom"></i>
+                                            </Link>
                                         </div>
-
                                     </div>
                                 </CardHeader>
                             </Card>
@@ -103,26 +91,17 @@ const Public = () => {
                                             <Link to={`/elections/${item.slug}`}>
                                                 <img src={`${MEDIA_URL}${item.image}`} alt="" className="explore-img w-100 h-100" />
                                             </Link>
-                                            {/* <div className="discount-time">
-                                                <Countdown date={item.dueDate} renderer={renderer} />
-                                            </div> */}
                                         </div>
                                         <CardBody>
-                                            <p className="fw-medium mb-0 float-end"><i className="mdi mdi-heart text-danger align-middle"></i> {item.likes}k </p>
                                             <Link to={`/elections/${item.slug}`}>
-                                                <h5 className="text-success"><i className="mdi mdi-ethereum"></i> {item.name} </h5>
+                                                <h5 className="text-success">{item.name} </h5>
                                             </Link>
                                             <h6 className="fs-16 mb-3">
-                                                <Link to="/apps-nft-item-details">{item.dueDate}
-                                                </Link>
+                                                <p className="text-muted">
+                                                    {item.dueDate} <br />
+                                                    {item.categoryName}
+                                                </p>
                                             </h6>
-                                            <div>
-                                                <span className="text-muted float-end">{item.categoryName}</span>
-                                                <span className="text-muted">{item.subCategory}</span>
-                                                <div className="progress progress-sm mt-2">
-                                                    <div className={"progress-bar progress-bar-striped bg-" + item.progressClass} role="progressbar" style={{ width: item.size }} aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
                                         </CardBody>
                                     </Card>
                                 </Col>
@@ -133,9 +112,11 @@ const Public = () => {
                             <Card>
                                 <CardHeader className="d-flex align-items-center">
                                     <h6 className="card-title mb-0 flex-grow-1">إنتخابات قادمة</h6>
-                                    <Link className="text-muted" to="#">
-                                        مشاهدة الكل <i className="ri-arrow-right-line align-bottom"></i>
-                                    </Link>
+                                    {futureElections.length > 10 &&
+                                        <Link className="text-muted" to="/elections">
+                                            مشاهدة الكل <i className="ri-arrow-right-line align-bottom"></i>
+                                        </Link>
+                                    }
                                 </CardHeader>
                                 <CardBody>
                                     <div className="table-responsive table-card">
@@ -148,15 +129,10 @@ const Public = () => {
                                                                 <img src={`${MEDIA_URL}${item.image}`} alt="" className="avatar-sm object-cover rounded-circle" />
                                                                 <div className="ms-2">
                                                                     <Link to="#"><h6 className="fs-15 mb-1">{item.name}</h6></Link>
-                                                                    <p className="mb-0 text-muted">{item.categoryName}<span> - {item.dueDate}</span></p>
+                                                                    <p className="mb-0 text-muted strong">{item.categoryName}<span> - {item.dueDate}</span></p>
 
                                                                 </div>
                                                             </div>
-                                                        </td>
-                                                        <td>
-                                                            <button className="btn btn-sm btn-success">
-                                                                مشاهدة
-                                                            </button>
                                                         </td>
                                                     </tr>
                                                 ))}
