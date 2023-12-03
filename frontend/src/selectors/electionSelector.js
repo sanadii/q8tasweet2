@@ -8,6 +8,8 @@ export const electionSelector = createSelector(
   (electionsState) => ({
     // Election Selectors
     elections: electionsState.elections,
+    recentElections: electionsState.recentElections,
+    futureElections: electionsState.futureElections,
 
     election: electionsState.electionDetails,
     electionDetails: electionsState.electionDetails,

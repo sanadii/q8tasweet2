@@ -3,44 +3,11 @@ import PropTypes from "prop-types";
 import { useTable, useGlobalFilter, useSortBy, useFilters, useExpanded, usePagination, useRowSelect } from "react-table";
 import { Table, Row, Col, Button, Input, CardBody, CardFooter } from "reactstrap";
 import { DefaultColumnFilter } from "../Filters";
-import { TableContainerFooter, TableContainerFilters } from "components";
+import { TableContainerFooter } from "components";
 
 const TableContainer = ({
-  // Global Header----------
-  isTableContainerFilter,
-  isElectionCategoryFilter,
-  isCampaignRankFilter,
-
-  // Constants, going where?
-  campaignMember,
-  setElectionList,
-  setCampaignMemberList,
-  setElectionCandidateList,
-  setCampaignGuaranteeList,
-
-  // Filters----------
-  isGlobalFilter,
-  isSearchFilter,
-  isStatusFilter,
-  isPriorityFilter,
-  isMemberRoleFilter,
-  isCandidateGenderFilter,
-  isGenderFilter,
-  isGuaranteeAttendanceFilter,
-  isAttendeesGenderFilter,
-  isCommitteeFilter,
-  isGuaranteeStatusFilter,
-  isGuarantorFilter,
-  isResetFilters,
-  isTestFilter,
-
   // Settings
-  activeTab,
-  setActiveTab,
-  filters,
-  setFilters,
   customPageSize,
-  SearchPlaceholder,
 
   // Actions
   onTabChange,
@@ -144,64 +111,7 @@ const TableContainer = ({
   return (
     <Fragment>
       <CardBody>
-        {isMobile && (
-          <Row className="d-grid mb-4">
-            <button
-              type="button"
-              className="btn btn-danger mb-4"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              عرض الفلاتر
-            </button>
-          </Row>
-        )}
 
-        {(showFilters || !isMobile) && isTableContainerFilter && (
-          <TableContainerFilters
-
-            isGlobalFilter={isGlobalFilter}
-            // Upper Filters----------
-            isElectionCategoryFilter={isElectionCategoryFilter}
-            isCampaignRankFilter={isCampaignRankFilter}
-
-            filters={filters}
-            setFilters={setFilters}
-
-            // Filters----------
-            SearchPlaceholder={SearchPlaceholder}
-            isSearchFilter={isSearchFilter}
-            isStatusFilter={isStatusFilter}
-            isPriorityFilter={isPriorityFilter}
-            isCandidateGenderFilter={isCandidateGenderFilter}
-            isGenderFilter={isGenderFilter}
-            isGuaranteeAttendanceFilter={isGuaranteeAttendanceFilter}
-            isAttendeesGenderFilter={isAttendeesGenderFilter}
-            isMemberRoleFilter={isMemberRoleFilter}
-            isCommitteeFilter={isCommitteeFilter}
-            isGuaranteeStatusFilter={isGuaranteeStatusFilter}
-            isGuarantorFilter={isGuarantorFilter}
-            isResetFilters={isResetFilters}
-            isTestFilter={isTestFilter}
-
-            // Settings
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-
-            // Constant ----------
-            campaignMember={campaignMember}
-            setElectionList={setElectionList}
-            setCampaignMemberList={setCampaignMemberList}
-            setElectionCandidateList={setElectionCandidateList}
-            setCampaignGuaranteeList={setCampaignGuaranteeList}
-            // Actions
-            onTabChange={onTabChange}
-
-            // From useTable
-            preGlobalFilteredRows={preGlobalFilteredRows}
-            setPageSize={setPageSize}
-            gotoPage={gotoPage}
-          />
-        )}
         <div className={divClass}>
           <Table hover {...getTableProps()} className={tableClass}>
             <thead className={theadClass}>

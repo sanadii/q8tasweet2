@@ -4,6 +4,8 @@ from django.http.response import JsonResponse
 from django.db.models import Sum
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -52,63 +54,124 @@ class CustomPagination(PageNumberPagination):
             "data": data,
         })
 
-class GetElections(APIView):
-    permission_classes = [AllowAny]
-    
-    def get(self, request, *args, **kwargs):
-        elections_data = Election.objects.all()
-        paginator = CustomPagination()
-        paginated_elections = paginator.paginate_queryset(elections_data, request)
-        
-        # Passing context with request to the serializer
-        context = {"request": request}
-        data_serializer = ElectionSerializer(paginated_elections, many=True, context=context)
-        
-        return paginator.get_paginated_response(data_serializer.data)
+# View: Public / Admin
 
-# class GetElections(APIView):
-#     permission_classes = [AllowAny]
-    
-#     def get(self, request, *args, **kwargs):
-#         # Get all elections and order them by due_date in descending order
-#         elections_data = Election.objects.all().order_by('-due_date')
-        
-#         # Use the paginator to paginate the queryset
-#         paginator = CustomPagination()
-#         paginated_elections = paginator.paginate_queryset(elections_data, request)
-        
-#         # Passing context with request to the serializer
-#         context = {"request": request}
-#         data_serializer = ElectionSerializer(paginated_elections, many=True, context=context)
-        
-#         return paginator.get_paginated_response(data_serializer.data)
+class GetElections(APIView):
+    """
+    Instantiates and returns the list of permissions that this view requires.
+    Views: Index / Public / Admin 
+    """
+
+    def get(self, request, *args, **kwargs):
+        view = request.query_params.get('view', None)
+        now = timezone.now()
+
+        try:
+            if view == 'index':
+                elections_data = Election.objects.filter(status=6, deleted=0)
+                return self.handle_index_view(elections_data, now)
+
+            elif view == 'public':
+                elections_data = Election.objects.filter(status=6, deleted=0).order_by('-due_date')
+                return self.handle_public_view(elections_data)
+
+            elif view == 'admin':
+                elections_data = Election.objects.all().order_by('-due_date')
+                return self.handle_admin_view(elections_data)
+
+            else:
+                raise ValidationError("Invalid view parameter")
+
+        except ValidationError as e:
+            return Response({"message": str(e)})
+    def get(self, request, *args, **kwargs):
+        view = request.query_params.get('view', None)
+        now = timezone.now()
+
+        try:
+            if view == 'index':
+                elections_data = Election.objects.filter(status=6, deleted=0)
+                response_data = self.handle_index_view(elections_data, now)
+
+            elif view == 'public':
+                elections_data = Election.objects.filter(status=6, deleted=0).order_by('-due_date')
+                response_data = self.handle_public_view(elections_data)
+
+            elif view == 'admin':
+                elections_data = Election.objects.all().order_by('-due_date')
+                response_data = self.handle_admin_view(elections_data)
+
+            else:
+                raise ValidationError("Invalid view parameter")
+
+            return Response({'data': response_data, 'code': 200})
+
+        except ValidationError as e:
+            return Response({"message": str(e)})
+
+    def handle_index_view(self, queryset, now):
+        electionFuture = queryset.filter(due_date__gt=now).order_by('due_date')[:10]
+        electionRecent = queryset.filter(due_date__lte=now).order_by('-due_date')[:12]
+        context = {"request": self.request}
+        return {
+            'futureElections': ElectionSerializer(electionFuture, many=True, context=context).data,
+            'recentElections': ElectionSerializer(electionRecent, many=True, context=context).data
+        }
+
+    def handle_public_view(self, queryset):
+        paginator = CustomPagination()
+        paginated_elections = paginator.paginate_queryset(queryset, self.request)
+        context = {"request": self.request}
+        return {
+            'elections': ElectionSerializer(paginated_elections, many=True, context=context).data
+        }
+
+    def handle_admin_view(self, queryset):
+        paginator = CustomPagination()
+        paginated_elections = paginator.paginate_queryset(queryset, self.request)
+        context = {"request": self.request}
+        return {
+            'elections': ElectionSerializer(paginated_elections, many=True, context=context).data
+        }
+
+
 
 
 class GetElectionDetails(APIView):
+    
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        view = self.request.query_params.get('view', None)
+        if view == 'public':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+
     def get(self, request, slug):
+        view = request.query_params.get('view', None)
         election = get_object_or_404(Election, slug=slug)
-    # def get(self, request, id):
-    #     election = get_object_or_404(Election, id=id)
         context = {"request": request}
 
         election_candidates = ElectionCandidate.objects.filter(election=election).prefetch_related('candidate').only('id')
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
-        election_campaigns = Campaign.objects.filter(election_candidate__election=election)
 
-        election_committee_results = self.get_election_committee_results(election, election_candidates, election_committees)
+        response_data = {
+            "electionDetails": self.get_election_data(election, context),
+            "electionCandidates": self.get_election_candidates(election_candidates, context),
+            "electionCommittees": self.get_election_committees(election_committees, context),
+        }
+
+        # Include electionCampaigns only if view is not public
+        if view != 'public':
+            response_data["electionCampaigns"] = self.get_election_campaigns(election, context)
 
         return Response({
-            "data": {
-                "electionDetails": self.get_election_data(election, context),
-                "electionCandidates": self.get_election_candidates(election_candidates, context),
-                "electionCommittees": self.get_election_committees(election_committees, context),
-                "electionCampaigns": self.get_election_campaigns(election, context),
-                # Include Election Committee Results in the response
-                "electionCommitteeResults": election_committee_results,
-
-            },
+            "data": response_data,
             "code": 200
         })
+
 
     def get_election_data(self, election, context):
         return ElectionSerializer(election, context=context).data

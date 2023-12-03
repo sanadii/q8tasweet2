@@ -30,8 +30,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   // Campaign Supervisor Options
   const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
   const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
-  console.log("filteredRoleOptions:", filteredRoleOptions);
-  console.log("Original campaignRoles:", campaignRoles);
 
   // Election Committee Options
   const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
@@ -87,7 +85,6 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   }, [validation.values.role]);
 
   const selectedRoleString = getRoleString(selectedRole, campaignRoles);
-  console.log("selectedRoleString:", selectedRoleString)
 
 
   // Get formFields & Handle Form Submission

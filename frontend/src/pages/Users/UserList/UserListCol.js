@@ -4,10 +4,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import * as moment from "moment";
 
-const handleValidDate = (duedate) => {
-  const formattedDate = moment(duedate).format("YYYY-MM-DD");
-  return formattedDate;
-};
 
 const Id = (cellProps) => {
   return (

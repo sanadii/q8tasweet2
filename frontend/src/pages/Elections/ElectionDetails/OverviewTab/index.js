@@ -1,8 +1,6 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
-import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
+import { useSelector } from "react-redux";
+import { Row, Col } from "reactstrap";
 import { electionSelector } from 'Selectors';
 
 // Components
@@ -19,7 +17,6 @@ import ElectionPrevious from "./ElectionPrevious";
 import SimpleBar from "simplebar-react";
 
 const OverviewTab = () => {
-
   const { election, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
 
   const moderators = Array.isArray(election.moderators)

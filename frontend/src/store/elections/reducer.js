@@ -53,6 +53,8 @@ import {
 
 const IntialState = {
   elections: [],
+  recentElections: [],
+  futureElections: [],
   electionDetails: [],
   electionCandidates: [],
   electionCampaigns: [],
@@ -64,13 +66,28 @@ const Elections = (state = IntialState, action) => {
   switch (action.type) {
     case API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
-        case GET_ELECTIONS:
-          return {
-            ...state,
-            elections: action.payload.data,
-            isElectionCreated: false,
-            isElectionSuccess: true,
-          };
+        case GET_ELECTIONS: {
+          const { recentElections, futureElections, elections } = action.payload.data;
+
+          // Update state based on the type of elections data received
+          if (recentElections || futureElections) {
+            return {
+              ...state,
+              recentElections,
+              futureElections,
+              isElectionCreated: false,
+              isElectionSuccess: true,
+            };
+          } else if (elections) {
+            return {
+              ...state,
+              elections,
+              isElectionCreated: false,
+              isElectionSuccess: true,
+            };
+          }
+          return state;
+        }
         case GET_ELECTION_DETAILS:
           return {
             ...state,

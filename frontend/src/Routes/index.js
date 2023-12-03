@@ -3,10 +3,10 @@ import { Routes, Route } from "react-router-dom";
 
 //Layouts
 import NonAuthLayout from "../Layouts/NonAuthLayout";
-import VerticalLayout from "../Layouts/index";
+import Layout from "../Layouts";
 
 //routes
-import { authProtectedRoutes, publicRoutes } from "./allRoutes";
+import { authProtectedRoutes, dashboardRoutes, publicRoutes } from "./allRoutes";
 import { AuthProtected } from './AuthProtected';
 
 const Index = () => {
@@ -18,9 +18,9 @@ const Index = () => {
                         <Route
                             path={route.path}
                             element={
-                                <NonAuthLayout>
+                                <Layout isHorizontal={true}>
                                     {route.component}
-                                </NonAuthLayout>
+                                </Layout>
                             }
                             key={idx}
                             exact={true}
@@ -29,12 +29,29 @@ const Index = () => {
                 </Route>
 
                 <Route>
+                    {dashboardRoutes.map((route, idx) => (
+                        <Route
+                            path={route.path}
+                            element={
+                                <AuthProtected>
+                                    <Layout>
+                                        {route.component}
+                                    </Layout>
+                                </AuthProtected>}
+                            key={idx}
+                            exact={true}
+                        />
+                    ))}
+                </Route>
+                <Route>
                     {authProtectedRoutes.map((route, idx) => (
                         <Route
                             path={route.path}
                             element={
                                 <AuthProtected>
-                                    <VerticalLayout>{route.component}</VerticalLayout>
+                                    <Layout>
+                                        {route.component}
+                                    </Layout>
                                 </AuthProtected>}
                             key={idx}
                             exact={true}

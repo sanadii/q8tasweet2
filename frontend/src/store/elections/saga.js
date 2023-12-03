@@ -118,9 +118,9 @@ import {
   deleteElectionCampaign,
 } from "../../helpers/backend_helper";
 
-function* getElections() {
+function* getElections({ payload: view }) {
   try {
-    const response = yield call(getElectionsApi);
+    const response = yield call(getElectionsApi, view);  // Pass view to the API call
     yield put(ElectionApiResponseSuccess(GET_ELECTIONS, response.data));
   } catch (error) {
     yield put(ElectionApiResponseError(GET_ELECTIONS, error));
@@ -128,9 +128,10 @@ function* getElections() {
 }
 
 
-function* getElectionDetails({ payload: election }) {
+
+function* getElectionDetails({ payload: election, view }) {
   try {
-    const response = yield call(getElectionDetailsApi, election);
+    const response = yield call(getElectionDetailsApi, election, view);
     yield put(ElectionApiResponseSuccess(GET_ELECTION_DETAILS, response.data));
   } catch (error) {
     yield put(ElectionApiResponseError(GET_ELECTION_DETAILS, error));

@@ -5,8 +5,9 @@ import { campaignSelector } from 'Selectors';
 
 // Component imports
 import { Col, Row, Card, CardBody } from "reactstrap";
-import { Loader, DeleteModal, TableContainer, TableContainerHeader, TableContainerFilter } from "../../../../components";
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "../../../../components";
 import { Id, Name, Phone, Attended, Status, Guarantor, Actions } from "./GuaranteesCol";
+import { useDelete, useFilter } from "hooks"
 
 import GuaranteesModal from "./GuaranteesModal";
 
@@ -172,40 +173,12 @@ const GuaranteesTab = () => {
       },
     ], [handleCampaignGuaranteeClick, campaignMembers]);
 
-  // Filters----------
-  const [filters, setFilters] = useState({
-    global: "",
-    attended: null,
-    gender: null,
-    status: null,
-    member: null,
-  });
+  // Filters
+  const { filteredData: campaignGuaranteeList, filters, setFilters } = useFilter(campaignGuarantees);
 
-  const campaignGuaranteeList = campaignGuarantees.filter(campaignGuarantee => {
-    let isValid = true;
-    if (filters.global) {
-      const globalSearch = filters.global.toLowerCase();
 
-      const nameIncludes = campaignGuarantee.name && typeof campaignGuarantee.name === 'string' && campaignGuarantee.name.toLowerCase().includes(globalSearch);
-      const civilIncludes = campaignGuarantee.civil && typeof campaignGuarantee.civil === 'number' && String(campaignGuarantee.civil).includes(globalSearch);
-
-      isValid = isValid && (nameIncludes || civilIncludes);
-    }
-    if (filters.attended !== null) {
-      isValid = isValid && campaignGuarantee.attended === filters.attended;
-    }
-    if (filters.gender !== null) {
-      isValid = isValid && campaignGuarantee.gender === filters.gender;
-    }
-    if (filters.status !== null) {
-      isValid = isValid && campaignGuarantee.status === filters.status;
-    }
-    if (filters.member !== null) {
-      isValid = isValid && campaignGuarantee.member === filters.member;
-    }
-    return isValid;
-  });
-
+  console.log("FF.. campaignGuaranteeList", campaignGuaranteeList);
+  console.log("FF.. filters", filters);
   return (
     <React.Fragment>
       <DeleteModal
@@ -248,31 +221,32 @@ const GuaranteesTab = () => {
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
 
+                <TableFilters
+                  // Filters
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isGenderFilter={true}
+                  isGuaranteeAttendanceFilter={true}
+                  isGuaranteeStatusFilter={true}
+                  isGuarantorFilter={true}
+                  isResetFilters={true}
+
+                  // Settings
+                  filters={filters}
+                  setFilters={setFilters}
+                  SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
+
+                />
+
                 {campaignGuaranteeList ? (
                   <TableContainer
-                    // Filters----------
-                    isTableContainerFilter={true}
-                    isGlobalFilter={true}
-                    preGlobalFilteredRows={true}
-
-                    isGenderFilter={true}
-                    isGuaranteeAttendanceFilter={true}
-                    isGuaranteeStatusFilter={true}
-                    isGuarantorFilter={true}
-                    isResetFilters={true}
-
-                    // Settings
-                    filters={filters}
-                    setFilters={setFilters}
-                    SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
-
-                    // Data----------
+                    // Data
                     columns={columns}
                     data={campaignGuaranteeList || []}
                     customPageSize={50}
                     // setCampaignGuaranteeList={setCampaignGuaranteeList}
 
-                    // Styling----------
+                    // Styling
                     className="custom-header-css"
                     divClass="table-responsive table-card mb-2"
                     tableClass="align-middle table-nowrap"

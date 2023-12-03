@@ -18,7 +18,6 @@ const MembersViewModal = ({ campaignMember }) => {
   const campaignSupervisors = useSupervisorMembers(campaignRoles, campaignMembers);
   const electionCommittees = useCampaignRoles(campaignElectionCommittees, campaignMembers);
 
-  console.log("campaignMember: ", campaignMember)
   const displayField = (label, value) => {
     if (!value) return null;
 

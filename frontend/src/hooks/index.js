@@ -9,6 +9,8 @@ export { usePermission } from "./usePermission";
 export { useUserRoles } from "./useUserRoles";
 export { useGroupManager } from "./GroupHook";
 
+// Common
+export { useFilter } from "./useFilter";
 
 // Elections & Election Categories
 export { useCategoryManager } from "./CategoryHooks";

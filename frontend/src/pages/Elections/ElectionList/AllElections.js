@@ -1,5 +1,5 @@
 // React & Redux core
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
@@ -9,8 +9,8 @@ import { getElections, deleteElection, getCategories } from "store/actions";
 // Components & Columns
 import ElectionModal from "./ElectionModal";
 import { Id, CheckboxHeader, CheckboxCell, Name, DueDate, Status, Priority, Category, CreateBy, Actions } from "./ElectionListCol";
-import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "components";
-import { useDelete, useFetchDataIfNeeded } from "hooks"
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "components";
+import { useDelete, useFilter, useFetchDataIfNeeded } from "hooks"
 
 // UI, Styles & Notifications
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -41,7 +41,14 @@ const AllElections = () => {
   console.log("checkedAll: ", checkedAll)
 
   // Fetch Data If Needed Hook
-  useFetchDataIfNeeded(elections, getElections);
+      // Election Data
+      useEffect(() => {
+        if (!isElectionSuccess) {
+          dispatch(getElections('admin'));
+        }
+    }, [dispatch, isElectionSuccess]);
+
+
   useFetchDataIfNeeded(categories, getCategories);
 
   // Dates
@@ -174,36 +181,11 @@ const AllElections = () => {
     [handleElectionClick, checkedAll]
   );
 
-  // Filters----------
-  const [filters, setFilters] = useState({
-    global: "",
-    status: null,
-    priority: null,
-    category: null, // Newly added
-  });
+  // Filters
+  const { filteredData: electionList, filters, setFilters } = useFilter(elections);
 
-  const electionList = elections.filter(election => {
-    let isValid = true;
-
-    if (filters.category !== null) {
-      isValid = isValid && election.category === filters.category;
-    }
-
-    if (filters.global) {
-      isValid = isValid && election.name && typeof election.name === 'string' && election.name.toLowerCase().includes(filters.global.toLowerCase());
-    }
-
-    if (filters.status !== null) {
-      isValid = isValid && election.status === filters.status;
-    }
-
-    if (filters.priority !== null) {
-      isValid = isValid && election.priority === filters.priority;
-    }
-
-    return isValid;
-  });
-
+  console.log("filters: ", filters);
+  console.log("filters: electionList: ", electionList);
   return (
     <React.Fragment>
       <DeleteModal
@@ -245,33 +227,34 @@ const AllElections = () => {
                 isMultiDeleteButton={isMultiDeleteButton}
                 setDeleteModalMulti={setDeleteModalMulti}
               />
+
+              <TableFilters
+                // Filters
+                isGlobalFilter={true}
+                preGlobalFilteredRows={true}
+                isElectionCategoryFilter={true}
+                isStatusFilter={true}
+                isPriorityFilter={true}
+                isResetFilters={true}
+
+                // Settings
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                filters={filters}
+                setFilters={setFilters}
+                SearchPlaceholder="البحث بالاسم..."
+              />
+              
               {isElectionSuccess && elections.length ? (
                 <TableContainer
-
-                  // Filters----------
-                  isTableContainerFilter={true}
-                  isGlobalFilter={true}
-                  preGlobalFilteredRows={true}
-                  isElectionCategoryFilter={true}
-                  isStatusFilter={true}
-                  isPriorityFilter={true}
-                  isResetFilters={true}
-
-                  // Filter Settings
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
-                  filters={filters}
-                  setFilters={setFilters}
-                  SearchPlaceholder="البحث بالاسم..."
-
-                  // Data----------
+                  // Data
                   columns={columns}
                   data={electionList || []}
                   customPageSize={20}
                   sortBy="dueDate"
                   sortDesc={true}
 
-                  // Styling----------
+                  // Styling
                   className="custom-header-css"
                   divClass="table-responsive table-card mb-2"
                   tableClass="align-middle table-nowrap"

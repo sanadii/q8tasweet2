@@ -27,7 +27,7 @@ const CheckboxCell = ({ row, deleteCheckbox }) => (
 const Id = (cellProps) => {
   return (
     <Link
-      to={`/candidate/${cellProps.row.original.id}`}
+      to={`/dashboard/candidate/${cellProps.row.original.id}`}
       className="fw-medium link-primary"
     >
       {cellProps.row.original.id}

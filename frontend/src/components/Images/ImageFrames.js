@@ -8,12 +8,12 @@ import { Link } from "react-router-dom";
 import { Badge } from 'reactstrap'; // Or your preferred UI library if not using reactstrap
 
 const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL.slice(0, -1) : api.MEDIA_URL;
-const defaultImagePath = 'media/candidates/default.jpg';
+const defaultImagePath = '/media/candidates/default.jpg';
 
-const defaultCandidatePath = 'media/candidates/default.jpg';
-const defaultElectionPath = 'media/candidates/default.jpg';
-const defaultUserPath = 'media/candidates/default.jpg';
-const defaultCampaignBgPath = 'media/candidates/default.jpg';
+const defaultCandidatePath = '/media/candidates/default.jpg';
+const defaultElectionPath = '/media/candidates/default.jpg';
+const defaultUserPath = '/media/candidates/default.jpg';
+const defaultCampaignBgPath = '/media/candidates/default.jpg';
 
 
 export const ImageCircle = ({ imagePath }) => {
@@ -59,7 +59,7 @@ export const AvatarList = ({ dirName, row }) => {
 
   // For other dirName values, render the link
   return (
-    <Link to={`/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
+    <Link to={`/dashboard/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
       <div className="avatar-sm">
         <img
           src={imageUrl}

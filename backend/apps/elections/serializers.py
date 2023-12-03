@@ -22,12 +22,16 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     image = serializers.SerializerMethodField('get_election_image')
     previous_election = serializers.SerializerMethodField()
     due_date = serializers.DateField(format="%Y-%m-%d", input_formats=["%Y-%m-%d",], allow_null=True, required=False)
+    category_name  = serializers.SerializerMethodField('get_category_name')
+    sub_category_name  = serializers.SerializerMethodField('get_sub_category_name')
 
     class Meta:
         model = Election
         fields = [
             "id", "name", "slug", "image", "due_date",
-            "category", "sub_category", "previous_election",
+            "category", "sub_category", "category_name", "sub_category_name",
+
+            "previous_election",
             "elect_type", "elect_result", "elect_votes", "elect_seats",
             "electors", "electors_males", "electors_females",
             "attendees", "attendees_males", "attendees_females",
@@ -38,6 +42,19 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
         if sub_category:
             year = getattr(obj.due_date, 'year', None)
             return f"{sub_category.name} - {year or ''}"
+        return None
+    
+    def get_sub_category_name(self, obj):
+        sub_category = getattr(obj, 'sub_category', None)
+        if sub_category:
+            return f"{sub_category.name}"
+        return None
+
+
+    def get_category_name(self, obj):
+        category = getattr(obj, 'category', None)
+        if category:
+            return f"{category.name}"
         return None
 
     def get_election_image(self, obj):
@@ -96,17 +113,39 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
         return None
 
     def create(self, validated_data):
-        request = self.context.get("request")
-        if request and hasattr(request, "user"):
-            validated_data["created_by"] = request.user
-        return super().create(validated_data)
+        # Extract task-related data if present
+        task_data = validated_data.pop('task', {})
+
+        # Create the Election instance
+        election = Election.objects.create(**validated_data)
+
+        # Manually update task-related fields
+        self.update_task_fields(election, task_data)
+
+        return election
 
     def update(self, instance, validated_data):
-        request = self.context.get("request")
-        if request and hasattr(request, "user"):
-            instance.updated_by = request.user
-        # Here you can perform additional transformations if needed before updating the instance
-        return super().update(instance, validated_data)
+        # Extract task-related data if present
+        task_data = validated_data.pop('task', {})
+
+        # Update the Election instance
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Manually update task-related fields
+        self.update_task_fields(instance, task_data)
+
+        return instance
+
+    def update_task_fields(self, election, task_data):
+        # Update priority and status from task_data if they are present
+        if 'priority' in task_data:
+            election.priority = task_data['priority']
+        if 'status' in task_data:
+            election.status = task_data['status']
+        election.save()
+
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
