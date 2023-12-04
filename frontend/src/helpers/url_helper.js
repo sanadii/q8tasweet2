@@ -95,28 +95,6 @@ export const GET_CAMPAIGN_COMMITTEE_SORTING = "/campaigns/getCampaignCommitteeSo
 // export const ADD_NEW_CAMPAIGN_SORTING = "/campaigns/addNewCampaignSorting";
 // export const UPDATE_CAMPAIGN_SORTING = "/campaigns/updateCampaignSorting";
 
-// USERS
-export const GET_USERS = "/auth/getUsers";
-export const GET_USER_DETAILS = "/auth/getUserDetails";
-export const ADD_NEW_USER = "/auth/addNewUser";
-export const UPDATE_USER_PROFILE = "/auth/updateUser";
-export const CHANGE_USER_PASSWORD = "/auth/changeUserPassword";
-export const DELETE_USER = "/auth/deleteUser";
-
-// SPECIFIC USER(S)
-export const GET_CURRENT_USER = "/auth/getCurrentUser";
-export const GET_MODERATOR_USERS = "/auth/getModeratorUsers";
-export const GET_CAMPAIGN_MODERATORS = "/auth/getCampaignModerators";
-export const GET_CAMPAIGN_SORTERS = "/auth/getCampaignSorters";
-
-
-// GROUPS
-export const GET_GROUPS = "/auth/getGroups";
-export const GET_GROUP_DETAILS = "/auth/getGroupDetails";
-export const ADD_NEW_GROUP = "/auth/addNewGroup";
-export const UPDATE_GROUP = "/auth/updateGroup";
-export const DELETE_GROUP = "/auth/deleteGroup";
-
 // Images
 export const UPLOAD_IMAGE = "/media/uploadImage";
 export const GET_IMAGES = "/media/uploadImage";
@@ -135,3 +113,36 @@ export const GET_ELECTORS = "/electors/getElectors";
 export const DELETE_ELECTOR = "/electors/deleteElector";
 export const ADD_NEW_ELECTOR = "/electors/addElector";
 export const UPDATE_ELECTOR = "/electors/updateElector";
+
+// USERS
+export const GET_USERS = "/auth/getUsers";
+export const GET_USER_DETAILS = "/auth/getUserDetails";
+export const ADD_NEW_USER = "/auth/addNewUser";
+export const UPDATE_USER_PROFILE = "/auth/updateUser";
+export const CHANGE_USER_PASSWORD = "/auth/changeUserPassword";
+export const DELETE_USER = "/auth/deleteUser";
+
+// SPECIFIC USER(S)
+export const GET_CURRENT_USER = "/auth/getCurrentUser";
+export const GET_MODERATOR_USERS = "/auth/getModeratorUsers";
+export const GET_CAMPAIGN_MODERATORS = "/auth/getCampaignModerators";
+export const GET_CAMPAIGN_SORTERS = "/auth/getCampaignSorters";
+
+
+
+// Group & permissions
+
+// GROUPS
+export const GET_GROUPS = "/auth/getGroups";
+export const GET_GROUP_DETAILS = "/auth/getGroupDetails";
+export const ADD_NEW_GROUP = "/auth/addNewGroup";
+export const UPDATE_GROUP = "/auth/updateGroup";
+export const DELETE_GROUP = "/auth/deleteGroup";
+
+
+
+// GROUP_PERMISSIONS
+export const GET_GROUP_PERMISSIONS = "/auth/getGroupPermissions";
+export const ADD_NEW_GROUP_PERMISSION = "/auth/addNewPermission";
+export const UPDATE_GROUP_PERMISSION = "/auth/updatePermission";
+export const DELETE_GROUP_PERMISSION = "/auth/deletePermission";

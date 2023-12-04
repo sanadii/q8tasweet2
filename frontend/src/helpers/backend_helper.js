@@ -167,10 +167,17 @@ export const getCampaignSorters = () => api.get(url.GET_CAMPAIGN_SORTERS);
 
 // Groups
 export const getGroups = () => api.get(url.GET_GROUPS);
-export const getGroupDetails = (group) => api.get(url.GET_GROUP_DETAILS + "/" + group.id);
 export const addNewGroup = (group) => api.upload(url.ADD_NEW_GROUP, group);
 export const updateGroup = (group) => api.update(url.UPDATE_GROUP + "/" + group.id, group);
 export const deleteGroup = (group) => api.delete(url.DELETE_GROUP + "/" + group);
+
+
+// GroupPermissions
+export const getGroupPermissions = () => api.get(url.GET_GROUP_PERMISSIONS);
+export const addNewGroupPermission = (groupPermission) => api.upload(url.ADD_NEW_GROUP_PERMISSION, groupPermission);
+export const updateGroupPermission = (groupPermission) => api.update(url.UPDATE_GROUP_PERMISSION + "/" + groupPermission.id, groupPermission);
+export const deleteGroupPermission = (groupPermission) => api.delete(url.DELETE_GROUP_PERMISSION + "/" + groupPermission);
+
 
 // Images
 export const uploadNewImage = (formData) => api.upload(url.UPLOAD_IMAGE, formData);

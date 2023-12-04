@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 // Group Redux States
 import {
   GET_GROUPS,
-  GET_GROUP_DETAILS,
   ADD_NEW_GROUP,
   DELETE_GROUP,
   UPDATE_GROUP,
@@ -17,7 +16,7 @@ import {
 } from "../uploadImage/actionType";
 
 import {
-  // getGroups, getGroupDetails,
+  // getGroups,
   // API Response
   GroupApiResponseSuccess,
   GroupApiResponseError,
@@ -37,7 +36,6 @@ import { uploadNewImage } from "../uploadImage/action";
 //Include Both Helper File with needed methods
 import {
   getGroups as getGroupsApi,
-  getGroupDetails as getGroupDetailsApi,
   addNewGroup,
   updateGroup,
   deleteGroup,
@@ -52,14 +50,6 @@ function* getGroups() {
   }
 }
 
-function* getGroupDetails({ payload: group }) {
-  try {
-    const response = yield call(getGroupDetailsApi, group);
-    yield put(GroupApiResponseSuccess(GET_GROUP_DETAILS, response.data));
-  } catch (error) {
-    yield put(GroupApiResponseError(GET_GROUP_DETAILS, error));
-  }
-}
 
 function* onAddNewGroup({ payload: { group, formData } }) {
   try {
@@ -123,9 +113,7 @@ function* onUpdateGroup({ payload: { group, formData } }) {
 export function* watchGetGroups() {
   yield takeEvery(GET_GROUPS, getGroups);
 }
-export function* watchGetGroupDetails() {
-  yield takeEvery(GET_GROUP_DETAILS, getGroupDetails);
-}
+
 export function* watchAddNewGroup() {
   yield takeEvery(ADD_NEW_GROUP, onAddNewGroup);
 }
@@ -140,7 +128,6 @@ function* groupSaga() {
   yield all([
     // Groups
     fork(watchGetGroups),
-    fork(watchGetGroupDetails),
     fork(watchAddNewGroup),
     fork(watchUpdateGroup),
     fork(watchDeleteGroup),

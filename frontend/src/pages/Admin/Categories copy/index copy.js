@@ -3,8 +3,8 @@ import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeade
 import SimpleBar from "simplebar-react";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import DeleteModal from "../../../../components/Components/DeleteModal";
-import BreadCrumb from "../../../../components/Components/BreadCrumb";
+import DeleteModal from "../../../components/Components/DeleteModal";
+import BreadCrumb from "../../../components/Components/BreadCrumb";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -19,7 +19,7 @@ import {
   updateTerm as onupdateTerm,
   deleteTerm as onDeleteTerm,
   addNewTerm as onAddNewTerm
-} from "../../../../store/actions";
+} from "../../../store/actions";
 
 const Terms = () => {
   document.title = "To Do Lists | Velzon - React Admin & Dashboard Template";

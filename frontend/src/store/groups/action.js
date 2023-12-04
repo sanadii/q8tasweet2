@@ -5,7 +5,6 @@ import {
 
   // Groups
   GET_GROUPS,
-  GET_GROUP_DETAILS,
   GET_MODERATOR_GROUPS,
   ADD_NEW_GROUP,
   ADD_NEW_GROUP_SUCCESS,
@@ -32,11 +31,6 @@ export const GroupApiResponseError = (actionType, error) => ({
 // Get Groups
 export const getGroups = () => ({
   type: GET_GROUPS,
-});
-
-export const getGroupDetails = (group) => ({
-  type: GET_GROUP_DETAILS,
-  payload: group,
 });
 
 export const getModeratorGroups = () => ({

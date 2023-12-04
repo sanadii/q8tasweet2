@@ -10,6 +10,7 @@ import ForgetPassword from "./auth/forgetpwd/reducer";
 import Profile from "./auth/profile/reducer";
 import Users from "./auth/users/reducer";
 import Groups from "./groups/reducer";
+import GroupPermissions from "./groupPermissions/reducer";
 
 
 // Elections
@@ -45,7 +46,8 @@ const rootReducer = combineReducers({
     Profile,
     Users,
     Groups,
-
+    GroupPermissions,
+    
     // Project
     Elections,
     Candidates,

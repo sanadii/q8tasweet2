@@ -1,5 +1,6 @@
 from django.http.response import JsonResponse
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import status
@@ -8,10 +9,9 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.views import APIView
 
+from .models import Group, GroupCategories
+from .serializers import UserSerializer, ContentTypeSerializer, GroupPermissionSerializer, GroupSerializer
 
-from apps.auths.models import User
-from apps.auths.models import GroupCategories
-from apps.auths.serializers import UserSerializer, UserLoginSerializer, GroupSerializer
 
 from utils.views import get_current_user_campaigns
 # from utils.auths import generate_username
@@ -287,3 +287,32 @@ class DeleteGroup(APIView):
             return JsonResponse({"data": "Group deleted successfully", "count": 1, "code": 200}, safe=False)
         except Group.DoesNotExist:
             return JsonResponse({"data": "Group not found", "count": 0, "code": 404}, safe=False)
+
+
+class GetGroupPermissions(APIView):
+
+    def get(self, request):
+        # Fetch permissions, groups, and content types
+        permissions = Permission.objects.all()
+        groups = Group.objects.all()
+        content_types = ContentType.objects.all()
+
+        # Serialize permissions, groups, and content types
+        permissions_serializer = GroupPermissionSerializer(permissions, many=True)
+        groups_serializer = GroupSerializer(groups, many=True)
+        content_types_serializer = ContentTypeSerializer(content_types, many=True)
+
+        # Fetch all distinct categories and transform to desired format
+        raw_categories = dict(GroupCategories.choices)
+        categories = [{'id': key, 'name': value} for key, value in raw_categories.items()]
+
+        # Return the response in the desired format
+        return Response({
+            "code": 200,
+            "data": {
+                "contentTypes": content_types_serializer.data,
+                "permissions": permissions_serializer.data,
+                "groups": groups_serializer.data,
+                "categories": categories
+            }
+        })

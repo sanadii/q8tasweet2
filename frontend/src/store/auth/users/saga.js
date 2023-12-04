@@ -63,7 +63,7 @@ import {
   getModeratorUsers as getModeratorUsersApi,
   getCampaignModerators as getCampaignModeratorsApi,
   getCampaignSorters as getCampaignSortersApi,
-} from "../../../helpers/backend_helper";
+} from "helpers/backend_helper";
 
 function* getUsers() {
   try {

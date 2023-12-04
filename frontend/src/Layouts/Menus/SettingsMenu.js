@@ -26,51 +26,40 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
       isHeader: true,
     },
     {
-      id: "settings",
+      id: "options",
       label: "الإعدادات",
-      icon: "ri-apps-2-line",
-      link: "/#",
-
-
-      stateVariables: isSettings,
+      link: "/dashboard/settings",
       click: function (e) {
         e.preventDefault();
-        setIsSettings(!isSettings);
-        setIscurrentState("settings");
-        updateIconSidebar(e);
+        setIscurrentState("options");
       },
-      subItems: [
-        {
-          id: "options",
-          label: "الإعدادات",
-          link: "/dashboard/settings",
-          parentId: "settings",
-          click: function (e) {
-            e.preventDefault();
-            setIscurrentState("options");
-          },
-        },
-        {
-          id: "categories",
-          label: "التصنيف",
-          link: "/dashboard/settings/categories",
-          parentId: "settings",
-          click: function (e) {
-            e.preventDefault();
-            setIscurrentState("categories");
-          },
-        },
-        {
-          id: "groups",
-          label: "المجموعات",
-          link: "/dashboard/settings/groups",
-          parentId: "settings",
-          click: function (e) {
-            e.preventDefault();
-            setIscurrentState("groups");
-          },
-        },
-      ],
+    },
+    {
+      id: "categories",
+      label: "التصنيف",
+      link: "/dashboard/settings/categories",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("categories");
+      },
+    },
+    {
+      id: "groups",
+      label: "المجموعات",
+      link: "/dashboard/settings/groups",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("groups");
+      },
+    },
+    {
+      id: "group-permissions",
+      label: "الصلاحيات",
+      link: "/dashboard/settings/group-permissions",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("group-permissions");
+      },
     },
   ];
 }

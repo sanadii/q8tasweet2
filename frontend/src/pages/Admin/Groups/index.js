@@ -1,107 +1,106 @@
-// External Libraries
+// React & Redux core imports
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import SimpleBar from "simplebar-react";
-import { ToastContainer } from "react-toastify";
-import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeader, Row, Label } from "reactstrap";
-
-// Redux
 import { useSelector, useDispatch } from "react-redux";
-import { getGroups, updateGroup, deleteGroup, addNewGroup } from "store/actions";
+import { Link } from "react-router-dom";
 
+// Store Actions & Selectors
+import { getGroups, addNewGroup, updateGroup, deleteGroup } from "store/actions";
 import { authSelector } from 'Selectors';
 
 // Components & Hooks
 import DeleteModal from "components/Components/DeleteModal";
 import BreadCrumb from "components/Components/BreadCrumb";
+import { useGroupManager } from "hooks"
+
+// Formik & Validations
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+// UI Components & styling imports
+import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeader, Row, Label } from "reactstrap";
+import SimpleBar from "simplebar-react";
+import { ToastContainer } from "react-toastify";
 
 
-
-const Groups = () => {
+const GroupPermissions = () => {
   document.title = "المجموعات | Q8Tasweet - React Admin & Dashboard Template";
-
   const dispatch = useDispatch();
 
+  // State Management
   const { groups, categories } = useSelector(authSelector);
 
-  // State hooks
-  const [groupList, setGroupList] = useState(groups); // Original, unfiltered list
-  const [filteredGroupList, setFilteredGroupList] = useState(groups); // The list that gets updated on search
-  const [showNoResult, setShowNoResult] = useState(false);
-
-  const [categoryList, setCategoryList] = useState(categories);
-  const [modalCategory, setModalCategory] = useState(false);
-  const [categoryData, setCategoryData] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
+  // State Hooks
   const [deleteModal, setDeleteModal] = useState(false);
-  const [isMainCategory, setIsMainCategory] = useState(false);
-  const [parentValue, setParentValue] = useState(null);
 
-  // Effects
+  // State Hooks
+  const [group, setGroup] = useState(null);
+  const [modalGroup, setModalGroup] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+  // Dispatch to get Groups
   useEffect(() => {
     dispatch(getGroups());
   }, [dispatch]);
 
-  useEffect(() => {
-    setGroupList(groups);
-    setCategoryList(categories);
-  }, [groups, categories]);
-
-  const toggleModalCategory = useCallback(() => {
-    setModalCategory(prev => !prev);
-    if (modalCategory) {
-      setCategoryData(null);
+  // Modal
+  const toggle = useCallback(() => {
+    if (modalGroup) {
+      setModalGroup(false);
+      setGroup(null);
+    } else {
+      setModalGroup(true);
     }
-  }, [modalCategory]);
+  }, [modalGroup]);
 
-  const handleCategoryClick = useCallback((selectedCategory) => {
-    setCategoryData({
-      id: selectedCategory.id,
-      name: selectedCategory.name,
-      parent: selectedCategory.parent,
-      isActive: selectedCategory.isActive,
-    });
-    setIsEdit(true);
-    toggleModalCategory();
-  }, [toggleModalCategory]);
+
+  // Update Group For Add/Edit/Delete
+  const handleCategoryClick = useCallback(
+    (arg) => {
+      const group = arg;
+      setGroup({
+        id: group.id,
+        name: group.name,
+        category: group.category,
+      });
+      setIsEdit(true);
+      toggle();
+    },
+    [toggle]
+  );
 
   // Add To do
   const handleCategoryClicks = () => {
-    setCategoryList("");
-    setModalCategory(!modalCategory);
+    setGroup("");
+    setModalGroup(!modalGroup);
     setIsEdit(false);
     toggle();
   };
 
   // Delete Categories
-  const onClickCategoryDelete = (category) => {
-    setCategoryList(category);
+  const onClickCategoryDelete = (groups) => {
+    setGroup(groups);
     setDeleteModal(true);
   };
 
   const handleDeleteCategory = () => {
-    if (category) {
-      dispatch(deleteGroup(category));
+    if (groups) {
+      dispatch(deleteGroup(groups));
       setDeleteModal(false);
     }
   };
 
 
-  const searchList = (e) => {
-    const inputVal = e.target.value.toLowerCase();
-    const filteredData = groupList.filter(el => el.category.toLowerCase().includes(inputVal));
+  // Handle Category Toggle
+  const [isCategory, setIsMainGroup] = useState(false);
 
-    setFilteredGroupList(filteredData);
-    setShowNoResult(filteredData.length === 0);
-  };
+  // State to store the "category" value
+  const [categoryValue, setCategoryValue] = useState(null);
 
   // Function to handle the toggle change
   const handleToggleChange = () => {
-    setIsMainCategory((prevValue) => !prevValue);
-    // Set the "parent" value to 0 when the toggle is turned on
-    setParentValue(isMainCategory ? 0 : null);
+    setIsMainGroup((prevValue) => !prevValue);
+    // Set the "category" value to 0 when the toggle is turned on
+    setCategoryValue(isCategory ? 0 : null);
   };
 
   // Categories validation
@@ -110,17 +109,17 @@ const Groups = () => {
     enableReinitialize: true,
 
     initialValues: {
-      name: (category && category.name) || "",
-      category: (category && category.category) || "",
+      name: (groups && groups.name) || "",
+      category: (groups && groups.category) || "",
     },
     validationSchema: Yup.object({
       // name: Yup.string().required("Please Enter Category"),
-      // parent: Yup.string().required("Please Enter Parent"),
+      // category: Yup.string().required("Please Enter Category"),
     }),
     onSubmit: (values) => {
       if (isEdit) {
         const updatedCategory = {
-          id: category ? category.id : 0,
+          id: groups ? groups.id : 0,
           name: values.name,
           category: values.category,
         };
@@ -143,9 +142,9 @@ const Groups = () => {
   const {
     categoryOptions,
     groupOptions,
-    changeSubCategoriesOptions,
-    activeParentCategoryId
-  } = useCategoryManager(categories, subCategories, validation);
+    changeGroupsOptions,
+    activeCategoryCategoryId
+  } = useGroupManager(categories, groups, validation);
 
   return (
     <React.Fragment>
@@ -165,9 +164,9 @@ const Groups = () => {
                 <div className="mb-3">
                   <button
                     className="btn btn-success w-100"
-                    onClick={() => setModalCategory(true)}
+                    onClick={() => setModalGroup(true)}
                   >
-                    <i className="ri-add-line align-bottom"></i> Add Category
+                    <i className="ri-add-line align-bottom"></i> إضافة مجموعة
                   </button>
                 </div>
 
@@ -180,35 +179,16 @@ const Groups = () => {
                     id="CategoryList-data"
                   >
                     {(categoryOptions || []).map((item, index) => (
-                      // Add a conditional check for parent === 0 and id !== 0
+                      // Add a conditional check for category === 0 and id !== 0
                       <li key={item.id}>
                         <Link
                           to="#"
                           className="nav-link fs-13"
                           id={item.id}
-                          onClick={(e) => changeSubCategoriesOptions({ ...e, target: { ...e.target, value: item.id } })}
+                          onClick={(e) => changeGroupsOptions({ ...e, target: { ...e.target, value: item.id } })}
                         >
                           {item.name}
                         </Link>
-                        <div className="sub-menu list-unstyled ps-3 vstack gap-2 mb-2">
-                          {(categoryOptions || []).map(
-                            (nestedItem) =>
-                              nestedItem.parent === item.id && (
-                                <li
-                                  key={nestedItem.id}
-                                  onClick={changeSubCategoriesOptions}
-                                >
-                                  <Link
-                                    to="#"
-                                    className="nav-link fs-13"
-                                    id={"Categories" + nestedItem.id}
-                                  >
-                                    {nestedItem.name}
-                                  </Link>
-                                </li>
-                              )
-                          )}
-                        </div>
                       </li>
                     ))}
                   </ul>
@@ -223,25 +203,13 @@ const Groups = () => {
             <div className="file-manager-content w-100 p-4 pb-0">
               <div className="p-3 bg-light rounded mb-4">
                 <Row className="g-2">
-                  <Col className="col-lg">
-                    <div className="search-box">
-                      <input
-                        type="text"
-                        id="searchgroupList"
-                        className="form-control search"
-                        placeholder="Search category name"
-                        onKeyUp={(e) => searchList(e.target.value)}
-                      />
-                      <i className="ri-search-line search-icon"></i>
-                    </div>
-                  </Col>
                   <Col className="col-lg-auto">
                     <button
                       className="btn btn-primary createCategory"
                       type="button"
                       onClick={() => handleCategoryClicks()}
                     >
-                      <i className="ri-add-fill align-bottom" /> Add Categories
+                      <i className="ri-add-fill align-bottom" /> إضافة مجموعة
                     </button>
                   </Col>
                 </Row>
@@ -251,7 +219,7 @@ const Groups = () => {
                 className="category-content position-relative px-4 mx-n4"
                 id="category-content"
               >
-                {!categoryList && (
+                {!categoryOptions && (
                   <div id="elmLoader">
                     <div
                       className="spinner-border text-primary avatar-sm"
@@ -267,18 +235,18 @@ const Groups = () => {
                     <table className="table align-middle position-relative table-nowrap">
                       <thead className="table-active">
                         <tr>
-                          <th scope="col">Category Name</th>
-                          <th scope="col">Elections</th>
-                          <th scope="col">Action</th>
+                          <th scope="col">المجموعة</th>
+                          <th scope="col">التصنيف</th>
+                          <th scope="col">إجراءات</th>
                         </tr>
                       </thead>
 
                       <tbody id="category-list">
                         {(groupOptions || []).map(
                           (item, key) => (
-                            // Filter the child Categories based on the active parent category ID
-                            !activeParentCategoryId ||
-                            (item.parent === activeParentCategoryId && (
+                            // Filter the child Categories based on the active category category ID
+                            !activeCategoryCategoryId ||
+                            (item.category === activeCategoryCategoryId && (
                               <tr key={key}>
                                 <td>
                                   <div className="d-flex align-items-start">
@@ -294,7 +262,7 @@ const Groups = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td>Hello !</td>
+                                <td>category</td>
                                 <td>
                                   <div className="hstack gap-2">
                                     <button
@@ -340,7 +308,7 @@ const Groups = () => {
 
       <Modal
         id="createCategory"
-        isOpen={modalCategory}
+        isOpen={modalGroup}
         toggle={toggle}
         modalClassName="zoomIn"
         centered
@@ -397,7 +365,7 @@ const Groups = () => {
                   type="checkbox"
                   role="switch"
                   id="SwitchCheck3"
-                  checked={isMainCategory}
+                  checked={isCategory}
                   onChange={handleToggleChange}
                 />
                 <label className="form-check-label" htmlFor="SwitchCheck3">
@@ -405,11 +373,11 @@ const Groups = () => {
                 </label>
               </div>
 
-              {/* Show the "Parent Category" input field when the toggle is on */}
-              {isMainCategory && (
+              {/* Show the "Category Category" input field when the toggle is on */}
+              {isCategory && (
                 <div className="mb-3">
                   <label htmlFor="category-name-input" className="form-label">
-                    Parent Category
+                    Category Category
                   </label>
                   <input
                     type="text"
@@ -435,7 +403,7 @@ const Groups = () => {
               <button
                 type="button"
                 className="btn btn-ghost-success"
-                onClick={() => setModalCategory(false)}
+                onClick={() => setModalGroup(false)}
               >
                 <i className="ri-close-fill align-bottom"></i> Close
               </button>
@@ -454,4 +422,4 @@ const Groups = () => {
   );
 };
 
-export default Groups;
+export default GroupPermissions;

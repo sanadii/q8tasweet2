@@ -5,7 +5,6 @@ import {
 
   // Group s
   GET_GROUPS,
-  GET_GROUP_DETAILS,
 
   ADD_NEW_GROUP_SUCCESS,
   ADD_NEW_GROUP_FAIL,
@@ -34,13 +33,6 @@ const Groups = (state = IntialState, action) => {
             isGroupCreated: false,
             isGroupSuccess: true,
           };
-        case GET_GROUP_DETAILS:
-          return {
-            ...state,
-            groupDetails: action.payload.data.details,
-            isGroupCreated: false,
-            isGroupSuccess: true,
-          };
 
         default:
           return { ...state };
@@ -55,13 +47,6 @@ const Groups = (state = IntialState, action) => {
             isGroupCreated: false,
             isGroupSuccess: true,
           };
-        case GET_GROUP_DETAILS:
-          return {
-            ...state,
-            error: action.payload.error,
-            isGroupCreated: false,
-            isGroupSuccess: true,
-          };
 
         default:
           return { ...state };
@@ -70,13 +55,6 @@ const Groups = (state = IntialState, action) => {
     case GET_GROUPS: {
       return {
         ...state,
-        isGroupCreated: false,
-      };
-    }
-    case GET_GROUP_DETAILS: {
-      return {
-        ...state,
-        groupDetails: action.payload,
         isGroupCreated: false,
       };
     }

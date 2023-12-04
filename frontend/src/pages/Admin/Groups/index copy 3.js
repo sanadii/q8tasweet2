@@ -21,7 +21,7 @@ import {
   updateGroup as onUpdateGroup,
   deleteGroup as onDeleteGroup,
   addNewGroup as onAddNewGroup,
-} from "../../../../store/actions";
+} from "../../../store/actions";
 
 const Categories = () => {
   document.title = "المجموعات | Q8Tasweet - React Admin & Dashboard Template";
@@ -37,7 +37,7 @@ const Categories = () => {
   };
   const formData = new FormData();
   if (!selectedImage) {
-    // cons
+    // 
   } else {
     formData.append("image", selectedImage);
     formData.append("folder", "elections"); // replace "yourFolderName" with the actual folder name
@@ -143,6 +143,7 @@ const Categories = () => {
       document.getElementById("category-category").style.display = "block";
     }
   };
+  console.log(categories, subCategories);
 
   const [isMainCategory, setIsMainCategory] = useState(false);
 
@@ -206,6 +207,7 @@ const Categories = () => {
     changeSubCategoriesOptions,
     activeParentCategoryId
   } = useCategoryManager(categories, subCategories, validation);
+
 
   return (
     <React.Fragment>

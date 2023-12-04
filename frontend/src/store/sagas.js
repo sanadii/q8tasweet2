@@ -7,23 +7,17 @@ import ForgetSaga from "./auth/forgetpwd/saga";
 import ProfileSaga from "./auth/profile/saga";
 import UsersSaga from "./auth/users/saga";
 import GroupsSaga from "./groups/saga";
+import groupPermissionSaga from "./groupPermissions/saga";
 
 
 // Elections
 import electionSaga from "./elections/saga";
 import candidatesSaga from "./candidates/saga";
 import campaignsSaga from "./campaigns/saga";
-// import ElectionCandidatesSaga from "./electionCandidate/saga";
-
-// Electors
 import electorSaga from "./electors/saga";
-// import guaranteeSaga from "./guarantees/saga";
-// import attendeeSaga from "./attendees/saga";
-
 
 // System
 import UploadImageSaga from "./uploadImage/saga";
-
 
 // Settings
 import LayoutSaga from "./layouts/saga";
@@ -39,6 +33,7 @@ export default function* rootSaga() {
     fork(ProfileSaga),
     fork(UsersSaga),
     fork(GroupsSaga),
+    fork(groupPermissionSaga),
 
     // Project
     fork(electionSaga),

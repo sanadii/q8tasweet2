@@ -4,7 +4,6 @@ export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
 
 // Get Groups
 export const GET_GROUPS = "GET_GROUPS";
-export const GET_GROUP_DETAILS = "GET_GROUP_DETAILS";
 export const GET_MODERATOR_GROUPS = "GET_MODERATOR_GROUPS";
 
 // Add Group

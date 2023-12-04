@@ -45,6 +45,12 @@ urlpatterns = [
     path('deleteGroup/<int:id>', DeleteGroup.as_view(), name="DeleteGroup"),
 
     # Permissions
+    path("getGroupPermissions", GetGroupPermissions.as_view(), name="GetGroupPermissions"),
+    path('addNewGroup', AddNewGroup.as_view(), name="AddNewGroup"),
+    path('updateGroup', UpdateGroup.as_view(), name="UpdateGroup"),
+    path('deleteGroup/<int:id>', DeleteGroup.as_view(), name="DeleteGroup"),
+
+
 
     # Tokens
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

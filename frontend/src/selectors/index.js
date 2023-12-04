@@ -10,6 +10,7 @@ export { electorSelector } from './electorSelector';
 
 export { authSelector } from './authSelector';
 export { userSelector } from './userSelector';
+export { groupPermissionSelector } from './groupPermissionSelector';
 
 export { layoutSelector } from './layoutSelector';
 

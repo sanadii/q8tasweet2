@@ -3,10 +3,10 @@ import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeade
 import SimpleBar from "simplebar-react";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import DeleteModal from "../../../../components/Components/DeleteModal";
-import BreadCrumb from "../../../../components/Components/BreadCrumb";
+import DeleteModal from "../../../components/Components/DeleteModal";
+import BreadCrumb from "../../../components/Components/BreadCrumb";
 import { categorySelector } from 'Selectors';
-import useCategoryManager from "../../../../hooks/CategoryHooks";
+import useCategoryManager from "../../../hooks/CategoryHooks";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -21,7 +21,7 @@ import {
   updateCategory as onUpdateCategory,
   deleteCategory as onDeleteCategory,
   addNewCategory as onAddNewCategory,
-} from "../../../../store/actions";
+} from "../../../store/actions";
 
 const Categories = () => {
   document.title = "المجموعات | Q8Tasweet - React Admin & Dashboard Template";

@@ -32,8 +32,9 @@ import ProfileEdit from "pages/Authentication/Profile/EditProfile";
 
 // ADMIN PAGES
 import Settings from "pages/Admin/Settings";
-import Categories from "pages/Admin/Settings/Categories";
-import Groups from "pages/Admin/Settings/Groups";
+import Categories from "pages/Admin/Categories";
+import Groups from "pages/Admin/Groups";
+import GroupPermissions from "pages/Admin/GroupPermissions";
 
 // import Alphabet from "pages/Alphabet";
 
@@ -146,9 +147,13 @@ const dashboardRoutes = [
   { path: "/dashboard/candidates/", component: <CandidateList /> },
   { path: "/dashboard/campaigns", component: <CampaignList /> },
   { path: "/dashboard/users/", component: <UserList /> },
+
+  // Settings / Options
   { path: "/dashboard/settings/categories", component: <Categories /> },
   { path: "/dashboard/settings/groups", component: <Groups /> },
+  { path: "/dashboard/settings/group-permissions", component: <GroupPermissions /> },
 
+  
   // Single Page
   { path: "/dashboard/elections/:slug", component: <ElectionDetails /> },
   { path: "/dashboard/candidates/:slug", component: <CandidateDetails /> },

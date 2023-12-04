@@ -2,10 +2,13 @@
 from rest_framework import serializers
 from apps.auths.models import User
 from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+from rest_framework.serializers import ModelSerializer
+
+
 
 # USER
-
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -31,16 +34,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class PermissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Permission
-        fields = ['codename']
-        # fields = ['name', 'codename']
 
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['id', 'name', 'permissions', 'display_name']
+
 
 
 class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
@@ -92,3 +87,24 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+# Groups, Categories, Permissions
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['codename']
+        # fields = ['name', 'codename']
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name', 'category', 'permissions', 'display_name']
+
+class GroupPermissionSerializer(ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+class ContentTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContentType
+        fields = '__all__'  # or list specific fields you want to include
