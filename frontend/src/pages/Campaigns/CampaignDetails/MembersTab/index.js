@@ -13,8 +13,8 @@ import { deleteCampaignMember } from "store/actions";
 import { campaignSelector } from 'Selectors';
 
 // UI & Utilities
-import { Col, Row, Card, CardBody } from "reactstrap";
-import { toast, ToastContainer } from "react-toastify";
+import { Card, CardBody } from "reactstrap";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const MembersTab = () => {
@@ -41,9 +41,6 @@ const MembersTab = () => {
 
   // Delete Hook
   const { handleDeleteItem, onClickDelete, setDeleteModal, deleteModal } = useDelete(deleteCampaignMember);
-
-  // Filtering and Member Matching
-
 
   // Finding Active Role to Show Different Table Columns
   const [activeTab, setActiveTab] = useState("campaignManagers"); // Initialize with "campaignManagers"
@@ -207,17 +204,11 @@ const MembersTab = () => {
 
             <TableFilters
               // Filters
-              isGlobalFilter={true}
-              preGlobalFilteredRows={true}
               isMemberRoleFilter={true}
-              isResetFilters={true}
-
-              // Settings
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               filters={filters}
               setFilters={setFilters}
-              SearchPlaceholder="البحث..."
             />
 
 

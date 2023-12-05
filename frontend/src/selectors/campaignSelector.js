@@ -11,11 +11,12 @@ export const campaignSelector = createSelector(
     campaigns: campaignsState.campaigns,
     campaign: campaignsState.campaignDetails,
     campaignId: campaignsState.campaignDetails.id,
+
     campaignDetails: campaignsState.campaignDetails,
     campaignMembers: campaignsState.campaignMembers,
     campaignGuarantees: campaignsState.campaignGuarantees,
     campaignAttendees: campaignsState.campaignAttendees,
-    
+
     campaignSorting: campaignsState.campaignSorting,
     campaignElectionCommittees: campaignsState.campaignElectionCommittees,
     campaignElectionCandidates: campaignsState.campaignElectionCandidates,
@@ -29,6 +30,8 @@ export const campaignSelector = createSelector(
     electors: campaignsState.electors,
 
     campaignRoles: campaignsState.campaignRoles,
+
+    // Election
 
 
   })

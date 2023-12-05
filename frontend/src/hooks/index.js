@@ -1,7 +1,7 @@
 // Components/Hooks/index.js
 
 // Sockets
-export { useSocket } from "./useSocket";
+export { useWebSocket } from "./useWebSocket";
 
 // Users & Permissions
 export { useProfile } from "./UserHooks";

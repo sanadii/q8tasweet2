@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.views import APIView
 
 from .models import Group, GroupCategories
-from .serializers import UserSerializer, ContentTypeSerializer, GroupPermissionSerializer, GroupSerializer
+from .serializers import UserSerializer, UserLoginSerializer, ContentTypeSerializer, GroupPermissionSerializer, GroupSerializer
 
 
 from utils.views import get_current_user_campaigns

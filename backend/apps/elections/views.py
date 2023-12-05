@@ -42,7 +42,7 @@ from helper.views_helper import CustomPagination
 def index(request):
     return render(request, "index.html")
 
-# Election: getElection, deleteElection, addElection, updateElection, ElectionCount
+# Election: getElection, deleteElection, addElection, updateElection
 class CustomPagination(PageNumberPagination):
     page_size = 50
 
@@ -56,34 +56,24 @@ class CustomPagination(PageNumberPagination):
 
 # View: Public / Admin
 
+
 class GetElections(APIView):
     """
     Instantiates and returns the list of permissions that this view requires.
     Views: Index / Public / Admin 
     """
 
-    def get(self, request, *args, **kwargs):
-        view = request.query_params.get('view', None)
-        now = timezone.now()
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        view = self.request.query_params.get('view', None)
+        if view in ['index', 'public']:
+            return [AllowAny()]
+        elif view == 'admin':
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
-        try:
-            if view == 'index':
-                elections_data = Election.objects.filter(status=6, deleted=0)
-                return self.handle_index_view(elections_data, now)
-
-            elif view == 'public':
-                elections_data = Election.objects.filter(status=6, deleted=0).order_by('-due_date')
-                return self.handle_public_view(elections_data)
-
-            elif view == 'admin':
-                elections_data = Election.objects.all().order_by('-due_date')
-                return self.handle_admin_view(elections_data)
-
-            else:
-                raise ValidationError("Invalid view parameter")
-
-        except ValidationError as e:
-            return Response({"message": str(e)})
     def get(self, request, *args, **kwargs):
         view = request.query_params.get('view', None)
         now = timezone.now()

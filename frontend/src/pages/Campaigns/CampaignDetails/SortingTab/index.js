@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { campaignSelector, userSelector } from 'Selectors';
 import { TableContainer } from 'components';
 import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
-import { useSocket } from 'hooks'; // Update with the correct path
+import { useWebSocket } from 'hooks'; // Update with the correct path
 
 const SortingTab = () => {
   const { campaign, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
@@ -13,7 +13,8 @@ const SortingTab = () => {
   const committeeId = currentCampaignMember.committee;
   const [candidatesSorting, setCandidatesSorting] = useState([]);
   const campaignSlug = campaign.slug;
-
+  const socketUrl = `sorting/${campaignSlug}`;
+  const electionId = campaign.election.id;
 
   // Initialize candidatesSorting state and WebSocket
   useEffect(() => {
@@ -33,7 +34,7 @@ const SortingTab = () => {
     }
   }, [committeeId]);
 
-  const [socket, send] = useSocket('sorting', campaignSlug, handleWebSocketMessage);
+  const [socket, send] = useWebSocket(socketUrl, handleWebSocketMessage);
 
 
   const updateSortingVotes = (candidateId, newVotes) => {
@@ -45,11 +46,13 @@ const SortingTab = () => {
     }));
   };
 
+  console.log("socket: ", socket)
 
   const sendVoteUpdate = (candidateId, newVotes) => {
     if (socket) {
       socket.send(JSON.stringify({
         type: 'vote_update',
+        election: electionId,
         electionCandidateId: candidateId,
         electionCommitteeId: committeeId,
         votes: newVotes
