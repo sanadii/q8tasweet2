@@ -33,11 +33,11 @@ const Marker = ({ percentage, color, label, total, height }) => {
 
 
 
-const GuaranteeTargetBar = ({ campaignDetails, results }) => {
-    const firstWinnerVotes = campaignDetails.election.previousElection.firstWinner.votes
-    const medianWinnerVotes = campaignDetails.election.previousElection.medianWinner
-    const lastWinnerVotes = campaignDetails.election.previousElection.lastWinner.votes
-    const targetVotes = campaignDetails.targetVotes
+const GuaranteeTargetBar = ({ campaign, results }) => {
+    const firstWinnerVotes = campaign.election.previousElection.firstWinner.votes
+    const medianWinnerVotes = campaign.election.previousElection.medianWinner
+    const lastWinnerVotes = campaign.election.previousElection.lastWinner.votes
+    const targetVotes = campaign.targetVotes
 
     const endOfBar = firstWinnerVotes + (firstWinnerVotes / 10);
 

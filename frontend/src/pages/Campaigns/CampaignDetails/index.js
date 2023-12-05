@@ -5,11 +5,11 @@ import { useParams } from "react-router-dom";
 
 // Store & Selectors
 import { campaignSelector } from 'Selectors';
-import { getCampaignDetails } from "../../../store/actions";
+import { getCampaignDetails } from "store/actions";
 
 // Components
 import Section from "./Section";
-import Loader from "../../../components/Components/Loader";
+import Loader from "components/Components/Loader";
 import { usePermission } from 'hooks';
 
 // UI & Utilities
@@ -24,7 +24,7 @@ const CampaignDetails = () => {
   const { canViewCampaign } = usePermission();
 
   useEffect(() => {
-    document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
+    document.title = "الحملة الإنتخابية | كويت تصويت";
   }, []);
 
 
