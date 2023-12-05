@@ -22,6 +22,7 @@ class SortingConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         if text_data_json['type'] == 'vote_update':
+            election_id = text_data_json['electionId']
             election_candidate_id = text_data_json['electionCandidateId']
             new_votes = text_data_json['votes']
             election_committee_id = text_data_json['electionCommitteeId']
@@ -30,6 +31,7 @@ class SortingConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'send_vote_update',
+                    'electionId': election_id,
                     'electionCandidateId': election_candidate_id,
                     'votes': new_votes,
                     'electionCommitteeId': election_committee_id,
@@ -42,6 +44,7 @@ class SortingConsumer(AsyncWebsocketConsumer):
         # Prepare the message
         message = {
             'type': 'vote_update',
+            'electionId': event['electionId'],
             'electionCandidateId': event['electionCandidateId'],
             'votes': event['votes'],
             'electionCommitteeId': event['electionCommitteeId'],

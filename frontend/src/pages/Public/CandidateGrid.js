@@ -10,10 +10,9 @@ import { getCandidates } from "../../store/actions";
 import { candidateSelector, categorySelector } from 'Selectors';
 
 const CandidateGrid = () => {
+  document.title = "المرشحين - كويت تصويت";
+
   const dispatch = useDispatch();
-
-  document.title = "Candidates - Q8 TASWEET APP";
-
   const { candidates, isCandidateSuccess, error } = useSelector(candidateSelector);
 
   const [candidateList, setCandidateList] = useState([]);

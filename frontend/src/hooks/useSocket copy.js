@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 const BASE_URL = 'ws://127.0.0.1:8000/ws';
 
-const useSocket = (type = '', slug = '', handleMessage) => {
+const useWebSocket = (type = '', slug = '', handleMessage) => {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
@@ -32,4 +32,4 @@ const useSocket = (type = '', slug = '', handleMessage) => {
 };
 
 
-export { useSocket };
+export { useWebSocket };

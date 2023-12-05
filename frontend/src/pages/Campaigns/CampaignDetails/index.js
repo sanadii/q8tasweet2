@@ -9,7 +9,7 @@ import { getCampaignDetails } from "store/actions";
 
 // Components
 import Section from "./Section";
-import Loader from "components/Components/Loader";
+import { Loader } from "components";
 import { usePermission } from 'hooks';
 
 // UI & Utilities

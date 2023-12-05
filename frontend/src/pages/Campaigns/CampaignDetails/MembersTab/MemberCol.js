@@ -1,15 +1,6 @@
 import React from "react";
 import { usePermission, useDelete } from "hooks";
 
-
-// // Functions
-// const getUserRoleById = (userId, campaignMembers, campaignRoles) => {
-//     const user = campaignMembers.find(user => user.id === userId);
-//     const role = campaignRoles.find(role => role.id === user.role);
-//     return role.role;
-// };
-
-
 const Id = (cellProps) => {
     return (
         <React.Fragment>

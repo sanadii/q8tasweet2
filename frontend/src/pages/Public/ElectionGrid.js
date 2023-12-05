@@ -18,7 +18,7 @@ const ElectionGrid = () => {
   useEffect(() => {
     if (!elections.length) {
       dispatch(getElections('public'));
-      dispatch(getCategories());
+      // dispatch(getCategories());
     }
   }, [dispatch, elections.length, isElectionSuccess]);
 
@@ -75,15 +75,21 @@ const ElectionGrid = () => {
                     </Link>
                   </div>
                   <CardBody>
+                    <p className="fw-medium mb-0 float-end"><i className="mdi mdi-heart text-danger align-middle"></i> {item.likes}k </p>
                     <Link to={`/elections/${item.slug}`}>
-                      <h5 className="text-success">{item.name} </h5>
+                      <h5 className="text-success"><i className="mdi mdi-ethereum"></i> {item.name} </h5>
                     </Link>
                     <h6 className="fs-16 mb-3">
-                      <p className="text-muted">
-                        {item.dueDate} <br />
-                        {item.categoryName}
-                      </p>
+                      <Link to="/apps-nft-item-details">{item.dueDate}
+                      </Link>
                     </h6>
+                    <div>
+                      <span className="text-muted float-end">{item.categoryName}</span>
+                      <span className="text-muted">{item.subCategory}</span>
+                      <div className="progress progress-sm mt-2">
+                        <div className={"progress-bar progress-bar-striped bg-" + item.progressClass} role="progressbar" style={{ width: item.size }} aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
                   </CardBody>
                 </Card>
               </Col>

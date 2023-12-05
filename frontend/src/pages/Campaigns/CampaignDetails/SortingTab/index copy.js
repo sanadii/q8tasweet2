@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { campaignSelector, userSelector } from 'Selectors';
 import { TableContainer } from 'components';
 import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
-import { useSocket } from 'hooks'; // Update with the correct path
+import { useWebSocket } from 'hooks'; // Update with the correct path
 
 const SortingTab = () => {
   const { campaign, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
@@ -33,7 +33,7 @@ const SortingTab = () => {
     }
   }, [committeeId]);
 
-  const [socket, send] = useSocket('campaigns', campaignSlug, handleWebSocketMessage);
+  const [socket, send] = useWebSocket('campaigns', campaignSlug, handleWebSocketMessage);
 
 
   const updateSortingVotes = (candidateId, newVotes) => {
