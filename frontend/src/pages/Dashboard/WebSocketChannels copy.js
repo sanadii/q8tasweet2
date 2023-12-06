@@ -2,76 +2,88 @@ import React, { useState, useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { Card, CardHeader, CardBody, Button, Input, FormGroup, Label, Col, Row } from 'reactstrap';
 
-const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws';
-const GLOBAL_CHANNEL = 'GlobalChannel';
-const SORTING_CHANNEL = 'campaigns';
-
-const getChannelUrl = (channel, timeout = 2000) => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(`${SERVER_BASE_URL}/${GLOBAL_CHANNEL}/${channel === 'global' ? '' : channel + '/'}`);
-        }, timeout);
-    });
-};
+const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws/GlobalChannel';
+const CHANNEL = 'GlobalChannel';
 
 const channels = [
     { channel: 'public' },
     { channel: 'private' },
-    // { channel: 'special' },
     { channel: 'UmUXPn8A' },
     { channel: 'global' },
-
-    
 ];
 
-const READY_STATE_OPEN = 1;
-
 export const WebSocketChannels = () => {
-    const [currentSocketUrl, setCurrentSocketUrl] = useState(null);
+    const [sockets, setSockets] = useState({});
     const [messageHistory, setMessageHistory] = useState([]);
     const [inputtedMessage, setInputtedMessage] = useState('');
-    const [selectedMessageChannel, setselectedMessageChannel] = useState(channels[0].channel); // default to the first channel channel
+    const [selectedChannel, setSelectedChannel] = useState(channels[0].channel);
 
-    const [messageChannel, setMessageChannel] = useState('global');
+    // Connect to a new channel
+    const connectToChannel = (channel) => {
+        const channelUrl = `${SERVER_BASE_URL}/${channel}/`;
+        if (!sockets[channel]) {
+            const newSocket = new WebSocket(channelUrl);
 
-    const { sendMessage, lastMessage, readyState } = useWebSocket(currentSocketUrl, {
-        share: true,
-        shouldReconnect: () => false,
-    });
+            newSocket.onopen = () => {
+                setSockets(prev => ({ ...prev, [channel]: newSocket }));
+            };
 
-    const handleSendMessage = () => {
-        if (readyState === READY_STATE_OPEN && selectedMessageChannel) {
-            sendMessage(JSON.stringify({ channel: selectedMessageChannel, message: inputtedMessage }));
-        } else {
-            console.error('WebSocket connection is not open or message channel is not set.');
+            newSocket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                setMessageHistory(prev => [...prev, { channel: data.channel, message: data.message }]);
+            };
+
+            newSocket.onclose = () => {
+                setSockets(prev => {
+                    const prevSockets = { ...prev };
+                    delete prevSockets[channel];
+                    return prevSockets;
+                });
+            };
         }
     };
 
-    useEffect(() => {
-        if (lastMessage !== null) {
-            const data = JSON.parse(lastMessage.data);
-            setMessageHistory(prev => [...prev, { channel: data.channel, message: data.message }]);
+    const handleSendMessage = () => {
+        const socket = sockets[selectedChannel];
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({ channel: selectedChannel, message: inputtedMessage }));
+            setInputtedMessage(''); // Clear the input after sending
+        } else {
+            console.error('WebSocket connection is not open.');
         }
-    }, [lastMessage]);
-
+    };
 
     // Function to determine the status of each channel
-    const determineChannelStatus = (channelChannel) => {
-        const isConnected = readyState === WebSocket.OPEN && messageChannel === channelChannel;
+    const determineChannelStatus = (channel) => {
+        const socket = sockets[channel];
         let statusText, statusClass;
 
-        if (readyState === WebSocket.CONNECTING) {
-            statusText = 'Connecting';
-            statusClass = "info";
-        } else if (readyState === WebSocket.CLOSING) {
-            statusText = 'Closing';
-            statusClass = "warning";
-        } else if (isConnected) {
-            statusText = 'Connected';
-            statusClass = "success"; // Change this to "warning" for a warning color
+        if (socket) {
+            switch (socket.readyState) {
+                case WebSocket.CONNECTING:
+                    statusText = 'Connecting';
+                    statusClass = "info";
+                    break;
+                case WebSocket.OPEN:
+                    statusText = 'Connected';
+                    statusClass = "success";
+                    break;
+                case WebSocket.CLOSING:
+                    statusText = 'Closing';
+                    statusClass = "warning";
+                    break;
+                case WebSocket.CLOSED:
+                    statusText = 'Disconnected';
+                    statusClass = "danger";
+                    break;
+                default:
+                    statusText = 'Unknown';
+                    statusClass = "secondary";
+                    break;
+            }
         } else {
             statusText = 'Connect';
-            statusClass = "danger"; // Change this to "danger" for a danger color
+            statusClass = "secondary"; // No connection attempt yet
         }
 
         return {
@@ -79,7 +91,6 @@ export const WebSocketChannels = () => {
             class: statusClass,
         };
     };
-
 
     return (
         <React.Fragment>

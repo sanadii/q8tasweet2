@@ -29,6 +29,7 @@ class GlobalConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         channel = text_data_json.get('channel', 'public')
+        data_type = text_data_json.get('dataType', 'default')
 
         # Send message to the current room group
         await self.channel_layer.group_send(
@@ -36,7 +37,8 @@ class GlobalConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'send_message',
                 'message': message,
-                'channel': channel
+                'channel': channel,
+                'dataType': data_type
             }
         )
 
@@ -48,17 +50,20 @@ class GlobalConsumer(AsyncWebsocketConsumer):
                 {
                     'type': 'send_message',
                     'message': message,
-                    'channel': channel
+                    'channel': channel,
+                    'dataType': data_type
                 }
             )
 
     async def send_message(self, event):
         message = event['message']
         channel = event.get('channel', 'public')
+        data_type = event.get('dataType', 'default')
 
         await self.send(text_data=json.dumps({
             'channel': channel,
-            'message': message
+            'message': message,
+            'dataType': data_type
         }))
 
 

@@ -14,24 +14,24 @@ const getChannelUrl = (channel, timeout = 2000) => {
 };
 
 const channels = [
-    { channel: 'public' },
-    { channel: 'private' },
-    { channel: 'UmUXPn8A' },
-    { channel: 'global' },
-
-
+    { channel: 'Elections' },
+    { channel: 'Campaign' },
+    { channel: 'Candidate' },
+    { channel: 'Global' },
 ];
 
-const READY_STATE_OPEN = 1;
+const dataTypes = [
+    { name: 'votting' },
+    { name: 'updatting' },
+    { name: 'notifications' },
+]
 
 export const WebSocketChannels = () => {
     const [sockets, setSockets] = useState({});
-
-    const [currentSocketUrl, setCurrentSocketUrl] = useState(null);
     const [messageHistory, setMessageHistory] = useState([]);
     const [inputtedMessage, setInputtedMessage] = useState('');
     const [selectedChannel, setSelectedChannel] = useState(channels[0].channel);
-    const [selectedType, setSelectedType] = useState('')
+    const [selectedDataType, setSelectedDataType] = useState('');
 
 
     // Connect to a new channel
@@ -49,24 +49,34 @@ export const WebSocketChannels = () => {
             newSocket.onclose = () => {
                 setSockets(prev => {
                     const prevSockets = { ...prev };
-                    prevSockets[channel] = null; // or handle it as you see fit
+                    delete prevSockets[channel];
                     return prevSockets;
                 });
             };
 
-            // Listen to WebSocket error event
             newSocket.onerror = (error) => {
                 console.error(`WebSocket error on channel ${channel}:`, error);
-                setSockets(prev => {
-                    const prevSockets = { ...prev };
-                    prevSockets[channel] = null; // or handle it as you see fit
-                    return prevSockets;
-                });
             };
+
+
+            // Listen to WebSocket error event
+            // newSocket.onerror = (error) => {
+            //     console.error(`WebSocket error on channel ${channel}:`, error);
+            //     setSockets(prev => {
+            //         const prevSockets = { ...prev };
+            //         prevSockets[channel] = null; // or handle it as you see fit
+            //         return prevSockets;
+            //     });
+            // };
 
             newSocket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                setMessageHistory(prev => [...prev, { channel: data.channel, type: data.type, message: data.message }]);
+                setMessageHistory(prev => [...prev, {
+                    channel: data.channel,
+                    dataTypes: 'Votting',
+                    type: selectedDataType,
+                    message: data.message,
+                }]);
             };
         }
     };
@@ -81,7 +91,11 @@ export const WebSocketChannels = () => {
     const handleSendMessage = () => {
         const socket = sockets[selectedChannel];
         if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({ channel: selectedChannel, type: selectedType, message: inputtedMessage }));
+            socket.send(JSON.stringify({
+                channel: selectedChannel,
+                dataType: selectedDataType,
+                message: inputtedMessage
+            }));
         } else {
             console.error('WebSocket connection is not open.');
         }
@@ -91,7 +105,11 @@ export const WebSocketChannels = () => {
     useEffect(() => {
         if (lastMessage !== null) {
             const data = JSON.parse(lastMessage.data);
-            setMessageHistory(prev => [...prev, { channel: data.channel, message: data.message }]);
+            setMessageHistory(prev => [...prev, {
+                channel: data.channel,
+                dataType: selectedDataType,
+                message: data.message
+            }]);
         }
     }, [lastMessage]);
 
@@ -149,13 +167,6 @@ export const WebSocketChannels = () => {
                         <Button
                             color={determineChannelStatus(channel).class}
                             onClick={() => connectToChannel(channel)}
-
-                        // onClick={async () => {
-                        //     const url = await getChannelUrl(channel.channel);
-                        //     setCurrentSocketUrl(url);
-                        //     setMessageChannel(channel.channel);
-                        // }}
-                        // disabled={currentSocketUrl === `${SERVER_BASE_URL}/${CHANNEL}/${channel.channel === 'global' ? '' : channel.channel + '/'}`}
                         >
                             {determineChannelStatus(channel).text}
                         </Button>
@@ -197,13 +208,13 @@ export const WebSocketChannels = () => {
                                 <Label>Type:</Label>
                                 <Input
                                     type="select"
-                                    value={selectedType}
-                                    onChange={(e) => setSelectedType(e.target.value)}
+                                    value={selectedDataType}
+                                    onChange={(e) => setSelectedDataType(e.target.value)}
                                     className="me-2"
                                 >
-                                    {channels.map((channel, index) => (
-                                        <option key={index} value={channel.channel}>
-                                            {channel.channel.charAt(0).toUpperCase() + channel.channel.slice(1)}
+                                    {dataTypes.map((dataType, index) => (
+                                        <option key={index} value={dataType.name}>
+                                            {dataType.name.charAt(0).toUpperCase() + dataType.name.slice(1)}
                                         </option>
                                     ))}
                                 </Input>
