@@ -13,12 +13,13 @@ const SortingTab = () => {
   const committeeId = currentCampaignMember.committee;
   const [candidatesSorting, setCandidatesSorting] = useState([]);
   const campaignSlug = campaign.slug;
-  const socketUrl = `sorting/${campaignSlug}`;
+  const socketUrl = `campaigns/${campaignSlug}`;
   const electionId = campaign.election.id;
 
   // Initialize candidatesSorting state and WebSocket
   useEffect(() => {
     const initialSortingData = campaignElectionCandidates.map(candidate => ({
+      electionId: electionId,
       candidateId: candidate.id,
       name: candidate.name,
       committeeVote: candidate.committeeSorting.find(cs => cs.electionCommittee === committeeId)?.votes || 0
@@ -52,7 +53,7 @@ const SortingTab = () => {
     if (socket) {
       socket.send(JSON.stringify({
         type: 'vote_update',
-        election: electionId,
+        electionId: electionId,
         electionCandidateId: candidateId,
         electionCommitteeId: committeeId,
         votes: newVotes

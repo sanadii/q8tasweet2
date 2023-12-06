@@ -34,16 +34,16 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       label: "قائمة الإدارة",
       isHeader: true,
     },
-    // {
-    //   id: "adminDashboard",
-    //   label: "لوحة التحكم",
-    //   icon: "ri-dashboard-line",
-    //   link: "/dashboard",
-    //   click: function (e) {
-    //     e.preventDefault();
-    //     setIscurrentState("adminDashboard");
-    //   },
-    // },
+    {
+      id: "adminDashboard",
+      label: "لوحة التحكم",
+      icon: "ri-dashboard-line",
+      link: "/dashboard",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("adminDashboard");
+      },
+    },
     {
       id: "elections",
       label: "الإنتخابات",

@@ -1,3 +1,6 @@
+import { useState, useEffect, useCallback } from 'react';
+const BASE_URL = 'ws://127.0.0.1:8000/ws';
+
 // Websocket is to be used for 
 
 // General --
@@ -12,10 +15,6 @@
 // Sorting Votes
 // Updating Guarantees/Attendees
 // Chatting [ /ws/chat/campaignSlug ]
-
-import { useState, useEffect, useCallback } from 'react';
-
-const BASE_URL = 'ws://127.0.0.1:8000/ws';
 
 const useWebSocket = (socketUrl = '', handleMessage) => {
     const [socket, setSocket] = useState(null);

@@ -12,7 +12,6 @@ export const Dashboard = ({ }) => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title="الصفحة الرئيسية" pageTitle="الصفحة الرئيسية" />
-
                     <WebSocketChannels />
                 </Container>
             </div>

@@ -1,26 +1,20 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-
-// Public
+// Public ------------------------------
+// Frontend Pages
 import Public from "pages/Public";
 import ElectionGrid from "pages/Public/ElectionGrid";
 import CandidateGrid from "pages/Public/CandidateGrid";
 import AboutUs from "pages/Public/AboutUs";
-
-// Elections
 import ContactUs from "pages/Public/ContactUs";
 import PublicElectionDetails from "pages/Public/PublicElectionDetails";
 
-import Results from "pages/Public/Results";
-
-
-// Auth
+// Authentication Pages
 import Login from "pages/Authentication/Login";
 import ForgetPasswordPage from "pages/Authentication/ForgetPassword";
 import Logout from "pages/Authentication/Logout";
 import Register from "pages/Authentication/Register";
-
 
 // User profile
 import UserProfile from "pages/Authentication/Profile/ViewProfile";
@@ -28,18 +22,15 @@ import ProfileEdit from "pages/Authentication/Profile/EditProfile";
 // user edit profile
 
 
-//Dashboard
+//Dashboard ------------------------------
+// Main
+import Dashboard from "pages/Dashboard";
 
-// ADMIN PAGES
+// Settings
 import Settings from "pages/Admin/Settings";
 import Categories from "pages/Admin/Categories";
 import Groups from "pages/Admin/Groups";
 import GroupPermissions from "pages/Admin/GroupPermissions";
-
-// import Alphabet from "pages/Alphabet";
-
-import Dashboard from "pages/Dashboard";
-
 
 // Election Pages
 import ElectionList from "pages/Elections/ElectionList";
@@ -54,12 +45,15 @@ import CampaignList from "pages/Campaigns/CampaignList";
 import CampaignGrid from "pages/Campaigns/CampaignList/CampaignGrid";
 import CampaignDetails from "pages/Campaigns/CampaignDetails";
 
-
 // User Pages
 import UserList from "pages/Users/UserList";
 
+// Test Pages
+import Test1 from "pages/Tests/Test1";
+import Test2 from "pages/Tests/Test2";
 
-//  Campaign Dashboard ---------------
+
+//  Campaign Dashboard ------------------------------
 import OverviewTab from "pages/Campaigns/CampaignDetails/OverviewTab";
 import MembersTab from "pages/Campaigns/CampaignDetails/MembersTab";
 import GuaranteesTab from "pages/Campaigns/CampaignDetails/GuaranteesTab";
@@ -71,7 +65,7 @@ import EditTab from "pages/Campaigns/CampaignDetails/EditTab";
 
 
 
-//AuthenticationInner pages ---------------
+//AuthenticationInner pages ------------------------------
 import BasicSignIn from "pages/AuthenticationInner/Login/BasicSignIn";
 import CoverSignIn from "pages/AuthenticationInner/Login/CoverSignIn";
 import BasicSignUp from "pages/AuthenticationInner/Register/BasicSignUp";
@@ -153,8 +147,11 @@ const dashboardRoutes = [
 
   // Admin Lists
   { path: "/dashboard/elections/", component: <ElectionList /> },
+  { path: "/dashboard/elections/:slug", component: <ElectionDetails /> },
   { path: "/dashboard/candidates/", component: <CandidateList /> },
+  { path: "/dashboard/candidates/:slug", component: <CandidateDetails /> },
   { path: "/dashboard/campaigns", component: <CampaignList /> },
+  { path: "/dashboard/campaigns/:slug", component: <CampaignDetails /> },
   { path: "/dashboard/users/", component: <UserList /> },
 
   // Settings / Options
@@ -162,11 +159,12 @@ const dashboardRoutes = [
   { path: "/dashboard/settings/groups", component: <Groups /> },
   { path: "/dashboard/settings/group-permissions", component: <GroupPermissions /> },
 
+  // Tests
+  { path: "/dashboard/test1/", component: <Test1 /> },
+  { path: "/dashboard/test2/", component: <Test2 /> },
+
 
   // Single Page
-  { path: "/dashboard/elections/:slug", component: <ElectionDetails /> },
-  { path: "/dashboard/candidates/:slug", component: <CandidateDetails /> },
-  { path: "/dashboard/campaigns/:slug", component: <CampaignDetails /> },
 
 
   // Campaign Special Dashboard

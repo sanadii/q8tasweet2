@@ -7,6 +7,7 @@ import { usePermission } from 'hooks';
 
 // Menus
 import { useAdminMenu } from './Menus/AdminMenu';
+import { useTestMenu } from './Menus/TestMenu';
 import { usePublicMenu } from './Menus/PublicMenu';
 import { useSettingsMenu } from './Menus/SettingsMenu';
 import { useEditorMenu } from './Menus/EditorMenu';
@@ -39,6 +40,7 @@ const Navdata = () => {
 
   // Menus Constants
   const AdminMenu = useAdminMenu(setIscurrentState);
+  const TestMenu = useTestMenu(setIscurrentState);
   const PublicMenu = usePublicMenu(setIscurrentState);
   const CampaignMenu = useCampaignMenu(setIscurrentState);
   const ModeratorMenu = useModeratorMenu(setIscurrentState);
@@ -47,7 +49,7 @@ const Navdata = () => {
   const SettingsMenu = useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings, isSettings);
 
   const menuItems = [
-    ...(canChangeConfig ? [...AdminMenu, ...SettingsMenu] : []),
+    ...(canChangeConfig ? [...AdminMenu, ...SettingsMenu, ...TestMenu] : []),
     // ...(isAdmin || isEditor ? EditorMenu : []),
     // ...(isAdmin || isModerator ? ModeratorMenu : []),
     // ...(isAdmin || isContributor ? ContributorMenu : []),

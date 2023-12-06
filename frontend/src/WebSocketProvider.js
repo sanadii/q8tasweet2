@@ -1,21 +1,34 @@
-import React, { createContext, useContext, useCallback } from 'react';
-import { useWebSocket } from 'hooks';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const WebSocketContext = createContext(null);
 
 export const WebSocketProvider = ({ children }) => {
-    // useWebSocket hook can be used here directly if it's intended to be the same for the whole app
-    // const [socket, send] = useWebSocket('UmUXPn8A'); // Replace 'defaultType' with your default socket type
-    const [socket, send] = useWebSocket('sorting', 'q8Elections');
+    const [socket, setSocket] = useState(null);
 
-    // If you need to create different socket connections based on type, consider creating a custom hook
-    const createSocketConnection = useCallback((type) => {
-        // Logic to create a new socket connection based on type
-        // This could involve calling useWebSocket or other logic
-    }, []);
+    useEffect(() => {
+        // Define the WebSocket URL
+        const socketUrl = `ws://127.0.0.1:8000/ws/sorting/UmUXPn8A/`;
+
+        // Create a new WebSocket connection
+        const newSocket = new WebSocket(socketUrl);
+        newSocket.onopen = () => setSocket(newSocket);
+        newSocket.onclose = () => setSocket(null);
+        // Add additional event handlers (message, error, etc.) as needed
+
+        // Cleanup function
+        return () => {
+            newSocket.close();
+        };
+    }, []); // Empty dependency array to run only once
+
+    const send = (data) => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(data);
+        }
+    };
 
     return (
-        <WebSocketContext.Provider value={{ socket, send, createSocketConnection }}>
+        <WebSocketContext.Provider value={{ socket, send }}>
             {children}
         </WebSocketContext.Provider>
     );

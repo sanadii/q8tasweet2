@@ -5,7 +5,18 @@ from webSocket.consumers.NotificationConsumer import NotificationConsumer
 from webSocket.consumers.GlobalConsumer import GlobalConsumer
 # from .consumers import consumers
 
+# // General --
+# // Notifications [ /ws/notifications ]
+# // Chatting [ /ws/chat/uuid ]
 
+# // Election -- [ ws/election/<str:socketUrl>/ ]
+# // Sorting
+# // Chatting
+
+# // Campaigns -- [ ws/campaigns/<str:socketUrl> ]
+# // Sorting Votes
+# // Updating Guarantees/Attendees
+# // Chatting [ /ws/chat/campaignSlug ]
 
 websocket_urlpatterns = [
     path('ws/election/<str:slug>/', ElectionConsumer.as_asgi()),
