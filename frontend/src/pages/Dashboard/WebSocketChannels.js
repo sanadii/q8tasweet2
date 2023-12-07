@@ -28,10 +28,12 @@ const dataTypes = [
 
 export const WebSocketChannels = () => {
     const [sockets, setSockets] = useState({});
+
+    const [currentSocketUrl, setCurrentSocketUrl] = useState(null);
     const [messageHistory, setMessageHistory] = useState([]);
     const [inputtedMessage, setInputtedMessage] = useState('');
     const [selectedChannel, setSelectedChannel] = useState(channels[0].channel);
-    const [selectedDataType, setSelectedDataType] = useState('');
+    const [selectedDataType, setSelectedDataType] = useState(dataTypes[0].name)
 
 
     // Connect to a new channel
@@ -49,38 +51,34 @@ export const WebSocketChannels = () => {
             newSocket.onclose = () => {
                 setSockets(prev => {
                     const prevSockets = { ...prev };
-                    delete prevSockets[channel];
+                    prevSockets[channel] = null;
                     return prevSockets;
                 });
             };
 
+            // Listen to WebSocket error event
             newSocket.onerror = (error) => {
                 console.error(`WebSocket error on channel ${channel}:`, error);
+                setSockets(prev => {
+                    const prevSockets = { ...prev };
+                    prevSockets[channel] = null; // or handle it as you see fit
+                    return prevSockets;
+                });
             };
-
-
-            // Listen to WebSocket error event
-            // newSocket.onerror = (error) => {
-            //     console.error(`WebSocket error on channel ${channel}:`, error);
-            //     setSockets(prev => {
-            //         const prevSockets = { ...prev };
-            //         prevSockets[channel] = null; // or handle it as you see fit
-            //         return prevSockets;
-            //     });
-            // };
 
             newSocket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
+                console.log("event: ", event)
+
                 setMessageHistory(prev => [...prev, {
                     channel: data.channel,
-                    dataTypes: 'Votting',
+                    dataType: selectedDataType,
                     type: selectedDataType,
                     message: data.message,
                 }]);
             };
         }
     };
-
 
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(currentSocketUrl, {
@@ -153,7 +151,7 @@ export const WebSocketChannels = () => {
         };
 
     };
-
+    console.log("messageHistory: ", messageHistory)
 
     const renderChannel = (channel) => {
         const isConnected = sockets[channel] && sockets[channel].readyState === WebSocket.OPEN;
@@ -175,7 +173,7 @@ export const WebSocketChannels = () => {
                         <h6>{channel.charAt(0).toUpperCase() + channel.slice(1)} Messages</h6>
                         <ul>
                             {messageHistory.filter(msg => msg.channel === channel).map((msg, idx) => (
-                                <li key={idx}>{msg.message}</li>
+                                <li key={idx}>[{msg.dataType}]{msg.message}</li>
                             ))}
                         </ul>
                     </CardBody>
