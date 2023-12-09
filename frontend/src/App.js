@@ -6,9 +6,9 @@ import { WebSocketProvider } from './WebSocketProvider';
 
 function App() {
   return (
-    <WebSocketProvider>
+    // <WebSocketProvider>
       <Route />
-    </WebSocketProvider>
+    // </WebSocketProvider>
   );
 }
 

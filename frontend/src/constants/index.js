@@ -5,7 +5,7 @@
 export { StatusOptions, StatusBadge } from "./StatusOptions";
 export { PriorityOptions, PriorityBadge } from "./PriorityOptions";
 export { GenderOptions } from "./GenderOptions";
-
+export { socketStyles, socketChannels, socketDataTypes, socketGroups } from "./webSocketOptions"
 // Member Options
 
 export { ElectionTypeOptions, ElectionTypeBadge } from "./ElectionTypeOptions";

@@ -1,254 +1,297 @@
 import React, { useState, useEffect } from 'react';
 import useWebSocket from 'react-use-websocket';
-import { Card, CardHeader, CardBody, Button, Input, FormGroup, Label, Col, Row } from 'reactstrap';
+import { Card, CardHeader, CardBody, Button, Col, Row } from 'reactstrap';
 
-const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws/GlobalChannel';
-const CHANNEL = 'GlobalChannel';
+// Form validation imports
+import { FormFields } from "components"
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { Form } from "reactstrap";
 
-const getChannelUrl = (channel, timeout = 2000) => {
+import { UncontrolledAlert } from 'reactstrap';
+import { socketStyles, socketChannels, socketDataTypes, socketGroups } from "constants";
+
+const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws';
+
+const getChannelUrl = (channel, token, timeout = 2000) => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve(`${SERVER_BASE_URL}/${CHANNEL}/${channel === 'global' ? '' : channel + '/'}`);
+            const urlWithToken = token ? `${SERVER_BASE_URL}/${channel}/?token=${token}` : `${SERVER_BASE_URL}/${channel}/`;
+            resolve(urlWithToken);
         }, timeout);
     });
 };
 
-const channels = [
-    { channel: 'Elections' },
-    { channel: 'Campaign' },
-    { channel: 'Candidate' },
-    { channel: 'Global' },
-];
 
-const dataTypes = [
-    { name: 'votting' },
-    { name: 'updatting' },
-    { name: 'notifications' },
-]
+
+
+const READY_STATE_OPEN = 1;
 
 export const WebSocketChannels = () => {
-    const [sockets, setSockets] = useState({});
-
     const [currentSocketUrl, setCurrentSocketUrl] = useState(null);
     const [messageHistory, setMessageHistory] = useState([]);
-    const [inputtedMessage, setInputtedMessage] = useState('');
-    const [selectedChannel, setSelectedChannel] = useState(channels[0].channel);
-    const [selectedDataType, setSelectedDataType] = useState(dataTypes[0].name)
+    const [messageChannel, setMessageChannel] = useState('global');
+
+    // Retrieve token from localStorage or cookies
+    const authUserData = localStorage.getItem('authUser');
+
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA1NzExNzUwLCJpYXQiOjE3MDIxMTE3NTAsImp0aSI6ImU1YWY4NzVjM2ZlOTRjYzA4NWIyMmFmOWY3MDgyYjNiIiwidXNlcl9pZCI6MX0._MeTeLQRexjQTTrmS5D2lpf1-1y-OM7kVAwytjVGsxI";
+
+    console.log("Retrieved Token: ", token); // Check if the token is printed correctly
 
 
-    // Connect to a new channel
-    const connectToChannel = (channel) => {
-        const channelUrl = `${SERVER_BASE_URL}/${channel}/`;
-        if (!sockets[channel]) {
-            const newSocket = new WebSocket(channelUrl);
 
-            // Listen to WebSocket open event
-            newSocket.onopen = () => {
-                setSockets(prev => ({ ...prev, [channel]: newSocket }));
-            };
 
-            // Listen to WebSocket close event
-            newSocket.onclose = () => {
-                setSockets(prev => {
-                    const prevSockets = { ...prev };
-                    prevSockets[channel] = null;
-                    return prevSockets;
-                });
-            };
 
-            // Listen to WebSocket error event
-            newSocket.onerror = (error) => {
-                console.error(`WebSocket error on channel ${channel}:`, error);
-                setSockets(prev => {
-                    const prevSockets = { ...prev };
-                    prevSockets[channel] = null; // or handle it as you see fit
-                    return prevSockets;
-                });
-            };
-
-            newSocket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log("event: ", event)
-
-                setMessageHistory(prev => [...prev, {
-                    channel: data.channel,
-                    dataType: selectedDataType,
-                    type: selectedDataType,
-                    message: data.message,
-                }]);
-            };
-        }
-    };
-
+    console.log("messageHistory: ", messageHistory);
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(currentSocketUrl, {
         share: true,
         shouldReconnect: () => false,
+        credentials: 'include',
+        // token: // Add your token here and send it and use it in the backend?
     });
+    console.log("lastMessage: ", lastMessage);
 
-    const handleSendMessage = () => {
-        const socket = sockets[selectedChannel];
-        if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({
-                channel: selectedChannel,
-                dataType: selectedDataType,
-                message: inputtedMessage
-            }));
-        } else {
-            console.error('WebSocket connection is not open.');
-        }
-    };
-
-
-    useEffect(() => {
-        if (lastMessage !== null) {
-            const data = JSON.parse(lastMessage.data);
-            setMessageHistory(prev => [...prev, {
-                channel: data.channel,
-                dataType: selectedDataType,
-                message: data.message
-            }]);
-        }
-    }, [lastMessage]);
 
 
     // Function to determine the status of each channel
-    const determineChannelStatus = (channel) => {
-        const socket = sockets[channel];
+    const determineChannelStatus = (channelChannel) => {
+        const isConnected = readyState === WebSocket.OPEN && messageChannel === channelChannel;
         let statusText, statusClass;
 
-        if (socket) {
-            switch (socket.readyState) {
-                case WebSocket.CONNECTING:
-                    statusText = 'Connecting';
-                    statusClass = "info";
-                    break;
-                case WebSocket.OPEN:
-                    statusText = 'Connected';
-                    statusClass = "success";
-                    break;
-                case WebSocket.CLOSING:
-                    statusText = 'Closing';
-                    statusClass = "warning";
-                    break;
-                case WebSocket.CLOSED:
-                    statusText = 'Disconnected';
-                    statusClass = "danger";
-                    break;
-                default:
-                    statusText = 'Unknown';
-                    statusClass = "secondary";
-                    break;
-            }
+        if (readyState === WebSocket.CONNECTING) {
+            statusText = 'Connecting';
+            statusClass = "info";
+        } else if (readyState === WebSocket.CLOSING) {
+            statusText = 'Closing';
+            statusClass = "warning";
+        } else if (isConnected) {
+            statusText = 'Connected';
+            statusClass = "success"; // Change this to "warning" for a warning color
         } else {
             statusText = 'Connect';
-            statusClass = "secondary"; // No connection attempt yet
+            statusClass = "danger"; // Change this to "danger" for a danger color
         }
 
         return {
             text: statusText,
             class: statusClass,
         };
-
     };
-    console.log("messageHistory: ", messageHistory)
 
-    const renderChannel = (channel) => {
-        const isConnected = sockets[channel] && sockets[channel].readyState === WebSocket.OPEN;
+
+    // validation
+    const validation = useFormik({
+        initialValues: {
+            dataType: '',
+            group: '',
+            messageStyle: '',
+            message: '',
+        },
+        validationSchema: Yup.object({
+            dataType: Yup.string().required("Data type is required"),
+            group: Yup.string().required("Group type is required"),
+            messageStyle: Yup.string().required("Notification type is required"),
+            message: Yup.string().required("Message is required"),
+        }),
+        onSubmit: (values) => {
+            if (readyState === READY_STATE_OPEN && messageChannel) {
+                sendMessage(JSON.stringify({
+                    channel: messageChannel,
+                    group: values.group,
+                    dataType: values.dataType,
+                    messageStyle: values.messageStyle,
+                    message: values.message
+                }));
+            } else {
+                console.error('WebSocket connection is not open or message channel is not set.');
+            }
+            // validation.resetForm();
+        },
+    });
+
+    useEffect(() => {
+        if (lastMessage !== null) {
+            const data = JSON.parse(lastMessage.data);
+            console.log("data:", data)
+
+            const dataType = data.dataType || validation.values.dataType;
+            if (socketDataTypes.includes(dataType)) {
+                setMessageHistory(prev => ({
+                    ...prev,
+                    [dataType]: [...(prev[dataType] || []), {
+                        channel: data.channel,
+                        group: data.group,
+                        messageStyle: data.messageStyle,
+                        message: data.message
+                    }]
+                }));
+            }
+        }
+    }, [lastMessage, validation.values.dataType, socketDataTypes]);
+
+    const fields = [
+        {
+            id: "data-type",
+            name: "dataType",
+            label: "Data Type",
+            type: "select",
+            options: socketDataTypes.map(dataType => ({
+                id: dataType,
+                label: dataType,
+                value: dataType,
+            })),
+        },
+        {
+            id: "socket-groups",
+            name: "group",
+            label: "socketGroups",
+            type: "select",
+            options: [
+                { id: '', label: '- Choose Group - ', value: '' },
+                ...socketGroups.map(group => ({
+                    id: group.id,
+                    label: group.label,
+                    value: group.value,
+                }))
+            ],
+            condition: validation.values.dataType === "notification",
+        },
+
+        {
+            id: "notification-type",
+            name: "messageStyle",
+            label: "Notification Type",
+            type: "select",
+            options: [
+                { id: '', label: '- Choose Type - ', value: '' },
+                ...socketStyles.map(messageStyle => ({
+                    id: messageStyle.type,
+                    label: messageStyle.type,
+                    value: messageStyle.type,
+                }))
+            ],
+            condition: validation.values.dataType === "notification",
+        },
+        {
+            id: "message",
+            name: "message",
+            label: "Message",
+            type: "text",
+        },
+    ].filter(Boolean);
+
+
+
+    const renderChannelButtons = (channel) => {
         return (
-            <Col md={3} key={channel}>
+            <Col md={2} key={channel}>
+                <Button
+                    color={determineChannelStatus(channel).class}
+                    onClick={async () => {
+                        const url = await getChannelUrl(channel, token); // Check if token is being passed
+                        console.log("WebSocket URL: ", url); // Log the constructed URL
+                        setCurrentSocketUrl(url);
+                        setMessageChannel(channel);
+                    }}
+                    disabled={currentSocketUrl === `${SERVER_BASE_URL}/${channel}/?token=${token}`} // Include the token in the check
+                >
+                    {`${channel.charAt(0).toUpperCase() + channel.slice(1)} Channel`}
+                </Button>
+            </Col>
+        );
+    };
+
+
+
+    const getNotificationDetails = (type) => {
+        return socketStyles.find(nt => nt.type === type) || {};
+    };
+
+
+    const renderDataTypeMessages = (dataTypeName) => {
+        const messages = messageHistory[dataTypeName] || [];
+
+        return (
+            <Col md={3} key={dataTypeName}>
                 <Card>
                     <CardHeader>
-                        <h4>
-                            {`${channel.charAt(0).toUpperCase() + channel.slice(1)} Channel`}
-                        </h4>
-                        <Button
-                            color={determineChannelStatus(channel).class}
-                            onClick={() => connectToChannel(channel)}
-                        >
-                            {determineChannelStatus(channel).text}
-                        </Button>
+                        <h4>{`${dataTypeName.charAt(0).toUpperCase() + dataTypeName.slice(1)} Messages`}</h4>
                     </CardHeader>
                     <CardBody>
-                        <h6>{channel.charAt(0).toUpperCase() + channel.slice(1)} Messages</h6>
-                        <ul>
-                            {messageHistory.filter(msg => msg.channel === channel).map((msg, idx) => (
-                                <li key={idx}>[{msg.dataType}]{msg.message}</li>
-                            ))}
-                        </ul>
+                        {
+                            messages.map((msg, idx) => {
+                                const notificationDetails = getNotificationDetails(msg.messageStyle);
+
+                                return (
+                                    <UncontrolledAlert
+                                        key={idx}
+                                        color={notificationDetails.color}
+                                        className={`${notificationDetails.className} fade show`}>
+                                        <i className={`${notificationDetails.iconClass} label-icon`}></i>
+                                        <strong>{notificationDetails.label}</strong> - {msg.message}
+                                    </UncontrolledAlert>
+                                );
+                            })
+                        }
                     </CardBody>
                 </Card>
             </Col>
         );
     };
 
+
+
+
     return (
         <React.Fragment>
             <Card>
-                <CardHeader>
-                    <h5>Global Channel</h5>
-                </CardHeader>
+                <CardHeader><h5>Global Channel</h5></CardHeader>
                 <CardBody>
-                    <FormGroup>
+                    <Form onSubmit={validation.handleSubmit}>
                         <Row>
-                            <Col xxl={3} md={6}>
-                                <Label>Message:</Label>
-                                <Input
-                                    channel="text"
-                                    placeholder="Enter your message"
-                                    value={inputtedMessage}
-                                    onChange={(e) => setInputtedMessage(e.target.value)}
-                                    className="me-2"
-                                />
-                            </Col>
-
-                            <Col xxl={3} md={6}>
-                                <Label>Type:</Label>
-                                <Input
-                                    type="select"
-                                    value={selectedDataType}
-                                    onChange={(e) => setSelectedDataType(e.target.value)}
-                                    className="me-2"
-                                >
-                                    {dataTypes.map((dataType, index) => (
-                                        <option key={index} value={dataType.name}>
-                                            {dataType.name.charAt(0).toUpperCase() + dataType.name.slice(1)}
-                                        </option>
-                                    ))}
-                                </Input>
-                            </Col>
-
-                            <Col xxl={3} md={6}>
-                                <Label>Channel:</Label>
-                                <Input
-                                    type="select"
-                                    value={selectedChannel}
-                                    onChange={(e) => setSelectedChannel(e.target.value)}
-                                    className="me-2"
-                                >
-                                    {channels.filter(ch => sockets[ch.channel] && sockets[ch.channel].readyState === WebSocket.OPEN)
-                                        .map((channel, index) => (
-                                            <option key={index} value={channel.channel}>
-                                                {channel.channel.charAt(0).toUpperCase() + channel.channel.slice(1)}
-                                            </option>
-                                        ))}
-                                </Input>
+                            {
+                                fields.map(field => {
+                                    return (field.condition === undefined || field.condition) && (
+                                        <FormFields
+                                            key={field.id}
+                                            field={field}
+                                            validation={validation}
+                                            inLineStyle={true}
+                                        />
+                                    );
+                                })
+                            }                        </Row>
+                        <Row className="mt-2">
+                            <Col>
+                                <Button color="primary" type="submit">
+                                    Send Message
+                                </Button>
                             </Col>
                         </Row>
-                        <div>
-                            <Button color="primary" onClick={handleSendMessage}>
-                                Send Message
-                            </Button>
-                        </div>
-                    </FormGroup>
+                    </Form>
                 </CardBody>
             </Card>
 
 
-            <Row>
-                {channels.map(({ channel }) => renderChannel(channel))}
+            <Card>
+                <CardHeader>
+                    <h4>Servers</h4>
+                    <CardBody>
+                        <Row>
+                            {socketChannels.map((channelName) => renderChannelButtons(channelName))}
+                        </Row>
+                    </CardBody>
+                </CardHeader>
+            </Card>
 
+
+            <Row>
+                {socketDataTypes.map((dataTypeName) => renderDataTypeMessages(dataTypeName))}
             </Row>
+
+
         </React.Fragment >
     );
 };

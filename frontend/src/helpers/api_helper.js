@@ -25,6 +25,7 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+
 // Utility function to get a cookie by name
 function getCookie(name) {
   let cookieValue = null;

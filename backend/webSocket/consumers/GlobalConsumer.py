@@ -1,242 +1,162 @@
 import json
-
-from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.utils.timesince import timesince
+from enum import Enum
+from urllib.parse import parse_qs
 
-from apps.auths.models import User
-from apps.campaigns.models import Campaign, CampaignSorting
 
-GLOBAL_CHANNEL = 'GlobalChannel'  # Define the GLOBAL_CHANNEL constant
+class DataType(Enum):
+    NOTIFICATION = 'notification'
+    ELECTION_SORT = 'electionSort'
+    CAMPAIGN_UPDATE = 'campaignUpdate'
+    CHAT = 'Chat'
+    # Add more as needed
 
-# Channels
-# # Election (Sorting, Chat)
-# # Campaign (Sorting, Chat, Updating entries)
-# # Notifications
+class Group(Enum):
+    ALL_USERS = 'allUsers'
+    ADMIN_USERS = 'adminUsers'
+    NON_ADMIN_USERS = 'nonAdminUsers'
+    REGISTERED_USERS = 'registeredUsers'
+    CAMPAIGNS = 'campaigns'
+    # Add more groups as needed
+
+
 
 class GlobalConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        room_type = self.scope['url_route']['kwargs'].get('type', 'global')
-        self.room_group_name = f'{GLOBAL_CHANNEL}_{room_type}_room'
+        # To access the user
+        user = self.scope["user"]
+        print("user:", user)
+        print("self.scope:", self.scope)
 
+        # Extract the channel type from the URL route kwargs
+        self.channel_type = self.scope['url_route']['kwargs'].get('type', 'default')
+        self.room_group_name = f'global_channel_{self.channel_type}'
+
+        # Join the room group
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
+
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
+
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        channel = text_data_json.get('channel', 'public')
-        data_type = text_data_json.get('dataType', 'default')
+        try:
+            data = json.loads(text_data)
+            print("Received data:", data)  # Add this line for debugging
+        except json.JSONDecodeError:
+            print("Invalid JSON received")
+            return  # Or handle as needed
 
-        # Send message to the current room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'send_message',
-                'message': message,
-                'channel': channel,
-                'dataType': data_type
-            }
-        )
+        if not self.is_valid_message(data):
+            print("Invalid message format")
+            return  # Or handle as needed
 
-        # Additionally, send to the specific room group if it's different from the current one
-        specific_room_group_name = f'{GLOBAL_CHANNEL}_{channel}_room'
-        if specific_room_group_name != self.room_group_name:
-            await self.channel_layer.group_send(
-                specific_room_group_name,
-                {
-                    'type': 'send_message',
-                    'message': message,
-                    'channel': channel,
-                    'dataType': data_type
-                }
-            )
+        await self.process_message(data)
+
+
+    def is_valid_message(self, data):
+        required_fields = ['channel', 'group', 'dataType', 'messageStyle', 'message']
+        return all(field in data for field in required_fields)
+
+
+    async def process_message(self, data):
+
+        # Handeling messages based on user role
+        group_value = data.get('group')
+        user = self.scope["user"]
+
+        print(f"User: {user}, Authenticated: {user.is_authenticated}, Is Staff: {user.is_staff}")
+
+        if not user.is_authenticated:
+            return  # Handle unauthenticated user
+
+        # Validate the group value
+        try:
+            group_enum = Group[group_value]
+        except KeyError:
+            print(f"Invalid group: {group_value}")
+            return
+
+        if group_enum == Group.NON_ADMIN_USERS and user.is_staff:
+            return  # Do not send to admin users
+
+        # Handeling Event
+        event = {
+            'type': 'send_message',
+            'channel': data['channel'],
+            'group': data['group'],
+            'message': data['message'],
+            'messageStyle': data['messageStyle'],
+            'dataType': data['dataType'],
+        }
+        print(f"Sending Event: {event}")
+        await self.channel_layer.group_send(self.room_group_name, event)
+
+        # Additional logic for client channel
+        if self.channel_type == 'Client' and data['dataType'] not in ['chat']:
+            client_room_group_name = 'global_channel_Client'
+            print(f"Sending to Client Group: {client_room_group_name}")
+            await self.channel_layer.group_send(client_room_group_name, event)
+
+
+        if data['dataType'] in [
+            DataType.NOTIFICATION.value,
+            DataType.ELECTION_SORT.value,
+            DataType.CAMPAIGN_UPDATE.value
+            ]:
+
+            client_room_group_name = 'global_channel_Client'
+            await self.channel_layer.group_send(client_room_group_name, event)
+
+
 
     async def send_message(self, event):
-        message = event['message']
-        channel = event.get('channel', 'public')
-        data_type = event.get('dataType', 'default')
-
+        print(f"Sending Message: {event}")
+        # Additional conditions can be added here if needed
         await self.send(text_data=json.dumps({
-            'channel': channel,
-            'message': message,
-            'dataType': data_type
+            'channel': event['channel'],
+            'group': event['group'],
+            'message': event['message'],
+            'messageStyle': event['messageStyle'],
+            'dataType': event['dataType'],
         }))
 
+    # async def send_message(self, event):
+    #     # Only proceed if the channel type is 'Client' and the data type is one of the specified ones
+    #     if self.channel_type == 'Client' and event['dataType'] in ['chat']:
+    #         return  # Stop processing further if the message is sent to the 'Client' channel
+
+    #     if event['dataType'] in ['notification']:
+    #         await self.send(text_data=json.dumps({
+    #             'channel': event['channel'],
+    #             'message': event['message'],
+    #             'messageStyle': event['messageStyle'],
+    #             'dataType': event['dataType'],
+    #         }))
+    #         return
+
+    #     if event['dataType'] in ['electionSort']:
+    #         await self.send(text_data=json.dumps({
+    #             'channel': event['channel'],
+    #             'message': event['message'],
+    #             'messageStyle': event['messageStyle'],
+    #             'dataType': event['dataType'],
+    #         }))
+    #         return  # Stop processing further if the message is sent to the 'Client' channel
+        
+    #     if event['dataType'] in ['campaignUpdate']:
+    #         await self.send(text_data=json.dumps({
+    #             'channel': event['channel'],
+    #             'message': event['message'],
+    #             'messageStyle': event['messageStyle'],
+    #             'dataType': event['dataType'],
+    #         }))
+    #         return  # Stop processing further if the message is sent to the 'Client' channel
+        
+
+    #     # For other channel types or data types, do not send the message
+    #     # You can add more logic here if needed for other channels
 
 
-class SortingConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        self.campaign_slug = self.scope['url_route']['kwargs']['slug']
-        self.room_group_name = f'campaign_sorting_{self.campaign_slug}'
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-        await self.accept()
-
-    async def disconnect(self, close_code):
-        # Leave campaign sorting group
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-
-    async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        if text_data_json['type'] == 'vote_update':
-            election_candidate_id = text_data_json['electionCandidateId']
-            new_votes = text_data_json['votes']
-            election_committee_id = text_data_json['electionCommitteeId']
-            await self.update_vote_count(election_candidate_id, new_votes, election_committee_id)
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'send_vote_update',
-                    'electionCandidateId': election_candidate_id,
-                    'votes': new_votes,
-                    'electionCommitteeId': election_committee_id,
-                }
-            )
-            print(f"Received message: {text_data}")  # Debugging line
-
-
-    async def send_vote_update(self, event):
-        # Prepare the message
-        message = {
-            'type': 'vote_update',
-            'electionCandidateId': event['electionCandidateId'],
-            'votes': event['votes'],
-            'electionCommitteeId': event['electionCommitteeId'],
-        }
-        print(f"Sending message to group: {message}")  # Debugging line
-        await self.send(text_data=json.dumps(message))
-
-    @sync_to_async
-    def update_vote_count(self, election_candidate_id, new_votes, election_committee_id):
-        try:
-            # Updated to filter by both candidate ID and committee ID
-            sorting_entry = CampaignSorting.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
-            sorting_entry.votes = new_votes
-            sorting_entry.save()
-            print(f"Vote count updated for candidate {election_candidate_id} in committee {election_committee_id} to {new_votes}")
-        except CampaignSorting.DoesNotExist:
-            # Create a new entry if it doesn't exist
-            sorting_entry = CampaignSorting.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
-            print(f"New CampaignSorting entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
-
-
-
-# class ChatConsumer(AsyncWebsocketConsumer):
-#     async def connect(self):
-#         self.room_name = self.scope['url_route']['kwargs']['room_name']
-#         self.room_group_name = f'chat_{self.room_name}'
-#         self.user = self.scope['user']
-
-#         # Join room group
-#         await self.get_room()
-#         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-#         await self.accept()
-
-#         # Inform user
-#         if self.user.is_staff:
-#             await self.channel_layer.group_send(
-#                 self.room_group_name,
-#                 {
-#                     'type': 'users_update'
-#                 }
-#             )
-
-#     async def disconnect(self, close_code):
-#         # Leave room
-#         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-
-#         if not self.user.is_staff:
-#             await self.set_room_closed()
-
-#     async def receive(self, text_data):
-#         text_data_json = json.loads(text_data)
-#         print("Received JSON:", text_data_json)
-
-#         type = text_data_json['type']
-#         message = text_data_json['message']
-#         created_by = text_data_json.get('createdBy', None)  # Corrected key
-
-#         print('Received created_by:', created_by)
-#         # ... rest of your code ...
-
-#         if type == 'message':
-#             new_message = await self.create_message(message, created_by)
-
-#             # Send message to group / room
-#             await self.channel_layer.group_send(
-#                 self.room_group_name, {
-#                     'type': 'chat_message',
-#                     'message': message,
-#                     'created_by': created_by,
-#                     'created_at': timesince(new_message.created_at),
-#                 }
-#             )
-#         elif type == 'update':
-#             print('is update')
-#             # Send update to the room
-#             await self.channel_layer.group_send(
-#                 self.room_group_name, {
-#                     'type': 'writing_active',
-#                     'message': message,
-#                     'created_by': created_by,
-#                 }
-#             )
-
-#     async def chat_message(self, event):
-#         # Send message to WebSocket (front end)
-#         await self.send(text_data=json.dumps({
-#             'type': event['type'],
-#             'message': event['message'],
-#             'createdBy': event['createdBy'],
-#             'created_at': event['created_at'],
-#             'roomUuid': self.room_name,  # Add the roomUuid here
-#         }))
-
-#     async def writing_active(self, event):
-#         # Send writing is active to room
-#         await self.send(text_data=json.dumps({
-#             'type': event['type'],
-#             'message': event['message'],
-#             'name': event['name'],
-#             'created_by': event['created_by'],
-#             'initials': event['initials'],
-#         }))
-
-#     async def users_update(self, event):
-#         # Send information to the web socket (front end)
-#         await self.send(text_data=json.dumps({
-#             'type': 'users_update'
-#         }))
-
-#     @sync_to_async
-#     def get_room(self):
-#         self.room = ChatRoom.objects.get(uuid=self.room_name)
-
-#     @sync_to_async
-#     def set_room_closed(self):
-#         self.room = ChatRoom.objects.get(uuid=self.room_name)
-#         self.room.status = ChatRoom.CLOSED
-#         self.room.save()
-
-#     @sync_to_async
-#     def create_message(self, message, created_by):
-#         print("Creating message with created_by:", created_by)
-#         new_message = None
-
-#         if created_by:
-#             try:
-#                 user = User.objects.get(pk=created_by)
-#                 new_message = Message.objects.create(
-#                     message=message, created_by=user)
-#                 print("Assigned user:", user)
-#             except User.DoesNotExist:
-#                 print("User not found for ID:", created_by)
-#                 # Handle the case where the user does not exist
-
-#         if new_message:
-#             self.room.messages.add(new_message)
-
-#         return new_message

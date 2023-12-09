@@ -75,11 +75,9 @@ INSTALLED_APPS = [
 
 # Order is important TODO: for more info to be written
 MIDDLEWARE = [
-
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     
     'django.middleware.common.CommonMiddleware',
@@ -88,8 +86,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django_hosts.middleware.HostsRequestMiddleware',
 
+    # 'django_hosts.middleware.HostsRequestMiddleware',
     # 'admin_reorder.middleware.ModelAdminReorder',
 ]
 

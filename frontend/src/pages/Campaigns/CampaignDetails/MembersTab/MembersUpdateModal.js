@@ -1,190 +1,39 @@
-// React & Redux
-import React, { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateCampaignMember } from "store/actions";
-import { userSelector, campaignSelector } from 'Selectors';
+<!-- Primary Alert -->
+<UncontrolledAlert color="primary" className="alert-solid alert-dismissible bg-primary text-white alert-label-icon fade show">
+    <i className="ri-user-smile-line label-icon"></i><strong>Primary</strong> -Label icon alert 
+</UncontrolledAlert>
 
-// Component & Constants imports 
-import { useSupervisorMembers, useCampaignRoles } from "hooks";
+<!-- Secondary Alert -->
+<UncontrolledAlert color="secondary" className="alert-solid alert-dismissible bg-secondary text-white alert-label-icon fade show">
+    <i className="ri-check-double-line label-icon"></i><strong>Secondary</strong> - Label icon alert
+</UncontrolledAlert>
 
-// Form validation imports
-import { FormFields } from "components"
-import * as Yup from "yup";
-import { useFormik } from "formik";
+<!-- Success Alert -->
+<UncontrolledAlert color="success" className="alert-solid alert-dismissible bg-success text-white alert-label-icon fade show">
+    <i className="ri-notification-off-line label-icon"></i><strong>Success</strong> - Label icon alert
+</UncontrolledAlert>
 
-// Reactstrap (UI) imports
-import { ModalBody, Form } from "reactstrap";
+<!-- Danger Alert -->
+<UncontrolledAlert color="danger" className="alert-solid alert-dismissible bg-danger text-white alert-label-icon fade show mb-xl-0">
+    <i className="ri-error-warning-line label-icon"></i><strong>Danger</strong> - Label icon alert
+</UncontrolledAlert>
 
-const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
-  const dispatch = useDispatch();
+<!-- Warning Alert -->
+<UncontrolledAlert color="warning" className="alert-solid alert-dismissible bg-warning text-white alert-label-icon fade show">
+    <i className="ri-alert-line label-icon"></i><strong>warning</strong> - Label icon alert
+</UncontrolledAlert>
 
-  // State Managemenet
-  const { currentUser } = useSelector(userSelector);
-  const {
-    currentCampaignMember,
-    campaignId,
-    campaignMembers,
-    campaignRoles,
-    campaignElectionCommittees,
-  } = useSelector(campaignSelector);
+<!-- Info Alert -->
+<UncontrolledAlert color="info" className="alert-solid alert-dismissible bg-info text-white alert-label-icon fade show">
+    <i className="ri-airplay-line label-icon"></i><strong>Info</strong> - Label icon alert
+</UncontrolledAlert>
 
-  // Campaign Supervisor Options
-  const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
-  const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
-  const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
+<!-- Light Alert -->
+<UncontrolledAlert color="light" className="alert-solid alert-dismissible bg-light text-white alert-label-icon fade show">
+    <i className="ri-mail-line label-icon"></i><strong>Light</strong> - Label icon alert
+</UncontrolledAlert>
 
-  useEffect(() => {
-    setCampaignCommitteeList(campaignElectionCommittees);
-  }, [campaignElectionCommittees]);
-
-
-  // Form Validation
-  const validation = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      id: (campaignMember && campaignMember.id) || "",
-      role: (campaignMember && campaignMember.role) || "",
-      committee: (campaignMember && campaignMember.committee) || "",
-      supervisor: (campaignMember && campaignMember.supervisor) || "",
-      phone: (campaignMember && campaignMember.phone) || "",
-      notes: (campaignMember && campaignMember.notes) || "",
-    },
-    validationSchema: Yup.object({
-      role: Yup.number().integer().required("role is required"),
-      supervisor: Yup.number().integer(),
-      committee: Yup.number().integer(),
-    }),
-    onSubmit: (values) => {
-
-      const requiresSupervisor = ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(getRoleString(values.role, campaignRoles));
-      const requiresCommittee = ["campaignAttendant", "campaignSorter"].includes(getRoleString(values.role, campaignRoles));
-
-      const updatedCampaignMember = {
-        id: campaignMember ? campaignMember.id : 0,
-        role: parseInt(values.role, 10),
-        supervisor: requiresSupervisor ? parseInt(values.supervisor, 10) : '',
-        committee: requiresCommittee ? parseInt(values.committee, 10) : '',
-        phone: values.phone,
-        notes: values.notes,
-      };
-      dispatch(updateCampaignMember(updatedCampaignMember));
-      validation.resetForm();
-    },
-  });
-
-
-  // Show formFields based on Selected Role String
-  const getRoleString = useCallback((roleId, roles) => {
-    const roleObj = roles.find(role => role.id.toString() === roleId.toString());
-    return roleObj ? roleObj.name : null;
-  }, [campaignRoles]);
-
-  const [selectedRole, setSelectedRole] = useState(validation.values.role);
-
-  useEffect(() => {
-    setSelectedRole(validation.values.role);
-  }, [validation.values.role]);
-
-  const selectedRoleString = getRoleString(selectedRole, campaignRoles);
-
-  const isCurrentUserCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
-
-  const fields = [
-    isCurrentUserCampaignMember && {
-      id: "role-field",
-      name: "role",
-      label: "العضوية",
-      type: "select",
-      options: filteredRoleOptions.map(role => ({
-        id: role.id,
-        label: role.displayName,
-        role: role.name,
-        value: role.id
-      })),
-    },
-    {
-      id: "supervisor-field",
-      name: "supervisor",
-      label: "المشرف",
-      type: "select",
-      options: [
-        { id: '', label: '- اختر المشرف - ', value: '' }, // Add this default option
-        ...supervisorOptions.map(supervisor => ({
-          id: supervisor.id,
-          label: supervisor.name,
-          value: supervisor.id
-        }))
-      ],
-      condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(selectedRoleString),
-    },
-    {
-      id: "committee-field",
-      name: "committee",
-      label: "اللجنة",
-      type: "select",
-      options: [
-        { id: '', label: '- اختر اللجنة - ', value: '' }, // Add this default option
-        ...campaignCommitteeList.map(committee => ({
-          id: committee.id,
-          label: committee.name,
-          value: committee.id
-        }))
-      ],
-      condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
-    },
-    {
-      id: "phone-field",
-      name: "phone",
-      label: "الهاتف",
-      type: "text",
-    },
-    {
-      id: "notes-field",
-      name: "notes",
-      label: "ملاحظات",
-      type: "textarea",
-    },
-  ].filter(Boolean); // This will remove any falsey values from the array, e.g., if isCurrentUserCampaignMember is false
-
-
-  // Get formFields & Handle Form Submission
-  const handleUpdateButton = useCallback(() => validation.submitForm(), [validation]);
-
-  useEffect(() => {
-    setOnModalSubmit(() => handleUpdateButton);
-    return () => setOnModalSubmit(null);
-  }, []);
-
-  return (
-    <Form
-      className="tablelist-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        validation.handleSubmit();
-      }}
-    >
-      <ModalBody className="vstack gap-3">
-        <input type="hidden" id="id-field" />
-        <h4>
-          <strong>
-            [{validation.values.id}] {validation.values.fullName}
-          </strong>
-        </h4>
-        {
-          fields.map(field => {
-            return (field.condition === undefined || field.condition) && (
-              <FormFields
-                key={field.id}
-                field={field}
-                validation={validation}
-                inLineStyle={true}
-              />
-            );
-          })
-        }
-      </ModalBody>
-    </Form >
-  );
-};
-
-export default MembersUpdateModal;
+<!-- Dark Alert -->
+<UncontrolledAlert color="dark" className="alert-solid alert-dismissible bg-dark text-white alert-label-icon fade show mb-0">
+    <i className="ri-refresh-line label-icon"></i><strong>Dark</strong> - Label icon alert
+</UncontrolledAlert>
