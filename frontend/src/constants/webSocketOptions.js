@@ -1,4 +1,4 @@
-export const socketStyles = [
+export const messageTypes = [
     {
         type: 'primary',
         color: 'primary',
@@ -58,16 +58,23 @@ export const socketStyles = [
 ];
 
 
+// This is used to differentiation [userGroups] to specific channel in the backend
 export const socketChannels = [
     'Global',
     'Client',
-    // 'Elections',
     // 'Campaign',
+    // 'Elections',
     // 'Candidate',
     // 'Chat',
 ];
 
-export const socketDataTypes =
+export const notificationGroup = [
+    'users',        // userGroups
+    'elections',     // electionSlug
+    'campaigns',     // All active / Active campaignSlug
+];
+
+export const dataTypes =
     [
         'notification',
         'electionSort',
@@ -75,7 +82,7 @@ export const socketDataTypes =
         'chat',
     ];
 
-export const socketGroups = [
+export const userGroups = [
     {
         id: '1',
         label: 'All Users',
@@ -88,17 +95,12 @@ export const socketGroups = [
     },
     {
         id: '3',
-        label: 'Registered Users',
-        value: 'registeredUsers',
+        label: 'Non Admin Users',
+        value: 'nonAdminUsers',
     },
     {
         id: '4',
-        label: 'Campaigns',
-        value: 'campaigns',
-    },
-    {
-        id: '5',
-        label: 'Non Admin Users',
-        value: 'nonAdminUsers',
+        label: 'Registered Users',
+        value: 'registeredUsers',
     },
 ];

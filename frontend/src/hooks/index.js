@@ -21,6 +21,11 @@ export { useCategoryManager } from "./CategoryHooks";
 // Campaigns
 export { useSupervisorMembers, useCampaignRoles } from "./CampaignHooks";
 export { useCurrentCampaignMemberRole, useCampaignMemberRoles } from "./useCampaignMemberRoles";
+
 // Global
 export { useDelete } from "./useDelete";
 export { useFetchDataIfNeeded } from "./useFetchDataIfNeeded";
+
+
+// Socket
+export { useChannelStatuses } from "./webSocket/useChannelStatus";

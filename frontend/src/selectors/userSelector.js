@@ -15,6 +15,7 @@ export const userSelector = createSelector(
         user: usersState.currentUser,
         userId: usersState.currentUser.id,
         currentUser: usersState.currentUser,
+        userCampaigns: usersState.currentUser.campaigns,
         currentUserCampaigns: usersState.currentUser.campaigns,
         campaignModerators: usersState.campaignModerators,
     })

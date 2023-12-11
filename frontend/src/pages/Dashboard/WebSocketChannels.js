@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { userSelector } from 'Selectors';
+
 import useWebSocket from 'react-use-websocket';
 import { Card, CardHeader, CardBody, Button, Col, Row } from 'reactstrap';
 
-// Form validation imports
+// Form Field validation & Fields
 import { FormFields } from "components"
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Form } from "reactstrap";
+// import { fields } from "./WebSocketFields";
+
 
 import { UncontrolledAlert } from 'reactstrap';
-import { socketStyles, socketChannels, socketDataTypes, socketGroups } from "constants";
+import { notificationGroup, messageTypes, socketChannels, dataTypes, userGroups } from "constants";
+import { useChannelStatuses } from 'hooks';
 
 const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws';
 
@@ -23,87 +29,79 @@ const getChannelUrl = (channel, token, timeout = 2000) => {
 };
 
 
-
-
 const READY_STATE_OPEN = 1;
 
 export const WebSocketChannels = () => {
+
+    // State Management
+    const { userCampaigns } = useSelector(userSelector);
     const [currentSocketUrl, setCurrentSocketUrl] = useState(null);
     const [messageHistory, setMessageHistory] = useState([]);
     const [messageChannel, setMessageChannel] = useState('global');
 
     // Retrieve token from localStorage or cookies
     const authUserData = localStorage.getItem('authUser');
-
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA1NzExNzUwLCJpYXQiOjE3MDIxMTE3NTAsImp0aSI6ImU1YWY4NzVjM2ZlOTRjYzA4NWIyMmFmOWY3MDgyYjNiIiwidXNlcl9pZCI6MX0._MeTeLQRexjQTTrmS5D2lpf1-1y-OM7kVAwytjVGsxI";
 
     console.log("Retrieved Token: ", token); // Check if the token is printed correctly
-
-
-
-
-
     console.log("messageHistory: ", messageHistory);
 
+    // webSocket Hook Connection
     const { sendMessage, lastMessage, readyState } = useWebSocket(currentSocketUrl, {
         share: true,
         shouldReconnect: () => false,
         credentials: 'include',
         // token: // Add your token here and send it and use it in the backend?
     });
-    console.log("lastMessage: ", lastMessage);
+
+    const channelStatuses = useChannelStatuses(socketChannels, readyState, messageChannel);
 
 
-
-    // Function to determine the status of each channel
-    const determineChannelStatus = (channelChannel) => {
-        const isConnected = readyState === WebSocket.OPEN && messageChannel === channelChannel;
-        let statusText, statusClass;
-
-        if (readyState === WebSocket.CONNECTING) {
-            statusText = 'Connecting';
-            statusClass = "info";
-        } else if (readyState === WebSocket.CLOSING) {
-            statusText = 'Closing';
-            statusClass = "warning";
-        } else if (isConnected) {
-            statusText = 'Connected';
-            statusClass = "success"; // Change this to "warning" for a warning color
-        } else {
-            statusText = 'Connect';
-            statusClass = "danger"; // Change this to "danger" for a danger color
-        }
-
-        return {
-            text: statusText,
-            class: statusClass,
-        };
-    };
-
-
-    // validation
+    // Form validation
     const validation = useFormik({
         initialValues: {
             dataType: '',
-            group: '',
-            messageStyle: '',
+            notificationGroup: '',
+            userGroup: '',
+            campaign: '',
+            election: '',
+            messageType: '',
             message: '',
         },
+
         validationSchema: Yup.object({
             dataType: Yup.string().required("Data type is required"),
-            group: Yup.string().required("Group type is required"),
-            messageStyle: Yup.string().required("Notification type is required"),
+            userGroup: Yup.string().required("Group type is required"),
+            messageType: Yup.string().required("Notification type is required"),
             message: Yup.string().required("Message is required"),
         }),
         onSubmit: (values) => {
             if (readyState === READY_STATE_OPEN && messageChannel) {
-                sendMessage(JSON.stringify({
+                const messageData = {
                     channel: messageChannel,
-                    group: values.group,
                     dataType: values.dataType,
-                    messageStyle: values.messageStyle,
-                    message: values.message
-                }));
+                    messageType: values.messageType,
+                    message: values.message,
+                    notificationGroup: values.notificationGroup,
+                };
+
+                // Conditionally add fields based on notificationGroup
+                switch (values.notificationGroup) {
+                    case 'users':
+                        messageData.userGroup = values.userGroup;
+                        break;
+                    case 'campaigns':
+                        messageData.campaign = values.campaign;
+                        break;
+                    case 'elections':
+                        messageData.election = values.election;
+                        break;
+                    default:
+                        // Handle default case if needed
+                        break;
+                }
+
+                sendMessage(JSON.stringify(messageData));
             } else {
                 console.error('WebSocket connection is not open or message channel is not set.');
             }
@@ -117,19 +115,20 @@ export const WebSocketChannels = () => {
             console.log("data:", data)
 
             const dataType = data.dataType || validation.values.dataType;
-            if (socketDataTypes.includes(dataType)) {
+            if (dataTypes.includes(dataType)) {
                 setMessageHistory(prev => ({
                     ...prev,
                     [dataType]: [...(prev[dataType] || []), {
                         channel: data.channel,
-                        group: data.group,
-                        messageStyle: data.messageStyle,
+                        messageType: data.messageType,
+                        userGroup: data.userGroup,
+                        campaign: data.campaign,
                         message: data.message
                     }]
                 }));
             }
         }
-    }, [lastMessage, validation.values.dataType, socketDataTypes]);
+    }, [lastMessage, validation.values.dataType, dataTypes]);
 
     const fields = [
         {
@@ -137,65 +136,106 @@ export const WebSocketChannels = () => {
             name: "dataType",
             label: "Data Type",
             type: "select",
-            options: socketDataTypes.map(dataType => ({
+            options: dataTypes.map(dataType => ({
                 id: dataType,
                 label: dataType,
                 value: dataType,
             })),
+            colSize: 4,
+
         },
         {
-            id: "socket-groups",
-            name: "group",
-            label: "socketGroups",
+            id: "Notification-group",
+            name: "notificationGroup",
+            label: "Notification Group",
             type: "select",
             options: [
-                { id: '', label: '- Choose Group - ', value: '' },
-                ...socketGroups.map(group => ({
-                    id: group.id,
-                    label: group.label,
-                    value: group.value,
+                { id: '', label: '- Choose Notification Group - ', value: '' },
+                ...notificationGroup.map(item => ({
+                    id: item,
+                    label: item,
+                    value: item,
                 }))
             ],
             condition: validation.values.dataType === "notification",
+            colSize: 4,
+
         },
 
         {
+            id: "socket-groups",
+            name: "userGroup",
+            label: "User Groups",
+            type: "select",
+            options: [
+                { id: '', label: '- Choose User Group - ', value: '' },
+                ...userGroups.map(userGroup => ({
+                    id: userGroup.id,
+                    label: userGroup.label,
+                    value: userGroup.value,
+                }))
+            ],
+            condition: validation.values.notificationGroup === "users",
+            colSize: 4,
+
+        },
+        {
+            id: "campaign-groups",
+            name: "campaign",
+            label: "Campaigns",
+            type: "select",
+            options: [
+                { id: '', label: '- Choose Campaign - ', value: '' },
+                ...userCampaigns.map(campaign => ({
+                    id: campaign.id,
+                    label: campaign.candidate.name,
+                    value: campaign.slug,
+                }))
+            ],
+            condition: validation.values.notificationGroup === "campaigns",
+            colSize: 4,
+
+        },
+        {
             id: "notification-type",
-            name: "messageStyle",
+            name: "messageType",
             label: "Notification Type",
             type: "select",
             options: [
                 { id: '', label: '- Choose Type - ', value: '' },
-                ...socketStyles.map(messageStyle => ({
-                    id: messageStyle.type,
-                    label: messageStyle.type,
-                    value: messageStyle.type,
+                ...messageTypes.map(messageType => ({
+                    id: messageType.type,
+                    label: messageType.type,
+                    value: messageType.type,
                 }))
             ],
             condition: validation.values.dataType === "notification",
+            colSize: 6,
+
         },
         {
             id: "message",
             name: "message",
             label: "Message",
             type: "text",
+            colSize: 12,
+
         },
     ].filter(Boolean);
 
-
-
     const renderChannelButtons = (channel) => {
+        const channelStatus = channelStatuses[channel] || { class: 'secondary' };
+
         return (
             <Col md={2} key={channel}>
                 <Button
-                    color={determineChannelStatus(channel).class}
+                    color={channelStatus.class}
                     onClick={async () => {
-                        const url = await getChannelUrl(channel, token); // Check if token is being passed
-                        console.log("WebSocket URL: ", url); // Log the constructed URL
+                        const url = await getChannelUrl(channel, token);
                         setCurrentSocketUrl(url);
                         setMessageChannel(channel);
                     }}
-                    disabled={currentSocketUrl === `${SERVER_BASE_URL}/${channel}/?token=${token}`} // Include the token in the check
+                    disabled={currentSocketUrl === `${SERVER_BASE_URL}/${channel}/?token=${token}`}
                 >
                     {`${channel.charAt(0).toUpperCase() + channel.slice(1)} Channel`}
                 </Button>
@@ -206,7 +246,7 @@ export const WebSocketChannels = () => {
 
 
     const getNotificationDetails = (type) => {
-        return socketStyles.find(nt => nt.type === type) || {};
+        return messageTypes.find(nt => nt.type === type) || {};
     };
 
 
@@ -222,7 +262,7 @@ export const WebSocketChannels = () => {
                     <CardBody>
                         {
                             messages.map((msg, idx) => {
-                                const notificationDetails = getNotificationDetails(msg.messageStyle);
+                                const notificationDetails = getNotificationDetails(msg.messageType);
 
                                 return (
                                     <UncontrolledAlert
@@ -242,15 +282,13 @@ export const WebSocketChannels = () => {
     };
 
 
-
-
     return (
         <React.Fragment>
             <Card>
-                <CardHeader><h5>Global Channel</h5></CardHeader>
+                <CardHeader><h5>اشعارات</h5></CardHeader>
                 <CardBody>
                     <Form onSubmit={validation.handleSubmit}>
-                        <Row>
+                        <Row className="g-3">
                             {
                                 fields.map(field => {
                                     return (field.condition === undefined || field.condition) && (
@@ -258,11 +296,12 @@ export const WebSocketChannels = () => {
                                             key={field.id}
                                             field={field}
                                             validation={validation}
-                                            inLineStyle={true}
                                         />
                                     );
                                 })
-                            }                        </Row>
+                            }
+                        </Row>
+
                         <Row className="mt-2">
                             <Col>
                                 <Button color="primary" type="submit">
@@ -280,7 +319,24 @@ export const WebSocketChannels = () => {
                     <h4>Servers</h4>
                     <CardBody>
                         <Row>
-                            {socketChannels.map((channelName) => renderChannelButtons(channelName))}
+                            {socketChannels.map((channel) => {
+                                const channelStatus = channelStatuses[channel] || { class: 'secondary' };
+                                return (
+                                    <Col md={2} key={channel}>
+                                        <Button
+                                            color={channelStatus.class}
+                                            onClick={async () => {
+                                                const url = await getChannelUrl(channel, token);
+                                                setCurrentSocketUrl(url);
+                                                setMessageChannel(channel);
+                                            }}
+                                            disabled={currentSocketUrl === `${SERVER_BASE_URL}/${channel}/?token=${token}`}
+                                        >
+                                            {`${channel.charAt(0).toUpperCase() + channel.slice(1)} Channel`}
+                                        </Button>
+                                    </Col>
+                                );
+                            })}
                         </Row>
                     </CardBody>
                 </CardHeader>
@@ -288,7 +344,7 @@ export const WebSocketChannels = () => {
 
 
             <Row>
-                {socketDataTypes.map((dataTypeName) => renderDataTypeMessages(dataTypeName))}
+                {dataTypes.map((dataTypeName) => renderDataTypeMessages(dataTypeName))}
             </Row>
 
 

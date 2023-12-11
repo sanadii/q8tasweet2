@@ -18,9 +18,10 @@ const BASE_URL = 'ws://127.0.0.1:8000/ws';
 
 const useWebSocket = (socketUrl = '', handleMessage) => {
     const [socket, setSocket] = useState(null);
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA1NzExNzUwLCJpYXQiOjE3MDIxMTE3NTAsImp0aSI6ImU1YWY4NzVjM2ZlOTRjYzA4NWIyMmFmOWY3MDgyYjNiIiwidXNlcl9pZCI6MX0._MeTeLQRexjQTTrmS5D2lpf1-1y-OM7kVAwytjVGsxI";
 
     useEffect(() => {
-        const fullPath = socketUrl ? `${BASE_URL}/${socketUrl}/` : BASE_URL;
+        const fullPath = socketUrl ? `${BASE_URL}/${socketUrl}/?token=${token}` : BASE_URL;
         const newSocket = new WebSocket(fullPath);
 
         newSocket.onmessage = handleMessage;
