@@ -160,4 +160,12 @@ const getLoggedinUser = () => {
   return user ? JSON.parse(user) : null;
 };
 
-export { APIClient, setAuthorization, getLoggedinUser };
+
+// Create a function here called getToken
+// Utility function to get the access token
+const getToken = () => {
+  const authUser = sessionStorage.getItem("authUser");
+  return authUser ? JSON.parse(authUser).accessToken : null;
+};
+
+export { APIClient, setAuthorization, getLoggedinUser, getToken };

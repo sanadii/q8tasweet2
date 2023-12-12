@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { campaignSelector, userSelector } from 'Selectors';
 import { TableContainer } from 'components';
 import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
-import { useWebSocket } from 'hooks'; // Update with the correct path
+import useWebSocket from 'react-use-websocket';
+import { useWebSocketContext } from '../../../../utils/WebSocketContext';
+
+const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws';
 
 const SortingTab = () => {
   const { campaign, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
@@ -13,7 +16,6 @@ const SortingTab = () => {
   const committeeId = currentCampaignMember.committee;
   const [candidatesSorting, setCandidatesSorting] = useState([]);
   const campaignSlug = campaign.slug;
-  const socketUrl = `campaigns/${campaignSlug}`;
   const electionId = campaign.election.id;
 
   // Initialize candidatesSorting state and WebSocket
@@ -25,17 +27,19 @@ const SortingTab = () => {
       committeeVote: candidate.committeeSorting.find(cs => cs.electionCommittee === committeeId)?.votes || 0
     }));
     setCandidatesSorting(initialSortingData);
-  }, [campaignElectionCandidates]);
+  }, [campaignElectionCandidates, electionId, committeeId]);
 
+  // webSocket Hook Connection
+  const { sendMessage, lastMessage } = useWebSocketContext();
 
-  const handleWebSocketMessage = useCallback((event) => {
-    const message = JSON.parse(event.data);
-    if (message.type === 'vote_update' && message.electionCommitteeId === committeeId) {
-      updateSortingVotes(message.electionCandidateId, message.votes);
+  useEffect(() => {
+    if (lastMessage !== null) {
+      const message = JSON.parse(lastMessage.data);
+      if (message.type === 'vote_update' && message.electionCommitteeId === committeeId) {
+        updateSortingVotes(message.electionCandidateId, message.votes);
+      }
     }
-  }, [committeeId]);
-
-  const [socket, send] = useWebSocket(socketUrl, handleWebSocketMessage);
+  }, [lastMessage, committeeId]);
 
 
   const updateSortingVotes = (candidateId, newVotes) => {
@@ -47,19 +51,15 @@ const SortingTab = () => {
     }));
   };
 
-  console.log("socket: ", socket)
-
   const sendVoteUpdate = (candidateId, newVotes) => {
-    if (socket) {
-      socket.send(JSON.stringify({
-        type: 'vote_update',
-        electionId: electionId,
-        electionCandidateId: candidateId,
-        electionCommitteeId: committeeId,
-        votes: newVotes
-      }));
-      updateSortingVotes(candidateId, newVotes); // Immediate state update for better UX
-    }
+    sendMessage(JSON.stringify({
+      type: 'vote_update',
+      electionId: electionId,
+      electionCandidateId: candidateId,
+      electionCommitteeId: committeeId,
+      votes: newVotes
+    }));
+    updateSortingVotes(candidateId, newVotes); // Immediate state update for better UX
   };
 
 

@@ -2,6 +2,7 @@
 
 // Sockets
 export { useWebSocket } from "./useWebSocket";
+export { useChannelStatuses } from "./webSocket/useChannelStatus";
 
 // Users & Permissions
 export { useProfile } from "./UserHooks";
@@ -25,7 +26,3 @@ export { useCurrentCampaignMemberRole, useCampaignMemberRoles } from "./useCampa
 // Global
 export { useDelete } from "./useDelete";
 export { useFetchDataIfNeeded } from "./useFetchDataIfNeeded";
-
-
-// Socket
-export { useChannelStatuses } from "./webSocket/useChannelStatus";

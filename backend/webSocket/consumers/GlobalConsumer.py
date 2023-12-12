@@ -30,7 +30,7 @@ class GlobalConsumer(AsyncWebsocketConsumer):
         self.channel_type = self.scope['url_route']['kwargs'].get('type', 'default')
         self.room_group_name = f'global_channel_{self.channel_type}'
 
-        # Join the room userGroup
+        # Join the room notificationGroup
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
@@ -55,30 +55,41 @@ class GlobalConsumer(AsyncWebsocketConsumer):
 
 
     def is_valid_message(self, data):
-        required_fields = ['channel', 'userGroup', 'campaign', 'dataType', 'messageType', 'message']
+        required_fields = ['channel', 'dataType', 'notificationGroup', 'messageType', 'message']
         return all(field in data for field in required_fields)
 
 
     async def process_message(self, data):
-        # Handling messages based on user role
-        group_value = data.get('userGroup')
-        user = self.scope["user"]
+        notificationGroup = data.get('notificationGroup')
+        if notificationGroup == 'users':
+            await self.send_message_to_users(data)
+        elif notificationGroup == 'campaigns':
+            await self.send_message_to_campaigns(data)
+        elif notificationGroup == 'elections':
+            await self.send_message_to_elections(data)
+        else:
+            print(f"Invalid group: {notificationGroup}")
 
+
+    async def send_message_to_users(self, event, data):
         # Check if the user is authenticated
-        if not user.is_authenticated:
-            return  # Handle unauthenticated user
+        userGroup = data.get('userGroup')
 
-        # Check for specific userGroup values
-        if (group_value == 'adminUsers' and not user.is_staff) or \
-           (group_value == 'nonAdminUsers' and user.is_staff):
+        user = self.scope["user"]
+        if not user.is_authenticated:
+            return
+
+        # Check for specific notificationGroup values
+        if (userGroup == 'adminUsers' and not user.is_staff) or \
+           (userGroup == 'nonAdminUsers' and user.is_staff):
             return  # Do not send to non-admin users if 'adminUsers' and vice versa
 
-        # Check for 'registeredUsers' userGroup
-        if group_value == 'registeredUsers' and not user.is_authenticated:
+        # Check for 'registeredUsers' notificationGroup
+        if userGroup == 'registeredUsers' and not user.is_authenticated:
             return  # Do not send to unregistered users
 
         # Logic to send to specific campaign
-        if data['userGroup'] == 'campaigns':
+        if data['notificationGroup'] == 'campaigns':
             campaign_slug = data.get('campaign')  # Assuming campaignSlug is passed in the message
             campaign_room_group_name = f'campaign_{campaign_slug}'
 
@@ -92,17 +103,16 @@ class GlobalConsumer(AsyncWebsocketConsumer):
                 }
             )
 
-        # Check for 'allUsers' userGroup
-        if group_value == 'allUsers':
-            # This userGroup includes all users, so no additional checks are needed
+        # Check for 'allUsers' notificationGroup
+        if userGroup == 'allUsers':
+            # This notificationGroup includes all users, so no additional checks are needed
             pass
 
         # Handeling Event
         event = {
-            'type': 'send_message',
+            'type': 'send_message_to_users',
             'channel': data['channel'],
-            'userGroup': data['userGroup'],
-            'campaign': data['campaign'],
+            'notificationGroup': data['notificationGroup'],
             'message': data['message'],
             'messageType': data['messageType'],
             'dataType': data['dataType'],
@@ -128,52 +138,37 @@ class GlobalConsumer(AsyncWebsocketConsumer):
 
 
 
-    async def send_message(self, event):
+
         print(f"Sending Message: {event}")
         # Additional conditions can be added here if needed
         await self.send(text_data=json.dumps({
             'channel': event['channel'],
-            'userGroup': event['userGroup'],
+            'message': event['message'],
+            'messageType': event['messageType'],
+            'dataType': event['dataType'],
+        }))
+
+
+    async def send_message_to_campaigns(self, event):
+        print(f"Sending Message: {event}")
+        # Additional conditions can be added here if needed
+        await self.send(text_data=json.dumps({
+            'channel': event['channel'],
             'campaign': event['campaign'],
             'message': event['message'],
             'messageType': event['messageType'],
             'dataType': event['dataType'],
         }))
 
-    # async def send_message(self, event):
-    #     # Only proceed if the channel type is 'Client' and the data type is one of the specified ones
-    #     if self.channel_type == 'Client' and event['dataType'] in ['chat']:
-    #         return  # Stop processing further if the message is sent to the 'Client' channel
 
-    #     if event['dataType'] in ['notification']:
-    #         await self.send(text_data=json.dumps({
-    #             'channel': event['channel'],
-    #             'message': event['message'],
-    #             'messageType': event['messageType'],
-    #             'dataType': event['dataType'],
-    #         }))
-    #         return
-
-    #     if event['dataType'] in ['electionSort']:
-    #         await self.send(text_data=json.dumps({
-    #             'channel': event['channel'],
-    #             'message': event['message'],
-    #             'messageType': event['messageType'],
-    #             'dataType': event['dataType'],
-    #         }))
-    #         return  # Stop processing further if the message is sent to the 'Client' channel
-        
-    #     if event['dataType'] in ['campaignUpdate']:
-    #         await self.send(text_data=json.dumps({
-    #             'channel': event['channel'],
-    #             'message': event['message'],
-    #             'messageType': event['messageType'],
-    #             'dataType': event['dataType'],
-    #         }))
-    #         return  # Stop processing further if the message is sent to the 'Client' channel
-        
-
-    #     # For other channel types or data types, do not send the message
-    #     # You can add more logic here if needed for other channels
-
+    async def send_message_to_elections(self, event):
+        print(f"Sending Message: {event}")
+        # Additional conditions can be added here if needed
+        await self.send(text_data=json.dumps({
+            'channel': event['channel'],
+            'election': event['election'],
+            'message': event['message'],
+            'messageType': event['messageType'],
+            'dataType': event['dataType'],
+        }))  
 
