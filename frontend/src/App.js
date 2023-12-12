@@ -1,15 +1,15 @@
-// App.js
 import React from 'react';
-import Route from './Routes';
 import './assets/scss/themes.scss';
-import { WebSocketProvider } from './WebSocketProvider';
+import Route from './Routes';
+import { WebSocketProvider } from 'utils/WebSocketContext';
 
 function App() {
   return (
-    // <WebSocketProvider>
+    <WebSocketProvider channel="Global">
       <Route />
-    // </WebSocketProvider>
+    </WebSocketProvider>
   );
 }
 
 export default App;
+
