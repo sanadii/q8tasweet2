@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 // import useWebSocket from 'react-use-websocket';
 import { Container, Row } from "reactstrap";
 import { BreadCrumb } from "components";
-import WebSocketChannels from "./WebSocketChannels";
+import WebSocketChannels from "./NotificationPanel";
 import NotificationPanel from "./NotificationPanel";
 
 export const Dashboard = ({ }) => {

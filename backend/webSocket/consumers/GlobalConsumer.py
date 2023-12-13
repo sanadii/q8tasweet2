@@ -10,9 +10,6 @@ class DataType(Enum):
     CHAT = 'chat'
     # Add more as needed
 
-
-
-
 class GlobalConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]
@@ -52,26 +49,32 @@ class GlobalConsumer(AsyncWebsocketConsumer):
            (userGroup == 'nonAdminUsers' and user.is_staff):
             return
 
-        await self.send(text_data=json.dumps({
-            'userGroup': userGroup,
-            'message': data['message'],
-            'messageType': data['messageType'],
-            'dataType': data['dataType'],
-        }))
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'broadcast_message',
+                'message': data
+            }
+        )
+
 
     async def send_message_to_campaigns(self, data):
-        await self.send(text_data=json.dumps({
-            'campaign': data['campaign'],
-            'message': data['message'],
-            'messageType': data['messageType'],
-            'dataType': data['dataType'],
-        }))
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'broadcast_message',
+                'message': data
+            }
+        )
 
     async def send_message_to_elections(self, data):
-        await self.send(text_data=json.dumps({
-            'election': data['election'],
-            'message': data['message'],
-            'messageType': data['messageType'],
-            'dataType': data['dataType'],
-        }))
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'broadcast_message',
+                'message': data
+            }
+        )
 
+    async def broadcast_message(self, event):
+        await self.send(text_data=json.dumps(event['message']))

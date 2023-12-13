@@ -10,7 +10,6 @@ import { useFormik } from "formik";
 import { Form } from "reactstrap";
 // import { fields } from "./WebSocketFields";
 
-
 import { UncontrolledAlert } from 'reactstrap';
 import { notificationGroup, messageTypes, dataTypes, userGroups } from "constants";
 import { useWebSocketContext } from 'utils/WebSocketContext';
@@ -22,10 +21,9 @@ export const NotificationPanel = () => {
 
     // State Management
     const { userCampaigns } = useSelector(userSelector);
-    const [messageHistory, setMessageHistory] = useState([]);
 
     // Use global WebSocket context
-    const { sendMessage, lastMessage, readyState } = useWebSocketContext();
+    const { sendMessage, readyState, notificationHistory } = useWebSocketContext();
 
     // Form validation
     const validation = useFormik({
@@ -78,26 +76,7 @@ export const NotificationPanel = () => {
         },
     });
 
-    useEffect(() => {
-        if (lastMessage !== null) {
-            const data = JSON.parse(lastMessage.data);
-            console.log("data:", data)
 
-            // Check if the message was sent by you to avoid processing it again
-            const dataType = data.dataType || validation.values.dataType;
-            if (dataTypes.includes(dataType)) {
-                setMessageHistory(prev => ({
-                    ...prev,
-                    [dataType]: [...(prev[dataType] || []), {
-                        messageType: data.messageType,
-                        userGroup: data.userGroup,
-                        campaign: data.campaign,
-                        message: data.message
-                    }]
-                }));
-            }
-        }
-    }, [lastMessage, validation.values.dataType, dataTypes]);
 
     const fields = [
         {
@@ -193,9 +172,39 @@ export const NotificationPanel = () => {
         return messageTypes.find(nt => nt.type === type) || {};
     };
 
+    const renderNotificaitonMessages = (item) => {
+        const messages = notificationHistory[item.label] || [];
+
+        return (
+            <Col md={3} key={item.label}>
+                <Card>
+                    <CardHeader>
+                        <h4>{`${item.label.charAt(0).toUpperCase() + item.label.slice(1)}`}</h4>
+                    </CardHeader>
+                    <CardBody>
+                        {
+                            messages.map((msg, idx) => {
+                                const notificationDetails = getNotificationDetails(msg.notificationGroup);
+
+                                return (
+                                    <UncontrolledAlert
+                                        key={idx}
+                                        color={notificationDetails.color}
+                                        className={`${notificationDetails.className} fade show`}>
+                                        <i className={`${notificationDetails.iconClass} label-icon`}></i>
+                                        <strong>{notificationDetails.label}</strong> - {msg.message}
+                                    </UncontrolledAlert>
+                                );
+                            })
+                        }
+                    </CardBody>
+                </Card>
+            </Col>
+        );
+    };
 
     const renderDataTypeMessages = (dataTypeName) => {
-        const messages = messageHistory[dataTypeName] || [];
+        const messages = notificationHistory[dataTypeName] || [];
 
         return (
             <Col md={3} key={dataTypeName}>
@@ -258,6 +267,10 @@ export const NotificationPanel = () => {
             </Card>
             <Row>
                 {dataTypes.map((dataTypeName) => renderDataTypeMessages(dataTypeName))}
+            </Row>
+
+            <Row>
+                {notificationGroup.map((item) => renderNotificaitonMessages(item))}
             </Row>
 
 

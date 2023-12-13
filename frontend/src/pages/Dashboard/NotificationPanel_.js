@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { userSelector } from 'Selectors';
-
-import useWebSocket from 'react-use-websocket';
 import { Card, CardHeader, CardBody, Button, Col, Row } from 'reactstrap';
 
 // Form Field validation & Fields
@@ -14,46 +12,30 @@ import { Form } from "reactstrap";
 
 
 import { UncontrolledAlert } from 'reactstrap';
-import { notificationGroup, messageTypes, socketChannels, dataTypes, userGroups } from "constants";
-import { useChannelStatuses } from 'hooks';
+import { notificationGroup, messageTypes, dataTypes, userGroups } from "constants";
 import { useWebSocketContext } from 'utils/WebSocketContext';
-
-const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws';
-
-const getChannelUrl = (channel, token, timeout = 2000) => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            const urlWithToken = token ? `${SERVER_BASE_URL}/${channel}/?token=${token}` : `${SERVER_BASE_URL}/${channel}/`;
-            resolve(urlWithToken);
-        }, timeout);
-    });
-};
 
 
 const READY_STATE_OPEN = 1;
 
-export const WebSocketChannels = () => {
+export const NotificationPanel = () => {
 
     // State Management
     const { userCampaigns } = useSelector(userSelector);
     const [messageHistory, setMessageHistory] = useState([]);
-    const [messageChannel, setMessageChannel] = useState('global');
-
 
     // Use global WebSocket context
     const { sendMessage, lastMessage, readyState } = useWebSocketContext();
-    const channelStatuses = useChannelStatuses(socketChannels, readyState, messageChannel);
-
 
     // Form validation
     const validation = useFormik({
         initialValues: {
-            dataType: '',
-            notificationGroup: '',
-            userGroup: '',
-            campaign: '',
+            dataType: 'notification',
+            notificationGroup: 'users',
+            userGroup: 'allUsers',
+            campaign: 'primary',
             election: '',
-            messageType: '',
+            messageType: 'info',
             message: '',
         },
 
@@ -64,9 +46,8 @@ export const WebSocketChannels = () => {
             message: Yup.string().required("Message is required"),
         }),
         onSubmit: (values) => {
-            if (readyState === READY_STATE_OPEN && messageChannel) {
+            if (readyState === READY_STATE_OPEN) {
                 const messageData = {
-                    channel: messageChannel,
                     dataType: values.dataType,
                     messageType: values.messageType,
                     message: values.message,
@@ -91,7 +72,7 @@ export const WebSocketChannels = () => {
 
                 sendMessage(JSON.stringify(messageData));
             } else {
-                console.error('WebSocket connection is not open or message channel is not set.');
+                console.error('WebSocket connection is not open.');
             }
             // validation.resetForm();
         },
@@ -102,12 +83,12 @@ export const WebSocketChannels = () => {
             const data = JSON.parse(lastMessage.data);
             console.log("data:", data)
 
+            // Check if the message was sent by you to avoid processing it again
             const dataType = data.dataType || validation.values.dataType;
             if (dataTypes.includes(dataType)) {
                 setMessageHistory(prev => ({
                     ...prev,
                     [dataType]: [...(prev[dataType] || []), {
-                        channel: data.channel,
                         messageType: data.messageType,
                         userGroup: data.userGroup,
                         campaign: data.campaign,
@@ -220,7 +201,7 @@ export const WebSocketChannels = () => {
             <Col md={3} key={dataTypeName}>
                 <Card>
                     <CardHeader>
-                        <h4>{`${dataTypeName.charAt(0).toUpperCase() + dataTypeName.slice(1)} Messages`}</h4>
+                        <h4>{`${dataTypeName.charAt(0).toUpperCase() + dataTypeName.slice(1)}`}</h4>
                     </CardHeader>
                     <CardBody>
                         {
@@ -275,37 +256,6 @@ export const WebSocketChannels = () => {
                     </Form>
                 </CardBody>
             </Card>
-
-
-            <Card>
-                <CardHeader>
-                    <h4>Servers</h4>
-                    <CardBody>
-                        <Row>
-                            {socketChannels.map((channel) => {
-                                const channelStatus = channelStatuses[channel] || { class: 'secondary' };
-                                return (
-                                    <Col md={2} key={channel}>
-                                        <Button
-                                            color={channelStatus.class}
-                                            onClick={async () => {
-                                                // const url = await getChannelUrl(channel, token);
-                                                // setCurrentSocketUrl(url);
-                                                setMessageChannel(channel);
-                                            }}
-                                        // disabled={currentSocketUrl === `${SERVER_BASE_URL}/${channel}/?token=${token}`}
-                                        >
-                                            {`${channel.charAt(0).toUpperCase() + channel.slice(1)} Channel`}
-                                        </Button>
-                                    </Col>
-                                );
-                            })}
-                        </Row>
-                    </CardBody>
-                </CardHeader>
-            </Card>
-
-
             <Row>
                 {dataTypes.map((dataTypeName) => renderDataTypeMessages(dataTypeName))}
             </Row>
@@ -315,4 +265,4 @@ export const WebSocketChannels = () => {
     );
 };
 
-export default WebSocketChannels;
+export default NotificationPanel;
