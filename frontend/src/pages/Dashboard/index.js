@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import { Container, Row } from "reactstrap";
 import { BreadCrumb } from "components";
 import WebSocketChannels from "./WebSocketChannels";
+import NotificationPanel from "./NotificationPanel";
 
 export const Dashboard = ({ }) => {
 
@@ -12,7 +13,8 @@ export const Dashboard = ({ }) => {
             <div className="page-content">
                 <Container fluid>
                     <BreadCrumb title="الصفحة الرئيسية" pageTitle="الصفحة الرئيسية" />
-                    <WebSocketChannels />
+                    {/* <WebSocketChannels /> */}
+                    <NotificationPanel />
                 </Container>
             </div>
         </React.Fragment >

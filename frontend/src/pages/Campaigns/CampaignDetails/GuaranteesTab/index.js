@@ -176,9 +176,6 @@ const GuaranteesTab = () => {
   // Filters
   const { filteredData: campaignGuaranteeList, filters, setFilters } = useFilter(campaignGuarantees);
 
-
-  console.log("FF.. campaignGuaranteeList", campaignGuaranteeList);
-  console.log("FF.. filters", filters);
   return (
     <React.Fragment>
       <DeleteModal

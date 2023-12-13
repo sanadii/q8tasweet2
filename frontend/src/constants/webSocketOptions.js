@@ -1,59 +1,35 @@
 export const messageTypes = [
     {
-        type: 'primary',
-        color: 'primary',
-        className: 'alert-solid alert-dismissible bg-primary text-white alert-label-icon',
-        iconClass: 'ri-user-smile-line',
-        label: 'Primary'
+        id: '1',
+        label: 'Info',
+        value: 'info',
+        color: 'info',
+        className: 'alert-solid alert-dismissible bg-info text-white alert-label-icon',
+        iconClass: 'ri-airplay-line',
     },
     {
-        type: 'secondary',
-        color: 'secondary',
-        className: 'alert-solid alert-dismissible bg-secondary text-white alert-label-icon',
-        iconClass: 'ri-check-double-line',
-        label: 'Secondary'
-    },
-    {
-        type: 'success',
-        color: 'success',
-        className: 'alert-solid alert-dismissible bg-success text-white alert-label-icon',
-        iconClass: 'ri-notification-off-line',
-        label: 'Success'
-    },
-    {
-        type: 'danger',
-        color: 'danger',
-        className: 'alert-solid alert-dismissible bg-danger text-white alert-label-icon',
-        iconClass: 'ri-error-warning-line',
-        label: 'Danger'
-    },
-    {
-        type: 'warning',
+        id: '2',
+        value: 'warning',
         color: 'warning',
         className: 'alert-solid alert-dismissible bg-warning text-white alert-label-icon',
         iconClass: 'ri-alert-line',
         label: 'Warning'
     },
     {
-        type: 'info',
-        color: 'info',
-        className: 'alert-solid alert-dismissible bg-info text-white alert-label-icon',
-        iconClass: 'ri-airplay-line',
-        label: 'Info'
+        id: '3',
+        label: 'Danger',
+        value: 'danger',
+        color: 'danger',
+        className: 'alert-solid alert-dismissible bg-danger text-white alert-label-icon',
+        iconClass: 'ri-error-warning-line',
     },
     {
-        type: 'light',
-        color: 'light',
-        className: 'alert-solid alert-dismissible bg-light text-white alert-label-icon',
-        iconClass: 'ri-mail-line',
-        label: 'Light'
-    },
-    {
-        type: 'dark',
-        color: 'dark',
-        className: 'alert-solid alert-dismissible bg-dark text-white alert-label-icon',
-        iconClass: 'ri-refresh-line',
-        label: 'Dark'
+        id: '4',
+        label: 'Success',
+        value: 'success',
+        color: 'success',
+        className: 'alert-solid alert-dismissible bg-success text-white alert-label-icon',
+        iconClass: 'ri-notification-off-line',
     },
 ];
 
@@ -69,9 +45,21 @@ export const socketChannels = [
 ];
 
 export const notificationGroup = [
-    'users',        // userGroups
-    'elections',     // electionSlug
-    'campaigns',     // All active / Active campaignSlug
+    {
+        id: '1',
+        label: 'Users',
+        value: 'users',
+    },
+    {
+        id: '2',
+        label: 'Elections',
+        value: 'elections',
+    },
+    {
+        id: '3',
+        label: 'Campaigns',
+        value: 'campaigns',
+    }
 ];
 
 export const dataTypes =

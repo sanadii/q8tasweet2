@@ -22,7 +22,7 @@ const CampaignDetails = () => {
       <Container fluid>
         {canViewCampaign ? (
           campaign ?
-            <WebSocketProvider>
+            <WebSocketProvider channel="campaigns" slug={slug}>
               <Section />
             </WebSocketProvider>
             : <Loader />
