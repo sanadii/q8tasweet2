@@ -9,7 +9,7 @@ export const useWebSocketContext = () => useContext(WebSocketContext);
 export const WebSocketProvider = ({ children, channel, slug, uuid }) => {
     const token = getToken();
     const [socketUrl, setSocketUrl] = useState(null);
-    const [notificationHistory, setNotificationHistory] = useState([]);
+    const [messageHistory, setMessageHistory] = useState([]);
 
     useEffect(() => {
         const baseUrl = 'ws://127.0.0.1:8000/ws';
@@ -40,11 +40,11 @@ export const WebSocketProvider = ({ children, channel, slug, uuid }) => {
         if (lastMessage !== null) {
             const data = JSON.parse(lastMessage.data);
             console.log("data:", data)
-            console.log("notificationHistory: ", notificationHistory)
+            console.log("messageHistory: ", messageHistory)
 
             // Check if the message was sent by you to avoid processing it again
             const dataType = data.dataType
-            setNotificationHistory(prev => ({
+            setMessageHistory(prev => ({
                 ...prev,
                 [dataType]: [...(prev[dataType] || []), {
                     notificationGroup: data.notificationGroup,
@@ -61,8 +61,8 @@ export const WebSocketProvider = ({ children, channel, slug, uuid }) => {
         sendMessage,
         lastMessage,
         readyState,
-        notificationHistory,
-        setNotificationHistory
+        messageHistory,
+        setMessageHistory
     };
 
     return (

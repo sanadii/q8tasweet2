@@ -25,6 +25,7 @@ import ProfileEdit from "pages/Authentication/Profile/EditProfile";
 //Dashboard ------------------------------
 // Main
 import Dashboard from "pages/Dashboard";
+import ControlPanel from "pages/ControlPanel";
 
 // Settings
 import Settings from "pages/Admin/Settings";
@@ -144,6 +145,7 @@ const publicRoutes = [
 
 const dashboardRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
+  { path: "/control-panel", component: <ControlPanel /> },
 
   // Admin Lists
   { path: "/dashboard/elections/", component: <ElectionList /> },
