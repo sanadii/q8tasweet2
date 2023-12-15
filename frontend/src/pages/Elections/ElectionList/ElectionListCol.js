@@ -74,7 +74,7 @@ const Status = (cellProps) => {
     return acc;
   }, {});
 
-  const { name, badgeClass } = statusMapping[cellProps.row.original.task.status] || {
+  const { name, badgeClass } = statusMapping[cellProps.row.original.status] || {
     name: "غير معرف",
     badgeClass: "badge bg-primary",
   };
@@ -90,7 +90,7 @@ const Priority = (cellProps) => {
     return acc;
   }, {});
 
-  const { name, badgeClass } = priorityMapping[cellProps.row.original.task.priority] || {
+  const { name, badgeClass } = priorityMapping[cellProps.row.original.priority] || {
     name: "غير معرف",
     badgeClass: "badge bg-primary",
   };

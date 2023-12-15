@@ -1,23 +1,27 @@
-# Election Model
 from django.db import models
-from django.db.models.signals import post_save, post_delete
-from django_extensions.db.fields import AutoSlugField, SlugField
-from django.dispatch import receiver
-from django.db.models import Sum
+from apps.configs.models import TrackModel
+from apps.campaigns.models import Campaign
+from apps.elections.models import Election
 
-from django.utils.text import slugify
-import uuid
+USER_GROUP_CHOICES = [
+    ('allUsers', 'All Users'),
+    ('adminUsers', 'Admin Users'),
+    ('nonAdminUsers', 'Non Admin Users'),
+    ('registeredUsers', 'Registered Users'),
+]
 
-from apps.configs.models import TrackModel, TaskModel
+MESSAGE_TYPE_CHOICES = [
+    ('info', 'Info'),
+    ('warning', 'Warning'),
+    ('danger', 'Danger'),
+    ('success', 'Success'),
+]
 
-from helper.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions
-from helper.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 
 class ElectionNotification(TrackModel):
-    # Election Essential Information
-    election = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_elections")
-    message_type = 
-    message = 
+    election = models.ForeignKey(Election, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_elections")
+    message_type = models.CharField(max_length=50, choices=MESSAGE_TYPE_CHOICES)
+    message = models.TextField()
 
     class Meta:
         # managed = False
@@ -30,3 +34,32 @@ class ElectionNotification(TrackModel):
     def __str__(self):
         return f"{self.message}"
     
+class CampaignNotification(TrackModel):
+    campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_campaigns")
+    message_type = models.CharField(max_length=50, choices=MESSAGE_TYPE_CHOICES)
+    message = models.TextField()
+
+    class Meta:
+        db_table = "campaign_notification"
+        verbose_name = "Campaign Notification"
+        verbose_name_plural = "Campaign Notifications"
+        default_permissions = []
+        permissions = []
+
+    def __str__(self):
+        return f"{self.message}"
+
+class UserNotification(TrackModel):
+    user_group = models.CharField(max_length=50, choices=USER_GROUP_CHOICES)
+    message_type = models.CharField(max_length=50, choices=MESSAGE_TYPE_CHOICES)
+    message = models.TextField()
+
+    class Meta:
+        db_table = "user_notification"
+        verbose_name = "User Notification"
+        verbose_name_plural = "User Notifications"
+        default_permissions = []
+        permissions = []
+
+    def __str__(self):
+        return f"{self.message}"

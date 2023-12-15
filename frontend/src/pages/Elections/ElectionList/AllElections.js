@@ -104,8 +104,8 @@ const AllElections = () => {
         attendees: election.attendees,
 
         // Task
-        status: election.task.status,
-        priority: election.task.priority,
+        status: election.status,
+        priority: election.priority,
       });
 
       setIsEdit(true);

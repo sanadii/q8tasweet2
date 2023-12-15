@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'apps.categories',
     'apps.candidates',
     'apps.electors',
+    'apps.notifications',
 ]
 
 # Order is important TODO: for more info to be written
@@ -220,6 +221,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # Adjust the path as needed
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '../frontend/build/static')

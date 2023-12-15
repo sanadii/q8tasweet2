@@ -268,8 +268,6 @@ const AttendeesList = () => {
                 />
 
                 <TableFilters
-                  // Filters
-                  // dataToFilter={}
                   isGlobalFilter={true}
                   preGlobalFilteredRows={true}
                   isGenderFilter={true}

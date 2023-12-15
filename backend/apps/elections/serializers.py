@@ -15,9 +15,9 @@ from apps.elections.models import (
 
 from apps.campaigns.models import CampaignSorting
 
-class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
+class ElectionSerializer(serializers.ModelSerializer):
     """ Serializer for the Election model. """
-    admin_serializer_classes = (TrackMixin, TaskMixin)
+    # admin_serializer_classes = (TrackMixin, TaskMixin)
     name = serializers.SerializerMethodField('get_election_name')
     image = serializers.SerializerMethodField('get_election_image')
     previous_election = serializers.SerializerMethodField()
@@ -28,13 +28,16 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     class Meta:
         model = Election
         fields = [
-            "id", "name", "slug", "image", "due_date",
-            "category", "sub_category", "category_name", "sub_category_name",
+            'id', 'name', 'slug', 'image', 'due_date',
+            'category', 'sub_category', 'category_name', 'sub_category_name',
+            'elect_type', 'elect_result', 'elect_votes', 'elect_seats',
+            'electors', 'electors_males', 'electors_females',
+            'attendees', 'attendees_males', 'attendees_females',
+            'previous_election',
 
-            "previous_election",
-            "elect_type", "elect_result", "elect_votes", "elect_seats",
-            "electors", "electors_males", "electors_females",
-            "attendees", "attendees_males", "attendees_females",
+            # Track & Task Fields
+            'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted',
+            'priority', 'status',
         ]
 
     def get_election_name(self, obj):

@@ -25,8 +25,10 @@ from apps.campaigns.serializers import (
     CampaignSortingSerializer
     )
 
+from apps.notifications.models import CampaignNotification
 from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteeSerializer
 from apps.auths.serializers import GroupSerializer
+from apps.notifications.serializers import CampaignNotificationSerializer
 
 from helper.views_helper import CustomPagination
 from utils.views import (
@@ -100,6 +102,7 @@ class GetCampaignDetails(APIView):
         election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
         campaign_attendees = CampaignAttendee.objects.filter(election=election).select_related('election')
+        campaign_notifications = CampaignNotification.objects.filter(campaign=campaign).select_related('campaign')
 
         # Prepare data for each election candidate
         election_candidates_data = []
@@ -117,6 +120,7 @@ class GetCampaignDetails(APIView):
                 "campaignMembers": CampaignMemberSerializer(campaign_members, many=True, context=context).data,
                 "campaignGuarantees": CampaignGuaranteeSerializer(campaign_guarantees, many=True, context=context).data,
                 "campaignAttendees": CampaignGuaranteeSerializer(campaign_attendees, many=True, context=context).data,
+                "campaignNotifications": CampaignNotificationSerializer(campaign_notifications, many=True, context=context).data,
                 "campaignElectionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
                 "campaignElectionCommittees": ElectionCommitteeSerializer(election_committees, many=True, context=context).data,
                 "campaignElectionSorting": CampaignSortingSerializer(election_candidates_data, many=True, context=context).data,

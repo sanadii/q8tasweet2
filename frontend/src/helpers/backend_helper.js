@@ -149,6 +149,9 @@ export const getCampaignCommitteeSorting = () => api.get(url.GET_CAMPAIGN_COMMIT
 // export const addNewCampaignSorting = (campaignSorting) => api.create(url.ADD_NEW_CAMPAIGN_SORTING, campaignSorting);
 // export const updateCampaignSorting = (campaignSorting) => api.update(url.UPDATE_CAMPAIGN_SORTING + "/" + campaignSorting.id, campaignSorting);
 
+// Notifications
+export const getUserNotifications = () => api.get(url.GET_USER_NOTIFICATIONS);
+
 // Users
 export const getUsers = () => api.get(url.GET_USERS);
 export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + user.id);
