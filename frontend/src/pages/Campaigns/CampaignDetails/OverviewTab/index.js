@@ -18,11 +18,10 @@ import GuaranteeTarget from "./GuaranteeRadialBar"
 import GuaranteeRadialBar from "./GuaranteeRadialBar"
 import GuaranteeTargetBar from "./GuaranteeTargetBar"
 
-
+import OverviewNotifications from "./OverviewNotifications";
 import OverviewCandidate from "./OverviewCandidate";
 import { calculateCampaignData } from 'hooks/campaignCalculation';
 
-// import OverviewNotifications from "./OverviewNotifications";
 
 // UI & Utilities
 import { Col, Row } from "reactstrap";
@@ -53,6 +52,8 @@ const OverviewTab = () => {
       <Row>
         <Col lg={3}>
           <OverviewSidebar />
+          <OverviewNotifications />
+
         </Col>
         <Col lg={9}>
           {/* Candidate */}
@@ -91,7 +92,6 @@ const OverviewTab = () => {
           {canViewCampaignGuarantee &&
             <Guarantors />
           }
-          {/* <OverviewNotifications /> */}
         </Col>
       </Row>
     </React.Fragment>

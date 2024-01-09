@@ -14,7 +14,6 @@ import { UncontrolledAlert } from 'reactstrap';
 import { notificationGroup, messageTypes, dataTypes, userGroups } from "constants";
 import { useWebSocketContext } from 'utils/WebSocketContext';
 
-
 const READY_STATE_OPEN = 1;
 
 export const NotificationPanel = () => {
@@ -44,39 +43,33 @@ export const NotificationPanel = () => {
             message: Yup.string().required("Message is required"),
         }),
         onSubmit: (values) => {
-            if (readyState === READY_STATE_OPEN) {
-                const messageData = {
-                    dataType: values.dataType,
-                    messageType: values.messageType,
-                    message: values.message,
-                    notificationGroup: values.notificationGroup,
-                };
 
-                // Conditionally add fields based on notificationGroup
-                switch (values.notificationGroup) {
-                    case 'users':
-                        messageData.userGroup = values.userGroup;
-                        break;
-                    case 'campaigns':
-                        messageData.campaign = values.campaign;
-                        break;
-                    case 'elections':
-                        messageData.election = values.election;
-                        break;
-                    default:
-                        // Handle default case if needed
-                        break;
-                }
+            const messageData = {
+                dataType: values.dataType,
+                messageType: values.messageType,
+                message: values.message,
+                notificationGroup: values.notificationGroup,
+            };
 
-                sendMessage(JSON.stringify(messageData));
-            } else {
-                console.error('WebSocket connection is not open.');
+            // Conditionally add fields based on notificationGroup
+            switch (values.notificationGroup) {
+                case 'users':
+                    messageData.userGroup = values.userGroup;
+                    break;
+                case 'campaigns':
+                    messageData.campaign = values.campaign;
+                    break;
+                case 'elections':
+                    messageData.election = values.election;
+                    break;
+                default:
+                    // Handle default case if needed
+                    break;
             }
-            // validation.resetForm();
+
+            sendMessage(JSON.stringify(messageData));
         },
     });
-
-
 
     const fields = [
         {
@@ -90,7 +83,6 @@ export const NotificationPanel = () => {
                 value: dataType,
             })),
             colSize: 4,
-
         },
         {
             id: "Notification-group",
@@ -106,7 +98,6 @@ export const NotificationPanel = () => {
             ],
             condition: validation.values.dataType === "notification",
             colSize: 4,
-
         },
         {
             id: "socket-groups",
@@ -122,7 +113,6 @@ export const NotificationPanel = () => {
             ],
             condition: validation.values.notificationGroup === "users",
             colSize: 4,
-
         },
         {
             id: "campaign-groups",
@@ -139,7 +129,6 @@ export const NotificationPanel = () => {
             ],
             condition: validation.values.notificationGroup === "campaigns",
             colSize: 4,
-
         },
         {
             id: "notification-type",
@@ -155,7 +144,6 @@ export const NotificationPanel = () => {
             ],
             condition: validation.values.dataType === "notification",
             colSize: 6,
-
         },
         {
             id: "message",
@@ -183,39 +171,6 @@ export const NotificationPanel = () => {
                 <Card>
                     <CardHeader>
                         <h4>{`${item.label.charAt(0).toUpperCase() + item.label.slice(1)}`}</h4>
-                    </CardHeader>
-                    <CardBody>
-                        {
-                            messages.map((msg, idx) => {
-                                const notificationDetails = getNotificationDetails(msg.messageType);
-
-                                return (
-                                    <UncontrolledAlert
-                                        key={idx}
-                                        color={notificationDetails.color}
-                                        className={`${notificationDetails.className} fade show`}>
-                                        <i className={`${notificationDetails.iconClass} label-icon`}></i>
-                                        <strong>{notificationDetails.label}</strong> - {msg.message}
-                                    </UncontrolledAlert>
-                                );
-                            })
-                        }
-                    </CardBody>
-                </Card>
-            </Col>
-        );
-    };
-
-
-
-    const renderDataTypeMessages = (dataTypeName) => {
-        const messages = messageHistory[dataTypeName] || [];
-
-        return (
-            <Col md={3} key={dataTypeName}>
-                <Card>
-                    <CardHeader>
-                        <h4>{`${dataTypeName.charAt(0).toUpperCase() + dataTypeName.slice(1)}`}</h4>
                     </CardHeader>
                     <CardBody>
                         {
@@ -272,9 +227,6 @@ export const NotificationPanel = () => {
             </Card>
             <Row>
                 {notificationGroup.map((item) => renderNotificationMessages(item))}
-            </Row>
-            <Row>
-                {dataTypes.map((dataTypeName) => renderDataTypeMessages(dataTypeName))}
             </Row>
         </React.Fragment >
     );

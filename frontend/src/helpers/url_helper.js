@@ -117,6 +117,11 @@ export const GET_CAMPAIGN_COMMITTEE_SORTING = "/campaigns/getCampaignCommitteeSo
 // export const ADD_NEW_CAMPAIGN_SORTING = "/campaigns/addNewCampaignSorting";
 // export const UPDATE_CAMPAIGN_SORTING = "/campaigns/updateCampaignSorting";
 
+
+// Notifications
+export const GET_USER_NOTIFICATIONS = "/campaigns/getUserNotifications";
+
+
 // Images
 export const UPLOAD_IMAGE = "/media/uploadImage";
 export const GET_IMAGES = "/media/uploadImage";

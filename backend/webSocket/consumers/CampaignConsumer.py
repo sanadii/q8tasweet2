@@ -67,26 +67,23 @@ class CampaignConsumer(AsyncWebsocketConsumer):
             print(f"New CampaignSorting entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
 
 
-    async def send_campaign_message(self, event):
+    async def campaign_message(self, event):
         # This method handles messages sent from the GlobalConsumer
-        data_type = event.get('dataType', 'default')
-        messageType = event.get('messageType', 'default')
-        message = event['message']
+        message_content = event.get('message', '')
 
-        # Process the message based on its type
-        if data_type == 'campaignUpdate':
-            # Handle campaign update messages
-            # Add your logic here
-            pass
-
+        # Prepare the message to be sent to the WebSocket
+        response_message = {
+            'message': message_content,
+        }
+        
         # Send the message to the WebSocket
-        await self.send(text_data=json.dumps({
-            'dataType': data_type,
-            'messageType': messageType,
-            'message': message,
-        }))
+        await self.send(text_data=json.dumps(response_message))
 
-        print(f"Received campaign message: {message}")
+        print(f"Received campaign message: {response_message}")
+
+
+
+
 
 class SortingConsumer(AsyncWebsocketConsumer):
     async def connect(self):

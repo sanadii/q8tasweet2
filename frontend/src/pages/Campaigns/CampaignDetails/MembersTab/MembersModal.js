@@ -26,7 +26,7 @@ const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) =>
       size="xs"
     >
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        {campaignMember.name}
+        {campaignMember?.name}
       </ModalHeader>
 
       <ModalBody className="p-4">

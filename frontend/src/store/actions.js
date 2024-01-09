@@ -20,6 +20,7 @@ export * from "./electors/action";
 
 // System
 export * from "./uploadImage/action";
+export * from "./notifications/action";
 
 
 // Settings

@@ -1,0 +1,7 @@
+// UserNotification Success / Error
+export const API_RESPONSE_SUCCESS = "API_RESPONSE_SUCCESS";
+export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
+
+// Get UserNotifications
+export const GET_USER_NOTIFICATIONS = "GET_USER_NOTIFICATIONS";
+export const GET_CAMPAIGN_NOTIFICATIONS = "GET_CAMPAIGN_NOTIFICATIONS";

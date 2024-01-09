@@ -59,7 +59,7 @@ const Guarantees = (props) => {
     const guaranteeCountForMember = campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
     const campaignMemberId = cellProps.row.original.role;
     const campaignRole = campaignRoles.find((option) => option.id === campaignMemberId);
-    const campaignMemberRole = campaignRole.name;
+    const campaignMemberRole = campaignRole?.name;
     return (
         (!canChangeCampaignCoordinator &&
             !["campaignModerator", "campaignCandidate", "campaignCoordinator"].includes(campaignMemberRole))
@@ -142,7 +142,7 @@ const Actions = (props) => {
 
     const campaignMemberId = cellProps.row.original.role;
     const campaignRole = campaignRoles.find((option) => option.id === campaignMemberId);
-    const campaignMemberRole = campaignRole.name;
+    const campaignMemberRole = campaignRole?.name;
 
 
     return (

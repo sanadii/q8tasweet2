@@ -1,5 +1,6 @@
 # helper/base_serializer.py
 from rest_framework import serializers
+from collections.abc import Iterable
 from apps.auths.models import User
 import json
 
@@ -62,8 +63,6 @@ class TaskMixin(serializers.BaseSerializer):
     based on the user’s administrative status.
     """
 
-from rest_framework import serializers
-from collections.abc import Iterable  # Import Iterable to check if an object is iterable
 
 
 class AdminFieldMixin(serializers.Serializer):

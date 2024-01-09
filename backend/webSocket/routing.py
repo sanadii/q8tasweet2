@@ -2,7 +2,7 @@ from django.urls import path, re_path
 from channels.routing import ProtocolTypeRouter, URLRouter, ChannelNameRouter
 
 from webSocket.consumers.ElectionConsumer import ElectionConsumer
-from webSocket.consumers.SortingConsumer import SortingConsumer, CampaignConsumer
+from webSocket.consumers.CampaignConsumer import CampaignConsumer, CampaignConsumer
 from webSocket.consumers.NotificationConsumer import NotificationConsumer
 from webSocket.consumers.GlobalConsumer import GlobalConsumer
 

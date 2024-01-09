@@ -35,6 +35,7 @@ import Layout from "./layouts/reducer";
 
 // Settings
 import Categories from "./categories/reducer";
+import Notifications from "./notifications/reducer";
 
 //API Key
 const rootReducer = combineReducers({

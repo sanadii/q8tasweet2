@@ -19,6 +19,7 @@ import electorSaga from "./electors/saga";
 
 // System
 import UploadImageSaga from "./uploadImage/saga";
+import NotificationSaga from "./notifications/saga";
 
 // Settings
 import LayoutSaga from "./layouts/saga";
@@ -49,6 +50,7 @@ export default function* rootSaga() {
     fork(LayoutSaga),
     fork(UploadImageSaga),
     fork(Categories),
+    fork(NotificationSaga),
 
   ]);
 }

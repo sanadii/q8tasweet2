@@ -38,10 +38,6 @@ export const messageTypes = [
 export const socketChannels = [
     'Global',
     'Client',
-    // 'Campaign',
-    // 'Elections',
-    // 'Candidate',
-    // 'Chat',
 ];
 
 export const notificationGroup = [
