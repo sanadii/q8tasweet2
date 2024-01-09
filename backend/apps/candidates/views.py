@@ -9,8 +9,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 
 # Tasweet Apps
-from apps.candidates.models import Candidate
-from apps.candidates.serializers import CandidateSerializer
+from apps.candidates.models import Candidate, Party
+from apps.candidates.serializers import CandidateSerializer, PartySerializer
 
 from apps.elections.models import ElectionCandidate
 from apps.elections.serializers import ElectionCandidateSerializer
@@ -128,34 +128,108 @@ class DeleteCandidate(APIView):
             return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)
 
 
-# class GetCandidateDetails(APIView):
-#     def get(self, request, id):
-#         candidate = get_object_or_404(Candidate, id=id)
-#         context = {"request": request}
+# Parties
+class GetParties(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request, *args, **kwargs):
+        parties_data = Party.objects.all()
+        paginator = CustomPagination()
+        paginated_parties = paginator.paginate_queryset(parties_data, request)
+        
+        # Passing context with request to the serializer
+        context = {"request": request}
+        data_serializer = PartySerializer(paginated_parties, many=True, context=context)
+        
+        return paginator.get_paginated_response(data_serializer.data)
 
-#         candidate_candidates = CandidateCandidates.objects.filter(candidate=candidate).prefetch_related('candidate').only('id')
-#         candidate_committees = CandidateCommittees.objects.filter(candidate=candidate).select_related('candidate')
+class GetPartyDetails(APIView):
+    def get(self, request, slug):
+        party = get_object_or_404(Party, slug=slug)
+    # def get(self, request, id):
+    #     party = get_object_or_404(Party, id=id)
+        context = {"request": request}
 
-#         return Response({
-#             "data": {
-#                 "candidateDetails": self.get_candidate_data(candidate, context),
-#                 "candidateCandidates": self.get_candidate_candidates(candidate_candidates, context),
-#                 "candidateCommittees": self.get_candidate_committees(candidate_committees, context),
-#                 "candidateCampaigns": self.get_candidate_campaigns(candidate, context),
-#             },
-#             "code": 200
-#         })
+        return Response({
+            "data": {
+                "partyDetails": self.get_party_data(party, context),
+            },
+            "code": 200
+        })
 
-#     def get_candidate_data(self, candidate, context):
-#         return CandidateSerializer(candidate, context=context).data
+    def get_party_data(self, party, context):
+        return PartySerializer(party, context=context).data
 
-#     def get_candidate_candidates(self, candidate_candidates, context):
-#         return CandidateCandidateSerializer(candidate_candidates, many=True, context=context).data
 
-#     def get_candidate_committees(self, candidate_committees, context):
-#         return CandidateCommitteesSerializer(candidate_committees, many=True, context=context).data
 
-#     def get_candidate_campaigns(self, candidate, context):
-#         candidate_candidate_ids = CandidateCandidates.objects.filter(candidate=candidate).values_list('id', flat=True)
-#         candidate_campaigns = Campaign.objects.filter(candidate_candidate__in=candidate_candidate_ids)
-#         return CampaignSerializer(candidate_campaigns, many=True, context=context).data
+class AddParty(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        serializer = PartySerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            party = serializer.save()
+            if 'image' in request.FILES:
+                party.image = request.FILES['image']
+                party.save()
+
+            # Check if the 'election' field exists in the request data
+            if 'election' in request.data:
+                election_id = request.data['election']
+
+                # Create an ElectionParty entry linking the party to the election
+                election_party = ElectionParty.objects.create(
+                    election_id=election_id,
+                    party=party
+                )
+
+                # Serialize the election_party and add it to the response
+                election_party_serializer = ElectionPartySerializer(election_party)
+                response_data = {
+                    "data": serializer.data,
+                    "electionParty": election_party_serializer.data,
+                    "count": 0,
+                    "code": 200,
+                }
+
+                return Response(response_data, status=status.HTTP_201_CREATED)
+            
+            # If 'election' field is not provided, return a response without 'electionParty' field
+            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateParty(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def patch(self, request, id):
+        try:
+            party = Party.objects.get(id=id)
+        except Party.DoesNotExist:
+            return Response({"error": "Party not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        data = request.data.copy()
+        if 'image' in request.FILES:
+            party.image = request.FILES['image']
+            party.save()
+        elif 'image' in data and data['image'] in ['null', 'remove']:
+            party.image = None
+            party.save()
+
+        serializer = PartySerializer(party, data=data, partial=True, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 0, "code": 200})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteParty(APIView):
+    def delete(self, request, id):
+        try:
+            party = Party.objects.get(id=id)
+            party.delete()
+            return JsonResponse({"data": "Party deleted successfully", "count": 1, "code": 200}, safe=False)
+        except Party.DoesNotExist:
+            return JsonResponse({"data": "Party not found", "count": 0, "code": 404}, safe=False)

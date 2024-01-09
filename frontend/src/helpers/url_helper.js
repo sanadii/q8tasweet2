@@ -24,9 +24,24 @@ export const GET_ELECTION_CANDIDATE_DETAILS = "/elections/getElectionCandidateDe
 export const ADD_NEW_ELECTION_CANDIDATE = "/elections/addNewElectionCandidate";
 export const UPDATE_ELECTION_CANDIDATE = "/elections/updateElectionCandidate";
 export const DELETE_ELECTION_CANDIDATE = "/elections/deleteElectionCandidate";
-
-// Election Candidate Votes
 export const UPDATE_ELECTION_CANDIDATE_VOTES = "/elections/updateElectionCandidateVotes";
+
+// Election Party
+export const GET_ELECTION_PARTIES = "/elections/getElectionParty";
+export const GET_ELECTION_PARTY_DETAILS = "/elections/getElectionPartyDetails";
+export const ADD_ELECTION_PARTY = "/elections/addElectionParty";
+export const UPDATE_ELECTION_PARTY = "/elections/updateElectionParty";
+export const DELETE_ELECTION_PARTY = "/elections/deleteElectionParty";
+export const UPDATE_ELECTION_PARTY_VOTES = "/elections/updateElectionPartyVotes";
+
+// Election Party Candidate
+export const GET_ELECTION_PARTY_CANDIDATES = "/elections/getElectionPartyCandidates";
+export const GET_ELECTION_PARTY_CANDIDATE_DETAILS = "/elections/getElectionPartyCandidateDetails";
+export const ADD_ELECTION_PARTY_CANDIDATE = "/elections/addElectionPartyCandidate";
+export const UPDATE_ELECTION_PARTY_CANDIDATE = "/elections/updateElectionPartyCandidate";
+export const DELETE_ELECTION_PARTY_CANDIDATE = "/elections/deleteElectionPartyCandidate";
+export const UPDATE_ELECTION_PARTY_CANDIDATE_VOTES = "/elections/updateElectionPartyCandidateVotes";
+
 
 // Election Committee
 export const GET_ELECTION_COMMITTEES = "/elections/getElectionCommittees";
@@ -60,6 +75,13 @@ export const GET_CANDIDATE_DETAILS = "/candidates/getCandidateDetails";
 export const ADD_NEW_CANDIDATE = "/candidates/addNewCandidate";
 export const UPDATE_CANDIDATE = "/candidates/updateCandidate";
 export const DELETE_CANDIDATE = "/candidates/deleteCandidate";
+
+// Parties
+export const GET_PARTIES = "/candidates/getParties";
+export const GET_PARTY_DETAILS = "/candidates/getPartyDetails";
+export const ADD_PARTY = "/candidates/addParty";
+export const UPDATE_PARTY = "/candidates/updateParty";
+export const DELETE_PARTY = "/candidates/deleteParty";
 
 // Campaigns
 export const GET_CAMPAIGNS = "/campaigns/getCampaigns";

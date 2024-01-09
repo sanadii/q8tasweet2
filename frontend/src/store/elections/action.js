@@ -3,6 +3,7 @@ import {
   API_RESPONSE_SUCCESS,
   API_RESPONSE_ERROR,
 
+
   // Elections
   GET_ELECTIONS,
   GET_ELECTION_DETAILS,
@@ -16,6 +17,7 @@ import {
   DELETE_ELECTION_SUCCESS,
   DELETE_ELECTION_FAIL,
 
+
   // Election Candidate
   GET_ELECTION_CANDIDATES,
   ADD_NEW_ELECTION_CANDIDATE,
@@ -28,6 +30,34 @@ import {
   DELETE_ELECTION_CANDIDATE,
   DELETE_ELECTION_CANDIDATE_SUCCESS,
   DELETE_ELECTION_CANDIDATE_FAIL,
+
+
+  // Election party
+  GET_ELECTION_PARTIES,
+  ADD_ELECTION_PARTY,
+  ADD_ELECTION_PARTY_SUCCESS,
+  ADD_TO_ELECTION_AFTER_PARTY_SUCCESS,
+  ADD_ELECTION_PARTY_FAIL,
+  UPDATE_ELECTION_PARTY,
+  UPDATE_ELECTION_PARTY_SUCCESS,
+  UPDATE_ELECTION_PARTY_FAIL,
+  DELETE_ELECTION_PARTY,
+  DELETE_ELECTION_PARTY_SUCCESS,
+  DELETE_ELECTION_PARTY_FAIL,
+
+
+  // Election Party Candidate
+  GET_ELECTION_PARTY_CANDIDATES,
+  ADD_ELECTION_PARTY_CANDIDATE,
+  ADD_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  ADD_TO_ELECTION_AFTER_PARTY_CANDIDATE_SUCCESS,
+  ADD_ELECTION_PARTY_CANDIDATE_FAIL,
+  UPDATE_ELECTION_PARTY_CANDIDATE,
+  UPDATE_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  UPDATE_ELECTION_PARTY_CANDIDATE_FAIL,
+  DELETE_ELECTION_PARTY_CANDIDATE,
+  DELETE_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  DELETE_ELECTION_PARTY_CANDIDATE_FAIL,
 
   // Election Candidate Votes
   UPDATE_ELECTION_CANDIDATE_VOTES,
@@ -191,8 +221,6 @@ export const deleteElectionCandidateFail = error => ({
   payload: error,
 });
 
-
-// Election Candidate Votes
 export const updateElectionCandidateVotes = (electionCandidateVotes) => ({
   type: 'UPDATE_ELECTION_CANDIDATE_VOTES',
   payload: electionCandidateVotes,
@@ -206,7 +234,147 @@ export const updateElectionCandidateVotesSuccess = (electionCandidateVotes) => (
 
 export const updateElectionCandidateVotesFail = (error) => ({
   type: 'UPDATE_ELECTION_CANDIDATE_VOTES_FAIL',
-    payload: error,
+  payload: error,
+});
+
+
+// Election Party
+export const getElectionParties = (election) => ({
+  type: GET_ELECTION_PARTIES,
+  payload: election,
+});
+
+export const addElectionParty = electionParty => ({
+  type: ADD_ELECTION_PARTY,
+  payload: electionParty,
+});
+
+export const addElectionPartySuccess = electionParty => ({
+  type: ADD_ELECTION_PARTY_SUCCESS,
+  payload: electionParty,
+});
+
+export const addToElectionAfterPartySuccess = electionParty => ({
+  type: ADD_TO_ELECTION_AFTER_PARTY_SUCCESS,
+  payload: electionParty,
+});
+export const addElectionPartyFail = error => ({
+  type: ADD_ELECTION_PARTY_FAIL,
+  payload: error,
+});
+
+export const updateElectionParty = electionParty => ({
+  type: UPDATE_ELECTION_PARTY,
+  payload: electionParty,
+});
+export const updateElectionPartySuccess = electionParty => ({
+  type: UPDATE_ELECTION_PARTY_SUCCESS,
+  payload: electionParty,
+});
+export const updateElectionPartyFail = error => ({
+  type: UPDATE_ELECTION_PARTY_FAIL,
+  payload: error,
+});
+
+export const deleteElectionParty = electionParty => ({
+  type: DELETE_ELECTION_PARTY,
+  payload: electionParty,
+});
+
+export const deleteElectionPartySuccess = electionParty => ({
+  type: DELETE_ELECTION_PARTY_SUCCESS,
+  payload: electionParty,
+});
+
+export const deleteElectionPartyFail = error => ({
+  type: DELETE_ELECTION_PARTY_FAIL,
+  payload: error,
+});
+
+export const updateElectionPartyVotes = (electionPartyVotes) => ({
+  type: 'UPDATE_ELECTION_PARTY_VOTES',
+  payload: electionPartyVotes,
+});
+
+export const updateElectionPartyVotesSuccess = (electionPartyVotes) => ({
+
+  type: 'UPDATE_ELECTION_PARTY_VOTES_SUCCESS',
+  payload: electionPartyVotes,
+});
+
+export const updateElectionPartyVotesFail = (error) => ({
+  type: 'UPDATE_ELECTION_PARTY_VOTES_FAIL',
+  payload: error,
+});
+
+
+// Election Party Candidate
+export const getElectionPartyCandidates = (election) => ({
+  type: GET_ELECTION_PARTY_CANDIDATES,
+  payload: election,
+});
+
+export const addElectionPartyCandidate = electionPartyCandidate => ({
+  type: ADD_ELECTION_PARTY_CANDIDATE,
+  payload: electionPartyCandidate,
+});
+
+export const addElectionPartyCandidateSuccess = electionPartyCandidate => ({
+  type: ADD_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  payload: electionPartyCandidate,
+});
+
+export const addToElectionAfterPartyCandidateSuccess = electionPartyCandidate => ({
+  type: ADD_TO_ELECTION_AFTER_PARTY_CANDIDATE_SUCCESS,
+  payload: electionPartyCandidate,
+});
+export const addElectionPartyCandidateFail = error => ({
+  type: ADD_ELECTION_PARTY_CANDIDATE_FAIL,
+  payload: error,
+});
+
+export const updateElectionPartyCandidate = electionPartyCandidate => ({
+  type: UPDATE_ELECTION_PARTY_CANDIDATE,
+  payload: electionPartyCandidate,
+});
+export const updateElectionPartyCandidateSuccess = electionPartyCandidate => ({
+  type: UPDATE_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  payload: electionPartyCandidate,
+});
+export const updateElectionPartyCandidateFail = error => ({
+  type: UPDATE_ELECTION_PARTY_CANDIDATE_FAIL,
+  payload: error,
+});
+
+export const deleteElectionPartyCandidate = electionPartyCandidate => ({
+  type: DELETE_ELECTION_PARTY_CANDIDATE,
+  payload: electionPartyCandidate,
+});
+
+export const deleteElectionPartyCandidateSuccess = electionPartyCandidate => ({
+  type: DELETE_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  payload: electionPartyCandidate,
+});
+
+export const deleteElectionPartyCandidateFail = error => ({
+  type: DELETE_ELECTION_PARTY_CANDIDATE_FAIL,
+  payload: error,
+});
+
+export const updateElectionPartyCandidateVotes = (electionPartyCandidateVotes) => ({
+  type: 'UPDATE_ELECTION_PARTY_CANDIDATE_VOTES',
+  payload: electionPartyCandidateVotes,
+});
+
+export const updateElectionPartyCandidateVotesSuccess = (electionPartyCandidateVotes) => ({
+
+  type: 'UPDATE_ELECTION_PARTY_CANDIDATE_VOTES_SUCCESS',
+  payload: electionPartyCandidateVotes,
+});
+
+export const updateElectionPartyCandidateVotesFail = (error) => ({
+  type: 'UPDATE_ELECTION_PARTY_CANDIDATE_VOTES_FAIL',
+  payload: error,
 });
 
 

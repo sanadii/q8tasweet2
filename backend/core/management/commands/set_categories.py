@@ -128,21 +128,21 @@ class Command(BaseCommand):
 
 
             # النقابات
-            {"id": 5001, "name": "وزارة الصحة", "parent": 5},
-            {"id": 5002, "name": "بلدية الكويت", "parent": 5},
-            {"id": 5003, "name": "وزارة التربية", "parent": 5},
-            {"id": 5004, "name": "وزارة الاشغال العامة", "parent": 5},
-            {"id": 5005, "name": "الإدارة العامة للجمارك", "parent": 5},
-            {"id": 5006, "name": "وزارة الكهرباء والماء", "parent": 5},
-            {"id": 5007, "name": "وزارة الاعلام", "parent": 5},
-            {"id": 5008, "name": "وزارة الشؤون الاجتماعية والعمل", "parent": 5},
-            {"id": 5009, "name": "وزارة المواصلات", "parent": 5},
-            {"id": 5010, "name": "شركة نفط الكويت", "parent": 5},
-            {"id": 5011, "name": "شركة البترول الوطنية الكويتية", "parent": 5},
-            {"id": 5012, "name": "عمال شركة صناعة الكيماويات البترولية", "parent": 5},
-            {"id": 5013, "name": "شركة إيكويت للبتروكيماويات", "parent": 5},
-            {"id": 5014, "name": "شركة ناقلات نفط الكويت", "parent": 5},
-            {"id": 5015, "name": "الشركة الكويتية لنفط الخليج", "parent": 5}
+            {"id": 5001, "name": "وزارة الصحة", "slug": "unions-kuwait-medical-association", "parent": 5},
+            {"id": 5002, "name": "بلدية الكويت", "slug": "unions-Kuwait-municipality-labour-syndicate", "parent": 5},
+            {"id": 5003, "name": "وزارة التربية", "slug": "unions-ministry-of-education", "parent": 5},
+            {"id": 5004, "name": "وزارة الاشغال العامة", "slug": "unions-syndicate-of-public-workers", "parent": 5},
+            {"id": 5005, "name": "الإدارة العامة للجمارك", "slug": "unions-workers-union-of-general-adminstration-of-customs", "parent": 5},
+            {"id": 5006, "name": "وزارة الكهرباء والماء", "slug": "unions-ministry-of-electricity-and-water", "parent": 5},
+            {"id": 5007, "name": "وزارة الاعلام", "slug": "unions-ministry-of-information", "parent": 5},
+            {"id": 5008, "name": "وزارة الشؤون الاجتماعية والعمل", "slug": "unions-ministry-of-social-affairs", "parent": 5},
+            {"id": 5009, "name": "وزارة المواصلات", "slug": "unions-ministry-of-communication", "parent": 5},
+            {"id": 5010, "name": "شركة نفط الكويت", "slug": "unions-kuwait-oil-company", "parent": 5},
+            {"id": 5011, "name": "شركة البترول الوطنية الكويتية", "slug": "unions-kuwait-national-petroleum-company", "parent": 5},
+            {"id": 5012, "name": "عمال شركة صناعة الكيماويات البترولية", "slug": "unions-petrochemical-industries-cmpany", "parent": 5},
+            {"id": 5013, "name": "شركة إيكويت للبتروكيماويات", "slug": "unions-oil-petrochemical-industries", "parent": 5},
+            {"id": 5014, "name": "شركة ناقلات نفط الكويت", "slug": "unions-kuwait-oil-tanker-company", "parent": 5},
+            {"id": 5015, "name": "الشركة الكويتية لنفط الخليج", "slug": "unions-kuwait-oil-gulf", "parent": 5}
         ]
     
     def set_category_image(self, category, slug):

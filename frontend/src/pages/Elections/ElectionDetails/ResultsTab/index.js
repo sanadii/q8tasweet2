@@ -9,7 +9,6 @@ import { electionSelector } from 'Selectors';
 import { TableContainer, TableContainerHeader, ImageCandidateWinnerCircle } from "components";
 import { HeaderVoteButton, transformResultData, useSaveCommitteeResults } from './ResultHelper';
 
-
 // Utility and Third-Party Library Imports
 import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";

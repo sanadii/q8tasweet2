@@ -22,11 +22,33 @@ import {
   UPDATE_ELECTION_CANDIDATE_FAIL,
   DELETE_ELECTION_CANDIDATE_SUCCESS,
   DELETE_ELECTION_CANDIDATE_FAIL,
-
-
-  // Election Candidate Votes
   UPDATE_ELECTION_CANDIDATE_VOTES_SUCCESS,
   UPDATE_ELECTION_CANDIDATE_VOTES_FAIL,
+
+
+  // Election Parties
+  GET_ELECTION_PARTIES,
+  ADD_ELECTION_PARTY_SUCCESS,
+  ADD_TO_ELECTION_AFTER_PARTY_SUCCESS,
+  ADD_ELECTION_PARTY_FAIL,
+  UPDATE_ELECTION_PARTY_SUCCESS,
+  UPDATE_ELECTION_PARTY_FAIL,
+  DELETE_ELECTION_PARTY_SUCCESS,
+  DELETE_ELECTION_PARTY_FAIL,
+  UPDATE_ELECTION_PARTY_VOTES_SUCCESS,
+  UPDATE_ELECTION_PARTY_VOTES_FAIL,
+
+  // Election Parties
+  GET_ELECTION_PARTY_CANDIDATES,
+  ADD_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  ADD_TO_ELECTION_AFTER_PARTY_CANDIDATE_SUCCESS,
+  ADD_ELECTION_PARTY_CANDIDATE_FAIL,
+  UPDATE_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  UPDATE_ELECTION_PARTY_CANDIDATE_FAIL,
+  DELETE_ELECTION_PARTY_CANDIDATE_SUCCESS,
+  DELETE_ELECTION_PARTY_CANDIDATE_FAIL,
+  UPDATE_ELECTION_PARTY_CANDIDATE_VOTES_SUCCESS,
+  UPDATE_ELECTION_PARTY_CANDIDATE_VOTES_FAIL,
 
   // Election Committees
   GET_ELECTION_COMMITTEES,
@@ -37,9 +59,11 @@ import {
   DELETE_ELECTION_COMMITTEE_SUCCESS,
   DELETE_ELECTION_COMMITTEE_FAIL,
 
+
   // Election Committee Results-
   UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS,
   UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL,
+
 
   // Election Campaigns
   GET_ELECTION_CAMPAIGNS,
@@ -57,6 +81,8 @@ const IntialState = {
   futureElections: [],
   electionDetails: [],
   electionCandidates: [],
+  electionParties: [],
+  electionPartyCandidates: [],
   electionCampaigns: [],
   electionCommittees: [],
   electionCommitteeResults: [],
@@ -92,6 +118,8 @@ const Elections = (state = IntialState, action) => {
           return {
             ...state,
             electionDetails: action.payload.data.electionDetails,
+            electionParties: action.payload.data.electionParties,
+            electionPartyCandidates: action.payload.data.electionPartyCandidates,
             electionCandidates: action.payload.data.electionCandidates,
             electionCampaigns: action.payload.data.electionCampaigns,
             electionCommittees: action.payload.data.electionCommittees,
@@ -106,6 +134,23 @@ const Elections = (state = IntialState, action) => {
             isElectionCandidateCreated: false,
             isElectionCandidateSuccess: true,
           };
+
+        case GET_ELECTION_PARTIES:
+          return {
+            ...state,
+            electionParties: action.payload.data,
+            isElectionPartyCreated: false,
+            isElectionPartySuccess: true,
+          };
+
+        case GET_ELECTION_PARTY_CANDIDATES:
+          return {
+            ...state,
+            electionPartyCandidates: action.payload.data,
+            isElectionPartyCandidateCreated: false,
+            isElectionPartCandidateySuccess: true,
+          };
+
         case GET_ELECTION_COMMITTEES:
           return {
             ...state,
@@ -349,6 +394,209 @@ const Elections = (state = IntialState, action) => {
         isElectionCandidateUpdate: false,
         isElectionCandidateUpdateFail: true,
       };
+
+
+
+    // Election Party
+    case GET_ELECTION_PARTIES: {
+      return {
+        ...state,
+        error: action.payload.error,
+        isElectionPartyCreated: false,
+        isElectionPartySuccess: true,
+      };
+    }
+
+    case ADD_ELECTION_PARTY_SUCCESS:
+      return {
+        ...state,
+        isElectionPartyCreated: true,
+        electionParties: [...state.electionParties, action.payload.data],
+        isElectionPartyAdd: true,
+        isElectionPartyAddFail: false,
+      };
+
+    // DO_AFTER_ADD_PARTY_SUCCESS
+    case ADD_TO_ELECTION_AFTER_PARTY_SUCCESS:
+      return {
+        ...state,
+        isElectionPartyCreated: true,
+        electionParties: [...state.electionParties, action.payload.electionParty],
+        isElectionPartyAdd: true,
+        isElectionPartyAddFail: false,
+      };
+
+    case ADD_ELECTION_PARTY_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionPartyAdd: false,
+        isElectionPartyAddFail: true,
+      };
+    case UPDATE_ELECTION_PARTY_SUCCESS:
+      return {
+        ...state,
+        electionParties: state.electionParties.map((electionParty) =>
+          electionParty.id.toString() === action.payload.data.id.toString()
+            ? { ...electionParty, ...action.payload.data }
+            : electionParty
+        ),
+        isElectionPartyUpdate: true,
+        isElectionPartyUpdateFail: false,
+      };
+    case UPDATE_ELECTION_PARTY_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionPartyUpdate: false,
+        isElectionPartyUpdateFail: true,
+      };
+    case DELETE_ELECTION_PARTY_SUCCESS:
+      return {
+        ...state,
+        electionParties: state.electionParties.filter(
+          (electionParty) =>
+            electionParty.id.toString() !==
+            action.payload.electionParty.toString()
+        ),
+        isElectionPartyDelete: true,
+        isElectionPartyDeleteFail: false,
+      };
+    case DELETE_ELECTION_PARTY_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionPartyDelete: false,
+        isElectionPartyDeleteFail: true,
+      };
+
+
+    // Election Party Votes
+    case UPDATE_ELECTION_PARTY_VOTES_SUCCESS:
+      return {
+
+        ...state,
+        electionParties: action.payload.data,
+        isElectionPartyUpdate: true,
+        isElectionPartyUpdateFail: false,
+
+
+        
+        // ...state,
+        // electionParties: state.electionParties.map((electionParty) =>
+        //   electionParty.id.toString() === action.payload.data.id.toString()
+        //     ? { ...electionParty, ...action.payload.data }
+        //     : electionParty
+        // ),
+        // isElectionPartyUpdate: true,
+        // isElectionPartyUpdateFail: false,
+      };
+    case UPDATE_ELECTION_PARTY_VOTES_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionPartyUpdate: false,
+        isElectionPartyUpdateFail: true,
+      };
+
+
+      
+    // Election Party Candidates
+    case GET_ELECTION_PARTY_CANDIDATES: {
+      return {
+        ...state,
+        error: action.payload.error,
+        isElectionPartyCandidateCreated: false,
+        isElectionPartyCandidateSuccess: true,
+      };
+    }
+
+    case ADD_ELECTION_PARTY_CANDIDATE_SUCCESS:
+      return {
+        ...state,
+        isElectionPartyCandidateCreated: true,
+        electionParties: [...state.electionParties, action.payload.data],
+        isElectionPartyCandidateAdd: true,
+        isElectionPartyCandidateAddFail: false,
+      };
+
+    // DO_AFTER_ADD_PARTY_CANDIDATE_SUCCESS
+    case ADD_TO_ELECTION_AFTER_PARTY_CANDIDATE_SUCCESS:
+      return {
+        ...state,
+        isElectionPartyCandidateCreated: true,
+        electionParties: [...state.electionParties, action.payload.electionParty],
+        isElectionPartyCandidateAdd: true,
+        isElectionPartyCandidateAddFail: false,
+      };
+
+    case ADD_ELECTION_PARTY_CANDIDATE_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionPartyCandidateAdd: false,
+        isElectionPartyCandidateAddFail: true,
+      };
+
+    case UPDATE_ELECTION_PARTY_CANDIDATE_SUCCESS:
+      return {
+        ...state,
+        electionParties: state.electionParties.map((electionParty) =>
+          electionParty.id.toString() === action.payload.data.id.toString()
+            ? { ...electionParty, ...action.payload.data }
+            : electionParty
+        ),
+        isElectionPartyCandidateUpdate: true,
+        isElectionPartyCandidateUpdateFail: false,
+      };
+
+    case UPDATE_ELECTION_PARTY_CANDIDATE_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionPartyCandidateUpdate: false,
+        isElectionPartyCandidateUpdateFail: true,
+      };
+
+    case DELETE_ELECTION_PARTY_CANDIDATE_SUCCESS:
+      return {
+        ...state,
+        electionParties: state.electionParties.filter(
+          (electionParty) =>
+            electionParty.id.toString() !==
+            action.payload.electionParty.toString()
+        ),
+        isElectionPartyCandidateDelete: true,
+        isElectionPartyCandidateDeleteFail: false,
+      };
+
+    case DELETE_ELECTION_PARTY_CANDIDATE_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionPartyCandidateDelete: false,
+        isElectionPartyCandidateDeleteFail: true,
+      };
+
+
+    // Election Party Votes
+    case UPDATE_ELECTION_PARTY_CANDIDATE_VOTES_SUCCESS:
+      return {
+
+        ...state,
+        electionParties: action.payload.data,
+        isElectionPartyCandidateUpdate: true,
+        isElectionPartyCandidateUpdateFail: false,       
+      };
+
+    case UPDATE_ELECTION_PARTY_CANDIDATE_VOTES_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionPartyCandidateUpdate: false,
+        isElectionPartyCandidateUpdateFail: true,
+      };
+
 
     // Election Committees
     case GET_ELECTION_COMMITTEES: {

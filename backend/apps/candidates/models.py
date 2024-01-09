@@ -43,6 +43,27 @@ class Candidate(TrackModel, TaskModel):
         super().save(*args, **kwargs)
 
 
+class Party(TrackModel, TaskModel):
+    name = models.CharField(max_length=255, blank=False, null=False)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
+    image = models.ImageField(upload_to="parties/", blank=True, null=True)
+    tags = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        db_table = "party"
+        verbose_name = "Party"
+        verbose_name_plural = "Parties"
+        default_permissions = []
+        permissions  = []
+        
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_random_slug()
+        super().save(*args, **kwargs)
+
 
 # class CandidateProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
 #     candidate = models.OneToOneField('Candidate', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_candidates")

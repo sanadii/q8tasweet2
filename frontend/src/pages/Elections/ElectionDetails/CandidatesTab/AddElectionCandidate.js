@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
-import { getCandidates, addNewElectionCandidate } from "store/actions";
+import { getCandidates, addNewElectionCandidate, addElectionPartyCandidate } from "store/actions";
 import { electionSelector, candidateSelector } from 'Selectors';
 
 // UI Components & styling imports
@@ -12,8 +12,9 @@ import SimpleBar from "simplebar-react";
 
 const AddElectionCandidate = ({ election }) => {
     const dispatch = useDispatch();
-    const { electionCandidates } = useSelector(electionSelector);
+    const { electionCandidates, electionParties } = useSelector(electionSelector);
     const { candidates } = useSelector(candidateSelector);
+    const { parties } = useSelector(candidateSelector);
     const electionCandidateList = electionCandidates;
 
     // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS
@@ -26,6 +27,14 @@ const AddElectionCandidate = ({ election }) => {
     // Add New ElectionCandidate Search & Filter
     const [searchCandidateInput, setSearchCandidateInput] = useState("");
     const [candidateList, setCandidateList] = useState(candidates);
+    // State for the selected party
+    const [selectedParty, setSelectedParty] = useState();
+
+    // Handler for when the selection changes
+    const setElectionParty = (event) => {
+        setSelectedParty(event.target.value);
+        // Additional actions can be performed here if needed
+    };
 
     useEffect(() => {
         setCandidateList(
@@ -36,6 +45,21 @@ const AddElectionCandidate = ({ election }) => {
             )
         );
     }, [candidates, searchCandidateInput]);
+
+    const fields = [
+        {
+            id: "party-field",
+            name: "القائمة الإنتخابية",
+            type: "select",
+            placeholder: "اختر النوع",
+            options: candidates.map((item) => ({
+                id: item.id,
+                label: item.name,
+                value: item.id,
+            })),
+        },
+
+    ];
 
     return (
         <>
@@ -49,13 +73,24 @@ const AddElectionCandidate = ({ election }) => {
                 />
                 <i className="ri-search-line search-icon"></i>
             </div>
+            <select id="id-field" name="id" onChange={setElectionParty} value={selectedParty}>
+                {electionParties.map((item, index) => (
+                    <option
+                        key={index}
+                        value={parseInt(item.id, 10)}>
 
+                        {item.name}
+                    </option>
+                ))}
+            </select>
             <SimpleBar
                 className="mx-n4 px-4"
                 data-simplebar="init"
                 style={{ maxHeight: "225px" }}
             >
                 <div className="vstack gap-3">
+
+
                     {candidateList.map((candidate) => (
                         <Form
                             key={candidate.id}
@@ -63,12 +98,18 @@ const AddElectionCandidate = ({ election }) => {
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 const newElectionCandidate = {
-                                    election: election,
+                                    ...(election.electType !== 1) ? { electionParty: selectedParty } : { election: election.id },
                                     candidate: candidate.id,
                                 };
-                                dispatch(addNewElectionCandidate(newElectionCandidate));
+                                if (election.electType !== 1) {
+                                    dispatch(addElectionPartyCandidate(newElectionCandidate));
+                                } else {
+                                    dispatch(addNewElectionCandidate(newElectionCandidate));
+                                }
                             }}
                         >
+
+
                             <div className="d-flex align-items-center">
                                 <input
                                     type="hidden"
@@ -101,7 +142,7 @@ const AddElectionCandidate = ({ election }) => {
                         </Form>
                     ))}
                 </div>
-            </SimpleBar>
+            </SimpleBar >
         </>
     );
 };

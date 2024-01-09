@@ -10,6 +10,7 @@ export * from "./groupPermissions/action";
 // Elections
 export * from "./elections/action";
 export * from "./candidates/action";
+export * from "./parties/action";
 export * from "./campaigns/action";
 
 // Electors

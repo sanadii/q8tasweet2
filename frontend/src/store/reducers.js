@@ -16,6 +16,7 @@ import GroupPermissions from "./groupPermissions/reducer";
 // Elections
 import Elections from "./elections/reducer";
 import Candidates from "./candidates/reducer";
+import Parties from "./parties/reducer";
 import Campaigns from "./campaigns/reducer";
 // import ElectionCandidates from "./electionCandidate/reducer";
 
@@ -51,6 +52,7 @@ const rootReducer = combineReducers({
     // Project
     Elections,
     Candidates,
+    Parties,
     Campaigns,
     Electors,
     // Guarantees,

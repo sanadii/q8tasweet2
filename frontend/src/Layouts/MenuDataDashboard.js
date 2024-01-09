@@ -54,7 +54,7 @@ const Navdata = () => {
     // ...(isAdmin || isModerator ? ModeratorMenu : []),
     // ...(isAdmin || isContributor ? ContributorMenu : []),
     // ...(canViewCampaign || isSubscriber ? CampaignMenu : []),
-    ...(CampaignMenu),
+    ...(!canChangeConfig ? [...CampaignMenu] : []),
     // ...(PublicMenu),
 
   ];

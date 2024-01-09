@@ -27,10 +27,23 @@ urlpatterns = [
     path("deleteElectionCandidate/<int:id>", DeleteElectionCandidate.as_view(), name="DeleteElectionCandidate"),
     path("updateElectionCandidate/<int:id>", UpdateElectionCandidate.as_view(), name="UpdateElectionCandidate"),
     path("updateElectionCandidate/<int:id>", UpdateElectionCandidate.as_view(), name="UpdateElectionCandidate"),
-
-    # Election Candidate
     path("updateElectionCandidateVotes/votes", UpdateElectionCandidateVotes.as_view(), name="UpdateElectionCandidateVotes"),
 
+    # Election Party
+    # path("getElectionParties/<int:election_id>", GetElectionPartys.as_view(), name="getElectionPartys"),
+    path("addElectionParty", AddElectionParty.as_view(), name="AddElectionParty"),
+    path("deleteElectionParty/<int:id>", DeleteElectionParty.as_view(), name="DeleteElectionParty"),
+    path("updateElectionParty/<int:id>", UpdateElectionParty.as_view(), name="UpdateElectionParty"),
+    path("updateElectionParty/<int:id>", UpdateElectionParty.as_view(), name="UpdateElectionParty"),
+    path("updateElectionPartyVotes/votes", UpdateElectionPartyVotes.as_view(), name="UpdateElectionPartyVotes"),
+
+    # Election Party
+    # path("getElectionPartyCandidateCandidates/<int:election_id>", GetElectionPartyCandidates.as_view(), name="getElectionPartyCandidates"),
+    path("addElectionPartyCandidate", AddElectionPartyCandidate.as_view(), name="AddElectionPartyCandidate"),
+    path("deleteElectionPartyCandidate/<int:id>", DeleteElectionPartyCandidate.as_view(), name="DeleteElectionPartyCandidate"),
+    path("updateElectionPartyCandidate/<int:id>", UpdateElectionPartyCandidate.as_view(), name="UpdateElectionPartyCandidate"),
+    path("updateElectionPartyCandidate/<int:id>", UpdateElectionPartyCandidate.as_view(), name="UpdateElectionPartyCandidate"),
+    path("updateElectionPartyCandidateVotes/votes", UpdateElectionPartyCandidateVotes.as_view(), name="UpdateElectionPartyCandidateVotes"),
 
     # Election Committees
     # path("getElectionCommittees/<int:election_id>", GetElectionCommittees.as_view(), name="getElectionCommittees"),

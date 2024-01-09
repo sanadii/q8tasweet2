@@ -75,6 +75,16 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       },
     },
     {
+      id: "parties",
+      label: "القوائم الإنتخابية",
+      icon: "ri-account-pin-box-line",
+      link: "/dashboard/parties",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("adminParties");
+      },
+    },
+    {
       id: "campaigns",
       label: "الحملات الإنتخابية",
       icon: "ri-honour-line",

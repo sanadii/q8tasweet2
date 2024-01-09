@@ -13,6 +13,7 @@ import groupPermissionSaga from "./groupPermissions/saga";
 // Elections
 import electionSaga from "./elections/saga";
 import candidatesSaga from "./candidates/saga";
+import partiesSaga from "./parties/saga";
 import campaignsSaga from "./campaigns/saga";
 import electorSaga from "./electors/saga";
 
@@ -38,6 +39,7 @@ export default function* rootSaga() {
     // Project
     fork(electionSaga),
     fork(candidatesSaga),
+    fork(partiesSaga),
     fork(campaignsSaga),
     fork(electorSaga),
     // fork(guaranteeSaga),

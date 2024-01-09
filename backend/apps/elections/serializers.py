@@ -4,11 +4,14 @@ from datetime import datetime  # Importing datetime
 from django.db.models import F
 
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+
 # Models
 from apps.elections.models import (
     Election,
     ElectionCategory,
     ElectionCandidate,
+    ElectionParty,
+    ElectionPartyCandidate,
     ElectionCommittee,
     ElectionCommitteeResult,
 )
@@ -159,6 +162,8 @@ class SubCategoriesSerializer(serializers.ModelSerializer):
         model = ElectionCategory
         fields = ["id", "name", "parent", "image"]
 
+
+# Votting and Sorting
 class ElectionCandidateVoteSerializer(serializers.ModelSerializer):
     admin_serializer_classes = (TrackMixin,)
 
@@ -173,6 +178,9 @@ class ElectionCandidateSortingVoteSerializer(serializers.ModelSerializer):
         model = CampaignSorting
         fields = '__all__'
 
+
+
+# Candidates and Parties
 class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the ElectionCandidate model. """
     admin_serializer_classes = (TrackMixin,)
@@ -201,7 +209,60 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
         # Additional logic to customize instance updating
         return super().update(instance, validated_data)
 
+class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """ Serializer for the ElectionParty model. """
+    admin_serializer_classes = (TrackMixin,)
 
+    name = serializers.CharField(source='party.name', read_only=True)
+    image = serializers.SerializerMethodField('get_party_image')
+
+    class Meta:
+        model = ElectionParty
+        fields = ["id", "election", "party", "name", "image", "votes", "notes"]
+
+    def get_party_image(self, obj):
+        if obj.party and obj.party.image:
+            return obj.party.image.url
+        return None
+
+    def create(self, validated_data):
+        """ Customize creation (POST) of an instance """
+        return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+        """ Customize update (PUT, PATCH) of an instance """
+        # Additional logic to customize instance updating
+        return super().update(instance, validated_data)
+
+
+class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """ Serializer for the ElectionPartyCandidate model. """
+    admin_serializer_classes = (TrackMixin,)
+
+    candidate_name = serializers.CharField(source='candidate.name', read_only=True)
+    candidate_gender = serializers.IntegerField(source='candidate.gender', read_only=True)
+    candidate_image = serializers.SerializerMethodField('get_candidate_image')
+
+    class Meta:
+        model = ElectionPartyCandidate
+        fields = ["id", "election_party", "candidate", "candidate_name", "candidate_gender", "candidate_image", "votes", "notes"]
+
+    def get_candidate_image(self, obj):
+        if obj.candidate and obj.candidate.image:
+            return obj.candidate.image.url
+        return None
+
+    def create(self, validated_data):
+        """ Customize creation (POST) of an instance """
+        return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+        """ Customize update (PUT, PATCH) of an instance """
+        # Additional logic to customize instance updating
+        return super().update(instance, validated_data)
+
+
+# Committees & Committee Results
 class ElectionCommitteeSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the ElectionCommittee model. """
     admin_serializer_classes = (TrackMixin,)

@@ -22,6 +22,8 @@ from apps.elections.models import (
     Election,
     ElectionCategory,
     ElectionCandidate,
+    ElectionParty,
+    ElectionPartyCandidate,
     ElectionCommittee,
     ElectionCommitteeResult,
 )
@@ -32,6 +34,8 @@ from apps.elections.serializers import (
     SubCategoriesSerializer,
     ElectionCommitteeSerializer,
     ElectionCandidateSerializer,
+    ElectionPartySerializer,
+    ElectionPartyCandidateSerializer,
     ElectionCommitteeResultSerializer,
 )
 
@@ -145,12 +149,26 @@ class GetElectionDetails(APIView):
         context = {"request": request}
 
         election_candidates = ElectionCandidate.objects.filter(election=election).prefetch_related('candidate').only('id')
+
+
+
+        # Fetch ElectionParty objects for a specific election
+        election_parties = ElectionParty.objects.filter(election=election)
+
+        # Fetch ElectionPartyCandidate objects that are related to the fetched ElectionParty IDs
+        election_party_candidates = ElectionPartyCandidate.objects.filter(
+            election_party__in=election_parties
+        ).select_related('candidate', 'election_party', 'election_party__election')
+
+
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
 
         response_data = {
-            "electionDetails": self.get_election_data(election, context),
-            "electionCandidates": self.get_election_candidates(election_candidates, context),
-            "electionCommittees": self.get_election_committees(election_committees, context),
+            "electionDetails": ElectionSerializer(election, context=context).data,
+            "electionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
+            "electionParties": ElectionPartySerializer(election_parties, many=True, context=context).data,
+            "electionPartyCandidates": ElectionPartyCandidateSerializer(election_party_candidates, many=True, context=context).data,
+            "electionCommittees": ElectionPartyCandidateSerializer(election_committees, many=True, context=context).data,
         }
 
         # Include electionCampaigns only if view is not public
@@ -162,15 +180,6 @@ class GetElectionDetails(APIView):
             "code": 200
         })
 
-
-    def get_election_data(self, election, context):
-        return ElectionSerializer(election, context=context).data
-
-    def get_election_candidates(self, election_candidates, context):
-        return ElectionCandidateSerializer(election_candidates, many=True, context=context).data
-
-    def get_election_committees(self, election_committees, context):
-        return ElectionCommitteeSerializer(election_committees, many=True, context=context).data
 
     def get_election_campaigns(self, election, context):
         election_candidate_ids = ElectionCandidate.objects.filter(election=election).values_list('id', flat=True)
@@ -244,7 +253,7 @@ class DeleteElection(APIView):
             return JsonResponse({"data": "Election not found", "count": 0, "code": 404}, safe=False)
 
 
-# ElectionCandidate
+# Election Candidate
 class AddNewElectionCandidate(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -284,8 +293,216 @@ class DeleteElectionCandidate(APIView):
         except ElectionCandidate.DoesNotExist:
             return Response({"data": "Election candidate not found", "count": 0, "code": 404}, status=404)
 
+class UpdateElectionCandidateVotes(APIView):
+    def patch(self, request, *args, **kwargs):
+        # Extract the payload from the request
+        votes_data = request.data
+        
+        # This will hold any candidates that couldn't be found
+        not_found_candidates = []
+        # This will hold the candidates that have been updated
+        updated_candidates = []
+        
+        for candidate_id, votes in votes_data.items():
+            try:
+                # Find the candidate by id
+                candidate = ElectionCandidate.objects.get(id=candidate_id)
+                # Update the votes
+                candidate.votes = votes
+                candidate.save()
+                
+                # Append the updated candidate's data
+                updated_candidates.append(ElectionCandidateSerializer(candidate).data)
+            except ElectionCandidate.DoesNotExist:
+                # If candidate doesn't exist, add to the not_found list
+                not_found_candidates.append(candidate_id)
+        
+        # If there were any not found candidates, return a 404
+        if not_found_candidates:
+            return Response({
+                'status': 'error',
+                'message': 'Some candidates not found',
+                'not_found_candidates': not_found_candidates
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # If all candidates were found and updated, return a 200
+        return Response({
+            'status': 'success',
+            'message': 'Votes updated successfully',
+            'data': updated_candidates,
+            "count": 0,
+            "code": status.HTTP_200_OK
+        }, status=status.HTTP_200_OK)
 
-# ElectionCandidate
+
+
+# Election Party
+class AddElectionParty(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ElectionPartySerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
+
+class UpdateElectionParty(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, id):
+        try:
+            election_party = ElectionParty.objects.get(id=id)
+        except ElectionParty.DoesNotExist:
+            return Response({"data": "Election party not found", "count": 0, "code": 404}, status=404)
+        
+        serializer = ElectionPartySerializer(instance=election_party, data=request.data, partial=True, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
+
+class DeleteElectionParty(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        try:
+            election_party = ElectionParty.objects.get(id=id)
+            election_party.delete()
+            return Response({"data": "Election party deleted successfully", "count": 1, "code": 200}, status=200)
+        except ElectionParty.DoesNotExist:
+            return Response({"data": "Election party not found", "count": 0, "code": 404}, status=404)
+        
+
+class UpdateElectionPartyVotes(APIView):
+    def patch(self, request, *args, **kwargs):
+        # Extract the payload from the request
+        votes_data = request.data
+        
+        # This will hold any parties that couldn't be found
+        not_found_parties = []
+        # This will hold the parties that have been updated
+        updated_parties = []
+        
+        for party_id, votes in votes_data.items():
+            try:
+                # Find the party by id
+                party = ElectionParty.objects.get(id=party_id)
+                # Update the votes
+                party.votes = votes
+                party.save()
+                
+                # Append the updated party's data
+                updated_parties.append(ElectionPartySerializer(party).data)
+            except ElectionParty.DoesNotExist:
+                # If party doesn't exist, add to the not_found list
+                not_found_parties.append(party_id)
+        
+        # If there were any not found parties, return a 404
+        if not_found_parties:
+            return Response({
+                'status': 'error',
+                'message': 'Some parties not found',
+                'not_found_parties': not_found_parties
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # If all parties were found and updated, return a 200
+        return Response({
+            'status': 'success',
+            'message': 'Votes updated successfully',
+            'data': updated_parties,
+            "count": 0,
+            "code": status.HTTP_200_OK
+        }, status=status.HTTP_200_OK)
+
+
+# Election Party Candidates
+class AddElectionPartyCandidate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ElectionPartyCandidateSerializer(data=request.data, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
+
+class UpdateElectionPartyCandidate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, id):
+        try:
+            election_party = ElectionPartyCandidate.objects.get(id=id)
+        except ElectionPartyCandidate.DoesNotExist:
+            return Response({"data": "Election party not found", "count": 0, "code": 404}, status=404)
+        
+        serializer = ElectionPartyCandidateSerializer(instance=election_party, data=request.data, partial=True, context={'request': request})
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
+        
+        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
+
+class DeleteElectionPartyCandidate(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        try:
+            election_party = ElectionPartyCandidate.objects.get(id=id)
+            election_party.delete()
+            return Response({"data": "Election party deleted successfully", "count": 1, "code": 200}, status=200)
+        except ElectionPartyCandidate.DoesNotExist:
+            return Response({"data": "Election party not found", "count": 0, "code": 404}, status=404)
+        
+
+class UpdateElectionPartyCandidateVotes(APIView):
+    def patch(self, request, *args, **kwargs):
+        # Extract the payload from the request
+        votes_data = request.data
+        
+        # This will hold any parties that couldn't be found
+        not_found_parties = []
+        # This will hold the parties that have been updated
+        updated_parties = []
+        
+        for party_id, votes in votes_data.items():
+            try:
+                # Find the party by id
+                party = ElectionPartyCandidate.objects.get(id=party_id)
+                # Update the votes
+                party.votes = votes
+                party.save()
+                
+                # Append the updated party's data
+                updated_parties.append(ElectionPartyCandidateSerializer(party).data)
+            except ElectionPartyCandidate.DoesNotExist:
+                # If party doesn't exist, add to the not_found list
+                not_found_parties.append(party_id)
+        
+        # If there were any not found parties, return a 404
+        if not_found_parties:
+            return Response({
+                'status': 'error',
+                'message': 'Some parties not found',
+                'not_found_parties': not_found_parties
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # If all parties were found and updated, return a 200
+        return Response({
+            'status': 'success',
+            'message': 'Votes updated successfully',
+            'data': updated_parties,
+            "count": 0,
+            "code": status.HTTP_200_OK
+        }, status=status.HTTP_200_OK)
+
+
+# Election Committees
 class GetCommittees(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -333,46 +550,6 @@ class DeleteElectionCommittee(APIView):
             return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class UpdateElectionCandidateVotes(APIView):
-    def patch(self, request, *args, **kwargs):
-        # Extract the payload from the request
-        votes_data = request.data
-        
-        # This will hold any candidates that couldn't be found
-        not_found_candidates = []
-        # This will hold the candidates that have been updated
-        updated_candidates = []
-        
-        for candidate_id, votes in votes_data.items():
-            try:
-                # Find the candidate by id
-                candidate = ElectionCandidate.objects.get(id=candidate_id)
-                # Update the votes
-                candidate.votes = votes
-                candidate.save()
-                
-                # Append the updated candidate's data
-                updated_candidates.append(ElectionCandidateSerializer(candidate).data)
-            except ElectionCandidate.DoesNotExist:
-                # If candidate doesn't exist, add to the not_found list
-                not_found_candidates.append(candidate_id)
-        
-        # If there were any not found candidates, return a 404
-        if not_found_candidates:
-            return Response({
-                'status': 'error',
-                'message': 'Some candidates not found',
-                'not_found_candidates': not_found_candidates
-            }, status=status.HTTP_404_NOT_FOUND)
-        
-        # If all candidates were found and updated, return a 200
-        return Response({
-            'status': 'success',
-            'message': 'Votes updated successfully',
-            'data': updated_candidates,
-            "count": 0,
-            "code": status.HTTP_200_OK
-        }, status=status.HTTP_200_OK)
 
 class UpdateElectionCommitteeResults(APIView):
     permission_classes = [IsAuthenticated]  # Assuming only authenticated users can update

@@ -25,20 +25,24 @@ const ElectionPrevious = () => {
                                     <tr>
                                         <td className="d-flex align-items-center">
                                             <i className="mdi mdi-circle align-middle me-2 text-success"></i>
-                                            {previousElection.firstWinner.name}</td>
-                                        <td>{previousElection.firstWinner.votes}</td>
+                                            {previousElection.firstWinner?.name}
+                                        </td>
+                                        <td>
+                                            {previousElection.firstWinner?.votes}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td className="d-flex align-items-center">
                                             <i className="mdi mdi-circle align-middle me-2 text-info"></i>
-                                            المتوسط</td>
-                                        <td>{previousElection.medianWinner}</td>
+                                            المتوسط
+                                        </td>
+                                        <td>{previousElection?.medianWinner}</td>
                                     </tr>
                                     <tr>
                                         <td className="d-flex align-items-center">
                                             <i className="mdi mdi-circle align-middle me-2 text-danger"></i>
-                                            {previousElection.lastWinner.name}</td>
-                                        <td>{previousElection.lastWinner.votes}</td>
+                                            {previousElection.lastWinner?.name}</td>
+                                        <td>{previousElection.lastWinner?.votes}</td>
                                     </tr>
                                 </Table>
                             </div>

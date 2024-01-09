@@ -41,6 +41,11 @@ import ElectionDetails from "pages/Elections/ElectionDetails";
 import CandidateList from "pages/Candidates/CandidateList";
 import CandidateDetails from "pages/Candidates/CandidateDetails";
 
+// Candidates Pages
+import PartyList from "pages/Parties/PartyList";
+import PartyDetails from "pages/Parties/PartyDetails";
+
+
 // Campaign Pages
 import CampaignList from "pages/Campaigns/CampaignList";
 import CampaignGrid from "pages/Campaigns/CampaignList/CampaignGrid";
@@ -152,6 +157,9 @@ const dashboardRoutes = [
   { path: "/dashboard/elections/:slug", component: <ElectionDetails /> },
   { path: "/dashboard/candidates/", component: <CandidateList /> },
   { path: "/dashboard/candidates/:slug", component: <CandidateDetails /> },
+  { path: "/dashboard/parties/:slug", component: <PartyDetails /> },
+  { path: "/dashboard/parties/", component: <PartyList /> },
+
   { path: "/dashboard/campaigns", component: <CampaignList /> },
   { path: "/dashboard/campaigns/:slug", component: <CampaignDetails /> },
   { path: "/dashboard/users/", component: <UserList /> },

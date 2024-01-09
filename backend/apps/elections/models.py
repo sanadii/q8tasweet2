@@ -112,7 +112,7 @@ class ElectionCandidate(TrackModel):
     class Meta:
         db_table = "election_candidate"
         verbose_name = "Election Candidate"
-        verbose_name_plural = "Election Candidate"
+        verbose_name_plural = "Election Candidates"
         default_permissions = []
         permissions  = [
             ("canViewElectionCandidate", "Can View Election Candidate"),
@@ -123,6 +123,51 @@ class ElectionCandidate(TrackModel):
 
     def __str__(self):
         return str(self.candidate.name)
+
+class ElectionParty(TrackModel):
+    election = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name="party_elections")
+    party = models.ForeignKey('candidates.Party', on_delete=models.SET_NULL, null=True, blank=True, related_name="election_parties")
+    votes = models.PositiveIntegerField(default=0)
+    notes = models.TextField(blank=True, null=True)
+
+    #  Saving sum of votes from ElectionCommitteeResult for each party
+    def update_votes(self):
+        total_votes = ElectionCommitteeResult.objects.filter(election_party=self).aggregate(total_votes=Sum('votes'))['total_votes']
+        self.votes = total_votes if total_votes is not None else 0
+        self.save()
+
+    class Meta:
+        db_table = "election_party"
+        verbose_name = "Election Party"
+        verbose_name_plural = "Election Parties"
+        default_permissions = []
+        permissions  = []
+
+    def __str__(self):
+        return f"{self.party.name} in {self.election.title}"
+
+class ElectionPartyCandidate(TrackModel):
+    election_party = models.ForeignKey('ElectionParty', on_delete=models.SET_NULL, null=True, blank=True, related_name="party_candidate_elections")
+    candidate = models.ForeignKey('candidates.Candidate', on_delete=models.SET_NULL, null=True, blank=True, related_name="election_party_candidates")
+    votes = models.PositiveIntegerField(default=0)
+    notes = models.TextField(blank=True, null=True)
+
+    #  Saving sum of votes from ElectionCommitteeResult for each candidate
+    def update_votes(self):
+        total_votes = ElectionCommitteeResult.objects.filter(election_party_candidate=self).aggregate(total_votes=Sum('votes'))['total_votes']
+        self.votes = total_votes if total_votes is not None else 0
+        self.save()
+
+    class Meta:
+        db_table = "election_party_candidate"
+        verbose_name = "Election Party Candidate"
+        verbose_name_plural = "Election Parties Candidates"
+        default_permissions = []
+        permissions  = []
+
+    def __str__(self):
+        return f"{self.candidate.name} for {self.election_party.party.name} in {self.election_party.election.title}"
+
 
 class ElectionCommittee(TrackModel):
     # Basic Information
