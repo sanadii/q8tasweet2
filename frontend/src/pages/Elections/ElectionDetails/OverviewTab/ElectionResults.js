@@ -14,12 +14,15 @@ import { toast, ToastContainer } from "react-toastify";
 const ElectionResults = () => {
 
   // States & Constants
-  const { election, electionCandidates, electionCommittees, error } = useSelector(electionSelector);
+  const { election, electionCandidates, electionPartyCandidates, electionCommittees, error } = useSelector(electionSelector);
   const [showDetailedResults, setShowDetailedResults] = useState(false);
   const CampaignSlug = 'UmUXPn8A';
   const [socket, setSocket] = useState(null);
   const [candidatesResult, setCandidatesResult] = useState([]);
   const [electionResultStatus, setElectionResultStatus] = useState("");
+
+  // candidates based on election Type
+  const candidates = election.electType !== 1 ? electionPartyCandidates : electionCandidates;
 
   const electionResult = election.electResult;
   const electionSeats = election.electSeats;
@@ -72,7 +75,7 @@ const ElectionResults = () => {
   }, [electionCommittees, calculateTotalVotes]);
 
   useEffect(() => {
-    const initialSortingData = electionCandidates.map(candidate => {
+    const initialSortingData = candidates.map(candidate => {
       const { committeeResult, totalVotes, electionResultStatus } = calculateCommitteeResults(candidate, electionResult);
       // Use the first status as the default for the entire election
       setElectionResultStatus(electionResultStatus);
@@ -91,7 +94,7 @@ const ElectionResults = () => {
     // Use sortAndUpdatePositions and pass electionSeats from the election object
     const sortedCandidates = sortAndUpdatePositions(initialSortingData, electionSeats);
     setCandidatesResult(sortedCandidates);
-  }, [electionCandidates, electionCommittees, election.electResult, electionSeats]);
+  }, [candidates, electionCommittees, election.electResult, electionSeats]);
 
 
   const updateSortingVotes = (candidateId, newVotes, committeeId) => {
@@ -129,7 +132,7 @@ const ElectionResults = () => {
     return () => {
       if (newSocket) newSocket.close();
     };
-  }, [electionCandidates, electionCommittees]);
+  }, [candidates, electionCommittees]);
 
 
   const toggleDetailedResults = () => {

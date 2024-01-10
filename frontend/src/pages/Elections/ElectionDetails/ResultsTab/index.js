@@ -15,8 +15,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ResultsTab = () => {
-  const { election, electionCandidates, electionCommittees } = useSelector(electionSelector);
+  const { election, electionCandidates, electionPartyCandidates, electionCommittees } = useSelector(electionSelector);
   const electionResult = election.electResult;
+
+  // candidates based on election Type
+  const candidates = election.electType !== 1 ? electionPartyCandidates : electionCandidates;
 
   // States
   const [columnEdited, setColumnEdited] = useState({});
@@ -42,14 +45,14 @@ const ResultsTab = () => {
   // Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
   const transformedResultData = useMemo(
     () => transformResultData(
-      electionCandidates,
+      candidates,
       electionCommittees,
       columnEdited,
       handleVoteFieldChange,
       election
     ),
     [
-      electionCandidates,
+      candidates,
       electionCommittees,
       columnEdited,
       handleVoteFieldChange,
@@ -130,7 +133,7 @@ const ResultsTab = () => {
     }
 
     // Columns for when electionResult is 2
-    if (result === 2 && electionCandidates) {
+    if (result === 2 && candidates) {
       return [
         ...baseColumns,
         { Header: 'المجموع', accessor: 'total' },
@@ -145,7 +148,7 @@ const ResultsTab = () => {
     return createColumns(electionResult);
   }, [
     electionResult,
-    electionCandidates,
+    candidates,
     electionCommittees,
     columnEdited,
     voteFieldEditedData,

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
-import { deleteElectionCandidate } from "store/actions";
+import { deleteElectionPartyCandidate } from "store/actions";
 import { electionSelector } from 'Selectors';
 import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
 
@@ -110,7 +110,7 @@ const CandidatesTab = () => {
     deleteModalMulti,
     setDeleteModalMulti,
     deleteMultiple,
-  } = useDelete(deleteElectionCandidate);
+  } = useDelete(deleteElectionPartyCandidate);
 
   // Models
   const [modal, setModal] = useState(false);
@@ -296,7 +296,8 @@ const CandidatesTab = () => {
 
   const PartyColumns = useMemo(() => {
     return columns.filter(column =>
-      column.Header === "المرشح" || column.accessor === "candidate_id"
+      column.Header === "المرشح"
+      // || column.Header === "إجراءات"
     );
   }, [columns]);
 

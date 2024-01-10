@@ -12,8 +12,8 @@ from rest_framework.views import APIView
 from apps.candidates.models import Candidate, Party
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
 
-from apps.elections.models import ElectionCandidate
-from apps.elections.serializers import ElectionCandidateSerializer
+from apps.elections.models import ElectionCandidate, ElectionParty, ElectionPartyCandidate
+from apps.elections.serializers import ElectionCandidateSerializer, ElectionPartyCandidateSerializer
 from helper.views_helper import CustomPagination
 
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -88,6 +88,36 @@ class AddNewCandidate(APIView):
 
                 return Response(response_data, status=status.HTTP_201_CREATED)
             
+        if 'electionParty' in request.data:
+            try:
+                election_party_id = int(request.data['electionParty'])
+            except (ValueError, TypeError):
+                return Response({"error": "Invalid 'electionParty' value. Must be an integer."}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            # Ensure election_party_id corresponds to a valid ElectionParty object
+            if not ElectionParty.objects.filter(id=election_party_id).exists():
+                return Response({"error": f"ElectionParty with id {election_party_id} does not exist."},
+                                status=status.HTTP_404_NOT_FOUND)
+
+            # Create an ElectionPartyCandidate entry linking the candidate to the election party
+            election_party_candidate = ElectionPartyCandidate.objects.create(
+                election_party_id=election_party_id,
+                candidate=candidate
+            )
+
+            # Serialize the election_party_candidate and add it to the response
+            election_party_candidate_serializer = ElectionPartyCandidateSerializer(election_party_candidate)
+            response_data = {
+                "data": serializer.data,
+                "electionPartyCandidate": election_party_candidate_serializer.data,
+                "count": 0,
+                "code": 200,
+            }
+
+            return Response(response_data, status=status.HTTP_201_CREATED)
+
+
             # If 'election' field is not provided, return a response without 'electionCandidate' field
             return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
         

@@ -525,7 +525,7 @@ const Elections = (state = IntialState, action) => {
       return {
         ...state,
         isElectionPartyCandidateCreated: true,
-        electionParties: [...state.electionParties, action.payload.electionParty],
+        electionPartyCandidates: [...state.electionPartyCandidates, action.payload.electionPartyCandidate],
         isElectionPartyCandidateAdd: true,
         isElectionPartyCandidateAddFail: false,
       };

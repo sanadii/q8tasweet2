@@ -35,6 +35,7 @@ import {
 import {
   // Election Candidates
   addToElectionAfterCandidateSuccess,
+  addToElectionAfterPartyCandidateSuccess,
 } from "../elections/action";
 
 //Include Both Helper File with needed methods
@@ -73,6 +74,11 @@ function* onAddCandidate({ payload: candidate }) {
     if (response.electionCandidate) {
       // Assuming that candidate.electionCandidate is the election object
       yield put(addToElectionAfterCandidateSuccess(response));
+      toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
+    }
+    if (response.electionPartyCandidate) {
+      // Assuming that candidate.electionCandidate is the election object
+      yield put(addToElectionAfterPartyCandidateSuccess(response));
       toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
     }
 

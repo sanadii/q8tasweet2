@@ -5,12 +5,11 @@ import { addNewCandidate, updateCandidate } from "store/actions";
 import { electionSelector } from 'Selectors';
 
 // Custom Components & ConstantsImports
-import { GenderOptions, PriorityOptions, StatusOptions } from "constants";
+import { GenderOptions } from "constants";
 import { FieldComponent } from "components";
 
 // UI & Utilities Components
 import { Col, Row, Form } from "reactstrap";
-
 
 // Form and Validation
 import * as Yup from "yup";
@@ -20,7 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AddNewCandidate = () => {
     const dispatch = useDispatch();
 
-    const { electionId } = useSelector(electionSelector);
+    const { election, electionId, electionParties } = useSelector(electionSelector);
 
     const initialValues = {
         name: "",
@@ -38,7 +37,13 @@ const AddNewCandidate = () => {
         }),
         onSubmit: (values) => {
             const formData = new FormData();
-            formData.append('election', electionId);
+
+            if (election.electType !== 1) {
+                formData.append('electionParty', values.electionParty);
+            } else {
+                formData.append('election', electionId);
+            }
+
             formData.append('name', values.name);
             formData.append('gender', values.gender);
             formData.append('status', values.status);
@@ -57,6 +62,24 @@ const AddNewCandidate = () => {
     });
 
     const fields = [
+        {
+            id: "party-field",
+            name: "electionParty",
+            type: "select",
+            placeholder: "اختر القائمة الإنتخابية",
+            options: [
+                { id: "default", label: "-- اختر القائمة الانتخابية --", value: null },
+                ...(Array.isArray(electionParties) ? electionParties
+                    .filter(item => item && item.id) // Ensure that the item is defined and has an id property
+                    .map((item) => ({
+                        id: item.id,
+                        label: item.name,
+                        value: item.id,
+                    }))
+                    : [])
+            ],
+            colSize: 12,
+        },
         {
             id: "image-field",
             name: "image",
@@ -77,10 +100,10 @@ const AddNewCandidate = () => {
             label: "النوع",
             type: "select",
             placeholder: "اختر النوع",
-            options: GenderOptions.map((gender) => ({
-                id: gender.id,
-                label: gender.name,
-                value: gender.id,
+            options: GenderOptions.map((item) => ({
+                id: item.id,
+                label: item.name,
+                value: item.id,
             })),
         },
     ];

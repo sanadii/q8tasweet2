@@ -242,13 +242,13 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
     """ Serializer for the ElectionPartyCandidate model. """
     admin_serializer_classes = (TrackMixin,)
 
-    candidate_name = serializers.CharField(source='candidate.name', read_only=True)
-    candidate_gender = serializers.IntegerField(source='candidate.gender', read_only=True)
-    candidate_image = serializers.SerializerMethodField('get_candidate_image')
+    name = serializers.CharField(source='candidate.name', read_only=True)
+    gender = serializers.IntegerField(source='candidate.gender', read_only=True)
+    image = serializers.SerializerMethodField('get_candidate_image')
 
     class Meta:
         model = ElectionPartyCandidate
-        fields = ["id", "election_party", "candidate", "candidate_name", "candidate_gender", "candidate_image", "votes", "notes"]
+        fields = ["id", "election_party", "candidate", "name", "gender", "image", "votes", "notes"]
 
     def get_candidate_image(self, obj):
         if obj.candidate and obj.candidate.image:
