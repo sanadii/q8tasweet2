@@ -1,6 +1,7 @@
 # campaigns/serializers.py
 from rest_framework import serializers
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+from django.conf import settings  # Import Django settings to access MEDIA_URL
 
 # Models
 from django.contrib.auth.models import Group, Permission
@@ -11,11 +12,11 @@ from apps.elections.models import (
     ElectionCandidate,
     ElectionCommittee,
 )
-from apps.candidates.models import Candidate
+from apps.candidates.models import Candidate, Party
 from apps.electors.models import Elector
 
 # Serializers
-from apps.candidates.serializers import CandidateSerializer
+from apps.candidates.serializers import CandidateSerializer, PartySerializer
 from apps.elections.serializers import ElectionSerializer, ElectionCandidateSerializer, ElectionCommitteeSerializer
 from apps.auths.serializers import UserSerializer
 from apps.electors.serializers import ElectorsSerializer
@@ -47,6 +48,95 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             rep["candidate"].pop("task", None)
 
         return rep
+
+class CampaignPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """ Serializer for the Campaign model. """
+    admin_serializer_classes = (TrackMixin, TaskMixin)
+    party = PartySerializer(source='election_party.party', read_only=True)
+    election = ElectionSerializer(source='election_party.election', read_only=True)
+    
+    class Meta: 
+        model = Campaign
+        fields = [
+            "id", "election_party", "election", "party", "slug",
+            "description", "target_votes",
+            "twitter", "instagram", "website",
+            ]
+        
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        
+        # Remove unwanted fields from nested serializers
+        if "election" in rep:
+            rep["election"].pop("track", None)
+            rep["election"].pop("task", None)
+        
+        if "party" in rep:
+            rep["party"].pop("track", None)
+            rep["party"].pop("task", None)
+
+        return rep
+
+class CampaignCombinedSerializer(AdminFieldMixin, serializers.Serializer):
+    # Serialize common fields
+    id = serializers.IntegerField()
+    campaignType = serializers.CharField(read_only=True)
+
+    # Nested candidate and election data
+    candidate = CandidateSerializer(source='election_candidate.candidate', read_only=True)
+    election = ElectionSerializer(source='election_candidate.election', read_only=True)
+
+    campaign_name = serializers.CharField(read_only=True)
+    campaign_image = serializers.ImageField(read_only=True)
+    election_name = serializers.CharField(read_only=True)
+
+
+    slug = serializers.SlugField()
+    description = serializers.CharField()
+    target_votes = serializers.IntegerField()
+    twitter = serializers.CharField(allow_blank=True, max_length=120)
+    instagram = serializers.CharField(allow_blank=True, max_length=120)
+    website = serializers.CharField(allow_blank=True, max_length=120)
+
+    # Handle election field consistently
+    election = ElectionSerializer(read_only=True)
+
+    # Conditionally handle candidate/party fields
+    election_candidate = serializers.PrimaryKeyRelatedField(
+        read_only=True, source="election_candidate.candidate"
+    )
+    candidate = CandidateSerializer(read_only=True, source="election_candidate.candidate")
+
+    election_party = serializers.PrimaryKeyRelatedField(
+        read_only=True, source="election_party.party"
+    )
+    party = PartySerializer(read_only=True, source="election_party.party")
+
+    def get_image(self, obj):
+        if obj.image:
+            return f"{settings.MEDIA_URL}{obj.image}"
+        return None
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        # Retrieve candidate/party and election information directly
+        if isinstance(instance, Campaign):
+            candidate = instance.election_candidate.candidate
+            election = instance.election_candidate.election
+        else:
+            party = instance.election_party.party
+            election = instance.election_party.election
+
+
+        # Include only relevant candidate/party fields based on instance type
+        # Populate fields using retrieved data
+        representation["campaign_name"] = candidate.name if instance.campaignType == "candidates" else party.name
+        representation["campaign_image"] = self.get_image(candidate if instance.campaignType == "candidates" else party)
+        representation["election_name"] = election.sub_category.name
+
+        return representation
+
 
 class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 

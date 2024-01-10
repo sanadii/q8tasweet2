@@ -5,7 +5,7 @@ import { addNewCandidate, updateCandidate } from "store/actions";
 import { electionSelector } from 'Selectors';
 
 // Custom Components & ConstantsImports
-import { GenderOptions, PriorityOptions, StatusOptions } from "constants";
+import { GenderOptions } from "constants";
 import { FieldComponent } from "components";
 
 // UI & Utilities Components
@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AddNewCandidate = () => {
     const dispatch = useDispatch();
 
-    const { electionId } = useSelector(electionSelector);
+    const { election, electionId, electionParties } = useSelector(electionSelector);
 
     const initialValues = {
         name: "",
@@ -58,6 +58,21 @@ const AddNewCandidate = () => {
 
     const fields = [
         {
+            id: "party-field",
+            name: "electionParty",
+            type: "select",
+            placeholder: "اختر القائمة الإنتخابية",
+            options: [
+                { id: "default", label: "-- اختر القائمة الانتخابية --", value: null },
+                ...(Array.isArray(electionParties) ? electionParties.map((item) => ({
+                    id: item.id,
+                    label: item.name,
+                    value: item.id,
+                })) : [])
+            ],
+            colSize: 12,
+        },
+        {
             id: "image-field",
             name: "image",
             type: "image",
@@ -72,17 +87,24 @@ const AddNewCandidate = () => {
             placeholder: "ادخل الاسم المرشح",
         },
         {
-            id: "gender-field",
-            name: "gender",
-            label: "النوع",
+            id: "party-field",
+            name: "electionParty",
             type: "select",
-            placeholder: "اختر النوع",
-            options: GenderOptions.map((gender) => ({
-                id: gender.id,
-                label: gender.name,
-                value: gender.id,
-            })),
-        },
+            placeholder: "اختر القائمة الإنتخابية",
+            options: [
+                { id: "default", label: "-- اختر القائمة الانتخابية --", value: null },
+                ...(Array.isArray(electionParties) ? electionParties
+                    .filter(item => item && item.id) // Ensure that the item is defined and has an id property
+                    .map((item) => ({
+                        id: item.id,
+                        label: item.name,
+                        value: item.id,
+                    }))
+                    : [])
+            ],
+            colSize: 12,
+        }
+        
     ];
 
     return (

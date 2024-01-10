@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 
+from itertools import chain
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,17 +14,34 @@ from rest_framework.exceptions import AuthenticationFailed
 
 # Models
 from apps.auths.models import User, Group
-from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee, CampaignSorting
-from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
+from apps.campaigns.models import (
+    Campaign,
+    CampaignParty,
+    CampaignMember,
+    CampaignPartyMember,
+    CampaignGuarantee,
+    CampaignPartyGuarantee,
+    CampaignAttendee,
+    CampaignSorting,
+    CampaignParty,
+    CampaignPartyMember,
+    CampaignPartyGuarantee
+    )
+
+from apps.elections.models import Election, ElectionCandidate, ElectionParty, ElectionCommittee
 from django.contrib.auth.models import Group
 
 # Serializers
 from apps.campaigns.serializers import (
     CampaignSerializer,
+    CampaignPartySerializer,
+    CampaignCombinedSerializer,
+
+    CampaignCombinedSerializer,
     CampaignMemberSerializer,
     CampaignGuaranteeSerializer,
     CampaignAttendeeSerializer, 
-    CampaignSortingSerializer
+    CampaignSortingSerializer,
     )
 
 from apps.notifications.models import CampaignNotification
@@ -40,34 +59,36 @@ from utils.views import (
 
 
 class GetCampaigns(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         try:
-            # Check if user is admin or superadmin (group.name)
-            user_id = request.user.id
+            user = request.user
 
-            if User.objects.filter(pk=user_id, groups__name__in=["admin", "superAdmin"]).exists():
-                campaign_data = Campaign.objects.all()
+            # Fetch campaigns and campaign parties separately
+            campaigns = Campaign.objects.all()
+            campaign_parties = CampaignParty.objects.all()
 
-            else:
+            # Apply filtering for non-admin/superadmin users
+            if not (user.is_superuser or user.groups.filter(name__in=["admin", "superAdmin"]).exists()):
+                accessible_campaign_ids = (
+                    CampaignMember.objects.filter(user=user).values_list("campaign_id", flat=True)
+                    | CampaignPartyMember.objects.filter(user=user).values_list("campaign_party_id", flat=True)
+                )
+                campaigns = campaigns.filter(id__in=accessible_campaign_ids)
+                campaign_parties = campaign_parties.filter(id__in=accessible_campaign_ids)
 
-                # Step 1: Query the CampaignMember table
-                member_entries = CampaignMember.objects.filter(user_id=user_id)
-                
-                # Step 2: Get corresponding Campaign
-                campaign_ids = [entry.campaign.id for entry in member_entries if entry.campaign]
-                campaign_data = Campaign.objects.filter(id__in=campaign_ids)
-                
+            # Combine results in Python
+            combined_data = list(chain(campaigns, campaign_parties))
+
             # Pagination
             paginator = CustomPagination()
-            paginated_campaigns = paginator.paginate_queryset(campaign_data, request)
-            
-            # Passing context with request to the serializer
-            context = {"request": request}
-            data_serializer = CampaignSerializer(paginated_campaigns, many=True, context=context)
+            paginated_combined_data = paginator.paginate_queryset(combined_data, request)
 
-            return paginator.get_paginated_response(data_serializer.data)
+            context = {"request": request}
+            serializer = CampaignCombinedSerializer(paginated_combined_data, many=True, context=context)
+
+            return paginator.get_paginated_response(serializer.data)
 
         except AuthenticationFailed as auth_failed:
             return Response({"error": str(auth_failed)}, status=status.HTTP_401_UNAUTHORIZED)
@@ -78,7 +99,7 @@ class GetCampaigns(APIView):
 class GetCampaignDetails(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, slug):
+    def get(self, request, campaignType, slug):
         campaign = get_object_or_404(Campaign, slug=slug)
         context = {"request": request}
         user_id = context["request"].user.id
@@ -97,9 +118,13 @@ class GetCampaignDetails(APIView):
             member__user__id__in=campaign_managed_members.values_list('user__id', flat=True)
         ).select_related('campaign')
 
-        # Fetch other related details based on the current campaign
-        election = campaign.election_candidate.election
-        election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
+        if campaignType == "candidates":
+            election = campaign.election_candidate.election
+            election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
+        else:  # campaignType == "party"
+            election = campaign.election_party.election
+            election_parties = ElectionParty.objects.filter(election=election).select_related('election')
+
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
         campaign_attendees = CampaignAttendee.objects.filter(election=election).select_related('election')
         campaign_notifications = CampaignNotification.objects.filter(campaign=campaign).select_related('campaign')
@@ -116,7 +141,7 @@ class GetCampaignDetails(APIView):
         return Response({
             "data": {
                 "currentCampaignMember": current_campaign_member,
-                "campaignDetails": CampaignSerializer(campaign, context=context).data,
+                "campaignDetails": CampaignCombinedSerializer(campaign, context=context).data,
                 "campaignMembers": CampaignMemberSerializer(campaign_members, many=True, context=context).data,
                 "campaignGuarantees": CampaignGuaranteeSerializer(campaign_guarantees, many=True, context=context).data,
                 "campaignAttendees": CampaignGuaranteeSerializer(campaign_attendees, many=True, context=context).data,

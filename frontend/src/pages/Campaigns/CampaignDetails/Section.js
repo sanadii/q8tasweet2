@@ -92,17 +92,17 @@ const Section = () => {
 
   return (
     <React.Fragment>
-      <SectionBackagroundImage imagePath={campaign.election.image} />
+      <SectionBackagroundImage imagePath={campaign.electionImage} />
       <div className="pt-4 mb-4 mb-lg-3 pb-lg-2 profile-wrapper">
         <Row className="g-4">
           <div className="col-auto">
-            <ImageLarge imagePath={campaign.candidate.image} />
+            <ImageLarge imagePath={campaign.campaignImage} />
           </div>
 
           <Col>
             <div className="p-2">
-              <h3 className="text-white mb-1">{campaign.candidate.name}</h3>
-              <p className="text-white-75">{campaign.election.name}</p>
+              <h3 className="text-white mb-1">{campaign.campaignName}</h3>
+              <p className="text-white-75">{campaign.electionName}</p>
               <div className="hstack text-white gap-1">
                 <div className="me-2">
                   <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
