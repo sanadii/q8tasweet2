@@ -167,7 +167,7 @@ const AllCampaigns = () => {
       },
       {
         Header: "الحملة",
-        accessor: "candidate.name",
+        accessor: "campaignName",
         filterable: false,
         Cell: (cellProps) => {
           return <Name {...cellProps} />;
@@ -175,7 +175,7 @@ const AllCampaigns = () => {
       },
       {
         Header: "الانتخابات",
-        accessor: "election.name",
+        accessor: "electionName",
         filterable: false,
         Cell: (cellProps) => {
           return <Name {...cellProps} />;

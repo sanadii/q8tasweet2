@@ -11,14 +11,19 @@ export function useCampaignMenu(iscurrentState, setIscurrentState) {
   const history = useNavigate();
   const { currentUserCampaigns } = useSelector(userSelector);
   const { campaign } = useSelector(campaignSelector);
-  const { slug } = useParams();
+  const { slug, campaignType } = useParams();
+  const currentCampaign = { campaignType, slug,  }
+
+
+
+  console.log("THIS IS THE CAMPAIGN: ", currentCampaign)
 
   useEffect(() => {
     document.title = "الانتخابات | كويت تصويت";
-    if (slug && (isEmpty(campaign) || slug !== campaign.slug)) {
-      dispatch(getCampaignDetails(slug));
+    if (slug || slug !== campaign.slug) {
+      dispatch(getCampaignDetails(currentCampaign));
     }
-  }, [dispatch, slug, campaign]);
+  }, [dispatch, slug]);
 
   useEffect(() => {
     if (iscurrentState === "campaigns") {

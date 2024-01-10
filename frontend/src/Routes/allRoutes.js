@@ -152,16 +152,24 @@ const dashboardRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/control-panel", component: <ControlPanel /> },
 
-  // Admin Lists
+  // Admin Lists -------
+
+  // Elections
   { path: "/dashboard/elections/", component: <ElectionList /> },
   { path: "/dashboard/elections/:slug", component: <ElectionDetails /> },
+  
+  // Candidates
   { path: "/dashboard/candidates/", component: <CandidateList /> },
   { path: "/dashboard/candidates/:slug", component: <CandidateDetails /> },
+  
+  // Parties
   { path: "/dashboard/parties/:slug", component: <PartyDetails /> },
   { path: "/dashboard/parties/", component: <PartyList /> },
 
+  // Campaigns
   { path: "/dashboard/campaigns", component: <CampaignList /> },
-  { path: "/dashboard/campaigns/:slug", component: <CampaignDetails /> },
+  { path: "/dashboard/campaigns/:campaignType/:slug", component: <CampaignDetails /> },
+
   { path: "/dashboard/users/", component: <UserList /> },
 
   // Settings / Options

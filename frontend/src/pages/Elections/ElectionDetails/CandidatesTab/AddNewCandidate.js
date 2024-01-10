@@ -63,6 +63,20 @@ const AddNewCandidate = () => {
 
     const fields = [
         {
+            id: "image-field",
+            name: "image",
+            type: "image",
+            placeholder: "صورة المرشح",
+            colSize: 12,
+        },
+        {
+            id: "name-field",
+            name: "name",
+            label: "الاسم",
+            type: "text",
+            placeholder: "ادخل الاسم المرشح",
+        },
+        {
             id: "party-field",
             name: "electionParty",
             type: "select",
@@ -79,33 +93,8 @@ const AddNewCandidate = () => {
                     : [])
             ],
             colSize: 12,
-        },
-        {
-            id: "image-field",
-            name: "image",
-            type: "image",
-            placeholder: "صورة المرشح",
-            colSize: 12,
-        },
-        {
-            id: "name-field",
-            name: "name",
-            label: "الاسم",
-            type: "text",
-            placeholder: "ادخل الاسم المرشح",
-        },
-        {
-            id: "gender-field",
-            name: "gender",
-            label: "النوع",
-            type: "select",
-            placeholder: "اختر النوع",
-            options: GenderOptions.map((item) => ({
-                id: item.id,
-                label: item.name,
-                value: item.id,
-            })),
-        },
+        }
+        
     ];
 
     return (

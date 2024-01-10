@@ -50,6 +50,7 @@ class Campaign(TrackModel, TaskModel):
 
         super().save(*args, **kwargs)  # Call the "real" save() method
 
+
 class CampaignProfile(TrackModel, TaskModel):
     campaign = models.OneToOneField('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_campaigns")
 
@@ -59,12 +60,13 @@ class CampaignProfile(TrackModel, TaskModel):
         verbose_name_plural = "Campaign Profiles"
         default_permissions = []
 
+
 class CampaignMember(TrackModel):
-    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='memberships')
+    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_users')
     campaign = models.ForeignKey('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_members')
     role = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_role_members')
     supervisor = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='supervised_members')
-    committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_members')
+    committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_committee_members')
     civil = models.CharField(max_length=12, blank=True, null=True, validators=[civil_validator])
     phone = models.CharField(max_length=8, blank=True, null=True, validators=[phone_validator])
     notes = models.TextField(blank=True, null=True)
@@ -82,10 +84,11 @@ class CampaignMember(TrackModel):
             ("canDeleteCampaignMember", "Can Delete Test Now"),
             ]
         
+
 class CampaignGuarantee(TrackModel):
     campaign = models.ForeignKey('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantees')
-    member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='guarantee_guarantors')
-    civil = models.ForeignKey('electors.Elector', on_delete=models.SET_NULL, null=True, blank=True, related_name='elector_guarantees')
+    member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantee_guarantors')
+    civil = models.ForeignKey('electors.Elector', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_elector_guarantees')
     phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
     notes = models.TextField(blank=True, null=True)
     status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)
@@ -101,6 +104,7 @@ class CampaignGuarantee(TrackModel):
             ("canChangeCampaignGuarantee", "Can Change Campaign Guarantee"),
             ("canDeleteCampaignGuarantee", "Can Delete Campaign Guarantee"),
             ]
+
 
 class CampaignAttendee(TrackModel):
     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attendant_attendees')
@@ -141,3 +145,68 @@ class CampaignSorting(models.Model):
             ("canChangeCampaignSorting", "Can Change Campaign Sorting"),
             ("canDeleteCampaignSorting", "Can Delete Campaign Sorting"),
             ]
+
+# Campaign Parties
+class CampaignParty(TrackModel, TaskModel):
+    # Basic Information
+    election_party = models.ForeignKey('elections.ElectionParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_campaigns')
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    target_votes = models.PositiveIntegerField(blank=True, null=True)
+
+    # Media Coverage
+    twitter = models.CharField(max_length=120, blank=True, null=True)
+    instagram = models.CharField(max_length=120, blank=True, null=True)
+    website = models.CharField(max_length=120, blank=True, null=True)
+
+    # Activities
+
+    class Meta:
+        db_table = "campaign_party"
+        verbose_name = "Campaign Party"
+        verbose_name_plural = "Campaign Parties"
+        default_permissions = []
+        permissions  = []
+    def __str__(self):
+        return f"{self.election_party.party.name} - Year"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = uuid.uuid4().hex[:8].upper()
+
+        super().save(*args, **kwargs)  # Call the "real" save() method
+
+
+class CampaignPartyMember(TrackModel):
+    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_users')
+    campaign_party = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_members')
+    role = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_role_members')
+    supervisor = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='supervised_members')
+    committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_committee_members')
+    civil = models.CharField(max_length=12, blank=True, null=True, validators=[civil_validator])
+    phone = models.CharField(max_length=8, blank=True, null=True, validators=[phone_validator])
+    notes = models.TextField(blank=True, null=True)
+    status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)
+   
+    class Meta:
+        db_table = 'campaign_party_member'
+        verbose_name = "Campaign Party Member"
+        verbose_name_plural = "Campaign Party Members"
+        default_permissions = []
+        permissions  = []
+        
+
+class CampaignPartyGuarantee(TrackModel):
+    campaign_party = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantees')
+    member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantee_guarantors')
+    civil = models.ForeignKey('electors.Elector', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_elector_guarantees')
+    phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
+    notes = models.TextField(blank=True, null=True)
+    status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)
+
+    class Meta:
+        db_table = 'campaign_party_guarantee'
+        verbose_name = "Campaign Party Guarantee"
+        verbose_name_plural = "Campaign Party Guarantees"
+        default_permissions = []
+        permissions  = []

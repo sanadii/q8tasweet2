@@ -7,7 +7,7 @@ app_name = "campaigns"
 urlpatterns = [
     # Campaign
     path("getCampaigns", GetCampaigns.as_view(), name="getCampaigns"),
-    path("getCampaignDetails/<slug:slug>", GetCampaignDetails.as_view(), name="getCampaignDetails"),
+    path("getCampaignDetails/<slug:campaignType>/<slug:slug>", GetCampaignDetails.as_view(), name="getCampaignDetails"),
     path("addNewCampaign", AddNewCampaign.as_view(), name="AddNewCampaign"),
     path("deleteCampaign/<int:id>", DeleteCampaign.as_view(), name="DeleteCampaign"),
     path("updateCampaign/<int:id>", UpdateCampaign.as_view(), name="UpdateCampaign"),
