@@ -5,6 +5,8 @@ from django.utils.text import slugify
 import uuid
 
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from apps.configs.models import TrackModel, TaskModel
 from helper.models_helper import GuaranteeStatusOptions
@@ -18,6 +20,11 @@ class Campaign(TrackModel, TaskModel):
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     target_votes = models.PositiveIntegerField(blank=True, null=True)
+
+    # Relationships
+    campaign_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    campaign_type_object = GenericForeignKey('campaign_type', 'object_id')
 
     # Media Coverage
     twitter = models.CharField(max_length=120, blank=True, null=True)
@@ -127,25 +134,6 @@ class CampaignAttendee(TrackModel):
             ]
         
 
-class CampaignSorting(models.Model):
-    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='sorter_sortees')
-    election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
-    election_committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sortees')
-    votes = models.PositiveIntegerField(default=0)
-    notes = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'campaign_sorting'
-        verbose_name = "Campaign Sorting"
-        verbose_name_plural = "Campaign Sortings"
-        default_permissions = []
-        permissions  = [
-            ("canViewCampaignSorting", "Can View Campaign Sorting"),
-            ("canAddCampaignSorting", "Can Add Campaign Sorting"),
-            ("canChangeCampaignSorting", "Can Change Campaign Sorting"),
-            ("canDeleteCampaignSorting", "Can Delete Campaign Sorting"),
-            ]
-
 # Campaign Parties
 class CampaignParty(TrackModel, TaskModel):
     # Basic Information
@@ -179,7 +167,7 @@ class CampaignParty(TrackModel, TaskModel):
 
 class CampaignPartyMember(TrackModel):
     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_users')
-    campaign_party = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_members')
+    campaign = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_members')
     role = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_role_members')
     supervisor = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='supervised_members')
     committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_committee_members')
@@ -197,8 +185,8 @@ class CampaignPartyMember(TrackModel):
         
 
 class CampaignPartyGuarantee(TrackModel):
-    campaign_party = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantees')
-    member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantee_guarantors')
+    campaign = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantees')
+    member = models.ForeignKey('CampaignPartyMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantee_guarantors')
     civil = models.ForeignKey('electors.Elector', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_elector_guarantees')
     phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
     notes = models.TextField(blank=True, null=True)
@@ -210,3 +198,103 @@ class CampaignPartyGuarantee(TrackModel):
         verbose_name_plural = "Campaign Party Guarantees"
         default_permissions = []
         permissions  = []
+
+
+# class CampaignSorting(models.Model):
+#     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='sorter_sortees')
+#     election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
+#     election_committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sortees')
+#     votes = models.PositiveIntegerField(default=0)
+#     notes = models.TextField(blank=True, null=True)
+
+#     class Meta:
+#         db_table = 'campaign_sorting'
+#         verbose_name = "Campaign Sorting"
+#         verbose_name_plural = "Campaign Sortings"
+#         default_permissions = []
+#         permissions  = [
+#             ("canViewCampaignSorting", "Can View Campaign Sorting"),
+#             ("canAddCampaignSorting", "Can Add Campaign Sorting"),
+#             ("canChangeCampaignSorting", "Can Change Campaign Sorting"),
+#             ("canDeleteCampaignSorting", "Can Delete Campaign Sorting"),
+#             ]
+
+# class CampaignPartySorting(models.Model):
+#     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='sorter_sortees')
+#     election_party = models.ForeignKey('elections.ElectionParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_sortings')
+#     election_committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sortees')
+#     votes = models.PositiveIntegerField(default=0)
+#     notes = models.TextField(blank=True, null=True)
+
+#     class Meta:
+#         db_table = 'campaign_party_sorting'
+#         verbose_name = "Campaign Party Sorting"
+#         verbose_name_plural = "Campaign Party Sortings"
+#         default_permissions = []
+#         permissions  = []
+
+# class CampaignPartyCandidateSorting(models.Model):
+#     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='sorter_sortees')
+#     election_party_candidate = models.ForeignKey('elections.ElectionPartyCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_candidate_sortings')
+#     election_committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sortees')
+#     votes = models.PositiveIntegerField(default=0)
+#     notes = models.TextField(blank=True, null=True)
+
+#     class Meta:
+#         db_table = 'campaign_party_candidate_sorting'
+#         verbose_name = "Campaign Party Candidate Sorting"
+#         verbose_name_plural = "Campaign Party Candidate Sortings"
+#         default_permissions = []
+#         permissions  = []
+
+
+class BaseCampaignSorting(models.Model):
+    user = models.ForeignKey(
+        'auths.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_users',
+    )
+    election_committee = models.ForeignKey(
+        'elections.ElectionCommittee',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_election_committees',
+    )
+    votes = models.PositiveIntegerField(default=0)
+    notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        abstract = True  # Prevents direct model creation
+        permissions = [
+            ("canViewCampaignSorting", "Can View Campaign Sorting"),
+            ("canAddCampaignSorting", "Can Add Campaign Sorting"),
+            ("canChangeCampaignSorting", "Can Change Campaign Sorting"),
+            ("canDeleteCampaignSorting", "Can Delete Campaign Sorting"),
+        ]
+
+class CampaignSorting(BaseCampaignSorting):
+    election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
+
+    class Meta(BaseCampaignSorting.Meta):
+        db_table = 'campaign_sorting'
+        verbose_name = "Campaign Sorting"
+        verbose_name_plural = "Campaign Sortings"
+
+class CampaignPartySorting(BaseCampaignSorting):
+    election_party = models.ForeignKey('elections.ElectionParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_sortings')
+
+    class Meta(BaseCampaignSorting.Meta):
+        db_table = 'campaign_party_sorting'
+        verbose_name = "Campaign Party Sorting"
+        verbose_name_plural = "Campaign Party Sortings"
+
+class CampaignPartyCandidateSorting(BaseCampaignSorting):
+    election_party_candidate = models.ForeignKey('elections.ElectionPartyCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_candidate_sortings')
+
+    class Meta(BaseCampaignSorting.Meta):
+        db_table = 'campaign_party_candidate_sorting'
+        verbose_name = "Campaign Party Candidate Sorting"
+        verbose_name_plural = "Campaign Party Candidate Sortings"

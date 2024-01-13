@@ -75,7 +75,10 @@ const OverviewSidebar = () => {
                             <h5 className="card-title mb-3"><strong>الإدارة</strong></h5>
                             <ul className="text-danger">
                                 <li>رمز الإنتخابات: <strong>{campaign.election.id}</strong></li>
-                                <li>رمز المرشح: <strong>{campaign.candidate.id}</strong></li>
+                                <li>
+                                    {campaign.candidate ? 'رمز المرشح: ' : 'رمز القائمة: '} 
+                                    <strong>{campaign.id}</strong>
+                                </li>
                                 <li>رمز الحملة: <strong>{campaign.id}</strong></li>
                             </ul>
                         </div>

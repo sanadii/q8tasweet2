@@ -14,8 +14,8 @@ from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 
 # Campaign App
-from apps.campaigns.models import Campaign
-from apps.campaigns.serializers import CampaignSerializer
+from apps.campaigns.models import Campaign, CampaignMember
+from apps.campaigns.serializers import CampaignSerializer, CampaignMemberSerializer
 
 # Election App
 from apps.elections.models import (
@@ -168,12 +168,13 @@ class GetElectionDetails(APIView):
             "electionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
             "electionParties": ElectionPartySerializer(election_parties, many=True, context=context).data,
             "electionPartyCandidates": ElectionPartyCandidateSerializer(election_party_candidates, many=True, context=context).data,
-            "electionCommittees": ElectionPartyCandidateSerializer(election_committees, many=True, context=context).data,
+            "electionCommittees": ElectionCommitteeSerializer(election_committees, many=True, context=context).data,
         }
 
         # Include electionCampaigns only if view is not public
         if view != 'public':
             response_data["electionCampaigns"] = self.get_election_campaigns(election, context)
+            response_data["electionSorters"] = self.get_election_campaign_sorters(election, context)
 
         return Response({
             "data": response_data,
@@ -186,6 +187,13 @@ class GetElectionDetails(APIView):
         election_campaigns = Campaign.objects.filter(election_candidate__in=election_candidate_ids)
         return CampaignSerializer(election_campaigns, many=True, context=context).data
     
+    def get_election_campaign_sorters(self, election, context):
+        election_campaigns = Campaign.objects.filter(election_candidate__election=election)
+        election_campaign_sorters = CampaignMember.objects.filter(
+            campaign__in=election_campaigns, role=36  # Filter by role 36
+        )
+        return CampaignMemberSerializer(election_campaign_sorters, many=True, context=context).data
+
     def get_election_committee_results(self, election, election_candidates, election_committees):
         # Step 1: Initialize results dictionary
         committee_results = {str(committee.id): {str(candidate.id): 0 for candidate in election_candidates} for committee in election_committees}

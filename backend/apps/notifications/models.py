@@ -1,6 +1,6 @@
 from django.db import models
 from apps.configs.models import TrackModel
-from apps.campaigns.models import Campaign
+from apps.campaigns.models import Campaign, CampaignParty
 from apps.elections.models import Election
 
 USER_GROUP_CHOICES = [
@@ -17,11 +17,15 @@ MESSAGE_TYPE_CHOICES = [
     ('success', 'Success'),
 ]
 
-
-class ElectionNotification(TrackModel):
-    election = models.ForeignKey(Election, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_elections")
+class BaseNotification(TrackModel):
     message_type = models.CharField(max_length=50, choices=MESSAGE_TYPE_CHOICES)
     message = models.TextField()
+
+    class Meta:
+        abstract = True  # Mark as an abstract base model
+
+class ElectionNotification(BaseNotification):
+    election = models.ForeignKey(Election, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_elections")
 
     class Meta:
         # managed = False
@@ -34,10 +38,8 @@ class ElectionNotification(TrackModel):
     def __str__(self):
         return f"{self.message}"
     
-class CampaignNotification(TrackModel):
+class CampaignNotification(BaseNotification):
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_campaigns")
-    message_type = models.CharField(max_length=50, choices=MESSAGE_TYPE_CHOICES)
-    message = models.TextField()
 
     class Meta:
         db_table = "campaign_notification"
@@ -49,10 +51,21 @@ class CampaignNotification(TrackModel):
     def __str__(self):
         return f"{self.message}"
 
-class UserNotification(TrackModel):
+class CampaignPartyNotification(BaseNotification):
+    campaign = models.ForeignKey(CampaignParty, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_campaign_partiess")
+
+    class Meta:
+        db_table = "campaign_party_notification"
+        verbose_name = "Campaign Party Notification"
+        verbose_name_plural = "Campaign Party Notifications"
+        default_permissions = []
+        permissions = []
+
+    def __str__(self):
+        return f"{self.message}"
+
+class UserNotification(BaseNotification):
     user_group = models.CharField(max_length=50, choices=USER_GROUP_CHOICES)
-    message_type = models.CharField(max_length=50, choices=MESSAGE_TYPE_CHOICES)
-    message = models.TextField()
 
     class Meta:
         db_table = "user_notification"

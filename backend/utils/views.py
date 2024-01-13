@@ -19,8 +19,8 @@ from django.utils.translation import gettext as _
 from apps.auths.models import Group, User
 from django.db.models import Q
 
-from apps.campaigns.models import Campaign, CampaignMember
-from apps.campaigns.serializers import CampaignMemberSerializer
+from apps.campaigns.models import Campaign, CampaignParty, CampaignMember, CampaignPartyMember
+from apps.campaigns.serializers import CampaignMemberSerializer, CampaignPartyMemberSerializer
 from apps.auths.serializers import GroupSerializer
 
 
@@ -106,7 +106,7 @@ def get_current_campaign_member(campaign_id, user_id, context):
     Identified by both campaign_id and user_id.
     It fetches campaign members from the database and serializes it using CampaignMemberSerializer.
     If the campaign member is found, it returns the serialized data; otherwise, it returns None.
-    """    
+    """
     current_campaign_member = CampaignMember.objects.select_related('user').filter(
         campaign_id=campaign_id, user_id=user_id
         ).first()

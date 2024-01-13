@@ -17,7 +17,6 @@ import { ModalBody, Form } from "reactstrap";
 
 const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   const dispatch = useDispatch();
-
   // State Managemenet
   const { currentUser } = useSelector(userSelector);
   const {

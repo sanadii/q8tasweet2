@@ -26,7 +26,7 @@ import classnames from "classnames";
 
 const CandidatesTab = () => {
 
-  const { election, electionCandidates, electionParties, error } = useSelector(electionSelector);
+  const { election, electionType, electionCandidates, electionParties, error } = useSelector(electionSelector);
 
   // Constants
   const [electionParty, setElectionParty] = useState([]);
@@ -258,11 +258,11 @@ const CandidatesTab = () => {
         Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
         id: "id",
       },
-      {
-        Header: "المركز",
-        accessor: "position",
-        Cell: (cellProps) => <Position {...cellProps} />
-      },
+      // {
+      //   Header: "المركز",
+      //   accessor: "position",
+      //   Cell: (cellProps) => <Position {...cellProps} />
+      // },
       {
         Header: "المرشح",
         filterable: true,
@@ -284,11 +284,11 @@ const CandidatesTab = () => {
           />
         )
       },
-      {
-        Header: "رمز",
-        accessor: "candidate_id",
-        Cell: (cellProps) => <Id {...cellProps} />
-      },
+      // {
+      //   Header: "رمز",
+      //   accessor: "candidate_id",
+      //   Cell: (cellProps) => <Id {...cellProps} />
+      // },
     ],
     [handleElectionCandidateClick, checkedAll]
   );
@@ -355,13 +355,14 @@ const CandidatesTab = () => {
                   // NEW
                   isElectionCandidateButtons={true}
 
-                  // CSS: Table-border-Color
                   // Title
                   ContainerHeaderTitle="المرشحين والنتائج"
 
                   // Buttons
-                  HandlePrimaryButton={handleElectionPartyClicks}
-                  PrimaryButtonText="إضافة قائمة"
+                  {...(electionType !== 1 && {
+                    HandlePrimaryButton: handleElectionPartyClicks,
+                    PrimaryButtonText: "إضافة قائمة"
+                  })}
 
                   HandleSecondaryButton={handleElectionCandidateClicks}
                   SecondaryButtonText="إضافة مرشح"
@@ -376,7 +377,7 @@ const CandidatesTab = () => {
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
                 {
-                  election.electType !== 1 ?
+                  electionType !== 1 ?
                     <Parties
                       columns={PartyColumns}
                     />

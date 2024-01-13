@@ -12,7 +12,7 @@ import { WebSocketProvider } from '../../../utils/WebSocketContext';
 
 const CampaignDetails = () => {
   const dispatch = useDispatch();
-  const { slug, campaignType } = useParams();
+  const { slug } = useParams();
   const { campaign } = useSelector(campaignSelector);
   const { canViewCampaign } = usePermission();
 

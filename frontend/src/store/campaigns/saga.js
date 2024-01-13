@@ -151,10 +151,10 @@ function* onAddNewCampaign({ payload: campaign }) {
   try {
     const response = yield call(addNewCampaign, campaign);
     yield put(addNewCampaignSuccess(response));
-    toast.success("Campaign Added Successfully", { autoClose: 2000 });
+    toast.success("تم إضافة الحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addNewCampaignFail(error));
-    toast.error("Campaign Added Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -163,10 +163,10 @@ function* onDeleteCampaign({ payload: campaign }) {
   try {
     const response = yield call(deleteCampaign, campaign);
     yield put(deleteCampaignSuccess({ campaign, ...response }));
-    toast.success("Campaign Delete Successfully", { autoClose: 2000 });
+    toast.success("تم حذف الحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteCampaignFail(error));
-    toast.error("Campaign Delete Failed", { autoClose: 2000 });
+    toast.error("خطأ في حذف الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -174,12 +174,12 @@ function* onUpdateCampaign({ payload: campaign }) {
   try {
     const response = yield call(updateCampaign, campaign);
     yield put(updateCampaignSuccess(response));
-    toast.success("Campaign Updated Successfully", {
+    toast.success("تم تحديث الحملة الإنتخابية بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     yield put(updateCampaignFail(error));
-    toast.error("Campaign Updated Failed", { autoClose: 2000 });
+    toast.error("خطأ في تحديث الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -200,21 +200,10 @@ function* onAddNewCampaignMember({ payload: campaignMember }) {
   try {
     const response = yield call(addNewCampaignMember, campaignMember);
     yield put(addNewCampaignMemberSuccess(response));
-    toast.success("CampaignMember Added Successfully", { autoClose: 2000 });
+    toast.success("تم إضافة عضو للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addNewCampaignMemberFail(error));
-    toast.error("CampaignMember Added Failed", { autoClose: 2000 });
-  }
-}
-
-function* onDeleteCampaignMember({ payload: campaignMember }) {
-  try {
-    const response = yield call(deleteCampaignMember, campaignMember);
-    yield put(deleteCampaignMemberSuccess({ campaignMember, ...response }));
-    toast.success("CampaignMember Delete Successfully", { autoClose: 2000 });
-  } catch (error) {
-    yield put(deleteCampaignMemberFail(error));
-    toast.error("CampaignMember Delete Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة عضو للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -222,23 +211,47 @@ function* onUpdateCampaignMember({ payload: campaignMember }) {
   try {
     const response = yield call(updateCampaignMember, campaignMember);
     yield put(updateCampaignMemberSuccess(response));
-    toast.success("CampaignMember Updated Successfully", {
+    toast.success("تم تعديل عضو الحملة الإنتخابية بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     yield put(updateCampaignMemberFail(error));
-    toast.error("CampaignMember Updated Failed", { autoClose: 2000 });
+    toast.error("خطأ في تحديث عضو للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
+function* onDeleteCampaignMember({ payload: campaignMember }) {
+  try {
+    const response = yield call(deleteCampaignMember, campaignMember);
+    yield put(deleteCampaignMemberSuccess({ campaignMember, ...response }));
+    toast.success("تم حذف عضو الحملة الإنتخابية بنجاح", { autoClose: 2000 });
+  } catch (error) {
+    yield put(deleteCampaignMemberFail(error));
+    toast.error("خطأ في حذف عضو للحملة الإنتخابية", { autoClose: 2000 });
+  }
+}
 function* onAddNewCampaignGuarantee({ payload: campaignGuarantee }) {
   try {
     const response = yield call(addNewCampaignGuarantee, campaignGuarantee);
     yield put(addNewCampaignGuaranteeSuccess(response));
-    // toast.success("CampaignGuarantee Added Successfully", { autoClose: 2000 });
+    toast.success("تم إضافة المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addNewCampaignGuaranteeFail(error));
-    // toast.error("CampaignGuarantee Added Failed", { autoClose: 2000 });
+    toast.error("خطأ في إضافة المضمون للحملة الإنتخابية", { autoClose: 2000 });
+  }
+}
+
+
+function* onUpdateCampaignGuarantee({ payload: campaignGuarantee }) {
+  try {
+    const response = yield call(updateCampaignGuarantee, campaignGuarantee);
+    yield put(updateCampaignGuaranteeSuccess(response));
+    toast.success("تم تحديث المضمون للحملة الإنتخابية بنجاح", {
+      autoClose: 2000,
+    });
+  } catch (error) {
+    yield put(updateCampaignGuaranteeFail(error));
+    toast.error("خطأ في تحديث المضمون للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -248,23 +261,10 @@ function* onDeleteCampaignGuarantee({ payload: campaignGuarantee }) {
     yield put(
       deleteCampaignGuaranteeSuccess({ campaignGuarantee, ...response })
     );
-    toast.success("CampaignGuarantee Delete Successfully", { autoClose: 2000 });
+    toast.success("تم حذف المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteCampaignGuaranteeFail(error));
-    toast.error("CampaignGuarantee Delete Failed", { autoClose: 2000 });
-  }
-}
-
-function* onUpdateCampaignGuarantee({ payload: campaignGuarantee }) {
-  try {
-    const response = yield call(updateCampaignGuarantee, campaignGuarantee);
-    yield put(updateCampaignGuaranteeSuccess(response));
-    toast.success("CampaignGuarantee Updated Successfully", {
-      autoClose: 2000,
-    });
-  } catch (error) {
-    yield put(updateCampaignGuaranteeFail(error));
-    toast.error("CampaignGuarantee Updated Failed", { autoClose: 2000 });
+    toast.error("خطأ في حذف المضمون للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 

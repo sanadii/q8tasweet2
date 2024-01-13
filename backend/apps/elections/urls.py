@@ -11,7 +11,6 @@ urlpatterns = [
     # Election
     path("getElections", GetElections.as_view(), name="GetElections"),
     path("getElectionDetails/<slug:slug>", GetElectionDetails.as_view(), name="GetElectionDetails"),
-    path("getElectionDetails/<int:id>", GetElectionDetails.as_view(), name="GetElectionDetails"),
     path("addElection", AddElection.as_view(), name="AddElection"),
     path("deleteElection/<int:id>", DeleteElection.as_view(), name="DeleteElection"),
     path("updateElection/<int:id>", UpdateElection.as_view(), name="UpdateElection"),

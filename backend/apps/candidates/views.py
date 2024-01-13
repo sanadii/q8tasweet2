@@ -12,8 +12,16 @@ from rest_framework.views import APIView
 from apps.candidates.models import Candidate, Party
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
 
-from apps.elections.models import ElectionCandidate, ElectionParty, ElectionPartyCandidate
-from apps.elections.serializers import ElectionCandidateSerializer, ElectionPartyCandidateSerializer
+from apps.elections.models import(
+    ElectionCandidate,
+    ElectionParty,
+    ElectionPartyCandidate,
+    )
+from apps.elections.serializers import (
+    ElectionCandidateSerializer,
+    ElectionPartySerializer,
+    ElectionPartyCandidateSerializer,
+)
 from helper.views_helper import CustomPagination
 
 from rest_framework.parsers import MultiPartParser, FormParser

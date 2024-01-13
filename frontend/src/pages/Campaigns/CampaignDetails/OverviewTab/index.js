@@ -60,7 +60,7 @@ const OverviewTab = () => {
           <OverviewCandidate />
 
           {/* Guarantees */}
-          {canViewCampaignGuarantee &&
+          {canViewCampaignGuarantee && campaign.election.previousElections &&
             <GuaranteeTargetBar
               campaign={campaign}
               results={results}

@@ -30,14 +30,16 @@ const AttendeesList = () => {
     error
   } = useSelector(campaignSelector);
 
-  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
+  const [campaignAttendee, setCampaignAttendee] = useState([]);
 
+  const { isAdmin, isSubscriber, isModerator, isParty, isCandidate, isSupervisor, isGuarantor, isAttendant, isSorter, isBelowSupervisor, isAttendantOrSorter } = useUserRoles();
   const electionId = campaignDetails.election.id;
+
+
   // Delete Modal Constants
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
 
-  const [campaignAttendee, setCampaignAttendee] = useState([]);
 
   // Delete Multiple Constants
   const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
@@ -222,7 +224,8 @@ const AttendeesList = () => {
 
   // Filters
   const { filteredData: campaignAttendeeList, filters, setFilters } = useFilter(campaignAttendees);
-
+  console.log("campaignAttendees: ", campaignAttendees)
+  console.log("campaignAttendeeList: ", campaignAttendeeList)
 
 
   return (
@@ -247,6 +250,7 @@ const AttendeesList = () => {
         toggle={toggle}
         campaignAttendee={campaignAttendee}
       />
+
       <Row>
         <Col lg={12}>
           <Card id="memberList">
@@ -255,11 +259,6 @@ const AttendeesList = () => {
                 <TableContainerHeader
                   // Title
                   ContainerHeaderTitle="تحضير الناخبين"
-
-                  // Add Elector Button
-                  // isAddElectorButton={true}
-                  // AddButtonText="Add New Guarantee"
-                  // handleAddButtonClick={handleCampaignMemberClicks}
                   toggle={toggle}
 
                   // Delete Button
@@ -271,13 +270,11 @@ const AttendeesList = () => {
                   isGlobalFilter={true}
                   preGlobalFilteredRows={true}
                   isGenderFilter={true}
+                  isAttendeeStatusFilter={true}
                   isCommitteeFilter={true}
                   isResetFilters={true}
 
                   // Settings
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
-                  onTabChange={handleTabChange}
                   filters={filters}
                   setFilters={setFilters}
                   SearchPlaceholder="البحث بالاسم أو الرقم المدني..."

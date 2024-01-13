@@ -20,12 +20,12 @@ class CampaignConsumer(AsyncWebsocketConsumer):
 
 
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        if text_data_json['type'] == 'vote_update':
-            election_id = text_data_json['electionId']
-            election_candidate_id = text_data_json['electionCandidateId']
-            new_votes = text_data_json['votes']
-            election_committee_id = text_data_json['electionCommitteeId']
+        data = json.loads(text_data)
+        if data['type'] == 'election_sorting':
+            election_id = data['electionId']
+            election_candidate_id = data['electionCandidateId']
+            new_votes = data['votes']
+            election_committee_id = data['electionCommitteeId']
             await self.update_vote_count(election_candidate_id, new_votes, election_committee_id)
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -37,6 +37,20 @@ class CampaignConsumer(AsyncWebsocketConsumer):
                     'electionCommitteeId': election_committee_id,
                 }
             )
+        
+            print(f"Received message: {text_data}")  # Debugging line
+            # Forward the message to the GlobalConsumer
+            
+            await self.channel_layer.group_send(
+                'global_channel_default',  # Assuming default channel group
+                {
+                    'type': 'broadcast_message',
+                    'message': data,  # Pass the entire message
+                    'channel': 'campaign',  # Indicate the source channel
+                    'dataType': 'election_sorting'  # Specify data type
+                }
+            )
+
             print(f"Received message: {text_data}")  # Debugging line
 
 
@@ -97,12 +111,12 @@ class SortingConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        if text_data_json['type'] == 'vote_update':
-            election_id = text_data_json['electionId']
-            election_candidate_id = text_data_json['electionCandidateId']
-            new_votes = text_data_json['votes']
-            election_committee_id = text_data_json['electionCommitteeId']
+        data = json.loads(text_data)
+        if data['type'] == 'vote_update':
+            election_id = data['electionId']
+            election_candidate_id = data['electionCandidateId']
+            new_votes = data['votes']
+            election_committee_id = data['electionCommitteeId']
             await self.update_vote_count(election_candidate_id, new_votes, election_committee_id)
             await self.channel_layer.group_send(
                 self.room_group_name,

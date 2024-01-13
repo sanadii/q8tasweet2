@@ -35,7 +35,7 @@ const SortingTab = () => {
   useEffect(() => {
     if (lastMessage !== null) {
       const message = JSON.parse(lastMessage.data);
-      if (message.type === 'vote_update' && message.electionCommitteeId === committeeId) {
+      if (message.type === 'election_sorting' && message.electionCommitteeId === committeeId) {
         updateSortingVotes(message.electionCandidateId, message.votes);
       }
     }
@@ -53,7 +53,7 @@ const SortingTab = () => {
 
   const sendVoteUpdate = (candidateId, newVotes) => {
     sendMessage(JSON.stringify({
-      type: 'vote_update',
+      type: 'election_sorting',
       electionId: electionId,
       electionCandidateId: candidateId,
       electionCommitteeId: committeeId,

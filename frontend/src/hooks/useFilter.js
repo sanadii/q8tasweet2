@@ -7,6 +7,7 @@ const useFilter = (data, initialFilters) => {
         status: null,
         priority: null,
         category: null,
+        committee: null,
         member: null,
         role: [30, 31, 32, 33],
     });

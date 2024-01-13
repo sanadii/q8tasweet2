@@ -72,7 +72,7 @@ const Section = ({ viewType }) => {
     const candidatesTitle = election.electionType !== 1 ? "القوائم والمرشحين" : "المرشحين";
     mainTabs.push({ id: "2", title: candidatesTitle, icon: 'ri-activity-line' });
 
-    if (election.electResult === 2) {
+    if (election.electResult !== 1) {
       mainTabs.push({ id: "3", title: "اللجان", icon: 'ri-activity-line' });
     }
     if (electionCampaigns.length !== 0) {

@@ -3,8 +3,10 @@ from django.http import JsonResponse
 # from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
+from rest_framework.generics import CreateAPIView, UpdateAPIView, DestroyAPIView, ListAPIView
 
 from itertools import chain
+from rest_framework.exceptions import ValidationError  # Add this import
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -16,35 +18,43 @@ from rest_framework.exceptions import AuthenticationFailed
 from apps.auths.models import User, Group
 from apps.campaigns.models import (
     Campaign,
-    CampaignParty,
     CampaignMember,
-    CampaignPartyMember,
     CampaignGuarantee,
     CampaignPartyGuarantee,
     CampaignAttendee,
     CampaignSorting,
+
     CampaignParty,
+    CampaignPartyMember,
     CampaignPartyMember,
     CampaignPartyGuarantee
     )
 
-from apps.elections.models import Election, ElectionCandidate, ElectionParty, ElectionCommittee
+from apps.elections.models import (
+    Election,
+    ElectionCandidate,
+    ElectionParty,
+    ElectionCommittee
+)
+
 from django.contrib.auth.models import Group
 
 # Serializers
 from apps.campaigns.serializers import (
     CampaignSerializer,
-    CampaignPartySerializer,
-    CampaignCombinedSerializer,
-
-    CampaignCombinedSerializer,
     CampaignMemberSerializer,
     CampaignGuaranteeSerializer,
     CampaignAttendeeSerializer, 
     CampaignSortingSerializer,
+
+    CampaignPartyMemberSerializer,
+    CampaignPartyGuaranteeSerializer,
+
+    # CampaignCombinedSerializer,
+    # CampaignPartySerializer,
     )
 
-from apps.notifications.models import CampaignNotification
+from apps.notifications.models import CampaignNotification, CampaignPartyNotification
 from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteeSerializer
 from apps.auths.serializers import GroupSerializer
 from apps.notifications.serializers import CampaignNotificationSerializer
@@ -67,7 +77,7 @@ class GetCampaigns(APIView):
 
             # Fetch campaigns and campaign parties separately
             campaigns = Campaign.objects.all()
-            campaign_parties = CampaignParty.objects.all()
+            # campaign_parties = CampaignParty.objects.all()
 
             # Apply filtering for non-admin/superadmin users
             if not (user.is_superuser or user.groups.filter(name__in=["admin", "superAdmin"]).exists()):
@@ -76,17 +86,17 @@ class GetCampaigns(APIView):
                     | CampaignPartyMember.objects.filter(user=user).values_list("campaign_party_id", flat=True)
                 )
                 campaigns = campaigns.filter(id__in=accessible_campaign_ids)
-                campaign_parties = campaign_parties.filter(id__in=accessible_campaign_ids)
+                # campaign_parties = campaign_parties.filter(id__in=accessible_campaign_ids)
 
             # Combine results in Python
-            combined_data = list(chain(campaigns, campaign_parties))
+            # combined_data = list(chain(campaigns, campaign_parties))
 
             # Pagination
             paginator = CustomPagination()
-            paginated_combined_data = paginator.paginate_queryset(combined_data, request)
+            paginated_combined_data = paginator.paginate_queryset(campaigns, request)
 
             context = {"request": request}
-            serializer = CampaignCombinedSerializer(paginated_combined_data, many=True, context=context)
+            serializer = CampaignSerializer(paginated_combined_data, many=True, context=context)
 
             return paginator.get_paginated_response(serializer.data)
 
@@ -99,10 +109,11 @@ class GetCampaigns(APIView):
 class GetCampaignDetails(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, campaignType, slug):
-        campaign = get_object_or_404(Campaign, slug=slug)
+    def get(self, request, slug):
+
         context = {"request": request}
         user_id = context["request"].user.id
+        campaign = get_object_or_404(Campaign, slug=slug)
 
         # Does User have Higher Privilage? Admin? Moderator?
 
@@ -112,18 +123,20 @@ class GetCampaignDetails(APIView):
         # Fetch campaign members based on user/member role
         campaign_members, campaign_managed_members = get_campaign_members_by_role(campaign, user_role, current_campaign_member)
 
-        # Extract user ids from campaign_managed_members to further filter guarantees based on member's user
+        # # Extract user ids from campaign_managed_members to further filter guarantees based on member's user
         campaign_guarantees = CampaignGuarantee.objects.filter(
             campaign=campaign,
             member__user__id__in=campaign_managed_members.values_list('user__id', flat=True)
         ).select_related('campaign')
 
-        if campaignType == "candidates":
-            election = campaign.election_candidate.election
-            election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
-        else:  # campaignType == "party"
-            election = campaign.election_party.election
-            election_parties = ElectionParty.objects.filter(election=election).select_related('election')
+        election = campaign.election_candidate.election
+
+        # if campaignType == "candidates":
+        #     election = campaign.election_candidate.election
+        # elif campaignType == "parties":
+        #     election = campaign.election_party.election
+
+        election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
 
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
         campaign_attendees = CampaignAttendee.objects.filter(election=election).select_related('election')
@@ -141,14 +154,14 @@ class GetCampaignDetails(APIView):
         return Response({
             "data": {
                 "currentCampaignMember": current_campaign_member,
-                "campaignDetails": CampaignCombinedSerializer(campaign, context=context).data,
+                "campaignDetails": CampaignSerializer(campaign, context=context).data,
                 "campaignMembers": CampaignMemberSerializer(campaign_members, many=True, context=context).data,
                 "campaignGuarantees": CampaignGuaranteeSerializer(campaign_guarantees, many=True, context=context).data,
-                "campaignAttendees": CampaignGuaranteeSerializer(campaign_attendees, many=True, context=context).data,
+                "campaignAttendees": CampaignAttendeeSerializer(campaign_attendees, many=True, context=context).data,
                 "campaignNotifications": CampaignNotificationSerializer(campaign_notifications, many=True, context=context).data,
                 "campaignElectionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
                 "campaignElectionCommittees": ElectionCommitteeSerializer(election_committees, many=True, context=context).data,
-                "campaignElectionSorting": CampaignSortingSerializer(election_candidates_data, many=True, context=context).data,
+                # "campaignElectionSorting": CampaignSortingSerializer(election_candidates_data, many=True, context=context).data,
                 "campaign_roles": get_campaign_roles(context),
             },
             "code": 200
@@ -192,90 +205,115 @@ class DeleteCampaign(APIView):
 
 
 # Campaign Members
-class AddNewCampaignMember(APIView):
+class CampaignMemberViewMixin:
+    """Mixin to handle common functionality for campaign member views."""
+
+    def get_queryset(self):
+        """Return the appropriate queryset."""
+        return CampaignMember.objects.all()
+
+    def get_serializer_class(self):
+        """Return the appropriate serializer class."""
+        return CampaignMemberSerializer
+
+class AddNewCampaignMember(CampaignMemberViewMixin, CreateAPIView):
+    """View for creating new campaign members."""
+
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        serializer = CampaignMemberSerializer(data=request.data, context={'request': request})
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
-        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
+    def create(self, request, *args, **kwargs):
+        """Handle campaign guarantee creation."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response({"data": serializer.data, "count": 1, "code": 200}, status=status.HTTP_201_CREATED, headers=headers)
 
-class UpdateCampaignMember(APIView):
+
+class UpdateCampaignMember(CampaignMemberViewMixin, UpdateAPIView):
+    """View for updating existing campaign members."""
+
     permission_classes = [IsAuthenticated]
 
-    def patch(self, request, id):
-        try:
-            current_campaign_member = CampaignMember.objects.get(id=id)
-            
-        except CampaignMember.DoesNotExist:
-            return Response({"data": "Campaign Member not found", "count": 0, "code": 404}, status=404)
-        
-        serializer = CampaignMemberSerializer(instance=current_campaign_member, data=request.data, partial=True, context={'request': request})
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
-        
-        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
+    def get_object(self):
+        """Ensure campaign member type matches campaignType."""
+        campaign_member = super().get_object()
+        if campaign_member.__class__ != self.get_queryset().model:
+            raise ValidationError("Campaign member type does not match campaignType")
+        return campaign_member
 
-class DeleteCampaignMember(APIView):
-    def delete(self, request, id):
-        try:
-            current_campaign_member = CampaignMember.objects.get(id=id)
-            current_campaign_member.delete()
-            return JsonResponse(
-                {"data": "campaign member deleted successfully", "count": 1, "code": 200},
-                safe=False,
-            )
-        except Election.DoesNotExist:
-            return JsonResponse(
-                {"data": "campaign not found", "count": 0, "code": 404}, safe=False
-            )
+    def update(self, request, *args, **kwargs):
+        """Handle campaign member update."""
+        partial = kwargs.pop('partial', False)
+        serializer = self.get_serializer(instance=self.get_object(), data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({"data": serializer.data, "count": 1, "code": 200}, status=status.HTTP_200_OK)
+
+
+class DeleteCampaignMember(CampaignMemberViewMixin, DestroyAPIView):
+    """View for deleting campaign members."""
+
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        """Handle campaign member deletion."""
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"data": "Campaign guarantee deleted successfully", "count": 1, "code": 200}, status=status.HTTP_204_NO_CONTENT)
 
 
 # Campaign Guarantees
-class AddNewCampaignGuarantee(APIView):
+class CampaignGuaranteeViewMixin:
+    """Mixin to handle common functionality for campaign guarantee views."""
+    def get_queryset(self):
+        """Return the appropriate queryset."""
+        return CampaignGuarantee.objects.all()
+
+    def get_serializer_class(self):
+        """Return the appropriate serializer class."""
+        return CampaignGuaranteeSerializer
+
+class AddNewCampaignGuarantee(CampaignGuaranteeViewMixin, CreateAPIView):
+    """View for creating new campaign guarantees."""
+
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        serializer = CampaignGuaranteeSerializer(data=request.data, context={'request': request})
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
-        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
+    def create(self, request, *args, **kwargs):
+        """Handle campaign guarantee creation."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response({"data": serializer.data, "count": 1, "code": 200}, status=status.HTTP_201_CREATED, headers=headers)
 
-class UpdateCampaignGuarantee(APIView):
+
+class UpdateCampaignGuarantee(CampaignGuaranteeViewMixin, UpdateAPIView):
+    """View for updating existing campaign guarantees."""
+
     permission_classes = [IsAuthenticated]
 
-    def patch(self, request, id):
-        try:
-            campaign_guarantee = CampaignGuarantee.objects.get(id=id)
-        except CampaignGuarantee.DoesNotExist:
-            return Response({"data": "Campaign Guarantee not found", "count": 0, "code": 404}, status=404)
-        
-        serializer = CampaignGuaranteeSerializer(instance=campaign_guarantee, data=request.data, partial=True, context={'request': request})
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"data": serializer.data, "count": 1, "code": 200}, status=200)
-        
-        return Response({"data": serializer.errors, "count": 0, "code": 400}, status=400)
+    def update(self, request, *args, **kwargs):
+        """Handle campaign guarantee update."""
+        partial = kwargs.pop('partial', False)
+        serializer = self.get_serializer(instance=self.get_object(), data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({"data": serializer.data, "count": 1, "code": 200}, status=status.HTTP_200_OK)
 
-class DeleteCampaignGuarantee(APIView):
+
+class DeleteCampaignGuarantee(CampaignGuaranteeViewMixin, DestroyAPIView):
+    """View for deleting campaign guarantees."""
+
     permission_classes = [IsAuthenticated]
 
-    def delete(self, request, id):
-        try:
-            campaign_guarantee = CampaignGuarantee.objects.get(id=id)
-            campaign_guarantee.delete()
-            return JsonResponse({"data": "Campaign Guarantee deleted successfully", "count": 1, "code": 200}, safe=False)
-        except CampaignGuarantee.DoesNotExist:
-            return JsonResponse({"data": "Campaign Guarantee not found", "count": 0, "code": 404}, safe=False)
+    def delete(self, request, *args, **kwargs):
+        """Handle campaign guarantee deletion."""
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response({"data": "Campaign guarantee deleted successfully", "count": 1, "code": 200}, status=status.HTTP_204_NO_CONTENT)
 
+# Campaign Attendees
 class AddNewCampaignAttendee(APIView):
     permission_classes = [IsAuthenticated]
 

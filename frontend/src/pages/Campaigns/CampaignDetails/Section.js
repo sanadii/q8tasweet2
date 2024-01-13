@@ -86,7 +86,7 @@ const Section = () => {
     }
   };
 
-  if (!campaign.candidate) {
+  if (!campaign.name) {
     return <Loader />;
   }
 
@@ -101,8 +101,8 @@ const Section = () => {
 
           <Col>
             <div className="p-2">
-              <h3 className="text-white mb-1">{campaign.campaignName}</h3>
-              <p className="text-white-75">{campaign.electionName}</p>
+              <h3 className="text-white mb-1">{campaign.name}</h3>
+              <p className="text-white-75">{campaign.election.name}</p>
               <div className="hstack text-white gap-1">
                 <div className="me-2">
                   <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>

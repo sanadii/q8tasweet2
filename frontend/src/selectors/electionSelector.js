@@ -12,6 +12,8 @@ export const electionSelector = createSelector(
     futureElections: electionsState.futureElections,
 
     election: electionsState.electionDetails,
+    electionType: electionsState.electionDetails.electType,
+
     electionDetails: electionsState.electionDetails,
     previousElection: electionsState.electionDetails.previousElection,
     electionId: electionsState.electionDetails.id,
@@ -21,13 +23,12 @@ export const electionSelector = createSelector(
     electionParties: electionsState.electionParties,
     electionPartyCandidates: electionsState.electionPartyCandidates,
 
-
     electionCampaigns: electionsState.electionCampaigns,
     electionAttendees: electionsState.electionAttendees,
     electionCommitteeResults: electionsState.electionCommitteeResults,
 
 
-    campaignSorters: electionsState.campaignSorters,
+    electionSorters: electionsState.electionSorters,
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,
 

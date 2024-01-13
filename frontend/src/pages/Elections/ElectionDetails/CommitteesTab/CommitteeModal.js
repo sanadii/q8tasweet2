@@ -22,17 +22,16 @@ import { Col, ModalBody, Modal, ModalHeader, Form, ModalFooter, Button } from "r
 export const CommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommittee }) => {
   const dispatch = useDispatch();
 
-  const { electionDetails, campaignSorters } = useSelector(electionSelector);
+  const { electionDetails, electionSorters } = useSelector(electionSelector);
   const election = electionDetails.id
 
-
-  // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS
-  useEffect(() => {
-    if (campaignSorters && !campaignSorters.length) {
-      dispatch(getCampaignSorters());
-    }
-  }, [dispatch, campaignSorters]);
-
+  const filteredElectionSorters = electionSorters.filter((sorter) => {
+    return sorter.committee === electionCommittee.id
+    // || sorter.committee === null;
+    
+  });
+    
+  console.log("electionSorters: ", electionSorters)
   const openModal = () => setModal(!modal);
   const toggleModal = () => {
     setModal(!modal);
@@ -61,6 +60,7 @@ export const CommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommit
           election: election || "",
           name: values.name,
           gender: parseInt(values.gender, 10),
+          sorter: parseInt(values.sorter, 10),
         };
         dispatch(updateElectionCommittee(updatedElectionCommittee));
         console.log("updatedElectionCommittee ", updatedElectionCommittee);
@@ -97,14 +97,14 @@ export const CommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommit
       })),
     },
     {
-      id: "user-field",
-      name: "gender-field",
+      id: "sorter-field",
+      name: "sorter",
       label: "الفارز",
       type: "select",
-      options: GenderOptions.map(gender => ({
-        id: gender.id,
-        label: gender.name,
-        value: gender.id
+      options: filteredElectionSorters.map(item => ({
+        id: item.id,
+        label: item.name,
+        value: item.id
       })),
     },
   ];

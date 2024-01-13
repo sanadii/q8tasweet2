@@ -23,11 +23,10 @@ const Id = (cell) => {
 };
 
 const Name = (cell) => {
-  console.log ("THIS IS THE TYPE: ", cell.row.original.campaignType)
   return (
     <React.Fragment>
       <Link
-        to={`/dashboard/campaigns/${cell.row.original.campaignType}/${cell.row.original.slug}`}
+        to={`/dashboard/campaigns/${cell.row.original.slug}`}
         className="fw-medium link-primary"
       >
         {cell.value}

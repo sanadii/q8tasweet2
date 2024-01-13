@@ -48,6 +48,15 @@ const Gender = ({ row }) => {
     );
 };
 
+const Sorter = (cellProps) => {
+    return (
+        <p>
+            {cellProps.row.original.sorter?.fullName}
+            <span>- {cellProps.row.original.sorter?.id}</span>
+        </p>
+    );
+};
+
 const Votes = (cellProps) => {
     return <p>{cellProps.row.original.votes}</p>;
 }
@@ -97,6 +106,7 @@ export {
     Votes,
     Name,
     Gender,
+    Sorter,
     Position,
     Actions,
 };

@@ -18,6 +18,8 @@ from apps.elections.models import (
 
 from apps.campaigns.models import CampaignSorting
 
+from apps.auths.serializers import UserSerializer
+
 class ElectionSerializer(serializers.ModelSerializer):
     """ Serializer for the Election model. """
     # admin_serializer_classes = (TrackMixin, TaskMixin)
@@ -270,9 +272,11 @@ class ElectionCommitteeSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the ElectionCommittee model. """
     admin_serializer_classes = (TrackMixin,)
     
+    sorter = UserSerializer(read_only=True)
+
     class Meta:
         model = ElectionCommittee
-        fields = ["id", "election", "name", "gender", "location"]
+        fields = ["id", "election", "name", "gender", "location", "sorter"]
 
     def create(self, validated_data):
         """ Customize creation (POST) of an instance """
@@ -282,6 +286,7 @@ class ElectionCommitteeSerializer(AdminFieldMixin, serializers.ModelSerializer):
         """ Customize update (PUT, PATCH) of an instance """
         # Additional logic to customize instance updating
         return super().update(instance, validated_data)
+
 
 class ElectionCommitteeResultSerializer(AdminFieldMixin, serializers.ModelSerializer):
     admin_serializer_classes = (TrackMixin,)

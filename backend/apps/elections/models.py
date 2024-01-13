@@ -4,6 +4,7 @@ from django.db.models.signals import post_save, post_delete
 from django_extensions.db.fields import AutoSlugField, SlugField
 from django.dispatch import receiver
 from django.db.models import Sum
+from django.contrib.auth import get_user_model
 
 from django.utils.text import slugify
 import uuid
@@ -12,6 +13,8 @@ from apps.configs.models import TrackModel, TaskModel
 
 from helper.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions
 from helper.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
+
+User = get_user_model()
 
 class Election(TrackModel, TaskModel):
     # Election Essential Information
@@ -57,7 +60,7 @@ class Election(TrackModel, TaskModel):
     def __str__(self):
         return f"{self.sub_category.name} - {self.due_date.year if self.due_date else 'لم يحدد بعد'}"
     
-    def save(self, *args, **kwargs):
+    def create(self, *args, **kwargs):
         self.slug = slugify(f"{self.sub_category.slug}-{self.due_date.year if self.due_date else 'tba'}")
         super().save(*args, **kwargs)
 
@@ -175,6 +178,13 @@ class ElectionCommittee(TrackModel):
     name = models.CharField(max_length=255, blank=False, null=False)
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
     location = models.TextField(blank=True, null=True)
+    sorter = models.OneToOneField(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='election_committee_sorter'  # Singular related name
+    )
 
     class Meta:
         db_table = "election_committee"
@@ -211,31 +221,31 @@ class ElectionCommitteeResult(TrackModel):
     def __str__(self):
         return f"{self.election_committee.name} - {self.election_candidate.candidate.name} - Votes: {self.votes}"
 
-class ElectionCommitteeSorter(TrackModel, TaskModel):
-    election_committee = models.ForeignKey('ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_committees')
-    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_users')
+# class ElectionCommitteeSorter(TrackModel, TaskModel):
+#     election_committee = models.ForeignKey('ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_committees')
+#     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_users')
 
 
 
-    class Meta:
-        # managed = False
-        db_table = "election_committee_sorter"
-        verbose_name = "Election Committee Sorter"
-        verbose_name_plural = "Election Committee Sorters"
-        default_permissions = []
-        permissions  = [
-            ("canViewElectionCommitteeSorter", "Can View Election Committee Sorter"),
-            ("canAddElectionCommitteeSorter", "Can Add Election Committee Sorter"),
-            ("canChangeElectionCommitteeSorter", "Can Change Election Committee Sorter"),
-            ("canDeleteElectionCommitteeSorter", "Can Delete Election Committee Sorter"),
-            ]
+#     class Meta:
+#         # managed = False
+#         db_table = "election_committee_sorter"
+#         verbose_name = "Election Committee Sorter"
+#         verbose_name_plural = "Election Committee Sorters"
+#         default_permissions = []
+#         permissions  = [
+#             ("canViewElectionCommitteeSorter", "Can View Election Committee Sorter"),
+#             ("canAddElectionCommitteeSorter", "Can Add Election Committee Sorter"),
+#             ("canChangeElectionCommitteeSorter", "Can Change Election Committee Sorter"),
+#             ("canDeleteElectionCommitteeSorter", "Can Delete Election Committee Sorter"),
+#             ]
 
-    def __str__(self):
-        return f"{self.election.name}"
+#     def __str__(self):
+#         return f"{self.election.name}"
     
-    # def save(self, *args, **kwargs):
-    #     self.slug = slugify(f"{self.sub_category.slug}-{self.due_date.year if self.due_date else 'tba'}")
-    #     super().save(*args, **kwargs)
+#     # def save(self, *args, **kwargs):
+#     #     self.slug = slugify(f"{self.sub_category.slug}-{self.due_date.year if self.due_date else 'tba'}")
+#     #     super().save(*args, **kwargs)
 
 
 @receiver(post_save, sender=ElectionCommitteeResult)

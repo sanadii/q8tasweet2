@@ -28,12 +28,12 @@ class GlobalConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        if self.is_valid_message(data):
-            await self.process_message(data)
+        # if self.is_valid_message(data):
+        await self.process_message(data)
 
-    def is_valid_message(self, data):
-        required_fields = ['dataType', 'notificationGroup', 'messageType', 'message']
-        return all(field in data for field in required_fields)
+    # def is_valid_message(self, data):
+    #     required_fields = ['dataType', 'notificationGroup', 'messageType', 'message']
+    #     return all(field in data for field in required_fields)
 
     async def process_message(self, data):
         notificationGroup = data.get('notificationGroup')

@@ -168,7 +168,7 @@ const dashboardRoutes = [
 
   // Campaigns
   { path: "/dashboard/campaigns", component: <CampaignList /> },
-  { path: "/dashboard/campaigns/:campaignType/:slug", component: <CampaignDetails /> },
+  { path: "/dashboard/campaigns/:slug", component: <CampaignDetails /> },
 
   { path: "/dashboard/users/", component: <UserList /> },
 

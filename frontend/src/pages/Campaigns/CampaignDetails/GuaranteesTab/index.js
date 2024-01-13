@@ -21,9 +21,14 @@ const GuaranteesTab = () => {
   const dispatch = useDispatch();
 
   // States
-  const { campaignGuarantees, campaignMembers, isCampaignGuaranteeSuccess, error } = useSelector(campaignSelector);
+  const {
+    campaignGuarantees,
+    campaignMembers,
+    isCampaignGuaranteeSuccess,
+    error
+  } = useSelector(campaignSelector);
 
-  // CampaignGuarantees Constants
+  // Constants
   const [campaignGuarantee, setCampaignGuarantee] = useState(null);
 
   // Delete Modal Constants
@@ -198,6 +203,7 @@ const GuaranteesTab = () => {
         toggle={toggle}
         campaignGuarantee={campaignGuarantee}
       />
+      
       <Row>
         <Col lg={12}>
           <Card id="memberList">
@@ -206,11 +212,6 @@ const GuaranteesTab = () => {
                 <TableContainerHeader
                   // Title
                   ContainerHeaderTitle="المضامين"
-
-                  // Add Elector Button
-                  // isAddElectorButton={true}
-                  // AddButtonText="Add New Guarantee"
-                  // handleAddButtonClick={handleCampaignMemberClicks}
                   toggle={toggle}
 
                   // Delete Button
@@ -241,7 +242,6 @@ const GuaranteesTab = () => {
                     columns={columns}
                     data={campaignGuaranteeList || []}
                     customPageSize={50}
-                    // setCampaignGuaranteeList={setCampaignGuaranteeList}
 
                     // Styling
                     className="custom-header-css"

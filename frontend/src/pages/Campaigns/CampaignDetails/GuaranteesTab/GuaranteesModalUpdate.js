@@ -70,10 +70,9 @@ const GuaranteesModalUpdate = ({
 
 
   useEffect(() => {
-    // Set the callback action for the update modal
     setOnModalSubmit(() => handleUpdateButton);
-    return () => setOnModalSubmit(null); // Cleanup on unmount
-  }, [handleUpdateButton, setOnModalSubmit]);
+    return () => setOnModalSubmit(null);
+}, [setOnModalSubmit]);
 
   return (
     <React.Fragment>

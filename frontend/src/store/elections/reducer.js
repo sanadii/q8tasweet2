@@ -86,6 +86,7 @@ const IntialState = {
   electionCampaigns: [],
   electionCommittees: [],
   electionCommitteeResults: [],
+  electionSorters: [],
 };
 
 const Elections = (state = IntialState, action) => {
@@ -124,6 +125,7 @@ const Elections = (state = IntialState, action) => {
             electionCampaigns: action.payload.data.electionCampaigns,
             electionCommittees: action.payload.data.electionCommittees,
             electionCommitteeResults: action.payload.data.electionCommitteeResults,
+            electionSorters: action.payload.data.electionSorters,
             isElectionCreated: false,
             isElectionSuccess: true,
           };

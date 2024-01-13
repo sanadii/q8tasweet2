@@ -159,18 +159,18 @@ const CampaignsTab = () => {
                         <div className="team-profile-img">
                           <div className="avatar-sm rounded">
                             <ImageCandidateCampaign
-                              imagePath={campaign.candidate.image}
+                              imagePath={campaign.image}
                             />
                           </div>
 
                           <div className="team-content">
                             <Link to="#" className="d-block">
                               <h5 className="fs-16 mb-1">
-                                <b>{campaign.candidate.name}</b>
+                                <b>{campaign.name}</b>
                               </h5>
                             </Link>
                             <p className="text-muted mb-0">
-                              رمز المرشح: {campaign.candidate.id}
+                              {/* رمز المرشح: {campaign.campaign.id} */}
                             </p>
                             <p className="text-muted mb-0 text-danger">
                               رمز مرشح الإنتخابات: {campaign.electionCandidate}

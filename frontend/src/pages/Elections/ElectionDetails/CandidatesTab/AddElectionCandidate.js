@@ -10,12 +10,13 @@ import { electionSelector, candidateSelector } from 'Selectors';
 import { Input, Form } from "reactstrap";
 import SimpleBar from "simplebar-react";
 
-const AddElectionCandidate = ({ election }) => {
+const AddElectionCandidate = () => {
     const dispatch = useDispatch();
-    const { electionCandidates, electionParties } = useSelector(electionSelector);
+    const { election, electionType, electionCandidates, electionParties } = useSelector(electionSelector);
     const { candidates } = useSelector(candidateSelector);
     const { parties } = useSelector(candidateSelector);
     const electionCandidateList = electionCandidates;
+
 
     // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS
     useEffect(() => {
@@ -73,16 +74,18 @@ const AddElectionCandidate = ({ election }) => {
                 />
                 <i className="ri-search-line search-icon"></i>
             </div>
-            <select id="id-field" name="id" onChange={setElectionParty} value={selectedParty}>
-                {electionParties.map((item, index) => (
-                    <option
-                        key={index}
-                        value={parseInt(item.id, 10)}>
+            {electionType !== 1 &&
+                <select id="id-field" name="id" onChange={setElectionParty} value={selectedParty}>
+                    {electionParties.map((item, index) => (
+                        <option
+                            key={index}
+                            value={parseInt(item.id, 10)}>
 
-                        {item.name}
-                    </option>
-                ))}
-            </select>
+                            {item.name}
+                        </option>
+                    ))}
+                </select>
+            }
             <SimpleBar
                 className="mx-n4 px-4"
                 data-simplebar="init"
@@ -98,10 +101,10 @@ const AddElectionCandidate = ({ election }) => {
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 const newElectionCandidate = {
-                                    ...(election.electType !== 1) ? { electionParty: selectedParty } : { election: election.id },
+                                    ...(electionType !== 1) ? { electionParty: selectedParty } : { election: election.id },
                                     candidate: candidate.id,
                                 };
-                                if (election.electType !== 1) {
+                                if (electionType !== 1) {
                                     dispatch(addElectionPartyCandidate(newElectionCandidate));
                                 } else {
                                     dispatch(addNewElectionCandidate(newElectionCandidate));

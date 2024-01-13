@@ -6,7 +6,7 @@ import { electionSelector } from 'Selectors';
 
 import { deleteElectionCommittee } from "store/actions";
 import CommitteeModal from "./CommitteeModal";
-import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Position, Votes, Actions } from "./CommitteesCol";
+import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Sorter, Actions } from "./CommitteesCol";
 import { usePermission, useDelete } from "hooks";
 
 // Utility and helper imports
@@ -114,6 +114,11 @@ const CommitteesTab = () => {
         Cell: (cellProps) => <Gender {...cellProps} />
       },
       {
+        Header: "الفارز",
+        filterable: true,
+        Cell: (cellProps) => <Sorter {...cellProps} />
+      },
+      {
         Header: "إجراءات",
         Cell: (cellProps) => (
           <Actions
@@ -123,11 +128,6 @@ const CommitteesTab = () => {
             onClickDelete={onClickDelete}
           />
         )
-      },
-      {
-        Header: "رمز",
-        accessor: "committee_id",
-        Cell: (cellProps) => <Id {...cellProps} />
       },
     ],
     [handleElectionCommitteeClick, checkedAll]

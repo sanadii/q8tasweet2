@@ -133,7 +133,7 @@ export const NotificationPanel = () => {
                 { id: '', label: '- Choose Campaign - ', value: '' },
                 ...userCampaigns.map(campaign => ({
                     id: campaign.id,
-                    label: campaign.candidate.name,
+                    label: campaign.name,
                     value: campaign.slug,
                 }))
             ],

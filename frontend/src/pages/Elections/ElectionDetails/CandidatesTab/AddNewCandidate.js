@@ -28,6 +28,7 @@ const AddNewCandidate = () => {
         status: 1,
         priority: 1,
     };
+    console.log("electionType: ", election.electType)
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -37,7 +38,6 @@ const AddNewCandidate = () => {
         }),
         onSubmit: (values) => {
             const formData = new FormData();
-
             if (election.electType !== 1) {
                 formData.append('electionParty', values.electionParty);
             } else {
@@ -94,7 +94,7 @@ const AddNewCandidate = () => {
             ],
             colSize: 12,
         }
-        
+
     ];
 
     return (
