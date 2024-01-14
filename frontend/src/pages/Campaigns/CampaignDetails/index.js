@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { campaignSelector } from 'Selectors';
-// import { getCampaignDetails } from "store/actions";
+import { getCampaignDetails } from "store/actions";
 import Section from "./Section";
 import { Loader } from "components";
 import { usePermission } from 'hooks';
@@ -15,6 +15,18 @@ const CampaignDetails = () => {
   const { slug } = useParams();
   const { campaign } = useSelector(campaignSelector);
   const { canViewCampaign } = usePermission();
+
+  console.log("slug: ", slug)
+
+  useEffect(() => {
+    // Set the document title
+    document.title = "الانتخابات | كويت تصويت";
+
+    // Fetch election details if the slug is available and candidate is empty
+    if (slug && (isEmpty(campaign) || campaign.slug !== slug)) {
+      dispatch(getCampaignDetails(slug));
+    }
+  }, [dispatch, slug]);
 
 
   return (

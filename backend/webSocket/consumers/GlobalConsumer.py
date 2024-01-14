@@ -9,14 +9,14 @@ from asgiref.sync import sync_to_async
 
 class DataType(Enum):
     NOTIFICATION = 'notification'
-    ELECTION_SORT = 'electionSort'
+    ELECTION_SORT = 'electionSorting'
     CAMPAIGN_UPDATE = 'campaignUpdate'
     CHAT = 'chat'
     # Add more as needed
 
 class GlobalConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = self.scope["user"]
+        # self.user = self.scope["user"]
         self.channel_type = self.scope['url_route']['kwargs'].get('type', 'default')
         self.room_group_name = f'global_channel_{self.channel_type}'
 
@@ -32,37 +32,30 @@ class GlobalConsumer(AsyncWebsocketConsumer):
         await self.process_message(data)
 
     # def is_valid_message(self, data):
-    #     required_fields = ['dataType', 'notificationGroup', 'messageType', 'message']
+    #     required_fields = ['dataType', 'dataGroup', 'messageType', 'message']
     #     return all(field in data for field in required_fields)
 
     async def process_message(self, data):
-        notificationGroup = data.get('notificationGroup')
-        if notificationGroup == 'users':
-            await self.send_notification_to_users(data)
-        elif notificationGroup == 'campaigns':
+        dataGroup = data.get('dataGroup')
+        channel = data.get('channel')
+        
+        if dataGroup == 'campaigns':
             await self.send_notification_to_campaigns(data)
-        elif notificationGroup == 'elections':
+        elif dataGroup == 'elections':
             await self.send_notification_to_elections(data)
+        elif channel == 'campaign':
+            await self.handle_campaign_message(data)
         else:
-            print(f"Invalid group: {notificationGroup}")
+            print(f"Invalid group or channel: {dataGroup}, {channel}")
 
-    async def send_notification_to_users(self, data):
-        userGroup = data.get('userGroup')
-        user = self.scope["user"]
-        if not user.is_authenticated or (userGroup == 'adminUsers' and not user.is_staff) or \
-           (userGroup == 'nonAdminUsers' and user.is_staff):
-            return
 
-        # Use sync_to_async to save the notification
-        await sync_to_async(self.save_notification)(data)
-
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'broadcast_message',
-                'message': data
-            }
-        )
+    async def handle_campaign_message(self, data):
+        if data['dataType'] == 'electionSorting':
+            # Process election sorting data from campaign
+            # For example, saving to database or notifying users
+            print(f"GlobalConsumer: Processing election sorting message from CampaignConsumer: {data}")
+            # Your processing logic here
+            pass
 
     def save_notification(self, data):
         notification = UserNotification(
@@ -73,6 +66,23 @@ class GlobalConsumer(AsyncWebsocketConsumer):
         notification.save()
 
 
+    # async def send_notification_to_users(self, data):
+    #     userGroup = data.get('userGroup')
+    #     # user = self.scope["user"]
+    #     # if not user.is_authenticated or (userGroup == 'adminUsers' and not user.is_staff) or \
+    #     #    (userGroup == 'nonAdminUsers' and user.is_staff):
+    #         # return
+
+    #     # Use sync_to_async to save the notification
+    #     await sync_to_async(self.save_notification)(data)
+
+    #     await self.channel_layer.group_send(
+    #         self.room_group_name,
+    #         {
+    #             'type': 'broadcast_message',
+    #             'message': data
+    #         }
+    #     )
 
     async def send_notification_to_campaigns(self, data):
         campaign_slug = data.get('campaign')
@@ -97,6 +107,7 @@ class GlobalConsumer(AsyncWebsocketConsumer):
                 'message': data
             }
         )
+        
 
     async def send_notification_to_elections(self, data):
         election_id = data.get('election')
@@ -133,5 +144,7 @@ class GlobalConsumer(AsyncWebsocketConsumer):
         election_notification.save()
 
     async def broadcast_message(self, event):
-        await self.send(text_data=json.dumps(event['message']))
+        response_message = json.dumps(event['message'])
+        await self.send(text_data=response_message)
+        print(f"GlobalConsumer: Received electionSorting message from CampaignConsumer: {response_message}")
 

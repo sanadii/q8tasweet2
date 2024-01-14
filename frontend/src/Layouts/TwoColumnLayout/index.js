@@ -8,7 +8,7 @@ import logoSm from "assets/images/logo-sm.png";
 
 // Import Data
 import navdata from "../LayoutMenuData";
-import VerticalLayout from "../VerticalLayouts";
+import VerticalLayout from "../VerticalLayout";
 
 //SimpleBar
 import SimpleBar from "simplebar-react";

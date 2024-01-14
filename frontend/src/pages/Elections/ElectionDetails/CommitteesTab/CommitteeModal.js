@@ -24,13 +24,14 @@ export const CommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommit
 
   const { electionDetails, electionSorters } = useSelector(electionSelector);
   const election = electionDetails.id
+  console.log("electionCommittee: ", electionCommittee)
 
   const filteredElectionSorters = electionSorters.filter((sorter) => {
-    return sorter.committee === electionCommittee.id
+    return sorter.committee === electionCommittee?.id
     // || sorter.committee === null;
-    
+
   });
-    
+
   console.log("electionSorters: ", electionSorters)
   const openModal = () => setModal(!modal);
   const toggleModal = () => {
@@ -47,11 +48,12 @@ export const CommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommit
     initialValues: {
       election: election || "",
       name: (electionCommittee && electionCommittee.name) || "",
-      gender: (electionCommittee && electionCommittee.gender) || 0,
+      gender: (electionCommittee && electionCommittee.gender) || 1,
+      sorter: (electionCommittee && electionCommittee.sorter) || null,
     },
 
     validationSchema: Yup.object({
-      // committee_id: Yup.string().required("Please Enter Committee ID"),
+      // name: Yup.required("Please Enter Committee ID"),
     }),
     onSubmit: (values) => {
       if (isEdit) {
@@ -81,38 +83,45 @@ export const CommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommit
     // Existing fields
     {
       id: "name-field",
-      name: "name-field",
+      name: "name",
       label: "اسم اللجنة",
       type: "text",
     },
     {
       id: "gender-field",
-      name: "gender-field",
+      name: "gender",
       label: "النوع",
       type: "select",
       options: GenderOptions.map(gender => ({
         id: gender.id,
-        label: gender.name,
+        label: gender.pleural,
         value: gender.id
       })),
     },
+
+    // Condition To show when isEdit is true
     {
       id: "sorter-field",
       name: "sorter",
       label: "الفارز",
       type: "select",
-      options: filteredElectionSorters.map(item => ({
-        id: item.id,
-        label: item.name,
-        value: item.id
-      })),
+      options: [
+        { id: 'none', label: '- اختر الفارز -', value: null },
+        ...filteredElectionSorters.map(item => ({
+          id: item.user,
+          label: item.name,
+          value: item.user
+        }))
+      ],
+      condition: isEdit, // Condition for rendering
+
     },
   ];
 
   return (
     <Modal isOpen={modal} toggle={openModal} centered className="border-0">
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        {!!isEdit ? "Update Election Committee" : "Add New Election Committee"}
+        {!!isEdit ? "تعديل اللجنة الإنتخابية" : "إضافة لجنة إنتخابية"}
       </ModalHeader>
       <ModalBody className="p-4">
         <Form

@@ -26,8 +26,9 @@ import {
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
-const Layout = (props, isHorizontal) => {
+const Layout = (props) => {
     const [headerClass, setHeaderClass] = useState("");
+    const defaultLayout = props.defaultLayout;
 
     const dispatch = useDispatch();
     const {
@@ -67,14 +68,7 @@ const Layout = (props, isHorizontal) => {
             dispatch(changeLayoutWidth(layoutWidthType));
             dispatch(changeLayoutPosition(layoutPositionType));
             dispatch(changeTopbarTheme(topbarThemeType));
-
-            if (props.isHorizontal) {
-                dispatch(changeLayout('horizontal'));
-            } else {
-                // Keep the default layout or set it to vertical
-                dispatch(changeLayout(layoutType));
-            }
-
+            (defaultLayout) && dispatch(changeLayout(defaultLayout));
             dispatch(changeSidebarImageType(leftSidebarImageType));
             dispatch(changeSidebarVisibility(sidebarVisibilitytype));
         }
@@ -88,6 +82,7 @@ const Layout = (props, isHorizontal) => {
         leftSidebarViewType,
         leftSidebarImageType,
         sidebarVisibilitytype,
+        defaultLayout,
         dispatch]);
 
     useEffect(() => {

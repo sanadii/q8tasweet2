@@ -106,6 +106,10 @@ import Offlinepage from "pages/AuthenticationInner/Errors/Offlinepage";
 // import FileManager from "pages/FileManager";
 // import ToDoList from "pages/ToDo";
 
+
+// Labour Approach
+import LabourApproach from "pages//LabourApproach";
+
 // Public Routes
 const publicRoutes = [
   // Public Pages
@@ -146,8 +150,15 @@ const publicRoutes = [
   { path: "/auth-pass-change-basic", component: <BasicPasswCreate /> },
   { path: "/auth-pass-change-cover", component: <CoverPasswCreate /> },
   { path: "/auth-offline", component: <Offlinepage /> },
+
+
+  // Labour Approach
+  { path: "/labourapproach", component: <LabourApproach /> },
+
+  
 ];
 
+// Dashboar Routes
 const dashboardRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/control-panel", component: <ControlPanel /> },
@@ -203,6 +214,7 @@ const dashboardRoutes = [
 
 ]
 
+// AuthProtected Routes
 const authProtectedRoutes = [
   // User Profile
   { path: "/profile-edit", component: <ProfileEdit /> },

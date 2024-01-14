@@ -40,7 +40,7 @@ export const socketChannels = [
     'Client',
 ];
 
-export const notificationGroup = [
+export const dataGroup = [
     {
         id: '1',
         label: 'Users',
@@ -61,7 +61,7 @@ export const notificationGroup = [
 export const dataTypes =
     [
         'notification',
-        'electionSort',
+        'electionSorting',
         'campaignUpdate',
         'chat',
     ];

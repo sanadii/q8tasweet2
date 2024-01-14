@@ -18,30 +18,28 @@ class JWTWebsocketMiddleware(BaseMiddleware):
         query_parameters = {qp.split("=")[0]: qp.split("=")[1] for qp in query_string.split("&") if "=" in qp}
         token = query_parameters.get("token")
 
-        if token is None:
-            await send({
-                "type": "websocket.close",
-                "code": 4000
-            })
-            return
-
-        try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-            user_id = payload.get("user_id")  # Adjust based on your token's payload
-            user = await get_user_from_user_id(user_id)
-            if user:
-                scope["user"] = user
-            else:
-                scope["user"] = AnonymousUser()
-        except jwt.ExpiredSignatureError:
-            await send({"type": "websocket.close", "code": 4001})
-            return
-        except jwt.DecodeError:
-            await send({"type": "websocket.close", "code": 4002})
-            return
-        except AuthenticationFailed:
-            await send({"type": "websocket.close", "code": 4002})
-            return
+        if token:
+            try:
+                payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+                user_id = payload.get("user_id")  # Adjust based on your token's payload
+                user = await get_user_from_user_id(user_id)
+                if user:
+                    scope["user"] = user
+                else:
+                    scope["user"] = AnonymousUser()
+                    
+            except jwt.ExpiredSignatureError:
+                await send({"type": "websocket.close", "code": 4001})
+                return
+            except jwt.DecodeError:
+                await send({"type": "websocket.close", "code": 4002})
+                return
+            except AuthenticationFailed:
+                await send({"type": "websocket.close", "code": 4002})
+                return
+        else:
+            # If no token is provided, set the user as AnonymousUser
+            scope["user"] = AnonymousUser()
 
         return await super().__call__(scope, receive, send)
 

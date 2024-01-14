@@ -7,17 +7,28 @@ import { Loader, TableContainer, ImageCandidateWinnerCircle } from "components";
 import { electionSelector } from 'Selectors';
 
 // UI & Utilities
-import { Card, CardHeader, CardBody } from "reactstrap";
+import { Button, Spinner, Card, CardHeader, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
+import { useWebSocketContext } from 'utils/WebSocketContext';
 
+
+const sortingStatus = () => {
+
+  return (
+    <span>
+      <Spinner size="sm" color="success" className="flex-shrink-0"> الفرز... </Spinner>
+      <span className="flex-grow-1 ms-2 text-success">
+        عملية الفرز جارية...
+      </span>
+    </span>
+  )
+}
 
 const ElectionResults = () => {
 
   // States & Constants
   const { election, electionCandidates, electionPartyCandidates, electionCommittees, error } = useSelector(electionSelector);
   const [showDetailedResults, setShowDetailedResults] = useState(false);
-  const CampaignSlug = 'UmUXPn8A';
-  const [socket, setSocket] = useState(null);
   const [candidatesResult, setCandidatesResult] = useState([]);
   const [electionResultStatus, setElectionResultStatus] = useState("");
 
@@ -58,7 +69,7 @@ const ElectionResults = () => {
         electionResultStatus = "نتائج نهائية"
       } else if (electionResult === 3 && candidate.committeeSorting) {
         electionTypeResults = candidate.committeeSorting;
-        electionResultStatus = "عملية الفرز جارية"
+        electionResultStatus = sortingStatus
 
       }
 
@@ -113,26 +124,19 @@ const ElectionResults = () => {
     });
   };
 
-  // Update the WebSocket from slug & url
+
+  // Update the votes from electionSorting Socket
+  const { sendMessage, readyState, messageHistory } = useWebSocketContext();
+
+  const electioSortingHistory = messageHistory.electionSorting || [];
+
   useEffect(() => {
-    const wsUrl = `ws://127.0.0.1:8000/ws/sorting/${CampaignSlug}/`;
-    const newSocket = new WebSocket(wsUrl);
-
-    newSocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log("WebSocket Data Received:", data);
-      if (data.type === 'vote_update') {
-        console.log(`Updating votes for candidate ${data.electionCandidateId} in committee ${data.electionCommitteeId} to ${data.votes}`);
-        updateSortingVotes(data.electionCandidateId, data.votes, data.electionCommitteeId);
-      }
-    };
-
-    setSocket(newSocket);
-
-    return () => {
-      if (newSocket) newSocket.close();
-    };
-  }, [candidates, electionCommittees]);
+    // Access and process each object within the array
+    electioSortingHistory.forEach(data => {
+      const { electionCandidateId, votes, electionCommitteeId } = data;
+      updateSortingVotes(electionCandidateId, votes, electionCommitteeId);
+    });
+  }, [candidates, electioSortingHistory, updateSortingVotes]);
 
 
   const toggleDetailedResults = () => {
@@ -188,7 +192,7 @@ const ElectionResults = () => {
       <Card>
         <CardHeader>
           <div className="align-items-center d-flex">
-            <h5 className="mb-0 flex-grow-1"><strong>المرشحين والنتائج</strong> - <span>{electionResultStatus}</span></h5>
+            <h5 className="mb-0 flex-grow-1"><strong>المرشحين والنتائج</strong> - {electionResultStatus}</h5>
             <div className="flex-shrink-0">
               {
                 (electionResult === 2 || electionResult === 3) &&
@@ -204,6 +208,9 @@ const ElectionResults = () => {
           </div>
         </CardHeader>
         <CardBody>
+
+
+
           {candidatesResult && candidatesResult.length ? (
             <TableContainer
               // Data

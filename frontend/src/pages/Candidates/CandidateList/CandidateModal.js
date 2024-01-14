@@ -35,6 +35,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       status: Yup.number().integer().required('Status is required'),
       priority: Yup.number().integer().required('priority is required'),
     }),
+    
     onSubmit: (values) => {
       const formData = new FormData();
       formData.append('id', candidate ? candidate.id : 0);

@@ -272,7 +272,7 @@ class ElectionCommitteeSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the ElectionCommittee model. """
     admin_serializer_classes = (TrackMixin,)
     
-    sorter = UserSerializer(read_only=True)
+    # sorter = UserSerializer(read_only=True)
 
     class Meta:
         model = ElectionCommittee

@@ -11,7 +11,7 @@ import { Form } from "reactstrap";
 // import { fields } from "./WebSocketFields";
 
 import { UncontrolledAlert } from 'reactstrap';
-import { notificationGroup, messageTypes, dataTypes, userGroups } from "constants";
+import { dataGroup, messageTypes, dataTypes, userGroups } from "constants";
 import { useWebSocketContext } from 'utils/WebSocketContext';
 
 
@@ -24,12 +24,13 @@ export const NotificationPanel = () => {
 
     // Use global WebSocket context
     const { sendMessage, readyState, messageHistory } = useWebSocketContext();
+    const notificationHistory = messageHistory.notification || [];
 
     // Form validation
     const validation = useFormik({
         initialValues: {
             dataType: 'notification',
-            notificationGroup: 'users',
+            dataGroup: 'users',
             userGroup: 'allUsers',
             campaign: 'primary',
             election: '',
@@ -49,11 +50,11 @@ export const NotificationPanel = () => {
                     dataType: values.dataType,
                     messageType: values.messageType,
                     message: values.message,
-                    notificationGroup: values.notificationGroup,
+                    dataGroup: values.dataGroup,
                 };
 
-                // Conditionally add fields based on notificationGroup
-                switch (values.notificationGroup) {
+                // Conditionally add fields based on dataGroup
+                switch (values.dataGroup) {
                     case 'users':
                         messageData.userGroup = values.userGroup;
                         break;
@@ -94,11 +95,11 @@ export const NotificationPanel = () => {
         },
         {
             id: "Notification-group",
-            name: "notificationGroup",
-            label: "Notification Group",
+            name: "dataGroup",
+            label: "Message Group",
             type: "select",
             options: [
-                ...notificationGroup.map(item => ({
+                ...dataGroup.map(item => ({
                     id: item.id,
                     label: item.label,
                     value: item.value,
@@ -120,7 +121,7 @@ export const NotificationPanel = () => {
                     value: userGroup.value,
                 }))
             ],
-            condition: validation.values.notificationGroup === "users",
+            condition: validation.values.dataGroup === "users",
             colSize: 4,
 
         },
@@ -137,7 +138,7 @@ export const NotificationPanel = () => {
                     value: campaign.slug,
                 }))
             ],
-            condition: validation.values.notificationGroup === "campaigns",
+            condition: validation.values.dataGroup === "campaigns",
             colSize: 4,
 
         },
@@ -175,8 +176,7 @@ export const NotificationPanel = () => {
     };
 
     const renderNotificationMessages = (item) => {
-        const notificationHistory = messageHistory.notification || [];
-        const messages = notificationHistory.filter(msg => msg.notificationGroup === item.value);
+        const messages = notificationHistory.filter(msg => msg.dataGroup === item.value);
 
         return (
             <Col md={4} key={item.label}>
@@ -193,7 +193,8 @@ export const NotificationPanel = () => {
                                     <UncontrolledAlert
                                         key={idx}
                                         color={notificationDetails.color}
-                                        className={`${notificationDetails.className} fade show`}>
+                                        className={`${notificationDetails.className} fade show`}
+                                    >
                                         <i className={`${notificationDetails.iconClass} label-icon`}></i>
                                         <strong>{notificationDetails.label}</strong> - {msg.message}
                                     </UncontrolledAlert>
@@ -209,7 +210,7 @@ export const NotificationPanel = () => {
 
 
     const renderDataTypeMessages = (dataTypeName) => {
-        const messages = messageHistory[dataTypeName] || [];
+        const messages = notificationHistory[dataTypeName] || [];
 
         return (
             <Col md={3} key={dataTypeName}>
@@ -271,7 +272,7 @@ export const NotificationPanel = () => {
                 </CardBody>
             </Card>
             <Row>
-                {notificationGroup.map((item) => renderNotificationMessages(item))}
+                {dataGroup.map((item) => renderNotificationMessages(item))}
             </Row>
             <Row>
                 {dataTypes.map((dataTypeName) => renderDataTypeMessages(dataTypeName))}

@@ -2,12 +2,13 @@ import React from 'react';
 import { Routes, Route } from "react-router-dom";
 
 //Layouts
-import NonAuthLayout from "../Layouts/NonAuthLayout";
+// import NonAuthLayout from "../Layouts/NonAuthLayout";
 import Layout from "../Layouts";
 
 //routes
 import { authProtectedRoutes, dashboardRoutes, publicRoutes } from "./allRoutes";
 import { AuthProtected } from './AuthProtected';
+import { NonAuthProtected } from './NonAuthProtected';
 
 const Index = () => {
     return (
@@ -18,7 +19,7 @@ const Index = () => {
                         <Route
                             path={route.path}
                             element={
-                                <Layout isHorizontal={true}>
+                                <Layout defaultLayout={'horizontal'}>
                                     {route.component}
                                 </Layout>
                             }
@@ -34,7 +35,7 @@ const Index = () => {
                             path={route.path}
                             element={
                                 <AuthProtected>
-                                    <Layout>
+                                    <Layout defaultLayout={'vertical'}>
                                         {route.component}
                                     </Layout>
                                 </AuthProtected>}

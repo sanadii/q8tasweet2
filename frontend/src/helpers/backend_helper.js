@@ -142,7 +142,7 @@ export const deleteParty = (party) => api.delete(url.DELETE_PARTY + "/" + party)
 
 // Campaigns
 export const getCampaigns = () => api.get(url.GET_CAMPAIGNS);
-export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS  + "/" + campaign.slug);
+export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS  + "/" + campaign);
 export const addNewCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
 export const updateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
 export const deleteCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);

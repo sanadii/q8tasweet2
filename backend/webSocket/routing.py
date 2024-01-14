@@ -9,19 +9,18 @@ from webSocket.consumers.GlobalConsumer import GlobalConsumer
 # from .consumers import consumers
 
 websocket_urlpatterns = [
+    
+    # Global Channel
+    path('ws/Global/', GlobalConsumer.as_asgi()),
+
     path('ws/election/<str:slug>/', ElectionConsumer.as_asgi()),
     path('ws/campaigns/<str:slug>/', CampaignConsumer.as_asgi()),
     path('ws/sorting/<str:slug>/', CampaignConsumer.as_asgi()),
     path('ws/notifications/', NotificationConsumer.as_asgi()),
 
     # Test
-    path('ws/GlobalChannel/<str:channel>/', GlobalConsumer.as_asgi()),
-    path('ws/Global/', GlobalConsumer.as_asgi(), {'type': 'Global'}),
     path('ws/Client/', GlobalConsumer.as_asgi(), {'type': 'Client'}),
 
-    # Test
-    # re_path(r'ws/Test/', TestConsumer.as_asgi()),
-    # path('ws/chat/<int:id>/', PersonalChatConsumer.as_asgi()),
 ]
 
 

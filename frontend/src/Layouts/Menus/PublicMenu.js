@@ -73,8 +73,16 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
         e.preventDefault();
         setIscurrentState("publicContactUs");
       },
-
-      // ri-briefcase-line
+    },
+    {
+      id: "contact-us",
+      label: "الحملة الإنتخابية",
+      icon: "ri-wechat-line",
+      link: "/dashboard",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("dashboard");
+      },
     },
   ];
 }

@@ -11,6 +11,9 @@ export function useCampaignMenu(iscurrentState, setIscurrentState) {
   const history = useNavigate();
   const { currentUserCampaigns } = useSelector(userSelector);
   const { campaign } = useSelector(campaignSelector);
+
+
+  // Use useEffect slug && 
   const { slug, campaignType } = useParams();
   const currentCampaign = { campaignType, slug,  }
 

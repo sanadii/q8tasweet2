@@ -35,26 +35,6 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       isHeader: true,
     },
     {
-      id: "adminDashboard",
-      label: "لوحة القيادة",
-      icon: "ri-dashboard-line",
-      link: "/dashboard",
-      click: function (e) {
-        e.preventDefault();
-        setIscurrentState("adminDashboard");
-      },
-    },
-    {
-      id: "adminControlPanel",
-      label: "لوحة التحكم",
-      icon: "ri-dashboard-line",
-      link: "/control-panel",
-      click: function (e) {
-        e.preventDefault();
-        setIscurrentState("adminControlPanel");
-      },
-    },
-    {
       id: "elections",
       label: "الإنتخابات",
       icon: "ri-dashboard-line",

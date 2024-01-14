@@ -23,7 +23,7 @@ const channels = [
 
 const dataTypes = [
     'notification',
-    'electionSort',
+    'electionSorting',
     'campaignUpdate',
     'Chat',
 ];

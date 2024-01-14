@@ -1,24 +1,22 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { campaignSelector, userSelector } from 'Selectors';
 import { TableContainer } from 'components';
 import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
-import useWebSocket from 'react-use-websocket';
 import { useWebSocketContext } from '../../../../utils/WebSocketContext';
 
-const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws';
 
 const SortingTab = () => {
-  const { campaign, campaignElectionCandidates, currentCampaignMember } = useSelector(campaignSelector);
+  const { campaign, campaignElectionCandidates, campaignElectionCommittees, currentCampaignMember } = useSelector(campaignSelector);
   const { userId } = useSelector(userSelector);
 
-  // Logic committee is not set by the campaign Moderators
   const committeeId = currentCampaignMember.committee;
+  const committee = campaignElectionCommittees.find(c => c.id === committeeId);
+  const committeeName = committee?.name || 'Unknown Committee';
+
   const [candidatesSorting, setCandidatesSorting] = useState([]);
-  const campaignSlug = campaign.slug;
   const electionId = campaign.election.id;
 
-  // Initialize candidatesSorting state and WebSocket
   useEffect(() => {
     const initialSortingData = campaignElectionCandidates.map(candidate => ({
       electionId: electionId,
@@ -29,107 +27,89 @@ const SortingTab = () => {
     setCandidatesSorting(initialSortingData);
   }, [campaignElectionCandidates, electionId, committeeId]);
 
-  // webSocket Hook Connection
   const { sendMessage, lastMessage } = useWebSocketContext();
 
   useEffect(() => {
     if (lastMessage !== null) {
-      const message = JSON.parse(lastMessage.data);
-      if (message.type === 'election_sorting' && message.electionCommitteeId === committeeId) {
-        updateSortingVotes(message.electionCandidateId, message.votes);
+      try {
+        const message = JSON.parse(lastMessage.data);
+        if (message.dataType === 'electionSorting' && message.electionCommitteeId === committeeId) {
+          updateSortingVotes(message.electionCandidateId, message.votes);
+        }
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
       }
     }
   }, [lastMessage, committeeId]);
 
-
-  const updateSortingVotes = (candidateId, newVotes) => {
+  const updateSortingVotes = useCallback((candidateId, newVotes) => {
     setCandidatesSorting(prevSorting => prevSorting.map(sortItem => {
       if (sortItem.candidateId === candidateId) {
         return { ...sortItem, committeeVote: newVotes };
       }
       return sortItem;
     }));
-  };
+  }, []);
 
-  const sendVoteUpdate = (candidateId, newVotes) => {
+  const sendVoteUpdate = useCallback((candidateId, newVotes) => {
     sendMessage(JSON.stringify({
-      type: 'election_sorting',
+      dataType: 'electionSorting',
       electionId: electionId,
       electionCandidateId: candidateId,
       electionCommitteeId: committeeId,
       votes: newVotes
     }));
-    updateSortingVotes(candidateId, newVotes); // Immediate state update for better UX
-  };
+    updateSortingVotes(candidateId, newVotes);
+  }, [sendMessage, electionId, committeeId, updateSortingVotes]);
 
-
-  const updateVotes = (candidateId, increment) => {
+  const updateVotes = useCallback((candidateId, increment) => {
     const candidate = candidatesSorting.find(c => c.candidateId === candidateId);
     if (candidate) {
       const newVotes = increment ? candidate.committeeVote + 1 : Math.max(0, candidate.committeeVote - 1);
-      updateSortingVotes(candidateId, newVotes); // Immediate state update
-      sendVoteUpdate(candidateId, newVotes); // Send WebSocket message
+      sendVoteUpdate(candidateId, newVotes);
     } else {
       console.error(`Candidate with ID ${candidateId} not found in candidatesSorting state`);
     }
-  };
+  }, [candidatesSorting, sendVoteUpdate]);
 
-  const incrementVotes = candidateId => updateVotes(candidateId, true);
-  const decrementVotes = candidateId => updateVotes(candidateId, false);
+  const incrementVotes = useCallback(candidateId => updateVotes(candidateId, true), [updateVotes]);
+  const decrementVotes = useCallback(candidateId => updateVotes(candidateId, false), [updateVotes]);
 
   // Define columns for the table
   const columns = useMemo(() => {
     return [
       {
         Header: 'candidateId',
-        Cell: ({ row }) => <span style={{ whiteSpace: 'nowrap' }}>{row.original.candidateId}</span>,
-      }, {
+        Cell: ({ row }) => <span className="nowrap">{row.original.candidateId}</span>,
+      },
+      {
         Header: 'اسم المرشح',
-        Cell: ({ row }) => <span style={{ whiteSpace: 'nowrap' }}>{row.original.name}</span>,
+        Cell: ({ row }) => (
+          <VoteButton 
+          candidateId={row.original.candidateId} 
+          increment={incrementVotes} 
+          decrement ={decrementVotes} 
+          name={row.original.name} 
+          />
+        ),
       },
       {
         Header: 'الأصوات',
-        Cell: ({ row }) => {
-          return (
-            <>
-              <Button color="success" className="btn-icon" outline onClick={() => incrementVotes(row.original.candidateId)}>
-                <i className="ri-add-line" />
-              </Button>
-              {' '}
-              <span style={{ margin: '0 10px', display: 'inline-block', width: '30px', textAlign: 'center' }}>
-                {row.original.committeeVote}
-              </span>
-              {' '}
-              <Button color="danger" className="btn-icon" outline onClick={() => decrementVotes(row.original.candidateId)}>
-                <i className="ri-subtract-line" />
-              </Button>
-            </>
-          );
-        },
+        Cell: ({ row }) => <span className="nowrap">{row.original.committeeVote}</span>,
       },
-      {
-        Header: 'إجراءات',
-        Cell: () => (
-          <>
-            <button className="btn btn-sm btn-soft-warning edit-list me-2">
-              <i className="ri-eye-fill align-bottom pe-2" /> تعديل
-            </button>
-            <button className="btn btn-sm btn-soft-info edit-list me-2">
-              <i className="ri-pencil-fill align-bottom pe-2" /> ملاحضات
-            </button>
-          </>
-        ),
-      },
+     
     ];
-  }, [incrementVotes, decrementVotes]); // Add dependencies to useMemo
-
+  }, [incrementVotes, decrementVotes]);
 
   return (
     <React.Fragment>
       <Row>
         <Col lg={12}>
           <Card>
-            <CardHeader><h4><b>الفرز</b></h4></CardHeader>
+            <CardHeader>
+              <h4><b>الفرز</b></h4>
+              <p><strong> اللجنة: {committeeName}</strong></p>
+            </CardHeader>
             <CardBody>
               <TableContainer
                 columns={columns}
@@ -149,3 +129,16 @@ const SortingTab = () => {
 };
 
 export default SortingTab;
+
+
+const VoteButton = ({ candidateId, increment, decrement, name }) => (
+  <>
+    <Button color="success" className="btn-label w-50" onClick={() => increment(candidateId)}>
+      <i className="ri-add-line label-icon align-middle fs-16 me-2"></i>
+      {name}
+    </Button>
+    <Button color="danger" className="btn-icon" outline onClick={() => decrement(candidateId)}>
+      <i className="ri-subtract-line" />
+    </Button>
+  </>
+);

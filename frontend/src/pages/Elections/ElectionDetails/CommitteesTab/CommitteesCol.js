@@ -1,5 +1,6 @@
 import React from "react";
 import { ImageCandidateWinnerCircle } from "components";
+import { GenderOptions } from 'constants';
 
 
 const Id = (cellProps) => {
@@ -41,19 +42,27 @@ const Name = ({ row }) => {
 };
 
 const Gender = ({ row }) => {
+    const gender = GenderOptions.find(g => g.id === row.original.gender);
+
     return (
         <p>
-            {row.original.gender}
+            {gender.pleural}
         </p>
     );
 };
 
-const Sorter = (cellProps) => {
+const Sorter = ({ cellProps, electionSorters, electionCampaigns }) => {
+    console.log("22 electionSorters: ", electionSorters);
+    const sorter = electionSorters.find(s => s.user === cellProps.row.original.sorter);
+    const campaign = electionCampaigns.find(c => c.id === sorter?.campaign )
+
     return (
         <p>
-            {cellProps.row.original.sorter?.fullName}
-            <span>- {cellProps.row.original.sorter?.id}</span>
+            {sorter ? sorter.name : 'No Sorter'} <br/>
+            {campaign ? campaign.name : 'No Campaign'}
+
         </p>
+
     );
 };
 

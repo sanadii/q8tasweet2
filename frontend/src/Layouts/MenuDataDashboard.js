@@ -13,7 +13,7 @@ import { useSettingsMenu } from './Menus/SettingsMenu';
 import { useEditorMenu } from './Menus/EditorMenu';
 import { useModeratorMenu } from './Menus/ModeratorMenu';
 import { useContributorMenu } from './Menus/ContributorMenu';
-import { useCampaignMenu } from './Menus/CampaignMenu';
+// import { useCampaignMenu } from './Menus/CampaignMenu';
 
 const Navdata = () => {
   const history = useNavigate();
@@ -42,7 +42,7 @@ const Navdata = () => {
   const AdminMenu = useAdminMenu(setIscurrentState);
   const TestMenu = useTestMenu(setIscurrentState);
   const PublicMenu = usePublicMenu(setIscurrentState);
-  const CampaignMenu = useCampaignMenu(setIscurrentState);
+  // const CampaignMenu = useCampaignMenu(setIscurrentState);
   const ModeratorMenu = useModeratorMenu(setIscurrentState);
   const EditorMenu = useEditorMenu(setIscurrentState);
   const ContributorMenu = useContributorMenu(setIscurrentState);
@@ -54,7 +54,7 @@ const Navdata = () => {
     // ...(isAdmin || isModerator ? ModeratorMenu : []),
     // ...(isAdmin || isContributor ? ContributorMenu : []),
     // ...(canViewCampaign || isSubscriber ? CampaignMenu : []),
-    ...(!canChangeConfig ? [...CampaignMenu] : []),
+    // ...(!canChangeConfig ? [...CampaignMenu] : []),
     // ...(PublicMenu),
 
   ];

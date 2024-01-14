@@ -12,7 +12,7 @@ import { useSettingsMenu } from './Menus/SettingsMenu';
 import { useEditorMenu } from './Menus/EditorMenu';
 import { useModeratorMenu } from './Menus/ModeratorMenu';
 import { useContributorMenu } from './Menus/ContributorMenu';
-import { useCampaignMenu } from './Menus/CampaignMenu';
+// import { useCampaignMenu } from './Menus/CampaignMenu';
 
 const Navdata = () => {
   const history = useNavigate();
@@ -40,7 +40,7 @@ const Navdata = () => {
   // Menus Constants
   const AdminMenu = useAdminMenu(setIscurrentState);
   const PublicMenu = usePublicMenu(setIscurrentState);
-  const CampaignMenu = useCampaignMenu(setIscurrentState);
+  // const CampaignMenu = useCampaignMenu(setIscurrentState);
   const ModeratorMenu = useModeratorMenu(setIscurrentState);
   const EditorMenu = useEditorMenu(setIscurrentState);
   const ContributorMenu = useContributorMenu(setIscurrentState);

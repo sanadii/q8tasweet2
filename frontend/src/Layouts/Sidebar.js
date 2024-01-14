@@ -7,7 +7,7 @@ import logoDark from "../assets/images/logo-dark.png";
 import logoLight from "../assets/images/logo-light.png";
 
 //Import Components
-import VerticalLayout from "./VerticalLayouts";
+import VerticalLayout from "./VerticalLayout";
 import TwoColumnLayout from "./TwoColumnLayout";
 import { Container } from "reactstrap";
 import HorizontalLayout from "./HorizontalLayout";

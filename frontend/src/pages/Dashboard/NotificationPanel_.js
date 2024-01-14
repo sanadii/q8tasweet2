@@ -12,7 +12,7 @@ import { Form } from "reactstrap";
 
 
 import { UncontrolledAlert } from 'reactstrap';
-import { notificationGroup, messageTypes, dataTypes, userGroups } from "constants";
+import { dataGroup, messageTypes, dataTypes, userGroups } from "constants";
 import { useWebSocketContext } from 'utils/WebSocketContext';
 
 
@@ -31,7 +31,7 @@ export const NotificationPanel = () => {
     const validation = useFormik({
         initialValues: {
             dataType: 'notification',
-            notificationGroup: 'users',
+            dataGroup: 'users',
             userGroup: 'allUsers',
             campaign: 'primary',
             election: '',
@@ -51,11 +51,11 @@ export const NotificationPanel = () => {
                     dataType: values.dataType,
                     messageType: values.messageType,
                     message: values.message,
-                    notificationGroup: values.notificationGroup,
+                    dataGroup: values.dataGroup,
                 };
 
-                // Conditionally add fields based on notificationGroup
-                switch (values.notificationGroup) {
+                // Conditionally add fields based on dataGroup
+                switch (values.dataGroup) {
                     case 'users':
                         messageData.userGroup = values.userGroup;
                         break;
@@ -115,11 +115,11 @@ export const NotificationPanel = () => {
         },
         {
             id: "Notification-group",
-            name: "notificationGroup",
-            label: "Notification Group",
+            name: "dataGroup",
+            label: "Message Group",
             type: "select",
             options: [
-                ...notificationGroup.map(item => ({
+                ...dataGroup.map(item => ({
                     id: item.id,
                     label: item.label,
                     value: item.value,
@@ -141,7 +141,7 @@ export const NotificationPanel = () => {
                     value: userGroup.value,
                 }))
             ],
-            condition: validation.values.notificationGroup === "users",
+            condition: validation.values.dataGroup === "users",
             colSize: 4,
 
         },
@@ -158,7 +158,7 @@ export const NotificationPanel = () => {
                     value: campaign.slug,
                 }))
             ],
-            condition: validation.values.notificationGroup === "campaigns",
+            condition: validation.values.dataGroup === "campaigns",
             colSize: 4,
 
         },

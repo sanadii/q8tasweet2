@@ -4,6 +4,7 @@ import { useSelector } from "react-redux"; // Don't forget to import useSelector
 import { useNavigate } from "react-router-dom";
 import { updateIconSidebar } from './Menus/utils';  // adjust the path according to your directory structure
 import { usePermission } from 'hooks';
+import { layoutSelector } from 'Selectors/layoutSelector';
 
 // Menus
 import { useAdminMenu } from './Menus/AdminMenu';
@@ -12,7 +13,7 @@ import { useSettingsMenu } from './Menus/SettingsMenu';
 import { useEditorMenu } from './Menus/EditorMenu';
 import { useModeratorMenu } from './Menus/ModeratorMenu';
 import { useContributorMenu } from './Menus/ContributorMenu';
-import { useCampaignMenu } from './Menus/CampaignMenu';
+// import { useCampaignMenu } from './Menus/CampaignMenu';
 
 const Navdata = () => {
   const history = useNavigate();
@@ -27,6 +28,18 @@ const Navdata = () => {
     isSubscriber
   } = usePermission();
 
+  const {
+    layoutType,
+    leftSidebarType,
+    layoutModeType,
+    layoutWidthType,
+    layoutPositionType,
+    topbarThemeType,
+    leftsidbarSizeType,
+    leftSidebarViewType,
+    leftSidebarImageType,
+    sidebarVisibilitytype
+} = useSelector(layoutSelector);
   const [isSettings, setIsSettings] = useState(false);
 
   useEffect(() => {
@@ -40,20 +53,20 @@ const Navdata = () => {
   // Menus Constants
   const AdminMenu = useAdminMenu(setIscurrentState);
   const PublicMenu = usePublicMenu(setIscurrentState);
-  const CampaignMenu = useCampaignMenu(setIscurrentState);
+  // const CampaignMenu = useCampaignMenu(setIscurrentState);
   const ModeratorMenu = useModeratorMenu(setIscurrentState);
   const EditorMenu = useEditorMenu(setIscurrentState);
   const ContributorMenu = useContributorMenu(setIscurrentState);
   const SettingsMenu = useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings, isSettings);
 
   const menuItems = [
-    ...(canChangeConfig ? [...AdminMenu, ...SettingsMenu] : []),
+    ...(layoutType === 'vertical' && canChangeConfig ? [...AdminMenu, ...SettingsMenu] : []),
     // ...(isAdmin || isEditor ? EditorMenu : []),
     // ...(isAdmin || isModerator ? ModeratorMenu : []),
     // ...(isAdmin || isContributor ? ContributorMenu : []),
     // ...(canViewCampaign || isSubscriber ? CampaignMenu : []),
     // ...(CampaignMenu),
-    ...(PublicMenu),
+    ...(layoutType === 'horizontal' && PublicMenu),
 
   ];
 

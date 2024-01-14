@@ -1,7 +1,7 @@
-Certainly! When naming variables and functions related to WebSocket functionality, it's important to choose names that clearly describe their purpose and context. Here are some suggestions:
+Certainly! When naming variables and functions related to WebSocket functionality,
+it's important to choose names that clearly describe their purpose and context. Here are some suggestions:
 
 Channels and Routes:
-
 socketChannels
 communicationRoutes
 dataStreams
@@ -12,8 +12,8 @@ socketRoutes
 streamIdentifiers
 channelNames
 routeEndpoints
-Types (General or Message Types):
 
+Types (General or Message Types):
 messageTypes
 eventTypes
 # dataTypes
@@ -24,8 +24,8 @@ communicationTypes
 streamTypes
 messageCategories
 eventCategories
-Message Related:
 
+Message Related:
 messagePayload
 dataPacket
 socketMessage
@@ -35,8 +35,8 @@ communicationData
 streamData
 messageBody
 dataMessage
-Socket State and Status:
 
+Socket State and Status:
 socketStatus
 connectionState
 channelStatus
@@ -46,8 +46,8 @@ connectionQuality
 channelState
 streamStatus
 socketHealth
-Functions and Handlers:
 
+Functions and Handlers:
 sendMessage
 receiveMessage
 handleSocketEvent
@@ -58,8 +58,8 @@ handleDataTransmission
 onSocketOpen
 onSocketClose
 handleConnectionChange
-Miscellaneous:
 
+Miscellaneous:
 socketProvider
 channelManager
 dataTransmitter

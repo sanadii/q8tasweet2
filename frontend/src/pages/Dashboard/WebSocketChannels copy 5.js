@@ -14,7 +14,7 @@ import { Form } from "reactstrap";
 
 
 import { UncontrolledAlert } from 'reactstrap';
-import { notificationGroup, messageTypes, socketChannels, dataTypes, userGroups } from "constants";
+import { dataGroup, messageTypes, socketChannels, dataTypes, userGroups } from "constants";
 import { useChannelStatuses } from 'hooks';
 import { useWebSocketContext } from 'utils/WebSocketContext';
 
@@ -49,7 +49,7 @@ export const WebSocketChannels = () => {
     const validation = useFormik({
         initialValues: {
             dataType: '',
-            notificationGroup: '',
+            dataGroup: '',
             userGroup: '',
             campaign: '',
             election: '',
@@ -70,11 +70,11 @@ export const WebSocketChannels = () => {
                     dataType: values.dataType,
                     messageType: values.messageType,
                     message: values.message,
-                    notificationGroup: values.notificationGroup,
+                    dataGroup: values.dataGroup,
                 };
 
-                // Conditionally add fields based on notificationGroup
-                switch (values.notificationGroup) {
+                // Conditionally add fields based on dataGroup
+                switch (values.dataGroup) {
                     case 'users':
                         messageData.userGroup = values.userGroup;
                         break;
@@ -134,12 +134,12 @@ export const WebSocketChannels = () => {
         },
         {
             id: "Notification-group",
-            name: "notificationGroup",
-            label: "Notification Group",
+            name: "dataGroup",
+            label: "Message Group",
             type: "select",
             options: [
-                { id: '', label: '- Choose Notification Group - ', value: '' },
-                ...notificationGroup.map(item => ({
+                { id: '', label: '- Choose Message Group - ', value: '' },
+                ...dataGroup.map(item => ({
                     id: item,
                     label: item,
                     value: item,
@@ -163,7 +163,7 @@ export const WebSocketChannels = () => {
                     value: userGroup.value,
                 }))
             ],
-            condition: validation.values.notificationGroup === "users",
+            condition: validation.values.dataGroup === "users",
             colSize: 4,
 
         },
@@ -180,7 +180,7 @@ export const WebSocketChannels = () => {
                     value: campaign.slug,
                 }))
             ],
-            condition: validation.values.notificationGroup === "campaigns",
+            condition: validation.values.dataGroup === "campaigns",
             colSize: 4,
 
         },

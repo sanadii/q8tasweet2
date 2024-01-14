@@ -24,7 +24,7 @@ import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
 import SimpleBar from "simplebar-react";
 
 const CommitteesTab = () => {
-  const { electionDetails, electionCommittees, error } = useSelector(electionSelector);
+  const { electionDetails, electionCommittees, electionSorters, electionCampaigns, error } = useSelector(electionSelector);
   const [electionCommittee, setElectionCommittee] = useState([]);
 
   // Modals: Delete, Set, Edit
@@ -75,20 +75,17 @@ const CommitteesTab = () => {
       setElectionCommittee({
         // Basic Information
         id: electionCommittee.id,
-        election_id: electionCommittee.election_id,
-        candidate_id: electionCommittee.candidate_id,
         name: electionCommittee.name,
         gender: electionCommittee.gender,
-        votes: electionCommittee.votes,
-        remarks: electionCommittee.remarks,
+        sorter: electionCommittee.sorter,
       });
 
       setIsEdit(true);
       toggle();
     },
     [toggle]
-  );
 
+  );
 
   const handleElectionCommitteeClicks = () => {
     setElectionCommittee("");
@@ -116,8 +113,14 @@ const CommitteesTab = () => {
       {
         Header: "الفارز",
         filterable: true,
-        Cell: (cellProps) => <Sorter {...cellProps} />
-      },
+        Cell: (cellProps) => (
+          <Sorter
+              cellProps={cellProps}
+              electionSorters={electionSorters}
+              electionCampaigns={electionCampaigns}
+          />
+      )
+        },
       {
         Header: "إجراءات",
         Cell: (cellProps) => (

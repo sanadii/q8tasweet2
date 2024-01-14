@@ -29,8 +29,8 @@ const OverviewTab = () => {
       <Row>
         <Col xl={9} lg={8}>
           <ElectionResults />
-          <ElectionPrevious />
-          <ElectionComments />
+          {/* <ElectionPrevious /> */}
+          {/* <ElectionComments /> */}
         </Col>
 
         <Col xl={3} lg={4}>

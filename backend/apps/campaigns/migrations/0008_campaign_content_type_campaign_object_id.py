@@ -7,7 +7,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
         ('campaigns', '0007_campaign_campaign_candidate_campaign_campaign_party'),
     ]
 
