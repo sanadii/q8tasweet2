@@ -200,6 +200,51 @@ class ElectionCommittee(TrackModel):
     def __str__(self):
         return self.name
 
+
+class BaseElectionSorting(models.Model):
+    user = models.ForeignKey(
+        'auths.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_users',
+    )
+    election_committee = models.ForeignKey(
+        'elections.ElectionCommittee',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_election_committees',
+    )
+    votes = models.PositiveIntegerField(default=0)
+    notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        abstract = True  # Prevents direct model creation
+        permissions = [
+            ("canViewElectionSorting", "Can View Election Sorting"),
+            ("canAddElectionSorting", "Can Add Election Sorting"),
+            ("canChangeElectionSorting", "Can Change Election Sorting"),
+            ("canDeleteElectionSorting", "Can Delete Election Sorting"),
+        ]
+
+class ElectionSorting(BaseElectionSorting):
+    election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candidate_sortings')
+
+    class Meta(BaseElectionSorting.Meta):
+        db_table = 'election_sorting'
+        verbose_name = "Election Sorting"
+        verbose_name_plural = "Election Sortings"
+
+class ElectionPartySorting(BaseElectionSorting):
+    election_party = models.ForeignKey('elections.ElectionParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_sortings')
+
+    class Meta(BaseElectionSorting.Meta):
+        db_table = 'election_party_sorting'
+        verbose_name = "Election Party Sorting"
+        verbose_name_plural = "Election Party Sortings"
+
+
 class ElectionCommitteeResult(TrackModel):
     # Basic Information
     election_committee = models.ForeignKey('ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_result_elections')

@@ -202,7 +202,7 @@ class CampaignPartyGuarantee(TrackModel):
 
 # class CampaignSorting(models.Model):
 #     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='sorter_sortees')
-#     election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
+#     election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candidate_sortings')
 #     election_committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sortees')
 #     votes = models.PositiveIntegerField(default=0)
 #     notes = models.TextField(blank=True, null=True)
@@ -276,7 +276,7 @@ class BaseCampaignSorting(models.Model):
         ]
 
 class CampaignSorting(BaseCampaignSorting):
-    election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_candiddate_sortings')
+    election_candidate = models.ForeignKey('elections.ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_candidate_sortings')
 
     class Meta(BaseCampaignSorting.Meta):
         db_table = 'campaign_sorting'
@@ -284,7 +284,7 @@ class CampaignSorting(BaseCampaignSorting):
         verbose_name_plural = "Campaign Sortings"
 
 class CampaignPartySorting(BaseCampaignSorting):
-    election_party = models.ForeignKey('elections.ElectionParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_sortings')
+    election_party = models.ForeignKey('elections.ElectionParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_sortings')
 
     class Meta(BaseCampaignSorting.Meta):
         db_table = 'campaign_party_sorting'
@@ -292,7 +292,7 @@ class CampaignPartySorting(BaseCampaignSorting):
         verbose_name_plural = "Campaign Party Sortings"
 
 class CampaignPartyCandidateSorting(BaseCampaignSorting):
-    election_party_candidate = models.ForeignKey('elections.ElectionPartyCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_candidate_sortings')
+    election_party_candidate = models.ForeignKey('elections.ElectionPartyCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_candidate_sortings')
 
     class Meta(BaseCampaignSorting.Meta):
         db_table = 'campaign_party_candidate_sorting'

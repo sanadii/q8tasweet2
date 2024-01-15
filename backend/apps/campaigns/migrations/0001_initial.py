@@ -280,7 +280,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='campaignsorting',
             name='election_candidate',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='election_candiddate_sortings', to='elections.electioncandidate'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='election_candidate_sortings', to='elections.electioncandidate'),
         ),
         migrations.AddField(
             model_name='campaignsorting',

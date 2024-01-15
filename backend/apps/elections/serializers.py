@@ -177,7 +177,7 @@ class ElectionCandidateVoteSerializer(serializers.ModelSerializer):
         # fields = "__all__"
         fields = ["election_committee", "votes"]
 
-class ElectionCandidateSortingVoteSerializer(serializers.ModelSerializer):
+class CampaignSortingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignSorting
@@ -194,11 +194,36 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     gender = serializers.IntegerField(source='candidate.gender', read_only=True)
     image = serializers.SerializerMethodField('get_candidate_image')
     committee_votes = ElectionCandidateVoteSerializer(source='committee_result_candidates', many=True, read_only=True)
-    committee_sorting = ElectionCandidateSortingVoteSerializer(source='election_candiddate_sortings', many=True, read_only=True)
+    committee_sorting = serializers.SerializerMethodField()
 
     class Meta:
         model = ElectionCandidate
-        fields = ["id", "election", "candidate", "name", "gender", "image", "votes", "notes", "committee_votes", "committee_sorting"]
+        fields = [
+            "id", "election", "candidate", "name", "gender", "image", "votes", "notes",
+            "committee_votes",
+            "committee_sorting"
+            ]
+
+    def get_committee_sorting(self, obj):
+        # Access the request context from self.context
+        request = self.context.get('request') if self.context else None
+        print("request: ", request)
+        source = (
+            'election_candidate_sortings' if request and 'elections' in request.resolver_match.url_name
+            else 'campaign_candidate_sortings'
+        )
+        # Assuming you have a method to get the sorting data from the source
+        sorting_data = self.get_sorting_data_from_source(obj, source)
+        return CampaignSortingSerializer(sorting_data, many=True, read_only=True).data
+
+    # You might need to implement this method based on your logic
+    def get_sorting_data_from_source(self, obj, source):
+        if source == 'election_candidate_sortings':
+            return obj.election_candidate_sortings.all()  # Replace with appropriate query
+        elif source == 'campaign_candidate_sortings':
+            return obj.campaign_candidate_sortings.all()  # Replace with appropriate query
+        else:
+            raise ValueError(f"Invalid source: {source}")
 
     def get_candidate_image(self, obj):
         if obj.candidate and obj.candidate.image:

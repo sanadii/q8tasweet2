@@ -24,6 +24,11 @@ const sortingStatus = () => {
   )
 }
 
+// تم اغلاق الصناديق
+// بدأ عملية الفرز
+// انتهاء عملية الفرز
+// بانتظار النتائج النهائية الرسمية
+
 const ElectionResults = () => {
 
   // States & Constants
