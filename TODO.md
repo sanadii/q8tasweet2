@@ -6,6 +6,25 @@ Channels:
 - Global
 - Client ?
 
+SORTING
+- Frontend
+-- Candidate Results                        DONE - working again
+-- Update Candidate Results                 DONE
+-- Candidate Sorting                        DONE
+-- Update Candidate Sorting                 DONE
+
+-- Party Results
+-- Update Party Results
+-- Party Sorting
+-- Update Party Sorting
+
+-- PartyCandidate Results
+-- Update PartyCandidate Results
+-- PartyCandidate Sorting
+-- Update PartyCandidate Sorting
+
+- Backend
+
 
 **Frontend**
 # Campaign

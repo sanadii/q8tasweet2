@@ -481,7 +481,9 @@ function* onUpdateElectionCommittee({ payload: electionCommittee }) {
 
 function* onUpdateElectionCommitteeResults({ payload: electionCommitteeResult }) {
   try {
+    console.log('Saga triggered with electionCommitteeResult:', electionCommitteeResult);
     const response = yield call(updateElectionCommitteeResults, electionCommitteeResult);
+    console.log('API response:', response);
     yield put(updateElectionCommitteeResultsSuccess(response));
     toast.success("تم تحديث النتائج بنجاح", {
       autoClose: 2000,

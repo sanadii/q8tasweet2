@@ -207,9 +207,8 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     def get_committee_sorting(self, obj):
         # Access the request context from self.context
         request = self.context.get('request') if self.context else None
-        print("request: ", request)
         source = (
-            'election_candidate_sortings' if request and 'elections' in request.resolver_match.url_name
+            'election_candidate_sortings' if request and 'GetElectionDetails' in request.resolver_match.url_name
             else 'campaign_candidate_sortings'
         )
         # Assuming you have a method to get the sorting data from the source
@@ -238,6 +237,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
         """ Customize update (PUT, PATCH) of an instance """
         # Additional logic to customize instance updating
         return super().update(instance, validated_data)
+
 
 class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the ElectionParty model. """

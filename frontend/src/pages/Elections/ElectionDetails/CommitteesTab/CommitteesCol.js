@@ -52,7 +52,7 @@ const Gender = ({ row }) => {
 };
 
 const Sorter = ({ cellProps, electionSorters, electionCampaigns }) => {
-    console.log("22 electionSorters: ", electionSorters);
+    // console.log("22 electionSorters: ", electionSorters);
     const sorter = electionSorters.find(s => s.user === cellProps.row.original.sorter);
     const campaign = electionCampaigns.find(c => c.id === sorter?.campaign )
 

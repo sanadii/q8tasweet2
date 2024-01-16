@@ -110,7 +110,7 @@ def get_current_campaign_member(campaign_id, user_id, context):
     current_campaign_member = CampaignMember.objects.select_related('user').filter(
         campaign_id=campaign_id, user_id=user_id
         ).first()
-    print("current_campaign_member_query", current_campaign_member) #OK
+    # print("current_campaign_member_query", current_campaign_member) #OK
 
     if current_campaign_member:
         return CampaignMemberSerializer(current_campaign_member, context=context).data

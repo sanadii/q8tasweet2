@@ -10,19 +10,23 @@ import { updateElectionCommitteeResults, updateElectionCandidateVotes } from "st
 const HeaderVoteButton = ({
   committee,
   committeeId,
-  isEdited,
+  columnEdited,
   hasChanges,
   handleSaveResults,
   toggleColumnToEdit,
 }) => {
+
   // Determine the button text and class based on the editing state
-  const buttonText = isEdited ? (hasChanges ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
-  const buttonClass = isEdited ? (hasChanges ? 'btn-success' : 'btn-danger') : 'btn-info';
+  const buttonText = columnEdited[committeeId] ? (hasChanges[committeeId] ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
+  const buttonClass = columnEdited[committeeId] ? (hasChanges[committeeId] ? 'btn-success' : 'btn-danger') : 'btn-info';
 
   const handleClick = () => {
-    if (hasChanges && committeeId) {
+    if (hasChanges[committeeId]) {
+      console.log("It should handleSaveResults Results here")
       handleSaveResults(committeeId);
     }
+    console.log("It should toggleColumnToEdit Results here")
+
     toggleColumnToEdit(committeeId);
   };
 
@@ -101,11 +105,11 @@ const transformResultData = (
     const noCommittee = "0";
     transformedResultFieldsData[`votes`] = columnEdited[0]
       ? <ResultInputField
-          committeeId={noCommittee}
-          candidateId={candidate.id}
-          value={candidateVotes}
-          onChange={(value) => handleVoteFieldChange(noCommittee, candidate.id, value)}
-        />
+        committeeId={noCommittee}
+        candidateId={candidate.id}
+        value={candidateVotes}
+        onChange={(value) => handleVoteFieldChange(noCommittee, candidate.id, value)}
+      />
       : candidateVotes;
 
     // Committee Candidate Vote Field
@@ -115,11 +119,11 @@ const transformResultData = (
         const votes = columnEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
         transformedResultFieldsData[`committee_${committee.id}`] = columnEdited[committee.id]
           ? <ResultInputField
-              committeeId={committee.id}
-              candidateId={candidate.id}
-              value={votes}
-              onChange={(value) => handleVoteFieldChange(committee.id, candidate.id, value)}
-            />
+            committeeId={committee.id}
+            candidateId={candidate.id}
+            value={votes}
+            onChange={(value) => handleVoteFieldChange(committee.id, candidate.id, value)}
+          />
           : votes;
       });
     }

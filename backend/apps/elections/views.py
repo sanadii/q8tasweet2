@@ -614,7 +614,6 @@ class UpdateElectionCommitteeResults(APIView):
         return Response({"data": output, "count": sum(len(candidates) for candidates in output.values()), "code": 200})
 
 
-
 class GetPublicElections(APIView):
     permission_classes = [AllowAny]
     
@@ -623,7 +622,7 @@ class GetPublicElections(APIView):
         data_serializer = ElectionSerializer(elections_data, many=True)
 
         # Fetch categories with parent equal to NULL
-        category_options = Category.objects.filter(parent__isnull=True)
+        category_options = ElectionCategory.objects.filter(parent__isnull=True)
 
         # Initialize count dictionary
         counts = {

@@ -35,7 +35,7 @@ const CandidatesTab = ({ columns }) => {
   const [electionCampaign, setElectionCampaign] = useState([]);
   const [electionCampaignList, setElectionCampaignList] = useState(electionCampaign);
 
-  console.log("electionParties: ", electionParties)
+  // console.log("electionParties: ", electionParties)
   // console.log("electionCandidateList: ", electionPartyList)
 
   // const mainTabs = [

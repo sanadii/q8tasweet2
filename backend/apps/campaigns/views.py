@@ -130,14 +130,7 @@ class GetCampaignDetails(APIView):
         ).select_related('campaign')
 
         election = campaign.election_candidate.election
-
-        # if campaignType == "candidates":
-        #     election = campaign.election_candidate.election
-        # elif campaignType == "parties":
-        #     election = campaign.election_party.election
-
         election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
-
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
         campaign_attendees = CampaignAttendee.objects.filter(election=election).select_related('election')
         campaign_notifications = CampaignNotification.objects.filter(campaign=campaign).select_related('campaign')

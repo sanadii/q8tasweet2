@@ -483,7 +483,7 @@ const Elections = (state = IntialState, action) => {
         isElectionPartyUpdateFail: false,
 
 
-        
+
         // ...state,
         // electionParties: state.electionParties.map((electionParty) =>
         //   electionParty.id.toString() === action.payload.data.id.toString()
@@ -502,7 +502,7 @@ const Elections = (state = IntialState, action) => {
       };
 
 
-      
+
     // Election Party Candidates
     case GET_ELECTION_PARTY_CANDIDATES: {
       return {
@@ -588,7 +588,7 @@ const Elections = (state = IntialState, action) => {
         ...state,
         electionParties: action.payload.data,
         isElectionPartyCandidateUpdate: true,
-        isElectionPartyCandidateUpdateFail: false,       
+        isElectionPartyCandidateUpdateFail: false,
       };
 
     case UPDATE_ELECTION_PARTY_CANDIDATE_VOTES_FAIL:
@@ -670,54 +670,40 @@ const Elections = (state = IntialState, action) => {
       const { data } = action.payload;
       const committeeIdStr = Object.keys(data)[0];
       const committeeId = parseInt(committeeIdStr, 10);
-
+    
       // If committeeIdStr is not present, or it's not a number, or data[committeeIdStr] is not present, return the current state.
       if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
-
+    
       const updatedElectionCandidates = state.electionCandidates.map(candidate => {
-        // If committeeId is 0, we are updating the candidate's direct votes
-        if (committeeId === 0) {
-          return {
-            ...candidate,
-            votes: data[committeeIdStr][candidate.id.toString()] || candidate.votes,
-          };
-        } else {
-          // If committeeId is not 0, we are updating the committeeVotes
-          const committeeVoteIndex = candidate.committeeVotes.findIndex(v => v.electionCommittee === committeeId);
-
-          // If the committeeVote does not exist, we don't update anything
-          if (committeeVoteIndex === -1) {
-            return candidate;
-          }
-
-          // Update existing entry
-          const updatedVotes = [...candidate.committeeVotes];
-          updatedVotes[committeeVoteIndex] = {
-            ...updatedVotes[committeeVoteIndex],
-            votes: data[committeeIdStr][candidate.id.toString()],
-          };
-
+        if (candidate.committeeVotes) {
+          const updatedVotes = candidate.committeeVotes.map(committeeVote => {
+            if (committeeVote.electionCommittee === committeeId) {
+              return {
+                ...committeeVote,
+                votes: data[committeeIdStr][candidate.id.toString()] || committeeVote.votes,
+              };
+            }
+            return committeeVote;
+          });
+    
           return {
             ...candidate,
             committeeVotes: updatedVotes,
           };
         }
+    
+        return candidate;
       });
-
+    
       return {
         ...state,
-        electionCommitteeResults: {
-          ...state.electionCommitteeResults,
-          [committeeId]: {
-            ...(state.electionCommitteeResults[committeeId] || {}),
-            ...data[committeeIdStr],
-          },
-        },
         electionCandidates: updatedElectionCandidates,
         isElectionCommitteeResultUpdate: true,
         isElectionCommitteeResultUpdateFail: false,
       };
     }
+    
+
 
 
 

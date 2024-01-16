@@ -23,14 +23,24 @@ const ResultsTab = () => {
 
   // States
   const [columnEdited, setColumnEdited] = useState({});
+  const [hasChanges, setHasChanges] = useState(false);
   const [voteFieldEditedData, setVoteFieldEditedData] = useState({});
+  console.log("columnEdited? ", columnEdited, "hasChanges? ", hasChanges)
 
 
   // Toggle Vote Column To Edit / Save / Close Mode
   const toggleColumnToEdit = (committeeId) => {
     setColumnEdited(prev => ({
-      ...prev, [committeeId]: !prev[committeeId]
+      ...prev,
+      [committeeId]: !prev[committeeId], // Toggle the value for the specified committee
     }));
+
+    if (!columnEdited[committeeId]) {
+      setHasChanges(prev => ({
+        ...prev,
+        [committeeId]: false, // Set hasChanges to false for the specified committee
+      }));
+    }
 
   };
 
@@ -39,6 +49,13 @@ const ResultsTab = () => {
     setVoteFieldEditedData(prev => ({
       ...prev, [committeeId]: { ...(prev[committeeId] || {}), [candidateId]: newValue },
     }));
+
+    // Set hasChanges for the specific committee to true
+    setHasChanges(prev => ({
+      ...prev,
+      [committeeId]: true,
+    }));
+
   }, []);
 
 
@@ -67,7 +84,7 @@ const ResultsTab = () => {
     columnEdited,
     setColumnEdited,
     setVoteFieldEditedData,
-    toggleColumnToEdit
+    toggleColumnToEdit,
   );
 
 
@@ -99,8 +116,8 @@ const ResultsTab = () => {
           <HeaderVoteButton
             committeeId={"0"}
             committee={0}
-            isEdited={columnEdited[0]}
-            hasChanges={voteFieldEditedData && Object.keys(voteFieldEditedData).length > 0}
+            columnEdited={columnEdited}  // Need some work
+            hasChanges={hasChanges}
             handleSaveResults={handleSaveResults}
             toggleColumnToEdit={toggleColumnToEdit}
           />
@@ -114,9 +131,8 @@ const ResultsTab = () => {
         <HeaderVoteButton
           committeeId={committee.id}
           committee={committee}
-          isEdited={columnEdited[committee.id]}
-          // columnEdited={columnEdited[committee.id]}
-          hasChanges={voteFieldEditedData[committee.id] && Object.keys(voteFieldEditedData[committee.id]).length > 0}
+          columnEdited={columnEdited}
+          hasChanges={hasChanges}
           handleSaveResults={handleSaveResults}
           toggleColumnToEdit={toggleColumnToEdit}
         />
