@@ -49,12 +49,12 @@ const Votes = (cellProps) => {
 }
 
 const Actions = (cellProps) => {
-    const { setElectionCandidate, handleElectionCandidateClick, onClickDelete } = cellProps;
+    const { setElectionCandidate, handleElectionCandidateClick, setIsElectionPartyAction, onClickDelete } = cellProps;
     const electionCandidate = cellProps.row.original;
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
-            <button
+            {/* <button
                 to="#"
                 className="btn btn-sm btn-soft-primary edit-list"
                 onClick={() => {
@@ -80,7 +80,7 @@ const Actions = (cellProps) => {
                 }}
             >
                 <i className="ri-eye-fill align-bottom" />
-            </button>
+            </button> */}
             <button
                 to="#"
                 className="btn btn-sm btn-soft-info edit-list"
@@ -94,6 +94,7 @@ const Actions = (cellProps) => {
                 to="#"
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
+                    setIsElectionPartyAction(false); // Set isPartyAction to true when this button is clicked
                     onClickDelete(electionCandidate);
                 }}
             >

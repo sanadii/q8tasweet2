@@ -665,7 +665,7 @@ class GetPublicElectionDetails(APIView):
                     "electionDetails": election_data,
                     "electionCandidates": election_candidates,
                     "electionCommittees": election_committees,
-                    "electionCommitteeResults": committee_results,
+                    "electionResults": committee_results,
                     "electionCampaigns": campaigns,
 
                 },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from "react-redux";
-import { updateElectionCommitteeResults, updateElectionCandidateVotes } from "store/actions";
+import { updateElectionResults } from "store/actions";
 
 
 // CommitteeVoteButton is responsible for rendering a button with different texts and classes
@@ -143,74 +143,6 @@ const transformResultData = (
   return calculateCandidatePosition(candidatesWithTotalVotes);
 };
 
-
-// const transformResultData = (
-//   electionCandidates,
-//   electionCommittees,
-//   columnEdited,
-//   handleVoteFieldChange,
-//   election
-// ) => {
-//   if (!electionCandidates || !electionCommittees || !election) return [];
-
-//   const candidatesWithTotalVotes = electionCandidates.map((candidate) => {
-//     const candidateVotes = candidate.votes ?? 0;
-//     const transformedResultFieldsData = {
-//       'candidate.id': candidate.id,
-//       position: candidate.position,
-//       name: candidate.name,
-//       gender: candidate.gender,
-//       image: candidate.imagePath,
-//       isWinner: candidate.isWinner,
-//       total: calculateTotalVotes(candidate, electionCommittees),
-
-//     };
-
-//     // Candidate Vote Field
-//     const noCommittee = "0";
-//     transformedResultFieldsData[`votes`] = columnEdited[0]
-//       ? <ResultInputField
-//         committeeId={noCommittee}
-//         candidateId={candidate.id}
-//         value={candidateVotes}
-//         onChange={(value) => handleVoteFieldChange(noCommittee, candidate.id, value)} // Pass `undefined` for `committeeId`
-//       />
-//       :
-//       candidateVotes
-
-//     // Committee Candidate Vote Field
-//     if (electionCommittees.length > 0) {
-//       electionCommittees.forEach(committee => {
-//         const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
-//         const votes = columnEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
-//         transformedResultFieldsData[`committee_${committee.id}`] = columnEdited[committee.id]
-//           ? <ResultInputField
-//             committeeId={committee.id}
-//             candidateId={candidate.id}
-//             value={votes}
-//             onChange={(value) => handleVoteFieldChange(committee.id, candidate.id, value)}
-//           />
-
-//           : votes;
-//       });
-//     }
-//     return transformedResultFieldsData;
-//   });
-
-
-//   const calculateCandidatePosition = (candidates) => {
-//     const sortedCandidates = [...candidates].sort((a, b) => b.total - a.total);
-//     sortedCandidates.forEach((candidate, index) => {
-//       candidate.position = index + 1;
-//       candidate.isWinner = candidate.position <= (election.electSeats || 0);
-//     });
-//     return sortedCandidates.sort((a, b) => b.position - a.position);
-//   };
-//   return calculateCandidatePosition(candidatesWithTotalVotes);
-// };
-
-
-
 // useSaveCommitteeResults is a custom hook that dispatches an action to save committee results and handles local state updates related to editing.
 const useSaveCommitteeResults = (
   voteFieldEditedData,
@@ -227,7 +159,7 @@ const useSaveCommitteeResults = (
         id: committeeId,
         data: voteFieldEditedData[committeeId]
       };
-      dispatch(updateElectionCommitteeResults(updatedElectionCommitteeResult));
+      dispatch(updateElectionResults(updatedElectionCommitteeResult));
 
       // Reset edited data for this specific committee
       const updatededitedCommittee = { ...columnEdited };
@@ -238,14 +170,11 @@ const useSaveCommitteeResults = (
       const updatedModifiedData = { ...voteFieldEditedData };
       delete updatedModifiedData[committeeId];
       setVoteFieldEditedData(updatedModifiedData);
-
-      // Toggle edit mode off immediately, don’t wait for the action to complete
-      toggleColumnToEdit(committeeId);
-
-    } else {
-      // If no modifications are there but user still clicked save, simply toggle off the edit mode
-      toggleColumnToEdit('votes');
     }
+
+    // Toggle edit mode off immediately, don’t wait for the action to complete
+    toggleColumnToEdit(committeeId);
+
   }, [
     voteFieldEditedData,
     dispatch,

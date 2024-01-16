@@ -1,16 +1,13 @@
 // React imports
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-
-// Store & Selectors
 import { electionSelector } from 'Selectors';
-
-// UI & Utilities
 import { Col, Row, Card, CardHeader } from "reactstrap";
-import { Loader, TableContainer, TableContainerHeader } from "components";
+import { Loader, TableContainer } from "components";
 
-const CandidatesTab = ({ columns }) => {
+const Parties = ({ columns, electionPartyButtons }) => {
 
+  // State Management
   const { electionParties, electionPartyCandidates, error } = useSelector(electionSelector);
 
   const getCandidatesForParty = (partyId) => {
@@ -27,15 +24,27 @@ const CandidatesTab = ({ columns }) => {
             return (
               <Col lg={4} key={index}>
                 <Card className="border card-border-secondary">
-                  <CardHeader>
-                    <h4><strong>{party.name}</strong></h4>
+                  <CardHeader className="d-flex justify-content-between align-items-center">
+                    <h4>
+                      <strong>{party.name}</strong>
+                    </h4>
+                    <div className="list-inline hstack gap-2 mb-0">
+                      {electionPartyButtons.map((button, btnIndex) => (
+                        <React.Fragment key={btnIndex}>
+                          {button.action(party)}
+                        </React.Fragment>
+                      ))}
+                    </div>
                   </CardHeader>
-                  
+
+
                   {partyCandidates && partyCandidates.length ? (
                     <TableContainer
                       columns={columns}
                       data={partyCandidates}
                       customPageSize={50}
+
+                      // Styling
                       divClass="table-responsive table-card mb-3"
                       tableClass="align-middle table-nowrap mb-0"
                       theadClass="table-light table-nowrap"
@@ -54,4 +63,4 @@ const CandidatesTab = ({ columns }) => {
   );
 };
 
-export default CandidatesTab;
+export default Parties;

@@ -35,12 +35,10 @@ const ResultsTab = () => {
       [committeeId]: !prev[committeeId], // Toggle the value for the specified committee
     }));
 
-    if (!columnEdited[committeeId]) {
-      setHasChanges(prev => ({
-        ...prev,
-        [committeeId]: false, // Set hasChanges to false for the specified committee
-      }));
-    }
+    setHasChanges(prev => ({
+      ...prev,
+      [committeeId]: false, // Set hasChanges to false for the specified committee
+    }));
 
   };
 
@@ -67,14 +65,7 @@ const ResultsTab = () => {
       columnEdited,
       handleVoteFieldChange,
       election
-    ),
-    [
-      candidates,
-      electionCommittees,
-      columnEdited,
-      handleVoteFieldChange,
-      election
-    ]
+    ), [candidates, electionCommittees, columnEdited, handleVoteFieldChange, election]
   );
 
 

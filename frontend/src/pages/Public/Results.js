@@ -23,7 +23,7 @@ const ElectionDetails = () => {
     id: useParams().id,
   });
 
-  const { electionDetails, electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector(electionSelector);
+  const { electionDetails, electionCandidates, electionCommittees, electionResults, error } = useSelector(electionSelector);
 
   useEffect(() => {
     if (election.id && !isEmpty(election)) {
@@ -31,7 +31,7 @@ const ElectionDetails = () => {
     }
   }, [dispatch, election, election.id]);
 
-  const [electionCommitteeResult, setElectionCommitteeResults] = useState(null);
+  const [electionResult, setElectionCommitteeResults] = useState(null);
   const [modifiedData, setModifiedData] = useState({});
 
   // Function to transform the data
@@ -157,8 +157,8 @@ const ElectionDetails = () => {
   }
 
   // Inside your component
-  const transformedData = transformData(electionCommitteeResults);
-  const columns = createColumns(electionCommitteeResults);
+  const transformedData = transformData(electionResults);
+  const columns = createColumns(electionResults);
 
   // Export Modal
   const [isExportCSV, setIsExportCSV] = useState(false);

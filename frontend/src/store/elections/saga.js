@@ -39,7 +39,7 @@ import {
   DELETE_ELECTION_COMMITTEE,
 
   // Election Committee Results
-  UPDATE_ELECTION_COMMITTEE_RESULTS,
+  UPDATE_ELECTION_RESULTS,
 
   // Election Campaign
   GET_ELECTION_CAMPAIGNS,
@@ -101,8 +101,8 @@ import {
   deleteElectionCommitteeFail,
 
   // Election Committees Results
-  updateElectionCommitteeResultsSuccess,
-  updateElectionCommitteeResultsFail,
+  updateElectionResultsSuccess,
+  updateElectionResultsFail,
 
   // Election Campaigns
   addElectionCampaignSuccess,
@@ -149,7 +149,7 @@ import {
   addNewElectionCommittee,
   updateElectionCommittee,
   deleteElectionCommittee,
-  updateElectionCommitteeResults,
+  updateElectionResults,
 
   // Election Campaigns
   getElectionCampaigns as getElectionCampaignsApi,
@@ -479,18 +479,18 @@ function* onUpdateElectionCommittee({ payload: electionCommittee }) {
 }
 
 
-function* onUpdateElectionCommitteeResults({ payload: electionCommitteeResult }) {
+function* onUpdateElectionCommitteeResults({ payload: electionResult }) {
   try {
-    console.log('Saga triggered with electionCommitteeResult:', electionCommitteeResult);
-    const response = yield call(updateElectionCommitteeResults, electionCommitteeResult);
+    console.log('Saga triggered with electionResult:', electionResult);
+    const response = yield call(updateElectionResults, electionResult);
     console.log('API response:', response);
-    yield put(updateElectionCommitteeResultsSuccess(response));
+    yield put(updateElectionResultsSuccess(response));
     toast.success("تم تحديث النتائج بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     console.error('Saga Error:', error); // Log any error that occurs
-    yield put(updateElectionCommitteeResultsFail(error));
+    yield put(updateElectionResultsFail(error));
     toast.error("خطأ في تحديث النتائج", { autoClose: 2000 });
   }
 }
@@ -648,7 +648,7 @@ export function* watchDeleteElectionCommittee() {
 
 // Election Committees Results Watchers
 export function* watchUpdateElectionCommitteeResults() {
-  yield takeEvery(UPDATE_ELECTION_COMMITTEE_RESULTS, onUpdateElectionCommitteeResults);
+  yield takeEvery(UPDATE_ELECTION_RESULTS, onUpdateElectionCommitteeResults);
 }
 
 // Election Campaigns Watchers

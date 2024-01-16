@@ -51,7 +51,7 @@ export const UPDATE_ELECTION_COMMITTEE = "/elections/updateElectionCommittee";
 export const DELETE_ELECTION_COMMITTEE = "/elections/deleteElectionCommittee";
 
 // Election Committee Results
-export const UPDATE_ELECTION_COMMITTEE_RESULTS = "/elections/updateElectionCommitteeResults";
+export const UPDATE_ELECTION_RESULTS = "/elections/updateElectionResults";
 
 
 // ElectionAttendee

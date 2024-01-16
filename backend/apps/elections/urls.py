@@ -49,7 +49,7 @@ urlpatterns = [
     path("addNewElectionCommittee", AddNewElectionCommittee.as_view(), name="AddNewElectionCommittee"),
     path("deleteElectionCommittee/<int:id>", DeleteElectionCommittee.as_view(), name="DeleteElectionCommittee"),
     path("updateElectionCommittee/<int:id>", UpdateElectionCommittee.as_view(), name="UpdateElectionCommittee"),
-    path("updateElectionCommitteeResults/<int:id>", UpdateElectionCommitteeResults.as_view(), name="UpdateElectionCommitteeResults"),
+    path("updateElectionResults/<int:id>", UpdateElectionCommitteeResults.as_view(), name="UpdateElectionCommitteeResults"),
 
     # Public
     path("getPublicElections", GetPublicElections.as_view(), name="GetPublicElections"),

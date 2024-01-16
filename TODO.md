@@ -8,10 +8,43 @@ Channels:
 
 SORTING
 - Frontend
--- Candidate Results                        DONE - working again
--- Update Candidate Results                 DONE
--- Candidate Sorting                        DONE
--- Update Candidate Sorting                 DONE
+# Candidate, Parties, ElectionCandidates
+✅ Add
+❌ Update
+✅ Delete
+
+# Results
+- Candidate Results                         - working again
+✅ Total Results & Update                       - updateCandidateeResults (Votes)
+✅ Detail Results & Update                          - updateElectionResults
+
+- Party Results
+❌ Total Results & Update
+❌ Detail Results & Update
+
+- PartyCandidate Results
+❌ Total Results & Update
+❌ Detail Results & Update 
+
+
+# Sorting
+- CandidateSorting
+-- Total Results & Update
+-- Detail Results & Update
+
+- PartySorting
+-- Total Results & Update
+-- Detail Results & Update 
+
+- PartyCandidateSorting
+-- Total Results & Update
+-- Detail Results & Update 
+
+
+-- Update Party Results
+-OK- Update Candidate Results                 -
+-OK- Candidate Sorting                        -
+-OK- Update Candidate Sorting                 -
 
 -- Party Results
 -- Update Party Results

@@ -20,14 +20,14 @@ import SimpleBar from "simplebar-react";
 const ResultsTab = () => {
     const dispatch = useDispatch();
 
-    const { electionCandidates, electionCommittees, electionCommitteeResults, error } = useSelector((state) => ({
+    const { electionCandidates, electionCommittees, electionResults, error } = useSelector((state) => ({
         electionCandidates: state.Elections.electionCandidates,
         electionCommittees: state.Elections.electionCommittees,
-        electionCommitteeResults: state.Elections.electionCommitteeResults,
+        electionResults: state.Elections.electionResults,
         error: state.Elections.error,
     }));
 
-    const [electionCommitteeResult, setElectionCommitteeResults] = useState(null);
+    const [electionResult, setElectionCommitteeResults] = useState(null);
 
 
 
@@ -149,8 +149,8 @@ const ResultsTab = () => {
 
 
     // Inside your component
-    const transformedData = transformData(electionCommitteeResults);
-    const columns = createColumns(electionCommitteeResults);
+    const transformedData = transformData(electionResults);
+    const columns = createColumns(electionResults);
 
     // Export Modal
     const [isExportCSV, setIsExportCSV] = useState(false);
@@ -160,7 +160,7 @@ const ResultsTab = () => {
             <ExportCSVModal
                 show={isExportCSV}
                 onCloseClick={() => setIsExportCSV(false)}
-                data={electionCommitteeResults}
+                data={electionResults}
             />
             <Row>
                 <Col lg={12}>

@@ -109,7 +109,7 @@ export const updateElectionCommittee = (electionCommittee) => api.update(url.UPD
 export const deleteElectionCommittee = (electionCommittee) => api.delete(url.DELETE_ELECTION_COMMITTEE + "/" + electionCommittee);
 
 // ElectionCommittees
-export const updateElectionCommitteeResults = (electionCommitteeResult) => api.update(url.UPDATE_ELECTION_COMMITTEE_RESULTS + "/" + electionCommitteeResult.id, electionCommitteeResult);
+export const updateElectionResults = (electionResult) => api.update(url.UPDATE_ELECTION_RESULTS + "/" + electionResult.id, electionResult);
 
 // ElectionCampaigns
 export const getElectionCampaigns = (campaign) => api.get(url.GET_ELECTION_CAMPAIGNS + "/" + campaign.id);

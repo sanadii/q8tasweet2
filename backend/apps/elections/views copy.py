@@ -16,7 +16,7 @@
 #                 "electionDetails": self.get_election_data(election, context),
 #                 "electionCandidates": self.get_election_candidates(election, election_candidates, context),
 #                 "electionCommittees": self.get_election_committees(election_committees, context),
-#                 "electionCommitteeResults": self.get_election_committee_results(election, election_committees),
+#                 "electionResults": self.get_election_committee_results(election, election_committees),
 #                 "electionCampaigns": self.get_election_campaigns_for_election(election, context),
 #             },
 #             "code": 200

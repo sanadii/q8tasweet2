@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
-import { deleteElectionPartyCandidate } from "store/actions";
+import { deleteElectionCandidate, deleteElectionParty, deleteElectionPartyCandidate } from "store/actions";
 import { electionSelector } from 'Selectors';
 import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
 
@@ -15,11 +15,10 @@ import Candidates from "./Candidates";
 import Parties from "./Parties";
 
 import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
-// import { calculateCandidatePosition } from "./CandidateCalculations"
 import { usePermission, useDelete } from "hooks";
 
 // UI & Utilities
-import { Col, Row, Card, CardBody, Nav, NavItem, NavLink } from "reactstrap";
+import { Button, Col, Row, Card, CardBody, Nav, NavItem, NavLink } from "reactstrap";
 import { isEmpty } from "lodash";
 import { toast, ToastContainer } from "react-toastify";
 import classnames from "classnames";
@@ -39,24 +38,11 @@ const CandidatesTab = () => {
   const [electionCampaign, setElectionCampaign] = useState([]);
   const [electionCampaignList, setElectionCampaignList] = useState(electionCampaign);
 
-  // console.log("electionParties: ", electionParties)
-  // console.log("electionCandidateList: ", electionPartyList)
-
-  // const mainTabs = [
-  //   { id: "1", title: "النتائج", icon: 'ri-activity-line', },
-  //   { id: "2", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
-  //   { id: "3", title: "إضافة النتائج", icon: 'ri-activity-line', }
-  // ];
 
   // Function to close the candidate modal
   const closeCandidateModal = () => {
     setCandidateModal(false);
   };
-
-
-  // Function to close the campaign modal
-
-
 
 
   // State for the candidate modal
@@ -69,34 +55,27 @@ const CandidatesTab = () => {
   // State for the campaign modal
   const [campaignModal, setCampaignModal] = useState(false);
   const [isEditCampaign, setIsEditCampaign] = useState(false);
+  const [isElectionPartyAction, setIsElectionPartyAction] = useState(false);
 
-  // Sort List by Candidate Position
-  useEffect(() => {
-    const calculateCandidatePosition = (candidates) => {
-      // Sort candidates by votes in desending order
-      let sortedCandidates = [...candidates].sort((a, b) => b.votes - a.votes);
+  console.log("isElectionPartyAction: ", isElectionPartyAction )
+  let deleteAction;
 
-      // Assign positions
-      for (let i = 0; i < sortedCandidates.length; i++) {
-        sortedCandidates[i].position = i + 1;
-      }
+  if (electionType !== 1) {
+    if (isElectionPartyAction) {
+      // If the action is on electionParty
+      deleteAction = deleteElectionParty;
+      // setIsElectionPartyAction(false); // Set isElectionPartyAction to true when this button is clicked
 
-      // Set isWinner property based on electSeats
-      const electSeats = election.electSeats || 0;
-      sortedCandidates = sortedCandidates.map(candidate => ({
-        ...candidate,
-        isWinner: candidate.position <= electSeats
-      }));
+    } else {
+      // If the action is on electionPartyCandidate
+      deleteAction = deleteElectionPartyCandidate;
+    }
+  } else {
+    // If electionType is 1
+    deleteAction = deleteElectionCandidate;
+  }
+  
 
-      // Sort candidates by positions in ascending order (issue in react its always reversing)
-      sortedCandidates = sortedCandidates.sort((a, b) => b.position - a.position);
-      return sortedCandidates;
-    };
-
-    const sortedCandidates = calculateCandidatePosition(electionCandidates);
-    setElectionCandidateList(sortedCandidates);
-
-  }, [electionCandidates, election.electSeats]);
 
   // Delete Hook
   const {
@@ -110,7 +89,7 @@ const CandidatesTab = () => {
     deleteModalMulti,
     setDeleteModalMulti,
     deleteMultiple,
-  } = useDelete(deleteElectionPartyCandidate);
+  } = useDelete(deleteAction);
 
   // Models
   const [modal, setModal] = useState(false);
@@ -143,9 +122,6 @@ const CandidatesTab = () => {
       setPartyModal(true);
       setIsEdit(true);
       toggle();
-
-      console.log("CHECK: modal:", modal);
-      console.log("CHECK: isEdit:", isEdit);
     },
     [toggle]
   );
@@ -187,9 +163,6 @@ const CandidatesTab = () => {
       setCandidateModal(true);
       setIsEdit(true);
       toggle();
-
-      console.log("CHECK: modal:", modal);
-      console.log("CHECK: isEdit:", isEdit);
     },
     [toggle]
   );
@@ -218,7 +191,6 @@ const CandidatesTab = () => {
     toggle();
   };
 
-
   const handleElectionCandidateClicks = (candidate = null) => {
     setElectionCandidate(candidate);
     setIsEditCandidate(!!candidate);
@@ -235,21 +207,9 @@ const CandidatesTab = () => {
     toggle();
   };
 
-  const handleElectionResultClicks = () => {
-    setActiveTab("8");
-  };
 
   // Export Modal
   const [isExportCSV, setIsExportCSV] = useState(false);
-
-  //Tab
-  const [activeTab, setActiveTab] = useState("1");
-
-  const toggleTab = (tab) => {
-    if (activeTab !== tab) {
-      setActiveTab(tab);
-    }
-  };
 
   const columns = useMemo(
     () => [
@@ -258,21 +218,11 @@ const CandidatesTab = () => {
         Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
         id: "id",
       },
-      // {
-      //   Header: "المركز",
-      //   accessor: "position",
-      //   Cell: (cellProps) => <Position {...cellProps} />
-      // },
       {
         Header: "المرشح",
         filterable: true,
         Cell: (cellProps) => <Name {...cellProps} />
       },
-      // {
-      //   Header: "الأصوات",
-      //   accessor: "votes",
-      //   Cell: (cellProps) => <Votes {...cellProps} />
-      // },
       {
         Header: "إجراءات",
         Cell: (cellProps) => (
@@ -280,24 +230,55 @@ const CandidatesTab = () => {
             {...cellProps}
             setElectionCandidate={setElectionCandidate}
             handleElectionCandidateClick={handleElectionCandidateClick}
+            setIsElectionPartyAction={setIsElectionPartyAction}
             onClickDelete={onClickDelete}
           />
         )
       },
-      // {
-      //   Header: "رمز",
-      //   accessor: "candidate_id",
-      //   Cell: (cellProps) => <Id {...cellProps} />
-      // },
     ],
     [handleElectionCandidateClick, checkedAll]
   );
 
 
+  const electionPartyButtons = useMemo(
+    () => [
+      {
+        Name: "تعديل",
+        action: (cellProps) =>
+          <button
+            to="#"
+            className="btn btn-sm btn-soft-info edit-list"
+            onClick={() => {
+              handleElectionPartyClick(electionParty);
+            }}
+          >
+            <i className="ri-pencil-fill align-bottom" />
+          </button>
+      },
+      {
+        Name: "حذف",
+        action: (electionParty) => (
+          <button
+            className="btn btn-sm btn-soft-danger remove-list"
+            onClick={() => {
+              setIsElectionPartyAction(true); // Set isElectionPartyAction to true when this button is clicked
+              onClickDelete(electionParty);
+            }}
+          >
+            <i className="ri-delete-bin-5-fill align-bottom" />
+          </button>
+        )
+      }
+    ],
+    []
+  );
+
+
+
   const PartyColumns = useMemo(() => {
     return columns.filter(column =>
       column.Header === "المرشح"
-      // || column.Header === "إجراءات"
+      || column.Header === "إجراءات"
     );
   }, [columns]);
 
@@ -380,6 +361,7 @@ const CandidatesTab = () => {
                   electionType !== 1 ?
                     <Parties
                       columns={PartyColumns}
+                      electionPartyButtons={electionPartyButtons}
                     />
                     :
                     <Candidates

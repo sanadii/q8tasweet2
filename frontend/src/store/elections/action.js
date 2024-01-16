@@ -77,9 +77,9 @@ import {
   DELETE_ELECTION_COMMITTEE_FAIL,
 
   // Election Committee
-  UPDATE_ELECTION_COMMITTEE_RESULTS,
-  UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS,
-  UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL,
+  UPDATE_ELECTION_RESULTS,
+  UPDATE_ELECTION_RESULTS_SUCCESS,
+  UPDATE_ELECTION_RESULTS_FAIL,
 
   // Election Campaign
   GET_ELECTION_CAMPAIGNS,
@@ -428,16 +428,16 @@ export const deleteElectionCommitteeFail = error => ({
 });
 
 // Election Committee Results
-export const updateElectionCommitteeResults = electionCommitteeResult => ({
-  type: UPDATE_ELECTION_COMMITTEE_RESULTS,
-  payload: electionCommitteeResult,
+export const updateElectionResults = electionResult => ({
+  type: UPDATE_ELECTION_RESULTS,
+  payload: electionResult,
 });
-export const updateElectionCommitteeResultsSuccess = electionCommitteeResult => ({
-  type: UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS,
-  payload: electionCommitteeResult,
+export const updateElectionResultsSuccess = electionResult => ({
+  type: UPDATE_ELECTION_RESULTS_SUCCESS,
+  payload: electionResult,
 });
-export const updateElectionCommitteeResultsFail = error => ({
-  type: UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL,
+export const updateElectionResultsFail = error => ({
+  type: UPDATE_ELECTION_RESULTS_FAIL,
   payload: error,
 });
 

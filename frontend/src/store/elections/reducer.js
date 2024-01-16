@@ -61,8 +61,8 @@ import {
 
 
   // Election Committee Results-
-  UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS,
-  UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL,
+  UPDATE_ELECTION_RESULTS_SUCCESS,
+  UPDATE_ELECTION_RESULTS_FAIL,
 
 
   // Election Campaigns
@@ -85,7 +85,7 @@ const IntialState = {
   electionPartyCandidates: [],
   electionCampaigns: [],
   electionCommittees: [],
-  electionCommitteeResults: [],
+  electionResults: [],
   electionSorters: [],
 };
 
@@ -124,7 +124,7 @@ const Elections = (state = IntialState, action) => {
             electionCandidates: action.payload.data.electionCandidates,
             electionCampaigns: action.payload.data.electionCampaigns,
             electionCommittees: action.payload.data.electionCommittees,
-            electionCommitteeResults: action.payload.data.electionCommitteeResults,
+            electionResults: action.payload.data.electionResults,
             electionSorters: action.payload.data.electionSorters,
             isElectionCreated: false,
             isElectionSuccess: true,
@@ -517,7 +517,7 @@ const Elections = (state = IntialState, action) => {
       return {
         ...state,
         isElectionPartyCandidateCreated: true,
-        electionParties: [...state.electionParties, action.payload.data],
+        electionPartyCandidates: [...state.electionPartyCandidates, action.payload.data],
         isElectionPartyCandidateAdd: true,
         isElectionPartyCandidateAddFail: false,
       };
@@ -543,7 +543,7 @@ const Elections = (state = IntialState, action) => {
     case UPDATE_ELECTION_PARTY_CANDIDATE_SUCCESS:
       return {
         ...state,
-        electionParties: state.electionParties.map((electionParty) =>
+        electionPartyCandidates: state.electionPartyCandidates.map((electionParty) =>
           electionParty.id.toString() === action.payload.data.id.toString()
             ? { ...electionParty, ...action.payload.data }
             : electionParty
@@ -563,10 +563,10 @@ const Elections = (state = IntialState, action) => {
     case DELETE_ELECTION_PARTY_CANDIDATE_SUCCESS:
       return {
         ...state,
-        electionParties: state.electionParties.filter(
-          (electionParty) =>
-            electionParty.id.toString() !==
-            action.payload.electionParty.toString()
+        electionPartyCandidates: state.electionPartyCandidates.filter(
+          (electionPartyCandidate) =>
+          electionPartyCandidate.id.toString() !==
+            action.payload.electionPartyCandidate.toString()
         ),
         isElectionPartyCandidateDelete: true,
         isElectionPartyCandidateDeleteFail: false,
@@ -666,7 +666,7 @@ const Elections = (state = IntialState, action) => {
 
 
     // We need to update electionCandidates.candidate.committeeVotes with the new value
-    case UPDATE_ELECTION_COMMITTEE_RESULTS_SUCCESS: {
+    case UPDATE_ELECTION_RESULTS_SUCCESS: {
       const { data } = action.payload;
       const committeeIdStr = Object.keys(data)[0];
       const committeeId = parseInt(committeeIdStr, 10);
@@ -675,7 +675,18 @@ const Elections = (state = IntialState, action) => {
       if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
     
       const updatedElectionCandidates = state.electionCandidates.map(candidate => {
+        // Update votes directly on the candidate if committeeId is 0
+        if (committeeId === 0) {
+          console.log("committeeIdStr", committeeIdStr, "updating candidate votes");
+          return {
+            ...candidate,
+            votes: data[committeeIdStr][candidate.id.toString()] || candidate.votes,
+          };
+        }
+    
+        // If candidate has committeeVotes and committeeId is not 0, update committeeVotes
         if (candidate.committeeVotes) {
+          console.log("committeeIdStr", committeeIdStr, "updating committee");
           const updatedVotes = candidate.committeeVotes.map(committeeVote => {
             if (committeeVote.electionCommittee === committeeId) {
               return {
@@ -711,7 +722,8 @@ const Elections = (state = IntialState, action) => {
 
 
 
-    case UPDATE_ELECTION_COMMITTEE_RESULTS_FAIL:
+
+    case UPDATE_ELECTION_RESULTS_FAIL:
       return {
         ...state,
         error: action.payload,

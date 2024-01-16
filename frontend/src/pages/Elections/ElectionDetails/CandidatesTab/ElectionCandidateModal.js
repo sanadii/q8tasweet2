@@ -1,9 +1,9 @@
 // React & Redux core imports
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
-import { addNewElectionCandidate, updateElectionCandidate } from "store/actions";
+import { updateElectionCandidate, updateElectionParty, updateElectionPartyCandidate } from "store/actions";
 import { electionSelector } from 'Selectors';
 
 // Constants & Component imports
@@ -27,9 +27,16 @@ export const ElectionCandidateModal = ({
   electionCandidate,
 }) => {
   const dispatch = useDispatch();
-  const { electionDetails } = useSelector(electionSelector);
+  const { electionType, electionDetails } = useSelector(electionSelector);
   const election = electionDetails.id;
 
+  let updateAction;
+  
+  if (electionType !== 1) {
+    updateAction = updateElectionPartyCandidate;
+  } else {
+    updateAction = updateElectionCandidate;
+  }
 
   const openModal = () => {
     setModal(!modal);
@@ -67,21 +74,13 @@ export const ElectionCandidateModal = ({
       // candidate: Yup.string().required("Please Enter Candidate ID"),
     }),
     onSubmit: (values) => {
-      if (isEdit) {
-        const updatedElectionCandidate = {
-          // Basic Information
-          id: electionCandidate ? electionCandidate.id : 0,
-          notes: values.notes,
-        };
-        dispatch(updateElectionCandidate(updatedElectionCandidate));
-      } else {
-        const newElectionCandidate = {
-          id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-          election: election,
-          candidate: values["candidate"],
-        };
-        dispatch(addNewElectionCandidate(newElectionCandidate));
-      }
+      const updatedElectionCandidate = {
+        // Basic Information
+        id: electionCandidate ? electionCandidate.id : 0,
+        notes: values.notes,
+      };
+      dispatch(updateAction(updatedElectionCandidate));
+
       validation.resetForm();
       toggle();
     },
