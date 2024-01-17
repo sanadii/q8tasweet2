@@ -27,12 +27,12 @@ export const ElectionCandidateModal = ({
   electionCandidate,
 }) => {
   const dispatch = useDispatch();
-  const { electionType, electionDetails } = useSelector(electionSelector);
+  const { electionMethod, electionDetails } = useSelector(electionSelector);
   const election = electionDetails.id;
 
   let updateAction;
   
-  if (electionType !== 1) {
+  if (electionMethod !== "candidateOnly") {
     updateAction = updateElectionPartyCandidate;
   } else {
     updateAction = updateElectionCandidate;

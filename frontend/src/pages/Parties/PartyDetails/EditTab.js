@@ -29,7 +29,7 @@ import {
   StatusOptions,
   PriorityOptions,
   RoleOptions,
-  ElectionTypeOptions,
+  ElectionMethodOptions,
   ElectionResultOptions,
   TagOptions,
 } from "constants";
@@ -598,7 +598,7 @@ const EditTab = ({ candidate }) => {
                   >
                     <option value="">- Select Candidate Type -</option>{" "}
                     {/* Placeholder option */}
-                    {ElectionTypeOptions.map((option) => (
+                    {ElectionMethodOptions.map((option) => (
                       <option key={option.name} value={option.value}>
                         {option.name}
                       </option>

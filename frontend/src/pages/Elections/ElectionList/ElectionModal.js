@@ -13,7 +13,7 @@ import { Row, Form, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 
 // Custom Components & ConstantsImports
 import { FormFields } from "components";
-import { ElectionResultOptions, ElectionTypeOptions, PriorityOptions, StatusOptions } from "constants";
+import { ElectionMethodOptions, ElectionResultOptions, ElectionPartyResultOptions, ElectionSortingResultOptions, PriorityOptions, StatusOptions } from "constants";
 import { useCategoryManager } from "hooks";
 
 
@@ -32,8 +32,8 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       subCategory: (election && election.subCategory) || null,
       dueDate: (election && election.dueDate) || null,
       tags: (election && election.tags) || [],
-      electType: (election && election.electType) || 1,
-      electResult: (election && election.electResult) || 1,
+      electionMethod: (election && election.electionMethod) || 1,
+      electionResult: (election && election.electionResult) || "total",
       electVotes: (election && election.electVotes) || 0,
       electSeats: (election && election.electSeats) || 0,
       electors: (election && election.electors) || 0,
@@ -60,8 +60,8 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
           subCategory: values.subCategory,
           dueDate: values.dueDate,
           tags: Array.isArray(values.tags) ? values.tags : [],
-          electType: values.electType,
-          electResult: values.electResult,
+          electionMethod: values.electionMethod,
+          electionResult: values.electionResult,
           electVotes: values.electVotes,
           electSeats: values.electSeats,
           electors: values.electors,
@@ -81,8 +81,8 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
           subCategory: parseInt(values.subCategory, 10),
           dueDate: values.dueDate,
           tags: Array.isArray(values.tags) ? values.tags : [],
-          electType: values.electType,
-          electResult: values.electResult,
+          electionMethod: values.electionMethod,
+          electionResult: values.electionResult,
           electVotes: values.electVotes,
           electSeats: values.electSeats,
           status: parseInt(values.status, 10),
@@ -143,28 +143,28 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       colSize: 4,
     },
     {
-      id: "electType-field",
-      name: "electType",
+      id: "electionMethod-field",
+      name: "electionMethod",
       label: "نوع الانتخابات",
       type: "select",
-      options: ElectionTypeOptions,
-      options: ElectionTypeOptions.map(electionType => ({
-        id: electionType.id,
-        label: electionType.name,
-        value: electionType.id
+      options: ElectionMethodOptions,
+      options: ElectionMethodOptions.map(electionMethod => ({
+        id: electionMethod.id,
+        label: electionMethod.name,
+        value: electionMethod.id
       })),
       colSize: 4,
     },
     // Additional fields
     {
-      id: "electResult-field",
-      name: "electResult",
+      id: "electionResult-field",
+      name: "electionResult",
       label: "نتائج الانتخابات",
       type: "select",
       options: ElectionResultOptions.map(electionResult => ({
         id: electionResult.id,
         label: electionResult.name,
-        value: electionResult.id
+        value: electionResult.value
       })),
       colSize: 4,
     },

@@ -5,19 +5,16 @@ import { electionSelector, categorySelector } from 'Selectors';
 import { useSelector, useDispatch } from "react-redux";
 import { updateElection } from "store/actions";
 import { useCategoryManager } from "hooks";
+import { FormFields } from "components";
 
 // Formik
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
-import { Card, CardBody, CardHeader, Col, Input, Label, Row, FormFeedback, Form } from "reactstrap";
-import { toast, ToastContainer } from "react-toastify";
+import { Col, Row, Form, Card, CardHeader, CardBody } from "reactstrap";
 
 //Import Flatepicker
-import Flatpickr from "react-flatpickr";
-import Select from "react-select";
 import Dropzone from "react-dropzone";
-import { StatusOptions, PriorityOptions, RoleOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "constants";
+import { StatusOptions, PriorityOptions, RoleOptions, ElectionMethodOptions, ElectionResultOptions, ElectionPartyResultOptions, ElectionSortingResultOptions, TagOptions } from "constants";
 
 const EditElection = () => {
   const dispatch = useDispatch();
@@ -34,8 +31,10 @@ const EditElection = () => {
       tags: election?.tags ?? [],
 
       // Settings
-      electType: election?.electType ?? 1,
-      electResult: election?.electResult ?? 1,
+      electionMethod: election?.electionMethod ?? "candidateOnly",
+      electionResult: election?.electionResult ?? "candidateOnly",
+      electionPartyResult: election?.electionPartyResult ?? 1,
+      electionSortingResult: election?.electionSortingResult ?? false,
       electVotes: election?.electVotes ?? 0,
       electSeats: election?.electSeats ?? 0,
 
@@ -64,18 +63,26 @@ const EditElection = () => {
     }),
 
     onSubmit: (values) => {
+      const electionResultJson = {
+        election_result: values.electionResult,
+        election_party_result: values.electionPartyResult,
+        election_sorting_result: values.electionSortingResult,
+      };
+
+      
       const updatedElection = {
         id: electionId,
         category: values.category,
         subCategory: values.subCategory,
-        dueDate: dueDate,
+        dueDate: values.dueDate,
 
         // Taxonomies
         tags: Array.isArray(values.tags) ? values.tags : [],
 
         // Election Spesifications
-        electType: values.electType,
-        electResult: values.electResult,
+        electionMethod: values.electionMethod,
+        electionResult: JSON.stringify(electionResultJson), // Convert the object to a JSON string
+  
         electVotes: values.electVotes,
         electSeats: values.electSeats,
         electors: values.electors,
@@ -105,55 +112,248 @@ const EditElection = () => {
     setselectedMulti(selectedMulti);
   };
 
-  //Dropzone file upload
-  const [selectedFiles, setselectedFiles] = useState([]);
-  const [files, setFiles] = useState([]);
 
-  const handleAcceptedFiles = (files) => {
-    files.map((file) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-        formattedSize: formatBytes(file.size),
-      })
-    );
-    setselectedFiles(files);
-  };
 
-  // Formats the size
-  const formatBytes = (bytes, decimals = 2) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-  };
-
-  // Format the Date
-  const defaultdate = () => {
-    let d = new Date();
-    const year = d.getFullYear();
-    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-    const day = ("0" + d.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
-  const [dueDate, setDueDate] = useState(defaultdate());
-
-  const dateformate = (e) => {
-    const selectedDate = new Date(e);
-    const formattedDate = `${selectedDate.getFullYear()}-${(
-      "0" +
-      (selectedDate.getMonth() + 1)
-    ).slice(-2)}-${("0" + selectedDate.getDate()).slice(-2)}`;
-    setDueDate(formattedDate);
-  };
 
   document.title =
     "Update Election | Q8Tasweet - React Admin & Dashboard Template";
 
+  const fields = [
+    {
+      column: "columnOne",
+      sections: [
+        {
+          section: "التفاصيل",
+          fields: [
+            {
+              id: "dueDate-field",
+              name: "dueDate",
+              label: "الموعد",
+              type: "date",
+              colSize: 4,
+              colSize: 12,
+            },
+            {
+              id: "category-field",
+              name: "category",
+              label: "التصنيف",
+              type: "select",
+              options: categoryOptions.map(category => ({
+                id: category.id,
+                label: category.name,
+                value: category.id
+              })),
+              onChange: (e) => {
+                validation.handleChange(e);
+                changeSubCategoriesOptions(e);
+              },
+              colSize: 6,
+            },
+            {
+              id: "sub-category-field",
+              name: "subCategory",
+              label: "التصنيف الفرعي",
+              type: "select",
+              options: subCategoryOptions.map(subCategory => ({
+                id: subCategory.id,
+                label: subCategory.name,
+                value: subCategory.id
+              })),
+              colSize: 6,
+            },
+          ]
+        },
+        {
+          section: "إعدادات الإنتخابات",
+          fields: [
+            {
+              id: "electionMethod-field",
+              name: "electionMethod",
+              label: "نوع الإنتخابات",
+              type: "select",
+              options: ElectionMethodOptions.map(option => ({
+                id: option.id,
+                label: option.name,
+                value: option.value
+              })),
+              colSize: 6,
+            },
+            {
+              id: "electionResult-field",
+              name: "electionResult",
+              label: "عرض النتائج",
+              type: "select",
+              options: ElectionResultOptions.map(option => ({
+                id: option.id,
+                label: option.name,
+                value: option.id
+              })),
+              colSize: 6,
+            },
+            {
+              id: "resultPartyType-field",
+              name: "resultPartyType",
+              label: "عرض نتائج القوائم",
+              type: "select",
+              options: ElectionPartyResultOptions.map(option => ({
+                id: option.id,
+                label: option.name,
+                value: option.id
+              })),
+              colSize: 6,
+            },
+            {
+              id: "resultSortingType-field",
+              name: "resultSortingType",
+              label: "عرض نتائج الفرز",
+              type: "select",
+              options: ElectionSortingResultOptions.map(option => ({
+                id: option.id,
+                label: option.name,
+                value: option.id
+              })),
+              colSize: 6,
+            },
+            {
+              id: "electionResultParty-field",
+              name: "electionResultParty",
+              label: "عرض نتائج إنتخابات القوائم",
+              type: "select",
+              options: ElectionResultOptions.map(option => ({
+                id: option.id,
+                label: option.name,
+                value: option.id
+              })),
+              colSize: 6,
+            },
+            {
+              id: "electSeats-input",
+              name: "electSeats",
+              label: "عدد المقاعد للفائزين",
+              type: "number",
+              value: validation.values.electSeats || "",
+              colSize: 6,
+            },
+            {
+              id: "electVotes-input",
+              name: "electVotes",
+              label: "عدد الأصوات للناخبين",
+              type: "number",
+              value: validation.values.electVotes || "",
+              colSize: 6,
+            },
+          ]
+        },
+      ]
+    },
+    {
+      column: "columnTwo",
+      sections: [
+        {
+          section: "الناخبين",
+          fields: [
+            {
+              id: "electors-input",
+              name: "electors",
+              label: "عدد الناخبين",
+              type: "number",
+              colSize: 12,
+            },
+            {
+              id: "electorsMales-input",
+              name: "electorsMales",
+              label: "عدد الناخبين الرجال",
+              type: "number",
+              colSize: 6,
+            },
+            {
+              id: "electorsFemales-input",
+              name: "electorsFemales",
+              label: "عدد الناخبين النساء",
+              type: "number",
+              colSize: 6,
+            },
+          ]
+        },
+        {
+          section: "الحضور",
+          fields: [
+            {
+              id: "attendees-input",
+              name: "attendees",
+              label: "عدد الحضور",
+              type: "number",
+              colSize: 12,
+            },
+            {
+              id: "attendeesMales-input",
+              name: "attendeesMales",
+              label: "حضور الرجال",
+              type: "number",
+              colSize: 6,
+            },
+            {
+              id: "attendeesFemales-input",
+              name: "attendeesFemales",
+              label: "حضور النساء",
+              type: "number",
+              colSize: 6,
+            },]
+        },
+      ]
+    },
+    {
+      column: "columnThree",
+      sections: [
+        {
+          section: "الإدارة",
+          fields: [
+            {
+              id: "priority-field",
+              name: "priority",
+              label: "الأولية",
+              type: "select",
+              options: PriorityOptions.map(priority => ({
+                id: priority.id,
+                label: priority.name,
+                value: priority.id
+              })),
+              colSize: 12,
+            },
+            {
+              id: "status-field",
+              name: "status",
+              label: "الحالة",
+              type: "select",
+              options: StatusOptions.map(status => ({
+                id: status.id,
+                label: status.name,
+                value: status.id
+              })),
+              colSize: 12,
+            },
+            // {
+            //   id: "file-upload",
+            //   name: "fileUpload",
+            //   label: "Add Attached files here.",
+            //   type: "file",
+            //   dropzoneOptions: {
+            //     onDrop: handleAcceptedFiles,
+            //     // Additional Dropzone options as needed
+            //   },
+            //   colSize: 12,
+            // },
+          ]
+        },
+      ]
+    },
+  ];
+
+
   return (
     <React.Fragment>
+
       <Form
         className="tablelist-form"
         onSubmit={(e) => {
@@ -162,453 +362,32 @@ const EditElection = () => {
           return false;
         }}
       >
-        <Row>
-
-          <Col lg={4}>
-            <Card>
-              <CardHeader>
-                <h4>التفاصيل</h4>
-              </CardHeader>
-              <CardBody>
-                <Row>
-                  <Col lg={12}>
-                    <div className="mb-3">
-                      <Label
-                        htmlFor="datepicker-deadline-input"
-                        className="form-label"
-                      >
-                        يوم الإقتراع
-                      </Label>
-                      <Flatpickr
-                        name="dueDate"
-                        id="dueDate-field"
-                        className="form-control"
-                        placeholder="Select a Date"
-                        options={{
-                          altInput: true,
-                          altFormat: "Y-m-d",
-                          dateFormat: "Y-m-d",
-                        }}
-                        onChange={(e) => dateformate(e)}
-                        value={validation.values.dueDate || ""}
-                      />
-                      {validation.touched.dueDate &&
-                        validation.errors.dueDate ? (
-                        <FormFeedback type="invalid">
-                          {validation.errors.dueDate}
-                        </FormFeedback>
-                      ) : null}
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label for="category-field" className="form-label">
-                        التصنيف
-                      </Label>
-                      <Input
-                        name="category"
-                        type="select"
-                        className="form-select"
-                        id="category-field"
-                        onChange={(e) => {
-                          validation.handleChange(e);
-                          changeSubCategoriesOptions(e);
-                        }}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.category || ""}
-                      >
-                        <option value="">- اختر التصنيف -</option>
-                        {categoryOptions.map((category) => (
-                          <option key={category.id} value={parseInt(category.id)}>
-                            {category.name}
-                          </option>
-                        ))}
-                      </Input>
-                      {validation.touched.category &&
-                        validation.errors.category ? (
-                        <FormFeedback type="invalid">
-                          {validation.errors.category}
-                        </FormFeedback>
-                      ) : null}
-                    </div>
-                  </Col>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label for="sub-category-field" className="form-label">
-                        التصنيف الفرعي
-                      </Label>
-                      <Input
-                        name="subCategory"
-                        type="select"
-                        className="form-select"
-                        id="sub-category-field"
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.subCategory || ""}
-                      >
-                        <option value="">- اختر التصنيف الفرعي -</option>
-                        {subCategoryOptions.map((subCategory) => (
-                          <option key={subCategory.id} value={subCategory.id}>
-                            {subCategory.name}
-                          </option>
-                        ))}
-                      </Input>
-                      {validation.touched.subCategory &&
-                        validation.errors.subCategory ? (
-                        <FormFeedback type="invalid">
-                          {validation.errors.subCategory}
-                        </FormFeedback>
-                      ) : null}
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-              {validation.touched.priority && validation.errors.priority ? (
-                <FormFeedback type="invalid">
-                  {validation.errors.priority}
-                </FormFeedback>
-              ) : null}
-              <CardHeader>
-                <h4>إعدادات الإنتخابات</h4>
-              </CardHeader>
-              <CardBody>
-                <Row>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label for="election-type" className="form-label">
-                        نوع الإنتخابات
-                      </Label>
-                      <Input
-                        name="electType"
-                        type="select"
-                        className="form-select"
-                        id="electionType"
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      // value={validation.values.type || ""}
-                      >
-                        {/* Placeholder option */}
-                        {ElectionTypeOptions.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </Input>
-
-                      {validation.touched.option && validation.errors.option ? (
-                        <FormFeedback type="invalid">
-                          {validation.errors.option}
-                        </FormFeedback>
-                      ) : null}
-                    </div>
-                  </Col>
-                  <Col lg={6}>
-
-                    <div className="mb-3">
-                      <Label for="electResult" className="form-label">
-                        عرض النتائج
-                      </Label>
-                      <Input
-                        name="electResult"
-                        type="select"
-                        className="form-select"
-                        id="electResult-field"
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values.electResult || ""}
-                      >
-                        {/* Placeholder option */}
-                        {ElectionResultOptions.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </Input>
-
-                      {validation.touched.option && validation.errors.option ? (
-                        <FormFeedback type="invalid">
-                          {validation.errors.option}
-                        </FormFeedback>
-                      ) : null}
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label htmlFor="electSeats-input" className="form-label">
-                        عدد المقاعد للفائزين
-                      </Label>
-                      <input
-                        id="electSeats-input"
-                        name="electSeats" // Add this
-                        type="number"
-                        className="form-control"
-                        value={validation.values.electSeats || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      />
-                    </div>
-                  </Col>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label htmlFor="electVotes-input" className="form-label">
-                        عدد الأصوات للناخبين
-                      </Label>
-                      <input
-                        id="electVotes-input"
-                        name="electVotes" // Add this
-                        type="number"
-                        className="form-control"
-                        value={validation.values.electVotes || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-            </Card>
-
-          </Col>
-          <Col lg={4}>
-            <Card>
-              <CardHeader>
-                <h4>الناخبين</h4>
-              </CardHeader>
-              <CardBody>
-                <Row>
-                  <Col lg={12}>
-                    <div className="mb-3">
-                      <Label htmlFor="electors-input" className="form-label">
-                        عدد الناخبين
-                      </Label>
-                      <input
-                        id="electors-input"
-                        name="electors" // Add this
-                        type="number"
-                        className="form-control"
-                        value={validation.values.electors || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      />
-                    </div>
-                  </Col>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label htmlFor="electorsMales-input" className="form-label">
-                        عدد الناخبين الرجال
-                      </Label>
-                      <input
-                        id="electors-input"
-                        name="electorsMales" // Add this
-                        type="number"
-                        className="form-control"
-                        value={validation.values.electorsMales || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      />
-                    </div>
-                  </Col>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label htmlFor="electorsFemales-input" className="form-label">
-                        عدد الناخبين النساء
-                      </Label>
-                      <input
-                        id="electorsFemales-input"
-                        name="electorsFemales" // Add this
-                        type="number"
-                        className="form-control"
-                        value={validation.values.electorsFemales || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-
-              <CardHeader>
-                <h4>الحضور</h4>
-              </CardHeader>
-              <CardBody>
-                <Row>
-                  <Col lg={12}>
-                    <div className="mb-3">
-                      <Label htmlFor="attendees-input" className="form-label">
-                        عدد الحضور
-                      </Label>
-                      <input
-                        id="attendees-input"
-                        name="attendees" // Add this
-                        type="number"
-                        className="form-control"
-                        value={validation.values.attendees || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      />
-                    </div>
-                  </Col>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label htmlFor="attendeesMales-input" className="form-label">
-                        حضور الرجال
-                      </Label>
-                      <input
-                        id="attendeesMales-input"
-                        name="attendeesMales" // Add this
-                        type="number"
-                        className="form-control"
-                        value={validation.values.attendeesMales || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      />
-                    </div>
-                  </Col>
-                  <Col lg={6}>
-                    <div className="mb-3">
-                      <Label htmlFor="attendeesFemales-input" className="form-label">
-                        حضور النساء
-                      </Label>
-                      <input
-                        id="attendeesFemales-input"
-                        name="attendeesFemales" // Add this
-                        type="number"
-                        className="form-control"
-                        value={validation.values.attendeesFemales || ""}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <div className="card">
-              <CardHeader>
-                <h4>الإدارة</h4>
-              </CardHeader>
-              <CardBody>
-                <div className="mb-3">
-                  <Label for="priority-field" className="form-label">
-                    الأولية
-                  </Label>
-                  <Input
-                    name="priority"
-                    type="select"
-                    className="form-select"
-                    id="priority-field"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.priority || ""}
-                  >
-                    {PriorityOptions.map((priority) => (
-                      <option key={priority.id} value={priority.id}>
-                        {priority.name}
-                      </option>
-                    ))}
-                  </Input>{" "}
-                  {validation.touched.priority && validation.errors.priority ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.priority}
-                    </FormFeedback>
-                  ) : null}
-                </div>
-
-                <div className="mb-3">
-                  <Label for="status-field" className="form-label">
-                    الحالة
-                  </Label>
-                  <Input
-                    name="status"
-                    type="select"
-                    className="form-select"
-                    id="status-field"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.status || ""}
-                  >
-                    {StatusOptions.map((status) => (
-                      <option key={status.id} value={status.id}>
-                        {status.name}
-                      </option>
-                    ))}
-                  </Input>
-                  {validation.touched.status && validation.errors.status ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.status}
-                    </FormFeedback>
-                  ) : null}
-                </div>
-                <div className="mb-3">
-                  <p className="text-muted">Add Attached files here.</p>
-
-                  <Dropzone
-                    onDrop={(acceptedFiles) => {
-                      handleAcceptedFiles(acceptedFiles);
-                    }}
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <div className="dropzone dz-clickable">
-                        <div
-                          className="dz-message needsclick"
-                          {...getRootProps()}
-                        >
-                          <div className="mb-3">
-                            <i className="display-4 text-muted ri-upload-cloud-2-fill" />
-                          </div>
-                          <h4>Drop files here or click to upload.</h4>
-                        </div>
-                      </div>
-                    )}
-                  </Dropzone>
-
-                  <ul className="list-unstyled mb-0" id="dropzone-preview">
-                    {selectedFiles.map((f, i) => {
-                      return (
-                        <Card
-                          className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                          key={i + "-file"}
-                        >
-                          <div className="p-2">
-                            <Row className="align-items-center">
-                              <Col className="col-auto">
-                                <img
-                                  data-dz-thumbnail=""
-                                  height="80"
-                                  className="avatar-sm rounded bg-light"
-                                  alt={f.name}
-                                  src={f.preview}
-                                />
-                              </Col>
-                              <Col>
-                                <Link
-                                  to="#"
-                                  className="text-muted font-weight-bold"
-                                >
-                                  {f.name}
-                                </Link>
-                                <p className="mb-0">
-                                  <strong>{f.formattedSize}</strong>
-                                </p>
-                              </Col>
-                            </Row>
-                          </div>
-                        </Card>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </CardBody>
-              <ToastContainer closeButton={false} limit={1} />
-
-            </div>
-          </Col>
+        <Row className="g-3">
+          {fields.map((column) => (
+            <Col lg={4} key={column.column}>
+              {column.sections.map((section) => (
+                <Card key={section.section}>
+                  <CardHeader>
+                    <h4>{section.section}</h4>
+                  </CardHeader>
+                  <CardBody>
+                    <Row className="g-3">
+                      {section.fields.map((field) => (
+                        (field.condition === undefined || field.condition) && (
+                          <Col lg={12} key={field.id}>
+                            <FormFields
+                              field={field}
+                              validation={validation}
+                            />
+                          </Col>
+                        )
+                      ))}
+                    </Row>
+                  </CardBody>
+                </Card>
+              ))}
+            </Col>
+          ))}
         </Row>
         <Row>
           <div className="text-end mb-4">
@@ -617,7 +396,9 @@ const EditElection = () => {
             </button>
           </div>
         </Row>
-      </Form >
+      </Form>
+
+
     </React.Fragment >
   );
 };

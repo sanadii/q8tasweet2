@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Col, Row, Card, CardBody, CardHeader, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from "reactstrap";
 import { ImageGenderCircle, } from "components";
 import { electionSelector } from 'Selectors';
-import { ElectionTypeBadge, PriorityBadge } from "constants";
+import { electionMethodBadge, PriorityBadge } from "constants";
 
 //SimpleBar
 import SimpleBar from "simplebar-react";

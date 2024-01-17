@@ -1,17 +1,45 @@
 export const ElectionResultOptions = [
   {
     id: 1,
-    name: "النتيجة النهائية",
-    value: "النتيجة النهائية",
+    name: "النتيجة الإجمالية",
+    value: "total",
   },
   {
     id: 2,
     name: "النتائج التفصيلية",
-    value: "النتائج التفصيلية",
+    value: "details",
+  },
+];
+
+
+export const ElectionPartyResultOptions = [
+  {
+    id: 1,
+    name: "عرض نتائج القوائم والمرشحين",
+    value: "combinedPartyCandidate",
+  },
+  {
+    id: 2,
+    name: "عرض نتائج المرشحين فقط",
+    value: "candidateOnly",
   },
   {
     id: 3,
-    name: "نتائج الفرز",
-    value: "نتائج الفرز",
+    name: "عرض نتائج القوائم فقط",
+    value: "partyOnly",
+  },
+];
+
+
+export const ElectionSortingResultOptions = [
+  {
+    id: 1,
+    name: "عرض نتائج الفرز",
+    value: true,
+  },
+  {
+    id: 2,
+    name: "عرض النتائج النهائية",
+    value: false,
   },
 ];

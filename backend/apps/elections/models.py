@@ -16,6 +16,8 @@ from helper.models_permission_manager import ModelsPermissionManager, CustomPerm
 
 User = get_user_model()
 
+
+
 class Election(TrackModel, TaskModel):
     # Election Essential Information
     slug = models.SlugField(unique=True, null=True, blank=True)
@@ -24,8 +26,25 @@ class Election(TrackModel, TaskModel):
     sub_category = models.ForeignKey('ElectionCategory', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategory_elections')
 
     # Election Setting Options
-    elect_type = models.IntegerField(choices=ElectionTypeOptions.choices, blank=True, null=True)
-    elect_result = models.IntegerField(choices=ElectionResultsOptions.choices, blank=True, null=True)
+    # election_method = models.IntegerField(choices=ElectionTypeOptions.choices, blank=True, null=True)
+    # election_result = models.IntegerField(choices=ElectionResultsOptions.choices, blank=True, null=True)
+
+    election_method = models.CharField(
+        max_length=50,
+        choices=ElectionTypeOptions.choices,
+        blank=True,
+        null=True,
+        verbose_name="Election Type"
+    )
+    election_result = models.CharField(
+        max_length=50,
+        choices=ElectionResultsOptions.choices,
+        blank=True,
+        null=True,
+        verbose_name="Election Result Type"
+    )
+
+
     elect_votes = models.PositiveIntegerField(blank=True, null=True)
     elect_seats = models.PositiveIntegerField(blank=True, null=True)
 
@@ -33,7 +52,7 @@ class Election(TrackModel, TaskModel):
     first_winner_votes = models.PositiveIntegerField(blank=True, null=True)
     last_winner_votes = models.PositiveIntegerField(blank=True, null=True)
 
-    # TODO: create ElectionElector Model
+    # TODO: create ElectionSummary Model for both electors & attendees
     # Elector // This can go to another table TODO: Move to another table called ElectionElectors or ElectionNumbers
     electors = models.PositiveIntegerField(blank=True, null=True)
     electors_males = models.PositiveIntegerField(blank=True, null=True)

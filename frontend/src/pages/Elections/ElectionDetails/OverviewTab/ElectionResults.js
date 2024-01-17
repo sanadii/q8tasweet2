@@ -38,9 +38,9 @@ const ElectionResults = () => {
   const [electionResultStatus, setElectionResultStatus] = useState("");
 
   // candidates based on election Type
-  const candidates = election.electType !== 1 ? electionPartyCandidates : electionCandidates;
+  const candidates = election.electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
 
-  const electionResult = election.electResult;
+  const electionResult = election.electionResult;
   const electionSeats = election.electSeats;
   const calculateTotalVotes = useCallback((committeeResults) => {
     return Object.values(committeeResults).reduce((sum, currentVotes) => sum + currentVotes, 0);
@@ -60,7 +60,7 @@ const ElectionResults = () => {
   const calculateCommitteeResults = useCallback((candidate, electionResult) => {
     const committeeResult = {};
     let totalVotes = 0;
-    let electionTypeResults;
+    let electionMethodResults;
     let electionResultStatus;
 
     if (electionResult === 1 && candidate.votes) {
@@ -68,19 +68,19 @@ const ElectionResults = () => {
       electionResultStatus = "نتائج نهائية"
 
     } else {
-      // determine electionTypeResults based on electionResult
+      // determine electionMethodResults based on electionResult
       if (electionResult === 2 && candidate.committeeVotes) {
-        electionTypeResults = candidate.committeeVotes;
+        electionMethodResults = candidate.committeeVotes;
         electionResultStatus = "نتائج نهائية"
       } else if (electionResult === 3 && candidate.committeeSorting) {
-        electionTypeResults = candidate.committeeSorting;
+        electionMethodResults = candidate.committeeSorting;
         electionResultStatus = sortingStatus
 
       }
 
       electionCommittees.forEach(committee => {
-        const votes = electionTypeResults ?
-          electionTypeResults.find(cs => cs.electionCommittee === committee.id)?.votes || 0 : 0;
+        const votes = electionMethodResults ?
+          electionMethodResults.find(cs => cs.electionCommittee === committee.id)?.votes || 0 : 0;
         committeeResult[committee.id] = votes;
       });
 
@@ -110,7 +110,7 @@ const ElectionResults = () => {
     // Use sortAndUpdatePositions and pass electionSeats from the election object
     const sortedCandidates = sortAndUpdatePositions(initialSortingData, electionSeats);
     setCandidatesResult(sortedCandidates);
-  }, [candidates, electionCommittees, election.electResult, electionSeats]);
+  }, [candidates, electionCommittees, election.electionResult, electionSeats]);
 
 
   const updateSortingVotes = (candidateId, newVotes, committeeId) => {

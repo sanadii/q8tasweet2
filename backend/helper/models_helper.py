@@ -2,20 +2,25 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 # TODO: make sure dictionaries are all changed to id and name and any otherthing if needed
 
 
 
-class ElectionTypeOptions(models.IntegerChoices):
-    PARTIES = 1, "قوائم"
-    CANDIDATES = 2, "مرشحين"
-    MIXED = 3, "قوائم ومرشحين"
+class ElectionTypeOptions(models.TextChoices):
+    CANDIDATE_ONLY_SYSTEM = 'candidateOnly', _('Candidate Only System')
+    PARTY_ONLY_SYSTEM = 'partyOnly', _('Party Only System')
+    COMBINED_CANDIDATE_PARTY_SYSTEM = 'combinedPartyCandidate', _('Combined Candidate Party System')
+    PROPORTIONAL_REPRESENTATION_SYSTEM = 'proportionalRepresentationSystem', _('Proportional Representation System')
+    MIXED_ELECTORAL_SYSTEM = 'mixedElectoralSystem', _('Mixed Electoral System')
 
-class ElectionResultsOptions(models.IntegerChoices):
-    FINAL = 1, "نتائج نهائية"
-    DETAILED = 2, "نتائج تفصيلية"
-    SORTING = 3, "نتائج الفرز"
+class ElectionResultsOptions(models.TextChoices):
+    TOTAL = 'total', _('Total')
+    DETAILED = 'detailed', _('Detailed')
+    PARTY_VOTING_RESULTS = 'PVR', _('Party Voting Results')
+    INDIVIDUAL_ONLY = 'IO', _('Individual Only')
+    # Add other options as needed
 
 class GenderOptions(models.IntegerChoices):
     UNDEFINED = 0, 'Undefined'

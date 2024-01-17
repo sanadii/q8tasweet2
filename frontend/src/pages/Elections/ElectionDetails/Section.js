@@ -51,14 +51,14 @@ const Section = ({ viewType }) => {
   const { categories } = useSelector(categorySelector);
   const categoryId = election.category; // assuming election object has a categoryId property
   const category = categories.find(cat => cat.id === categoryId);
-  const electionType = election.electType
+  const electionMethod = election.electionMethod
 
-  console.log('election tpe:', electionType)
+  console.log('election tpe:', electionMethod)
   const electionCategoryName = category ? category.name : 'Category Not Found';
 
   const mainTabs = [
     { id: "1", title: "المرشحين والنتائج", icon: 'ri-activity-line', },
-    // ...(election.electResult === 2 ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
+    // ...(election.electionResult === "total" ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
     // ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line', }] : []),
     // { id: "5", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
     // { id: "6", title: "عمليات المستخدم", icon: 'ri-activity-line', },
@@ -68,11 +68,11 @@ const Section = ({ viewType }) => {
   console.log("viewType: ", viewType)
   // Conditionally add tabs based on viewType and other conditions
   if (viewType !== 'public') {
-    // Check the electionType and set the title accordingly
-    const candidatesTitle = election.electionType !== 1 ? "القوائم والمرشحين" : "المرشحين";
+    // Check the electionMethod and set the title accordingly
+    const candidatesTitle = election.electionMethod !== "candidateOnly" ? "القوائم والمرشحين" : "المرشحين";
     mainTabs.push({ id: "2", title: candidatesTitle, icon: 'ri-activity-line' });
 
-    if (election.electResult !== 1) {
+    if (election.electionResult !== "total") {
       mainTabs.push({ id: "3", title: "اللجان", icon: 'ri-activity-line' });
     }
     if (electionCampaigns.length !== 0) {

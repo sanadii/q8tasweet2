@@ -12,7 +12,7 @@ import SimpleBar from "simplebar-react";
 
 const AddElectionCandidate = () => {
     const dispatch = useDispatch();
-    const { election, electionType, electionCandidates, electionParties } = useSelector(electionSelector);
+    const { election, electionMethod, electionCandidates, electionParties } = useSelector(electionSelector);
     const { candidates } = useSelector(candidateSelector);
     const { parties } = useSelector(candidateSelector);
     const electionCandidateList = electionCandidates;
@@ -74,7 +74,7 @@ const AddElectionCandidate = () => {
                 />
                 <i className="ri-search-line search-icon"></i>
             </div>
-            {electionType !== 1 &&
+            {electionMethod !== "candidateOnly" &&
                 <select id="id-field" name="id" onChange={setElectionParty} value={selectedParty}>
                     {electionParties.map((item, index) => (
                         <option
@@ -101,10 +101,10 @@ const AddElectionCandidate = () => {
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 const newElectionCandidate = {
-                                    ...(electionType !== 1) ? { electionParty: selectedParty } : { election: election.id },
+                                    ...(electionMethod !== "candidateOnly") ? { electionParty: selectedParty } : { election: election.id },
                                     candidate: candidate.id,
                                 };
-                                if (electionType !== 1) {
+                                if (electionMethod !== "candidateOnly") {
                                     dispatch(addElectionPartyCandidate(newElectionCandidate));
                                 } else {
                                     dispatch(addNewElectionCandidate(newElectionCandidate));

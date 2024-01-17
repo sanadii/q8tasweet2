@@ -96,8 +96,8 @@ const AllElections = () => {
         tags: election.tags,
 
         // Election Spesifications
-        electType: election.electType,
-        electResult: election.electResult,
+        electionMethod: election.electionMethod,
+        electionResult: election.electionResult,
         electVotes: election.electVotes,
         electSeats: election.seats,
         electors: election.electors,

@@ -28,7 +28,7 @@ const AddNewCandidate = () => {
         status: 1,
         priority: 1,
     };
-    console.log("electionType: ", election.electType)
+    console.log("electionMethod: ", election.electionMethod)
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -38,7 +38,7 @@ const AddNewCandidate = () => {
         }),
         onSubmit: (values) => {
             const formData = new FormData();
-            if (election.electType !== 1) {
+            if (election.electionMethod !== "candidateOnly") {
                 formData.append('electionParty', values.electionParty);
             } else {
                 formData.append('election', electionId);

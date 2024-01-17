@@ -25,7 +25,7 @@ import classnames from "classnames";
 
 const CandidatesTab = () => {
 
-  const { election, electionType, electionCandidates, electionParties, error } = useSelector(electionSelector);
+  const { election, electionMethod, electionCandidates, electionParties, error } = useSelector(electionSelector);
 
   // Constants
   const [electionParty, setElectionParty] = useState([]);
@@ -60,7 +60,7 @@ const CandidatesTab = () => {
   console.log("isElectionPartyAction: ", isElectionPartyAction )
   let deleteAction;
 
-  if (electionType !== 1) {
+  if (electionMethod !== "candidateOnly") {
     if (isElectionPartyAction) {
       // If the action is on electionParty
       deleteAction = deleteElectionParty;
@@ -71,7 +71,7 @@ const CandidatesTab = () => {
       deleteAction = deleteElectionPartyCandidate;
     }
   } else {
-    // If electionType is 1
+    // If electionMethod is 1
     deleteAction = deleteElectionCandidate;
   }
   
@@ -341,7 +341,7 @@ const CandidatesTab = () => {
                   ContainerHeaderTitle="المرشحين والنتائج"
 
                   // Buttons
-                  {...(electionType !== 1 && {
+                  {...(electionMethod !== "candidateOnly" && {
                     HandlePrimaryButton: {handleElectionPartyClicks},
                     PrimaryButtonText: "إضافة قائمة"
                   })}
@@ -359,7 +359,7 @@ const CandidatesTab = () => {
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
                 {
-                  electionType !== 1 ?
+                  electionMethod !== "candidateOnly" ?
                     <Parties
                       columns={PartyColumns}
                       electionPartyButtons={electionPartyButtons}

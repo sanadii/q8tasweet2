@@ -25,7 +25,7 @@ import { GenderCircle, ImageCircle, ImageGenderCircle, Loader, DeleteModal, Tabl
 import {
   StatusOptions,
   PriorityOptions,
-  ElectionTypeOptions,
+  ElectionMethodOptions,
   ElectionResultOptions,
   // TagOptions,
 } from "constants";
@@ -906,7 +906,7 @@ const ElectionList = () => {
                   onBlur={validation.handleBlur}
                   value={validation.values.type || ""}
                 >
-                  {ElectionTypeOptions.map((type) => (
+                  {ElectionMethodOptions.map((type) => (
                     <option key={type.id} value={type.value}>
                       {type.name}
                     </option>

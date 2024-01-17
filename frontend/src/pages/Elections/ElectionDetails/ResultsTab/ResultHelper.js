@@ -151,7 +151,7 @@ const useSaveCommitteeResults = (
   setColumnEdited,
   setVoteFieldEditedData,
   toggleColumnToEdit,
-  electionType,
+  electionMethod,
 ) => {
   const dispatch = useDispatch();
 
@@ -162,7 +162,7 @@ const useSaveCommitteeResults = (
         data: voteFieldEditedData[committeeId]
       };
 
-      (electionType !== 1 ?
+      (electionMethod !== "candidateOnly" ?
         dispatch(updateElectionPartyResults(updatedResults))
         :
         dispatch(updateElectionResults(updatedResults)));

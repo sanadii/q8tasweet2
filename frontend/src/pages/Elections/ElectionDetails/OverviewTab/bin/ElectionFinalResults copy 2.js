@@ -16,8 +16,8 @@ const CandidatesTab = () => {
 
   // Constants
   const [electionCandidateList, setElectionCandidateList] = useState(electionCandidates);
-  const electionType = election.electType;
-  console.log ("electionType: ", electionType)
+  const electionMethod = election.electionMethod;
+  console.log ("electionMethod: ", electionMethod)
   const [showDetailedResults, setShowDetailedResults] = useState(false);
   const CampaignSlug = 'UmUXPn8A';
   const committeeId = 5;

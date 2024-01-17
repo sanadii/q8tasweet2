@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from datetime import datetime  # Importing datetime
 from django.db.models import F
+import json
 
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
@@ -30,12 +31,16 @@ class ElectionSerializer(serializers.ModelSerializer):
     category_name  = serializers.SerializerMethodField('get_category_name')
     sub_category_name  = serializers.SerializerMethodField('get_sub_category_name')
 
+    election_result = serializers.SerializerMethodField()
+    election_party_result = serializers.SerializerMethodField()
+    election_sorting_result = serializers.SerializerMethodField()
+
     class Meta:
         model = Election
         fields = [
             'id', 'name', 'slug', 'image', 'due_date',
             'category', 'sub_category', 'category_name', 'sub_category_name',
-            'elect_type', 'elect_result', 'elect_votes', 'elect_seats',
+            'election_method', 'election_result', 'election_party_result', 'election_sorting_result', 'elect_votes', 'elect_seats',
             'electors', 'electors_males', 'electors_females',
             'attendees', 'attendees_males', 'attendees_females',
             'previous_election',
@@ -73,8 +78,24 @@ class ElectionSerializer(serializers.ModelSerializer):
                 return image.url
         return None
     
-    # Used for Add / Update / Delete
+    # Results
+    def get_election_result(self, obj):
+        return self.parse_json_field(obj.election_result).get('election_result')
 
+    def get_election_party_result(self, obj):
+        return self.parse_json_field(obj.election_result).get('election_party_result')
+
+    def get_election_sorting_result(self, obj):
+        return self.parse_json_field(obj.election_result).get('election_sorting_result')
+
+    def parse_json_field(self, json_str):
+        try:
+            return json.loads(json_str) if json_str else {}
+        except json.JSONDecodeError:
+            return {}
+
+
+    # Used for Add / Update / Delete
     def to_internal_value(self, data):
         # Convert string representation of due_date to date object
         if 'due_date' in data and data['due_date']:

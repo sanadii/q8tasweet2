@@ -14,7 +14,7 @@ from helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrack
 class ElectionsAdmin(admin.ModelAdmin):
     list_display = ['get_election_name', 'due_date', 'category', 'sub_category', 'elect_seats', 'elect_votes']
     list_filter = ['category', 'status', 'priority']
-    search_fields = ['sub_category__name', 'description', 'elect_type', 'elect_result']
+    search_fields = ['sub_category__name', 'description', 'election_method', 'election_result']
     ordering = ['-due_date', 'sub_category__name']
     date_hierarchy = 'due_date'
     readonly_fields = ReadOnlyTrackFields

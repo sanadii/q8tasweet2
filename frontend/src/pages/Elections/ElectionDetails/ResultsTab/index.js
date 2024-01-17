@@ -15,12 +15,15 @@ import { toast, ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
+import Parties from "./Parties";
+import Candidates from "./Candidates";
+
 const ResultsTab = () => {
-  const { election, electionType, electionCandidates, electionPartyCandidates, electionCommittees } = useSelector(electionSelector);
-  const electionResult = election.electResult;
+  const { election, electionMethod, electionCandidates, electionPartyCandidates, electionCommittees } = useSelector(electionSelector);
+  const electionResult = election.electionResult;
 
   // candidates based on election Type
-  const candidates = election.electType !== 1 ? electionPartyCandidates : electionCandidates;
+  const candidates = election.electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
 
   // States
   const [columnEdited, setColumnEdited] = useState({});
@@ -85,7 +88,7 @@ const ResultsTab = () => {
     setColumnEdited,
     setVoteFieldEditedData,
     toggleColumnToEdit,
-    electionType,
+    electionMethod,
   );
 
 
@@ -101,16 +104,7 @@ const ResultsTab = () => {
       {
         Header: 'المرشح',
         accessor: 'name',
-        Cell: ({ row }) => (
-          <ImageCandidateWinnerCircle
-            gender={row.original.gender}
-            name={row.original.name}
-            imagePath={row.original.image}
-            isWinner={row.original.isWinner}
-          />
-        ),
-      },
-    ];
+      },    ];
     const voteColumn = [
       {
         Header: () => (
@@ -187,10 +181,11 @@ const ResultsTab = () => {
 
                 {
                   (
-                    electionType !== 1 ?
+                    electionMethod !== "candidateOnly" ?
                       <Parties
                         columns={columns}
                         data={transformedResultData}
+                        HeaderVoteButton={HeaderVoteButton}
 
                       />
                       :
@@ -212,129 +207,3 @@ const ResultsTab = () => {
 };
 
 export default ResultsTab;
-
-
-const Candidates = ({ columns, data }) => {
-  return (
-
-    <>
-      <p>هذه الجدول يحتوي على المرشحين فقط</p>
-      <TableContainer
-
-        // Data
-        columns={columns}
-        data={data}
-        customPageSize={50}
-        isTableContainerFooter={true}
-        sortBy="name"
-        sortAsc={true}
-
-        // Styling
-        divClass="table-responsive table-card mb-3"
-        tableClass="align-middle table-nowrap mb-0"
-        theadClass="table-light table-nowrap"
-        thClass="table-light text-muted"
-      />
-    </>
-  )
-};
-
-const Parties = ({ columns, data }) => {
-  const { electionParties, electionPartyCandidates, electionCommittees, error } = useSelector(electionSelector);
-
-  console.log("Data: ", data)
-  // Handle change in the select field
-  const handleSelectChange = (e) => {
-    const selectedCommitteeId = e.target.value;
-    // Handle the selected committee ID here
-  };
-
-
-  const getCandidatesForParty = (partyId) => {
-    if (!data) return [];
-    return data.filter(electionPartyCandidate => electionPartyCandidate.electionParty === partyId);
-  };
-
-  return (
-    <>
-      <p>هذه الجدول يحتوي على القوائم والمرشحين</p>
-      <div className="d-flex">
-        <p>طريقة العرض</p>
-        <Input
-          type="select"
-          className="form-control mb-2"
-          name="committee"
-          id="committee"
-          onChange={handleSelectChange}
-        >
-          <option key="1" value="partiesOnly">
-            القوائم والمرشحين
-          </option>
-
-          <option key="1" value="partiesOnly">
-            المرشحين فقط
-          </option>
-        </Input>
-      </div>
-
-      {electionCommittees.length > 1 &&
-        <>
-          <p>اختر اللجنة</p>
-          <Input
-            type="select"
-            className="form-control mb-2"
-            name="committee"
-            id="committee"
-            onChange={handleSelectChange}
-          >
-            <option value="">-- اختر اللجنة --</option>
-            {electionCommittees &&
-              electionCommittees.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.name}
-                </option>
-              ))}
-          </Input>
-        </>
-      }
-      <Row>
-        {electionParties.map((party, index) => {
-          const partyCandidates = getCandidatesForParty(party.id);
-          return (
-            <Col lg={4} key={index}>
-              <Card className="border card-border-secondary">
-                <CardHeader className="d-flex justify-content-between align-items-center">
-                  <h4>
-                    <strong>{party.name}</strong>
-                  </h4>
-                  <div className="list-inline hstack gap-2 mb-0">
-                    -
-                  </div>
-                </CardHeader>
-
-
-                {partyCandidates && partyCandidates.length ? (
-                  <TableContainer
-                    columns={columns}
-                    data={partyCandidates}
-                    customPageSize={50}
-
-                    // Styling
-                    divClass="table-responsive table-card mb-3"
-                    tableClass="align-middle table-nowrap mb-0"
-                    theadClass="table-light table-nowrap"
-                    thClass="table-light text-muted"
-                    isTableContainerFooter={false}
-
-                  />
-                ) : (
-                  <Loader error={error} />
-                )}
-              </Card>
-            </Col>
-          );
-        })}
-      </Row>
-    </>
-  )
-};

@@ -20,7 +20,7 @@ SORTING
 
 - Party Results
 ❌ Total Results & Update
-❌ Detail Results & Update
+✅ Detail Results & Update
 
 - PartyCandidate Results
 ❌ Total Results & Update

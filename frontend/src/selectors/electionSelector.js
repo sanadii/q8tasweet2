@@ -12,7 +12,7 @@ export const electionSelector = createSelector(
     futureElections: electionsState.futureElections,
 
     election: electionsState.electionDetails,
-    electionType: electionsState.electionDetails.electType,
+    electionMethod: electionsState.electionDetails.electionMethod,
 
     electionDetails: electionsState.electionDetails,
     previousElection: electionsState.electionDetails.previousElection,
