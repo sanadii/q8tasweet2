@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
-import { addElectionParty, updateElectionParty } from "store/actions";
+import { updateElectionParty } from "store/actions";
 import { electionSelector } from 'Selectors';
 
 // Constants & Component imports
@@ -67,21 +67,14 @@ export const ElectionPartyModal = ({
       // party: Yup.string().required("Please Enter Party ID"),
     }),
     onSubmit: (values) => {
-      if (isEdit) {
-        const updatedElectionParty = {
-          // Basic Information
-          id: electionParty ? electionParty.id : 0,
-          notes: values.notes,
-        };
-        dispatch(updateElectionParty(updatedElectionParty));
-      } else {
-        const newElectionParty = {
-          id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-          election: election,
-          party: values["party"],
-        };
-        dispatch(addElectionParty(newElectionParty));
-      }
+
+      const updatedElectionParty = {
+        // Basic Information
+        id: electionParty ? electionParty.id : 0,
+        notes: values.notes,
+      };
+      dispatch(updateElectionParty(updatedElectionParty));
+      console.log("electionParty: ", electionParty)
       validation.resetForm();
       toggle();
     },

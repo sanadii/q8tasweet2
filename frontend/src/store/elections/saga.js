@@ -23,7 +23,7 @@ import {
   ADD_ELECTION_PARTY,
   UPDATE_ELECTION_PARTY,
   DELETE_ELECTION_PARTY,
-  UPDATE_ELECTION_PARTY_VOTES,
+  UPDATE_ELECTION_PARTY_RESULTS,
 
   // Election Party Candidates
   GET_ELECTION_PARTY_CANDIDATES,
@@ -79,8 +79,8 @@ import {
   updateElectionPartyFail,
   deleteElectionPartySuccess,
   deleteElectionPartyFail,
-  updateElectionPartyVotesSuccess,
-  updateElectionPartyVotesFail,
+  updateElectionPartyResultsSuccess,
+  updateElectionPartyResultsFail,
 
   // Election Party Candidates
   addElectionPartyCandidateSuccess,
@@ -135,7 +135,7 @@ import {
   addElectionParty,
   updateElectionParty,
   deleteElectionParty,
-  updateElectionPartyVotes,
+  updateElectionPartyResults,
 
   // Election Party Candidates
   getElectionPartyCandidates as getElectionPartyCandidatesApi,
@@ -328,20 +328,20 @@ function* onDeleteElectionParty({ payload: electionParty }) {
 }
 
 // Election Party Votes
-function* onUpdateElectionPartyVotes({ payload: electionPartyVotes }) {
+function* onUpdateElectionPartyVotes({ payload: electionPartyResults }) {
   try {
-    console.log("onUpdateElectionPartyVotes saga started", electionPartyVotes);
-    const response = yield call(updateElectionPartyVotes, electionPartyVotes);
+    console.log("onUpdateElectionPartyVotes saga started", electionPartyResults);
+    const response = yield call(updateElectionPartyResults, electionPartyResults);
     console.log("Received response from update API:", response);
-    yield put(updateElectionPartyVotesSuccess(response));
-    console.log("Dispatched updateElectionPartyVotesSuccess");
+    yield put(updateElectionPartyResultsSuccess(response));
+    console.log("Dispatched updateElectionPartyResultsSuccess");
     toast.success("تم تحديث نتائج الإنتخابات بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     console.error("Caught an error in onUpdateElectionPartyVotes:", error);
-    yield put(updateElectionPartyVotesFail(error));
-    console.log("Dispatched updateElectionPartyVotesFail");
+    yield put(updateElectionPartyResultsFail(error));
+    console.log("Dispatched updateElectionPartyResultsFail");
     toast.error("خطأ في تحديث نتائج الإنتخابات", { autoClose: 2000 });
   }
 }
@@ -605,7 +605,7 @@ export function* watchDeleteElectionParty() {
 }
 
 export function* watchUpdateElectionPartyVotes() {
-  yield takeEvery(UPDATE_ELECTION_PARTY_VOTES, onUpdateElectionPartyVotes);
+  yield takeEvery(UPDATE_ELECTION_PARTY_RESULTS, onUpdateElectionPartyVotes);
 }
 
 // Election Party Candidates Watchers

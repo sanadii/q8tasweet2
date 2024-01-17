@@ -89,7 +89,7 @@ export const getElectionPartyDetails = (electionParty) => api.get(url.GET_ELECTI
 export const addElectionParty = (electionParty) => api.create(url.ADD_ELECTION_PARTY, electionParty);
 export const updateElectionParty = (electionParty) => api.update(url.UPDATE_ELECTION_PARTY + "/" + electionParty.id, electionParty);
 export const deleteElectionParty = (electionParty) => api.delete(url.DELETE_ELECTION_PARTY + "/" + electionParty);
-export const updateElectionPartyVotes = (electionPartyVotes) => api.update(url.UPDATE_ELECTION_PARTY_VOTES + "/" + "votes", electionPartyVotes);
+export const updateElectionPartyResults = (electionPartyResults) => api.update(url.UPDATE_ELECTION_PARTY_RESULTS+ "/" + electionPartyResults.id, electionPartyResults);
 
 
 // ElectionPartyCandidates

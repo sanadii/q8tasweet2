@@ -38,21 +38,21 @@ export const getParties = () => ({
 
 
 // Party Details
-export const getPartyDetails = (party) => ({
+export const getPartyDetails = (electioParty) => ({
   type: GET_PARTY_DETAILS,
-  payload: party,
+  payload: electioParty,
 });
 
 
 // Add New Party
-export const addParty = (party) => ({
+export const addParty = (electioParty) => ({
   type: ADD_PARTY,
-  payload: party,
+  payload: electioParty,
 });
 
-export const addPartySuccess = (party) => ({
+export const addPartySuccess = (electioParty) => ({
   type: ADD_PARTY_SUCCESS,
-  payload: party,
+  payload: electioParty,
 });
 
 export const addPartyFail = (error) => ({
@@ -61,31 +61,15 @@ export const addPartyFail = (error) => ({
 });
 
 
-
 // Update Party
-// export const updatePartySuccess = (party) => ({
-//   type: UPDATE_PARTY_SUCCESS,
-//   payload: party,
-// });
-
-// export const updateParty = (party) => {
-//   console.log("Party in updateParty:", party);
-
-//   return {
-//     type: UPDATE_PARTY,
-//     payload: party,
-//   };
-// };
-
-// Update Party
-export const updateParty = (party) => ({
+export const updateParty = (electioParty) => ({
   type: UPDATE_PARTY,
-  payload: party,
+  payload: electioParty,
 });
 
-export const updatePartySuccess = (party) => ({
+export const updatePartySuccess = (electioParty) => ({
   type: UPDATE_PARTY_SUCCESS,
-  payload: party,
+  payload: electioParty,
 });
 
 
@@ -95,14 +79,14 @@ export const updatePartyFail = (error) => ({
 });
 
 // Delete Party
-export const deleteParty = (party) => ({
+export const deleteParty = (electioParty) => ({
   type: DELETE_PARTY,
-  payload: party,
+  payload: electioParty,
 });
 
-export const deletePartySuccess = (party) => ({
+export const deletePartySuccess = (electioParty) => ({
   type: DELETE_PARTY_SUCCESS,
-  payload: party,
+  payload: electioParty,
 });
 
 export const deletePartyFail = (error) => ({

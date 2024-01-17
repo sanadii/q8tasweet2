@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from "react-redux";
-import { updateElectionResults } from "store/actions";
+import { updateElectionResults, updateElectionPartyResults, updateElectionPartyCandidateResults } from "store/actions";
 
 
 // CommitteeVoteButton is responsible for rendering a button with different texts and classes
@@ -94,6 +94,7 @@ const transformResultData = (
     const transformedResultFieldsData = {
       'candidate.id': candidate.id,
       position: candidate.position,
+      electionParty: candidate.electionParty,
       name: candidate.name,
       gender: candidate.gender,
       image: candidate.imagePath,
@@ -149,17 +150,23 @@ const useSaveCommitteeResults = (
   columnEdited,
   setColumnEdited,
   setVoteFieldEditedData,
-  toggleColumnToEdit
+  toggleColumnToEdit,
+  electionType,
 ) => {
   const dispatch = useDispatch();
 
   return useCallback((committeeId) => {
     if (committeeId) {
-      const updatedElectionCommitteeResult = {
+      const updatedResults = {
         id: committeeId,
         data: voteFieldEditedData[committeeId]
       };
-      dispatch(updateElectionResults(updatedElectionCommitteeResult));
+
+      (electionType !== 1 ?
+        dispatch(updateElectionPartyResults(updatedResults))
+        :
+        dispatch(updateElectionResults(updatedResults)));
+
 
       // Reset edited data for this specific committee
       const updatededitedCommittee = { ...columnEdited };

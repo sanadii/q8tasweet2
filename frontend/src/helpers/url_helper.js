@@ -32,7 +32,7 @@ export const GET_ELECTION_PARTY_DETAILS = "/elections/getElectionPartyDetails";
 export const ADD_ELECTION_PARTY = "/elections/addElectionParty";
 export const UPDATE_ELECTION_PARTY = "/elections/updateElectionParty";
 export const DELETE_ELECTION_PARTY = "/elections/deleteElectionParty";
-export const UPDATE_ELECTION_PARTY_VOTES = "/elections/updateElectionPartyVotes";
+export const UPDATE_ELECTION_PARTY_RESULTS = "/elections/updateElectionPartyResults";
 
 // Election Party Candidate
 export const GET_ELECTION_PARTY_CANDIDATES = "/elections/getElectionPartyCandidates";

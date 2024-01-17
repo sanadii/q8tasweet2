@@ -35,8 +35,8 @@ import {
   UPDATE_ELECTION_PARTY_FAIL,
   DELETE_ELECTION_PARTY_SUCCESS,
   DELETE_ELECTION_PARTY_FAIL,
-  UPDATE_ELECTION_PARTY_VOTES_SUCCESS,
-  UPDATE_ELECTION_PARTY_VOTES_FAIL,
+  UPDATE_ELECTION_PARTY_RESULTS_SUCCESS,
+  UPDATE_ELECTION_PARTY_RESULTS_FAIL,
 
   // Election Parties
   GET_ELECTION_PARTY_CANDIDATES,
@@ -446,6 +446,7 @@ const Elections = (state = IntialState, action) => {
         isElectionPartyUpdate: true,
         isElectionPartyUpdateFail: false,
       };
+      
     case UPDATE_ELECTION_PARTY_FAIL:
       return {
         ...state,
@@ -453,6 +454,7 @@ const Elections = (state = IntialState, action) => {
         isElectionPartyUpdate: false,
         isElectionPartyUpdateFail: true,
       };
+
     case DELETE_ELECTION_PARTY_SUCCESS:
       return {
         ...state,
@@ -464,6 +466,7 @@ const Elections = (state = IntialState, action) => {
         isElectionPartyDelete: true,
         isElectionPartyDeleteFail: false,
       };
+
     case DELETE_ELECTION_PARTY_FAIL:
       return {
         ...state,
@@ -471,37 +474,6 @@ const Elections = (state = IntialState, action) => {
         isElectionPartyDelete: false,
         isElectionPartyDeleteFail: true,
       };
-
-
-    // Election Party Votes
-    case UPDATE_ELECTION_PARTY_VOTES_SUCCESS:
-      return {
-
-        ...state,
-        electionParties: action.payload.data,
-        isElectionPartyUpdate: true,
-        isElectionPartyUpdateFail: false,
-
-
-
-        // ...state,
-        // electionParties: state.electionParties.map((electionParty) =>
-        //   electionParty.id.toString() === action.payload.data.id.toString()
-        //     ? { ...electionParty, ...action.payload.data }
-        //     : electionParty
-        // ),
-        // isElectionPartyUpdate: true,
-        // isElectionPartyUpdateFail: false,
-      };
-    case UPDATE_ELECTION_PARTY_VOTES_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isElectionPartyUpdate: false,
-        isElectionPartyUpdateFail: true,
-      };
-
-
 
     // Election Party Candidates
     case GET_ELECTION_PARTY_CANDIDATES: {
@@ -565,7 +537,7 @@ const Elections = (state = IntialState, action) => {
         ...state,
         electionPartyCandidates: state.electionPartyCandidates.filter(
           (electionPartyCandidate) =>
-          electionPartyCandidate.id.toString() !==
+            electionPartyCandidate.id.toString() !==
             action.payload.electionPartyCandidate.toString()
         ),
         isElectionPartyCandidateDelete: true,
@@ -670,10 +642,10 @@ const Elections = (state = IntialState, action) => {
       const { data } = action.payload;
       const committeeIdStr = Object.keys(data)[0];
       const committeeId = parseInt(committeeIdStr, 10);
-    
+
       // If committeeIdStr is not present, or it's not a number, or data[committeeIdStr] is not present, return the current state.
       if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
-    
+
       const updatedElectionCandidates = state.electionCandidates.map(candidate => {
         // Update votes directly on the candidate if committeeId is 0
         if (committeeId === 0) {
@@ -683,7 +655,7 @@ const Elections = (state = IntialState, action) => {
             votes: data[committeeIdStr][candidate.id.toString()] || candidate.votes,
           };
         }
-    
+
         // If candidate has committeeVotes and committeeId is not 0, update committeeVotes
         if (candidate.committeeVotes) {
           console.log("committeeIdStr", committeeIdStr, "updating committee");
@@ -696,16 +668,16 @@ const Elections = (state = IntialState, action) => {
             }
             return committeeVote;
           });
-    
+
           return {
             ...candidate,
             committeeVotes: updatedVotes,
           };
         }
-    
+
         return candidate;
       });
-    
+
       return {
         ...state,
         electionCandidates: updatedElectionCandidates,
@@ -713,16 +685,6 @@ const Elections = (state = IntialState, action) => {
         isElectionCommitteeResultUpdateFail: false,
       };
     }
-    
-
-
-
-
-
-
-
-
-
     case UPDATE_ELECTION_RESULTS_FAIL:
       return {
         ...state,
@@ -731,8 +693,63 @@ const Elections = (state = IntialState, action) => {
         isElectionCommitteeResultUpdatedFail: true,
       };
 
-    // Election Committee Results
 
+
+    // Election Party Results
+    case UPDATE_ELECTION_PARTY_RESULTS_SUCCESS: {
+      const { data } = action.payload;
+      const committeeIdStr = Object.keys(data)[0];
+      const committeeId = parseInt(committeeIdStr, 10);
+
+      // If committeeIdStr is not present, or it's not a number, or data[committeeIdStr] is not present, return the current state.
+      if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
+
+      const updatedElectionpartyCandidates = state.electionPartyCandidates.map(candidate => {
+        // Update votes directly on the candidate if committeeId is 0
+        if (committeeId === 0) {
+          console.log("committeeIdStr", committeeIdStr, "updating candidate votes");
+          return {
+            ...candidate,
+            votes: data[committeeIdStr][candidate.id.toString()] || candidate.votes,
+          };
+        }
+
+        // If candidate has committeeVotes and committeeId is not 0, update committeeVotes
+        if (candidate.committeeVotes) {
+          console.log("committeeIdStr", committeeIdStr, "updating committee");
+          const updatedVotes = candidate.committeeVotes.map(committeeVote => {
+            if (committeeVote.electionCommittee === committeeId) {
+              return {
+                ...committeeVote,
+                votes: data[committeeIdStr][candidate.id.toString()] || committeeVote.votes,
+              };
+            }
+            return committeeVote;
+          });
+
+          return {
+            ...candidate,
+            committeeVotes: updatedVotes,
+          };
+        }
+
+        return candidate;
+      });
+
+      return {
+        ...state,
+        electionPartyCandidates: updatedElectionpartyCandidates,
+        isElectionPartyCandidateResultUpdate: true,
+        isElectionPartyCandidateResultUpdateFail: false,
+      };
+    }
+    case UPDATE_ELECTION_PARTY_RESULTS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionCommitteeResultUpdated: false,
+        isElectionCommitteeResultUpdatedFail: true,
+      };
 
     // Election Campaigns
     case GET_ELECTION_CAMPAIGNS: {

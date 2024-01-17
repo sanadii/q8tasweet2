@@ -35,6 +35,7 @@ urlpatterns = [
     path("updateElectionParty/<int:id>", UpdateElectionParty.as_view(), name="UpdateElectionParty"),
     path("updateElectionParty/<int:id>", UpdateElectionParty.as_view(), name="UpdateElectionParty"),
     path("updateElectionPartyVotes/votes", UpdateElectionPartyVotes.as_view(), name="UpdateElectionPartyVotes"),
+    path("updateElectionPartyResults/<int:id>", UpdateElectionPartyResults.as_view(), name="UpdateElectionPartyResults"),
 
     # Election Party
     # path("getElectionPartyCandidateCandidates/<int:election_id>", GetElectionPartyCandidates.as_view(), name="getElectionPartyCandidates"),

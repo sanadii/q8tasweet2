@@ -291,19 +291,19 @@ export const deleteElectionPartyFail = error => ({
   payload: error,
 });
 
-export const updateElectionPartyVotes = (electionPartyVotes) => ({
-  type: 'UPDATE_ELECTION_PARTY_VOTES',
-  payload: electionPartyVotes,
+export const updateElectionPartyResults = (electionPartyResults) => ({
+  type: 'UPDATE_ELECTION_PARTY_RESULTS',
+  payload: electionPartyResults,
 });
 
-export const updateElectionPartyVotesSuccess = (electionPartyVotes) => ({
+export const updateElectionPartyResultsSuccess = (electionPartyResults) => ({
 
-  type: 'UPDATE_ELECTION_PARTY_VOTES_SUCCESS',
-  payload: electionPartyVotes,
+  type: 'UPDATE_ELECTION_PARTY_RESULTS_SUCCESS',
+  payload: electionPartyResults,
 });
 
-export const updateElectionPartyVotesFail = (error) => ({
-  type: 'UPDATE_ELECTION_PARTY_VOTES_FAIL',
+export const updateElectionPartyResultsFail = (error) => ({
+  type: 'UPDATE_ELECTION_PARTY_RESULTS_FAIL',
   payload: error,
 });
 

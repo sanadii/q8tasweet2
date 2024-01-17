@@ -183,9 +183,9 @@ const CandidatesTab = () => {
   );
 
 
-  const handleElectionPartyClicks = (party = null) => {
-    setElectionParty(party);
-    setIsEditParty(!!party);
+  const handleElectionPartyClicks = (electionParty = null) => {
+    setElectionParty(electionParty);
+    setIsEditParty(!!electionParty);
     setPartyModal(true);
     setIsEdit(false);
     toggle();
@@ -244,11 +244,12 @@ const CandidatesTab = () => {
     () => [
       {
         Name: "تعديل",
-        action: (cellProps) =>
+        action: (electionParty) =>
           <button
             to="#"
             className="btn btn-sm btn-soft-info edit-list"
             onClick={() => {
+              setIsElectionPartyAction(true);
               handleElectionPartyClick(electionParty);
             }}
           >
@@ -261,7 +262,7 @@ const CandidatesTab = () => {
           <button
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
-              setIsElectionPartyAction(true); // Set isElectionPartyAction to true when this button is clicked
+              setIsElectionPartyAction(true);
               onClickDelete(electionParty);
             }}
           >
@@ -281,6 +282,7 @@ const CandidatesTab = () => {
       || column.Header === "إجراءات"
     );
   }, [columns]);
+  console.log("electionParty: ", electionParty)
 
 
   return (
@@ -319,7 +321,6 @@ const CandidatesTab = () => {
         toggle={toggle}
         electionParty={electionParty}
       />
-
       <CampaignModal
         modal={campaignModal}
         setModal={setCampaignModal}
@@ -341,7 +342,7 @@ const CandidatesTab = () => {
 
                   // Buttons
                   {...(electionType !== 1 && {
-                    HandlePrimaryButton: handleElectionPartyClicks,
+                    HandlePrimaryButton: {handleElectionPartyClicks},
                     PrimaryButtonText: "إضافة قائمة"
                   })}
 
