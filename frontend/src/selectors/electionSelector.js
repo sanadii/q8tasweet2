@@ -25,7 +25,13 @@ export const electionSelector = createSelector(
 
     electionCampaigns: electionsState.electionCampaigns,
     electionAttendees: electionsState.electionAttendees,
-    electionResults: electionsState.electionResults,
+    // electionResult: electionsState.electionDetails.electionResult,
+    electionResultView: electionsState.electionDetails.electionResultView,
+    electionResultParty: electionsState.electionDetails.electionResultParty,
+    electionResultSorting: electionsState.electionDetails.electionResultSorting,
+    // electionResultView: electionsState.electionDetails.electionResult.View,
+    // partyResult: electionsState.electionDetails.electionResult.,
+    // SortingResult: electionsState.electionDetails.electionResult.,
 
 
     electionSorters: electionsState.electionSorters,
@@ -34,3 +40,4 @@ export const electionSelector = createSelector(
 
   })
 );
+

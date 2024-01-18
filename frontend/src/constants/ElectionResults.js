@@ -7,12 +7,12 @@ export const ElectionResultOptions = [
   {
     id: 2,
     name: "النتائج التفصيلية",
-    value: "details",
+    value: "detailed",
   },
 ];
 
 
-export const ElectionPartyResultOptions = [
+export const PartyResultOptions = [
   {
     id: 1,
     name: "عرض نتائج القوائم والمرشحين",
@@ -31,7 +31,7 @@ export const ElectionPartyResultOptions = [
 ];
 
 
-export const ElectionSortingResultOptions = [
+export const SortingResultOptions = [
   {
     id: 1,
     name: "عرض نتائج الفرز",

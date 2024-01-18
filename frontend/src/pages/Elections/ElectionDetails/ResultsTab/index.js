@@ -19,11 +19,16 @@ import Parties from "./Parties";
 import Candidates from "./Candidates";
 
 const ResultsTab = () => {
-  const { election, electionMethod, electionCandidates, electionPartyCandidates, electionCommittees } = useSelector(electionSelector);
-  const electionResult = election.electionResult;
+  const { election, electionMethod, electionResultView, electionResultParty, electionResultSorting, electionCandidates, electionParties, electionPartyCandidates, electionCommittees } = useSelector(electionSelector);
 
   // candidates based on election Type
-  const candidates = election.electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
+  const candidates = electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
+  const parties = electionMethod !== "candidateOnly" ? electionParties : electionParties;
+
+  // Parties
+  const [resultsDisplayType, setResultsDisplayType] = useState("partyCandidateOriented");
+
+
 
   // States
   const [columnEdited, setColumnEdited] = useState({});
@@ -70,7 +75,18 @@ const ResultsTab = () => {
 
 
   // Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
-  const transformedResultData = useMemo(
+  const transforedPartyData = useMemo(
+    () => transformResultData(
+      parties,
+      electionCommittees,
+      columnEdited,
+      handleVoteFieldChange,
+      election
+    ), [parties, electionCommittees, columnEdited, handleVoteFieldChange, election]
+  );
+
+  // Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
+  const transformedCandidateData = useMemo(
     () => transformResultData(
       candidates,
       electionCommittees,
@@ -89,22 +105,26 @@ const ResultsTab = () => {
     setVoteFieldEditedData,
     toggleColumnToEdit,
     electionMethod,
+    resultsDisplayType,
   );
 
 
 
   // Creating the columns for both Final and Detailed Results
-  const createColumns = (result) => {
+  const createColumns = (electionResultView) => {
     // Base columns that are always present
     const baseColumns = [
+      {
+        Header: 'المرشح',
+        accessor: 'name',
+      },
+      
       {
         Header: 'المركز',
         accessor: 'position',
       },
-      {
-        Header: 'المرشح',
-        accessor: 'name',
-      },    ];
+    ];
+
     const voteColumn = [
       {
         Header: () => (
@@ -135,16 +155,20 @@ const ResultsTab = () => {
       accessor: `committee_${committee.id}`,
     }));
 
-    // Columns for when electionResult is 1
-    if (result === 1) {
+    const partyCandidateTotalColumn = [
+      {
+        Header: 'المجموع',
+        accessor: 'partyCandidateTotal',
+      },
+    ]
+    // Columns for when electionResultView is total or detailed
+    if (electionResultView === "total") {
       return [
         ...baseColumns,
+        ...partyCandidateTotalColumn, // for partyCandidate
         ...voteColumn,
       ];
-    }
-
-    // Columns for when electionResult is 2
-    if (result === 2 && candidates) {
+    } else {
       return [
         ...baseColumns,
         { Header: 'المجموع', accessor: 'total' },
@@ -156,9 +180,9 @@ const ResultsTab = () => {
 
 
   const columns = useMemo(() => {
-    return createColumns(electionResult);
+    return createColumns(electionResultView);
   }, [
-    electionResult,
+    electionResultView,
     candidates,
     electionCommittees,
     columnEdited,
@@ -184,14 +208,17 @@ const ResultsTab = () => {
                     electionMethod !== "candidateOnly" ?
                       <Parties
                         columns={columns}
-                        data={transformedResultData}
+                        transformedCandidateData={transformedCandidateData}
+                        transforedPartyData={transforedPartyData}
                         HeaderVoteButton={HeaderVoteButton}
+                        resultsDisplayType={resultsDisplayType}
+                        setResultsDisplayType={setResultsDisplayType}
 
                       />
                       :
                       <Candidates
                         columns={columns}
-                        data={transformedResultData}
+                        transformedCandidateData={transformedCandidateData}
 
                       />
                   )

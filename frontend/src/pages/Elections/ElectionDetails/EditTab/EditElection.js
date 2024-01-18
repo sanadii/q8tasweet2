@@ -14,7 +14,7 @@ import { Col, Row, Form, Card, CardHeader, CardBody } from "reactstrap";
 
 //Import Flatepicker
 import Dropzone from "react-dropzone";
-import { StatusOptions, PriorityOptions, RoleOptions, ElectionMethodOptions, ElectionResultOptions, ElectionPartyResultOptions, ElectionSortingResultOptions, TagOptions } from "constants";
+import { StatusOptions, PriorityOptions, RoleOptions, ElectionMethodOptions, ElectionResultOptions, PartyResultOptions, SortingResultOptions, TagOptions } from "constants";
 
 const EditElection = () => {
   const dispatch = useDispatch();
@@ -25,33 +25,35 @@ const EditElection = () => {
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
+
       category: election?.category ?? "",
       subCategory: election?.subCategory ?? "",
       dueDate: election?.dueDate ?? "",
       tags: election?.tags ?? [],
 
       // Settings
-      electionMethod: election?.electionMethod ?? "candidateOnly",
-      electionResult: election?.electionResult ?? "candidateOnly",
-      electionPartyResult: election?.electionPartyResult ?? 1,
-      electionSortingResult: election?.electionSortingResult ?? false,
-      electVotes: election?.electVotes ?? 0,
-      electSeats: election?.electSeats ?? 0,
+      electionMethod: (election && election.electionMethod) || "candidateOnly",
+      electionResultView: (election && election.electionResultView) || "total",
+      electionResultParty: (election && election.electionResultParty) || "candidateOnly",
+      electionResultSorting: (election && election.electionResultSorting) || false,
+
+      electVotes: (election && election.electVotes) || 0,
+      electSeats: (election && election.electSeats) || 0,
 
       // Electors
-      electors: election?.electors ?? 0,
-      electorsMales: election?.electorsMales ?? 0,
-      electorsFemales: election?.electorsFemales ?? 0,
+      electors: (election && election.electors) || 0,
+      electorsMales: (election && election.electorsMales) || 0,
+      electorsFemales: (election && election.electorsFemales) || 0,
 
       // Attendees
-      attendees: election?.attendees ?? 0,
-      attendeesMales: election?.attendeesMales ?? 0,
-      attendeesFemales: election?.attendeesFemales ?? 0,
+      attendees: (election && election.attendees) || 0,
+      attendeesMales: (election && election.attendeesMales) || 0,
+      attendeesFemales: (election && election.attendeesFemales) || 0,
 
       // System
-      status: election?.task?.status ?? 1,
-      priority: election?.task?.priority ?? 1,
-      delet: election?.delet ?? "",
+      status: (election && election.status) || 0,
+      priority: (election && election.priority) || 0,
+      delet: (election && election.delet) || "",
     },
     validationSchema: Yup.object({
       category: Yup.string().required("Please Enter Election Name"),
@@ -62,14 +64,15 @@ const EditElection = () => {
 
     }),
 
+
     onSubmit: (values) => {
       const electionResultJson = {
-        election_result: values.electionResult,
-        election_party_result: values.electionPartyResult,
-        election_sorting_result: values.electionSortingResult,
+        view: values.electionResultView || "total",
+        party: values.electionResultParty || "candidateOnly",
+        sorting: values.electionResultSorting, // No need to parse as it's already a boolean
       };
 
-      
+
       const updatedElection = {
         id: electionId,
         category: values.category,
@@ -82,8 +85,6 @@ const EditElection = () => {
         // Election Spesifications
         electionMethod: values.electionMethod,
         electionResult: JSON.stringify(electionResultJson), // Convert the object to a JSON string
-  
-        electVotes: values.electVotes,
         electSeats: values.electSeats,
         electors: values.electors,
         electorsMales: values.electorsMales,
@@ -105,15 +106,6 @@ const EditElection = () => {
 
   // Categories
   const { categoryOptions, subCategoryOptions, changeSubCategoriesOptions, activeParentCategoryId } = useCategoryManager(categories, subCategories, validation);
-
-  const [selectedMulti, setselectedMulti] = useState(null);
-
-  const handleMulti = (selectedMulti) => {
-    setselectedMulti(selectedMulti);
-  };
-
-
-
 
 
   document.title =
@@ -180,50 +172,38 @@ const EditElection = () => {
               colSize: 6,
             },
             {
-              id: "electionResult-field",
-              name: "electionResult",
+              id: "electionResultView-field",
+              name: "electionResultView",
               label: "عرض النتائج",
               type: "select",
               options: ElectionResultOptions.map(option => ({
                 id: option.id,
                 label: option.name,
-                value: option.id
-              })),
-              colSize: 6,
-            },
-            {
-              id: "resultPartyType-field",
-              name: "resultPartyType",
-              label: "عرض نتائج القوائم",
-              type: "select",
-              options: ElectionPartyResultOptions.map(option => ({
-                id: option.id,
-                label: option.name,
-                value: option.id
-              })),
-              colSize: 6,
-            },
-            {
-              id: "resultSortingType-field",
-              name: "resultSortingType",
-              label: "عرض نتائج الفرز",
-              type: "select",
-              options: ElectionSortingResultOptions.map(option => ({
-                id: option.id,
-                label: option.name,
-                value: option.id
+                value: option.value
               })),
               colSize: 6,
             },
             {
               id: "electionResultParty-field",
               name: "electionResultParty",
-              label: "عرض نتائج إنتخابات القوائم",
+              label: "عرض نتائج القوائم",
               type: "select",
-              options: ElectionResultOptions.map(option => ({
+              options: PartyResultOptions.map(option => ({
                 id: option.id,
                 label: option.name,
-                value: option.id
+                value: option.value
+              })),
+              colSize: 6,
+            },
+            {
+              id: "electionResultSorting-field",
+              name: "electionResultSorting",
+              label: "عرض نتائج الفرز",
+              type: "select",
+              options: SortingResultOptions.map(option => ({
+                id: option.id,
+                label: option.name,
+                value: option.value // No need to convert to a string
               })),
               colSize: 6,
             },
@@ -353,7 +333,6 @@ const EditElection = () => {
 
   return (
     <React.Fragment>
-
       <Form
         className="tablelist-form"
         onSubmit={(e) => {
@@ -371,15 +350,14 @@ const EditElection = () => {
                     <h4>{section.section}</h4>
                   </CardHeader>
                   <CardBody>
-                    <Row className="g-3">
+                    <Row className="g-2">
                       {section.fields.map((field) => (
                         (field.condition === undefined || field.condition) && (
-                          <Col lg={12} key={field.id}>
-                            <FormFields
-                              field={field}
-                              validation={validation}
-                            />
-                          </Col>
+                          <FormFields
+                            key={field.id}
+                            field={field}
+                            validation={validation}
+                          />
                         )
                       ))}
                     </Row>

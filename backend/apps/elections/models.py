@@ -36,9 +36,9 @@ class Election(TrackModel, TaskModel):
         null=True,
         verbose_name="Election Type"
     )
-    election_result = models.CharField(
-        max_length=50,
-        choices=ElectionResultsOptions.choices,
+    election_result = models.TextField(
+        max_length=150,
+        # choices=ElectionResultsOptions.choices,
         blank=True,
         null=True,
         verbose_name="Election Result Type"
@@ -263,27 +263,78 @@ class ElectionPartySorting(BaseElectionSorting):
         verbose_name = "Election Party Sorting"
         verbose_name_plural = "Election Party Sortings"
 
+class ElectionPartyCandidateSorting(BaseElectionSorting):
+    election_party_candidate = models.ForeignKey('elections.ElectionPartyCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_party_candidate_sortings')
 
-class ElectionCommitteeResult(TrackModel):
-    # Basic Information
-    election_committee = models.ForeignKey('ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_result_elections')
-    election_candidate = models.ForeignKey('ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_result_candidates')
-    votes = models.IntegerField(blank=True, null=True)
+    class Meta(BaseElectionSorting.Meta):
+        db_table = 'election_party_candidate_sorting'
+        verbose_name = "Election Party Candidate Sorting"
+        verbose_name_plural = "Election Party Candidate  Sortings"
+
+
+
+class BaseElectionCommitteeResult(models.Model):
+    election_committee = models.ForeignKey(
+        ElectionCommittee,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_election_committees',
+    )
+    election_candidate = models.ForeignKey(
+        ElectionCandidate,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_election_candidates',
+    )
+    votes = models.PositiveIntegerField(default=0)
+    notes = models.TextField(blank=True, null=True)
 
     class Meta:
-        db_table = "election_committee_result"
-        verbose_name = "Committe Result"
-        verbose_name_plural = "Committe Results"
-        default_permissions = []
-        permissions  = [
-            ("canViewCommitteeResult", "Can View Committee Result"),
-            ("canAddCommitteeResult", "Can Add Committee Result"),
-            ("canChangeCommitteeResult", "Can Change Committee Result"),
-            ("canDeleteCommitteeResult", "Can Delete Committee Result"),
-            ]
-        
-    def __str__(self):
-        return f"{self.election_committee.name} - {self.election_candidate.candidate.name} - Votes: {self.votes}"
+        abstract = True  # Prevents direct model creation
+        permissions = [
+            ("canViewElectionCommitteeResult", "Can View Election Committee Result"),
+            ("canAddElectionCommitteeResult", "Can Add Election Committee Result"),
+            ("canChangeElectionCommitteeResult", "Can Change Election Committee Result"),
+            ("canDeleteElectionCommitteeResult", "Can Delete Election Committee Result"),
+        ]
+
+class ElectionCommitteeResult(BaseElectionCommitteeResult, TrackModel):
+    election_candidate = models.ForeignKey('ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_result_candidates')
+
+    class Meta:
+        db_table = 'election_committee_result'
+        verbose_name = "Election Committee Result"
+        verbose_name_plural = "Election Committee Results"
+
+class ElectionPartyCommitteeResult(BaseElectionCommitteeResult, TrackModel):
+    election_party = models.ForeignKey(
+        ElectionParty,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_election_parties',
+    )
+
+    class Meta:
+        db_table = 'election_party_committee_result'
+        verbose_name = "Election Party Committee Result"
+        verbose_name_plural = "Election Party Committee Results"
+
+class ElectionPartyCandidateCommitteeResult(BaseElectionCommitteeResult, TrackModel):
+    election_party_candidate = models.ForeignKey(
+        ElectionPartyCandidate,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='%(class)s_election_party_candidates',
+    )
+
+    class Meta:
+        db_table = 'election_party_candidate_committee_result'
+        verbose_name = "Election Party Candidate Committee Result"
+        verbose_name_plural = "Election Party Candidate Committee Results"
 
 # class ElectionCommitteeSorter(TrackModel, TaskModel):
 #     election_committee = models.ForeignKey('ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_committees')

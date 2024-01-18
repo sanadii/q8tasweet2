@@ -32,7 +32,7 @@ const sortingStatus = () => {
 const ElectionResults = () => {
 
   // States & Constants
-  const { election, electionCandidates, electionPartyCandidates, electionCommittees, error } = useSelector(electionSelector);
+  const { election, electionResultView, electionResultParty, electionResultSorting, electionCandidates, electionPartyCandidates, electionCommittees, error } = useSelector(electionSelector);
   const [showDetailedResults, setShowDetailedResults] = useState(false);
   const [candidatesResult, setCandidatesResult] = useState([]);
   const [electionResultStatus, setElectionResultStatus] = useState("");
@@ -40,7 +40,6 @@ const ElectionResults = () => {
   // candidates based on election Type
   const candidates = election.electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
 
-  const electionResult = election.electionResult;
   const electionSeats = election.electSeats;
   const calculateTotalVotes = useCallback((committeeResults) => {
     return Object.values(committeeResults).reduce((sum, currentVotes) => sum + currentVotes, 0);
@@ -57,190 +56,190 @@ const ElectionResults = () => {
   };
 
   // Initialize candidatesResult state and WebSocket
-  const calculateCommitteeResults = useCallback((candidate, electionResult) => {
+  const calculateCommitteeResults = useCallback((candidate, electionResultView) => {
     const committeeResult = {};
     let totalVotes = 0;
-    let electionMethodResults;
+    let electionVoteResults;
     let electionResultStatus;
 
-    if (electionResult === 1 && candidate.votes) {
-      totalVotes = candidate.votes;
-      electionResultStatus = "نتائج نهائية"
-
+    console.log("electionResultSorting: ", electionResultSorting)
+    if (electionResultSorting === "true") {
+      electionVoteResults = candidate.committeeSorting;
+      electionResultStatus = sortingStatus
     } else {
-      // determine electionMethodResults based on electionResult
-      if (electionResult === 2 && candidate.committeeVotes) {
-        electionMethodResults = candidate.committeeVotes;
-        electionResultStatus = "نتائج نهائية"
-      } else if (electionResult === 3 && candidate.committeeSorting) {
-        electionMethodResults = candidate.committeeSorting;
-        electionResultStatus = sortingStatus
-
+      if (electionResultView === "total") {
+        totalVotes = candidate.votes;
+        electionResultStatus = "نتائج إجمالية"
+      } else {
+        if (electionResultView === "detailed" && candidate.committeeVotes) {
+          electionVoteResults = candidate.committeeVotes;
+          electionResultStatus = "نتائج تفصيلية"
+        }
       }
 
-      electionCommittees.forEach(committee => {
-        const votes = electionMethodResults ?
-          electionMethodResults.find(cs => cs.electionCommittee === committee.id)?.votes || 0 : 0;
-        committeeResult[committee.id] = votes;
-      });
+    electionCommittees.forEach(committee => {
+      const votes = electionVoteResults ?
+        electionVoteResults.find(cs => cs.electionCommittee === committee.id)?.votes || 0 : 0;
+      committeeResult[committee.id] = votes;
+    });
 
-      totalVotes = calculateTotalVotes(committeeResult);
-    }
+    totalVotes = calculateTotalVotes(committeeResult);
+  }
 
     return { committeeResult, totalVotes, electionResultStatus };
-  }, [electionCommittees, calculateTotalVotes]);
+}, [electionCommittees, electionResultView, electionResultSorting, calculateTotalVotes]);
 
-  useEffect(() => {
-    const initialSortingData = candidates.map(candidate => {
-      const { committeeResult, totalVotes, electionResultStatus } = calculateCommitteeResults(candidate, electionResult);
-      // Use the first status as the default for the entire election
-      setElectionResultStatus(electionResultStatus);
+useEffect(() => {
+  const initialSortingData = candidates.map(candidate => {
+    const { committeeResult, totalVotes, electionResultStatus } = calculateCommitteeResults(candidate, electionResultView);
+    // Use the first status as the default for the entire election
+    setElectionResultStatus(electionResultStatus);
 
-      return {
-        candidateId: candidate.id,
-        name: candidate.name,
-        gender: candidate.gender,
-        image: candidate.image,
-        isWinner: candidate.isWinner,
-        committeeResult,
-        votes: totalVotes
-      };
+    return {
+      candidateId: candidate.id,
+      name: candidate.name,
+      gender: candidate.gender,
+      image: candidate.image,
+      isWinner: candidate.isWinner,
+      committeeResult,
+      votes: totalVotes
+    };
+  });
+
+  // Use sortAndUpdatePositions and pass electionSeats from the election object
+  const sortedCandidates = sortAndUpdatePositions(initialSortingData, electionSeats);
+  setCandidatesResult(sortedCandidates);
+}, [candidates, electionCommittees, electionResultView, electionSeats]);
+
+
+const updateSortingVotes = (candidateId, newVotes, committeeId) => {
+  setCandidatesResult(prevSorting => {
+    const updatedSorting = prevSorting.map(candidate => {
+      if (candidate.candidateId === candidateId) {
+        // Update only the votes of the specific committee
+        const updatedCommitteeVotes = { ...candidate.committeeResult, [committeeId]: newVotes };
+        // Recalculate the total votes
+        const totalVotes = Object.values(updatedCommitteeVotes).reduce((sum, currVotes) => sum + currVotes, 0);
+        return { ...candidate, committeeResult: updatedCommitteeVotes, votes: totalVotes };
+      }
+      return candidate;
     });
-
-    // Use sortAndUpdatePositions and pass electionSeats from the election object
-    const sortedCandidates = sortAndUpdatePositions(initialSortingData, electionSeats);
-    setCandidatesResult(sortedCandidates);
-  }, [candidates, electionCommittees, election.electionResult, electionSeats]);
+    return sortAndUpdatePositions(updatedSorting);
+  });
+};
 
 
-  const updateSortingVotes = (candidateId, newVotes, committeeId) => {
-    setCandidatesResult(prevSorting => {
-      const updatedSorting = prevSorting.map(candidate => {
-        if (candidate.candidateId === candidateId) {
-          // Update only the votes of the specific committee
-          const updatedCommitteeVotes = { ...candidate.committeeResult, [committeeId]: newVotes };
-          // Recalculate the total votes
-          const totalVotes = Object.values(updatedCommitteeVotes).reduce((sum, currVotes) => sum + currVotes, 0);
-          return { ...candidate, committeeResult: updatedCommitteeVotes, votes: totalVotes };
-        }
-        return candidate;
+// Update the votes from electionSorting Socket
+const { messageHistory } = useWebSocketContext();
+
+const electioSortingHistory = messageHistory.electionSorting || [];
+
+useEffect(() => {
+  // Access and process each object within the array
+  electioSortingHistory.forEach(data => {
+    const { electionCandidateId, votes, electionCommitteeId } = data;
+    updateSortingVotes(electionCandidateId, votes, electionCommitteeId);
+  });
+}, [candidates, electioSortingHistory, updateSortingVotes]);
+
+
+const toggleDetailedResults = () => {
+  setShowDetailedResults((prev) => !prev);
+};
+
+
+const columns = useMemo(() => {
+  const baseColumns = [
+    {
+      Header: "المركز",
+      accessor: "position",
+      Cell: (cellProps) => <strong>{cellProps.row.original.position}</strong>,
+    },
+    {
+      Header: "المرشح",
+      filterable: true,
+      Cell: (cellProps) =>
+        <ImageCandidateWinnerCircle
+          gender={cellProps.row.original.gender}
+          name={cellProps.row.original.name}
+          imagePath={cellProps.row.original.image}
+          isWinner={cellProps.row.original.isWinner}
+        />,
+    },
+    {
+      Header: 'المجموع',
+      accessor: "votes",
+      Cell: (cellProps) => <strong className="text-success">{cellProps.row.original.votes}</strong>,
+    },
+  ];
+
+  if (showDetailedResults) {
+    electionCommittees.forEach((committee) => {
+      baseColumns.push({
+        Header: committee.name,
+        accessor: (row) => {
+          // For Sorting Results
+          const committeeVote = row.committeeResult[committee.id];
+          return committeeVote || 0;
+
+        },
+        Cell: (cellProps) => <strong>{cellProps.value}</strong>,
       });
-      return sortAndUpdatePositions(updatedSorting);
     });
-  };
+  }
 
+  return baseColumns;
+}, [showDetailedResults, electionCommittees]);
 
-  // Update the votes from electionSorting Socket
-  const { sendMessage, readyState, messageHistory } = useWebSocketContext();
-
-  const electioSortingHistory = messageHistory.electionSorting || [];
-
-  useEffect(() => {
-    // Access and process each object within the array
-    electioSortingHistory.forEach(data => {
-      const { electionCandidateId, votes, electionCommitteeId } = data;
-      updateSortingVotes(electionCandidateId, votes, electionCommitteeId);
-    });
-  }, [candidates, electioSortingHistory, updateSortingVotes]);
-
-
-  const toggleDetailedResults = () => {
-    setShowDetailedResults((prev) => !prev);
-  };
-
-
-  const columns = useMemo(() => {
-    const baseColumns = [
-      {
-        Header: "المركز",
-        accessor: "position",
-        Cell: (cellProps) => <strong>{cellProps.row.original.position}</strong>,
-      },
-      {
-        Header: "المرشح",
-        filterable: true,
-        Cell: (cellProps) =>
-          <ImageCandidateWinnerCircle
-            gender={cellProps.row.original.gender}
-            name={cellProps.row.original.name}
-            imagePath={cellProps.row.original.image}
-            isWinner={cellProps.row.original.isWinner}
-          />,
-      },
-      {
-        Header: 'المجموع',
-        accessor: "votes",
-        Cell: (cellProps) => <strong className="text-success">{cellProps.row.original.votes}</strong>,
-      },
-    ];
-
-    if (showDetailedResults) {
-      electionCommittees.forEach((committee) => {
-        baseColumns.push({
-          Header: committee.name,
-          accessor: (row) => {
-            // For Sorting Results
-            const committeeVote = row.committeeResult[committee.id];
-            return committeeVote || 0;
-
-          },
-          Cell: (cellProps) => <strong>{cellProps.value}</strong>,
-        });
-      });
-    }
-
-    return baseColumns;
-  }, [showDetailedResults, electionCommittees]);
-
-  return (
-    <React.Fragment>
-      <Card>
-        <CardHeader>
-          <div className="align-items-center d-flex">
-            <h5 className="mb-0 flex-grow-1"><strong>المرشحين والنتائج</strong> - {electionResultStatus}</h5>
-            <div className="flex-shrink-0">
-              {
-                (electionResult === 2 || electionResult === 3) &&
-                <button
-                  type="button"
-                  className="btn btn-soft-danger btn-md"
-                  onClick={toggleDetailedResults}
-                >
-                  {(showDetailedResults ? 'إخفاء النتائج التفصيلية' : 'عرض النتائج التفصيلية')}
-                </button>
-              }
-            </div>
+return (
+  <React.Fragment>
+    <Card>
+      <CardHeader>
+        <div className="align-items-center d-flex">
+          <h5 className="mb-0 flex-grow-1"><strong>المرشحين والنتائج</strong> - {electionResultStatus}</h5>
+          <div className="flex-shrink-0">
+            {
+              (electionResultView === "detailed") &&
+              <button
+                type="button"
+                className="btn btn-soft-danger btn-md"
+                onClick={toggleDetailedResults}
+              >
+                {(showDetailedResults ? 'إخفاء النتائج التفصيلية' : 'عرض النتائج التفصيلية')}
+              </button>
+            }
           </div>
-        </CardHeader>
-        <CardBody>
+        </div>
+      </CardHeader>
+      <CardBody>
 
 
 
-          {candidatesResult && candidatesResult.length ? (
-            <TableContainer
-              // Data
-              columns={columns}
-              data={candidatesResult || []}
-              customPageSize={50}
+        {candidatesResult && candidatesResult.length ? (
+          <TableContainer
+            // Data
+            columns={columns}
+            data={candidatesResult || []}
+            customPageSize={50}
 
-              // Sorting
-              sortBy="position"
+            // Sorting
+            sortBy="position"
 
-              // Styling
-              divClass="table-responsive table-card mb-3"
-              tableClass="align-middle table-nowrap mb-0"
-              theadClass="table-light table-nowrap"
-              thClass="table-light text-muted"
-            />
-          ) : (
-            <Loader error={error} />
-          )}
-          <ToastContainer closeButton={false} limit={1} />
-        </CardBody>
-      </Card>
+            // Styling
+            divClass="table-responsive table-card mb-3"
+            tableClass="align-middle table-nowrap mb-0"
+            theadClass="table-light table-nowrap"
+            thClass="table-light text-muted"
+          />
+        ) : (
+          <Loader error={error} />
+        )}
+        <ToastContainer closeButton={false} limit={1} />
+      </CardBody>
+    </Card>
 
-    </React.Fragment >
-  );
+  </React.Fragment >
+);
 };
 
 export default ElectionResults;

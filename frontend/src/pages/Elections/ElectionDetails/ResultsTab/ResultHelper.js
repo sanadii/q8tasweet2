@@ -77,6 +77,13 @@ const calculateTotalVotes = (candidate, electionCommittees) => {
   }, 0);
 };
 
+const calculatePartyCandidateTotalVotes = (candidate, electionCommittees, electionParties) => {
+  return electionCommittees.reduce((total, committee) => {
+    const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
+    return total + (committeeVote?.votes || 0);
+  }, 0);
+};
+
 
 // transformResultData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
 // including calculating the total votes and candidate positions.
@@ -100,6 +107,8 @@ const transformResultData = (
       image: candidate.imagePath,
       isWinner: candidate.isWinner,
       total: calculateTotalVotes(candidate, electionCommittees),
+      partyCandidateTotal: calculateTotalVotes(candidate, electionCommittees, electionParties),
+      partyCandidateTotal: "12",
     };
 
     // Candidate Vote Field
@@ -132,13 +141,13 @@ const transformResultData = (
   });
 
   // Calculate positions and determine winners, but do not sort by position
-  const calculateCandidatePosition = (candidates) => {
-    const sortedCandidates = [...candidates].sort((a, b) => b.total - a.total);
+  const calculateCandidatePosition = (resultData) => {
+    const sortedCandidates = [...resultData].sort((a, b) => b.total - a.total);
     sortedCandidates.forEach((candidate, index) => {
       candidate.position = index + 1;
       candidate.isWinner = candidate.position <= (election.electSeats || 0);
     });
-    return candidates; // Return the original list without sorting by position
+    return resultData; // Return the original list without sorting by position
   };
 
   return calculateCandidatePosition(candidatesWithTotalVotes);
@@ -152,20 +161,33 @@ const useSaveCommitteeResults = (
   setVoteFieldEditedData,
   toggleColumnToEdit,
   electionMethod,
+  resultsDisplayType,
 ) => {
   const dispatch = useDispatch();
 
   return useCallback((committeeId) => {
+    let resultType;
+
+    if (electionMethod === "candidateOnly") {
+      resultType = "candidates";
+    } else {
+      if (resultsDisplayType === "partyOriented" ) {
+        resultType = "parties";
+      } else if (resultsDisplayType === "candidateOriented" || resultsDisplayType === "partyCandidateOriented") {
+        resultType = "partyCandidates";
+      }
+    }
+
     if (committeeId) {
       const updatedResults = {
         id: committeeId,
-        data: voteFieldEditedData[committeeId]
+        data: voteFieldEditedData[committeeId],
+        resultType: resultType, // Fixed the typo in 'resultType'
       };
 
-      (electionMethod !== "candidateOnly" ?
-        dispatch(updateElectionPartyResults(updatedResults))
-        :
-        dispatch(updateElectionResults(updatedResults)));
+
+
+      dispatch(updateElectionResults(updatedResults))
 
 
       // Reset edited data for this specific committee
@@ -177,6 +199,8 @@ const useSaveCommitteeResults = (
       const updatedModifiedData = { ...voteFieldEditedData };
       delete updatedModifiedData[committeeId];
       setVoteFieldEditedData(updatedModifiedData);
+      console.log("updatedResults", updatedResults);
+
     }
 
     // Toggle edit mode off immediately, don’t wait for the action to complete

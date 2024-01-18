@@ -58,7 +58,7 @@ const Section = ({ viewType }) => {
 
   const mainTabs = [
     { id: "1", title: "المرشحين والنتائج", icon: 'ri-activity-line', },
-    // ...(election.electionResult === "total" ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
+    // ...(election.electionResultView === "total" ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
     // ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line', }] : []),
     // { id: "5", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
     // { id: "6", title: "عمليات المستخدم", icon: 'ri-activity-line', },
@@ -72,7 +72,7 @@ const Section = ({ viewType }) => {
     const candidatesTitle = election.electionMethod !== "candidateOnly" ? "القوائم والمرشحين" : "المرشحين";
     mainTabs.push({ id: "2", title: candidatesTitle, icon: 'ri-activity-line' });
 
-    if (election.electionResult !== "total") {
+    if (election.electionResultView !== "total") {
       mainTabs.push({ id: "3", title: "اللجان", icon: 'ri-activity-line' });
     }
     if (electionCampaigns.length !== 0) {

@@ -1,6 +1,6 @@
 import { TableContainer } from "components";
 
-const Candidates = ({ columns, data }) => {
+const Candidates = ({ columns, transformedCandidateData }) => {
     return (
   
       <>
@@ -9,7 +9,7 @@ const Candidates = ({ columns, data }) => {
   
           // Data
           columns={columns}
-          data={data}
+          data={transformedCandidateData}
           customPageSize={50}
           isTableContainerFooter={true}
           sortBy="name"

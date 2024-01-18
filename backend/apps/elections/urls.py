@@ -34,8 +34,6 @@ urlpatterns = [
     path("deleteElectionParty/<int:id>", DeleteElectionParty.as_view(), name="DeleteElectionParty"),
     path("updateElectionParty/<int:id>", UpdateElectionParty.as_view(), name="UpdateElectionParty"),
     path("updateElectionParty/<int:id>", UpdateElectionParty.as_view(), name="UpdateElectionParty"),
-    path("updateElectionPartyVotes/votes", UpdateElectionPartyVotes.as_view(), name="UpdateElectionPartyVotes"),
-    path("updateElectionPartyResults/<int:id>", UpdateElectionPartyResults.as_view(), name="UpdateElectionPartyResults"),
 
     # Election Party
     # path("getElectionPartyCandidateCandidates/<int:election_id>", GetElectionPartyCandidates.as_view(), name="getElectionPartyCandidates"),
@@ -43,14 +41,15 @@ urlpatterns = [
     path("deleteElectionPartyCandidate/<int:id>", DeleteElectionPartyCandidate.as_view(), name="DeleteElectionPartyCandidate"),
     path("updateElectionPartyCandidate/<int:id>", UpdateElectionPartyCandidate.as_view(), name="UpdateElectionPartyCandidate"),
     path("updateElectionPartyCandidate/<int:id>", UpdateElectionPartyCandidate.as_view(), name="UpdateElectionPartyCandidate"),
-    path("updateElectionPartyCandidateVotes/votes", UpdateElectionPartyCandidateVotes.as_view(), name="UpdateElectionPartyCandidateVotes"),
 
     # Election Committees
     # path("getElectionCommittees/<int:election_id>", GetElectionCommittees.as_view(), name="getElectionCommittees"),
     path("addNewElectionCommittee", AddNewElectionCommittee.as_view(), name="AddNewElectionCommittee"),
     path("deleteElectionCommittee/<int:id>", DeleteElectionCommittee.as_view(), name="DeleteElectionCommittee"),
     path("updateElectionCommittee/<int:id>", UpdateElectionCommittee.as_view(), name="UpdateElectionCommittee"),
-    path("updateElectionResults/<int:id>", UpdateElectionCommitteeResults.as_view(), name="UpdateElectionCommitteeResults"),
+
+    # Election Results
+    path("updateElectionResults/<int:id>", UpdateElectionResults.as_view(), name="UpdateElectionResults"),
 
     # Public
     path("getPublicElections", GetPublicElections.as_view(), name="GetPublicElections"),

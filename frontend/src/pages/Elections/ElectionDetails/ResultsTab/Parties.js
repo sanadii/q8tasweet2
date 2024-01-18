@@ -4,25 +4,33 @@ import { electionSelector } from 'Selectors';
 import { Button, Col, Row, Card, CardHeader, Input } from "reactstrap";
 import { Loader, TableContainer } from "components";
 
-const Parties = ({ columns, data, HeaderVoteButton }) => {
-    const { electionParties, electionCommittees, error } = useSelector(electionSelector);
-    const [resultsDisplayType, setResultsDisplayType] = useState("partyCandidateOriented");
+const Parties = ({
+    columns,
+    transformedCandidateData,
+    transforedPartyData,
+    resultsDisplayType,
+    setResultsDisplayType,
+    HeaderVoteButton
+}) => {
+    const { electionParties, electionCommittees, electionPartyCandidates, error } = useSelector(electionSelector);
+
     const [selectedCommittee, setSelectedCommittee] = useState(0);
 
     let displayData;
-    if (resultsDisplayType === "partyCandidateOriented") {
-        displayData = electionParties;
+    if (resultsDisplayType === "partyOriented") {
+        displayData = transforedPartyData;
     } else {
-        displayData = electionParties;
+        displayData = transformedCandidateData;
     }
+
 
 
     const getCandidatesForParty = useMemo(() => {
         return partyId => {
-            if (!data) return [];
-            return data.filter(candidate => candidate.electionParty === partyId);
+            if (!transformedCandidateData) return [];
+            return transformedCandidateData.filter(candidate => candidate.electionParty === partyId);
         };
-    }, [data]);
+    }, [transformedCandidateData]);
 
     const handleSelectChange = (e) => {
         const selectedCommitteeId = e.target.value;
@@ -31,7 +39,6 @@ const Parties = ({ columns, data, HeaderVoteButton }) => {
 
     const renderPartyCandidateOriented = () => (
         <Row>
-            <Button>تعديل أصوات القوائم</Button>
             {/* <button>تعديل أصوات المرشحين</button> */}
             {electionParties.map((party, index) => {
                 const partyCandidates = getCandidatesForParty(party.id);
@@ -61,14 +68,13 @@ const Parties = ({ columns, data, HeaderVoteButton }) => {
         </Row>
     );
 
+
     const renderCandidateOrPartyOriented = () => (
-
-
         <Row>
-            {data && data.length ? (
+            {displayData && displayData.length ? (
                 <TableContainer
                     columns={columns}
-                    data={displayData }
+                    data={displayData}
                     customPageSize={50}
                     divClass="table-responsive table-card mb-3"
                     tableClass="align-middle table-nowrap mb-0"
@@ -111,7 +117,7 @@ const Parties = ({ columns, data, HeaderVoteButton }) => {
                                     id="committee"
                                     onChange={handleSelectChange}
                                 >
-                                    <option value="">-- اختر اللجنة --</option>
+                                    <option value="">-- جميع اللجان --</option>
                                     {electionCommittees.map((committee) => (
                                         <option key={committee.id} value={committee.id}>
                                             {committee.name}
@@ -124,7 +130,8 @@ const Parties = ({ columns, data, HeaderVoteButton }) => {
                 </div>
             </Row>
 
-            {resultsDisplayType === "partyCandidateOriented" ? renderPartyCandidateOriented() : renderCandidateOrPartyOriented()}
+            {resultsDisplayType === "partyCandidateOriented" ?
+                renderPartyCandidateOriented() : renderCandidateOrPartyOriented()}
         </>
     );
 
