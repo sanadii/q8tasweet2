@@ -15,6 +15,8 @@ from apps.elections.models import (
     ElectionPartyCandidate,
     ElectionCommittee,
     ElectionCommitteeResult,
+    ElectionPartyCandidateCommitteeResult,
+    ElectionPartyCommitteeResult,
 )
 
 from apps.campaigns.models import CampaignSorting
@@ -191,7 +193,7 @@ class SubCategoriesSerializer(serializers.ModelSerializer):
 
 
 # Votting and Sorting
-class ElectionCandidateVoteSerializer(serializers.ModelSerializer):
+class ElectionCommitteeResultSerializer(serializers.ModelSerializer):
     admin_serializer_classes = (TrackMixin,)
 
     class Meta:
@@ -199,6 +201,20 @@ class ElectionCandidateVoteSerializer(serializers.ModelSerializer):
         # fields = "__all__"
         fields = ["election_committee", "votes"]
 
+class ElectionPartyCommitteeResultSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    admin_serializer_classes = (TrackMixin,)
+
+    class Meta:
+        model = ElectionPartyCommitteeResult
+        fields = ["election_committee", "votes"]
+
+class ElectionPartyCandidateCommitteeResultSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    admin_serializer_classes = (TrackMixin,)
+
+    class Meta:
+        model = ElectionPartyCandidateCommitteeResult
+        fields = ["election_committee", "votes"]
+        
 class CampaignSortingSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -215,7 +231,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     name = serializers.CharField(source='candidate.name', read_only=True)
     gender = serializers.IntegerField(source='candidate.gender', read_only=True)
     image = serializers.SerializerMethodField('get_candidate_image')
-    committee_votes = ElectionCandidateVoteSerializer(source='committee_result_candidates', many=True, read_only=True)
+    committee_votes = ElectionCommitteeResultSerializer(source='committee_result_candidates', many=True, read_only=True)
     committee_sorting = serializers.SerializerMethodField()
 
     class Meta:
@@ -267,10 +283,16 @@ class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     name = serializers.CharField(source='party.name', read_only=True)
     image = serializers.SerializerMethodField('get_party_image')
+    committee_votes = ElectionPartyCommitteeResultSerializer(source='party_committee_result_candidates', many=True, read_only=True)
+    # committee_sorting = serializers.SerializerMethodField()
 
     class Meta:
         model = ElectionParty
-        fields = ["id", "election", "party", "name", "image", "votes", "notes"]
+        fields = [
+            "id", "election", "party", "name", "image", "votes", "notes",
+            "committee_votes",
+            # "committee_sorting"
+            ]
 
     def get_party_image(self, obj):
         if obj.party and obj.party.image:
@@ -294,10 +316,16 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
     name = serializers.CharField(source='candidate.name', read_only=True)
     gender = serializers.IntegerField(source='candidate.gender', read_only=True)
     image = serializers.SerializerMethodField('get_candidate_image')
+    committee_votes = ElectionPartyCandidateCommitteeResultSerializer(source='party_candidate_committee_result_candidates', many=True, read_only=True)
+    # committee_sorting = serializers.SerializerMethodField()
 
     class Meta:
         model = ElectionPartyCandidate
-        fields = ["id", "election_party", "candidate", "name", "gender", "image", "votes", "notes"]
+        fields = [
+            "id", "election_party", "candidate", "name", "gender", "image", "votes", "notes",
+            "committee_votes",
+            # "committee_sorting"
+            ]
 
     def get_candidate_image(self, obj):
         if obj.candidate and obj.candidate.image:
@@ -335,9 +363,3 @@ class ElectionCommitteeSerializer(AdminFieldMixin, serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class ElectionCommitteeResultSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    admin_serializer_classes = (TrackMixin,)
-
-    class Meta:
-        model = ElectionCommitteeResult
-        fields = "__all__"

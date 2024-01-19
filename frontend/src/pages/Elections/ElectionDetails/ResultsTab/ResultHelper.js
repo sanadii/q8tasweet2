@@ -77,13 +77,6 @@ const calculateTotalVotes = (candidate, electionCommittees) => {
   }, 0);
 };
 
-const calculatePartyCandidateTotalVotes = (candidate, electionCommittees, electionParties) => {
-  return electionCommittees.reduce((total, committee) => {
-    const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
-    return total + (committeeVote?.votes || 0);
-  }, 0);
-};
-
 
 // transformResultData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
 // including calculating the total votes and candidate positions.
@@ -92,12 +85,25 @@ const transformResultData = (
   electionCommittees,
   columnEdited,
   handleVoteFieldChange,
-  election
+  election,
+  partyCommitteeVoteList,
 ) => {
   if (!electionCandidates || !electionCommittees || !election) return [];
 
+  console.log("partyCommitteeVoteList: ", partyCommitteeVoteList)
+
   const candidatesWithTotalVotes = electionCandidates.map((candidate) => {
     const candidateVotes = candidate.votes ?? 0;
+
+    const partyData = partyCommitteeVoteList?.find(party => party.partyId === candidate.electionParty);
+    const partyTotalVotes = partyData
+      ? partyData.committeeVotes.reduce((total, committeeVote) => total + committeeVote.votes, 0)
+      : 0;
+
+    const total = calculateTotalVotes(candidate, electionCommittees)
+
+    const PartyCandidateVote = partyTotalVotes + total;
+
     const transformedResultFieldsData = {
       'candidate.id': candidate.id,
       position: candidate.position,
@@ -106,9 +112,8 @@ const transformResultData = (
       gender: candidate.gender,
       image: candidate.imagePath,
       isWinner: candidate.isWinner,
-      total: calculateTotalVotes(candidate, electionCommittees),
-      partyCandidateTotal: calculateTotalVotes(candidate, electionCommittees, electionParties),
-      partyCandidateTotal: "12",
+      total: total,
+      partyVote: PartyCandidateVote,
     };
 
     // Candidate Vote Field
@@ -171,7 +176,7 @@ const useSaveCommitteeResults = (
     if (electionMethod === "candidateOnly") {
       resultType = "candidates";
     } else {
-      if (resultsDisplayType === "partyOriented" ) {
+      if (resultsDisplayType === "partyOriented") {
         resultType = "parties";
       } else if (resultsDisplayType === "candidateOriented" || resultsDisplayType === "partyCandidateOriented") {
         resultType = "partyCandidates";

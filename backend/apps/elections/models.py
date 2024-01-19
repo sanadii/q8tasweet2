@@ -281,13 +281,6 @@ class BaseElectionCommitteeResult(models.Model):
         blank=True,
         related_name='%(class)s_election_committees',
     )
-    election_candidate = models.ForeignKey(
-        ElectionCandidate,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='%(class)s_election_candidates',
-    )
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
 
@@ -301,7 +294,13 @@ class BaseElectionCommitteeResult(models.Model):
         ]
 
 class ElectionCommitteeResult(BaseElectionCommitteeResult, TrackModel):
-    election_candidate = models.ForeignKey('ElectionCandidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_result_candidates')
+    election_candidate = models.ForeignKey(
+        'ElectionCandidate',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='committee_result_candidates'
+        )
 
     class Meta:
         db_table = 'election_committee_result'
@@ -314,7 +313,7 @@ class ElectionPartyCommitteeResult(BaseElectionCommitteeResult, TrackModel):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='%(class)s_election_parties',
+        related_name='party_committee_result_candidates'
     )
 
     class Meta:
@@ -328,7 +327,7 @@ class ElectionPartyCandidateCommitteeResult(BaseElectionCommitteeResult, TrackMo
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='%(class)s_election_party_candidates',
+        related_name='party_candidate_committee_result_candidates'
     )
 
     class Meta:

@@ -28,7 +28,27 @@ const ResultsTab = () => {
   // Parties
   const [resultsDisplayType, setResultsDisplayType] = useState("partyCandidateOriented");
 
+  const createPartyCommitteeVoteList = (electionParties) => {
+    if (!electionParties) return [];
 
+    return electionParties.map(party => {
+      // Extracting committee votes for each party
+      const committeeVotes = party.committeeVotes.map(committeeVote => ({
+        committeeId: committeeVote.electionCommittee,
+        votes: committeeVote.votes
+      }));
+
+      return {
+        partyId: party.id,
+        partyName: party.name,
+        committeeVotes: committeeVotes
+      };
+    });
+  };
+
+  // Example usage
+  const partyCommitteeVoteList = createPartyCommitteeVoteList(electionParties);
+  console.log("Party Committee Vote List: ", partyCommitteeVoteList);
 
   // States
   const [columnEdited, setColumnEdited] = useState({});
@@ -85,6 +105,7 @@ const ResultsTab = () => {
     ), [parties, electionCommittees, columnEdited, handleVoteFieldChange, election]
   );
 
+
   // Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
   const transformedCandidateData = useMemo(
     () => transformResultData(
@@ -92,7 +113,8 @@ const ResultsTab = () => {
       electionCommittees,
       columnEdited,
       handleVoteFieldChange,
-      election
+      election,
+      partyCommitteeVoteList,
     ), [candidates, electionCommittees, columnEdited, handleVoteFieldChange, election]
   );
 
@@ -118,11 +140,13 @@ const ResultsTab = () => {
         Header: 'المرشح',
         accessor: 'name',
       },
-      
+
       {
         Header: 'المركز',
         accessor: 'position',
       },
+
+
     ];
 
     const voteColumn = [
@@ -158,20 +182,21 @@ const ResultsTab = () => {
     const partyCandidateTotalColumn = [
       {
         Header: 'المجموع',
-        accessor: 'partyCandidateTotal',
+        accessor: 'partyVote',
       },
     ]
     // Columns for when electionResultView is total or detailed
     if (electionResultView === "total") {
       return [
         ...baseColumns,
-        ...partyCandidateTotalColumn, // for partyCandidate
         ...voteColumn,
       ];
     } else {
       return [
         ...baseColumns,
-        { Header: 'المجموع', accessor: 'total' },
+        ...(resultsDisplayType === "partyCandidateOriented" ? partyCandidateTotalColumn : { Header: 'المجموع', accessor: 'total' }),
+
+        ,
         ...committeeColumns,
       ];
     }
