@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { electionSelector } from 'Selectors';
 import { Button, Col, Row, Card, CardHeader, Input } from "reactstrap";
 import { Loader, TableContainer } from "components";
+import { FormFields } from "components";
 
 const Parties = ({
     columns,
@@ -13,17 +14,18 @@ const Parties = ({
     HeaderVoteButton
 }) => {
     const { electionParties, electionCommittees, electionPartyCandidates, error } = useSelector(electionSelector);
+    const [selectedCommittee, setSelectedCommittee] = useState(null);
 
-    const [selectedCommittee, setSelectedCommittee] = useState(0);
+    console.log("selectedCommittee: ", selectedCommittee)
+    let displayData, partyData, candidateData;
 
-    let displayData;
     if (resultsDisplayType === "partyOriented") {
         displayData = transforedPartyData;
     } else {
         displayData = transformedCandidateData;
+        partyData = transforedPartyData;
+        candidateData = transformedCandidateData;
     }
-
-
 
     const getCandidatesForParty = useMemo(() => {
         return partyId => {
@@ -32,22 +34,83 @@ const Parties = ({
         };
     }, [transformedCandidateData]);
 
-    const handleSelectChange = (e) => {
-        const selectedCommitteeId = e.target.value;
-        // Handle the selected committee ID here
-    };
+    const ResultDisplayOption = [
+        { id: 1, name: "القوائم والمرشحين", value: "partyCandidateOriented" },
+        { id: 2, name: "القوائم فقط", value: "partyOriented" },
+        { id: 3, name: "المرشحين فقط", value: "candidateOriented" },
+    ]
+
+    const fields = [
+        {
+            id: "resultDisplayType-field",
+            name: "resultDisplayType",
+            label: "طريقة العرض",
+            type: "select",
+            options: ResultDisplayOption.map(item => ({
+                id: item.id,
+                label: item.name,
+                value: item.value
+            })),
+            onChange: (e) => setResultsDisplayType(e.target.value),
+            colSize: 6,
+        },
+        // {
+        //     id: "committee-field",
+        //     name: "committee",
+        //     label: "اختر اللجنة",
+        //     type: "select",
+        //     options: [
+        //         // Add the "Select Committee" option with a null value
+        //         { id: null, label: "اختر اللجنة", value: null },
+        //         ...electionCommittees.map(item => ({
+        //             id: item.id,
+        //             label: item.name,
+        //             value: item.id
+        //         }))
+        //     ],
+        //     onChange: (e) => setSelectedCommittee(e.target.value),
+        //     condition: electionCommittees.length > 0,
+        //     colSize: 6,
+        // },
+    ];
+
+    const renderDisplayFilter = () => (
+        <Row className="g-4 mb-4">
+            {fields.map((field) => (
+                (field.condition === undefined || field.condition) && (
+                    <div className="col d-flex g-2 row" key={field.id}>
+                        <div className="d-flex">
+                            <p>{field.label}</p>
+                            <select
+                                className="form-control mb-2"
+                                name={field.name}
+                                id={field.id}
+                                onChange={field.onChange}
+                                value={field.value}
+                            >
+                                {field.options.map((option) => (
+                                    <option key={option.id} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                )
+            ))}
+        </Row>
+    );
 
     const renderPartyCandidateOriented = () => (
         <Row>
-            {/* <button>تعديل أصوات المرشحين</button> */}
-            {electionParties.map((party, index) => {
+            {transforedPartyData.map((party, index) => {
                 const partyCandidates = getCandidatesForParty(party.id);
                 return (
                     <Col lg={4} key={party.id}>
                         <Card className="border card-border-secondary">
                             <CardHeader className="d-flex justify-content-between align-items-center">
                                 <h4><strong>{party.name}</strong></h4>
-                                <div className="list-inline hstack gap-2 mb-0"><strong>{party.votes}</strong></div>
+                                <div className="list-inline hstack gap-2 mb-0"><strong>التزام: {party.total}</strong></div>
                             </CardHeader>
                             {partyCandidates.length ? (
                                 <TableContainer
@@ -58,7 +121,9 @@ const Parties = ({
                                     tableClass="align-middle table-nowrap mb-0"
                                     theadClass="table-light table-nowrap"
                                     thClass="table-light text-muted"
-                                    isTableContainerFooter={false}
+                                    isTableFooter={false}
+                                    isSorting={false}
+                                    isTablePagination={false}
                                 />
                             ) : <Loader error={error} />}
                         </Card>
@@ -67,7 +132,6 @@ const Parties = ({
             })}
         </Row>
     );
-
 
     const renderCandidateOrPartyOriented = () => (
         <Row>
@@ -80,62 +144,22 @@ const Parties = ({
                     tableClass="align-middle table-nowrap mb-0"
                     theadClass="table-light table-nowrap"
                     thClass="table-light text-muted"
-                    isTableContainerFooter={false}
+                    isTableFooter={false}
                 />
             ) : <Loader error={error} />}
         </Row>
     );
 
+
     return (
-        <>
-            <Row className="g-4 mb-4">
-                <div className="d-flex align-items-center ">
-                    <div className="col d-flex row">
-                        <div className="d-flex">
-                            <p>طريقة العرض</p>
-                            <Input
-                                type="select"
-                                className="form-control mb-2"
-                                name="resultDisplayType"
-                                id="resultDisplayType"
-                                onChange={(e) => setResultsDisplayType(e.target.value)}
-                            >
-                                <option value="partyCandidateOriented">القوائم والمرشحين</option>
-                                <option value="partyOriented">القوائم فقط</option>
-                                <option value="candidateOriented">المرشحين فقط</option>
-                            </Input>
-                        </div>
-                    </div>
-                    <div className="col d-flex g-2 row">
-                        {electionCommittees.length < 1 &&
-                            <div className="d-flex">
-                                <p>اختر اللجنة</p>
-                                <Input
-                                    type="select"
-                                    className="form-control mb-2"
-                                    name="committee"
-                                    id="committee"
-                                    onChange={handleSelectChange}
-                                >
-                                    <option value="">-- جميع اللجان --</option>
-                                    {electionCommittees.map((committee) => (
-                                        <option key={committee.id} value={committee.id}>
-                                            {committee.name}
-                                        </option>
-                                    ))}
-                                </Input>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </Row>
+        <React.Fragment>
+            {renderDisplayFilter()}
 
             {resultsDisplayType === "partyCandidateOriented" ?
                 renderPartyCandidateOriented() : renderCandidateOrPartyOriented()}
-        </>
+        </React.Fragment>
     );
 
 };
 
 export default Parties;
-

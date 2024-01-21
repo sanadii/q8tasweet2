@@ -11,7 +11,7 @@ const Candidates = ({ columns, transformedCandidateData }) => {
           columns={columns}
           data={transformedCandidateData}
           customPageSize={50}
-          isTableContainerFooter={true}
+          isTableFooter={true}
           sortBy="name"
           sortAsc={true}
   

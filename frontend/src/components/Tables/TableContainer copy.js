@@ -64,7 +64,7 @@ const TableContainer = ({
   divClass,
 
   // Global Header----------
-  isTableContainerFooter,
+  isTableFooter,
 }) => {
   const {
     getTableProps,
@@ -255,7 +255,7 @@ const TableContainer = ({
                 );
               })}
             </tbody>
-            {isTableContainerFooter &&
+            {isTableFooter &&
               <tfoot>
                 {footerGroups.map((footerGroup) => (
                   <tr

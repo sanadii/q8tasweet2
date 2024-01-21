@@ -31,7 +31,8 @@ const TableContainer = ({
   divClass,
 
   // Global Header----------
-  isTableContainerFooter,
+  isTablePagination,
+  isTableFooter,
 }) => {
   const {
     getTableProps,
@@ -50,8 +51,11 @@ const TableContainer = ({
     setPageSize,
     state,
     preGlobalFilteredRows,
-
     state: { pageIndex, pageSize },
+
+    // Table Options
+    isSorting,
+
   } = useTable(
     {
       columns,
@@ -107,6 +111,15 @@ const TableContainer = ({
     };
   }, []);
 
+  const renderTableHeader = (column, isSorting) => (
+    <th key={column.id} className={thClass} {...(isSorting ? column.getSortByToggleProps() : {})}>
+      {column.render("Header")}
+      {isSorting && generateSortingIndicator(column)}
+      {/* <Filter column={column} /> */}
+    </th>
+  );
+  
+  
 
   return (
     <Fragment>
@@ -125,10 +138,11 @@ const TableContainer = ({
                     <th
                       key={column.id}
                       className={thClass}
-                      {...column.getSortByToggleProps()}
+                      {...(isSorting ? column.getSortByToggleProps() : {})}
                     >
+
                       {column.render("Header")}
-                      {generateSortingIndicator(column)}
+                      {isSorting && generateSortingIndicator(column)}
                       {/* <Filter column={column} /> */}
                     </th>
                   ))}
@@ -165,7 +179,7 @@ const TableContainer = ({
                 );
               })}
             </tbody>
-            {isTableContainerFooter &&
+            {isTableFooter &&
               <tfoot>
                 {footerGroups.map((footerGroup) => (
                   <tr
@@ -187,49 +201,54 @@ const TableContainer = ({
           </Table>
         </div>
 
-        <Row className="justify-content-md-end justify-content-center align-items-center p-2">
-          <Col className="col-md-auto">
-            <div className="d-flex gap-1">
-              <Button
-                color="primary"
-                onClick={previousPage}
-                disabled={!canPreviousPage}
-              >
-                {"<"}
-              </Button>
-            </div>
-          </Col>
-          <Col className="col-md-auto d-none d-md-block">
-            Page{" "}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>
-          </Col>
-          <Col className="col-md-auto">
-            <Input
-              type="number"
-              min={1}
-              style={{ width: 70 }}
-              max={pageOptions.length}
-              defaultValue={pageIndex + 1}
-              onChange={onChangeInInput}
-            />
-          </Col>
+        {isTablePagination !== false &&
 
-          <Col className="col-md-auto">
-            <div className="d-flex gap-1">
-              <Button color="primary" onClick={nextPage} disabled={!canNextPage}>
-                {">"}
-              </Button>
-            </div>
-          </Col>
-        </Row>
+          <Row className="justify-content-md-end justify-content-center align-items-center p-2">
+            <Col className="col-md-auto">
+              <div className="d-flex gap-1">
+                <Button
+                  color="primary"
+                  onClick={previousPage}
+                  disabled={!canPreviousPage}
+                >
+                  {"<"}
+                </Button>
+              </div>
+            </Col>
+            <Col className="col-md-auto d-none d-md-block">
+              Page{" "}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>
+            </Col>
+            <Col className="col-md-auto">
+              <Input
+                type="number"
+                min={1}
+                style={{ width: 70 }}
+                max={pageOptions.length}
+                defaultValue={pageIndex + 1}
+                onChange={onChangeInInput}
+              />
+            </Col>
+
+            <Col className="col-md-auto">
+              <div className="d-flex gap-1">
+                <Button color="primary" onClick={nextPage} disabled={!canNextPage}>
+                  {">"}
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        }
       </CardBody>
-
-      <CardFooter>
-        <TableContainerFooter />
-      </CardFooter>
-    </Fragment>
+      {
+        isTableFooter &&
+        <CardFooter>
+          <TableContainerFooter />
+        </CardFooter>
+      }
+    </Fragment >
   );
 };
 

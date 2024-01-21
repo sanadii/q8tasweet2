@@ -28,6 +28,7 @@ const ResultsTab = () => {
   // Parties
   const [resultsDisplayType, setResultsDisplayType] = useState("partyCandidateOriented");
 
+  console.log("resultsDisplayType: ", resultsDisplayType);
   const createPartyCommitteeVoteList = (electionParties) => {
     if (!electionParties) return [];
 
@@ -115,7 +116,8 @@ const ResultsTab = () => {
       handleVoteFieldChange,
       election,
       partyCommitteeVoteList,
-    ), [candidates, electionCommittees, columnEdited, handleVoteFieldChange, election]
+      resultsDisplayType,
+    ), [candidates, electionCommittees, columnEdited, handleVoteFieldChange, election, resultsDisplayType]
   );
 
 
@@ -134,19 +136,26 @@ const ResultsTab = () => {
 
   // Creating the columns for both Final and Detailed Results
   const createColumns = (electionResultView) => {
+
     // Base columns that are always present
     const baseColumns = [
-      {
-        Header: 'المرشح',
-        accessor: 'name',
-      },
-
       {
         Header: 'المركز',
         accessor: 'position',
       },
-
-
+      {
+        Header: 'المرشح',
+        accessor: 'name',
+      },
+      {
+        // for Candidates only: Sum of all committeeCandidateVotes
+        // for Parties
+        // - PartyCandidate View: Sum of all committeeCandidateVotes
+        // - Party View: Sum of all committee Party Votes
+        // - Candidates View: Sum of all committee Candidate Votes( + sumPartyVote)
+        Header: resultsDisplayType !== "partyOriented" ? 'مفرق' : 'المجموع',
+        accessor: 'sumVote',
+      },
     ];
 
     const voteColumn = [
@@ -182,31 +191,47 @@ const ResultsTab = () => {
     const partyCandidateTotalColumn = [
       {
         Header: 'المجموع',
-        accessor: 'partyVote',
-      },
+        accessor: 'sumPartyCandidateVote'
+      }
     ]
-    // Columns for when electionResultView is total or detailed
-    if (electionResultView === "total") {
-      return [
-        ...baseColumns,
-        ...voteColumn,
-      ];
-    } else {
-      return [
-        ...baseColumns,
-        ...(resultsDisplayType === "partyCandidateOriented" ? partyCandidateTotalColumn : { Header: 'المجموع', accessor: 'total' }),
 
-        ,
-        ...committeeColumns,
-      ];
+    const sumPartyVoteColumn = [
+      {
+        Header: 'الالتزام',
+        accessor: 'sumPartyVote',
+      }
+    ];
+
+    // Check for electionResultView and resultsDisplayType to determine columns
+    if (electionResultView === "total" && electionMethod === "candidateOnly") {
+      console.log("CHECK: resultsDisplayType: ", resultsDisplayType)
+      return [...baseColumns, ...voteColumn];
+    } else {
+      if (resultsDisplayType === "partyCandidateOriented") {
+        // return []
+        console.log("CHECK: resultsDisplayType: ", resultsDisplayType)
+        return [...baseColumns, ...partyCandidateTotalColumn,];
+
+      } else if (resultsDisplayType === "partyOriented") {
+        console.log("CHECK: resultsDisplayType: ", resultsDisplayType)
+        return [...baseColumns, ...committeeColumns];
+
+      } else if (resultsDisplayType === "candidateOriented") {
+        console.log("CHECK: resultsDisplayType: ", resultsDisplayType)
+        return [...baseColumns, ...partyCandidateTotalColumn, ...committeeColumns];
+      } else {
+        return []
+      }
     }
-    return [];
   };
+
+
 
 
   const columns = useMemo(() => {
     return createColumns(electionResultView);
   }, [
+    resultsDisplayType,
     electionResultView,
     candidates,
     electionCommittees,
@@ -226,8 +251,6 @@ const ResultsTab = () => {
                   // Title
                   ContainerHeaderTitle="النتائج التفصيلية"
                 />
-
-
                 {
                   (
                     electionMethod !== "candidateOnly" ?

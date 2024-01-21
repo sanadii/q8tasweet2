@@ -81,53 +81,59 @@ const calculateTotalVotes = (candidate, electionCommittees) => {
 // transformResultData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
 // including calculating the total votes and candidate positions.
 const transformResultData = (
-  electionCandidates,
+  electionContestants,
   electionCommittees,
   columnEdited,
   handleVoteFieldChange,
   election,
   partyCommitteeVoteList,
+  resultsDisplayType,
 ) => {
-  if (!electionCandidates || !electionCommittees || !election) return [];
+  if (!electionContestants || !electionCommittees || !election) return [];
 
-  console.log("partyCommitteeVoteList: ", partyCommitteeVoteList)
+  console.log("partyCommitteeVoteList: ", partyCommitteeVoteList);
 
-  const candidatesWithTotalVotes = electionCandidates.map((candidate) => {
-    const candidateVotes = candidate.votes ?? 0;
+  let contestantIndex = 1; // Initialize contestant index
 
-    const partyData = partyCommitteeVoteList?.find(party => party.partyId === candidate.electionParty);
-    const partyTotalVotes = partyData
+  const contestantTotalVoteUpdated = electionContestants.map((contestant) => {
+    const contestantVotes = contestant.votes ?? 0;
+
+    const partyData = partyCommitteeVoteList?.find(party => party.partyId === contestant.electionParty);
+    const sumPartyVote = partyData
       ? partyData.committeeVotes.reduce((total, committeeVote) => total + committeeVote.votes, 0)
       : 0;
 
-    const total = calculateTotalVotes(candidate, electionCommittees)
-
-    const PartyCandidateVote = partyTotalVotes + total;
+    const total = calculateTotalVotes(contestant, electionCommittees)
+    const sumPartyCandidateVote = sumPartyVote + total;
 
     const transformedResultFieldsData = {
-      'candidate.id': candidate.id,
-      position: candidate.position,
-      electionParty: candidate.electionParty,
-      name: candidate.name,
-      gender: candidate.gender,
-      image: candidate.imagePath,
-      isWinner: candidate.isWinner,
-      total: total,
-      partyVote: PartyCandidateVote,
+      id: contestant.id,
+      position: contestant.position,
+      electionParty: contestant.electionParty,
+      name: contestant.name, // Use contestantIndex + 1 as the index number
+      rankName: contestantIndex + 1 + ". " + contestant.name, // Use contestantIndex + 1 as the index number
+      gender: contestant.gender,
+      image: contestant.imagePath,
+      isWinner: contestant.isWinner,
+      total: resultsDisplayType === "candidateOriented" ? total : sumPartyCandidateVote,
+      sumVote: total,
+      sumPartyVote: sumPartyVote,
+      sumPartyCandidateVote: sumPartyCandidateVote,
     };
+    
 
     // Candidate Vote Field
     const noCommittee = "0";
     transformedResultFieldsData[`votes`] = columnEdited[0]
       ? <ResultInputField
         committeeId={noCommittee}
-        candidateId={candidate.id}
-        value={candidateVotes}
-        onChange={(value) => handleVoteFieldChange(noCommittee, candidate.id, value)}
+        contestantId={contestant.id}
+        value={contestantVotes}
+        onChange={(value) => handleVoteFieldChange(noCommittee, contestant.id, value)}
       />
-      : candidateVotes;
+      : contestantVotes;
 
-    // Committee Candidate Vote Field
+    // Committee Contestant Vote Field
     if (electionCommittees.length > 0) {
       electionCommittees.forEach(committee => {
         const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
@@ -142,21 +148,24 @@ const transformResultData = (
           : votes;
       });
     }
+
+    candidateIndex++; // Increment candidate index for the next candidate
     return transformedResultFieldsData;
   });
 
   // Calculate positions and determine winners, but do not sort by position
-  const calculateCandidatePosition = (resultData) => {
-    const sortedCandidates = [...resultData].sort((a, b) => b.total - a.total);
-    sortedCandidates.forEach((candidate, index) => {
+  const calculateContestantPosition = (resultData) => {
+    const sortedContestants = [...resultData].sort((a, b) => b.total - a.total);
+    sortedContestants.forEach((candidate, index) => {
       candidate.position = index + 1;
       candidate.isWinner = candidate.position <= (election.electSeats || 0);
     });
     return resultData; // Return the original list without sorting by position
   };
 
-  return calculateCandidatePosition(candidatesWithTotalVotes);
+  return calculateContestantPosition(contestantTotalVoteUpdated);
 };
+
 
 // useSaveCommitteeResults is a custom hook that dispatches an action to save committee results and handles local state updates related to editing.
 const useSaveCommitteeResults = (

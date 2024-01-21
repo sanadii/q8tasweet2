@@ -9,7 +9,7 @@ const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}
 
 const FormFields = ({ field, validation, inLineStyle }) => {
     const { id, label, name, type, colSize, icon, iconBg } = field;
-    const imageValue = validation.values.image;
+    const imageValue = validation?.values.image;
     const [imageSrc, setImageSrc] = useState(defaultAvatar);
     const [passwordShow, setPasswordShow] = useState(false);
 
