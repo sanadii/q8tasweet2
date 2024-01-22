@@ -101,44 +101,42 @@ const ResultsTab = () => {
 
     // Base columns that are always present
     const baseColumns = [
-      { Header: 'المركز', accessor: 'position', },
-      { Header: 'المرشح', accessor: 'name', },
+      { Header: 'المركز', accessor: 'position' },
+      { Header: 'المرشح', accessor: 'name' },
     ];
 
-    const totalVote = [{ Header: totalVoteHeader, accessor: 'sumVote', },];
+    const totalVote = [{ Header: totalVoteHeader, accessor: 'sumVote' }];
     const partyCandidateTotalColumn = [{ Header: 'المجموع', accessor: 'sumPartyCandidateVote' }]
-    const sumPartysingleCommitteeColumn = [{ Header: 'الالتزام', accessor: 'sumPartyVote', }];
+    const sumPartysingleCommitteeColumn = [{ Header: 'الالتزام', accessor: 'sumPartyVote' }];
 
+    const committeeColumHeader = (committee = { id: '0', committee: 0 }) => {
+      const committeeId = committee.id;
+      const committeeValue = committee.committee;
 
-    const singleCommitteeColumn = [
-      {
-        Header: () => (
-          <HeaderVoteButton
-            committeeId={"0"}
-            committee={0}
-            isColumnInEditMode={isColumnInEditMode}  // Need some work
-            isEditField={isEditField}
-            handleSaveResults={handleSaveResults}
-            toggleColumnEditMode={toggleColumnEditMode}
-          />
-        ),
-        accessor: 'votes',
-      },
-    ];
-
-    const multiCommitteeColumns = electionCommittees.map(committee => ({
-      Header: () => (
+      return (
         <HeaderVoteButton
-          committeeId={committee.id}
-          committee={committee}
+          committeeId={committeeId}
+          committee={committeeValue}
           isColumnInEditMode={isColumnInEditMode}
           isEditField={isEditField}
           handleSaveResults={handleSaveResults}
           toggleColumnEditMode={toggleColumnEditMode}
         />
-      ),
+      );
+    };
+
+    const singleCommitteeColumn = [
+      {
+        Header: () => committeeColumHeader(),
+        accessor: 'votes',
+      },
+    ];
+
+    const multiCommitteeColumns = electionCommittees.map(committee => ({
+      Header: () => committeeColumHeader(committee),
       accessor: `committee_${committee.id}`,
     }));
+
 
 
     // Check for electionResultView and resultsDisplayType to determine columns
@@ -148,7 +146,7 @@ const ResultsTab = () => {
 
       if (electionMethod === "candidateOnly") {
         if (isTotalViewCandidateOnly) {
-          additionalColumns = [...totalVote, ...singleCommitteeColumn];
+          additionalColumns = [...singleCommitteeColumn];
         } else if (isDetailedView) {
           additionalColumns = [...multiCommitteeColumns, ...sumPartysingleCommitteeColumn];
         }

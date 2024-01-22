@@ -68,7 +68,33 @@ const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
   );
 };
 
+const generateVoteFields = (contestant, electionCommittees, isColumnInEditMode, onVoteFieldChange) => {
+  const voteFields = {};
+  const noCommittee = "0";
+  voteFields[`votes`] = isColumnInEditMode[0]
+    ? <ResultInputField
+      committeeId={noCommittee}
+      contestantId={contestant.id}
+      value={contestant.votes ?? 0}
+      onChange={(value) => onVoteFieldChange(noCommittee, contestant.id, value)}
+    />
+    : contestant.votes ?? 0;
 
+  electionCommittees.forEach(committee => {
+    const committeeVote = contestant.committeeVotes?.find(v => v.electionCommittee === committee.id);
+    const votes = isColumnInEditMode[committee.id]?.[contestant.id] ?? committeeVote?.votes ?? 0;
+    voteFields[`committee_${committee.id}`] = isColumnInEditMode[committee.id]
+      ? <ResultInputField
+        committeeId={committee.id}
+        contestantId={contestant.id}
+        value={votes}
+        onChange={(value) => onVoteFieldChange(committee.id, contestant.id, value)}
+      />
+      : votes;
+  });
+
+  return voteFields;
+};
 // calculateTotalVotes is a utility function to sum up the votes for a candidate across all committees.
 const calculateTotalVotes = (candidate, electionCommittees) => {
   return electionCommittees.reduce((total, committee) => {
@@ -99,6 +125,10 @@ const usePartyCommitteeVotes = (electionParties) => {
 
   return partyCommitteeVoteList;
 };
+
+
+
+
 
 
 // transformResultData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
@@ -143,18 +173,12 @@ const transformResultData = (
       sumPartyVote: sumPartyVote,
       sumPartyCandidateVote: sumPartyCandidateVote,
     };
-    
+
 
     // Candidate Vote Field
-    const noCommittee = "0";
-    transformedResultFieldsData[`votes`] = isColumnInEditMode[0]
-      ? <ResultInputField
-        committeeId={noCommittee}
-        contestantId={contestant.id}
-        value={contestantVotes}
-        onChange={(value) => onVoteFieldChange(noCommittee, contestant.id, value)}
-      />
-      : contestantVotes;
+    // Add vote fields to the transformed data
+    const voteFields = generateVoteFields(contestant, electionCommittees, isColumnInEditMode, onVoteFieldChange);
+    Object.assign(transformedResultFieldsData, voteFields);
 
     // Committee Contestant Vote Field
     if (electionCommittees.length > 0) {

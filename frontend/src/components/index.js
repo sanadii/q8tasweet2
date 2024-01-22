@@ -12,6 +12,7 @@ export { default as Loader } from "./Components/Loader";
 export { default as Prism } from "./Components/Prism";
 export { default as ProfileDropdown } from "./Components/ProfileDropdown";
 export { default as ReviewSlider } from "./Components/ReviewSlider";
+export { default as SortingStatus } from "./Components/SortingStatus";
 export { default as withRouter } from "./Components/withRouter";
 
 // Layout
