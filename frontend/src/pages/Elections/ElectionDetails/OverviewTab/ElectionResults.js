@@ -45,6 +45,7 @@ const ElectionResults = () => {
     return Object.values(committeeResults).reduce((sum, currentVotes) => sum + currentVotes, 0);
   }, []);
 
+  
   const sortAndUpdatePositions = (candidates) => {
     const sortedCandidates = [...candidates].sort((a, b) => b.votes - a.votes);
     sortedCandidates.forEach((candidate, index) => {

@@ -13,7 +13,7 @@ const Parties = ({
     setResultsDisplayType,
     HeaderVoteButton
 }) => {
-    const { electionParties, electionCommittees, electionPartyCandidates, error } = useSelector(electionSelector);
+    const { electionParties, electionCommittees, electionPartyCandidates, electionMethod, error } = useSelector(electionSelector);
     const [selectedCommittee, setSelectedCommittee] = useState(null);
 
     console.log("selectedCommittee: ", selectedCommittee)
@@ -36,9 +36,10 @@ const Parties = ({
 
     const ResultDisplayOption = [
         { id: 1, name: "القوائم والمرشحين", value: "partyCandidateOriented" },
-        { id: 2, name: "القوائم فقط", value: "partyOriented" },
-        { id: 3, name: "المرشحين فقط", value: "candidateOriented" },
-    ]
+        ...(electionMethod !== "partyCandidateOnly" ? [{ id: 2, name: "القوائم فقط", value: "partyOriented" }] : []),
+        ...(electionMethod !== "partyOnly" ? [{ id: 3, name: "المرشحين فقط", value: "candidateOriented" }] : []),
+    ];
+
 
     const fields = [
         {
@@ -110,12 +111,15 @@ const Parties = ({
                         <Card className="border card-border-secondary">
                             <CardHeader className="d-flex justify-content-between align-items-center">
                                 <h4><strong>{party.name}</strong></h4>
-                                <div className="list-inline hstack gap-2 mb-0"><strong>التزام: {party.total}</strong></div>
+                                {(electionMethod !== "partyCandidateOnly") &&
+                                    <div className="list-inline hstack gap-2 mb-0"><strong>التزام: {party.total}</strong></div>
+                                }
                             </CardHeader>
                             {partyCandidates.length ? (
                                 <TableContainer
                                     columns={columns}
                                     data={partyCandidates}
+                                    sortBy="name"
                                     customPageSize={50}
                                     divClass="table-responsive table-card mb-3"
                                     tableClass="align-middle table-nowrap mb-0"

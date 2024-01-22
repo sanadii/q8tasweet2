@@ -1,93 +1,52 @@
 // React Core and Hooks
 import React, { useState, useMemo, useCallback } from "react";
-
-// Redux Related Imports
 import { useSelector } from "react-redux";
 import { electionSelector } from 'Selectors';
-
-// Component and UI Library Imports
-import { Loader, TableContainer, TableContainerHeader, ImageCandidateWinnerCircle } from "components";
-import { HeaderVoteButton, transformResultData, useSaveCommitteeResults } from './ResultHelper';
-
-// Utility and Third-Party Library Imports
-import { Col, Row, Card, CardHeader, CardBody, Input } from "reactstrap";
-import { toast, ToastContainer } from "react-toastify";
-
+import { TableContainerHeader } from "components";
+import { HeaderVoteButton, transformResultData, usePartyCommitteeVotes, useCommitteeResultSaver } from './ResultHelper';
+import { Col, Row, Card, CardBody } from "reactstrap";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import Parties from "./Parties";
 import Candidates from "./Candidates";
 
 const ResultsTab = () => {
-  const { election, electionMethod, electionResultView, electionResultParty, electionResultSorting, electionCandidates, electionParties, electionPartyCandidates, electionCommittees } = useSelector(electionSelector);
+  const { election, electionMethod, electionResultView, electionCandidates, electionParties, electionPartyCandidates, electionCommittees } = useSelector(electionSelector);
 
   // candidates based on election Type
   const candidates = electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
   const parties = electionMethod !== "candidateOnly" ? electionParties : electionParties;
+  const partyCommitteeVoteList = usePartyCommitteeVotes(electionParties);
 
   // Parties
   const [resultsDisplayType, setResultsDisplayType] = useState("partyCandidateOriented");
-
-  console.log("resultsDisplayType: ", resultsDisplayType);
-  const createPartyCommitteeVoteList = (electionParties) => {
-    if (!electionParties) return [];
-
-    return electionParties.map(party => {
-      // Extracting committee votes for each party
-      const committeeVotes = party.committeeVotes.map(committeeVote => ({
-        committeeId: committeeVote.electionCommittee,
-        votes: committeeVote.votes
-      }));
-
-      return {
-        partyId: party.id,
-        partyName: party.name,
-        committeeVotes: committeeVotes
-      };
-    });
-  };
-
-  // Example usage
-  const partyCommitteeVoteList = createPartyCommitteeVoteList(electionParties);
-  console.log("Party Committee Vote List: ", partyCommitteeVoteList);
-
-  // States
-  const [columnEdited, setColumnEdited] = useState({});
-  const [partyEdited, setPartyEdited] = useState({});
-  const [hasChanges, setHasChanges] = useState(false);
-
-
-  const [voteFieldEditedData, setVoteFieldEditedData] = useState({});
-  console.log("columnEdited? ", columnEdited, "hasChanges? ", hasChanges)
+  const [isColumnInEditMode, SetIsColumnInEditMode] = useState({});
+  const [isEditField, setIsEditField] = useState(false);
+  const [editedVoteFieldsData, setVoteFieldEditedData] = useState({});
 
 
   // Toggle Vote Column To Edit / Save / Close Mode
-  const toggleColumnToEdit = (committeeId) => {
-    setColumnEdited(prev => ({
+  const toggleColumnEditMode = (committeeId) => {
+    SetIsColumnInEditMode(prev => ({
       ...prev,
-      [committeeId]: !prev[committeeId], // Toggle the value for the specified committee
+      [committeeId]: !prev[committeeId],
     }));
 
-    setPartyEdited(prev => ({
+    setIsEditField(prev => ({
       ...prev,
-      [committeeId]: !prev[committeeId], // Toggle the value for the specified committee
-    }));
-
-    setHasChanges(prev => ({
-      ...prev,
-      [committeeId]: false, // Set hasChanges to false for the specified committee
+      [committeeId]: false,
     }));
 
   };
 
   // Handle Editing Cells
-  const handleVoteFieldChange = useCallback((committeeId, candidateId, newValue) => {
+  const onVoteFieldChange = useCallback((committeeId, candidateId, newValue) => {
     setVoteFieldEditedData(prev => ({
       ...prev, [committeeId]: { ...(prev[committeeId] || {}), [candidateId]: newValue },
     }));
 
-    // Set hasChanges for the specific committee to true
-    setHasChanges(prev => ({
+    // Set isEditField for the specific committee to true
+    setIsEditField(prev => ({
       ...prev,
       [committeeId]: true,
     }));
@@ -95,150 +54,165 @@ const ResultsTab = () => {
   }, []);
 
 
-  // Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
+  // Transformed Data [parties]
   const transforedPartyData = useMemo(
     () => transformResultData(
       parties,
       electionCommittees,
-      columnEdited,
-      handleVoteFieldChange,
+      isColumnInEditMode,
+      onVoteFieldChange,
       election
-    ), [parties, electionCommittees, columnEdited, handleVoteFieldChange, election]
+    ), [parties, electionCommittees, isColumnInEditMode, onVoteFieldChange, election]
   );
 
-
-  // Transformed Data [Taking ElectionCommitteeResults together with the result Field Edited]
+  // Transformed Data [candidates]
   const transformedCandidateData = useMemo(
     () => transformResultData(
       candidates,
       electionCommittees,
-      columnEdited,
-      handleVoteFieldChange,
+      isColumnInEditMode,
+      onVoteFieldChange,
       election,
       partyCommitteeVoteList,
       resultsDisplayType,
-    ), [candidates, electionCommittees, columnEdited, handleVoteFieldChange, election, resultsDisplayType]
+    ), [candidates, electionCommittees, isColumnInEditMode, onVoteFieldChange, election, resultsDisplayType]
   );
 
 
   // Handle Save Committee Results 
-  const handleSaveResults = useSaveCommitteeResults(
-    voteFieldEditedData,
-    columnEdited,
-    setColumnEdited,
+  const handleSaveResults = useCommitteeResultSaver(
+    editedVoteFieldsData,
+    isColumnInEditMode,
+    SetIsColumnInEditMode,
     setVoteFieldEditedData,
-    toggleColumnToEdit,
+    toggleColumnEditMode,
     electionMethod,
     resultsDisplayType,
   );
 
-
-
   // Creating the columns for both Final and Detailed Results
-  const createColumns = (electionResultView) => {
+  const generateResultColumns = (electionResultView) => {
+    const totalVoteHeader = resultsDisplayType !== "partyOriented" ? 'مفرق' : 'المجموع';
+    const isPartyOriented = resultsDisplayType === "partyOriented";
+    const isCandidateOriented = resultsDisplayType === "candidateOriented";
+    const isPartyCandidateOriented = resultsDisplayType === "partyCandidateOriented";
+    const isTotalViewCandidateOnly = electionResultView === "total" && electionMethod === "candidateOnly";
+    const isDetailedView = electionResultView === "detailed";
 
     // Base columns that are always present
     const baseColumns = [
-      {
-        Header: 'المركز',
-        accessor: 'position',
-      },
-      {
-        Header: 'المرشح',
-        accessor: 'name',
-      },
-      {
-        // for Candidates only: Sum of all committeeCandidateVotes
-        // for Parties
-        // - PartyCandidate View: Sum of all committeeCandidateVotes
-        // - Party View: Sum of all committee Party Votes
-        // - Candidates View: Sum of all committee Candidate Votes( + sumPartyVote)
-        Header: resultsDisplayType !== "partyOriented" ? 'مفرق' : 'المجموع',
-        accessor: 'sumVote',
-      },
+      { Header: 'المركز', accessor: 'position', },
+      { Header: 'المرشح', accessor: 'name', },
     ];
 
-    const voteColumn = [
+    const totalVote = [{ Header: totalVoteHeader, accessor: 'sumVote', },];
+    const partyCandidateTotalColumn = [{ Header: 'المجموع', accessor: 'sumPartyCandidateVote' }]
+    const sumPartysingleCommitteeColumn = [{ Header: 'الالتزام', accessor: 'sumPartyVote', }];
+
+
+    const singleCommitteeColumn = [
       {
         Header: () => (
           <HeaderVoteButton
             committeeId={"0"}
             committee={0}
-            columnEdited={columnEdited}  // Need some work
-            hasChanges={hasChanges}
+            isColumnInEditMode={isColumnInEditMode}  // Need some work
+            isEditField={isEditField}
             handleSaveResults={handleSaveResults}
-            toggleColumnToEdit={toggleColumnToEdit}
+            toggleColumnEditMode={toggleColumnEditMode}
           />
         ),
         accessor: 'votes',
       },
     ];
 
-    const committeeColumns = electionCommittees.map(committee => ({
+    const multiCommitteeColumns = electionCommittees.map(committee => ({
       Header: () => (
         <HeaderVoteButton
           committeeId={committee.id}
           committee={committee}
-          columnEdited={columnEdited}
-          hasChanges={hasChanges}
+          isColumnInEditMode={isColumnInEditMode}
+          isEditField={isEditField}
           handleSaveResults={handleSaveResults}
-          toggleColumnToEdit={toggleColumnToEdit}
+          toggleColumnEditMode={toggleColumnEditMode}
         />
       ),
       accessor: `committee_${committee.id}`,
     }));
 
-    const partyCandidateTotalColumn = [
-      {
-        Header: 'المجموع',
-        accessor: 'sumPartyCandidateVote'
-      }
-    ]
-
-    const sumPartyVoteColumn = [
-      {
-        Header: 'الالتزام',
-        accessor: 'sumPartyVote',
-      }
-    ];
 
     // Check for electionResultView and resultsDisplayType to determine columns
-    if (electionResultView === "total" && electionMethod === "candidateOnly") {
-      console.log("CHECK: resultsDisplayType: ", resultsDisplayType)
-      return [...baseColumns, ...voteColumn];
-    } else {
-      if (resultsDisplayType === "partyCandidateOriented") {
-        // return []
-        console.log("CHECK: resultsDisplayType: ", resultsDisplayType)
-        return [...baseColumns, ...partyCandidateTotalColumn,];
+    const determineColumns = () => {
 
-      } else if (resultsDisplayType === "partyOriented") {
-        console.log("CHECK: resultsDisplayType: ", resultsDisplayType)
-        return [...baseColumns, ...committeeColumns];
+      let additionalColumns = [];
 
-      } else if (resultsDisplayType === "candidateOriented") {
-        console.log("CHECK: resultsDisplayType: ", resultsDisplayType)
-        return [...baseColumns, ...partyCandidateTotalColumn, ...committeeColumns];
+      if (electionMethod === "candidateOnly") {
+        if (isTotalViewCandidateOnly) {
+          additionalColumns = [...totalVote, ...singleCommitteeColumn];
+        } else if (isDetailedView) {
+          additionalColumns = [...multiCommitteeColumns, ...sumPartysingleCommitteeColumn];
+        }
       } else {
-        return []
+        if (isPartyOriented) {
+          additionalColumns = [...totalVote, ...multiCommitteeColumns];
+
+        } else if (isPartyCandidateOriented) {
+          if (electionMethod === "partyOnly") {
+            additionalColumns = [];
+          } else if (electionMethod === "partyCandidateOnly") {
+            additionalColumns = [...totalVote];
+          } else if (electionMethod === "partyCandidateCombined") {
+            additionalColumns = [...totalVote, ...partyCandidateTotalColumn];
+          }
+
+        } else if (isCandidateOriented) {
+          if (electionMethod === "partyCandidateOnly") {
+            additionalColumns = [...totalVote, ...multiCommitteeColumns];
+          } else if (electionMethod === "partyCandidateCombined") {
+            additionalColumns = [...totalVote, ...partyCandidateTotalColumn, ...multiCommitteeColumns];
+          }
+        }
       }
-    }
+
+      return [...baseColumns, ...additionalColumns];
+    };
+
+    return determineColumns();
+
   };
 
 
-
-
   const columns = useMemo(() => {
-    return createColumns(electionResultView);
+    return generateResultColumns(electionResultView);
   }, [
     resultsDisplayType,
     electionResultView,
     candidates,
     electionCommittees,
-    columnEdited,
-    voteFieldEditedData,
+    isColumnInEditMode,
+    editedVoteFieldsData,
   ]);
 
+  const displayElectionResults = () => {
+    if (electionMethod !== "candidateOnly") {
+      return (
+        < Parties
+          columns={columns}
+          transformedCandidateData={transformedCandidateData}
+          transforedPartyData={transforedPartyData}
+          HeaderVoteButton={HeaderVoteButton}
+          resultsDisplayType={resultsDisplayType}
+          setResultsDisplayType={setResultsDisplayType}
+        />
+      );
+    }
+    return (
+      <Candidates
+        columns={columns}
+        transformedCandidateData={transformedCandidateData}
+      />
+    );
+  };
 
   return (
     <React.Fragment>
@@ -246,32 +220,8 @@ const ResultsTab = () => {
         <Col lg={12}>
           <Card id="electionCommitteeList">
             <CardBody>
-              <div>
-                <TableContainerHeader
-                  // Title
-                  ContainerHeaderTitle="النتائج التفصيلية"
-                />
-                {
-                  (
-                    electionMethod !== "candidateOnly" ?
-                      <Parties
-                        columns={columns}
-                        transformedCandidateData={transformedCandidateData}
-                        transforedPartyData={transforedPartyData}
-                        HeaderVoteButton={HeaderVoteButton}
-                        resultsDisplayType={resultsDisplayType}
-                        setResultsDisplayType={setResultsDisplayType}
-
-                      />
-                      :
-                      <Candidates
-                        columns={columns}
-                        transformedCandidateData={transformedCandidateData}
-
-                      />
-                  )
-                }
-              </div>
+              <TableContainerHeader ContainerHeaderTitle="تعديل نتائج الإنتخابات" />
+              {displayElectionResults()}
               <ToastContainer closeButton={false} limit={1} />
             </CardBody>
           </Card>

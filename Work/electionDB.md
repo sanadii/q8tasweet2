@@ -21,7 +21,7 @@ Details how election results are formatted and displayed. The structure combines
 
 ### Party Result Type
 (Used for PartyOnlySystem and CombinedCandidatePartySystem)
-- **combinedPartyCandidate**: Focuses solely on individual candidate votes, omitting party-based results.
+- **partyCandidateCombined**: Focuses solely on individual candidate votes, omitting party-based results.
 - **candidateOnly**: Focuses solely on individual candidate votes, omitting party-based results.
 - **partyOnly**: Provides insights into party-based voting patterns, essential in block voting scenarios.
 

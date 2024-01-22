@@ -16,7 +16,7 @@ export const PartyResultOptions = [
   {
     id: 1,
     name: "عرض نتائج القوائم والمرشحين",
-    value: "combinedPartyCandidate",
+    value: "partyCandidateCombined",
   },
   {
     id: 2,

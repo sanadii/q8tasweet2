@@ -7,14 +7,20 @@ export const ElectionMethodOptions = [
   },
   {
     id: '2',
-    name: "قوائم فقط",
+    name: "قوائم - قوائم فقط",
     value: "partyOnly",
     badgeClass: "badge bg-danger",
   },
   {
     id: '3',
-    name: "قوائم ومرشحين",
-    value: "combinedPartyCandidate",
+    name: "قوائم - مرشحين فقط",
+    value: "partyCandidateOnly",
+    badgeClass: "badge bg-danger",
+  },
+  {
+    id: '4',
+    name: "قوائم - قوائم ومرشحين",
+    value: "partyCandidateCombined",
     badgeClass: "badge bg-warning",
   },
 ];

@@ -11,7 +11,8 @@ from django.utils.translation import gettext_lazy as _
 class ElectionTypeOptions(models.TextChoices):
     CANDIDATE_ONLY_SYSTEM = 'candidateOnly', _('Candidate Only System')
     PARTY_ONLY_SYSTEM = 'partyOnly', _('Party Only System')
-    COMBINED_CANDIDATE_PARTY_SYSTEM = 'combinedPartyCandidate', _('Combined Candidate Party System')
+    PARTY_CANDIDATE_ONLY_SYSTEM = 'partyCandidateOnly', _('Party Candidate Only System')
+    COMBINED_PARTY_CANDIDATE_SYSTEM = 'partyCandidateCombined', _('Combined Party Candidate System')
     PROPORTIONAL_REPRESENTATION_SYSTEM = 'proportionalRepresentationSystem', _('Proportional Representation System')
     MIXED_ELECTORAL_SYSTEM = 'mixedElectoralSystem', _('Mixed Electoral System')
 

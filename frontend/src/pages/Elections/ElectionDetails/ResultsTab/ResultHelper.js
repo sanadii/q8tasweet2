@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useDispatch } from "react-redux";
 import { updateElectionResults, updateElectionPartyResults, updateElectionPartyCandidateResults } from "store/actions";
 
@@ -10,24 +10,24 @@ import { updateElectionResults, updateElectionPartyResults, updateElectionPartyC
 const HeaderVoteButton = ({
   committee,
   committeeId,
-  columnEdited,
-  hasChanges,
+  isColumnInEditMode,
+  isEditField,
   handleSaveResults,
-  toggleColumnToEdit,
+  toggleColumnEditMode,
 }) => {
 
   // Determine the button text and class based on the editing state
-  const buttonText = columnEdited[committeeId] ? (hasChanges[committeeId] ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
-  const buttonClass = columnEdited[committeeId] ? (hasChanges[committeeId] ? 'btn-success' : 'btn-danger') : 'btn-info';
+  const buttonText = isColumnInEditMode[committeeId] ? (isEditField[committeeId] ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
+  const buttonClass = isColumnInEditMode[committeeId] ? (isEditField[committeeId] ? 'btn-success' : 'btn-danger') : 'btn-info';
 
   const handleClick = () => {
-    if (hasChanges[committeeId]) {
+    if (isEditField[committeeId]) {
       console.log("It should handleSaveResults Results here")
       handleSaveResults(committeeId);
     }
-    console.log("It should toggleColumnToEdit Results here")
+    console.log("It should toggleColumnEditMode Results here")
 
-    toggleColumnToEdit(committeeId);
+    toggleColumnEditMode(committeeId);
   };
 
   return (
@@ -77,14 +77,37 @@ const calculateTotalVotes = (candidate, electionCommittees) => {
   }, 0);
 };
 
+// Party Committee Votes
+// Extract the votes from the party and make it as a list
+const usePartyCommitteeVotes = (electionParties) => {
+  const partyCommitteeVoteList = useMemo(() => {
+    if (!electionParties) return [];
+
+    return electionParties.map(party => {
+      const committeeVotes = party.committeeVotes.map(committeeVote => ({
+        committeeId: committeeVote.electionCommittee,
+        votes: committeeVote.votes
+      }));
+
+      return {
+        partyId: party.id,
+        partyName: party.name,
+        committeeVotes: committeeVotes
+      };
+    });
+  }, [electionParties]);
+
+  return partyCommitteeVoteList;
+};
+
 
 // transformResultData takes the raw election data and transforms it into a structure suitable for rendering by the frontend,
 // including calculating the total votes and candidate positions.
 const transformResultData = (
   electionContestants,
   electionCommittees,
-  columnEdited,
-  handleVoteFieldChange,
+  isColumnInEditMode,
+  onVoteFieldChange,
   election,
   partyCommitteeVoteList,
   resultsDisplayType,
@@ -111,7 +134,7 @@ const transformResultData = (
       position: contestant.position,
       electionParty: contestant.electionParty,
       name: contestant.name, // Use contestantIndex + 1 as the index number
-      rankName: contestantIndex + 1 + ". " + contestant.name, // Use contestantIndex + 1 as the index number
+      nameIndex: contestantIndex + 1 + ". " + contestant.name, // Use contestantIndex + 1 as the index number
       gender: contestant.gender,
       image: contestant.imagePath,
       isWinner: contestant.isWinner,
@@ -124,32 +147,32 @@ const transformResultData = (
 
     // Candidate Vote Field
     const noCommittee = "0";
-    transformedResultFieldsData[`votes`] = columnEdited[0]
+    transformedResultFieldsData[`votes`] = isColumnInEditMode[0]
       ? <ResultInputField
         committeeId={noCommittee}
         contestantId={contestant.id}
         value={contestantVotes}
-        onChange={(value) => handleVoteFieldChange(noCommittee, contestant.id, value)}
+        onChange={(value) => onVoteFieldChange(noCommittee, contestant.id, value)}
       />
       : contestantVotes;
 
     // Committee Contestant Vote Field
     if (electionCommittees.length > 0) {
       electionCommittees.forEach(committee => {
-        const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
-        const votes = columnEdited[committee.id]?.[candidate.id] ?? committeeVote?.votes ?? 0;
-        transformedResultFieldsData[`committee_${committee.id}`] = columnEdited[committee.id]
+        const committeeVote = contestant.committeeVotes?.find(v => v.electionCommittee === committee.id);
+        const votes = isColumnInEditMode[committee.id]?.[contestant.id] ?? committeeVote?.votes ?? 0;
+        transformedResultFieldsData[`committee_${committee.id}`] = isColumnInEditMode[committee.id]
           ? <ResultInputField
             committeeId={committee.id}
-            candidateId={candidate.id}
+            candidateId={contestant.id}
             value={votes}
-            onChange={(value) => handleVoteFieldChange(committee.id, candidate.id, value)}
+            onChange={(value) => onVoteFieldChange(committee.id, contestant.id, value)}
           />
           : votes;
       });
     }
 
-    candidateIndex++; // Increment candidate index for the next candidate
+    contestantIndex++; // Increment candidate index for the next candidate
     return transformedResultFieldsData;
   });
 
@@ -167,13 +190,13 @@ const transformResultData = (
 };
 
 
-// useSaveCommitteeResults is a custom hook that dispatches an action to save committee results and handles local state updates related to editing.
-const useSaveCommitteeResults = (
+// useCommitteeResultSaver is a custom hook that dispatches an action to save committee results and handles local state updates related to editing.
+const useCommitteeResultSaver = (
   voteFieldEditedData,
-  columnEdited,
-  setColumnEdited,
+  isColumnInEditMode,
+  SetIsColumnInEditMode,
   setVoteFieldEditedData,
-  toggleColumnToEdit,
+  toggleColumnEditMode,
   electionMethod,
   resultsDisplayType,
 ) => {
@@ -205,9 +228,9 @@ const useSaveCommitteeResults = (
 
 
       // Reset edited data for this specific committee
-      const updatededitedCommittee = { ...columnEdited };
+      const updatededitedCommittee = { ...isColumnInEditMode };
       delete updatededitedCommittee[committeeId];
-      setColumnEdited(updatededitedCommittee);
+      SetIsColumnInEditMode(updatededitedCommittee);
 
       // Reset the modified data for this committee if needed
       const updatedModifiedData = { ...voteFieldEditedData };
@@ -218,15 +241,15 @@ const useSaveCommitteeResults = (
     }
 
     // Toggle edit mode off immediately, don’t wait for the action to complete
-    toggleColumnToEdit(committeeId);
+    toggleColumnEditMode(committeeId);
 
   }, [
     voteFieldEditedData,
     dispatch,
-    columnEdited,
-    setColumnEdited,
+    isColumnInEditMode,
+    SetIsColumnInEditMode,
     setVoteFieldEditedData,
-    toggleColumnToEdit
+    toggleColumnEditMode
   ]);
 };
 
@@ -234,6 +257,7 @@ const useSaveCommitteeResults = (
 export {
   HeaderVoteButton,
   ResultInputField,
-  useSaveCommitteeResults,
+  useCommitteeResultSaver,
   transformResultData,
+  usePartyCommitteeVotes,
 }
