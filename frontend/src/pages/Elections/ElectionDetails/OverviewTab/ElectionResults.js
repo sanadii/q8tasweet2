@@ -11,18 +11,19 @@ import { Card, CardHeader, CardBody } from "reactstrap";
 import { ToastContainer } from "react-toastify";
 import { useWebSocketContext } from 'utils/WebSocketContext';
 import ElectionResultCandidates from "./ElectionResultCandidates";
+import ElectionResultParties from "./ElectionResultParties";
 
 
 const ElectionResults = () => {
 
   // States & Constants
-  const { election, electionResultView, electionResultParty, electionResultSorting, electionCandidates, electionPartyCandidates, electionCommittees, error } = useSelector(electionSelector);
+  const { election, electionMethod, electionResultView, electionResultParty, electionResultSorting, electionCandidates, electionPartyCandidates, electionCommittees, error } = useSelector(electionSelector);
   const [showDetailedResults, setShowDetailedResults] = useState(false);
   const [candidatesResult, setCandidatesResult] = useState([]);
   const [electionResultStatus, setElectionResultStatus] = useState("");
 
   // candidates based on election Type
-  const candidates = election.electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
+  const candidates = electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
 
   const electionSeats = election.electSeats;
   const calculateTotalVotes = useCallback((committeeResults) => {
@@ -197,11 +198,22 @@ const ElectionResults = () => {
           </div>
         </CardHeader>
         <CardBody>
-          <ElectionResultCandidates
-            candidatesResult={candidatesResult}
-            columns={columns}
-            error={error}
-          />
+
+          {
+            (electionMethod === "candidateOnly") ? (
+              <ElectionResultCandidates
+                candidatesResult={candidatesResult}
+                columns={columns}
+                error={error}
+              />
+            ) : (
+              <ElectionResultParties
+                candidatesResult={candidatesResult}
+                columns={columns}
+                error={error}
+              />
+            )
+          }
           <ToastContainer closeButton={false} limit={1} />
         </CardBody>
       </Card>

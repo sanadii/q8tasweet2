@@ -2,7 +2,6 @@
 import React from "react";
 import { Loader, TableContainer } from "components";
 
-
 const ElectionResultCandidates = ({ candidatesResult, columns, error }) => {
 
   return (
@@ -13,8 +12,6 @@ const ElectionResultCandidates = ({ candidatesResult, columns, error }) => {
           columns={columns}
           data={candidatesResult || []}
           customPageSize={50}
-
-          // Sorting
           sortBy="position"
 
           // Styling
