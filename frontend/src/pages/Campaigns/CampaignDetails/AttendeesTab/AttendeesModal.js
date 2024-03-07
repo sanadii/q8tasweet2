@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
-import { GenderOptions } from "constants";
+import { GenderOptions } from "shared/constants";
 import AttendeeUpdateModal from "./AttendeeUpdateModal";
 // import AttendeeViewModal from "./AttendeeViewModal"
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import withRouter from '../components/Components/withRouter';
+import { withRouter } from 'shared/components';
 
 //redux
 import { useSelector } from "react-redux";

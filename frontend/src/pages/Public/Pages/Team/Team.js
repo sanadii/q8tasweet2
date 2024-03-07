@@ -6,11 +6,11 @@ import DeleteModal from "../../../Components/Common/DeleteModal";
 import { ToastContainer } from 'react-toastify';
 
 //User Images
-import avatar2 from '../../../assets/images/users/avatar-2.jpg';
-import userdummyimg from '../../../assets/images/users/user-dummy-img.jpg';
+import avatar2 from '../"assets/images/users/avatar-2.jpg';
+import userdummyimg from '../"assets/images/users/user-dummy-img.jpg';
 
 //Small Images
-import smallImage9 from '../../../assets/images/small/img-9.jpg';
+import smallImage9 from '../"assets/images/small/img-9.jpg';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
 

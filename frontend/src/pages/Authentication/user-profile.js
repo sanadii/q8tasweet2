@@ -22,7 +22,7 @@ import { useFormik } from "formik";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
-import avatar from "../../assets/images/users/avatar-1.jpg";
+import avatar from "assets/images/users/avatar-1.jpg";
 // actions
 import { editProfile, resetProfileFlag } from "../../store/actions";
 

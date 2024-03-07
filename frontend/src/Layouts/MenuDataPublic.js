@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux"; // Don't forget to import useSelector
 import { useNavigate } from "react-router-dom";
 import { updateIconSidebar } from './Menus/utils';  // adjust the path according to your directory structure
-import { usePermission } from 'hooks';
+import { usePermission } from 'shared/hooks';
 
 // Menus
 import { useAdminMenu } from './Menus/AdminMenu';
@@ -17,7 +17,7 @@ import { useCampaignMenu } from './Menus/CampaignMenu';
 const Navdata = () => {
   const history = useNavigate();
   //state for collapsable menus
-  const [isCurrentState, setIscurrentState] = useState("Dashboard");
+  const [isCurrentState, setIsCurrentState] = useState("Dashboard");
 
   const {
     canChangeConfig,
@@ -38,13 +38,13 @@ const Navdata = () => {
   }, [history, isCurrentState, isSettings]);
 
   // Menus Constants
-  const AdminMenu = useAdminMenu(setIscurrentState);
-  const PublicMenu = usePublicMenu(setIscurrentState);
-  const CampaignMenu = useCampaignMenu(setIscurrentState);
-  const ModeratorMenu = useModeratorMenu(setIscurrentState);
-  const EditorMenu = useEditorMenu(setIscurrentState);
-  const ContributorMenu = useContributorMenu(setIscurrentState);
-  const SettingsMenu = useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings, isSettings);
+  const AdminMenu = useAdminMenu(setIsCurrentState);
+  const PublicMenu = usePublicMenu(setIsCurrentState);
+  const CampaignMenu = useCampaignMenu(setIsCurrentState);
+  const ModeratorMenu = useModeratorMenu(setIsCurrentState);
+  const EditorMenu = useEditorMenu(setIsCurrentState);
+  const ContributorMenu = useContributorMenu(setIsCurrentState);
+  const SettingsMenu = useSettingsMenu(isCurrentState, setIsCurrentState, setIsSettings, isSettings);
 
   const menuItems = [
     // ...(canChangeConfig ? [...AdminMenu, ...SettingsMenu] : []),

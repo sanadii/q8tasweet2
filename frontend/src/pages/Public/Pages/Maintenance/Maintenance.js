@@ -4,7 +4,7 @@ import { Col, Container, Row } from 'reactstrap';
 import ParticlesAuth from "../../../pages/AuthenticationInner/ParticlesAuth";
 
 //images import
-import maintenanceImg from '../../../assets/images/maintenance.png';
+import maintenanceImg from '../"assets/images/maintenance.png';
 
 const Maintenance = () => {
     document.title ="Maintenance | Velzon - React Admin & Dashboard Template";

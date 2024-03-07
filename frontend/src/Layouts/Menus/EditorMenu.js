@@ -2,16 +2,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function useEditorMenu(iscurrentState, setIscurrentState) {
+export function useEditorMenu(isCurrentState, setIsCurrentState) {
   const history = useNavigate();
 
   useEffect(() => {
     // State management
-    //   if (iscurrentState === "campaigns") {
+    //   if (isCurrentState === "campaigns") {
     //     history("/campaigns");
     //     document.body.classList.add("twocolumn-panel");
     //   }
-  }, [history, iscurrentState]);
+  }, [history, isCurrentState]);
 
   return [
     {
@@ -25,7 +25,7 @@ export function useEditorMenu(iscurrentState, setIscurrentState) {
       // link: "/campaigns",
       // click: function (e) {
       //   e.preventDefault();
-      //   setIscurrentState("campaigns");
+      //   setIsCurrentState("campaigns");
       // },
     },
   ];

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, CardHeader, CardBody, Col, Container, Form, Row } from "reactstrap";
-import BreadCrumb from "../../components/Components/BreadCrumb";
+import { BreadCrumb } from "shared/components";
 import { changeLayout } from 'store/actions'; // Import the action you need
 
 // Assuming you have imported the required layoutTypes and leftSidebarTypes

@@ -8,8 +8,8 @@ import { getGroupPermissions } from "store/actions";
 import { authSelector } from 'Selectors';
 
 // Components & Hooks
-import { BreadCrumb } from "components";
-import { useGroupManager } from "hooks"
+import { BreadCrumb } from "shared/components";
+import { useGroupManager } from "shared/hooks"
 
 
 // UI Components & styling imports

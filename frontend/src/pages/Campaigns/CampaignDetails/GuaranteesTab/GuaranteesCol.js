@@ -1,5 +1,5 @@
 import React from "react";
-import { GuaranteeStatusOptions, GenderOptions } from "constants";
+import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
 
 const Id = (cellProps) => {
     return (

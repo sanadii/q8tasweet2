@@ -177,6 +177,15 @@ function* getElectionDetails({ payload: election, view }) {
   }
 }
 
+// function* getElectionDetails({ payload: election, view }) {
+//   try {
+//     const response = yield call(getElectionDetailsApi, election, view);
+//     yield put(ElectionApiResponseSuccess(GET_ELECTION_DETAILS, response.data));
+//   } catch (error) {
+//     yield put(ElectionApiResponseError(GET_ELECTION_DETAILS, error));
+//   }
+// }
+
 function* onAddElection({ payload: election }) {
   try {
     const response = yield call(addElection, election);

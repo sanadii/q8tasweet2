@@ -4,7 +4,7 @@ import { userSelector } from 'Selectors';
 import { Card, CardHeader, CardBody, Button, Col, Row } from 'reactstrap';
 
 // Form Field validation & Fields
-import { FormFields } from "components"
+import { FormFields } from "shared/components"
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Form } from "reactstrap";
@@ -12,7 +12,7 @@ import { Form } from "reactstrap";
 
 
 import { UncontrolledAlert } from 'reactstrap';
-import { dataGroup, messageTypes, dataTypes, userGroups } from "constants";
+import { dataGroup, messageTypes, dataTypes, userGroups } from "shared/constants";
 import { useWebSocketContext } from 'utils/WebSocketContext';
 
 

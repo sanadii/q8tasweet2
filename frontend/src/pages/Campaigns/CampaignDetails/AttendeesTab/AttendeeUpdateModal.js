@@ -5,7 +5,7 @@ import { updateCampaignAttendee } from "store/actions";
 import { campaignSelector } from 'Selectors';
 
 // Component & Constants imports
-import { AttendeeStatusOptions, GenderOptions } from "constants";
+import { AttendeeStatusOptions, GenderOptions } from "shared/constants";
 
 // Form & Validation imports
 import * as Yup from "yup";

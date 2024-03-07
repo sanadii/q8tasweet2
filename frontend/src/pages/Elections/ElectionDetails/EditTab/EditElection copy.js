@@ -4,7 +4,7 @@ import { electionSelector, categorySelector } from 'Selectors';
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { updateElection } from "store/actions";
-import { useCategoryManager } from "hooks";
+import { useCategoryManager } from "shared/hooks";
 
 // Formik
 import * as Yup from "yup";
@@ -17,7 +17,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import Dropzone from "react-dropzone";
-import { StatusOptions, PriorityOptions, RoleOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "constants";
+import { StatusOptions, PriorityOptions, RoleOptions, ElectionTypeOptions, ElectionResultOptions, TagOptions } from "shared/constants";
 
 const EditElection = () => {
   const dispatch = useDispatch();

@@ -1,10 +1,14 @@
 // React & Redux imports
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 
-// Store & Selectors
+// Redux
+import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "store/actions";
 import { userSelector } from 'Selectors';
+
+// Shared
+import { FieldComponent } from "shared/components";
+import { GenderOptions } from "shared/constants"
 
 // Form validation imports
 import * as Yup from "yup";
@@ -12,10 +16,9 @@ import { useFormik } from "formik";
 
 // Reactstrap (UI) imports
 import { Button, Row, Form } from "reactstrap";
-import { FieldComponent } from "components";
 
 
-import { GenderOptions } from "constants"
+
 
 const EditPersonalDetails = () => {
     const dispatch = useDispatch();

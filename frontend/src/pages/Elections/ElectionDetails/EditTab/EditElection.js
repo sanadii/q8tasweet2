@@ -4,8 +4,8 @@ import { electionSelector, categorySelector } from 'Selectors';
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { updateElection } from "store/actions";
-import { useCategoryManager } from "hooks";
-import { FormFields } from "components";
+import { useCategoryManager } from "shared/hooks";
+import { FormFields } from "shared/components";
 
 // Formik
 import * as Yup from "yup";
@@ -14,7 +14,7 @@ import { Col, Row, Form, Card, CardHeader, CardBody } from "reactstrap";
 
 //Import Flatepicker
 import Dropzone from "react-dropzone";
-import { StatusOptions, PriorityOptions, RoleOptions, ElectionMethodOptions, ElectionResultOptions, PartyResultOptions, SortingResultOptions, TagOptions } from "constants";
+import { StatusOptions, PriorityOptions, RoleOptions, ElectionMethodOptions, ElectionResultOptions, PartyResultOptions, SortingResultOptions, TagOptions } from "shared/constants";
 
 const EditElection = () => {
   const dispatch = useDispatch();

@@ -8,9 +8,8 @@ import { getGroups, addNewGroup, updateGroup, deleteGroup } from "store/actions"
 import { authSelector } from 'Selectors';
 
 // Components & Hooks
-import DeleteModal from "components/Components/DeleteModal";
-import BreadCrumb from "components/Components/BreadCrumb";
-import { useGroupManager } from "hooks"
+import { BreadCrumb, DeleteModal } from "shared/components";
+import { useGroupManager } from "shared/hooks"
 
 // Formik & Validations
 import { useFormik } from "formik";

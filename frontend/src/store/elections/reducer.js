@@ -6,6 +6,7 @@ import {
   // Election
   GET_ELECTIONS,
   GET_ELECTION_DETAILS,
+  UPLOAD_ELECTION_DATA,
   ADD_ELECTION_SUCCESS,
   ADD_ELECTION_FAIL,
   UPDATE_ELECTION_SUCCESS,
@@ -129,6 +130,13 @@ const Elections = (state = IntialState, action) => {
             isElectionCreated: false,
             isElectionSuccess: true,
           };
+        case UPLOAD_ELECTION_DATA:
+          return {
+            ...state,
+            // electiondata: action.payload.data,
+            isElectionDataCreated: false,
+            isElectionDataSuccess: true,
+          };
         case GET_ELECTION_CANDIDATES:
           return {
             ...state,
@@ -188,6 +196,14 @@ const Elections = (state = IntialState, action) => {
             isElectionCreated: false,
             isElectionSuccess: true,
           };
+        case UPLOAD_ELECTION_DATA:
+          return {
+            ...state,
+            error: action.payload.error,
+            isElectionCreated: false,
+            isElectionSuccess: true,
+          };
+
         case GET_ELECTION_CANDIDATES: {
           return {
             ...state,
@@ -228,6 +244,14 @@ const Elections = (state = IntialState, action) => {
       return {
         ...state,
         electionDetails: action.payload,
+        isElectionCreated: false,
+      };
+    }
+
+    case UPLOAD_ELECTION_DATA: {
+      return {
+        ...state,
+        isElectionDataUploaded: true,
         isElectionCreated: false,
       };
     }

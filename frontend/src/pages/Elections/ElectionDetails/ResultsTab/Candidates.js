@@ -1,4 +1,4 @@
-import { TableContainer } from "components";
+import { TableContainer } from "shared/components";
 
 const Candidates = ({ columns, transformedCandidateData }) => {
     return (

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { updateIconSidebar } from './utils';  // adjust the path according to your directory structure
 
 
-export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings, isSettings) {
+export function useSettingsMenu(isCurrentState, setIsCurrentState, setIsSettings, isSettings) {
 
   const history = useNavigate();
 
@@ -32,7 +32,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
       link: "/dashboard",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("adminDashboard");
+        setIsCurrentState("adminDashboard");
       },
     },
     {
@@ -42,7 +42,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
       link: "/control-panel",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("adminControlPanel");
+        setIsCurrentState("adminControlPanel");
       },
     },
     {
@@ -51,7 +51,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
       link: "/dashboard/settings",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("options");
+        setIsCurrentState("options");
       },
     },
     {
@@ -60,7 +60,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
       link: "/dashboard/settings/categories",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("categories");
+        setIsCurrentState("categories");
       },
     },
     {
@@ -69,7 +69,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
       link: "/dashboard/settings/groups",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("groups");
+        setIsCurrentState("groups");
       },
     },
     {
@@ -78,7 +78,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
       link: "/dashboard/settings/group-permissions",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("group-permissions");
+        setIsCurrentState("group-permissions");
       },
     },
   ];

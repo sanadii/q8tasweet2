@@ -3,7 +3,7 @@ import { Card, Col, Collapse, Container, Row } from 'reactstrap';
 import classnames from "classnames";
 
 // Import Images
-import faqImg from "../../../assets/images/faq-img.png";
+import faqImg from "../"assets/images/faq-img.png";
 
 const Faqs = () => {
   const [col1, setcol1] = useState(true)

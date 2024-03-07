@@ -31,7 +31,7 @@ import {
 import classnames from "classnames";
 
 // Component Import
-import Loader from "../../../components/Components/Loader";
+import { Loader } from "shared/components";
 
 const SortingTab = ({ Candidates }) => {
   return (

@@ -5,18 +5,18 @@ import BreadCrumb from '../../../Components/Common/BreadCrumb';
 import classnames from "classnames";
 
 // import Images
-import smallImage1 from '../../../assets/images/small/img-1.jpg';
-import smallImage2 from '../../../assets/images/small/img-2.jpg';
-import smallImage3 from '../../../assets/images/small/img-3.jpg';
-import smallImage4 from '../../../assets/images/small/img-4.jpg';
-import smallImage5 from '../../../assets/images/small/img-5.jpg';
-import smallImage6 from '../../../assets/images/small/img-6.jpg';
-import smallImage7 from '../../../assets/images/small/img-7.jpg';
-import smallImage8 from '../../../assets/images/small/img-8.jpg';
-import smallImage9 from '../../../assets/images/small/img-9.jpg';
-import smallImage10 from '../../../assets/images/small/img-10.jpg';
-import smallImage11 from '../../../assets/images/small/img-11.jpg';
-import smallImage12 from '../../../assets/images/small/img-12.jpg';
+import smallImage1 from '../"assets/images/small/img-1.jpg';
+import smallImage2 from '../"assets/images/small/img-2.jpg';
+import smallImage3 from '../"assets/images/small/img-3.jpg';
+import smallImage4 from '../"assets/images/small/img-4.jpg';
+import smallImage5 from '../"assets/images/small/img-5.jpg';
+import smallImage6 from '../"assets/images/small/img-6.jpg';
+import smallImage7 from '../"assets/images/small/img-7.jpg';
+import smallImage8 from '../"assets/images/small/img-8.jpg';
+import smallImage9 from '../"assets/images/small/img-9.jpg';
+import smallImage10 from '../"assets/images/small/img-10.jpg';
+import smallImage11 from '../"assets/images/small/img-11.jpg';
+import smallImage12 from '../"assets/images/small/img-12.jpg';
 
 import { SearchGallery, news, video, swiper  } from '../../../common/data';
 

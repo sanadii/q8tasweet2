@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 
 // Import Images
-import img1 from "../../../assets/images/landing/features/img-1.png";
-import img2 from "../../../assets/images/landing/features/img-2.png";
-import img3 from "../../../assets/images/landing/features/img-3.png";
+import img1 from "../"assets/images/landing/features/img-1.png";
+import img2 from "../"assets/images/landing/features/img-2.png";
+import img3 from "../"assets/images/landing/features/img-3.png";
 
 const Features = () => {
     return (

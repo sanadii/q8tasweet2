@@ -5,26 +5,26 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { userSelector } from "Selectors";
 
-export function useCampaignMenu(iscurrentState, setIscurrentState) {
+export function useCampaignMenu(isCurrentState, setIsCurrentState) {
   const history = useNavigate();
 
   const { currentUserCampaigns } = useSelector(userSelector);
 
   useEffect(() => {
     // State management
-    if (iscurrentState === "campaigns") {
+    if (isCurrentState === "campaigns") {
       history("/campaigns");
       document.body.classList.add("twocolumn-panel");
     }
-  }, [history, iscurrentState]);
+  }, [history, isCurrentState]);
   
   useEffect(() => {
     // State management
-    if (iscurrentState === "campaigns") {
+    if (isCurrentState === "campaigns") {
       history("/campaigns");
       document.body.classList.add("twocolumn-panel");
     }
-  }, [history, iscurrentState]);
+  }, [history, isCurrentState]);
 
   // Menu items with campaign data
   const menuItems = [

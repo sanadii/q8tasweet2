@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function useAdminMenu(isCurrentState, setIscurrentState) {
+export function useAdminMenu(isCurrentState, setIsCurrentState) {
   const history = useNavigate();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       link: "/dashboard/elections",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("adminElections");
+        setIsCurrentState("adminElections");
       },
     },
     {
@@ -51,7 +51,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       link: "/dashboard/candidates",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("adminCandidates");
+        setIsCurrentState("adminCandidates");
       },
     },
     {
@@ -61,7 +61,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       link: "/dashboard/parties",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("adminParties");
+        setIsCurrentState("adminParties");
       },
     },
     {
@@ -71,7 +71,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       link: "/dashboard/campaigns",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("adminCampaigns");
+        setIsCurrentState("adminCampaigns");
       },
     },
     {
@@ -81,7 +81,7 @@ export function useAdminMenu(isCurrentState, setIscurrentState) {
       link: "/dashboard/users",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("adminUsers");
+        // setIsCurrentState("adminUsers");
       },
     },
   ];

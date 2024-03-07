@@ -8,7 +8,7 @@ import { getGroupPermissions } from "store/actions";
 import { groupPermissionSelector } from 'Selectors';
 
 // Components & Hooks
-import { BreadCrumb, Loader, TableContainer } from "components";
+import { BreadCrumb, Loader, TableContainer } from "shared/components";
 
 // UI Components & styling imports
 import { Container } from "reactstrap";

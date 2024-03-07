@@ -8,7 +8,7 @@ import { registerUser, apiError, resetRegisterFlag } from "store/actions";
 
 // Assets & components 
 import logoLight from "assets/images/logo-light.png";
-import { FormFields } from "components";
+import { FormFields } from "shared/components";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 
 

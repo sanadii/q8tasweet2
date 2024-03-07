@@ -6,9 +6,9 @@ import React, {
     useDispatch,
     useMemo,
     useCallback,
-  } from "react";
-  import { Link } from "react-router-dom";
-  import {
+} from "react";
+import { Link } from "react-router-dom";
+import {
     Card,
     CardBody,
     Col,
@@ -26,12 +26,12 @@ import React, {
     NavLink,
     TabContent,
     TabPane,
-  } from "reactstrap";
-  
-  import classnames from "classnames";
-  
-  // Component Import
-  import Loader from "../../../components/Components/Loader";
+} from "reactstrap";
+
+import classnames from "classnames";
+
+// Component Import
+import { Loader } from "shared/components";
 
 const AttendeesTab = ({ Candidates }) => {
     return (
@@ -45,4 +45,3 @@ const AttendeesTab = ({ Candidates }) => {
 };
 
 export default AttendeesTab;
-  

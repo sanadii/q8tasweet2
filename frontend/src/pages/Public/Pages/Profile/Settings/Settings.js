@@ -5,8 +5,8 @@ import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
 
 //import images
-import progileBg from '../../../../assets/images/profile-bg.jpg';
-import avatar1 from '../../../../assets/images/users/avatar-1.jpg';
+import progileBg from '../../"assets/images/profile-bg.jpg';
+import avatar1 from '../../"assets/images/users/avatar-1.jpg';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState("1");

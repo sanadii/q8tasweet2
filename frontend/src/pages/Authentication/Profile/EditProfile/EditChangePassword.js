@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { Button, Col, Form, Row } from 'reactstrap';
 import { userSelector } from 'Selectors';
-import { FieldComponent } from "components";
+import { FieldComponent } from "shared/components";
 import { changeUserPassword } from "store/actions";
 import { useFormik } from "formik";
 import * as Yup from "yup";

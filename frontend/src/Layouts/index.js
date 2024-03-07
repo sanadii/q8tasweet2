@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
-import withRouter from '../components/Components/withRouter';
+import { withRouter } from 'shared/components';
 import { layoutSelector } from 'Selectors/layoutSelector';
+import { Row, Col } from "reactstrap"
+import { campaignSelector } from 'Selectors';
+import SectionHeader from "pages/Campaigns/CampaignDetails/SectionHeader"
+import { Container } from "reactstrap";
 
 //import Components
 import Header from './Header';
@@ -20,7 +24,10 @@ import {
     changeLeftsidebarSizeType,
     changeLeftsidebarViewType,
     changeSidebarImageType,
-    changeSidebarVisibility
+    changeSidebarVisibility,
+
+    // Campaigns
+    getCampaignDetails,
 } from "../store/actions";
 
 //redux
@@ -29,6 +36,7 @@ import { useSelector, useDispatch } from "react-redux";
 const Layout = (props) => {
     const [headerClass, setHeaderClass] = useState("");
     const defaultLayout = props.defaultLayout;
+    const style = props.style;
 
     const dispatch = useDispatch();
     const {
@@ -44,6 +52,14 @@ const Layout = (props) => {
         sidebarVisibilitytype
     } = useSelector(layoutSelector);
 
+
+    const {
+        campaign,
+        campaignMembers,
+        campaignRoles,
+        campaignGuarantees,
+        campaignAttendees,
+    } = useSelector(campaignSelector);
     /*
     layout settings
     */
@@ -125,13 +141,22 @@ const Layout = (props) => {
                 <Sidebar
                     layoutType={layoutType}
                 />
-                <div className="main-content">
-                    {props.children}
+                <div className="main-content ">
+                    {props.style === "campaign" &&
+                        <div className="page-content">
+                            <Container fluid>
+                                <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
+                            </Container>
+                        </div>
+                    }
+                    <div className="p-3">
+                        {props.children}
+                    </div>
                     <Footer />
                 </div>
             </div>
             {/* <RightSidebar /> */}
-        </React.Fragment>
+        </React.Fragment >
 
     );
 };

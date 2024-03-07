@@ -2,8 +2,8 @@ import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { electionSelector } from 'Selectors';
 import { Button, Col, Row, Card, CardHeader, Input } from "reactstrap";
-import { Loader, TableContainer } from "components";
-import { FormFields } from "components";
+import { Loader, TableContainer } from "shared/components";
+import { FormFields } from "shared/components";
 
 const Parties = ({
     columns,

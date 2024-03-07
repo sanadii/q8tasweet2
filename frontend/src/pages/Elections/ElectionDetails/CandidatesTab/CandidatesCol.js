@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageCandidateWinnerCircle } from "components";
+import { ImageCandidateWinnerCircle } from "shared/components";
 
 
 const Id = (cellProps) => {

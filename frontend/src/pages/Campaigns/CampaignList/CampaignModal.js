@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
 // ------------ Custom Components & ConstantsImports ------------
-import { PriorityOptions, StatusOptions } from "constants";
+import { PriorityOptions, StatusOptions } from "shared/constants";
 
 import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";

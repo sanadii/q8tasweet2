@@ -5,10 +5,10 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports 
-import { useSupervisorMembers, useCampaignRoles } from "hooks";
+import { useSupervisorMembers, useCampaignRoles } from "shared/hooks";
 
 // Form validation imports
-import { FormFields } from "components"
+import { FormFields } from "shared/components"
 import * as Yup from "yup";
 import { useFormik } from "formik";
 

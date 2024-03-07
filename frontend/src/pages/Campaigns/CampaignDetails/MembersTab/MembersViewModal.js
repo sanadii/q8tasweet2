@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Row, Col, ModalBody } from "reactstrap";
 import { userSelector, campaignSelector } from 'Selectors';
 
-import { useSupervisorMembers, useCampaignRoles } from "hooks";
+import { useSupervisorMembers, useCampaignRoles } from "shared/hooks";
 
 const MembersViewModal = ({ campaignMember }) => {
 

@@ -9,18 +9,18 @@ import "swiper/css/pagination";
 import { Pagination, Autoplay, Navigation } from "swiper";
 
 //import Images
-import Img01 from "../../../assets/images/nft/img-01.jpg";
-import Img02 from "../../../assets/images/nft/img-02.jpg";
-import Img03 from "../../../assets/images/nft/img-03.jpg";
-import Img04 from "../../../assets/images/nft/img-04.jpg";
-import Img05 from "../../../assets/images/nft/img-05.jpg";
-import Img06 from "../../../assets/images/nft/img-06.jpg";
+import Img01 from "../"assets/images/nft/img-01.jpg";
+import Img02 from "../"assets/images/nft/img-02.jpg";
+import Img03 from "../"assets/images/nft/img-03.jpg";
+import Img04 from "../"assets/images/nft/img-04.jpg";
+import Img05 from "../"assets/images/nft/img-05.jpg";
+import Img06 from "../"assets/images/nft/img-06.jpg";
 
-// import GifImg01 from "../../../assets/images/nft/gif/img-1.gif";
-// import GifImg02 from "../../../assets/images/nft/gif/img-2.gif";
-// import GifImg03 from "../../../assets/images/nft/gif/img-3.gif";
-// import GifImg04 from "../../../assets/images/nft/gif/img-4.gif";
-// import GifImg05 from "../../../assets/images/nft/gif/img-5.gif";
+// import GifImg01 from "../"assets/images/nft/gif/img-1.gif";
+// import GifImg02 from "../"assets/images/nft/gif/img-2.gif";
+// import GifImg03 from "../"assets/images/nft/gif/img-3.gif";
+// import GifImg04 from "../"assets/images/nft/gif/img-4.gif";
+// import GifImg05 from "../"assets/images/nft/gif/img-5.gif";
 
 const Trending = () => {
     return (

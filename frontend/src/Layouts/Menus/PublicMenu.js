@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function usePublicMenu(isCurrentState, setIscurrentState) {
+export function usePublicMenu(isCurrentState, setIsCurrentState) {
   const history = useNavigate();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
       link: "/",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("publicHome");
+        setIsCurrentState("publicHome");
       },
     }, {
       id: "elections",
@@ -41,7 +41,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
       link: "/elections",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("publicElections");
+        setIsCurrentState("publicElections");
       },
     },
     {
@@ -51,7 +51,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
       link: "/candidates",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("publicCandidates");
+        setIsCurrentState("publicCandidates");
       },
     },
     {
@@ -61,7 +61,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
       link: "/about-us",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("publicAboutUs");
+        setIsCurrentState("publicAboutUs");
       },
     },
     {
@@ -71,7 +71,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
       link: "/contact-us",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("publicContactUs");
+        setIsCurrentState("publicContactUs");
       },
     },
     {
@@ -81,7 +81,7 @@ export function usePublicMenu(isCurrentState, setIscurrentState) {
       link: "/dashboard",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("dashboard");
+        setIsCurrentState("dashboard");
       },
     },
   ];

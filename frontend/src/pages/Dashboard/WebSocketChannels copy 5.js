@@ -6,7 +6,7 @@ import useWebSocket from 'react-use-websocket';
 import { Card, CardHeader, CardBody, Button, Col, Row } from 'reactstrap';
 
 // Form Field validation & Fields
-import { FormFields } from "components"
+import { FormFields } from "shared/components"
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Form } from "reactstrap";
@@ -14,8 +14,8 @@ import { Form } from "reactstrap";
 
 
 import { UncontrolledAlert } from 'reactstrap';
-import { dataGroup, messageTypes, socketChannels, dataTypes, userGroups } from "constants";
-import { useChannelStatuses } from 'hooks';
+import { dataGroup, messageTypes, socketChannels, dataTypes, userGroups } from "shared/constants";
+import { useChannelStatuses } from 'shared/hooks';
 import { useWebSocketContext } from 'utils/WebSocketContext';
 
 const SERVER_BASE_URL = 'ws://127.0.0.1:8000/ws';

@@ -8,8 +8,8 @@ import { addNewUser, updateUser } from "store/actions";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
-import { GenderOptions } from "constants"
-import { FieldComponent } from "components";
+import { GenderOptions } from "shared/constants"
+import { FieldComponent } from "shared/components";
 import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
 const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {

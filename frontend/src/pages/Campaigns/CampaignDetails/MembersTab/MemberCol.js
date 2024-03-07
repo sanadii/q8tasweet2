@@ -1,5 +1,5 @@
 import React from "react";
-import { usePermission, useDelete } from "hooks";
+import { usePermission, useDelete } from "shared/hooks";
 
 const Id = (cellProps) => {
     return (

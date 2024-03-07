@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { GuaranteeStatusOptions, GenderOptions } from "constants";
+import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
 import { addNewCampaignGuarantee, addNewCampaignAttendee } from "store/actions";
-import { usePermission } from 'hooks';
+import { usePermission } from 'shared/hooks';
 
 const Id = (cellProps) => {
     return (

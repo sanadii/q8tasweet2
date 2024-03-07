@@ -7,7 +7,7 @@ import { electionSelector } from 'Selectors';
 import { deleteElectionCommittee } from "store/actions";
 import CommitteeModal from "./CommitteeModal";
 import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Sorter, Actions } from "./CommitteesCol";
-import { usePermission, useDelete } from "hooks";
+import { usePermission, useDelete } from "shared/hooks";
 
 // Utility and helper imports
 import { isEmpty } from "lodash";
@@ -15,7 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import { DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
+import { DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "shared/components";
 
 // Reactstrap (UI) imports
 import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";

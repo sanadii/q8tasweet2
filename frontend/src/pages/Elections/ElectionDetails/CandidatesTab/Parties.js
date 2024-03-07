@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { electionSelector } from 'Selectors';
 import { Col, Row, Card, CardHeader } from "reactstrap";
-import { Loader, TableContainer } from "components";
+import { Loader, TableContainer } from "shared/components";
 
 const Parties = ({ columns, electionPartyButtons }) => {
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { ImageCandidateWinnerCircle } from "components";
-import { GenderOptions } from 'constants';
+import { ImageCandidateWinnerCircle } from "shared/components";
+import { GenderOptions } from "shared/constants/";
 
 
 const Id = (cellProps) => {

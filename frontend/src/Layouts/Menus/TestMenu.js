@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function useTestMenu(isCurrentState, setIscurrentState) {
+export function useTestMenu(isCurrentState, setIsCurrentState) {
   const history = useNavigate();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function useTestMenu(isCurrentState, setIscurrentState) {
       link: "/dashboard/test1",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("test1");
+        setIsCurrentState("test1");
       },
     },
     {
@@ -39,7 +39,7 @@ export function useTestMenu(isCurrentState, setIscurrentState) {
       link: "/dashboard/test2",
       click: function (e) {
         e.preventDefault();
-        setIscurrentState("test2");
+        setIsCurrentState("test2");
       },
     },
   ];

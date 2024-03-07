@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Card, CardHeader, CardBody, Col, Row, UncontrolledAlert } from "reactstrap";
 
 import { campaignSelector } from 'Selectors';
-import { messageTypes } from "constants";
+import { messageTypes } from "shared/constants";
 import { useWebSocketContext } from 'utils/WebSocketContext';
 
 const OverviewNotifications = () => {

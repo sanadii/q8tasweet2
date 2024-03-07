@@ -1,7 +1,7 @@
 // React imports
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Loader, TableContainer, ImageCandidateWinnerCircle } from "components";
+import { Loader, TableContainer, ImageCandidateWinnerCircle } from "shared/components";
 
 // Store & Selectors
 import { electionSelector } from 'Selectors';

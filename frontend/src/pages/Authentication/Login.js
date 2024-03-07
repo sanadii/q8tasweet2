@@ -13,7 +13,7 @@ import { createSelector } from 'reselect';
 
 // Assets & Components
 import logoLight from "assets/images/logo-light.png";
-import { withRouter, FormFields } from "components";
+import { withRouter, FormFields } from "shared/components";
 
 // Formik validation
 import * as Yup from "yup";

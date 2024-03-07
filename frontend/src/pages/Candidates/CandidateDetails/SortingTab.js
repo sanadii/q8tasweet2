@@ -31,16 +31,16 @@ import {
 import classnames from "classnames";
 
 // Component Import
-import Loader from "../../../components/Components/Loader";
+import { Loader } from "shared/components";
 
 const SortingTab = ({ Candidates }) => {
   return (
-      <React.Fragment>
-          <Row className="g-4 mb-3">
-              <h1>SortingTab</h1>
-          </Row>
+    <React.Fragment>
+      <Row className="g-4 mb-3">
+        <h1>SortingTab</h1>
+      </Row>
 
-      </React.Fragment>
+    </React.Fragment>
   );
 };
 

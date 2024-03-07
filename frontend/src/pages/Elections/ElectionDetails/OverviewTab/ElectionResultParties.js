@@ -1,6 +1,6 @@
 // React imports
 import React from "react";
-import { Loader, TableContainer } from "components";
+import { Loader, TableContainer } from "shared/components";
 
 
 const ElectionResultParties = ({ candidatesResult, columns, error }) => {

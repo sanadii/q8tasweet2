@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 import json
+import csv
+from django.views import View
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -134,8 +136,6 @@ class GetElections(APIView):
         }
 
 
-
-
 class GetElectionDetails(APIView):
     
     def get_permissions(self):
@@ -231,6 +231,20 @@ class DeleteElection(APIView):
             return JsonResponse({"data": "Election deleted successfully", "count": 1, "code": 200}, safe=False)
         except Election.DoesNotExist:
             return JsonResponse({"data": "Election not found", "count": 0, "code": 404}, safe=False)
+
+
+class UploadElectionData(View):
+    def post(self, request):
+        file = request.FILES['file']
+        reader = csv.reader(file.read().decode('utf-8').splitlines())
+        for row in reader:
+            # Assuming the CSV file has name and year columns
+            Election.objects.create(name=row[0], year=row[1])
+        return JsonResponse({'status': 'success'})
+
+    def get(self, request):
+        # Handle GET request if necessary, or remove this method
+        return JsonResponse({'status': 'error'}, status=400)
 
 
 # Election Candidate

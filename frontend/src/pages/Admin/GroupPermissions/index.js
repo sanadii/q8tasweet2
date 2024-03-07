@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getGroupPermissions } from "store/actions";
 import { groupPermissionSelector } from 'Selectors';
 import { Container } from "reactstrap";
-import { BreadCrumb, Loader, TableContainer } from "components";
+import { BreadCrumb, Loader, TableContainer } from "shared/components";
 import SimpleBar from "simplebar-react";
 import { Link } from "react-router-dom";
 

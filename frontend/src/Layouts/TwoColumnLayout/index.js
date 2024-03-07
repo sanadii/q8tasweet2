@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import { Collapse, Container } from 'reactstrap';
-import withRouter from 'components/Components/withRouter';
+import { withRouter } from 'shared/components';
 
 import logoSm from "assets/images/logo-sm.png";
 
@@ -207,9 +207,9 @@ const TwoColumnLayout = (props) => {
                                                                         to="/#"
                                                                         data-bs-toggle="collapse"
                                                                     > {props.t(subItem.label)}
-                                                                    {subItem.badgeName ?
-                                                                        <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
-                                                                    : null}
+                                                                        {subItem.badgeName ?
+                                                                            <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
+                                                                            : null}
                                                                     </Link>
                                                                     <Collapse className="menu-dropdown" isOpen={subItem.stateVariables} id={item.id}>
                                                                         <ul className="nav nav-sm flex-column">

@@ -5,10 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 // Action & Selector imports
 import { addNewElectionCommittee, updateElectionCommittee, getCampaignSorters } from "store/actions";
 import { electionSelector } from 'Selectors';
-import { FormFields } from "components";
+import { FormFields } from "shared/components";
 
 // Constants & Component imports
-import { GenderOptions } from "constants";
+import { GenderOptions } from "shared/constants";
 
 // Form & validation imports
 import { useFormik } from "formik";

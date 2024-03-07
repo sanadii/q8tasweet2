@@ -9,8 +9,8 @@ import { partySelector } from 'Selectors';
 // Custom Components, Constants & Hooks Imports
 import PartyModal from "./PartyModal"
 import { Id, CheckboxHeader, CheckboxCell, Name, Status, Priority, CreateBy, Actions } from "./PartyListCol";
-import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "components";
-import { useDelete, useFilter } from "hooks"
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
+import { useDelete, useFilter } from "shared/hooks"
 
 // Toast & Styles
 import { Col, Row, Card, CardBody } from "reactstrap";

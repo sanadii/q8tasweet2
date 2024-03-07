@@ -5,9 +5,9 @@ import { campaignSelector } from 'Selectors';
 
 // Component imports
 import { Col, Row, Card, CardBody } from "reactstrap";
-import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "../../../../components";
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "../../../../shared/components";
 import { Id, Name, Phone, Attended, Status, Guarantor, Actions } from "./GuaranteesCol";
-import { useDelete, useFilter } from "hooks"
+import { useDelete, useFilter } from "shared/hooks"
 
 import GuaranteesModal from "./GuaranteesModal";
 

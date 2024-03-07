@@ -11,10 +11,9 @@ import { campaignSelector } from 'Selectors';
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import SwiperCore, { Autoplay } from "swiper";
 
-// Components & Hooks
-import { ImageLarge, SectionBackagroundImage } from "components";
-import { usePermission } from 'hooks';
-import Loader from "components/Components/Loader";
+// Shared
+import { ImageLarge, SectionBackagroundImage, Loader } from "shared/components";
+import { usePermission } from 'shared/hooks';
 
 //import Tabs & Widges
 import OverviewTab from "./OverviewTab";

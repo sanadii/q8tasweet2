@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactApexChart from "react-apexcharts";
 
-import getChartColorsArray from "../../../components/Charts/ChartsDynamicColor";
+import { getChartColorsArray } from "../../../shared/shared/components";
 
 const SimpleDonutCharts = ({ dataColors }) => {
     var chartDonutBasicColors = getChartColorsArray(dataColors);

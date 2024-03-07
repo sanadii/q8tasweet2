@@ -7,7 +7,7 @@ import ReactApexChart from "react-apexcharts";
 // import smallImage3 from 'assets/images/small/img-3.jpg';
 // import smallImage4 from 'assets/images/small/img-4.jpg';
 
-import getChartColorsArray from "components/Charts/ChartsDynamicColor";
+import { getChartColorsArray } from "shared/components";
 
 const SimplePie = ({ dataColors, chartWidth, chartHeight }) => {
     var chartPieBasicColors = getChartColorsArray(dataColors);

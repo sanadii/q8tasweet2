@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import { Container, Row } from "reactstrap";
-import { BreadCrumb } from "components";
+import { BreadCrumb } from "shared/components";
 
 
 const Dashboard = () => {

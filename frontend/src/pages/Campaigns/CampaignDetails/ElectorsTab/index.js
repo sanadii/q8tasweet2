@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getElectors } from "../../../../store/actions";
-import { Loader, TableContainer } from "components";
+import { Loader, TableContainer } from "shared/components";
 import { campaignSelector, electorSelector } from 'Selectors';
 
 // Component imports

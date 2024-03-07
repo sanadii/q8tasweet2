@@ -16,6 +16,9 @@ import {
   DELETE_ELECTION,
   DELETE_ELECTION_SUCCESS,
   DELETE_ELECTION_FAIL,
+  UPLOAD_ELECTION_DATA,
+  UPLOAD_ELECTION_DATA_SUCCESS,
+  UPLOAD_ELECTION_DATA_FAIL,
 
 
   // Election Candidate
@@ -119,6 +122,12 @@ export const getElectionDetails = (election, view) => ({
   payload: election, view
 });
 
+// Upload Election Data
+export const uploadElectionData = (election) => ({
+  type: UPLOAD_ELECTION_DATA,
+  payload: election,
+});
+
 // Add New Election
 export const addElection = (election) => ({
   type: ADD_ELECTION,
@@ -167,6 +176,7 @@ export const deleteElectionFail = (error) => ({
   type: DELETE_ELECTION_FAIL,
   payload: error,
 });
+
 
 // ElectionCandidates
 export const getElectionCandidates = (election) => ({

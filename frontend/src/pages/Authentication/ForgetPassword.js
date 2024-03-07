@@ -15,11 +15,11 @@ import { useFormik } from "formik";
 import { userForgetPassword } from "../../store/actions";
 
 // import images
-// import profile from "../../assets/images/bg.png";
-import logoLight from "../../assets/images/logo-light.png";
+// import profile from "assets/images/bg.png";
+import logoLight from "assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 
-import withRouter from "../../components/Components/withRouter";
+import { withRouter } from "shared/components";
 
 const ForgetPasswordPage = props => {
   const dispatch = useDispatch();
@@ -44,11 +44,11 @@ const ForgetPasswordPage = props => {
     forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
   }));
 
-document.title ="Reset Password | Q8Tasweet - React Admin & Dashboard Template";
+  document.title = "Reset Password | Q8Tasweet - React Admin & Dashboard Template";
   return (
     <ParticlesAuth>
       <div className="auth-page-content">
-        
+
         <Container>
           <Row>
             <Col lg={12}>
@@ -78,7 +78,7 @@ document.title ="Reset Password | Q8Tasweet - React Admin & Dashboard Template";
                       colors="primary:#0ab39c"
                       className="avatar-xl"
                       style={{ width: "120px", height: "120px" }}
-                      >
+                    >
                     </lord-icon>
 
                   </div>

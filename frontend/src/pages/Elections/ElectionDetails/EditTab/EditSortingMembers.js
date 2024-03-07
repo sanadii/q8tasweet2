@@ -4,7 +4,7 @@ import { electionSelector, categorySelector } from 'Selectors';
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { updateElection } from "store/actions";
-import { useCategoryManager } from "hooks";
+import { useCategoryManager } from "shared/hooks";
 
 // Formik
 import * as Yup from "yup";

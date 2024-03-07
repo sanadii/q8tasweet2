@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Card, CardBody } from "reactstrap";
 import { userSelector, campaignSelector } from 'Selectors';
-import { usePermission, useCampaignMemberRoles, useCurrentCampaignMemberRole } from 'hooks';
+import { usePermission, useCampaignMemberRoles, useCurrentCampaignMemberRole } from 'shared/hooks';
 
 const OverviewSidebar = () => {
     const {

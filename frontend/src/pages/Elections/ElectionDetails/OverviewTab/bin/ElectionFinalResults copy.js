@@ -1,16 +1,16 @@
 // React imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { ImageCandidateWinnerCircle } from "components";
+import { ImageCandidateWinnerCircle } from "shared/components";
 
 // Store & Selectors
 import { electionSelector } from 'Selectors';
 // import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
 
 // Common Components
-import { Loader, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
+import { Loader, ExportCSVModal, TableContainer, TableContainerHeader } from "shared/components";
 // import { calculateCandidatePosition } from "./CandidateCalculations"
-import { usePermission, useDelete } from "hooks";
+import { usePermission, useDelete } from "shared/hooks";
 import { transformResultData } from '../ResultsTab/ResultHelper'; // Importing the transformData function
 
 // UI & Utilities

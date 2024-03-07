@@ -7,7 +7,7 @@ import { updateCampaign, getCampaignModerators } from "store/actions";
 import { userSelector, campaignSelector } from 'Selectors';
 
 // Component & Constants imports
-import { FormFields } from "components"
+import { FormFields } from "shared/components"
 import AddCampaignModerator from "./AddCampaignModerator";
 
 // Form validation imports

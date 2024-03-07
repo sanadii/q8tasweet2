@@ -14,8 +14,8 @@ import CampaignModal from "../CampaignsTab/CampaignModal";
 import Candidates from "./Candidates";
 import Parties from "./Parties";
 
-import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "components";
-import { usePermission, useDelete } from "hooks";
+import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "shared/components";
+import { usePermission, useDelete } from "shared/hooks";
 
 // UI & Utilities
 import { Button, Col, Row, Card, CardBody, Nav, NavItem, NavLink } from "reactstrap";

@@ -44,7 +44,7 @@ import {
   ElectionMethodOptions,
   ElectionResultOptions,
   TagOptions,
-} from "constants";
+} from "shared/constants";
 
 const EditTab = ({ user }) => {
   const dispatch = useDispatch();

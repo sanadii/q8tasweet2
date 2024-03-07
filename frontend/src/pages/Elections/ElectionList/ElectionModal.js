@@ -12,9 +12,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { Row, Form, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 
 // Custom Components & ConstantsImports
-import { FormFields } from "components";
-import { ElectionMethodOptions, ElectionResultOptions, ElectionPartyResultOptions, ElectionSortingResultOptions, PriorityOptions, StatusOptions } from "constants";
-import { useCategoryManager } from "hooks";
+import { FormFields } from "shared/components";
+import { ElectionMethodOptions, ElectionResultOptions, ElectionPartyResultOptions, ElectionSortingResultOptions, PriorityOptions, StatusOptions } from "shared/constants";
+import { useCategoryManager } from "shared/hooks";
 
 
 const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {

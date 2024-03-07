@@ -9,8 +9,8 @@ import { getElections, deleteElection, getCategories } from "store/actions";
 // Components & Columns
 import ElectionModal from "./ElectionModal";
 import { Id, CheckboxHeader, CheckboxCell, Name, DueDate, Status, Priority, Category, CreateBy, Actions } from "./ElectionListCol";
-import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "components";
-import { useDelete, useFilter, useFetchDataIfNeeded } from "hooks"
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
+import { useDelete, useFilter, useFetchDataIfNeeded } from "shared/hooks"
 
 // UI, Styles & Notifications
 import { Col, Row, Card, CardBody } from "reactstrap";

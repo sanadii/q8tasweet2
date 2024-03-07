@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { updateIconSidebar } from './utils';  // adjust the path according to your directory structure
 
 
-export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings, isSettings) {
+export function useSettingsMenu(isCurrentState, setIsCurrentState, setIsSettings, isSettings) {
 
   const history = useNavigate();
 
@@ -36,7 +36,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
       click: function (e) {
         e.preventDefault();
         setIsSettings(!isSettings);
-        setIscurrentState("settings");
+        setIsCurrentState("settings");
         updateIconSidebar(e);
       },
       subItems: [
@@ -47,7 +47,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
           parentId: "settings",
           click: function (e) {
             e.preventDefault();
-            setIscurrentState("options");
+            setIsCurrentState("options");
           },
         },
         {
@@ -57,7 +57,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
           parentId: "settings",
           click: function (e) {
             e.preventDefault();
-            setIscurrentState("categories");
+            setIsCurrentState("categories");
           },
         },
         {
@@ -67,7 +67,7 @@ export function useSettingsMenu(isCurrentState, setIscurrentState, setIsSettings
           parentId: "settings",
           click: function (e) {
             e.preventDefault();
-            setIscurrentState("groups");
+            setIsCurrentState("groups");
           },
         },
       ],

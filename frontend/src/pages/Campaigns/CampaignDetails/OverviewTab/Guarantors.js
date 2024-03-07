@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 // Store & Selectors
 import { campaignSelector } from 'Selectors';
 
-import { Loader, TableContainer } from "components";
+import { Loader, TableContainer } from "shared/components";
 import {
     getAggregatedGuarantorData,
     constructStatusColumns,
     getBgClassForStatus,
-} from 'hooks/campaignCalculation';
+} from 'shared/hooks';
 
 // UI & Utilities
 import { Card, CardBody, Col, Row } from "reactstrap";

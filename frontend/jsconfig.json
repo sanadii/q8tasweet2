@@ -2,9 +2,12 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "components/*": ["src/components/*"],
-      "constants/*": ["src/constants/*"],
-      "hooks/*": ["src/hooks/*"],
+      "shared/components/*": ["src/shared/components/*"],
+      "shared/constants/*": ["src/shared/constants/*"],
+      "shared/contexts/*": ["src/shared/contexts/*"],
+      "shared/hooks/*": ["src/shared/hooks/*"],
+      "store/*": ["src/store/*"],
+      "assets/*": ["src/assets/*"],
       "@/*": ["./*"]
 
     }

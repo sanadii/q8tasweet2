@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 import { electionSelector, categorySelector } from 'Selectors';
 
 // Components & Hooks
-import { ImageMedium } from "components";
-import { SectionBackagroundImage } from "components";
-import { StatusBadge, PriorityBadge } from "constants";
+import { ImageMedium } from "shared/components";
+import { SectionBackagroundImage } from "shared/components";
+import { StatusBadge, PriorityBadge } from "shared/constants";
 
 // UI & Utilities
 import { Col, Row } from "reactstrap";

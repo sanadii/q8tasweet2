@@ -12,8 +12,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom component imports
-import { ImageCircle, Loader, DeleteModal, TableContainer } from "components";
-import { MemberRoleOptions, MemberStatusOptions } from "constants";
+import { ImageCircle, Loader, DeleteModal, TableContainer } from "shared/components";
+import { MemberRoleOptions, MemberStatusOptions } from "shared/constants";
 
 // Reactstrap imports
 import { Col, Row, Card, CardBody } from "reactstrap";

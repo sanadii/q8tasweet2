@@ -132,7 +132,7 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignSuccess: true,
           };
         case GET_CAMPAIGN_DETAILS:
-          console.log("GET_CAMPAIGN_DETAILS ERROR LOGGING Payload:", action.payload); // Log the payload
+          // console.log("GET_CAMPAIGN_DETAILS ERROR LOGGING Payload:", action.payload); // Log the payload
 
           return {
             ...state,

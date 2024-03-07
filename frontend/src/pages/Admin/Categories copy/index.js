@@ -3,10 +3,9 @@ import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeade
 import SimpleBar from "simplebar-react";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import DeleteModal from "../../../components/Components/DeleteModal";
-import BreadCrumb from "../../../components/Components/BreadCrumb";
+import { BreadCrumb, DeleteModal } from ".shared/components";
+import useCategoryManager from "shared/hooks";
 import { categorySelector } from 'Selectors';
-import useCategoryManager from "../../../hooks/CategoryHooks";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -183,7 +182,7 @@ const Categories = () => {
           parent: values.parent,
         };
         // save edit Folder
-        dispatch(onUpdateCategory({cateogy: updatedCategory, formData: formData}));
+        dispatch(onUpdateCategory({ cateogy: updatedCategory, formData: formData }));
         validation.resetForm();
       } else {
         const newCategory = {

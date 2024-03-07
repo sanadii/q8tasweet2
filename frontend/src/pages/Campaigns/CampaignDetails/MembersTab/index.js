@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 
 // Compontents, Constants, Hooks
 import MembersModal from "./MembersModal";
-import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "components";
-import { usePermission, useFilter, useDelete } from "hooks";
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
+import { usePermission, useFilter, useDelete } from "shared/hooks";
 import { Id, Name, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
 
 // Store & Selectors
@@ -171,6 +171,10 @@ const MembersTab = () => {
 
   // Table Filters
   const { filteredData: campaignMemberList, filters, setFilters } = useFilter(campaignMembers);
+
+  if (campaignMemberList.length === 0) {
+    return "waiting"
+  }
 
   return (
     <React.Fragment>
