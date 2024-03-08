@@ -48,8 +48,8 @@ const Navdata = () => {
   const ContributorMenu = useContributorMenu(setIsCurrentState);
   const SettingsMenu = useSettingsMenu(isCurrentState, setIsCurrentState, setIsSettings, isSettings);
 
-  console.log("CampaignMenu: ", CampaignMenu)
-  const menuItems = [
+  // console.log("CampaignMenu: ", CampaignMenu)
+  const DashboardMenuData = [
     ...(canChangeConfig ? [...AdminMenu, ...SettingsMenu, ...TestMenu] : []),
     // ...(isAdmin || isEditor ? EditorMenu : []),
     // ...(isAdmin || isModerator ? ModeratorMenu : []),
@@ -59,7 +59,13 @@ const Navdata = () => {
     // ...(PublicMenu),
   ];
 
-  return <React.Fragment>{menuItems}</React.Fragment>;
+
+  const PublicMenuData = [
+    ...(PublicMenu),
+
+  ]
+
+  return <React.Fragment>{(DashboardMenuData, PublicMenuData)}</React.Fragment>;
 };
 
 export default Navdata;

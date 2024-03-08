@@ -31,6 +31,7 @@ const MembersTab = () => {
     error
   } = useSelector(campaignSelector);
 
+  console.log("campaignMembers: ", campaignMembers)
 
   // Permission Hook
   const {
@@ -43,9 +44,10 @@ const MembersTab = () => {
   const { handleDeleteItem, onClickDelete, setDeleteModal, deleteModal } = useDelete(deleteCampaignMember);
 
   // Finding Active Role to Show Different Table Columns
-  const [activeTab, setActiveTab] = useState("campaignManagers"); // Initialize with "campaignManagers"
+  const [activeTab, setActiveTab] = useState("all"); // Initialize with "campaignManagers"
   const activeRole = activeTab;
-
+  console.log("activte Tab: ", activeTab)
+  console.log("activte Tab: ", activeRole)
   // Model & Toggle Function
   const [campaignMember, setCampaignMember] = useState(null);
   const [modal, setModal] = useState(false);
@@ -92,7 +94,7 @@ const MembersTab = () => {
 
 
   // Table Columns
-  const columnsDefinition = [
+  const columnsDefinition = useMemo(() => [
     {
       Header: "م.",
       accessor: "id",
@@ -159,12 +161,12 @@ const MembersTab = () => {
         />
       )
     }
-  ];
+  ], [handleCampaignMemberClick, onClickDelete, campaignAttendees, campaignGuarantees, campaignElectionCommittees, canChangeConfig, canChangeCampaignSupervisor, campaignMembers, campaignRoles]);
 
   const columns = useMemo(() => {
     return columnsDefinition.filter(column => {
-      if (column.show === false) return false; // Hide the column if show is explicitly set to false
-      if (!column.TabsToShow) return true; // always show columns without a TabsToShow key
+      if (column.show === false) return false;
+      if (!column.TabsToShow) return true;
       return column.TabsToShow.includes(activeRole);
     });
   }, [activeRole, columnsDefinition]);
@@ -172,9 +174,9 @@ const MembersTab = () => {
   // Table Filters
   const { filteredData: campaignMemberList, filters, setFilters } = useFilter(campaignMembers);
 
-  if (campaignMemberList.length === 0) {
-    return "waiting"
-  }
+  // if (campaignMemberList.length === 0) {
+  //   return "waiting"
+  // }
 
   return (
     <React.Fragment>

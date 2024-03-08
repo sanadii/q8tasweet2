@@ -9,9 +9,10 @@ const useFilter = (data, initialFilters) => {
         category: null,
         committee: null,
         member: null,
-        role: [30, 31, 32, 33],
+        role: null,
     });
 
+    console.log("filters::: ", filters.role)
     const globalSearchFilter = useCallback((item) => {
         if (!filters.global) return true;
         const globalSearch = filters.global.toLowerCase();
@@ -24,12 +25,16 @@ const useFilter = (data, initialFilters) => {
         return data.filter(item => {
             let isValid = true;
 
+            // Tab Filters
             if (filters.category !== null) {
                 isValid = isValid && item.category === filters.category;
             }
 
-            isValid = isValid && globalSearchFilter(item);
 
+
+            if (filters.global !== null) {
+                isValid = isValid && globalSearchFilter(item);
+            }
 
             // Gender filters
             if (filters.gender !== null) {
@@ -46,8 +51,13 @@ const useFilter = (data, initialFilters) => {
             }
 
             // Campaigns
-            if (item.role) {
-                if (filters.role !== null) {
+            // Campain Member Role
+            if (filters.role !== null) {
+                if (Array.isArray(filters.role)) {
+                    // If filters.role is an array, check if item.role is in the array
+                    isValid = isValid && filters.role.includes(item.role);
+                } else {
+                    // If filters.role is not an array, check for equality
                     isValid = isValid && item.role === filters.role;
                 }
             }

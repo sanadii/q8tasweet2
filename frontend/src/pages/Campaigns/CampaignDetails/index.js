@@ -16,8 +16,6 @@ const CampaignDetails = () => {
   const { campaign } = useSelector(campaignSelector);
   const { canViewCampaign } = usePermission();
 
-  console.log("slug: ", slug)
-
   useEffect(() => {
     // Set the document title
     document.title = "الانتخابات | كويت تصويت";

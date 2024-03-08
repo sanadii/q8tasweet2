@@ -22,6 +22,8 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
         return campaignMembers.filter(member => campaignManagerRoles.includes(member.role)).length;
     }, [campaignManagerRoles, campaignMembers]);
 
+
+    console.log("campaignManagerRoles: ", campaignManagerRoles)
     // Compute the count for each role
     const roleCounts = useMemo(() => {
         return campaignRoles.reduce((counts, role) => {
@@ -30,13 +32,21 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
         }, {});
     }, [campaignRoles, campaignMembers]);
 
+    console.log("All campaign roles:", campaignRoles);
+    console.log("Manager roles:", campaignManagerRoles);
+
     // Handle Change Campaign Tab Click
     const ChangeCampaignRole = (e, tab, roleIds) => {
         e.preventDefault();
 
         if (activeTab !== tab) {
             setActiveTab(tab);
-            if (Array.isArray(roleIds) && tab === "campaignManagers") {
+            if (tab === "all") {
+                setFilters(prevFilters => ({
+                    ...prevFilters,
+                    role: null
+                }));
+            } else if (tab === "campaignManagers") {
                 setFilters(prevFilters => ({
                     ...prevFilters,
                     role: campaignManagerRoles
@@ -57,32 +67,34 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
                     className="nav-tabs-custom card-header-tabs border-bottom-0"
                     role="tablist"
                 >
-                    {/* <NavItem>
+                    <NavItem>
                         <NavLink
                             className={classnames(
                                 { active: activeTab === "all" },
                                 "fw-semibold"
                             )}
-                            onClick={(e) => ChangeCampaignRole(e, "all", "all", null)}
+                            onClick={(e) => ChangeCampaignRole(e, "all", campaignManagerRoles)}
                             href="#"
                         >
                             الكل
                         </NavLink>
-                    </NavItem> */}
+                    </NavItem>
+                    <NavItem>
 
-                    <NavLink
-                        className={classnames(
-                            { active: activeTab === "campaignManagers" },
-                            "fw-semibold"
-                        )}
-                        onClick={(e) => ChangeCampaignRole(e, "campaignManagers", campaignManagerRoles)}
-                        href="#"
-                    >
-                        الإدارة
-                        <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
-                            {managerCounts}
-                        </span>
-                    </NavLink>
+                        <NavLink
+                            className={classnames(
+                                { active: activeTab === "campaignManagers" },
+                                "fw-semibold"
+                            )}
+                            onClick={(e) => ChangeCampaignRole(e, "campaignManagers", campaignManagerRoles)}
+                            href="#"
+                        >
+                            الإدارة
+                            <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
+                                {managerCounts}
+                            </span>
+                        </NavLink>
+                    </NavItem>
 
                     {campaignRoles.filter(role => !campaignManagerRoles.includes(role.id)).map((role) => (
                         roleCounts[role.id] > 0 && ( // Only render if count is greater than 0

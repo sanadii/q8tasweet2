@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 
 export function useCampaignMenu(isCurrentState, setIsCurrentState,) {
   const dispatch = useDispatch();
-  const history = useNavigate();
+  const navigate = useNavigate();
   const { currentUserCampaigns } = useSelector(userSelector);
   const { campaign } = useSelector(campaignSelector);
 
@@ -26,38 +26,39 @@ export function useCampaignMenu(isCurrentState, setIsCurrentState,) {
 
   useEffect(() => {
     if (isCurrentState === "Campaign") {
-      history(`/dashboard/campaigns/${campaign.slug}`);
+      navigate(`/dashboard/campaigns/${campaign.slug}`);
       document.body.classList.add("twocolumn-panel");
     }
     // if (isCurrentState === "campaignOverview") {
-    //   history(`/dashboard/campaigns/${campaign.slug}/overview`);
+    //   navigate(`/dashboard/campaigns/${campaign.slug}/overview`);
     //   document.body.classList.add("twocolumn-panel");
     // }
     // if (isCurrentState === "campaignTeam") {
-    //   history(`/dashboard/campaigns/${campaign.slug}/team`);
+    //   navigate(`/dashboard/campaigns/${campaign.slug}/team`);
     //   document.body.classList.add("twocolumn-panel");
     // }
     // if (isCurrentState === "campaignGuarantee") {
-    //   history(`/dashboard/campaigns/${campaign.slug}/guarantee`);
+    //   navigate(`/dashboard/campaigns/${campaign.slug}/guarantee`);
     //   document.body.classList.add("twocolumn-panel");
     // }
     // if (isCurrentState === "campaignAttendee") {
-    //   history(`/dashboard/campaigns/${campaign.slug}/attendee`);
+    //   navigate(`/dashboard/campaigns/${campaign.slug}/attendee`);
     //   document.body.classList.add("twocolumn-panel");
     // }
     // if (isCurrentState === "campaignMyGuarantee") {
-    //   history(`/dashboard/campaigns/${campaign.slug}/my-guarantee`);
+    //   navigate(`/dashboard/campaigns/${campaign.slug}/my-guarantee`);
     //   document.body.classList.add("twocolumn-panel");
     // }
     // if (isCurrentState === "campaignEdit") {
-    //   history(`/dashboard/campaigns/${campaign.slug}/edit`);
+    //   navigate(`/dashboard/campaigns/${campaign.slug}/edit`);
     //   document.body.classList.add("twocolumn-panel");
     // }
-  }, [history, isCurrentState, campaign.slug]);
+  }, [navigate, isCurrentState, campaign.slug]);
 
   const createMenuItem = (campaign) => [
     {
       id: campaign.slug,
+      slug: campaign.slug,
       label: campaign.name || 'Campaign',
       isCampaign: true,
       subItems: [

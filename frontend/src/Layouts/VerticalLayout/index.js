@@ -1,23 +1,43 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from "prop-types";
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Collapse } from 'reactstrap';
 import { layoutSelector } from 'Selectors/layoutSelector';
 
 // Import Data
-import navdata from "../MenuDataDashboard";
+import { DashboardMenuData, PublicMenuData } from "../MenuDataDashboard";
 import { withRouter } from 'shared/components';
 import { useSelector, useDispatch } from "react-redux";
 import { getCampaignDetails } from "store/actions";
 
-const CampaignDropdown = ({ navData, selectedCampaign, onChange }) => (
-    <select className="m-3" onChange={onChange} value={selectedCampaign}>
-        <option value="">Select a Campaign</option>
-        {navData.filter(item => item.isCampaign).map((campaign, index) => (
-            <option key={index} value={campaign.id}>{campaign.label}</option>
-        ))}
-    </select>
-);
+const CampaignDropdown = ({ navData, selectedCampaign, setSelectedCampaign }) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleCampaignChange = (event) => {
+        const selectedValue = (event.target.value);
+        setSelectedCampaign(selectedValue);
+        dispatch(getCampaignDetails(selectedValue));
+
+        const selectedId = event.target.value;
+        const selectedCampaign = navData.find(campaign => campaign.id === selectedId);
+
+        if (selectedCampaign && selectedCampaign.slug) {
+            navigate(`/dashboard/campaigns/${selectedCampaign.slug}`);
+        }
+    };
+
+    return (
+        <select className="m-3" onChange={handleCampaignChange} value={selectedCampaign}>
+            <option value="">Select a Campaign</option>
+            {navData.filter(item => item.isCampaign).map((campaign, index) => (
+                <option key={index} value={campaign.id}>{campaign.label}</option>
+            ))}
+        </select>
+    );
+};
+
+
 
 const Menu = ({ item }) => (
     item.isHeader ? (
@@ -32,14 +52,14 @@ const Menu = ({ item }) => (
 );
 
 const CampaignMenu = ({ item }) => (
-    <>
+    <React.Fragment>
         <li className="menu-title"><span data-key="t-menu">{item.label}</span></li>
         {item.subItems && item.subItems.map((subItem, subKey) => (
             <div key={subKey}>
                 <MenuItem item={subItem} />
             </div>
         ))}
-    </>
+    </React.Fragment>
 )
 
 const MenuItem = ({ item }) => (
@@ -100,11 +120,10 @@ const SubItem = ({ subItem }) => (
 );
 
 const VerticalLayout = (props) => {
-    const dispatch = useDispatch();
 
-    const navData = navdata().props.children;
+    const navData = DashboardMenuData().props.children;
     const path = props.router.location.pathname;
-    const [selectedCampaign, setSelectedCampaign] = useState(null);
+    const [selectedCampaign, setSelectedCampaign] = useState("")
 
     /*
     layout settings
@@ -222,13 +241,6 @@ const VerticalLayout = (props) => {
         });
     };
 
-    // Function to handle campaign selection change
-    const handleCampaignChange = (event) => {
-        const selectedValue = (event.target.value);
-        setSelectedCampaign(selectedValue);
-        dispatch(getCampaignDetails(selectedValue));
-    };
-
     // Filter navData based on selected campaign
     const filteredNavData = navData.filter(item =>
         !item.isCampaign || (item.isCampaign && item.id === selectedCampaign)
@@ -239,8 +251,8 @@ const VerticalLayout = (props) => {
             {/* Dropdown for selecting a campaign */}
             <CampaignDropdown
                 navData={navData}
+                setSelectedCampaign={setSelectedCampaign}
                 selectedCampaign={selectedCampaign}
-                onChange={handleCampaignChange}
             />
 
             {/* menu Items */}

@@ -1,7 +1,7 @@
 // Pages/Campaigns/CampaignDetails/index.js
 // React & Redux core
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useMemo } from "react";
+import { useSelector } from "react-redux";
 import classnames from "classnames";
 
 // Store & Selectors
@@ -60,7 +60,7 @@ const Section = () => {
 
   const tabComponents = {
     1: <OverviewTab />,
-    2: <MembersTab campaignMembers={campaignMembers} />,
+    2: <MembersTab />,
     3: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />,
     4: <AttendeesTab />,
     5: <SortingTab />,

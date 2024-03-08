@@ -46,11 +46,11 @@ const ElectionCategoryFilter = ({ filters, setFilters, activeTab, setActiveTab }
             <NavItem>
               <NavLink
                 className={classnames(
-                  { active: activeTab === "0" },
+                  { active: activeTab === "" },
                   "fw-semibold"
                 )}
                 onClick={() => {
-                  ChangeElectionCategory("0", "الكل");
+                  ChangeElectionCategory("", "الكل");
                 }}
                 href="#"
               >
