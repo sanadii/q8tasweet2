@@ -5,7 +5,7 @@ import { Collapse } from 'reactstrap';
 import { layoutSelector } from 'Selectors/layoutSelector';
 
 // Import Data
-import { DashboardMenuData, PublicMenuData } from "../MenuDataDashboard";
+import DashboardMenuData from "../MenuDataDashboard";
 import { withRouter } from 'shared/components';
 import { useSelector, useDispatch } from "react-redux";
 import { getCampaignDetails } from "store/actions";
