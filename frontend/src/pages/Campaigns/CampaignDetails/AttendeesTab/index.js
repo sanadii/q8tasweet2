@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignAttendee } from "store/actions";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 // Component imports
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";

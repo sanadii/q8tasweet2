@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignGuarantee } from "store/actions";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 // Component & Constants imports
 import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { TabContent, Card, CardHeader, CardBody, Col, Row, Accordion, Button } from "reactstrap";
 
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 import { messageTypes } from "shared/constants";
 import { useWebSocketContext } from 'utils/WebSocketContext';
 

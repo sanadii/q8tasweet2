@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 import { Button, Col, Row, Card, CardHeader, Input } from "reactstrap";
 import { Loader, TableContainer } from "shared/components";
 import { FormFields } from "shared/components";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { GenderOptions } from "shared/constants";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 const ResultDisplayOption = [
     { id: 1, name: "القوائم والمرشحين", value: "partyCandidateOriented" },

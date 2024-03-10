@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 // Store & Selectors
 import { getElectionDetails } from "store/actions";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 // Components
 import Section from "./Section";

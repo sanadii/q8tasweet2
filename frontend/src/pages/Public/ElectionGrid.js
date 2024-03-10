@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Card, CardHeader, CardBody, Col, Container, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import { getElections, getCategories } from "store/actions";
-import { electionSelector, categorySelector } from 'Selectors';
+import { electionSelector, categorySelector } from 'selectors';
 
 const MEDIA_URL = process.env.REACT_APP_MEDIA_URL;
 

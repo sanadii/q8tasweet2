@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
 import { deleteElectionCandidate, deleteElectionParty, deleteElectionPartyCandidate } from "store/actions";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
 
 // Common Components

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { getCandidates } from "../../store/actions";
 
 
-import { candidateSelector, categorySelector } from 'Selectors';
+import { candidateSelector, categorySelector } from 'selectors';
 
 const CandidateGrid = () => {
   document.title = "المرشحين - كويت تصويت";

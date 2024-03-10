@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteElectionCampaign } from "store/actions";
 import { Link } from "react-router-dom";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 import { Button, Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
 import CampaignModal from "./CampaignModal";

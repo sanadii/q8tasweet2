@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Col, Row, Card, CardBody, CardHeader, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from "reactstrap";
 import { ImageGenderCircle, } from "shared/components";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 import { electionMethodBadge, PriorityBadge } from "shared/constants";
 
 //SimpleBar

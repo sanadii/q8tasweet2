@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 import { updateCampaignAttendee } from "store/actions";
 import * as Yup from "yup";

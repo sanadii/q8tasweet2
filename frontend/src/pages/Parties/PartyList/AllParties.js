@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
 import { getParties, deleteParty, getModeratorUsers } from "store/actions";
-import { partySelector } from 'Selectors';
+import { partySelector } from 'selectors';
 
 // Custom Components, Constants & Hooks Imports
 import PartyModal from "./PartyModal"

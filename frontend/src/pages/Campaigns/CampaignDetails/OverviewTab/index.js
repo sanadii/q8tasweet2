@@ -4,7 +4,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 // Store & Selectors
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 // Components, Constants & Hooks
 import { usePermission } from 'shared/hooks';

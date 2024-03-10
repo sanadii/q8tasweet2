@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Form, Row, Button } from 'reactstrap';
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 import { updateUser } from "store/actions";
 import { useFormik } from "formik";
 import * as Yup from "yup";

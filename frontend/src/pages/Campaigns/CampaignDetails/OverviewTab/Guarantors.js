@@ -3,7 +3,7 @@ import React, { useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 
 // Store & Selectors
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 import { Loader, TableContainer } from "shared/components";
 import {

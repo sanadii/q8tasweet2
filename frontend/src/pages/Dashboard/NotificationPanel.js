@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 import { Card, CardHeader, CardBody, Button, Col, Row } from 'reactstrap';
 
 // Form Field validation & Fields

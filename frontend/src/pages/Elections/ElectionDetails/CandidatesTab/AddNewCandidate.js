@@ -2,7 +2,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewCandidate, updateCandidate } from "store/actions";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 // Custom Components & ConstantsImports
 import { GenderOptions } from "shared/constants";

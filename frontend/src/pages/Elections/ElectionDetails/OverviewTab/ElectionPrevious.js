@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Col, Card, CardBody, CardHeader, Table } from "reactstrap";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 const ElectionPrevious = () => {
 

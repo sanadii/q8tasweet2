@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Offcanvas, OffcanvasHeader, OffcanvasBody, Collapse } from "reactstrap";
 import withRouter from './withRouter';
-import { layoutSelector } from 'Selectors/layoutSelector';
+import { layoutSelector } from 'selectors/layoutSelector';
 
 //redux
 import {

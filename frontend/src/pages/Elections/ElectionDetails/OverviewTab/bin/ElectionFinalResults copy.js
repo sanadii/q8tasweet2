@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { ImageCandidateWinnerCircle } from "shared/components";
 
 // Store & Selectors
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 // import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
 
 // Common Components

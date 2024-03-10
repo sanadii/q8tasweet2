@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
 import { updateElectionParty } from "store/actions";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 // Constants & Component imports
 import AddElectionParty from "./AddElectionParty";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { electionSelector, categorySelector } from 'Selectors';
+import { electionSelector, categorySelector } from 'selectors';
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";

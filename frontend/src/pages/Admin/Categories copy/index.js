@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import { BreadCrumb, DeleteModal } from ".shared/components";
 import useCategoryManager from "shared/hooks";
-import { categorySelector } from 'Selectors';
+import { categorySelector } from 'selectors';
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";

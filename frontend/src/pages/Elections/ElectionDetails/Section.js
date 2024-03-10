@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 // Store & Selectors
-import { electionSelector, categorySelector } from 'Selectors';
+import { electionSelector, categorySelector } from 'selectors';
 
 // UI & Utilities
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";

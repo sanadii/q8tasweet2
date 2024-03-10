@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getGroupPermissions } from "store/actions";
-import { groupPermissionSelector } from 'Selectors';
+import { groupPermissionSelector } from 'selectors';
 import { Container } from "reactstrap";
 import { BreadCrumb, Loader, TableContainer } from "shared/components";
 import SimpleBar from "simplebar-react";

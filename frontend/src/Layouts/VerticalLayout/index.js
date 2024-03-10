@@ -2,10 +2,10 @@ import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import { useNavigate, Link } from 'react-router-dom';
 import { Collapse } from 'reactstrap';
-import { layoutSelector } from 'Selectors/layoutSelector';
+import { layoutSelector } from 'selectors/layoutSelector';
 
 // Import Data
-import { DashboardMenuData, PublicMenuData } from "../MenuDataDashboard";
+import DashboardMenuData from "../MenuDataDashboard";
 import { withRouter } from 'shared/components';
 import { useSelector, useDispatch } from "react-redux";
 import { getCampaignDetails } from "store/actions";

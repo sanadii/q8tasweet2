@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 import { deleteElectionCommittee } from "store/actions";
 import CommitteeModal from "./CommitteeModal";

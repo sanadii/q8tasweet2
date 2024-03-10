@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { Card, CardBody } from 'reactstrap';
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 
 //import images
 

@@ -4,7 +4,7 @@ import { Card, CardHeader, CardBody, Col, Container, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import { getCandidates, getElections } from "../../store/actions";
 import Countdown from "react-countdown";
-import { candidateSelector, electionSelector } from 'Selectors';
+import { candidateSelector, electionSelector } from 'selectors';
 
 const MEDIA_URL = process.env.REACT_APP_MEDIA_URL;
 

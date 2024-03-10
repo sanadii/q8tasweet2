@@ -7,6 +7,7 @@
       "shared/contexts/*": ["src/shared/contexts/*"],
       "shared/hooks/*": ["src/shared/hooks/*"],
       "store/*": ["src/store/*"],
+      "selector/*": ["src/selector/*"],
       "assets/*": ["src/assets/*"],
       "@/*": ["./*"]
 

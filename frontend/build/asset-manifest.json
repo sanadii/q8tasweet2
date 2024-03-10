@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.3cb3be24.css",
-    "main.js": "/static/js/main.804d95f2.js",
+    "main.css": "/static/css/main.b4b84248.css",
+    "main.js": "/static/js/main.b64af473.js",
     "static/js/522.963fa583.chunk.js": "/static/js/522.963fa583.chunk.js",
     "static/media/kuwait-bg.png": "/static/media/kuwait-bg.859ab5d5fe5a98c8520d.png",
     "static/media/remixicon.svg?t=1590207869815": "/static/media/remixicon.1664a258a7e7714f6f8d.svg",
@@ -21,6 +21,7 @@
     "static/media/img-3.jpg": "/static/media/img-3.1c0b562c2ed3d35bd905.jpg",
     "static/media/la-solid-900.eot": "/static/media/la-solid-900.4184d740eae2fb727bfe.eot",
     "static/media/la-solid-900.ttf": "/static/media/la-solid-900.279f38601f1d1655255f.ttf",
+    "static/media/img-2.png": "/static/media/img-2.15d985acc4605bbe2203.png",
     "static/media/img-4.jpg": "/static/media/img-4.0c27fe74df9e5866c5d6.jpg",
     "static/media/remixicon.woff?t=1590207869815": "/static/media/remixicon.8d09fa11700ed63cf96e.woff",
     "static/media/img-2.jpg": "/static/media/img-2.ff87bf028c7481626ed8.jpg",
@@ -31,14 +32,14 @@
     "static/media/hkgrotesk-semibold.eot": "/static/media/hkgrotesk-semibold.e51918649afb22bbd2ed.eot",
     "static/media/hkgrotesk-regular.eot": "/static/media/hkgrotesk-regular.87639503b6d2caff5b6d.eot",
     "static/media/img-6.png": "/static/media/img-6.e344e05f55632128b059.png",
-    "static/media/img-3.png": "/static/media/img-3.50996c6b5349bce6789b.png",
+    "static/media/img-3.png": "/static/media/img-3.8ef17ffbd74bf0d99e7d.png",
     "static/media/la-solid-900.woff": "/static/media/la-solid-900.893634871a6cbff72157.woff",
     "static/media/remixicon.woff2?t=1590207869815": "/static/media/remixicon.90668f6f9b3c2c18a090.woff2",
     "static/media/boxicons.woff2": "/static/media/boxicons.60f603cccbdff82a523c.woff2",
     "static/media/la-regular-400.svg": "/static/media/la-regular-400.5b8ad6f4ffe812a4eb26.svg",
     "static/media/bg-pattern.png": "/static/media/bg-pattern.d84a545991260916b9c9.png",
     "static/media/img-7.jpg": "/static/media/img-7.0cb45fe1a0c3f41f947f.jpg",
-    "static/media/img-1.png": "/static/media/img-1.ae90cb2d4151977bff3f.png",
+    "static/media/img-1.png": "/static/media/img-1.f546083dc67f04468e82.png",
     "static/media/la-brands-400.woff": "/static/media/la-brands-400.925b340f49e65e8bab10.woff",
     "static/media/la-solid-900.woff2": "/static/media/la-solid-900.3efd5ba15a279377d224.woff2",
     "static/media/img-5.png": "/static/media/img-5.df1e78e39a19702de97c.png",
@@ -48,7 +49,6 @@
     "static/media/hkgrotesk-light.eot": "/static/media/hkgrotesk-light.54dec9ba75b0672e5e0a.eot",
     "static/media/Cairo-Light.ttf": "/static/media/Cairo-Light.a4c0dad2ad5c861adff9.ttf",
     "static/media/la-brands-400.woff2": "/static/media/la-brands-400.3a8109c4ac75662f8355.woff2",
-    "static/media/img-2.png": "/static/media/img-2.15d985acc4605bbe2203.png",
     "static/media/file.png": "/static/media/file.7460d341c4220363ca42.png",
     "static/media/hkgrotesk-semibold.woff": "/static/media/hkgrotesk-semibold.59387fcce7c52054d89f.woff",
     "static/media/hkgrotesk-bold.woff": "/static/media/hkgrotesk-bold.30de3d416642e1e9813f.woff",
@@ -65,7 +65,7 @@
     "static/media/avatar-7.jpg": "/static/media/avatar-7.a991bb8ecd885f209314.jpg",
     "static/media/cover-pattern.png": "/static/media/cover-pattern.181df191d9b702006e4b.png",
     "static/media/avatar-2.jpg": "/static/media/avatar-2.58874a6f667b9b04ce55.jpg",
-    "static/media/us.svg": "/static/media/us.1fdd166125432c58f58918cbfdcae2eb.svg",
+    "static/media/us.svg": "/static/media/us.1fdd166125432c58f589.svg",
     "static/media/la-regular-400.woff": "/static/media/la-regular-400.aa859c0d08b8193d6586.woff",
     "static/media/avatar-10.jpg": "/static/media/avatar-10.4d8cdbb1be43d9993ae7.jpg",
     "static/media/la-regular-400.woff2": "/static/media/la-regular-400.8dc1cedf1f4987f82b72.woff2",
@@ -74,11 +74,10 @@
     "static/media/avatar-3.jpg": "/static/media/avatar-3.36fbb9e4e257ecafc0da.jpg",
     "static/media/error.svg": "/static/media/error.bc754a5b8a10c14e55a192ab1196a76d.svg",
     "static/media/bell.svg": "/static/media/bell.bb6565fedee4ebe7d4402bd4a5ef0619.svg",
-    "static/media/ar.svg": "/static/media/ar.f61c68178e68bc563d154356ebd5826c.svg",
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "static/css/main.3cb3be24.css",
-    "static/js/main.804d95f2.js"
+    "static/css/main.b4b84248.css",
+    "static/js/main.b64af473.js"
   ]
 }

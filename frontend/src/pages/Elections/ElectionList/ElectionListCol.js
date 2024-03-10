@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { categorySelector } from 'Selectors';
+import { categorySelector } from 'selectors';
 
 import { Link } from "react-router-dom";
 import * as moment from "moment";

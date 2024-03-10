@@ -5,7 +5,7 @@ import SwiperCore, { Autoplay } from "swiper";
 import { createSelector } from 'reselect';
 
 // Store & Selectors
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 
 //import images
 import avatar1 from "assets/images/users/avatar-1.jpg";

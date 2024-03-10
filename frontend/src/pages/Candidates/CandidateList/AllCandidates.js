@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
 import { getCandidates, deleteCandidate, getModeratorUsers } from "store/actions";
-import { candidateSelector } from 'Selectors';
+import { candidateSelector } from 'selectors';
 
 // Custom Components, Constants & Hooks Imports
 import CandidateModal from "./CandidateModal"

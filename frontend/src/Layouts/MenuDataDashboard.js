@@ -65,7 +65,7 @@ const Navdata = () => {
 
   ]
 
-  return <React.Fragment>{(DashboardMenuData, PublicMenuData)}</React.Fragment>;
+  return <React.Fragment>{DashboardMenuData}</React.Fragment>;
 };
 
 export default Navdata;

@@ -10,7 +10,7 @@ import { Id, Name, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervi
 
 // Store & Selectors
 import { deleteCampaignMember } from "store/actions";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 // UI & Utilities
 import { Card, CardBody } from "reactstrap";

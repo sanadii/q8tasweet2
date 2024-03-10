@@ -1,7 +1,7 @@
 // React Core and Hooks
 import React, { useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 import { TableContainerHeader } from "shared/components";
 import { HeaderVoteButton, transformResultData, usePartyCommitteeVotes, useCommitteeResultSaver } from './ResultHelper';
 import { Col, Row, Card, CardBody } from "reactstrap";

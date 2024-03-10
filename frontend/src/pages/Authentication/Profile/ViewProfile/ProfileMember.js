@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"; // Removed unnecessary imports
 import { useSelector, useDispatch } from "react-redux";
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 
 import { Card, CardBody, Col, Pagination, PaginationItem, PaginationLink, Row } from "reactstrap";
 import SwiperCore, { Autoplay } from "swiper";

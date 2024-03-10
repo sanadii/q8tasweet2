@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
 import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "shared/components";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 // Components
 import ElectionDetailsWidget from "./ElectionDetailsWidget";

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { userSelector } from "Selectors";
+import { userSelector } from "selectors";
 
 export function useCampaignMenu(isCurrentState, setIsCurrentState) {
   const history = useNavigate();

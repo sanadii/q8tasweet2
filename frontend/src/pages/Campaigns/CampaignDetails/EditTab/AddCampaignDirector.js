@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // Action & Selector imports
 import { addNewCampaignMember, deleteCampaignMember } from "store/actions";
-import { userSelector, campaignSelector } from 'Selectors';
+import { userSelector, campaignSelector } from 'selectors';
 
 // Components & Constants
 import { DeleteModal } from "shared/components";

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Badge, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, Card, CardBody, } from "reactstrap";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 // Component, Constants, Hooks Imports
 import { ImageGenderCircle, AvatarList, SectionBackagroundImage, TableContainer, TableContainerHeader } from "../../shared/components";

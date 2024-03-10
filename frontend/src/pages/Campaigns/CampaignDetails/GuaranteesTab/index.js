@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignGuarantee } from "../../../../store/actions";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 // Component imports
 import { Col, Row, Card, CardBody } from "reactstrap";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Row, Col, ModalBody } from "reactstrap";
-import { userSelector, campaignSelector } from 'Selectors';
+import { userSelector, campaignSelector } from 'selectors';
 
 import { useSupervisorMembers, useCampaignRoles } from "shared/hooks";
 

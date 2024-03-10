@@ -1,7 +1,7 @@
 // React & Redux core imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { userSelector, campaignSelector } from 'Selectors';
+import { userSelector, campaignSelector } from 'selectors';
 
 // Action & Selector imports
 import { getCampaigns, deleteCampaign } from "store/actions";
