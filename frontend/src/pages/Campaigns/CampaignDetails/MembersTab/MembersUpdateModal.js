@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCampaignMember } from "store/actions";
-import { userSelector, campaignSelector } from 'Selectors';
+import { userSelector, campaignSelector } from 'selectors';
 
 // Component & Constants imports 
 import { useSupervisorMembers, useCampaignRoles } from "shared/hooks";

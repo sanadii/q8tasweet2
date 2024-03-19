@@ -3,7 +3,7 @@
 import { useSelector } from 'react-redux';
 
 // Store & Selectors
-import { userSelector, campaignSelector } from 'Selectors';
+import { userSelector, campaignSelector } from 'selectors';
 
 const useUserRoles = () => {
     const { currentUser } = useSelector(userSelector);

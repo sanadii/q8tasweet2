@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { Button, Col, Form, Row } from 'reactstrap';
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 import { FieldComponent } from "shared/components";
 import { changeUserPassword } from "store/actions";
 import { useFormik } from "formik";

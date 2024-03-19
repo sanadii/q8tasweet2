@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
 import { getUsers, deleteUser } from "store/actions";
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 
 // Custom Components & ConstantsImports
 import UserModal from "./UserModal";

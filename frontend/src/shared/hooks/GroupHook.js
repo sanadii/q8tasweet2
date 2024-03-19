@@ -1,6 +1,6 @@
 // useGroupManager.js
 import { useState, useEffect } from 'react';
-import { groupSelector } from 'Selectors';
+import { groupSelector } from 'selectors';
 
 const useGroupManager = (categories, groups, validation) => {
   const [categoryOptions, setCategoryOptions] = useState(categories);

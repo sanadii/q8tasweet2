@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
 import { getCandidates, addNewElectionCandidate, addElectionPartyCandidate } from "store/actions";
-import { electionSelector, candidateSelector } from 'Selectors';
+import { electionSelector, candidateSelector } from 'selectors';
 
 // UI Components & styling imports
 import { Input, Form } from "reactstrap";

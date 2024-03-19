@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Row, Col } from "reactstrap";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 // Components
 import ElectionResults from "./ElectionResults"

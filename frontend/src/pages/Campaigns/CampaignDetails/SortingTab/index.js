@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { campaignSelector, userSelector } from 'Selectors';
+import { campaignSelector, userSelector } from 'selectors';
 import { TableContainer } from 'shared/components';
 import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
 import { useWebSocketContext } from '../../../../utils/WebSocketContext';

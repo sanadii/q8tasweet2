@@ -4,7 +4,7 @@ import SimpleBar from "simplebar-react";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import { BreadCrumb, DeleteModal } from "shared/components";
-import { categorySelector } from 'Selectors';
+import { categorySelector } from 'selectors';
 import { useCategoryManager } from "shared/hooks";
 
 // Redux

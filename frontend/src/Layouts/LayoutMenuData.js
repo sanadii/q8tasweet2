@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"; // Don't forget to import useSelector
 import { useNavigate } from "react-router-dom";
 import { updateIconSidebar } from './Menus/utils';  // adjust the path according to your directory structure
 import { usePermission } from 'shared/hooks';
-import { layoutSelector } from 'Selectors/layoutSelector';
+import { layoutSelector } from 'selectors/layoutSelector';
 
 // Menus
 import { useAdminMenu } from './Menus/AdminMenu';

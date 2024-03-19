@@ -2,7 +2,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import classnames from "classnames";
-import { electionSelector, categorySelector } from 'Selectors';
+import { electionSelector, categorySelector } from 'selectors';
 import { Nav, NavItem, NavLink, Input } from "reactstrap";
 
 

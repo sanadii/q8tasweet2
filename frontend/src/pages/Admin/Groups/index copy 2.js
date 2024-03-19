@@ -11,7 +11,7 @@ import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeade
 import { useSelector, useDispatch } from "react-redux";
 import { getGroups, updateGroup, deleteGroup, addNewGroup } from "store/actions";
 
-import { authSelector } from 'Selectors';
+import { authSelector } from 'selectors';
 
 // Components & Hooks
 import DeleteModal from "components/Components/DeleteModal";

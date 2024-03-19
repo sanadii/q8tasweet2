@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { withRouter } from 'shared/components';
-import { layoutSelector } from 'Selectors/layoutSelector';
-import { Row, Col } from "reactstrap"
-import { campaignSelector } from 'Selectors';
+import { layoutSelector, campaignSelector } from 'selectors';
 import SectionHeader from "pages/Campaigns/CampaignDetails/SectionHeader"
 import { Container } from "reactstrap";
 

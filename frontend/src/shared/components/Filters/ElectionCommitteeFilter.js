@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 const ElectionCommitteeFilter = ({ filters, setFilters }) => {
     const { electionAttendees, electionCommittees } = useSelector(electionSelector);

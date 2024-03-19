@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 // Store & Selectors
 import { getCandidateDetails } from "store/actions";
-import { candidateSelector } from 'Selectors';
+import { candidateSelector } from 'selectors';
 
 // Components
 import Section from "./Section";

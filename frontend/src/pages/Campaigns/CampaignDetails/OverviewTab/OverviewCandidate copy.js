@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Store & Selectors
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 // UI & Utilities
 import { Card, CardBody, Col, Row } from "reactstrap";

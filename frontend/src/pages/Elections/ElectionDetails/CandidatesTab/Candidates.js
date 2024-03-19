@@ -1,7 +1,7 @@
 // React imports
 import React from "react";
 import { useSelector } from "react-redux";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 import { Loader, TableContainer } from "shared/components";
 import { ToastContainer } from "react-toastify";
 

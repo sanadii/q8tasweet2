@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // Store Actions & Selectors
 import { getGroupPermissions } from "store/actions";
-import { groupPermissionSelector } from 'Selectors';
+import { groupPermissionSelector } from 'selectors';
 
 // Components & Hooks
 import { BreadCrumb, Loader, TableContainer } from "shared/components";

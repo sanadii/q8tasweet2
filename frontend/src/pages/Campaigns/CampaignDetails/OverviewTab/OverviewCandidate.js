@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 import { Card, CardBody, Col, Row } from "reactstrap";
 
 const OverviewCandidate = () => {

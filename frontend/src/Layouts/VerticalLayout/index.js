@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import { useNavigate, Link } from 'react-router-dom';
 import { Collapse } from 'reactstrap';
-import { layoutSelector } from 'Selectors/layoutSelector';
+import { layoutSelector } from 'selectors/layoutSelector';
 
 // Import Data
 import DashboardMenuData from "../MenuDataDashboard";

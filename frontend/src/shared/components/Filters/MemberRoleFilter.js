@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import classnames from "classnames";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 import { Nav, NavItem, NavLink } from "reactstrap";
 
 const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {

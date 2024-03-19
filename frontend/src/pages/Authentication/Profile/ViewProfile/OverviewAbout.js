@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"; // Removed unnecessary imports
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 
 import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Progress, Row, TabContent, Table, TabPane, UncontrolledCollapse, UncontrolledDropdown } from "reactstrap";
 

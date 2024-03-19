@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "store/actions";
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 
 // Shared
 import { FieldComponent } from "shared/components";

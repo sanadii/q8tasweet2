@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // Action & Selector imports
 import { getUsers, addNewCampaignMember } from "store/actions";
-import { userSelector, campaignSelector } from 'Selectors';
+import { userSelector, campaignSelector } from 'selectors';
 
 // UI Components & styling imports
 import { Input, ModalBody, Form } from "reactstrap";

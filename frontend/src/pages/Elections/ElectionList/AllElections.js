@@ -3,7 +3,7 @@ import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
-import { electionSelector, categorySelector } from 'Selectors';
+import { electionSelector, categorySelector } from 'selectors';
 import { getElections, deleteElection, getCategories } from "store/actions";
 
 // Components & Columns

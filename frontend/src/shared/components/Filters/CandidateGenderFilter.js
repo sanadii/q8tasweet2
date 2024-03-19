@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { GenderOptions } from "shared/constants";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 const CandidateGenderFilter = ({ setElectionCandidateList }) => {
     const electionCandidates = useSelector(electionSelector);

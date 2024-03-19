@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Loader, TableContainer, ImageCandidateWinnerCircle } from "shared/components";
 
 // Store & Selectors
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 // UI & Utilities
 import { Card, CardHeader, CardBody } from "reactstrap";

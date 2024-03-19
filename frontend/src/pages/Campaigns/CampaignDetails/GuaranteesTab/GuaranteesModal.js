@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import GuaranteesModalUpdate from "./GuaranteesModalUpdate";

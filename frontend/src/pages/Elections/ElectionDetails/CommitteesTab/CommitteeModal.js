@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
 import { addNewElectionCommittee, updateElectionCommittee, getCampaignSorters } from "store/actions";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 import { FormFields } from "shared/components";
 
 // Constants & Component imports

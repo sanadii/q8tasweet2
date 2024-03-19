@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { campaignSelector, userSelector } from 'Selectors';
+import { campaignSelector, userSelector } from 'selectors';
 import { getCampaignDetails } from "store/actions";
 import { isEmpty } from "lodash";
 import { useParams } from "react-router-dom";

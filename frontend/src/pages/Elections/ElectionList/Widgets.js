@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Card, CardBody, Col, Row } from "reactstrap";
-import { electionSelector } from 'Selectors';
+import { electionSelector } from 'selectors';
 
 const Widgets = () => {
   

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import classnames from "classnames";
 
 // Store & Selectors
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 // UI & Utilities
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";

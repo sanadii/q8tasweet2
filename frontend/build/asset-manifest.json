@@ -1,7 +1,11 @@
 {
   "files": {
     "main.css": "/static/css/main.b4b84248.css",
+<<<<<<< HEAD
+    "main.js": "/static/js/main.b64af473.js",
+=======
     "main.js": "/static/js/main.194e7603.js",
+>>>>>>> 836ca04c6f9bf2ebe36b72fbe2e19539cdde086a
     "static/js/522.963fa583.chunk.js": "/static/js/522.963fa583.chunk.js",
     "static/media/kuwait-bg.png": "/static/media/kuwait-bg.859ab5d5fe5a98c8520d.png",
     "static/media/remixicon.svg?t=1590207869815": "/static/media/remixicon.1664a258a7e7714f6f8d.svg",
@@ -78,6 +82,10 @@
   },
   "entrypoints": [
     "static/css/main.b4b84248.css",
+<<<<<<< HEAD
+    "static/js/main.b64af473.js"
+=======
     "static/js/main.194e7603.js"
+>>>>>>> 836ca04c6f9bf2ebe36b72fbe2e19539cdde086a
   ]
 }

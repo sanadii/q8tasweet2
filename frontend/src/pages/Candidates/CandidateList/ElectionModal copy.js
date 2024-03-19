@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 import "react-toastify/dist/ReactToastify.css";
 
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";

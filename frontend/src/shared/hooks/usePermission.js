@@ -1,6 +1,6 @@
 // Components/Hooks/usePermission.js
 import { useSelector } from 'react-redux';
-import { userSelector, campaignSelector } from 'Selectors';
+import { userSelector, campaignSelector } from 'selectors';
 
 // Define a List of Entities:
 const entities = [

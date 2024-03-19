@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { campaignSelector } from 'Selectors';
+import { campaignSelector } from 'selectors';
 
 
 const GuarantorFilter = ({ filters, setFilters }) => {

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // Store Actions & Selectors
 import { getGroups, addNewGroup, updateGroup, deleteGroup } from "store/actions";
-import { authSelector } from 'Selectors';
+import { authSelector } from 'selectors';
 
 // Components & Hooks
 import { BreadCrumb, DeleteModal } from "shared/components";

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardBody, CardHeader, Col, Form, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
-import { userSelector } from 'Selectors';
+import { userSelector } from 'selectors';
 
 
 const EditPersonalDetails = () => {

@@ -1,7 +1,7 @@
 // React & Redux
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { electionSelector, categorySelector, userSelector } from 'Selectors';
+import { electionSelector, categorySelector, userSelector } from 'selectors';
 
 // Import Actions
 import { addElection, updateElection, getCategories } from "store/actions";
