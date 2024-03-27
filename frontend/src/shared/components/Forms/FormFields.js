@@ -241,7 +241,7 @@ const FormFields = ({ field, validation, inLineStyle }) => {
     return (
         <FormFieldLayout inLineStyle={inLineStyle} label={label} id={id} colSize={colSize} type={type}>
             {renderInput()}
-            {type !== 'separator' && type !== 'title' && validation.touched[name] && validation.errors[name] && (
+            {type !== 'separator' && type !== 'title' && validation?.touched[name] && validation?.errors[name] && (
                 <FormFeedback type="invalid" style={{ display: 'block' }}>
                     {validation?.errors?.[name]}
                 </FormFeedback>
