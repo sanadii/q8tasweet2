@@ -6,9 +6,9 @@
 #------------------------
 
 # Node modules and related
-# /node_modules
-# /.pnp
-# .pnp.js
+/node_modules
+/.pnp
+.pnp.js
 
 # Python dependencies
 # If you're using virtual environments, you might consider ignoring them

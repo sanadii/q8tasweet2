@@ -155,7 +155,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='campaignattendee',
             name='civil',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='elector_attendees', to='electors.elector'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='elector_attendees', to='voters.voter'),
         ),
         migrations.AddField(
             model_name='campaignattendee',
@@ -195,7 +195,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='campaignguarantee',
             name='civil',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='elector_guarantees', to='electors.elector'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='elector_guarantees', to='voters.voter'),
         ),
         migrations.AddField(
             model_name='campaignguarantee',

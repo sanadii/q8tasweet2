@@ -7,8 +7,8 @@ from rest_framework_simplejwt.views import (
 )
 
 app_name = "users"
-
-urlpatterns = [
+ 
+urlpatterns = [ 
     # Authentication
     path("userLogin", UserLogin.as_view(), name="UserLogin"),
     path("userRegister", UserRegister.as_view(), name="UserRegister"),

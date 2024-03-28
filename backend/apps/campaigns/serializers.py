@@ -23,7 +23,7 @@ from apps.elections.models import (
     ElectionCommittee,
 )
 from apps.candidates.models import Candidate, Party
-from apps.electors.models import Elector
+from apps.voters.models import Voter
 
 # Serializers
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
@@ -33,7 +33,7 @@ from apps.elections.serializers import (
     ElectionCommitteeSerializer,
 )
 from apps.auths.serializers import UserSerializer
-from apps.electors.serializers import ElectorsSerializer
+from apps.voters.serializers import ElectorsSerializer
 
 
 class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
@@ -416,7 +416,7 @@ class CampaignSortingSerializer(serializers.ModelSerializer):
 def get_field_or_not_found(self, obj, field_name):
     try:
         return getattr(obj, field_name) if obj else None
-    except Elector.DoesNotExist:
+    except Voter.DoesNotExist:
         return "Not Found"
 
 

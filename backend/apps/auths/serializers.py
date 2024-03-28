@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from rest_framework.serializers import ModelSerializer
+from django.contrib.auth.models import AnonymousUser
 
 
 
@@ -71,11 +72,24 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
         group_permissions = list(Permission.objects.filter(group__user=obj).values_list('codename', flat=True))
         all_permissions = list(set(user_permissions + group_permissions))
         return all_permissions
-
+    
+    #--- Changed Create User ------
     def create(self, validated_data):
         request = self.context.get('request')
         user = request.user if request and hasattr(request, 'user') else None
-        instance = User.objects.create(**validated_data, created_by=user)
+
+        # Set created_by to None if user is not authenticated
+        created_by = None
+        if isinstance(user, User):
+            created_by = user
+        # Remove 'created_by' from validated_data to avoid passing it twice
+        validated_data.pop('created_by', None)
+        instance = User.objects.create(created_by=created_by, **validated_data)
+        return instance
+    # def create(self, validated_data):
+    #     request = self.context.get('request')
+    #     user = request.user if request and hasattr(request, 'user') else None
+    #     instance = User.objects.create(**validated_data, created_by=user)
         return instance
 
 

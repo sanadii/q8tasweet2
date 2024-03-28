@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from apps.candidates.models import Candidate
-from electors.models import Elector
+from voters.models import Elector
 from apps.categories.models import Category
 from django.contrib.auth.models import Group, Permission
 
@@ -16,7 +16,7 @@ from django.contrib.auth.models import Group, Permission
 from candidates.serializers import CandidateSerializer
 from elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
-from electors.serializers import ElectorsSerializer
+from voters.serializers import ElectorsSerializer
 
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, AllowAny
