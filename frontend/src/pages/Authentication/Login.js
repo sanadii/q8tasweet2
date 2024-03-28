@@ -22,6 +22,8 @@ import { useFormik } from "formik";
 const Login = (props) => {
   const dispatch = useDispatch();
 
+  document.title = "تسجيل الدخول | كويت تصويت";
+
   const selectLayoutState = (state) => state.Account;
   const selectLayoutProperties = createSelector(
     selectLayoutState,
@@ -36,7 +38,6 @@ const Login = (props) => {
   const { user, errorMsg, loading, error } = useSelector(selectLayoutProperties);
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
-  console.log("user ===>", user);
   useEffect(() => {
     if (user && user) {
       const updatedUserData =
@@ -93,18 +94,16 @@ const Login = (props) => {
       name: "email",
       label: "الإيميل",
       type: "email",
-      // colSize: 12,
     },
     {
       id: "password-field",
       name: "password",
       label: "كلمة المرور",
       type: "password",
-      // colSize: 12,
     },
   ]
 
-  document.title = "تسجيل الدخول | كويت تصويت";
+
   return (
     <React.Fragment>
       <ParticlesAuth>

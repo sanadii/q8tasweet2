@@ -26,6 +26,8 @@ const Register = () => {
     const history = useNavigate();
     const dispatch = useDispatch();
 
+    document.title = "إنشاء حساب جديد | كويت تصويت";
+    
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
@@ -116,7 +118,7 @@ const Register = () => {
         },
     ]
 
-    document.title = "إنشاء حساب جديد | كويت تصويت";
+
 
     return (
         <React.Fragment>
