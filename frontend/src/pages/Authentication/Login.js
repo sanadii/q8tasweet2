@@ -36,16 +36,16 @@ const Login = (props) => {
   const { user, errorMsg, loading, error } = useSelector(selectLayoutProperties);
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
-
+  console.log("user ===>", user);
   useEffect(() => {
     if (user && user) {
       const updatedUserData =
         process.env.REACT_APP_DEFAULTAUTH === "firebase"
-          ? user.multiFactor.user.email
-          : user.user.email;
+          ? user?.multiFactor?.user?.email
+          : user?.user?.email;
       setUserLogin({
         email: updatedUserData,
-        password: user.user.confirm_password ? user.user.confirm_password : "",
+        password: user?.user?.confirm_password ? user?.user?.confirm_password : "",
       });
     }
   }, [user]);

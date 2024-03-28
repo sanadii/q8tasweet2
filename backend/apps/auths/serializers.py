@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.hashers import make_password
 
 
 
@@ -41,6 +42,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Usel Model. """
+    password = serializers.CharField(write_only=True)
     admin_serializer_classes = (TrackMixin,)
     full_name = serializers.SerializerMethodField()
     image = serializers.ImageField(required=False)
@@ -51,7 +53,7 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
         model = User
         fields = ["id", "username", "email", "first_name", "last_name", 'phone',
                   "image", 'civil', 'gender', 'date_of_birth', 'description',
-                  "full_name", 'twitter', 'instagram',
+                  "full_name", 'twitter', 'instagram','password',
                   'is_staff', 'is_active', 'groups', 'permissions'
                   ]
 
@@ -76,6 +78,11 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
     #--- Changed Create User ------
     def create(self, validated_data):
         request = self.context.get('request')
+        password = validated_data.pop('password', None)
+        user = User(**validated_data)
+        # Set the password for the user
+        if password:
+            password = make_password(password)
         user = request.user if request and hasattr(request, 'user') else None
 
         # Set created_by to None if user is not authenticated
@@ -84,13 +91,15 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
             created_by = user
         # Remove 'created_by' from validated_data to avoid passing it twice
         validated_data.pop('created_by', None)
-        instance = User.objects.create(created_by=created_by, **validated_data)
+        instance = User.objects.create(created_by=created_by,password=password, **validated_data)
         return instance
+    
+
     # def create(self, validated_data):
     #     request = self.context.get('request')
     #     user = request.user if request and hasattr(request, 'user') else None
     #     instance = User.objects.create(**validated_data, created_by=user)
-        return instance
+    #     return instance
 
 
     def update(self, instance, validated_data):
