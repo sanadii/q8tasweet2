@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'localhost:3000',
+    '127.0.0.1:8000',
     '*',
     ]
 
@@ -66,11 +67,12 @@ INSTALLED_APPS = [
     # 'apps.media',
     'apps.configs',
     'apps.auths',
+    'apps.voters',
     'apps.campaigns',
     'apps.elections.apps.ElectionConfig',
     'apps.categories',
     'apps.candidates',
-    'apps.electors',
+    
     'apps.notifications',
 ]
 
@@ -122,8 +124,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'timeout': 30,  # Adjust the timeout value as needed
+        },
     }
 }
+
 
 
 # Password Validation #TODO: to be in a sperate File as well, MAYBE!

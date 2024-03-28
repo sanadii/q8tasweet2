@@ -6,7 +6,7 @@ from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from apps.candidates.models import Candidate
-from electors.models import Elector
+from voters.models import Elector
 from apps.categories.models import Category
 
 # Serializers

@@ -25,8 +25,8 @@ ADMIN_REORDER = (
     )},
 
     # Elector
-    {'app': 'electors', 'label': 'Elector', 'models': (
-        'appas.electors.Elector',
+    {'app': 'voters', 'label': 'Voter', 'models': (
+        'appas.voters.Voter',
     )},
 
     # Taxonomy

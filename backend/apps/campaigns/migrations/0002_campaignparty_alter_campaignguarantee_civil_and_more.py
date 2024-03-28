@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
         ('elections', '0006_electionpartycandidate_candidate_and_more'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('auth', '0001_initial'),
-        ('electors', '__first__'),
+        ('voters', '__first__'),
         ('campaigns', '0001_initial'),
     ]
 
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='campaignguarantee',
             name='civil',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='campaign_elector_guarantees', to='electors.elector'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='campaign_elector_guarantees', to='voters.voter'),
         ),
         migrations.AlterField(
             model_name='campaignguarantee',
@@ -108,7 +108,7 @@ class Migration(migrations.Migration):
                 ('notes', models.TextField(blank=True, null=True)),
                 ('status', models.IntegerField(blank=True, choices=[(1, 'جديد'), (2, 'تم التواصل'), (3, 'تم التأكيد'), (4, 'غير مؤكد'), (5, 'غير معروف')], null=True)),
                 ('campaign_party', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='campaign_party_guarantees', to='campaigns.campaignparty')),
-                ('civil', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='campaign_party_elector_guarantees', to='electors.elector')),
+                ('civil', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='campaign_party_elector_guarantees', to='voters.voter')),
                 ('created_by', models.ForeignKey(blank=True, help_text='The user who created this object.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_created', to=settings.AUTH_USER_MODEL, verbose_name='Created by')),
                 ('deleted_by', models.ForeignKey(blank=True, help_text='The user who deleted this object.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_deleted', to=settings.AUTH_USER_MODEL, verbose_name='Deleted by')),
                 ('member', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='campaign_party_guarantee_guarantors', to='campaigns.campaignmember')),

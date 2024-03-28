@@ -13,7 +13,7 @@ from .models import Group, GroupCategories
 from .serializers import UserSerializer, UserLoginSerializer, ContentTypeSerializer, GroupPermissionSerializer, GroupSerializer
 
 
-from utils.views import get_current_user_campaigns
+from utils.views import get_current_user_campaigns 
 # from utils.auths import generate_username
 
 
@@ -54,6 +54,7 @@ class UserRegister(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        #return Response({'msg':"Api Called!"})
         # Extract username from email or generate a new one
         email = request.data.get('email')
         username = self.generate_username(email)

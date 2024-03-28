@@ -13,7 +13,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from apps.candidates.models import Candidate
-from apps.electors.models import Elector
+from apps.voters.models import Elector
 from apps.categories.models import Category
 from django.contrib.auth.models import Group, Permission
 
@@ -21,7 +21,7 @@ from django.contrib.auth.models import Group, Permission
 from apps.candidates.serializers import CandidateSerializer
 from apps.elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
-from apps.electors.serializers import ElectorsSerializer
+from apps.voters.serializers import ElectorsSerializer
 from apps.campaigns.serializers import CampaignMemberSerializer
 from enum import IntEnum
 
