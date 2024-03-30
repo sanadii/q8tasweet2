@@ -31,11 +31,7 @@ function* forgetUser({ payload: { user, history } }) {
         email: user.email,
       });
       if (response) {
-        yield put(
-          userForgetPasswordSuccess(
-            "Reset link are sended to your mailbox, check there first"
-          )
-        );
+        yield put(userForgetPasswordSuccess("Reset link are sended to your mailbox, check there first"));
       }
     } else if (process.env.REACT_APP_API_URL) {
       const response = yield call(postFakeForgetPwd, user);

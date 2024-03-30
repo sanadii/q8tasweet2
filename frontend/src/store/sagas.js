@@ -8,7 +8,7 @@ import ProfileSaga from "./auth/profile/saga";
 import UsersSaga from "./auth/users/saga";
 import GroupsSaga from "./groups/saga";
 import groupPermissionSaga from "./groupPermissions/saga";
-
+import ResetPasswordSaga from "./auth/resetpassword/saga";
 
 // Elections
 import electionSaga from "./elections/saga";
@@ -26,6 +26,7 @@ import LayoutSaga from "./layouts/saga";
 import Categories from "./categories/saga";
 
 
+
 export default function* rootSaga() {
   yield all([
     // Authentication
@@ -36,6 +37,7 @@ export default function* rootSaga() {
     fork(UsersSaga),
     fork(GroupsSaga),
     fork(groupPermissionSaga),
+    fork(ResetPasswordSaga),
 
     // Project
     fork(electionSaga),

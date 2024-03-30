@@ -2,9 +2,11 @@
 export const POST_LOGIN = "/auth/signin";
 export const POST_JWT_LOGIN = "/auth/userLogin";
 export const POST_PASSWORD_FORGET = "/auth/forgot-password";
-export const POST_JWT_PASSWORD_FORGET = "/auth/forget-pwd";
+// export const POST_JWT_PASSWORD_FORGET = "/auth/forget-pwd";
+export const POST_JWT_PASSWORD_FORGET = "/auth/forgot-password";
 export const SOCIAL_LOGIN = "/auth/social-login";
 export const POST_REGISTER = "/auth/signup";
+export const RESET_PASSWORD = "/auth/reset-password";
 
 // Proterm
 export const POST_EDIT_JWT_PROFILE = "/auth/postProfile";

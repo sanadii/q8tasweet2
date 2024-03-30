@@ -24,20 +24,30 @@ const Login = (props) => {
 
   document.title = "تسجيل الدخول | كويت تصويت";
 
-  const selectLayoutState = (state) => state.Account;
-  const selectLayoutProperties = createSelector(
-    selectLayoutState,
-    (layout) => ({
-      user: layout.user,
-      errorMsg: layout.errorMsg,
-      loading: layout.loading,
-      error: layout.error,
-    })
-  );
+  const { user = null, loading, errorMsg = "", error = false } = useSelector(state => state.Login);
+  // const { loading, errorMsg, error } = useSelector(state => ({
+  //   loading: state.Account.loading,
+  //   errorMsg: state.Account.errorMsg,
+  //   error: state.Account.error,
+  // }));
+
+  // const selectLayoutState = (state) => state.Account;
+  // const selectLayoutProperties = createSelector(
+  //   selectLayoutState,
+  //   (layout) => ({
+  //     user: layout.user,
+  //     errorMsg: layout.errorMsg,
+  //     loading: layout.loading,
+  //     error: layout.error,
+  //   })
+  // );
+
+
   // Inside your component
-  const { user, errorMsg, loading, error } = useSelector(selectLayoutProperties);
+  // const { user, errorMsg, loading = false, error } = useSelector(selectLayoutProperties);
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
+
   useEffect(() => {
     if (user && user) {
       const updatedUserData =
@@ -50,6 +60,16 @@ const Login = (props) => {
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        dispatch(resetLoginFlag());
+      }, 3000);
+    }
+  }, [dispatch, error]);
+
+  console.log("errorMsg ===>", errorMsg);
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -78,13 +98,7 @@ const Login = (props) => {
     signIn(type);
   };
 
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        dispatch(resetLoginFlag());
-      }, 3000);
-    }
-  }, [dispatch, error]);
+
 
 
   const fields = [
@@ -182,18 +196,12 @@ const Login = (props) => {
 
                         <div className="mt-4">
                           <Button
-                            disabled={error ? null : loading ? true : false}
+                            disabled={loading ? true : false}
                             color="success"
                             className="btn btn-success w-100"
                             type="submit"
                           >
-                            {error ? null : loading ? (
-                              <Spinner size="sm" className="me-2">
-                                {" "}
-                                تحميل...{" "}
-                              </Spinner>
-                            ) : null}
-                            تسجيل دخول
+                            {loading ? <Spinner size="sm" className="me-2" /> : 'تسجيل دخول'}
                           </Button>
                         </div>
                       </Form>

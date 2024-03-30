@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { Row, Col, Alert, Card, CardBody, Container, FormFeedback, Input, Label, Form } from "reactstrap";
+import { Row, Col, Alert, Card, CardBody, Container, FormFeedback, Input, Label, Form, Spinner } from "reactstrap";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
@@ -22,15 +22,20 @@ import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import { withRouter } from "shared/components";
 
 const ForgetPasswordPage = props => {
+  document.title = "Reset Password | Q8Tasweet - React Admin & Dashboard Template";
+
   const dispatch = useDispatch();
+
+  const { loading, forgetError, forgetSuccessMsg } = useSelector(state => ({
+    loading: state.ForgetPassword.loading,
+    forgetError: state.ForgetPassword.forgetError,
+    forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
+  }));
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
-
-    initialValues: {
-      email: '',
-    },
+    initialValues: { email: '', },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your Email"),
     }),
@@ -39,12 +44,6 @@ const ForgetPasswordPage = props => {
     }
   });
 
-  const { forgetError, forgetSuccessMsg } = useSelector(state => ({
-    forgetError: state.ForgetPassword.forgetError,
-    forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
-  }));
-
-  document.title = "Reset Password | Q8Tasweet - React Admin & Dashboard Template";
   return (
     <ParticlesAuth>
       <div className="auth-page-content">
@@ -124,7 +123,14 @@ const ForgetPasswordPage = props => {
                       </div>
 
                       <div className="text-center mt-4">
-                        <button className="btn btn-success w-100" type="submit">Send Reset Link</button>
+                        {/* <button className="btn btn-success w-100" type="submit">Send Reset Link</button> */}
+                        <button className="btn btn-success w-100" type="submit">
+                          {
+                            loading ?
+                              <Spinner size="sm" color="me-2" /> :
+                              'Send Reset Link'
+                          }
+                        </button>
                       </div>
                     </Form>
                   </div>

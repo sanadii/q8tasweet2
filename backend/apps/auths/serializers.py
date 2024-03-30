@@ -99,7 +99,7 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
     #     request = self.context.get('request')
     #     user = request.user if request and hasattr(request, 'user') else None
     #     instance = User.objects.create(**validated_data, created_by=user)
-    #     return instance
+     #   return instance
 
 
     def update(self, instance, validated_data):

@@ -38,8 +38,8 @@ const login = (state = initialState, action) => {
     case API_ERROR:
       state = {
         ...state,
-        errorMsg: action.payload.data,
-        loading: true,
+        errorMsg: action.payload,
+        loading: false,
         error: true,
         isUserLogout: false,
       };
