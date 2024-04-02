@@ -7,22 +7,17 @@ import logoLight from "assets/images/logo-light.png";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FormFields } from 'shared/components';
-import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { userResetPassword } from "../../store/actions";
 
 const ResetPasswordScreen = () => {
     document.title = "Reset Password | Q8Tasweet - React Admin & Dashboard Template";
+
     const dispatch = useDispatch();
     const { token = null } = useParams();
 
-
-    const { loading = false, resetPasswordError = null, resetPasswordSuccessMsg = null } = useSelector(state => ({
-        loading: state.ResetPassword.loading,
-        resetPasswordError: state.ResetPassword.resetPasswordError,
-        resetPasswordSuccessMsg: state.ResetPassword.resetPasswordSuccessMsg,
-    }));
+    const { loading = false, resetPasswordError = null, resetPasswordSuccessMsg = null } = useSelector(state => state.ResetPassword);
 
     const fields = [
         { id: "password-field1", name: "password", label: "كلمة المرور", type: "password", },
@@ -110,18 +105,13 @@ const ResetPasswordScreen = () => {
                                                     'Reset'
                                             }
                                         </button>
-                                        {/* <div className="mt-4">
-                                            <button className="btn btn-success w-100" type="submit">إنشاء حساب</button>
-                                        </div> */}
                                     </Form>
                                 </div>
                             </CardBody>
                         </Card>
-
                         <div className="mt-4 text-center">
                             <p className="mb-0">Wait, I remember my password... <Link to="/auth-signin-basic" className="fw-bold text-primary text-decoration-underline"> Click here </Link> </p>
                         </div>
-
                     </Col>
                 </Row>
             </Container>

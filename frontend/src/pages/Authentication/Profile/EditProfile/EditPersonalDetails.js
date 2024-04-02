@@ -18,55 +18,12 @@ import { useFormik } from "formik";
 import { Button, Row, Form } from "reactstrap";
 
 
-
-
 const EditPersonalDetails = () => {
-    const dispatch = useDispatch();
     document.title = "Profile Settings | Q8Tasweet - React Admin & Dashboard Template";
+    const dispatch = useDispatch();
 
     // State Management
     const { user } = useSelector(userSelector);
-
-    // Form validation and submission
-    const validation = useFormik({
-        enableReinitialize: true,
-        initialValues: {
-            firstName: (user && user.firstName) || "",
-            lastName: (user && user.lastName) || "",
-            email: (user && user.email) || "",
-            phone: (user && user.phone) || "",
-            description: (user && user.description) || "",
-
-            // 
-            civil: (user && user.civil) || "",
-            gender: (user && user.gender) || "",
-            dateOfBirth: (user && user.dateOfBirth) || null,
-
-        },
-        validationSchema: Yup.object({
-            firstName: Yup.string().required('Required'),
-            lastName: Yup.string().required('Required'),
-            email: Yup.string().email('Invalid email address').required('Required'),
-        }),
-
-        onSubmit: (values) => {
-            const updatedUserProfile = {
-                id: user.id,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                email: values.email,
-                phone: values.phone,
-                description: values.description,
-
-                // 
-                civil: values.civil,
-                gender: values.gender,
-                dateOfBirth: values.dateOfBirth,
-
-            };
-            dispatch(updateUser(updatedUserProfile));
-        },
-    });
 
     const fieldGroup = [
         {
@@ -150,6 +107,43 @@ const EditPersonalDetails = () => {
             ],
         },
     ];
+
+    // Form validation and submission
+    const validation = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            firstName: (user && user.firstName) || "",
+            lastName: (user && user.lastName) || "",
+            email: (user && user.email) || "",
+            phone: (user && user.phone) || "",
+            description: (user && user.description) || "",
+            civil: (user && user.civil) || "",
+            gender: (user && user.gender) || "",
+            dateOfBirth: (user && user.dateOfBirth) || null,
+        },
+        validationSchema: Yup.object({
+            firstName: Yup.string().required('Required'),
+            lastName: Yup.string().required('Required'),
+            email: Yup.string().email('Invalid email address').required('Required'),
+            civil: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(12, 'Must be exactly 12 digits').max(12, 'Must be exactly 12 digits').required('Required'),
+            phone: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(8, 'Must be exactly 8 digits').required('Required'),
+        }),
+
+        onSubmit: (values) => {
+            const updatedUserProfile = {
+                id: user.id,
+                firstName: values.firstName,
+                lastName: values.lastName,
+                email: values.email,
+                phone: values.phone,
+                description: values.description,
+                civil: values.civil,
+                gender: values.gender,
+                dateOfBirth: values.dateOfBirth,
+            };
+            dispatch(updateUser(updatedUserProfile));
+        },
+    });
 
     return (
         <React.Fragment >

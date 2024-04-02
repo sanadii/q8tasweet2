@@ -37,7 +37,22 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return instance
 
 
+class UserImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
 
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "first_name", "last_name", "image"]
+
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        image = validated_data.pop('image', None)
+
+        if image:
+            # Save the uploaded image
+            instance.image = image
+            instance.save()
+        return instance
 
 
 class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):

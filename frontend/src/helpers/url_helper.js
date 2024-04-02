@@ -125,7 +125,8 @@ export const GET_USER_NOTIFICATIONS = "/campaigns/getUserNotifications";
 
 
 // Images
-export const UPLOAD_IMAGE = "/media/uploadImage";
+// export const UPLOAD_IMAGE = "/media/uploadImage";
+export const UPLOAD_IMAGE = "/auth/uploadImage";
 export const GET_IMAGES = "/media/uploadImage";
 export const DELETE_IMAGE = "/media/uploadImage";
 export const UPDATE_IMAGE = "/media/uploadImage";
@@ -147,7 +148,9 @@ export const UPDATE_ELECTOR = "/electors/updateElector";
 export const GET_USERS = "/auth/getUsers";
 export const GET_USER_DETAILS = "/auth/getUserDetails";
 export const ADD_NEW_USER = "/auth/addNewUser";
-export const UPDATE_USER_PROFILE = "/auth/updateUser";
+// export const UPDATE_USER_PROFILE = "/auth/updateUser";
+export const UPDATE_USER_PROFILE = "/auth/update-profile";
+
 export const CHANGE_USER_PASSWORD = "/auth/changeUserPassword";
 export const DELETE_USER = "/auth/deleteUser";
 

@@ -20,33 +20,18 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 const Login = (props) => {
+  document.title = "تسجيل الدخول | كويت تصويت";
   const dispatch = useDispatch();
 
-  document.title = "تسجيل الدخول | كويت تصويت";
-
   const { user = null, loading, errorMsg = "", error = false } = useSelector(state => state.Login);
-  // const { loading, errorMsg, error } = useSelector(state => ({
-  //   loading: state.Account.loading,
-  //   errorMsg: state.Account.errorMsg,
-  //   error: state.Account.error,
-  // }));
 
-  // const selectLayoutState = (state) => state.Account;
-  // const selectLayoutProperties = createSelector(
-  //   selectLayoutState,
-  //   (layout) => ({
-  //     user: layout.user,
-  //     errorMsg: layout.errorMsg,
-  //     loading: layout.loading,
-  //     error: layout.error,
-  //   })
-  // );
-
-
-  // Inside your component
-  // const { user, errorMsg, loading = false, error } = useSelector(selectLayoutProperties);
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
+  const fields = [
+    // Existing fields
+    { id: "email-field", name: "email", label: "الإيميل", type: "email", },
+    { id: "password-field", name: "password", label: "كلمة المرور", type: "password", },
+  ]
 
   useEffect(() => {
     if (user && user) {
@@ -69,12 +54,9 @@ const Login = (props) => {
     }
   }, [dispatch, error]);
 
-  console.log("errorMsg ===>", errorMsg);
-
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
-
     initialValues: {
       email: userLogin.email || "",
       password: userLogin.password || "",
@@ -88,35 +70,6 @@ const Login = (props) => {
       dispatch(loginUser(values, props.router.navigate));
     },
   });
-
-  const signIn = (type) => {
-    dispatch(socialLogin(type, props.router.navigate));
-  };
-
-  //for facebook and google authentication
-  const socialResponse = (type) => {
-    signIn(type);
-  };
-
-
-
-
-  const fields = [
-    // Existing fields
-    {
-      id: "email-field",
-      name: "email",
-      label: "الإيميل",
-      type: "email",
-    },
-    {
-      id: "password-field",
-      name: "password",
-      label: "كلمة المرور",
-      type: "password",
-    },
-  ]
-
 
   return (
     <React.Fragment>

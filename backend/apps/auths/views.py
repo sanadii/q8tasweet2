@@ -2,6 +2,7 @@ from django.http.response import JsonResponse
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+import jwt
 
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -10,7 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.views import APIView
 
 from .models import Group, GroupCategories
-from .serializers import UserSerializer, UserLoginSerializer, ContentTypeSerializer, GroupPermissionSerializer, GroupSerializer
+from .serializers import UserSerializer, UserLoginSerializer, ContentTypeSerializer, GroupPermissionSerializer, GroupSerializer, UserImageSerializer
 
 
 from utils.views import get_current_user_campaigns 
@@ -27,7 +28,9 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import timezone
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from helper.views_helper import CustomPagination
+from rest_framework.parsers import MultiPartParser
+import os
+from django.core.files.storage import FileSystemStorage
 
 class UserLogin(APIView):
     permission_classes = [AllowAny]
@@ -106,29 +109,24 @@ class ChangeUserPassword(APIView):
 class UpdateProfile(APIView):
     permission_classes = [IsAuthenticated]
     def put(self, request):
-        # return Response({
-        #     'msg':"Api Called!",
-        # })
         user = request.user  # Get the authenticated user directly from the request due to the middleware
         serializer = UserSerializer(user, data=request.data, partial=True) # Update existing instance
         if serializer.is_valid():
             serializer.save()
             return Response({"success": True, "message": "User profile updated successfully"})
-#         return Response({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        
+        return Response({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
-# class UserProfileUpdateAPIView(APIView):
-#     permission_classes = [IsAuthenticated]
-#     def post(self, request):
-#         return Response({
-#             'msg':"Api Called!",
-#         })
-#         user = request.user  # Get the authenticated user directly from the request due to the middleware
-#         serializer = UserSerializer(user, data=request.data, partial=True) # Update existing instance
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({"success": True, "message": "User profile updated successfully"})
-#         return Response({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+class UpdateProfileImage(APIView):
+    parser_classes = (MultiPartParser,)
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserImageSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': True, 'msg': 'User image updated!','status': status.HTTP_200_OK,})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class BlacklistTokenUpdateView(APIView):
     permission_classes = [AllowAny]
@@ -143,7 +141,7 @@ class BlacklistTokenUpdateView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
+from helper.views_helper import CustomPagination
 
 class GetUsers(APIView):
     def get(self, request, *args, **kwargs):
@@ -367,7 +365,7 @@ class ForgotPassword(APIView):
                 #expiry_time = timezone.now() + timezone.timedelta(minutes=5)
                 subject, from_email, to = 'Password Reset', 'shankar.wxit@gmail.com', email
                 #text_content = 'This is an important message.'
-                msg = f'Click the link to reset your password: http://localhost:3000/reset-password/{token}'
+                msg = f'Click the link to reset your password: http://127.0.0.1:8001/reset-password/{token}'
                 msg1 = EmailMultiAlternatives(subject, msg, from_email, [to])
                 msg1.content_subtype = 'html'
                 msg1.send()
@@ -413,9 +411,7 @@ class ResetPassword(APIView):
                 }
                 return Response(response_data, status=status.HTTP_404_NOT_FOUND)
             # Check if token has expired
-            currentTime = timezone.now()
-            # dbTime =timezone.datetime.strptime(user.token_expiry,'%Y-%m-%d %H:%M:%S.%f%z')
-            if user.token_expiry and user.token_expiry < currentTime:
+            if user.token_expiry and user.token_expiry < timezone.now():
                 response_data = {
                     'success': False,
                     'status': status.HTTP_400_BAD_REQUEST,

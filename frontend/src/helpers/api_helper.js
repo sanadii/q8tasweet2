@@ -110,6 +110,13 @@ class APIClient {
   delete = (url, config) => {
     return axios.delete(url, { ...config });
   };
+
+  imageUpload = (url, data) => {
+    const headers = {
+      'Content-Type': "multipart/form-data"
+    }
+    return axios.post(url, data, { headers: headers });
+  };
 }
 
 const getLoggedinUser = () => {

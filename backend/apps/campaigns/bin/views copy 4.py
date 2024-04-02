@@ -21,7 +21,7 @@ from django.contrib.auth.models import Group, Permission
 from apps.candidates.serializers import CandidateSerializer
 from apps.elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
-from apps.voters.serializers import ElectorsSerializer
+from apps.voters.serializers import VotersSerializer
 from apps.campaigns.serializers import CampaignMemberSerializer
 from enum import IntEnum
 

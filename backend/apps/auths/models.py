@@ -59,7 +59,8 @@ class User(TrackModel, AbstractUser):
     instagram = models.CharField(max_length=150, blank=True)  # New
 
     token = models.CharField(max_length=150, blank=True)  # New 29/03/24
-    token_expiry = models.DateTimeField(blank=True, null=True) # New 29/03/24
+    token_expiry = models.DateTimeField(blank=True, null=True)
+    
     # User Permissions
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
