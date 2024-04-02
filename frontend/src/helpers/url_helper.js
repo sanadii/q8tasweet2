@@ -2,9 +2,11 @@
 export const POST_LOGIN = "/auth/signin";
 export const POST_JWT_LOGIN = "/auth/userLogin";
 export const POST_PASSWORD_FORGET = "/auth/forgot-password";
-export const POST_JWT_PASSWORD_FORGET = "/auth/forget-pwd";
+// export const POST_JWT_PASSWORD_FORGET = "/auth/forget-pwd";
+export const POST_JWT_PASSWORD_FORGET = "/auth/forgot-password";
 export const SOCIAL_LOGIN = "/auth/social-login";
 export const POST_REGISTER = "/auth/signup";
+export const RESET_PASSWORD = "/auth/reset-password";
 
 // Proterm
 export const POST_EDIT_JWT_PROFILE = "/auth/postProfile";
@@ -123,7 +125,8 @@ export const GET_USER_NOTIFICATIONS = "/campaigns/getUserNotifications";
 
 
 // Images
-export const UPLOAD_IMAGE = "/media/uploadImage";
+// export const UPLOAD_IMAGE = "/media/uploadImage";
+export const UPLOAD_IMAGE = "/auth/uploadImage";
 export const GET_IMAGES = "/media/uploadImage";
 export const DELETE_IMAGE = "/media/uploadImage";
 export const UPDATE_IMAGE = "/media/uploadImage";
@@ -145,7 +148,9 @@ export const UPDATE_ELECTOR = "/electors/updateElector";
 export const GET_USERS = "/auth/getUsers";
 export const GET_USER_DETAILS = "/auth/getUserDetails";
 export const ADD_NEW_USER = "/auth/addNewUser";
-export const UPDATE_USER_PROFILE = "/auth/updateUser";
+// export const UPDATE_USER_PROFILE = "/auth/updateUser";
+export const UPDATE_USER_PROFILE = "/auth/update-profile";
+
 export const CHANGE_USER_PASSWORD = "/auth/changeUserPassword";
 export const DELETE_USER = "/auth/deleteUser";
 

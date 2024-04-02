@@ -33,7 +33,7 @@ from apps.elections.serializers import (
     ElectionCommitteeSerializer,
 )
 from apps.auths.serializers import UserSerializer
-from apps.voters.serializers import ElectorsSerializer
+from apps.voters.serializers import VotersSerializer
 
 
 class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):

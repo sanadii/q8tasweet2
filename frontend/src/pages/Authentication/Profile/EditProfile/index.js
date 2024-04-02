@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -6,6 +6,7 @@ import { Card, CardBody, CardHeader, Container, Nav, NavItem, NavLink, TabConten
 import { userSelector } from 'selectors';
 import classnames from "classnames";
 
+import { uploadNewImage, getCurrentUser } from "store/actions";
 
 //import images
 import EditProfileImage from "./EditProfileImage"
@@ -29,14 +30,30 @@ const tabs = [
 ];
 const ProfileEdit = () => {
     document.title = "Profile Settings | Q8Tasweet - React Admin & Dashboard Template";
+    const dispatch = useDispatch();
+
     const { user } = useSelector(userSelector);
     const [activeTab, setActiveTab] = useState("1");
+    const [userProfileImage, setUserProfileImage] = useState(null);
+
+
+    useEffect(() => {
+        if (!user || user?.length === 0) { dispatch(getCurrentUser()); }
+    }, []);
 
     const tabChange = (tab) => {
         if (activeTab !== tab) setActiveTab(tab);
     };
 
-    document.title = "Profile Settings | Q8Tasweet - React Admin & Dashboard Template";
+    const onUploadImage = (e) => {
+        if (userProfileImage) {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('folder', 'users');
+            formData.append('image', userProfileImage || '');
+            dispatch(uploadNewImage(formData));
+        }
+    }
 
     return (
         <React.Fragment>
@@ -79,7 +96,7 @@ const ProfileEdit = () => {
                     </div>
                     <Row className="mt-xxl-n4">
                         <Col xxl={3}>
-                            <EditProfileImage />
+                            <EditProfileImage userDetails={user} selectImage={(image) => { setUserProfileImage(image) }} />
                             {/* <EditCompleteProfile /> */}
                             <EditSocialMedia />
                         </Col>
@@ -117,6 +134,7 @@ const ProfileEdit = () => {
                         <Col lg={12}>
                             <div className="hstack gap-2 justify-content-end">
                                 <button type="button"
+                                    onClick={onUploadImage}
                                     className="btn btn-primary">تحديث</button>
                             </div>
                         </Col>

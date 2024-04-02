@@ -60,12 +60,9 @@ function* onUploadNewImage({ payload: formData }) {
   try {
     // Call the API function that uploads the image and pass the formData
     const response = yield call(uploadNewImage, formData);
-
     // Dispatch the uploadImageSuccess action with the received data
     yield put(uploadImageSuccess(response.data));
-
     // toast.success("Image Added Successfully", { autoClose: 3000 });
-
     // Return the response data
     return response.data;
   } catch (error) {
@@ -73,7 +70,7 @@ function* onUploadNewImage({ payload: formData }) {
     // toast.error("Image Added Failed", { autoClose: 3000 });
 
     // Re-throw the error
-    throw error;
+    // throw error;
   }
 }
 

@@ -18,7 +18,7 @@ from django.contrib.auth.models import Group, Permission
 from candidates.serializers import CandidateSerializer
 from elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
-from voters.serializers import ElectorsSerializer
+from voters.serializers import VotersSerializer
 
 import ast 
 from django.shortcuts import get_object_or_404

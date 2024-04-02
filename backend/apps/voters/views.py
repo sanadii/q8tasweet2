@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from apps.voters.models import Voter
 
 # Serializers 
-from apps.voters.serializers import ElectorsSerializer
+from apps.voters.serializers import VotersSerializer
 
 import ast 
 from django.shortcuts import get_object_or_404
@@ -31,7 +31,7 @@ from django.http import Http404
 class GetAllElectors(APIView):
     def get(self, request):
         electors = Voter.objects.all()
-        electors_serializer = ElectorsSerializer(electors, many=True)
+        electors_serializer = VotersSerializer(electors, many=True)
         return Response({"data": {"allElectors": electors_serializer.data}, "code": 200})
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -73,7 +73,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 #         # Pagination
 #         paginator = StandardResultsSetPagination()
 #         result_page = paginator.paginate_queryset(electors, request)
-#         serialized = ElectorsSerializer(result_page, many=True)
+#         serialized = VotersSerializer(result_page, many=True)
 #         response_data = {
 #             "data": {
 #                 "electors": serialized.data,
@@ -109,7 +109,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 #         # Pagination
 #         paginator = StandardResultsSetPagination()
 #         result_page = paginator.paginate_queryset(electors, request)
-#         serialized = ElectorsSerializer(result_page, many=True)
+#         serialized = VotersSerializer(result_page, many=True)
 #         response_data = {
 #             "data": {
 #                 "electors": serialized.data,
@@ -141,7 +141,7 @@ class GetElectors(APIView):
 
         paginator = StandardResultsSetPagination()
         result_page = paginator.paginate_queryset(electors, request)
-        serialized = ElectorsSerializer(result_page, many=True)
+        serialized = VotersSerializer(result_page, many=True)
         response_data = {
             "data": {
                 "electors": serialized.data,

@@ -11,6 +11,7 @@ import Profile from "./auth/profile/reducer";
 import Users from "./auth/users/reducer";
 import Groups from "./groups/reducer";
 import GroupPermissions from "./groupPermissions/reducer";
+import ResetPassword from "./auth/resetpassword/reducer";
 
 
 // Elections
@@ -49,7 +50,8 @@ const rootReducer = combineReducers({
     Users,
     Groups,
     GroupPermissions,
-    
+    ResetPassword,
+
     // Project
     Elections,
     Candidates,
@@ -58,7 +60,7 @@ const rootReducer = combineReducers({
     Electors,
     // Guarantees,
     // Attendees,
-    
+
     // System / Settings
     UploadImage,
     Categories,

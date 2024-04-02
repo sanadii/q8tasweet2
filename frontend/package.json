@@ -86,6 +86,7 @@
     "reactstrap": "^9.1.6",
     "redux": "^4.2.1",
     "redux-saga": "^1.2.2",
+    "redux-state-sync": "^3.1.4",
     "remixicon-react": "^1.0.0",
     "reselect": "^4.1.8",
     "save": "^2.9.0",

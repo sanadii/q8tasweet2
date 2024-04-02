@@ -63,7 +63,7 @@ const ViewProfile = () => {
               <div className="col-auto">
                 <div className="avatar-lg">
                   <img
-                    src={avatar1}
+                    src={user?.image ? process.env.REACT_APP_MEDIA_URL + user?.image : avatar1}
                     alt="user-img"
                     className="img-thumbnail rounded-circle"
                   />

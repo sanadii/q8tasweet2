@@ -16,7 +16,8 @@ export function useCampaignMenu(isCurrentState, setIsCurrentState,) {
   const { slug, campaignType } = useParams();
   const currentCampaign = { campaignType, slug, }
 
-  console.log("isCurrentState: ", isCurrentState)
+  // console.log("isCurrentState: ", isCurrentState)
+  
   // useEffect(() => {
   //   document.title = "الانتخابات | كويت تصويت";
   //   if (slug || slug !== currentCampaign) {

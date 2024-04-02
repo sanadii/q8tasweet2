@@ -6,6 +6,7 @@ import ProfileEdit from "pages/Authentication/Profile/EditProfile";
 
 const AuthProtectedRoutes = [
     // User Profile
+    { path: "/profile", component: <UserProfile /> },
     { path: "/profile-edit", component: <ProfileEdit /> },
 
     // Redirects and Error Handling

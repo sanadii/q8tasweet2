@@ -18,12 +18,14 @@ class UploadImage(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        
         if request.method == 'POST':
             folder = request.POST.get('folder')  # Get the folder value from the request
             image = request.FILES.get('image')
             letters = string.ascii_lowercase
             result_str = ''.join(random.choice(letters) for i in range(20))
             if image and folder:
+                
                 filename = os.path.join(folder, result_str + image.name)
                 full_path = os.path.join(settings.MEDIA_ROOT, filename)
                 

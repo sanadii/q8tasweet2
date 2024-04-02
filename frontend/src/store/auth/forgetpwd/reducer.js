@@ -5,6 +5,7 @@ import {
 } from "./actionTypes";
 
 const initialState = {
+  loading: false,
   forgetSuccessMsg: null,
   forgetError: null,
 };
@@ -13,19 +14,19 @@ const forgetPassword = (state = initialState, action) => {
   switch (action.type) {
     case FORGET_PASSWORD:
       state = {
-        ...state,
+        ...state, loading: true,
         forgetSuccessMsg: null,
         forgetError: null,
       };
       break;
     case FORGET_PASSWORD_SUCCESS:
       state = {
-        ...state,
+        ...state, loading: false,
         forgetSuccessMsg: action.payload,
       };
       break;
     case FORGET_PASSWORD_ERROR:
-      state = { ...state, forgetError: action.payload };
+      state = { ...state, loading: false, forgetError: action.payload };
       break;
     default:
       state = { ...state };

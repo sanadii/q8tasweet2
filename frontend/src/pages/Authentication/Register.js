@@ -13,7 +13,7 @@ import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 
 
 // UI, Styles & Notifications
-import { Row, Col, CardBody, Card, Alert, Container, Form } from "reactstrap";
+import { Row, Col, CardBody, Card, Alert, Container, Form, Spinner } from "reactstrap";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -23,100 +23,43 @@ import { useFormik } from "formik";
 
 
 const Register = () => {
+    document.title = "إنشاء حساب جديد | كويت تصويت";// Title of page
+
     const history = useNavigate();
     const dispatch = useDispatch();
+
+    const { loading = false, error = false, registrationError = null, success = false } = useSelector(state => state.Account);
+
+    const fields = [
+        { id: "first-name-field", name: "firstName", label: "الاسم الأول", type: "text" },
+        { id: "last-name-field", name: "lastName", label: "الاسم الأخير", type: "text", },
+        { id: "email-field", name: "email", label: "الإيميل", type: "email" },
+        { id: "password-field", name: "password", label: "كلمة المرور", type: "password" },
+        { id: "confirm-password-field", name: "confirmPassword", label: "تأكيد كلمة المرور", type: "password" },
+    ]
+
+    useEffect(() => { dispatch(apiError("")); }, [dispatch]);
+
+    useEffect(() => {
+        if (success) { setTimeout(() => history("/login"), 3000); }
+        setTimeout(() => {
+            dispatch(resetRegisterFlag());
+        }, 3000);
+    }, [dispatch, success, error, history]);
 
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
-
-        initialValues: {
-            email: '',
-            firstName: '',
-            lastName: '',
-            password: '',
-            confirmPassword: ''
-        },
+        initialValues: { email: '', firstName: '', lastName: '', password: '', confirmPassword: '' },
         validationSchema: Yup.object().shape({
-            email: Yup.string()
-                .email('الرجاء إدخال عنوان بريد إلكتروني صالح')
-                .required('الرجاء إدخال بريدك الإلكتروني'),
-
-            firstName: Yup.string()
-                .required('الرجاء إدخال اسم المستخدم الخاص بك'),
-
-            lastName: Yup.string()
-                .required('الرجاء إدخال اسم المستخدم الخاص بك'),
-
-            password: Yup.string()
-                .min(6, 'يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل')
-                .required('كلمة المرور مطلوبة'),
-
-            confirmPassword: Yup.string()
-                .oneOf([Yup.ref('password'), null], 'يجب أن تتطابق كلمات المرور')
-                .required('تأكيد كلمة المرور مطلوب')
+            email: Yup.string().email('الرجاء إدخال عنوان بريد إلكتروني صالح').required('الرجاء إدخال بريدك الإلكتروني'),
+            firstName: Yup.string().required('الرجاء إدخال اسم المستخدم الخاص بك'),
+            lastName: Yup.string().required('الرجاء إدخال اسم المستخدم الخاص بك'),
+            password: Yup.string().min(6, 'يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل').required('كلمة المرور مطلوبة'),
+            confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'يجب أن تتطابق كلمات المرور').required('تأكيد كلمة المرور مطلوب')
         }),
-        onSubmit: (values) => {
-            dispatch(registerUser(values));
-        }
+        onSubmit: (values) => { dispatch(registerUser(values)); }
     });
-
-    const { error, registrationError, success } = useSelector(state => ({
-        registrationError: state.Account.registrationError,
-        success: state.Account.success,
-        error: state.Account.error
-    }));
-
-    useEffect(() => {
-        dispatch(apiError(""));
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (success) {
-            setTimeout(() => history("/login"), 3000);
-        }
-
-        setTimeout(() => {
-            dispatch(resetRegisterFlag());
-        }, 3000);
-
-    }, [dispatch, success, error, history]);
-
-
-    const fields = [
-        {
-            id: "first-name-field",
-            name: "firstName",
-            label: "الاسم الأول",
-            type: "text",
-        },
-        {
-            id: "last-name-field",
-            name: "lastName",
-            label: "الاسم الأخير",
-            type: "text",
-        },
-        {
-            id: "email-field",
-            name: "email",
-            label: "الإيميل",
-            type: "email",
-        },
-        {
-            id: "password-field",
-            name: "password",
-            label: "كلمة المرور",
-            type: "password",
-        },
-        {
-            id: "confirm-password-field",
-            name: "confirmPassword",
-            label: "تأكيد كلمة المرور",
-            type: "password",
-        },
-    ]
-
-    document.title = "إنشاء حساب جديد | كويت تصويت";
 
     return (
         <React.Fragment>
@@ -135,11 +78,9 @@ const Register = () => {
                                 </div>
                             </Col>
                         </Row>
-
                         <Row className="justify-content-center">
                             <Col md={8} lg={6} xl={5}>
                                 <Card className="mt-4">
-
                                     <CardBody className="p-4">
                                         <div className="text-center mt-2">
                                             <h5 className="text-primary">تسجيل حساب جديد</h5>
@@ -153,7 +94,6 @@ const Register = () => {
                                                     return false;
                                                 }}
                                                 className="needs-validation" action="#">
-
                                                 {success && success ? (
                                                     <>
                                                         {toast("Your Redirect To Login Page...", { position: "top-right", hideProgressBar: false, className: 'bg-success text-white', progress: undefined, toastId: "" })}
@@ -163,7 +103,6 @@ const Register = () => {
                                                         </Alert>
                                                     </>
                                                 ) : null}
-
                                                 {error && error ? (
                                                     <Alert color="danger">
                                                         <div>
@@ -171,7 +110,6 @@ const Register = () => {
                                                         </div>
                                                     </Alert>
                                                 ) : null}
-
                                                 {
                                                     fields.map(field => {
                                                         return (field.condition === undefined || field.condition) && (
@@ -192,7 +130,9 @@ const Register = () => {
                                                 </div>
 
                                                 <div className="mt-4">
-                                                    <button className="btn btn-success w-100" type="submit">إنشاء حساب</button>
+                                                    <button className="btn btn-success w-100" type="submit">
+                                                        {loading ? <Spinner size="sm" className="me-2" /> : 'إنشاء حساب'}
+                                                    </button>
                                                 </div>
                                             </Form>
                                         </div>

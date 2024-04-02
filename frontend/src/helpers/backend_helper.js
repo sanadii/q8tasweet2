@@ -22,12 +22,9 @@ export const postJwtLogin = data => api.create(url.POST_JWT_LOGIN, data);
 // Register Method
 export const postFakeRegister = (data) => api.create(url.POST_REGISTER, data);
 export const postFakeLogin = (data) => api.create(url.POST_LOGIN, data);
-export const postFakeForgetPwd = (data) =>
-  api.create(url.POST_PASSWORD_FORGET, data);
-export const postJwtProfile = (data) =>
-  api.create(url.POST_EDIT_JWT_PROFILE, data);
-export const postFakeProfile = (data) =>
-  api.update(url.POST_EDIT_PROFILE + "/" + data.idx, data);
+export const postFakeForgetPwd = (data) => api.create(url.POST_PASSWORD_FORGET, data);
+export const postJwtProfile = (data) => api.create(url.POST_EDIT_JWT_PROFILE, data);
+export const postFakeProfile = (data) => api.update(url.POST_EDIT_PROFILE + "/" + data.idx, data);
 
 // Register Method
 export const postJwtRegister = (url, data) => {
@@ -56,6 +53,7 @@ export const postJwtRegister = (url, data) => {
 
 export const postJwtForgetPwd = (data) => api.create(url.POST_JWT_PASSWORD_FORGET, data);
 export const postSocialLogin = (data) => api.create(url.SOCIAL_LOGIN, data);
+export const postResetPassword = (data) => api.create(url.RESET_PASSWORD, data);
 
 // Elections  //////////////////////////////
 // export const getElections = () => api.get(url.GET_ELECTIONS);
@@ -89,7 +87,7 @@ export const getElectionPartyDetails = (electionParty) => api.get(url.GET_ELECTI
 export const addElectionParty = (electionParty) => api.create(url.ADD_ELECTION_PARTY, electionParty);
 export const updateElectionParty = (electionParty) => api.update(url.UPDATE_ELECTION_PARTY + "/" + electionParty.id, electionParty);
 export const deleteElectionParty = (electionParty) => api.delete(url.DELETE_ELECTION_PARTY + "/" + electionParty);
-export const updateElectionPartyResults = (electionPartyResults) => api.update(url.UPDATE_ELECTION_PARTY_RESULTS+ "/" + electionPartyResults.id, electionPartyResults);
+export const updateElectionPartyResults = (electionPartyResults) => api.update(url.UPDATE_ELECTION_PARTY_RESULTS + "/" + electionPartyResults.id, electionPartyResults);
 
 
 // ElectionPartyCandidates
@@ -142,14 +140,14 @@ export const deleteParty = (party) => api.delete(url.DELETE_PARTY + "/" + party)
 
 // Campaigns
 export const getCampaigns = () => api.get(url.GET_CAMPAIGNS);
-export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS  + "/" + campaign);
+export const getCampaignDetails = (campaign) => api.get(url.GET_CAMPAIGN_DETAILS + "/" + campaign);
 export const addNewCampaign = (campaign) => api.create(url.ADD_NEW_CAMPAIGN, campaign);
 export const updateCampaign = (campaign) => api.update(url.UPDATE_CAMPAIGN + "/" + campaign.id, campaign);
 export const deleteCampaign = (campaign) => api.delete(url.DELETE_CAMPAIGN + "/" + campaign);
 
 // CampaignMember
 export const getAllCampaignMembers = (member) => api.get(url.GET_ALL_CAMPAIGN_MEMBERS + "/" + member.id);
-export const addNewCampaignMember = (member) => api.create(url.ADD_NEW_CAMPAIGN_MEMBER, member );
+export const addNewCampaignMember = (member) => api.create(url.ADD_NEW_CAMPAIGN_MEMBER, member);
 export const updateCampaignMember = (member) => api.update(url.UPDATE_CAMPAIGN_MEMBER + "/" + member.id, member);
 export const deleteCampaignMember = (member) => api.delete(url.DELETE_CAMPAIGN_MEMBER + "/" + member);
 export const getCampaignMemberDetails = (member) => api.get(url.GET_CAMPAIGN_MEMBER_DETAILS + "/" + member.id);
@@ -181,7 +179,8 @@ export const getUsers = () => api.get(url.GET_USERS);
 export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + user.id);
 
 export const addNewUser = (user) => api.create(url.ADD_NEW_USER, user);
-export const updateUser = (user) => api.update(url.UPDATE_USER_PROFILE + "/" + user.id, user);
+// export const updateUser = (user) => api.update(url.UPDATE_USER_PROFILE + "/" + user.id, user);
+export const updateUser = (user) => api.put(url.UPDATE_USER_PROFILE , user);
 export const changeUserPassword = (user) => api.update(url.CHANGE_USER_PASSWORD + "/" + user.id, user);
 export const deleteUser = (user) => api.delete(url.DELETE_USER + "/" + user);
 
@@ -207,7 +206,7 @@ export const deleteGroupPermission = (groupPermission) => api.delete(url.DELETE_
 
 
 // Images
-export const uploadNewImage = (formData) => api.upload(url.UPLOAD_IMAGE, formData);
+export const uploadNewImage = (formData) => api.imageUpload(url.UPLOAD_IMAGE, formData);
 export const getImages = () => api.get(url.GET_IMAGES);
 // export const uploadNewImage = (formData) => api.create(url.UPLOAD_NEW_IMAGE, formData);
 // export const uploadNewImage = (formData) => api.post("/uploadImage", formData);

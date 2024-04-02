@@ -6,6 +6,7 @@ export * from "./auth/profile/actions";
 export * from "./auth/users/action";
 export * from "./groups/action";
 export * from "./groupPermissions/action";
+export * from "./auth/resetpassword/actions";
 
 // Elections
 export * from "./elections/action";

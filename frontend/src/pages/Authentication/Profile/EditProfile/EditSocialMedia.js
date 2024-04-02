@@ -8,6 +8,8 @@ import * as Yup from "yup";
 import { FieldComponent } from "shared/components";
 
 const EditSocialMedia = () => {
+    document.title = "Profile Settings | Q8Tasweet - React Admin & Dashboard Template";
+
     const { user } = useSelector(userSelector);
     const dispatch = useDispatch();
 
@@ -48,7 +50,6 @@ const EditSocialMedia = () => {
         },
     ];
 
-    document.title = "Profile Settings | Q8Tasweet - React Admin & Dashboard Template";
 
     return (
         <React.Fragment>

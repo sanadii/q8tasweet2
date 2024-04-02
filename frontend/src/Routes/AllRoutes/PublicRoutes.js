@@ -44,6 +44,7 @@ import Login from "pages/Authentication/Login";
 import ForgetPasswordPage from "pages/Authentication/ForgetPassword";
 import Logout from "pages/Authentication/Logout";
 import Register from "pages/Authentication/Register";
+import ResetPasswordScreen from "pages/Authentication/ResetPassword";
 
 
 const PublicRoutes = [
@@ -62,6 +63,7 @@ const PublicRoutes = [
     { path: "/login", component: <Login /> },
     { path: "/forgot-password", component: <ForgetPasswordPage /> },
     { path: "/register", component: <Register /> },
+    { path: "/reset-password/:token", component: <ResetPasswordScreen /> },
 
 
     //AuthenticationInner pages

@@ -57,6 +57,9 @@ class User(TrackModel, AbstractUser):
     phone = models.CharField(max_length=8, blank=True, null=True, validators=[phone_validator])
     twitter = models.CharField(max_length=150, blank=True)  # New
     instagram = models.CharField(max_length=150, blank=True)  # New
+
+    token = models.CharField(max_length=150, blank=True)  # New 29/03/24
+    token_expiry = models.DateTimeField(blank=True, null=True)
     
     # User Permissions
     is_staff = models.BooleanField(default=False)
