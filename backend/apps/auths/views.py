@@ -365,7 +365,7 @@ class ForgotPassword(APIView):
                 #expiry_time = timezone.now() + timezone.timedelta(minutes=5)
                 subject, from_email, to = 'Password Reset', 'shankar.wxit@gmail.com', email
                 #text_content = 'This is an important message.'
-                msg = f'Click the link to reset your password: http://127.0.0.1:8001/reset-password/{token}'
+                msg = f'Click the link to reset your password: http://localhost:3000/reset-password/{token}'
                 msg1 = EmailMultiAlternatives(subject, msg, from_email, [to])
                 msg1.content_subtype = 'html'
                 msg1.send()
