@@ -5,7 +5,6 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from rest_framework.serializers import ModelSerializer
-from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.hashers import make_password
 
 
@@ -15,45 +14,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'first_name', 'last_name', 'username']
-
-
-class UserCreateSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True)
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(min_length=8, write_only=True)
-
-    class Meta:
-        model = User
-        fields = ('email', 'username', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        password = validated_data.pop('password', None)
-        # as long as the fields are the same, we can just use this
-        instance = self.Meta.model(**validated_data)
-        if password is not None:
-            instance.set_password(password)
-        instance.save()
-        return instance
-
-
-class UserImageSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(required=False)
-
-    class Meta:
-        model = User
-        fields = ["id", "username", "email", "first_name", "last_name", "image"]
-
-    def update(self, instance, validated_data):
-        request = self.context.get('request')
-        image = validated_data.pop('image', None)
-
-        if image:
-            # Save the uploaded image
-            instance.image = image
-            instance.save()
-        return instance
-
 
 class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Usel Model. """
@@ -124,8 +84,7 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
             instance.updated_by = user
         return super().update(instance, validated_data)
 
-
-# Groups, Categories, Permissions
+# Groups, Permissions
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
