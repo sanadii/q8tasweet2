@@ -5,7 +5,7 @@ import { Collapse } from 'reactstrap';
 import { layoutSelector } from 'selectors/layoutSelector';
 
 // Import Data
-import DashboardMenuData from "../MenuDataDashboard";
+import menuItems from "../LayoutMenuData";
 import { withRouter } from 'shared/components';
 import { useSelector, useDispatch } from "react-redux";
 import { getCampaignDetails } from "store/actions";
@@ -121,7 +121,7 @@ const SubItem = ({ subItem }) => (
 
 const VerticalLayout = (props) => {
 
-    const navData = DashboardMenuData().props.children;
+    const navData = menuItems().props.children;
     const path = props.router.location.pathname;
     const [selectedCampaign, setSelectedCampaign] = useState("")
 
