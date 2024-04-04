@@ -23,7 +23,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
-from helper.views_helper import CustomPagination
+from utils.views_helper import CustomPagination
 
 
 class GetCampaigns(APIView):

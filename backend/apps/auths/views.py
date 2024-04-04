@@ -37,7 +37,7 @@ from rest_framework.parsers import MultiPartParser
 import os
 from django.core.files.storage import FileSystemStorage
 
-from helper.views_helper import CustomPagination
+from utils.views_helper import CustomPagination
 
 User = get_user_model()
 

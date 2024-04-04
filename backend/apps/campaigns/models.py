@@ -9,8 +9,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 from apps.configs.models import TrackModel, TaskModel
-from helper.models_helper import GuaranteeStatusOptions
-from helper.validators import civil_validator, phone_validator
+from utils.models_helper import GuaranteeStatusOptions
+from utils.validators import civil_validator, phone_validator
 
 # from apps.campaigns.models import ElectionCandidate
 

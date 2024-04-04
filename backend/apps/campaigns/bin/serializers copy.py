@@ -1,6 +1,6 @@
 # campaigns/serializers.py
 from rest_framework import serializers
-from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # Models
 from models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee

@@ -7,7 +7,6 @@ import Layout from "../Layouts";
 // Routes
 import { AuthProtectedRoutes, DashboardRoutes, CampaignRoutes, PublicRoutes } from "./AllRoutes";
 import { AuthProtected } from './AuthProtected';
-// import {CampaignContext} from '/shared/contexts'
 
 const routeConfig = [
     {
@@ -67,34 +66,3 @@ const Index = () => {
 };
 
 export default Index;
-
-//     return (
-//         <React.Fragment>
-//             <Routes>
-//                 {routeConfig.map(({ routes, layout, Wrapper }, idx) => (
-//                     <Route key={idx}>
-//                         {routes.map((route, routeIdx) => (
-//                             <Route
-//                                 path={route.path}
-//                                 element={
-//                                     Wrapper ? (
-//                                         <AuthProtected>
-//                                             {layout ? <Layout defaultLayout={layout}>{route.component}</Layout> : route.component}
-//                                         </AuthProtected>
-//                                     ) : (
-//                                         layout ? <Layout defaultLayout={layout}>{route.component}</Layout> : route.component
-//                                     )
-//                                 }
-//                                 key={routeIdx}
-//                                 exact={true}
-//                             />
-//                         ))}
-//                     </Route>
-//                 ))}
-
-//             </Routes>
-//         </React.Fragment>
-//     );
-// };
-
-// export default Index;

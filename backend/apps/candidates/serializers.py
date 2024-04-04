@@ -5,7 +5,7 @@ from django.conf import settings  # Import Django settings to access MEDIA_URL
 from apps.candidates.models import Candidate, Party
 from apps.auths.models import User
 
-from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 class CandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Candidate model. """

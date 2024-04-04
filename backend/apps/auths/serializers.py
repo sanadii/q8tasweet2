@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.auths.models import User
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.hashers import make_password
 

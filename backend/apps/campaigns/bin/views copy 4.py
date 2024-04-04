@@ -25,7 +25,7 @@ from apps.voters.serializers import VotersSerializer
 from apps.campaigns.serializers import CampaignMemberSerializer
 from enum import IntEnum
 
-from helper.views_helper import CustomPagination
+from utils.views_helper import CustomPagination
 
 class CampaignRoleIDs(IntEnum):
     ADMIN = 1

@@ -59,7 +59,7 @@ from apps.elections.serializers import ElectionCandidateSerializer, ElectionComm
 from apps.auths.serializers import GroupSerializer
 from apps.notifications.serializers import CampaignNotificationSerializer
 
-from helper.views_helper import CustomPagination
+from utils.views_helper import CustomPagination
 from utils.views import (
     get_campaign_roles,
     determine_user_role,

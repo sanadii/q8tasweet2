@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from apps.campaigns.models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
-from helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
+from utils.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 
 class CampaignsAdmin(admin.ModelAdmin):

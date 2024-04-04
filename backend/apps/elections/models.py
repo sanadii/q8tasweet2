@@ -11,8 +11,8 @@ import uuid
 
 from apps.configs.models import TrackModel, TaskModel
 
-from helper.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions
-from helper.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
+from utils.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions
+from utils.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 
 User = get_user_model()
 

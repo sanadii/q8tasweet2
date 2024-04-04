@@ -1,8 +1,8 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-import UserProfile from "pages/Authentication/Profile/ViewProfile";
-import ProfileEdit from "pages/Authentication/Profile/EditProfile";
+import UserProfile from "pages/Profile/ViewProfile";
+import ProfileEdit from "pages/Profile/EditProfile";
 
 const AuthProtectedRoutes = [
     // User Profile

@@ -23,7 +23,7 @@ from elections.serializers import ElectionSerializer
 from apps.auths.serializers import UserSerializer
 from voters.serializers import VotersSerializer
 
-from helper.views_helper import CustomPagination
+from utils.views_helper import CustomPagination
 
 
 class GetCampaigns(APIView):

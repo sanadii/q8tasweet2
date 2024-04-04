@@ -9,7 +9,7 @@ from apps.elections.models import (
     ElectionCommitteeResult,
 )
 
-from helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
+from utils.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 class ElectionsAdmin(admin.ModelAdmin):
     list_display = ['get_election_name', 'due_date', 'category', 'sub_category', 'elect_seats', 'elect_votes']

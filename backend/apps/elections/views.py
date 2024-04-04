@@ -45,7 +45,7 @@ from apps.elections.serializers import (
 )
 
 # Utils
-from helper.views_helper import CustomPagination
+from utils.views_helper import CustomPagination
 
 from apps.elections.utils import ( get_election_committee_results )
 

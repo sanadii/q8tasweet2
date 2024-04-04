@@ -2,8 +2,8 @@ import React from "react";
 
 
 // User profile
-import UserProfile from "pages/Authentication/Profile/ViewProfile";
-import ProfileEdit from "pages/Authentication/Profile/EditProfile";
+import UserProfile from "pages/Profile/ViewProfile";
+import ProfileEdit from "pages/Profile/EditProfile";
 
 
 // Main

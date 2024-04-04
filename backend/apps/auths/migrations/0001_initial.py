@@ -5,7 +5,7 @@ import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-import helper.validators
+import utils.validators
 
 
 class Migration(migrations.Migration):
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('background', models.ImageField(blank=True, null=True, upload_to='background/')),
                 ('civil', models.CharField(blank=True, max_length=12, null=True, validators=[django.core.validators.RegexValidator(message='Civil must be exactly 12 digits.', regex='^\\d{12}$')])),
                 ('gender', models.IntegerField(blank=True, choices=[(0, 'Undefined'), (1, 'رجال'), (2, 'نساء')], null=True)),
-                ('date_of_birth', models.DateField(blank=True, null=True, validators=[django.core.validators.MaxValueValidator(limit_value=helper.validators.today)])),
+                ('date_of_birth', models.DateField(blank=True, null=True, validators=[django.core.validators.MaxValueValidator(limit_value=utils.validators.today)])),
                 ('description', models.TextField(blank=True, verbose_name='description')),
                 ('phone', models.CharField(blank=True, max_length=8, null=True, validators=[django.core.validators.RegexValidator(message='phone must be exactly 8 digits.', regex='^\\d{8}$')])),
                 ('twitter', models.CharField(blank=True, max_length=150)),

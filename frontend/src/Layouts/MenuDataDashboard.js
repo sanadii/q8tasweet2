@@ -6,6 +6,7 @@ import { updateIconSidebar } from './Menus/utils';  // adjust the path according
 import { usePermission } from 'shared/hooks';
 
 // Menus
+import { useUserMenu } from './Menus/UserMenu';
 import { useAdminMenu } from './Menus/AdminMenu';
 import { useTestMenu } from './Menus/TestMenu';
 import { usePublicMenu } from './Menus/PublicMenu';
@@ -39,6 +40,7 @@ const Navdata = () => {
   }, [history, isCurrentState, isSettings]);
 
   // Menus Constants
+  const UserMenu = useUserMenu(setIsCurrentState);
   const AdminMenu = useAdminMenu(setIsCurrentState);
   const TestMenu = useTestMenu(setIsCurrentState);
   const PublicMenu = usePublicMenu(setIsCurrentState);
@@ -56,7 +58,7 @@ const Navdata = () => {
     // ...(isAdmin || isContributor ? ContributorMenu : []),
     // ...(canViewCampaign || isSubscriber ? CampaignMenu : []),
     ...(!canChangeConfig ? [...CampaignMenu] : []),
-    // ...(PublicMenu),
+    ...(PublicMenu), ...UserMenu
   ];
 
 

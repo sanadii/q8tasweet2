@@ -22,7 +22,7 @@ from apps.elections.serializers import (
     ElectionPartySerializer,
     ElectionPartyCandidateSerializer,
 )
-from helper.views_helper import CustomPagination
+from utils.views_helper import CustomPagination
 
 from rest_framework.parsers import MultiPartParser, FormParser
 

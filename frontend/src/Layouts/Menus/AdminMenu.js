@@ -1,33 +1,14 @@
 // Layouts/Menus/AdminMenu.js
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function useAdminMenu(isCurrentState, setIsCurrentState) {
   const history = useNavigate();
 
-  useEffect(() => {
-    // State management
-    // if (isCurrentState === "adminDashboard") {
-    //   history("/dashboard");
-    //   document.body.classList.add("twocolumn-panel");
-    // }
-    if (isCurrentState === "adminElections") {
-      history("/elections");
-      document.body.classList.add("twocolumn-panel");
-    }
-    if (isCurrentState === "adminCandidates") {
-      history("/candidates");
-      document.body.classList.add("twocolumn-panel");
-    }
-    if (isCurrentState === "adminCampaigns") {
-      history("/campaigns");
-      document.body.classList.add("twocolumn-panel");
-    }
-    if (isCurrentState === "adminUsers") {
-      history("/dashboard/users");
-      document.body.classList.add("twocolumn-panel");
-    }
-  }, [history, isCurrentState]);
+  const handleNavigation = (state, path) => {
+    setIsCurrentState(state);
+    history(path);
+    document.body.classList.add("twocolumn-panel");
+  }
 
   return [
     {
@@ -35,53 +16,53 @@ export function useAdminMenu(isCurrentState, setIsCurrentState) {
       isHeader: true,
     },
     {
-      id: "elections",
+      id: "adminElections",
       label: "الإنتخابات",
       icon: "ri-dashboard-line",
       link: "/dashboard/elections",
-      click: function (e) {
+      click: (e) => {
         e.preventDefault();
-        setIsCurrentState("adminElections");
+        handleNavigation("adminElections", "/dashboard/elections");
       },
     },
     {
-      id: "candidates",
+      id: "adminCandidates",
       label: "المرشحين",
       icon: "ri-account-pin-box-line",
       link: "/dashboard/candidates",
       click: function (e) {
         e.preventDefault();
-        setIsCurrentState("adminCandidates");
+        handleNavigation("adminCandidates", "/dashboard/candidates");
       },
     },
     {
-      id: "parties",
+      id: "adminParties",
       label: "القوائم الإنتخابية",
       icon: "ri-account-pin-box-line",
       link: "/dashboard/parties",
       click: function (e) {
         e.preventDefault();
-        setIsCurrentState("adminParties");
+        handleNavigation("adminParties", "/dashboard/parties");
       },
     },
     {
-      id: "campaigns",
+      id: "adminCampaigns",
       label: "الحملات الإنتخابية",
       icon: "ri-honour-line",
       link: "/dashboard/campaigns",
       click: function (e) {
         e.preventDefault();
-        setIsCurrentState("adminCampaigns");
+        handleNavigation("adminCampaigns", "/dashboard/campaigns");
       },
     },
     {
-      id: "users",
+      id: "adminUsers",
       label: "المستخدمين",
       icon: "ri-honour-line",
       link: "/dashboard/users",
       click: function (e) {
         e.preventDefault();
-        // setIsCurrentState("adminUsers");
+        handleNavigation("adminUsers", "/dashboard/users");
       },
     },
   ];

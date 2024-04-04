@@ -7,8 +7,8 @@ from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUser
 from django.core.validators import MaxValueValidator
 
 from apps.configs.models import TrackModel
-from helper.models_helper import GenderOptions
-from helper.validators import today, civil_validator, phone_validator  
+from utils.models_helper import GenderOptions
+from utils.validators import today, civil_validator, phone_validator  
 
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, username, first_name, password, **other_fields):

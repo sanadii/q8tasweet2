@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.core.validators import RegexValidator
 
 from apps.configs.models import TrackModel
-from helper.models_helper import GenderOptions
+from utils.models_helper import GenderOptions
 
 
 class Voter(models.Model):

@@ -30,7 +30,7 @@ import jwt
 from django.conf import settings
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
-from helper.views_helper import CustomPagination
+from utils.views_helper import CustomPagination
 
 
 # class GetCampaigns(APIView):

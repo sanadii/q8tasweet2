@@ -4,7 +4,7 @@ from datetime import datetime  # Importing datetime
 from django.db.models import F
 import json
 
-from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # Models
 from apps.elections.models import (

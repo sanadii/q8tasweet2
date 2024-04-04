@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from apps.categories.models import Tag, Area
-from helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
+from utils.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
 class AreasAdmin(admin.ModelAdmin):
     list_display = ['name', 'parent', 'is_active']
