@@ -249,11 +249,11 @@ const VerticalLayout = (props) => {
     return (
         <React.Fragment>
             {/* Dropdown for selecting a campaign */}
-            <CampaignDropdown
+            {/* <CampaignDropdown
                 navData={navData}
                 setSelectedCampaign={setSelectedCampaign}
                 selectedCampaign={selectedCampaign}
-            />
+            /> */}
 
             {/* menu Items */}
             {filteredNavData.map((item, key) => (

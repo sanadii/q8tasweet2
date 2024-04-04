@@ -11,10 +11,11 @@ import EditTab from "pages/Campaigns/CampaignDetails/EditTab";
 
 const CampaignRoutes = [
     // Campaign Special Dashboard
-    { path: "/dashboard/campaigns/:slug/overview", component: <OverviewTab /> },
-    { path: "/dashboard/campaigns/:slug/members", component: <MembersTab /> },
-    { path: "/dashboard/campaigns/:slug/guarantees", component: <GuaranteesTab /> },
-    { path: "/dashboard/campaigns/:slug/attendees", component: <AttendeesTab /> },
-    { path: "/dashboard/campaigns/:slug/edit", component: <EditTab /> },
+    { path: "/:slug", component: <OverviewTab /> },
+    { path: "/:slug/overview", component: <OverviewTab /> },
+    { path: "/:slug/members", component: <MembersTab /> },
+    { path: "/:slug/guarantees", component: <GuaranteesTab /> },
+    { path: "/:slug/attendees", component: <AttendeesTab /> },
+    { path: "/:slug/edit", component: <EditTab /> },
 ]
 export default CampaignRoutes;
