@@ -52,11 +52,11 @@ class Election(TrackModel, TaskModel):
     first_winner_votes = models.PositiveIntegerField(blank=True, null=True)
     last_winner_votes = models.PositiveIntegerField(blank=True, null=True)
 
-    # TODO: create ElectionSummary Model for both electors & attendees
-    # Elector // This can go to another table TODO: Move to another table called ElectionElectors or ElectionNumbers
-    electors = models.PositiveIntegerField(blank=True, null=True)
-    electors_males = models.PositiveIntegerField(blank=True, null=True)
-    electors_females = models.PositiveIntegerField(blank=True, null=True)
+    # TODO: create ElectionSummary Model for both voters & attendees
+    # Voter // This can go to another table TODO: Move to another table called ElectionVoters or ElectionNumbers
+    voters = models.PositiveIntegerField(blank=True, null=True)
+    voters_males = models.PositiveIntegerField(blank=True, null=True)
+    voters_females = models.PositiveIntegerField(blank=True, null=True)
 
     # Attendees
     attendees = models.PositiveIntegerField(blank=True, null=True)

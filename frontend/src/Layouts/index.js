@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import PropTypes from "prop-types";
 import { withRouter } from 'shared/components';
-import { layoutSelector, campaignSelector } from 'selectors';
 import SectionHeader from "pages/Campaigns/CampaignDetails/SectionHeader"
 import { Container } from "reactstrap";
 
-//import Components
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { layoutSelector, userSelector, campaignSelector } from 'selectors';
+
+// Components
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
@@ -28,15 +33,29 @@ import {
     getCampaignDetails,
 } from "../store/actions";
 
-//redux
-import { useSelector, useDispatch } from "react-redux";
 
 const Layout = (props) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [headerClass, setHeaderClass] = useState("");
+    const [currentCampaign, setCurrentCampaign] = useState("");
+
+    // useEffect(() => {
+    //     if (currentUser && currentCampaign) {
+    //         console.log("dispatching: ", currentCampaign)
+    //         setCurrentCampaign(currentUser?.campaigns[0]?.slug || null)
+
+    //         console.log("dispatching: ", currentCampaign)
+    //         dispatch(getCampaignDetails(currentCampaign))
+    //     }
+    // }, [dispatch, currentUser, currentCampaign])
+
+
+
     const defaultLayout = props.defaultLayout;
     const style = props.style;
 
-    const dispatch = useDispatch();
     const {
         layoutType,
         leftSidebarType,
@@ -58,6 +77,7 @@ const Layout = (props) => {
         campaignGuarantees,
         campaignAttendees,
     } = useSelector(campaignSelector);
+
     /*
     layout settings
     */
@@ -109,6 +129,13 @@ const Layout = (props) => {
     /*
     call dark/light mode
     */
+    const onChangeCampaign = (userCampaign) => {
+        // setCurrentCampaign(userCampaign)
+        // console.log("dispatching: ", currentCampaign)
+        // dispatch(getCampaignDetails(currentCampaign.slug))
+        // navigate(`/campaigns/${currentCampaign.slug}`);
+    };
+
     const onChangeLayoutMode = (value) => {
         if (changeLayoutMode) {
             dispatch(changeLayoutMode(value));
@@ -135,7 +162,9 @@ const Layout = (props) => {
                 <Header
                     headerClass={headerClass}
                     layoutModeType={layoutModeType}
-                    onChangeLayoutMode={onChangeLayoutMode} />
+                    onChangeLayoutMode={onChangeLayoutMode}
+                    onChangeCampaign={onChangeCampaign}
+                />
                 <Sidebar
                     layoutType={layoutType}
                 />

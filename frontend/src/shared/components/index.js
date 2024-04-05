@@ -16,6 +16,8 @@ export { default as withRouter } from "./Components/withRouter";
 // Layout
 export { default as RightSidebar } from "./Components/RightSidebar";
 export { default as WebAppsDropdown } from "./Components/WebAppsDropdown";
+export { default as CampaignDropdown } from "./Components/CampaignDropdown";
+
 export { default as PreviewCardHeader } from "./Components/PreviewCardHeader";
 export { default as MyCartDropdown } from "./Components/MyCartDropdown";
 export { default as NotificationDropdown } from "./Components/NotificationDropdown";

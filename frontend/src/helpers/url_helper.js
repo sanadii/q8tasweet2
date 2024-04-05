@@ -137,12 +137,12 @@ export const DELETE_CATEGORY = "/elections/deleteCategory";
 export const ADD_NEW_CATEGORY = "/elections/addCategory";
 export const UPDATE_CATEGORY = "/elections/updateCategory";
 
-// Elector
-export const GET_ALL_ELECTORS = "/electors/getAllElectors";
-export const GET_ELECTORS = "/electors/getElectors";
-export const DELETE_ELECTOR = "/electors/deleteElector";
-export const ADD_NEW_ELECTOR = "/electors/addElector";
-export const UPDATE_ELECTOR = "/electors/updateElector";
+// Voter
+export const GET_ALL_VOTERS = "/voters/getAllvoters";
+export const GET_VOTERS = "/voters/getvoters";
+export const DELETE_VOTER = "/voters/deletevoter";
+export const ADD_NEW_VOTER = "/voters/addvoter";
+export const UPDATE_VOTER = "/voters/updatevoter";
 
 // USERS
 export const GET_USERS = "/auth/getUsers";

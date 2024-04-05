@@ -6,6 +6,6 @@ from .views import *
 app_name = "voters"
  
 urlpatterns = [
-    path("getAllElectors", GetAllElectors.as_view(), name="GetAllElectors"),
-    path("getElectors", GetElectors.as_view(), name="GetElectors"),    
+    path("getAllVoters", GetAllVoters.as_view(), name="GetAllVoters"),
+    path("getVoters", GetVoters.as_view(), name="GetVoters"),    
 ]

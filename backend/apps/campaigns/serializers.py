@@ -248,7 +248,7 @@ class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
 #
 class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 
-    # get the data from Elector Model Directly
+    # get the data from Voter Model Directly
     full_name = serializers.CharField(
         source="civil.full_name", default="Not Found", read_only=True
     )
@@ -265,7 +265,7 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
     relationship = serializers.CharField(
         source="civil.relationship", default="Not Found", read_only=True
     )
-    elector_notes = serializers.CharField(
+    voter_notes = serializers.CharField(
         source="civil.notes", default="Not Found", read_only=True
     )
     attended = serializers.SerializerMethodField()
@@ -287,7 +287,7 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
             "box_no",
             "enrollment_date",
             "relationship",
-            "elector_notes",
+            "voter_notes",
         ]
 
     def get_attended(self, obj):
@@ -301,7 +301,7 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 
 class CampaignPartyGuaranteeSerializer(serializers.ModelSerializer):
 
-    # get the data from Elector Model Directly
+    # get the data from Voter Model Directly
     full_name = serializers.CharField(
         source="civil.full_name", default="Not Found", read_only=True
     )
@@ -318,7 +318,7 @@ class CampaignPartyGuaranteeSerializer(serializers.ModelSerializer):
     relationship = serializers.CharField(
         source="civil.relationship", default="Not Found", read_only=True
     )
-    elector_notes = serializers.CharField(
+    voter_notes = serializers.CharField(
         source="civil.notes", default="Not Found", read_only=True
     )
     attended = serializers.SerializerMethodField()
@@ -340,7 +340,7 @@ class CampaignPartyGuaranteeSerializer(serializers.ModelSerializer):
             "box_no",
             "enrollment_date",
             "relationship",
-            "elector_notes",
+            "voter_notes",
         ]
 
     def get_attended(self, obj):
@@ -353,7 +353,7 @@ class CampaignPartyGuaranteeSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 class CampaignAttendeeSerializer(serializers.ModelSerializer):
-    # Directly get the data from the Elector Model
+    # Directly get the data from the Voter Model
     full_name = serializers.CharField(
         source="civil.full_name", default="Not Found", read_only=True
     )
@@ -370,7 +370,7 @@ class CampaignAttendeeSerializer(serializers.ModelSerializer):
     relationship = serializers.CharField(
         source="civil.relationship", default="Not Found", read_only=True
     )
-    elector_notes = serializers.CharField(
+    voter_notes = serializers.CharField(
         source="civil.notes", default="Not Found", read_only=True
     )
     # attended field will not be included here since it's specific to CampaignGuarantee model
@@ -391,7 +391,7 @@ class CampaignAttendeeSerializer(serializers.ModelSerializer):
             "box_no",
             "enrollment_date",
             "relationship",
-            "elector_notes",
+            "voter_notes",
         ]
 
     def create(self, validated_data):

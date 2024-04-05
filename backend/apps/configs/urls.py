@@ -6,7 +6,7 @@ from django.contrib import admin
 #     campaign_admin_site,
 #     candidate_admin_site,
 #     election_admin_site,
-#     elector_admin_site,
+#     voter_admin_site,
 #     category_admin_site,
 #     user_admin_site,
 #     )

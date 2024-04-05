@@ -219,9 +219,9 @@ export const addNewCategory = (category) => api.create(url.ADD_NEW_CATEGORY, cat
 export const updateCategory = (category) => api.update(url.UPDATE_CATEGORY + "/" + category.id, category);
 export const deleteCategory = (category) => api.delete(url.DELETE_CATEGORY + "/" + category);
 
-// Elector
-export const getAllElectors = (elector) => api.get(url.GET_ALL_ELECTORS, elector);
-export const getElectors = (elector) => api.get(url.GET_ELECTORS, elector);
-export const deleteElector = (elector) => api.delete(url.DELETE_ELECTOR + "/" + elector);
-export const addNewElector = (elector) => api.create(url.ADD_NEW_ELECTOR, elector);
-export const updateElector = (elector) => api.put(url.UPDATE_ELECTOR, elector);
+// Voter
+export const getAllVoters = (voter) => api.get(url.GET_ALL_VOTERS, voter);
+export const getVoters = (voter) => api.get(url.GET_VOTERS, voter);
+export const deleteVoter = (voter) => api.delete(url.DELETE_VOTER + "/" + voter);
+export const addNewVoter = (voter) => api.create(url.ADD_NEW_VOTER, voter);
+export const updateVoter = (voter) => api.put(url.UPDATE_VOTER, voter);

@@ -14,7 +14,7 @@ class ElectionTypeOptions(models.TextChoices):
     PARTY_CANDIDATE_ONLY_SYSTEM = 'partyCandidateOnly', _('Party Candidate Only System')
     COMBINED_PARTY_CANDIDATE_SYSTEM = 'partyCandidateCombined', _('Combined Party Candidate System')
     PROPORTIONAL_REPRESENTATION_SYSTEM = 'proportionalRepresentationSystem', _('Proportional Representation System')
-    MIXED_ELECTORAL_SYSTEM = 'mixedElectoralSystem', _('Mixed Electoral System')
+    MIXED_ELECTORAL_SYSTEM = 'mixedVoteralSystem', _('Mixed Voteral System')
 
 class ElectionResultsOptions(models.TextChoices):
     TOTAL = 'total', _('Total')

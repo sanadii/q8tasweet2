@@ -56,6 +56,8 @@ const usePermission = () => {
 
     return {
         ...specificPermissions,  // spread out the specific permissions
+        isActive: currentUser.isActive,  // add isActive flag
+        isStaff: currentUser.isStaff,    // add isStaff flag
     };
 };
 

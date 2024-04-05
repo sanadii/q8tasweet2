@@ -1,4 +1,4 @@
-# Elector Model
+# Voter Model
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
@@ -27,9 +27,9 @@ class Voter(models.Model):
         verbose_name_plural = "Voters"
         default_permissions = []
         permissions  = [
-            ("canViewElector", "Can View Elector"),
-            ("canAddElector", "Can Add Elector"),
-            ("canChangeElector", "Can Change Elector"),
-            ("canDeleteElector", "Can Delete Elector"),
+            ("canViewVoter", "Can View Voter"),
+            ("canAddVoter", "Can Add Voter"),
+            ("canChangeVoter", "Can Change Voter"),
+            ("canDeleteVoter", "Can Delete Voter"),
             ]
 

@@ -66,9 +66,9 @@ const DashboardRoutes = [
     { path: "/dashboard/users/", component: <UserList /> },
 
     // Settings / Options
-    { path: "/dashboard/settings/categories", component: <Categories /> },
-    { path: "/dashboard/settings/groups", component: <Groups /> },
-    { path: "/dashboard/settings/group-permissions", component: <GroupPermissions /> },
+    { path: "/dashboard/categories", component: <Categories /> },
+    { path: "/dashboard/groups", component: <Groups /> },
+    { path: "/dashboard/permissions", component: <GroupPermissions /> },
 
     // Tests
     { path: "/dashboard/test1/", component: <Test1 /> },

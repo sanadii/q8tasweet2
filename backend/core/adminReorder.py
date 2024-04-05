@@ -24,7 +24,7 @@ ADMIN_REORDER = (
         'apps.campaigns.CampaignAttendee'
     )},
 
-    # Elector
+    # Voter
     {'app': 'voters', 'label': 'Voter', 'models': (
         'appas.voters.Voter',
     )},

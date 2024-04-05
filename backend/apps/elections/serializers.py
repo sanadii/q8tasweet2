@@ -44,7 +44,7 @@ class ElectionSerializer(serializers.ModelSerializer):
             'id', 'name', 'slug', 'image', 'due_date',
             'category', 'sub_category', 'category_name', 'sub_category_name',
             'election_method', 'election_result', 'election_result_view', 'election_result_party', 'election_result_sorting','elect_votes', 'elect_seats',
-            'electors', 'electors_males', 'electors_females',
+            'voters', 'voters_males', 'voters_females',
             'attendees', 'attendees_males', 'attendees_females',
             'previous_election',
 

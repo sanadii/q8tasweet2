@@ -14,7 +14,7 @@ from rest_framework.documentation import include_docs_urls
 #     candidate_admin_site,
 #     election_admin_site,
 #     campaign_admin_site,
-#     elector_admin_site,
+#     voter_admin_site,
 #     category_admin_site,
 #     user_admin_site,
 #     )
@@ -25,7 +25,7 @@ urlpatterns = [
     # path('admin/elections/', election_admin_site.urls, name='election-admin'),
     # path('admin/candidates/', candidate_admin_site.urls, name='candidate-admin'),
     # path('admin/campaigns/', campaign_admin_site.urls, name='campaign-admin'),
-    # path('admin/electors/', elector_admin_site.urls, name='elector-admin'),
+    # path('admin/voters/', voter_admin_site.urls, name='voter-admin'),
     # path('admin/categories/', category_admin_site.urls, name='category-admin'),
     # path('admin/users/', user_admin_site.urls, name='user-admin'),
 

@@ -95,7 +95,7 @@ class CampaignMember(TrackModel):
 class CampaignGuarantee(TrackModel):
     campaign = models.ForeignKey('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantees')
     member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantee_guarantors')
-    civil = models.ForeignKey('voters.Voter', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_elector_guarantees')
+    civil = models.ForeignKey('voters.Voter', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_voter_guarantees')
     phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
     notes = models.TextField(blank=True, null=True)
     status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)
@@ -117,7 +117,7 @@ class CampaignAttendee(TrackModel):
     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='attendant_attendees')
     election = models.ForeignKey('elections.Election', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_attendees')
     committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_attendees')
-    civil = models.ForeignKey('voters.Voter', on_delete=models.SET_NULL, null=True, blank=True, related_name='elector_attendees')
+    civil = models.ForeignKey('voters.Voter', on_delete=models.SET_NULL, null=True, blank=True, related_name='voter_attendees')
     notes = models.TextField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
 
@@ -187,7 +187,7 @@ class CampaignPartyMember(TrackModel):
 class CampaignPartyGuarantee(TrackModel):
     campaign = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantees')
     member = models.ForeignKey('CampaignPartyMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantee_guarantors')
-    civil = models.ForeignKey('voters.Voter', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_elector_guarantees')
+    civil = models.ForeignKey('voters.Voter', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_voter_guarantees')
     phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
     notes = models.TextField(blank=True, null=True)
     status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)

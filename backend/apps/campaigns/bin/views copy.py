@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from apps.candidates.models import Candidate
-from voters.models import Elector
+from voters.models import Voter
 from apps.categories.models import Category
 from django.contrib.auth.models import Group, Permission
 
@@ -268,7 +268,7 @@ class GetCampaignDetails(APIView):
         
         # Fetch election attendees for given election_id
         # attendees = ElectionAttendees.objects.filter(election_id=election_id).values_list('civil', flat=True)
-        attendees = ElectionAttendees.objects.filter(election_id=election_id).values_list('elector_id', flat=True)
+        attendees = ElectionAttendees.objects.filter(election_id=election_id).values_list('voter_id', flat=True)
 
         attendee_set = set(attendees)  # Convert to set for faster lookups
 
@@ -451,14 +451,14 @@ class AddNewCampaignGuarantee(APIView):
     def post(self, request):
         campaign_id = request.data.get("campaign")
         member_id = request.data.get("member")
-        civil = request.data.get("elector")
+        civil = request.data.get("voter")
         status = request.data.get("status")
 
-        # Fetch the elector details based on elector civil
+        # Fetch the voter details based on voter civil
         try:
-            elector = Elector.objects.get(civil=civil)
-        except Elector.DoesNotExist:
-            return Response({"error": "Elector not found"}, status=status.HTTP_404_NOT_FOUND)
+            voter = Voter.objects.get(civil=civil)
+        except Voter.DoesNotExist:
+            return Response({"error": "Voter not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # Fetch the campaign based on campaign_id
         try:
@@ -472,23 +472,23 @@ class AddNewCampaignGuarantee(APIView):
         except CampaignMember.DoesNotExist:
             return Response({"error": "Member not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Create the new link between the campaign member and the elector
+        # Create the new link between the campaign member and the voter
         campaign_guarantee = CampaignGuarantee.objects.create(
             campaign_id=campaign_id,
             member_id=member_id,
-            civil=elector,
+            civil=voter,
             status=status,
         )
 
-        # Prepare the response data with member and elector details
+        # Prepare the response data with member and voter details
         response_data = {
             "id": campaign_guarantee.id,
             "campaign": campaign.id,
             "member": member.id,
-            "civil": elector.civil,
-            # "full_name": elector.full_name(),
-            "full_name": elector.full_name,
-            "gender": elector.gender,
+            "civil": voter.civil,
+            # "full_name": voter.full_name(),
+            "full_name": voter.full_name,
+            "gender": voter.gender,
             "status": campaign_guarantee.status,
             # ... other fields you want to return
         }
@@ -503,10 +503,10 @@ class UpdateCampaignGuarantee(APIView):
         except CampaignGuarantee.DoesNotExist:
             return Response({"error": "Campaign Guarantee not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Since civil is a ForeignKey, you can directly use it to access the related Elector object
-        elector = campaign_guarantee.civil
-        if not elector:
-            return Response({"error": "Elector not found"}, status=status.HTTP_404_NOT_FOUND)
+        # Since civil is a ForeignKey, you can directly use it to access the related Voter object
+        voter = campaign_guarantee.civil
+        if not voter:
+            return Response({"error": "Voter not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # Basic Information
         campaign_id = request.data.get("campaign")
@@ -550,10 +550,10 @@ class UpdateCampaignGuarantee(APIView):
             "id": campaign_guarantee.id,
             "campaign": campaign_guarantee.campaign.id if campaign_guarantee.campaign else None,
             "member": campaign_guarantee.member.id if campaign_guarantee.member else None,
-            "civil": elector.civil,
-            # "full_name": elector.full_name(),  # Using the full_name method from Elector model
-            "full_name": elector.full_name,  # Using the full_name method from Elector model
-            "gender": elector.gender,
+            "civil": voter.civil,
+            # "full_name": voter.full_name(),  # Using the full_name method from Voter model
+            "full_name": voter.full_name,  # Using the full_name method from Voter model
+            "gender": voter.gender,
             "phone": campaign_guarantee.phone,
             "status": campaign_guarantee.status,
             "notes": campaign_guarantee.notes
@@ -580,14 +580,14 @@ class AddNewElectionAttendee(APIView):
         user_id = request.data.get("user")
         election_id = request.data.get("election")
         committee_id = request.data.get("committee")
-        civil = request.data.get("elector")
+        civil = request.data.get("voter")
         status_value = request.data.get("status")  # Renamed to avoid conflict with status module
 
-        # Fetch the elector details based on elector civil
+        # Fetch the voter details based on voter civil
         try:
-            elector = Elector.objects.get(civil=civil)
-        except Elector.DoesNotExist:
-            return Response({"error": "Elector not found"}, status=status.HTTP_404_NOT_FOUND)
+            voter = Voter.objects.get(civil=civil)
+        except Voter.DoesNotExist:
+            return Response({"error": "Voter not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # Fetch the member based on member_id
         try:
@@ -607,24 +607,24 @@ class AddNewElectionAttendee(APIView):
         except ElectionCommittee.DoesNotExist:
             return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Create the new link between the user, elector, and election
+        # Create the new link between the user, voter, and election
         election_attendee = ElectionAttendees.objects.create(
             user_id=user_id,
-            elector=elector,
+            voter=voter,
             committee=committee,
             election=election,
             status=status_value,
         )
 
-        # Prepare the response data with member, elector, and election details
+        # Prepare the response data with member, voter, and election details
         response_data = {
             "id": election_attendee.id,
             "user": user.id,
-            "civil": elector.civil,
+            "civil": voter.civil,
             "election": election.id,
             "committee": committee.id,
-            "full_name": elector.full_name(),
-            "gender": elector.gender,
+            "full_name": voter.full_name(),
+            "gender": voter.gender,
             "status": election_attendee.status,
             # ... other fields you want to return
         }
@@ -639,10 +639,10 @@ class UpdateElectionAttendee(APIView):
         except ElectionAttendees.DoesNotExist:
             return Response({"error": "Campaign Guarantee not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Since civil is a ForeignKey, you can directly use it to access the related Elector object
-        elector = campaign_guarantee.civil
-        if not elector:
-            return Response({"error": "Elector not found"}, status=status.HTTP_404_NOT_FOUND)
+        # Since civil is a ForeignKey, you can directly use it to access the related Voter object
+        voter = campaign_guarantee.civil
+        if not voter:
+            return Response({"error": "Voter not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # Basic Information
         member_id = request.data.get("member_id")
@@ -675,9 +675,9 @@ class UpdateElectionAttendee(APIView):
         updated_data = {
             "id": campaign_guarantee.id,
             "member": campaign_guarantee.member.id if campaign_guarantee.member else None,
-            "civil": elector.civil,
-            "full_name": elector.full_name(),  # Using the full_name method from Elector model
-            "gender": elector.gender,
+            "civil": voter.civil,
+            "full_name": voter.full_name(),  # Using the full_name method from Voter model
+            "gender": voter.gender,
             "phone": campaign_guarantee.phone,
             "status": campaign_guarantee.status,
             "notes": campaign_guarantee.notes

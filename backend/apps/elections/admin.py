@@ -27,7 +27,7 @@ class ElectionsAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Basic Information', {'fields': ['image', 'due_date', 'description']}),
         ('Taxonomies', {'fields': ['category', 'sub_category', 'tags']}),
-        ('Election Options and Details', {'fields': ['type', 'result', 'votes', 'seats', 'electors', 'attendees']}),
+        ('Election Options and Details', {'fields': ['type', 'result', 'votes', 'seats', 'voters', 'attendees']}),
         TaskAdminFields,
         TrackAdminFields
     ]

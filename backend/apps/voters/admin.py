@@ -1,9 +1,9 @@
-# Elector Admin
+# Voter Admin
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from apps.voters.models import Voter
 
-class ElectorsAdmin(admin.ModelAdmin):
+class VotersAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'civil', 'family_name', 'gender', 'serial_number', 'membership_no', 'box_no', 'enrollment_date']
     search_fields = ['civil', 'full_name', 'family_name', 'serial_number', 'membership_no', 'box_no']
     list_filter = ['gender', 'enrollment_date']
@@ -12,12 +12,12 @@ class ElectorsAdmin(admin.ModelAdmin):
         ('Basic Information', {'fields': ['civil', 'full_name', 'family_name', 'gender', 'serial_number', 'membership_no', 'box_no', 'enrollment_date', 'relationship', 'notes']}),
     ]
 
-# Elector
-admin.site.register(Voter, ElectorsAdmin)
+# Voter
+admin.site.register(Voter, VotersAdmin)
 
-class ElectorAdminSite(AdminSite):
-    site_header = 'Elector Administration'
-    site_title = 'Elector Admin'
-    index_title = 'Elector Admin'
+class VoterAdminSite(AdminSite):
+    site_header = 'Voter Administration'
+    site_title = 'Voter Admin'
+    index_title = 'Voter Admin'
 
-elector_admin_site = ElectorAdminSite(name='elector')
+voter_admin_site = VoterAdminSite(name='voter')

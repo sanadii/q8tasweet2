@@ -15,7 +15,7 @@ import electionSaga from "./elections/saga";
 import candidatesSaga from "./candidates/saga";
 import partiesSaga from "./parties/saga";
 import campaignsSaga from "./campaigns/saga";
-import electorSaga from "./electors/saga";
+import electorSaga from "./voters/saga";
 
 // System
 import UploadImageSaga from "./uploadImage/saga";

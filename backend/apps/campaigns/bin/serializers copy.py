@@ -6,7 +6,7 @@ from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from apps.candidates.models import Candidate
-from voters.models import Elector
+from voters.models import Voter
 from apps.categories.models import Category
 
 # Serializers
@@ -148,55 +148,55 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
     box_no = serializers.SerializerMethodField()
     enrollment_date = serializers.SerializerMethodField()
     relationship = serializers.SerializerMethodField()
-    elector_notes = serializers.SerializerMethodField()
+    voter_notes = serializers.SerializerMethodField()
 
     class Meta:
         model = CampaignGuarantee
         fields = [ "id", "campaign", "member", "civil", "full_name", "phone",
                   "gender", "membership_no", "box_no", "enrollment_date", "relationship",
-                  "elector_notes", "notes", "status"
+                  "voter_notes", "notes", "status"
                   ]
 
     def get_full_name(self, obj):
         try:
             return obj.civil.full_name if obj.civil else None
-        except Elector.DoesNotExist:
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_gender(self, obj):
         try:
             return obj.civil.gender if obj.civil else None
-        except Elector.DoesNotExist:
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_membership_no(self, obj):
         try:
             return obj.civil.membership_no if obj.civil else None
-        except Elector.DoesNotExist:
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_box_no(self, obj):
         try:
             return obj.civil.box_no if obj.civil else None
-        except Elector.DoesNotExist:
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_enrollment_date(self, obj):
         try:
             return obj.civil.enrollment_date if obj.civil else None
-        except Elector.DoesNotExist:
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_relationship(self, obj):
         try:
             return obj.civil.relationship if obj.civil else None
-        except Elector.DoesNotExist:
+        except Voter.DoesNotExist:
             return "Not Found"
 
-    def get_elector_notes(self, obj):
+    def get_voter_notes(self, obj):
         try:
             return obj.civil.notes if obj.civil else None
-        except Elector.DoesNotExist:
+        except Voter.DoesNotExist:
             return "Not Found"
 
 
@@ -209,61 +209,61 @@ class CampaignAttendeeSerializer(TrackMixin, serializers.ModelSerializer):
     box_no = serializers.SerializerMethodField()
     enrollment_date = serializers.SerializerMethodField()
     relationship = serializers.SerializerMethodField()
-    elector_notes = serializers.SerializerMethodField()
+    voter_notes = serializers.SerializerMethodField()
 
     class Meta:
         model = CampaignAttendee
         fields = ["id", "election", "committee", "user", "civil", "full_name", "gender",
-                  "membership_no", "box_no", "enrollment_date", "relationship", "elector_notes", "notes",
+                  "membership_no", "box_no", "enrollment_date", "relationship", "voter_notes", "notes",
                   "status"
                   ]
 
     def get_full_name(self, obj):
         try:
-            return obj.elector.full_name if obj.elector else None
-        except Elector.DoesNotExist:
+            return obj.voter.full_name if obj.voter else None
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_gender(self, obj):
         try:
-            return obj.elector.gender if obj.elector else None
-        except Elector.DoesNotExist:
+            return obj.voter.gender if obj.voter else None
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_membership_no(self, obj):
         try:
-            return obj.elector.membership_no if obj.elector else None
-        except Elector.DoesNotExist:
+            return obj.voter.membership_no if obj.voter else None
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_box_no(self, obj):
         try:
-            return obj.elector.box_no if obj.elector else None
-        except Elector.DoesNotExist:
+            return obj.voter.box_no if obj.voter else None
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_enrollment_date(self, obj):
         try:
-            return obj.elector.enrollment_date if obj.elector else None
-        except Elector.DoesNotExist:
+            return obj.voter.enrollment_date if obj.voter else None
+        except Voter.DoesNotExist:
             return "Not Found"
 
     def get_relationship(self, obj):
         try:
-            return obj.elector.relationship if obj.elector else None
-        except Elector.DoesNotExist:
+            return obj.voter.relationship if obj.voter else None
+        except Voter.DoesNotExist:
             return "Not Found"
 
-    def get_elector_notes(self, obj):
+    def get_voter_notes(self, obj):
         try:
-            return obj.elector.notes if obj.elector else None
-        except Elector.DoesNotExist:
+            return obj.voter.notes if obj.voter else None
+        except Voter.DoesNotExist:
             return "Not Found"
         
     def get_civil(self, obj):
         try:
-            return obj.elector.civil if obj.elector else None
-        except Elector.DoesNotExist:
+            return obj.voter.civil if obj.voter else None
+        except Voter.DoesNotExist:
             return "Not Found"
 
 
@@ -272,5 +272,5 @@ class CampaignAttendeeSerializer(TrackMixin, serializers.ModelSerializer):
 def get_field_or_not_found(self, obj, field_name):
     try:
         return getattr(obj, field_name) if obj else None
-    except Elector.DoesNotExist:
+    except Voter.DoesNotExist:
         return "Not Found"

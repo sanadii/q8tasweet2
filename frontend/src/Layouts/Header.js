@@ -9,12 +9,12 @@ import logoDark from "../assets/images/logo-dark.png";
 import logoLight from "../assets/images/logo-light.png";
 
 //import Components
-import {SearchOption, WebAppsDropdown, MyCartDropdown, FullScreenDropdown, NotificationDropdown, ProfileDropdown, LightDark} from 'shared/components';
+import { SearchOption, WebAppsDropdown, CampaignDropdown, MyCartDropdown, FullScreenDropdown, NotificationDropdown, ProfileDropdown, LightDark } from 'shared/components';
 
 import { changeSidebarVisibility } from '../store/actions';
 import { useSelector, useDispatch } from "react-redux";
 
-const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
+const Header = ({ onChangeLayoutMode, onChangeCampaign, layoutModeType, headerClass }) => {
     const [search, setSearch] = useState(false);
     const toogleSearch = () => {
         setSearch(!search);
@@ -112,7 +112,8 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                             </Dropdown>
 
                             {/* WebAppsDropdown */}
-                            {/* <WebAppsDropdown /> */}
+                            <WebAppsDropdown />
+                            <CampaignDropdown onChangeCampaign={onChangeCampaign} />
 
                             {/* MyCartDropdwon */}
                             {/* <MyCartDropdown /> */}

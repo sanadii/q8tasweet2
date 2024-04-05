@@ -1,0 +1,20 @@
+// Actions
+export const API_RESPONSE_SUCCESS = "API_RESPONSE_SUCCESS";
+export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
+export const GET_ALL_VOTERS = "GET_ALL_VOTERS";
+export const GET_VOTERS = "GET_VOTERS";
+
+// Add Voter
+export const ADD_NEW_VOTER = "ADD_NEW_VOTER";
+export const ADD_VOTER_SUCCESS = "ADD_VOTER_SUCCESS";
+export const ADD_VOTER_FAIL = "ADD_VOTER_FAIL";
+
+// Edit Voter
+export const UPDATE_VOTER = "UPDATE_VOTER";
+export const UPDATE_VOTER_SUCCESS = "UPDATE_VOTER_SUCCESS";
+export const UPDATE_VOTER_FAIL = "UPDATE_VOTER_FAIL";
+
+// Delete Voter
+export const DELETE_VOTER = "DELETE_VOTER";
+export const DELETE_VOTER_SUCCESS = "DELETE_VOTER_SUCCESS";
+export const DELETE_VOTER_FAIL = "DELETE_VOTER_FAIL";

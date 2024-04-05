@@ -28,11 +28,11 @@ import jwt
 from django.conf import settings 
 from django.http import Http404
 
-class GetAllElectors(APIView):
+class GetAllVoters(APIView):
     def get(self, request):
-        electors = Voter.objects.all()
-        electors_serializer = VotersSerializer(electors, many=True)
-        return Response({"data": {"allElectors": electors_serializer.data}, "code": 200})
+        voters = Voter.objects.all()
+        voters_serializer = VotersSerializer(voters, many=True)
+        return Response({"data": {"allVoters": voters_serializer.data}, "code": 200})
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 100  # default number of items per page
@@ -40,7 +40,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000  # Maximum limit allowed when using `?page_size=xxx`.
 
 
-# class GetElectors(APIView):
+# class GetVoters(APIView):
 #     def get(self, request):
 #         query = request.GET.get('searchInput', '').strip()
 #         search_type = request.GET.get('searchType', '').lower()
@@ -48,12 +48,12 @@ class StandardResultsSetPagination(PageNumberPagination):
 #         if search_type == 'cid':
 #             if not (query.isdigit() and len(query) == 12):  # Validate Civil ID
 #                 return Response({"error": "Invalid Civil ID."}, status=400)
-#             electors = Elector.objects.filter(civil=query)
+#             voters = Voter.objects.filter(civil=query)
             
 #         elif search_type == 'name':
 #             if len(query) < 3:  # Validate name length
 #                 return Response({"error": "Name should be at least 3 characters long."}, status=400)
-#             electors = Elector.objects.filter(
+#             voters = Voter.objects.filter(
 #                 Q(name_1__icontains=query) | 
 #                 Q(name_2__icontains=query) | 
 #                 Q(name_3__icontains=query) | 
@@ -72,11 +72,11 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 #         # Pagination
 #         paginator = StandardResultsSetPagination()
-#         result_page = paginator.paginate_queryset(electors, request)
+#         result_page = paginator.paginate_queryset(voters, request)
 #         serialized = VotersSerializer(result_page, many=True)
 #         response_data = {
 #             "data": {
-#                 "electors": serialized.data,
+#                 "voters": serialized.data,
 #                 "count": paginator.page.paginator.count,
 #                 "nextPageUrl": paginator.get_next_link(),
 #                 "previousPageUrl": paginator.get_previous_link()
@@ -85,7 +85,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 #         return Response(response_data)
 
-# class GetElectors(APIView):
+# class GetVoters(APIView):
 #     def get(self, request):
 #         query = request.GET.get('searchInput', '').strip()
 #         queries = Q()  # Start with an empty Q object to chain queries
@@ -104,15 +104,15 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 #             queries |= Q(last_name__icontains=query)
         
-#         electors = Elector.objects.filter(queries)
+#         voters = Voter.objects.filter(queries)
 
 #         # Pagination
 #         paginator = StandardResultsSetPagination()
-#         result_page = paginator.paginate_queryset(electors, request)
+#         result_page = paginator.paginate_queryset(voters, request)
 #         serialized = VotersSerializer(result_page, many=True)
 #         response_data = {
 #             "data": {
-#                 "electors": serialized.data,
+#                 "voters": serialized.data,
 #                 "count": paginator.page.paginator.count,
 #                 "nextPageUrl": paginator.get_next_link(),
 #                 "previousPageUrl": paginator.get_previous_link()
@@ -121,7 +121,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 #         return Response(response_data)
 
-class GetElectors(APIView):
+class GetVoters(APIView):
     def get(self, request):
         query = request.GET.get('searchInput', '').strip()
         # return Response({
@@ -129,22 +129,22 @@ class GetElectors(APIView):
         #     "data":query
         # })
         if query.isdigit():
-            electors = Voter.objects.filter(civil=query)
-            if not electors.exists():
+            voters = Voter.objects.filter(civil=query)
+            if not voters.exists():
                 raise Http404({'detail':"Name was not found.", 'code':404})
         else:
             all_Voters = Voter.objects.all()
             if len(query) >= 3:
-                electors = [elector for elector in all_electors if query.lower() in elector.full_name.lower()]
+                voters = [voter for voter in all_voters if query.lower() in voter.full_name.lower()]
             else:
-                electors = all_electors
+                voters = all_voters
 
         paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(electors, request)
+        result_page = paginator.paginate_queryset(voters, request)
         serialized = VotersSerializer(result_page, many=True)
         response_data = {
             "data": {
-                "electors": serialized.data,
+                "voters": serialized.data,
                 "count": paginator.page.paginator.count,
                 "nextPageUrl": paginator.get_next_link(),
                 "previousPageUrl": paginator.get_previous_link()

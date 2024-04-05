@@ -13,7 +13,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from apps.candidates.models import Candidate
-from apps.voters.models import Elector
+from apps.voters.models import Voter
 from apps.categories.models import Category
 from django.contrib.auth.models import Group, Permission
 

@@ -1,27 +1,27 @@
 // Layouts/LayoutMenuData.js
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux"; // Don't forget to import useSelector
 import { useNavigate } from "react-router-dom";
 import { updateIconSidebar } from './utils';  // adjust the path according to your directory structure
 import { usePermission } from 'shared/hooks';
-import { layoutSelector } from 'selectors/layoutSelector';
+
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { layoutSelector, userSelector } from 'selectors';
+import { getCampaignDetails } from "store/actions";
 
 // Menus
-import { useUserMenu } from './UserMenu';
-import { useAdminMenu } from './AdminMenu';
+import { useAdminMenu, useCampaignMenu, useContributorMenu, useModeratorMenu, useEditorMenu, useSettingsMenu, useUserMenu } from './DashboardMenu';
 import { usePublicMenu } from './PublicMenu';
-import { useSettingsMenu } from './SettingsMenu';
-import { useEditorMenu } from './EditorMenu';
-import { useModeratorMenu } from './ModeratorMenu';
-import { useContributorMenu } from './ContributorMenu';
-import { useCampaignMenu } from './CampaignMenu';
 
 const Navdata = () => {
+  const dispatch = useDispatch();
   const history = useNavigate();
+
   //state for collapsable menus
   const [isCurrentState, setIsCurrentState] = useState("Dashboard");
 
   const {
+    isActive,
     canChangeConfig,
     canViewCampaign,
     isContributor,
@@ -29,19 +29,24 @@ const Navdata = () => {
     isSubscriber
   } = usePermission();
 
-  const {
-    layoutType,
-    leftSidebarType,
-    layoutModeType,
-    layoutWidthType,
-    layoutPositionType,
-    topbarThemeType,
-    leftsidbarSizeType,
-    leftSidebarViewType,
-    leftSidebarImageType,
-    sidebarVisibilitytype
-  } = useSelector(layoutSelector);
+  const { layoutType, } = useSelector(layoutSelector);
+  const { currentUser } = useSelector(userSelector);
   const [isSettings, setIsSettings] = useState(false);
+  // const [currentCampaign, setCurrentCampaign] = useState(currentUser?.campaigns[0]?.slug || "");
+
+  let currentCampaign = '';
+  // console.log("currentUser: ", currentUser)
+  // console.log("currentCampaign: ", currentCampaign)
+
+  // useEffect(() => {
+  //   if (currentUser && currentCampaign) {
+  //     console.log("dispatching: ", currentCampaign)
+  //     setCurrentCampaign(currentUser?.campaigns[0]?.slug || null)
+
+  //     console.log("dispatching: ", currentCampaign)
+  //     dispatch(getCampaignDetails(currentCampaign))
+  //   }
+  // }, [dispatch, currentCampaign])
 
   useEffect(() => {
     document.body.classList.remove("twocolumn-panel");
@@ -55,51 +60,35 @@ const Navdata = () => {
   const UserMenu = useUserMenu(setIsCurrentState);
   const AdminMenu = useAdminMenu(setIsCurrentState);
   const PublicMenu = usePublicMenu(setIsCurrentState);
-  const CampaignMenu = useCampaignMenu(setIsCurrentState);
+  const CampaignMenu = useCampaignMenu(setIsCurrentState, currentCampaign);
   const ModeratorMenu = useModeratorMenu(setIsCurrentState);
   const EditorMenu = useEditorMenu(setIsCurrentState);
   const ContributorMenu = useContributorMenu(setIsCurrentState);
   const SettingsMenu = useSettingsMenu(isCurrentState, setIsCurrentState, setIsSettings, isSettings);
 
 
-  // If Layout is vertical
-  // Public                               ==> Menu
-
-  // If Layout is Horizontal - Can Access Dashboard
-  // // If user is Admin                  ==> Admin Menu, User Menu
-  // // If user isModeratpr               ==> Moderator Menu, User Menu
-  // // If user is CampaignMember         ==> Campaign, User Menu           [More Details]
-  // // If user is User (loggedIn)        ==> Admin Menu, User Menu
-
   const menuItems = [];
 
+  // Public
   if (layoutType === 'horizontal') {
     menuItems.push(...PublicMenu);
+
+    // Dashboard
   } else if (layoutType === 'vertical') {
+
+    // Admin
     if (canChangeConfig) {
       menuItems.push(...AdminMenu, ...SettingsMenu, ...UserMenu);
-    } else if (canViewCampaign) {
+    }
+    // Campaign
+    else if (canViewCampaign) {
       menuItems.push(...CampaignMenu, ...UserMenu);
-    } else if (isSubscriber) {
-      menuItems.push(...AdminMenu, ...UserMenu);
+    }
+    // User
+    else if (isActive) {
+      menuItems.push(...UserMenu);
     }
   }
-
-  
-
-  // const menuItems = [
-  //   if (layoutType === 'vertical') {
-  //   ...( canChangeConfig ? [...AdminMenu, ...SettingsMenu] : []),}
-  //   ...(isAdmin || isEditor ? EditorMenu : []),
-  //   // ...(isAdmin || isModerator ? ModeratorMenu : []),
-  //   // ...(isAdmin || isContributor ? ContributorMenu : []),
-  //   ...(canViewCampaign || isSubscriber ? CampaignMenu : []),
-  //   ...(CampaignMenu),
-  //   ...UserMenu,
-
-  //   ...(layoutType === 'horizontal' && PublicMenu),
-
-  // ];
 
   return <React.Fragment>{menuItems}</React.Fragment>;
 };

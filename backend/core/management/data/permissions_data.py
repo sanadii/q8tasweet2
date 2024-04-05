@@ -77,8 +77,8 @@ PERMISSIONS = {
         'canChangeCampaignAttendee': ['superAdmin', 'admin', 'campaignSorter'],
     },
 
-    'Elector': {
-        'canViewElector': [
+    'Voter': {
+        'canViewVoter': [
             'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator', 
             'campaignSupervisor', 'campaignGuarantor', 
             'campaignAttendant', 'campaignSorter'

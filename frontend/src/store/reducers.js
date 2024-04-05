@@ -22,7 +22,7 @@ import Campaigns from "./campaigns/reducer";
 // import ElectionCandidates from "./electionCandidate/reducer";
 
 // Electors
-import Electors from "./electors/reducer";
+import Electors from "./voters/reducer";
 // import Guarantees from "./guarantees/reducer";
 // import Attendees from "./attendees/reducer";
 
