@@ -242,7 +242,7 @@ class ResetPassword(APIView):
             return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class UpdateProfile(APIView):
+class UpdateUserProfile(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request):
@@ -519,6 +519,3 @@ class GetGroupPermissions(APIView):
                 },
             }
         )
-
-
-# ---- Reset password Api's 29-03-2024 --

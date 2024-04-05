@@ -16,7 +16,7 @@ const CampaignDropdown = ({ onChangeCampaign }) => {
     return (
         <React.Fragment>
             {
-                currentUserCampaigns.map((userCampaign, key) => (
+                currentUserCampaigns && currentUserCampaigns.map((userCampaign, key) => (
 
                     <span
                         tag="button"
@@ -33,7 +33,6 @@ const CampaignDropdown = ({ onChangeCampaign }) => {
                     </span>
                 ))
             }
-
         </React.Fragment>
     );
 };

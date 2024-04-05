@@ -148,8 +148,9 @@ export const UPDATE_VOTER = "/voters/updatevoter";
 export const GET_USERS = "/auth/getUsers";
 export const GET_USER_DETAILS = "/auth/getUserDetails";
 export const ADD_NEW_USER = "/auth/addNewUser";
-// export const UPDATE_USER_PROFILE = "/auth/updateUser";
-export const UPDATE_USER_PROFILE = "/auth/update-profile";
+export const UPDATE_USER = "/auth/updateUser";
+export const UPDATE_USER_PROFILE = "/auth/updateUserProfile";
+// export const UPDATE_USER_PROFILE = "/auth/update-profile";
 
 export const CHANGE_USER_PASSWORD = "/auth/changeUserPassword";
 export const DELETE_USER = "/auth/deleteUser";

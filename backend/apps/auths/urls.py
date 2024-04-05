@@ -14,6 +14,7 @@ urlpatterns = [
     path("userLogin", UserLogin.as_view(), name="UserLogin"),
     path("userRegister", UserRegister.as_view(), name="UserRegister"),
     # path("logout/blacklist/", BlacklistTokenUpdateView.as_view(), name="blacklist"),
+    path('updateUserProfile', UpdateUserProfile.as_view(), name="UpdateUser"),
     path('forgotPassword',ForgotPassword.as_view(),name="ForgotPassword"),
     path('resetPassword',ResetPassword.as_view(),name="ResetPassword"),
 
