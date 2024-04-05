@@ -181,16 +181,6 @@ export function useUserMenu(isCurrentState, setIsCurrentState) {
         handleNavigation("userProfile", "/dashboard/profile");
       },
     },
-    {
-      id: "userProfileEdit",
-      label: "تعديل الملف الشخصي",
-      icon: "mdi mdi-account-cog",
-      link: "/dashboard/profile-edit",
-      click: (e) => {
-        e.preventDefault();
-        handleNavigation("userProfileEdit", "/dashboard/profile-edit");
-      },
-    },
   ];
 }
 

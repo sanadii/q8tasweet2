@@ -2,7 +2,7 @@ import React from "react";
 
 
 // User profile
-import UserProfile from "pages/Profile/ViewProfile";
+import UserProfile from "pages/Profile";
 import ProfileEdit from "pages/Profile/EditProfile";
 
 
@@ -98,7 +98,7 @@ const DashboardRoutes = [
 
     //User Profile
     { path: "/dashboard/profile", component: <UserProfile /> },
-    { path: "/dashboard/profile-edit", component: <ProfileEdit /> },
+    // { path: "/dashboard/profile-edit", component: <ProfileEdit /> },
 
 ]
 

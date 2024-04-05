@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { Container, Row } from "reactstrap";
 import { BreadCrumb } from "shared/components";
 import WebSocketChannels from "./NotificationPanel";
-import ViewProfile from "pages/Profile/ViewProfile";
+import ViewProfile from "pages/Profile";
 import NotificationPanel from "./NotificationPanel";
 
 export const Dashboard = ({ }) => {
