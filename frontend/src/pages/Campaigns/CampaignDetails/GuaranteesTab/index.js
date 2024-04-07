@@ -2,14 +2,20 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCampaignGuarantee } from "store/actions";
 import { campaignSelector } from 'selectors';
+import classnames from "classnames";
+import { usePermission } from 'shared/hooks';
 
 // Shared imports
-import { Col, Row, Card, CardBody } from "reactstrap";
+import { Col, Row, Card, CardBody, CardHeader, Nav, NavItem, NavLink } from "reactstrap";
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "shared/components";
 import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, Actions } from "./GuaranteesCol";
 import { useDelete, useFilter } from "shared/hooks"
 
 import GuaranteesModal from "./GuaranteesModal";
+
+
+// Components
+import GuaranteesTab2 from "./GuaranteesTab2"
 
 // Utility imports
 import { toast, ToastContainer } from "react-toastify";
@@ -43,11 +49,59 @@ const GuaranteesTab = () => {
     deleteMultiple,
   } = useDelete(deleteCampaignGuarantee);
 
+  
+  // Permissions
+  const {
+    canChangeCampaign,
+    canViewCampaignMember,
+    canViewCampaignGuarantee,
+    // canViewCampaignAttendees,
+  } = usePermission();
 
   // Modal Constants
   const [modal, setModal] = useState(false);
   const [modalMode, setModalMode] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Tabs & visibility
+  const permissions = usePermission();
+  const visibleTabs = useMemo(() => tabs.filter(tab => !!permissions[tab.permission]), [tabs, permissions]);
+
+  const [activeTab, setActiveTab] = useState(String(visibleTabs[0]?.tabId || 1));
+
+  const toggleTab = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(String(tab));
+    }
+  };
+
+  // Tabs
+  const tabs = [
+    { tabId: 1, href: '#guaranteeGroup', icon: 'ri-overview-line', title: 'المجموعات الإنتخابية' },
+    { tabId: 2, permission: 'guarantee', href: '#members', icon: 'ri-list-unordered', title: 'المضامين' },
+    // { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', title: 'الملخص' },
+    // { tabId: 2, permission: 'canViewCampaignMember', href: '#members', icon: 'ri-list-unordered', title: 'فريق العمل' },
+    // { tabId: 3, permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', title: 'الضمانات' },
+    // { tabId: 4, permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', title: 'الحضور' },
+    // { tabId: 5, permission: 'canViewCampaign', href: '#sorting', icon: 'ri-sort-line', title: 'الفرز' },
+    // { tabId: 6, permission: 'canViewElector', href: '#voters', icon: 'ri-user-voice-line', title: 'الناخبين' },
+    // { tabId: 7, permission: 'canViewActivitie', href: '#activities', icon: 'ri-activity-line', title: 'الأنشطة' },
+    // { tabId: 9, permission: 'canViewCampaign', href: '#edit', icon: 'ri-activity-line', title: 'تعديل' },
+  ];
+
+  const tabComponents = {
+    1: <GuaranteesTab />,
+    // 1: <OverviewTab />,
+    // 2: <MembersTab />,
+    // 3: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />,
+    // 4: <AttendeesTab />,
+    // 5: <SortingTab />,
+    // 6: <VotersTab />,
+    // 7: <ActivitiesTab />,
+    // 9: <EditTab />,
+    // ... add other tabs similarly if they require props
+  };
+
 
   const toggle = useCallback(() => {
     setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
@@ -164,6 +218,8 @@ const GuaranteesTab = () => {
       <Row>
         <Col lg={12}>
           <Card id="memberList">
+            {/* <CardHeader>
+            </CardHeader> */}
             <CardBody>
               <div>
                 <TableContainerHeader
@@ -175,6 +231,25 @@ const GuaranteesTab = () => {
                   isMultiDeleteButton={isMultiDeleteButton}
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
+                <Nav
+                  pills
+                  className="animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1"
+                  role="tablist"
+                >
+                  {visibleTabs.map((tab) => (
+                    <NavItem key={tab.tabId}>
+                      <NavLink
+                        href={tab.href}
+                        className={classnames({ active: activeTab === tab.tabId })}
+                        onClick={() => toggleTab(tab.tabId)}
+                      >
+                        <i className={`${tab.icon} d-inline-block d-md-none`}></i>
+                        <span className="d-none d-md-inline-block">{tab.title}</span>
+                      </NavLink>
+                    </NavItem>
+                  ))
+                  }
+                </Nav>
 
                 <TableFilters
                   // Filters

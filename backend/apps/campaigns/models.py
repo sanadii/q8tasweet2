@@ -99,6 +99,7 @@ class CampaignGuarantee(TrackModel):
     phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
     notes = models.TextField(blank=True, null=True)
     status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)
+    guarantee_group = models.ForeignKey('CampaignGuaranteeGroup', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantee_groups')
 
     class Meta:
         db_table = 'campaign_guarantee'
@@ -110,6 +111,22 @@ class CampaignGuarantee(TrackModel):
             ("canAddCampaignGuarantee", "Can Add Campaign Guarantee"),
             ("canChangeCampaignGuarantee", "Can Change Campaign Guarantee"),
             ("canDeleteCampaignGuarantee", "Can Delete Campaign Guarantee"),
+            ]
+
+class CampaignGuaranteeGroup(TrackModel):
+    name = models.CharField(max_length=150, blank=True)
+    member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantee_group_members')
+    
+    class Meta:
+        db_table = 'campaign_guarantee_group'
+        verbose_name = "Campaign Guarantee Group"
+        verbose_name_plural = "Campaign Guarantee Groups"
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaignGuaranteeGroup", "Can View Campaign Guarantee Group"),
+            ("canAddCampaignGuaranteeGroup", "Can Add Campaign Guarantee Group"),
+            ("canChangeCampaignGuaranteeGroup", "Can Change Campaign Guarantee Group"),
+            ("canDeleteCampaignGuaranteeGroup", "Can Delete Campaign GuaranteeGroup"),
             ]
 
 

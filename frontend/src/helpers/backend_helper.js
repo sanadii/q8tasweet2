@@ -158,6 +158,13 @@ export const addNewCampaignGuarantee = (campaignGuarantee) => api.create(url.ADD
 export const updateCampaignGuarantee = (campaignGuarantee) => api.update(url.UPDATE_CAMPAIGN_GUARANTEE + "/" + campaignGuarantee.id, campaignGuarantee);
 export const deleteCampaignGuarantee = (campaignGuarantee) => api.delete(url.DELETE_CAMPAIGN_GUARANTEE + "/" + campaignGuarantee);
 
+// CampaignGuaranteeGroup
+export const getAllCampaignGuaranteeGroups = (campaignGuaranteeGroup) => api.get(url.GET_ALL_CAMPAIGN_GUARANTEE_GROUPS, campaignGuaranteeGroup);
+export const addNewCampaignGuaranteeGroup = (campaignGuaranteeGroup) => api.create(url.ADD_NEW_CAMPAIGN_GUARANTEE_GROUP, campaignGuaranteeGroup);
+export const updateCampaignGuaranteeGroup = (campaignGuaranteeGroup) => api.update(url.UPDATE_CAMPAIGN_GUARANTEE_GROUP + "/" + campaignGuaranteeGroup.id, campaignGuaranteeGroup);
+export const deleteCampaignGuaranteeGroup = (campaignGuaranteeGroup) => api.delete(url.DELETE_CAMPAIGN_GUARANTEE_GROUP + "/" + campaignGuaranteeGroup);
+
+
 // CampaignElectionAttendee
 export const getAllCampaignAttendees = (campaignAttendee) => api.get(url.GET_CAMPAIGN_ATTENDEES, campaignAttendee);
 export const addNewCampaignAttendee = (campaignAttendee) => api.create(url.ADD_NEW_CAMPAIGN_ATTENDEE, campaignAttendee);

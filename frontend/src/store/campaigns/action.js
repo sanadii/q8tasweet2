@@ -42,6 +42,18 @@ import {
   DELETE_CAMPAIGN_GUARANTEE_SUCCESS,
   DELETE_CAMPAIGN_GUARANTEE_FAIL,
 
+  // CampaignGuarantees
+  GET_CAMPAIGN_GUARANTEE_GROUPS,
+  ADD_NEW_CAMPAIGN_GUARANTEE_GROUP,
+  ADD_NEW_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
+  ADD_NEW_CAMPAIGN_GUARANTEE_GROUP_FAIL,
+  UPDATE_CAMPAIGN_GUARANTEE_GROUP,
+  UPDATE_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
+  UPDATE_CAMPAIGN_GUARANTEE_GROUP_FAIL,
+  DELETE_CAMPAIGN_GUARANTEE_GROUP,
+  DELETE_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
+  DELETE_CAMPAIGN_GUARANTEE_GROUP_FAIL,
+
   // CampaignAttendees
   ADD_NEW_CAMPAIGN_ATTENDEE,
   ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS,
@@ -200,7 +212,6 @@ export const addNewCampaignGuaranteeFail = (error) => ({
   payload: error,
 });
 
-
 export const updateCampaignGuarantee = (campaignGuarantee) => ({
   type: UPDATE_CAMPAIGN_GUARANTEE,
   payload: campaignGuarantee
@@ -226,6 +237,50 @@ export const deleteCampaignGuaranteeSuccess = (campaignGuarantee) => ({
 
 export const deleteCampaignGuaranteeFail = (error) => ({
   type: DELETE_CAMPAIGN_GUARANTEE_FAIL,
+  payload: error,
+});
+
+// CampaignGuaranteeGroups
+export const addNewCampaignGuaranteeGroup = (campaignGuaranteeGroup) => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEE_GROUP,
+  payload: campaignGuaranteeGroup,
+});
+
+export const addNewCampaignGuaranteeGroupSuccess = (campaignGuaranteeGroup) => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
+  payload: campaignGuaranteeGroup,
+});
+
+export const addNewCampaignGuaranteeGroupFail = (error) => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEE_GROUP_FAIL,
+  payload: error,
+});
+
+export const updateCampaignGuaranteeGroup = (campaignGuaranteeGroup) => ({
+  type: UPDATE_CAMPAIGN_GUARANTEE_GROUP,
+  payload: campaignGuaranteeGroup
+});
+export const updateCampaignGuaranteeGroupSuccess = (campaignGuaranteeGroup) => ({
+  type: UPDATE_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
+  payload: campaignGuaranteeGroup
+});
+export const updateCampaignGuaranteeGroupFail = (error) => ({
+  type: UPDATE_CAMPAIGN_GUARANTEE_GROUP_FAIL,
+  payload: error,
+});
+
+export const deleteCampaignGuaranteeGroup = (campaignGuaranteeGroup) => ({
+  type: DELETE_CAMPAIGN_GUARANTEE_GROUP,
+  payload: campaignGuaranteeGroup,
+});
+
+export const deleteCampaignGuaranteeGroupSuccess = (campaignGuaranteeGroup) => ({
+  type: DELETE_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
+  payload: campaignGuaranteeGroup,
+});
+
+export const deleteCampaignGuaranteeGroupFail = (error) => ({
+  type: DELETE_CAMPAIGN_GUARANTEE_GROUP_FAIL,
   payload: error,
 });
 

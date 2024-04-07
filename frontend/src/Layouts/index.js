@@ -157,32 +157,30 @@ const Layout = (props) => {
                 <div className="main-content">
                     {props.style === "campaign" ? (
                         campaign && campaign.election ? (
-                            // <>
-                            //     <div className="page-content">
-                            //         <Container fluid>
-                            //             <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
-                            //         </Container>
-                            //     </div>
-
-                            //     <div className="p-3">
-                            //         {props.children}
-                            //     </div>
-                            // </>
-
                             <div className="page-content">
                                 <Container fluid>
+                                    <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
                                     {props.children}
                                 </Container>
                             </div>
 
+                            // {campaign && campaign.election && props.style === "campaign" &&
+                            // <div className="page-content">
+                            //     <Container fluid>
+                            //         {/* <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} /> */}
+                            //     </Container>
+                            // </div>
+
+                            // }
+                            // <div className="p-3">
+                            // {props.children}
+                            // </div>
 
                         ) : (
                             <p>Loading...</p>
                         )
                     ) : (
-                        <div className="p-3">
-                            {props.children}
-                        </div>
+                        props.children
                     )}
                     <Footer />
                 </div>

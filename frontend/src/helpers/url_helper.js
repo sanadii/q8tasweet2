@@ -106,6 +106,13 @@ export const DELETE_CAMPAIGN_GUARANTEE = "/campaigns/deleteCampaignGuarantee";
 export const ADD_NEW_CAMPAIGN_GUARANTEE = "/campaigns/addNewCampaignGuarantee";
 export const UPDATE_CAMPAIGN_GUARANTEE = "/campaigns/updateCampaignGuarantee";
 
+// Campaign GuaranteeGroups
+export const GET_ALL_CAMPAIGN_GUARANTEE_GROUPS = "/campaigns/getAllCampaignGuaranteeGroups";
+export const DELETE_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/deleteCampaignGuaranteeGroup";
+export const ADD_NEW_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/addNewCampaignGuaranteeGroup";
+export const UPDATE_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/updateCampaignGuaranteeGroup";
+
+
 // CampaignAttendee
 export const GET_CAMPAIGN_ATTENDEES = "/campaigns/getAllCampaignAttendees";
 export const DELETE_CAMPAIGN_ATTENDEE = "/campaigns/deleteCampaignAttendee";
