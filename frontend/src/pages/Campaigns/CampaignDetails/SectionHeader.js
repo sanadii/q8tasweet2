@@ -4,7 +4,13 @@ import { ImageLarge, SectionBackagroundImage } from "shared/components";
 import { Col, Row } from "reactstrap";
 import { usePermission } from 'shared/hooks';
 
+import { useSelector, useDispatch } from "react-redux";
+import { layoutSelector, userSelector, campaignSelector } from 'selectors';
+
 const SectionHeader = ({ campaign, campaignMembers, campaignGuarantees }) => {
+    const { activeCampaign, userCampaigns } = useSelector(userSelector);
+
+    const currentCampaign = campaign || activeCampaign;
 
     // Permissions
     const {
@@ -14,11 +20,17 @@ const SectionHeader = ({ campaign, campaignMembers, campaignGuarantees }) => {
         // canViewCampaignAttendees,
     } = usePermission();
 
-    const campaignId = campaign?.id;
-    const campaignName = campaign.name;
-    const campaignLogo = campaign.logo;
-    const electionName = campaign.election.name;
-    const electionDueDate = campaign.election.dueDate;
+    if (!currentCampaign && currentCampaign.election) {
+        return (
+            <p>loading</p>
+        )
+    }
+    
+    const campaignId = currentCampaign?.id;
+    const campaignName = currentCampaign.name;
+    const campaignLogo = currentCampaign.logo;
+    const electionName = currentCampaign.election.name;
+    const electionDueDate = currentCampaign.election.dueDate;
 
     return (
         <React.Fragment>

@@ -40,8 +40,8 @@ const EditElection = () => {
       electVotes: (election && election.electVotes) || 0,
       electSeats: (election && election.electSeats) || 0,
 
-      // Electors
-      electors: (election && election.electors) || 0,
+      // Voters
+      voters: (election && election.voters) || 0,
       electorsMales: (election && election.electorsMales) || 0,
       electorsFemales: (election && election.electorsFemales) || 0,
 
@@ -86,7 +86,7 @@ const EditElection = () => {
         electionMethod: values.electionMethod,
         electionResult: JSON.stringify(electionResultJson), // Convert the object to a JSON string
         electSeats: values.electSeats,
-        electors: values.electors,
+        voters: values.voters,
         electorsMales: values.electorsMales,
         electorsFemales: values.electorsFemales,
 
@@ -234,8 +234,8 @@ const EditElection = () => {
           section: "الناخبين",
           fields: [
             {
-              id: "electors-input",
-              name: "electors",
+              id: "voters-input",
+              name: "voters",
               label: "عدد الناخبين",
               type: "number",
               colSize: 12,

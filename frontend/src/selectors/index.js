@@ -13,7 +13,7 @@ export { partySelector } from './partySelector';
 export { campaignSelector } from './campaignSelector';
 
 
-// Electors
+// Voters
 export { electorSelector } from './electorSelector';
 
 

@@ -33,7 +33,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import timezone
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import MultiPartParser, FormParser
 import os
 from django.core.files.storage import FileSystemStorage
 
@@ -244,19 +244,24 @@ class ResetPassword(APIView):
 
 class UpdateUserProfile(APIView):
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request):
-        user = (
-            request.user
-        )  # Get the authenticated user directly from the request due to the middleware
-        serializer = UserSerializer(
-            user, data=request.data, partial=True
-        )  # Update existing instance
+        user = request.user  # Get the authenticated user directly from the request due to the middleware
+        serializer = UserSerializer(user, data=request.data, partial=True)  # Update existing instance
+
         if serializer.is_valid():
-            serializer.save()
+            if 'image' in request.FILES:
+                user.image = request.FILES['image']
+
+            serializer.save()  # This will save other fields
+
+            user.save()  # This will save the image file
             return Response(
-                {"success": True, "message": "User profile updated successfully"}
+                {"success": True, "message": "User profile updated successfully", "data": serializer.data},
+                status=status.HTTP_200_OK
             )
+        
         return Response(
             {"success": False, "errors": serializer.errors},
             status=status.HTTP_400_BAD_REQUEST,

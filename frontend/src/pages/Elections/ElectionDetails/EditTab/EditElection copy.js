@@ -39,8 +39,8 @@ const EditElection = () => {
       electVotes: election?.electVotes ?? 0,
       electSeats: election?.electSeats ?? 0,
 
-      // Electors
-      electors: election?.electors ?? 0,
+      // Voters
+      voters: election?.voters ?? 0,
       electorsMales: election?.electorsMales ?? 0,
       electorsFemales: election?.electorsFemales ?? 0,
 
@@ -78,7 +78,7 @@ const EditElection = () => {
         electResult: values.electResult,
         electVotes: values.electVotes,
         electSeats: values.electSeats,
-        electors: values.electors,
+        voters: values.voters,
         electorsMales: values.electorsMales,
         electorsFemales: values.electorsFemales,
 
@@ -382,15 +382,15 @@ const EditElection = () => {
                 <Row>
                   <Col lg={12}>
                     <div className="mb-3">
-                      <Label htmlFor="electors-input" className="form-label">
+                      <Label htmlFor="voters-input" className="form-label">
                         عدد الناخبين
                       </Label>
                       <input
-                        id="electors-input"
-                        name="electors" // Add this
+                        id="voters-input"
+                        name="voters" // Add this
                         type="number"
                         className="form-control"
-                        value={validation.values.electors || ""}
+                        value={validation.values.voters || ""}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                       />
@@ -402,7 +402,7 @@ const EditElection = () => {
                         عدد الناخبين الرجال
                       </Label>
                       <input
-                        id="electors-input"
+                        id="voters-input"
                         name="electorsMales" // Add this
                         type="number"
                         className="form-control"

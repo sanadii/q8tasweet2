@@ -6,16 +6,21 @@ import { usePermission } from 'shared/hooks';
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { layoutSelector, userSelector } from 'selectors';
+import { layoutSelector, campaignSelector } from 'selectors';
 import { getCampaignDetails } from "store/actions";
 
 // Menus
 import { useAdminMenu, useCampaignMenu, useContributorMenu, useModeratorMenu, useEditorMenu, useSettingsMenu, useUserMenu } from './DashboardMenu';
 import { usePublicMenu } from './PublicMenu';
 
-const Navdata = () => {
-  const dispatch = useDispatch();
+
+const LayoutMenuData = () => {
   const history = useNavigate();
+
+  const { campaign, } = useSelector(campaignSelector);
+  const { layoutType, } = useSelector(layoutSelector);
+  const [isSettings, setIsSettings] = useState(false);
+
 
   //state for collapsable menus
   const [isCurrentState, setIsCurrentState] = useState("Dashboard");
@@ -29,24 +34,6 @@ const Navdata = () => {
     isSubscriber
   } = usePermission();
 
-  const { layoutType, } = useSelector(layoutSelector);
-  const { currentUser } = useSelector(userSelector);
-  const [isSettings, setIsSettings] = useState(false);
-  // const [currentCampaign, setCurrentCampaign] = useState(currentUser?.campaigns[0]?.slug || "");
-
-  let currentCampaign = '';
-  // console.log("currentUser: ", currentUser)
-  // console.log("currentCampaign: ", currentCampaign)
-
-  // useEffect(() => {
-  //   if (currentUser && currentCampaign) {
-  //     console.log("dispatching: ", currentCampaign)
-  //     setCurrentCampaign(currentUser?.campaigns[0]?.slug || null)
-
-  //     console.log("dispatching: ", currentCampaign)
-  //     dispatch(getCampaignDetails(currentCampaign))
-  //   }
-  // }, [dispatch, currentCampaign])
 
   useEffect(() => {
     document.body.classList.remove("twocolumn-panel");
@@ -60,7 +47,7 @@ const Navdata = () => {
   const UserMenu = useUserMenu(setIsCurrentState);
   const AdminMenu = useAdminMenu(setIsCurrentState);
   const PublicMenu = usePublicMenu(setIsCurrentState);
-  const CampaignMenu = useCampaignMenu(setIsCurrentState, currentCampaign);
+  const CampaignMenu = useCampaignMenu(setIsCurrentState, campaign);
   const ModeratorMenu = useModeratorMenu(setIsCurrentState);
   const EditorMenu = useEditorMenu(setIsCurrentState);
   const ContributorMenu = useContributorMenu(setIsCurrentState);
@@ -81,7 +68,7 @@ const Navdata = () => {
       menuItems.push(...AdminMenu, ...SettingsMenu, ...UserMenu);
     }
     // Campaign
-    else if (canViewCampaign) {
+    else if (campaign) {
       menuItems.push(...CampaignMenu, ...UserMenu);
     }
     // User
@@ -92,4 +79,4 @@ const Navdata = () => {
 
   return <React.Fragment>{menuItems}</React.Fragment>;
 };
-export default Navdata;
+export default LayoutMenuData;

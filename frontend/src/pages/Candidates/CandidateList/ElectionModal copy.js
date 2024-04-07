@@ -10,7 +10,7 @@ import CandidateModalUpdate from "./CandidateModalUpdate";
 import CandidateModalAdd from "./CandidateModalAdd";
 import { GuaranteeStatusOptions } from "../../../../Components/Constants";
 
-const CandidateModal = ({ modal, toggle, modalMode, elector }) => {
+const CandidateModal = ({ modal, toggle, modalMode, voter }) => {
   const { campaignMembers } = useSelector(campaignSelector);
 
   const [modalSubmit, setModalSubmit] = useState(null);
@@ -50,7 +50,7 @@ const CandidateModal = ({ modal, toggle, modalMode, elector }) => {
       </ModalHeader>
       <ModalBody className="p-4">
         <ModalContent
-          elector={elector}
+          voter={voter}
           setModalSubmit={setModalSubmit}
           campaignMembers={campaignMembers}
         />

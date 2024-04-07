@@ -5,12 +5,9 @@ import defaultAvatar from 'assets/images/users/default.jpg';
 import { api } from "config";
 const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
 
-
-
 const FieldComponent = ({ field, validation }) => {
     const { id, label, name, type, colSize, icon, iconBg } = field;
     const imageValue = validation.values.image;
-
     const [imageSrc, setImageSrc] = useState(defaultAvatar);
 
     useEffect(() => {

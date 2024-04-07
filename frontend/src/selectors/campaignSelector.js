@@ -10,6 +10,7 @@ export const campaignSelector = createSelector(
     // Campaign Selectors
     campaigns: campaignsState.campaigns,
     campaign: campaignsState.campaignDetails,
+    activeCampaign: campaignsState.campaignDetails,
     campaignId: campaignsState.campaignDetails.id,
     campaignType: campaignsState.campaignDetails.campaignType,
 
@@ -29,7 +30,7 @@ export const campaignSelector = createSelector(
     // CurrentCampaignMember
     currentCampaignMember: campaignsState.currentCampaignMember,
     // currentCampaignMemberCommittee: campaignsState.currentCampaignMember.committee,
-    electors: campaignsState.electors,
+    voters: campaignsState.voters,
 
     campaignRoles: campaignsState.campaignRoles,
 

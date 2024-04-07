@@ -90,13 +90,13 @@ const ElectionDetailsWidget = ({ user, userElections }) => {
                 </div>
                 <div className="flex-grow-1 ms-3">
                   <p className="text-uppercase fw-semibold fs-12 text-muted mb-1">
-                    Electors
+                    Voters
                   </p>
                   <h4 className=" mb-0">
-                    <span>{user.electors}</span>
+                    <span>{user.voters}</span>
                   </h4>
                   <p>
-                    / <b className="text-danger mb-1">{user.electors}</b>
+                    / <b className="text-danger mb-1">{user.voters}</b>
                   </p>
                 </div>
                 <div className="flex-shrink-0 align-self-end">
@@ -127,15 +127,15 @@ const ElectionDetailsWidget = ({ user, userElections }) => {
                     <span>{user.attendees}</span>
                   </h4>
                   <p>
-                    / <b className="text-danger mb-1">{user.electors}</b>
+                    / <b className="text-danger mb-1">{user.voters}</b>
                   </p>
                 </div>
                 <div className="flex-shrink-0 bg-successalign-self-end">
                   <span className="badge bg-success-subtle text-success">
                     <i className="align-middle me-1 ri-arrow-up-s-fill"></i>
-                    {user.electors
+                    {user.voters
                       ? (
-                          (user.attendees / user.electors) *
+                          (user.attendees / user.voters) *
                           100
                         ).toFixed(2)
                       : 0}{" "}

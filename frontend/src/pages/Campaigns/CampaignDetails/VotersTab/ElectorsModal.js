@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { GuaranteeStatusOptions } from "shared/constants";
 
-const ElectorsModal = ({ modal, toggle, modalMode, elector }) => {
+const ElectorsModal = ({ modal, toggle, modalMode, voter }) => {
 
   const { campaignMembers } = useSelector(campaignSelector);
 
@@ -38,7 +38,7 @@ const ElectorsModal = ({ modal, toggle, modalMode, elector }) => {
       <ModalBody className="p-4">
 
         <ModalContent
-          elector={elector}
+          voter={voter}
           setOnModalSubmit={setOnModalSubmit}
           campaignMembers={campaignMembers}
         />
@@ -69,7 +69,7 @@ const ElectorsModal = ({ modal, toggle, modalMode, elector }) => {
 };
 
 export const CampaignElectorViewModal = ({
-  elector,
+  voter,
   toggle,
   setOnModalSubmit,
   campaignMembers,
@@ -88,23 +88,23 @@ export const CampaignElectorViewModal = ({
           <tbody>
             <tr>
               <td className="fw-medium">Name / Gender</td> {/* Added text-muted */}
-              <td>{elector.full_name} {elector.gender}</td>
+              <td>{voter.full_name} {voter.gender}</td>
             </tr>
             <tr>
               <td className="fw-medium">CID</td>
-              <td>{elector.civil}</td>
+              <td>{voter.civil}</td>
             </tr>
             <tr>
               <td className="fw-medium">Box Number</td>
-              <td>{elector.box_no}</td>
+              <td>{voter.box_no}</td>
             </tr>
             <tr>
               <td className="fw-medium">Member Number</td>
-              <td>{elector.membership_no}</td>
+              <td>{voter.membership_no}</td>
             </tr>
             <tr>
               <td className="fw-medium">Enrolment Date</td>
-              <td>{elector.enrollment_date}</td>
+              <td>{voter.enrollment_date}</td>
             </tr>
           </tbody>
         </Table>

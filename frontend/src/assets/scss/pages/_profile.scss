@@ -57,14 +57,14 @@
 
 .profile-project-card {
     border: 1px solid $border-color;
-    border-left: 3px solid $border-color;
+    border-right: 3px solid $border-color;
 }
 
 @each $color,
 $value in $theme-colors {
     .profile-project-card {
         &.profile-project-#{$color} {
-            border-left-color: $value;
+            border-right-color: $value;
         }
     }
 }

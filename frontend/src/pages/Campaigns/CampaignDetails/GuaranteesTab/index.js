@@ -1,20 +1,18 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteCampaignGuarantee } from "../../../../store/actions";
+import { deleteCampaignGuarantee } from "store/actions";
 import { campaignSelector } from 'selectors';
 
-// Component imports
+// Shared imports
 import { Col, Row, Card, CardBody } from "reactstrap";
-import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "../../../../shared/components";
-import { Id, Name, Phone, Attended, Status, Guarantor, Actions } from "./GuaranteesCol";
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "shared/components";
+import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, Actions } from "./GuaranteesCol";
 import { useDelete, useFilter } from "shared/hooks"
 
 import GuaranteesModal from "./GuaranteesModal";
 
 // Utility imports
 import { toast, ToastContainer } from "react-toastify";
-
-// CSS imports
 import "react-toastify/dist/ReactToastify.css";
 
 const GuaranteesTab = () => {
@@ -31,26 +29,20 @@ const GuaranteesTab = () => {
   // Constants
   const [campaignGuarantee, setCampaignGuarantee] = useState(null);
 
-  // Delete Modal Constants
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteModalMulti, setDeleteModalMulti] = useState(false);
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    onClickDelete,
+    deleteModal,
+    setDeleteModal,
+    checkedAll,
+    deleteCheckbox,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    deleteMultiple,
+  } = useDelete(deleteCampaignGuarantee);
 
-  // Delete Multiple Constants
-  const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
-  const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
-
-  // Delete Data
-  const handleDeleteCampaignGuarantee = () => {
-    if (campaignGuarantee) {
-      dispatch(deleteCampaignGuarantee(campaignGuarantee.id));
-      setDeleteModal(false);
-    }
-  };
-
-  const onClickDelete = (campaignGuarantee) => {
-    setCampaignGuarantee(campaignGuarantee);
-    setDeleteModal(true);
-  };
 
   // Modal Constants
   const [modal, setModal] = useState(false);
@@ -86,46 +78,7 @@ const GuaranteesTab = () => {
     [toggle]
   );
 
-  // Checked All
-  // const checkedAll = useCallback(() => {
-  //   const checkall = document.getElementById("checkBoxAll");
-  //   const checkedEntry = document.querySelectorAll(
-  //     ".campaignGuaranteeCheckBox"
-  //   );
 
-  //   if (checkall.checked) {
-  //     checkedEntry.forEach((checkedEntry) => {
-  //       checkedEntry.checked = true;
-  //     });
-  //   } else {
-  //     checkedEntry.forEach((checkedEntry) => {
-  //       checkedEntry.checked = false;
-  //     });
-  //   }
-  //   deleteCheckbox();
-  // }, []);
-
-  const deleteMultiple = () => {
-    const checkall = document.getElementById("checkBoxAll");
-    selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteCampaignGuarantee(element.value));
-      setTimeout(() => {
-        toast.clearWaitingQueue();
-      }, 3000);
-    });
-    setIsMultiDeleteButton(false);
-    checkall.checked = false;
-  };
-
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(
-      ".campaignGuaranteeCheckBox:checked"
-    );
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
-  };
 
   const memberName = (campaignMembers || []).reduce((acc, member) => {
     acc[member.id] = member;
@@ -134,8 +87,12 @@ const GuaranteesTab = () => {
   const columns = useMemo(
     () => [
       {
-        Header: "م.",
+        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
         accessor: "id",
+        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
+      },
+      {
+        Header: "م.",
         Cell: (cellProps) => <Id {...cellProps} />
       },
       {
@@ -185,7 +142,7 @@ const GuaranteesTab = () => {
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteCampaignGuarantee}
+        onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
@@ -203,7 +160,7 @@ const GuaranteesTab = () => {
         toggle={toggle}
         campaignGuarantee={campaignGuarantee}
       />
-      
+
       <Row>
         <Col lg={12}>
           <Card id="memberList">

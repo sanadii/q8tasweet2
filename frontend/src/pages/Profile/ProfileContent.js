@@ -9,7 +9,7 @@ import SwiperCore, { Autoplay } from "swiper";
 
 // Tabs
 import ProfileOverview from "./ProfileOverview";
-import ProfileActivities from "./TabActivities/ProfileActivities";
+import ProfileCampaigns from "./ProfileCampaigns";
 import ProfileMember from "./TabMember/ProfileMember";
 import ProfileDocuments from "./TabDocuments/ProfileDocuments";
 import EditProfile from "./EditProfile"
@@ -28,7 +28,7 @@ const ProfileContent = ({ user }) => {
             type: "tab",
             props: { user: user }
         },
-        // { id: "2", title: "الأنشطة", icon: "far fa-user", href: "Profile-activities", type: "tab", Component: ProfileActivities },
+        { id: "2", title: "الحملات الإنتخابية", icon: "far fa-user", href: "Profile-activities", type: "tab", Component: ProfileCampaigns, props: { user: user } },
         // { id: "3", title: "المشاريع", icon: "far fa-envelope", href: "Profile-Member", type: "tab", Component: ProfileMember },
         // { id: "4", title: "مستندات", icon: "far fa-envelope", href: "Profile-documents", type: "tab", Component: ProfileDocuments },
         {

@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.hashers import make_password
+from django.conf import settings  # Import Django settings to access MEDIA_URL
 
 
 
@@ -20,8 +21,8 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     admin_serializer_classes = (TrackMixin,)
     full_name = serializers.SerializerMethodField()
-    image = serializers.ImageField(required=False)
-    groups = serializers.SerializerMethodField()  # Changed the field name to 'names'
+    image = serializers.SerializerMethodField()
+    groups = serializers.SerializerMethodField()
     permissions = serializers.SerializerMethodField()
 
     class Meta:
@@ -42,6 +43,12 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
             return formatted_groups
         else:
             return []
+
+    def get_image(self, obj):
+        # Check if the image field is not empty and generate the desired URL format
+        if obj.image:
+            return f"{settings.MEDIA_URL}{obj.image}"  # Use Django's MEDIA_URL to build the URL
+        return None  # Return None if the image field is empty
 
 
     def get_permissions(self, obj):

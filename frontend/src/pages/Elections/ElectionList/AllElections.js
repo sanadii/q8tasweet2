@@ -38,7 +38,6 @@ const AllElections = () => {
     setDeleteModalMulti,
     deleteMultiple,
   } = useDelete(deleteElection);
-  console.log("checkedAll: ", checkedAll)
 
   // Fetch Data If Needed Hook
       // Election Data
@@ -100,7 +99,7 @@ const AllElections = () => {
         electionResult: election.electionResult,
         electVotes: election.electVotes,
         electSeats: election.seats,
-        electors: election.electors,
+        voters: election.voters,
         attendees: election.attendees,
 
         // Task

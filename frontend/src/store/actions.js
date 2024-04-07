@@ -14,7 +14,7 @@ export * from "./candidates/action";
 export * from "./parties/action";
 export * from "./campaigns/action";
 
-// Electors
+// Voters
 export * from "./voters/action";
 // export * from "./guarantees/action";
 // export * from "./attendees/action";

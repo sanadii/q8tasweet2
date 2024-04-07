@@ -187,6 +187,7 @@ export function useUserMenu(isCurrentState, setIsCurrentState) {
 export function useCampaignMenu(setIsCurrentState, currentCampaign) {
   const history = useNavigate();
 
+  console.log("currentCampaign: ", currentCampaign)
   const handleNavigation = (state, path) => {
     setIsCurrentState(state);
     history(path);
@@ -196,70 +197,135 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
   return [
     {
       label: "الحملة الإنتخابية",
+      isCampaign: true,
+      image: currentCampaign.image,
+      name: currentCampaign.name,
+    },
+    {
+      label: "الحملة الإنتخابية",
       isHeader: true,
     },
     {
       id: "campaignDashboard",
       label: "لوحة التحكم",
       icon: "mdi mdi-account-circle",
-      link: `/campaigns/${currentCampaign}`,
+      link: "/campaign/overview",
       click: (e) => {
         e.preventDefault();
-        handleNavigation("campaignDashboard", `/campaigns/${currentCampaign}`);
+        handleNavigation("campaignDashboard", "/campaign/overview");
+      }
+    },
+
+    {
+      id: "campaignMyGuarantees",
+      label: "ضماناتي",
+      icon: "ri-honour-line",
+      link: `/campaign/my-guarantees`,
+      click: function (e) {
+        e.preventDefault();
+        setIsCurrentState("campaignMyGuarantees", "/campaign/my-guarantees");
+      },
+    },
+    {
+      id: "campaignGuarantees",
+      label: "الضمانات",
+      icon: "ri-honour-line",
+      link: "/campaign/guarantees",
+      click: function (e) {
+        e.preventDefault();
+        handleNavigation("campaignGuarantees", "/campaign/guarantees");
+
+      },
+    },
+
+    {
+      id: "campaignAttendance",
+      label: "الحضور",
+      icon: "ri-honour-line",
+      link: `/campaign/attendees`,
+      click: function (e) {
+        e.preventDefault();
+        setIsCurrentState("campaignAttendance", "/campaign/attendees");
+      },
+    },
+    {
+      id: "campaignCommittees",
+      label: "اللجان",
+      icon: "ri-honour-line",
+      link: "/campaign/committees",
+      click: (e) => {
+        e.preventDefault();
+        handleNavigation("campaignCommittees", "/campaign/committees");
       }
     },
     {
-      id: "campaignTeam", // You can use a unique identifier here
-      label: "فريق العمل", // Display campaign name
+      id: "campaignSorting",
+      label: "الفرز",
       icon: "ri-honour-line",
-      link: `/campaigns/${currentCampaign}/members`, // Link to campaign details
-      click: function (e) {
+      link: "/campaign/sorting",
+      click: (e) => {
         e.preventDefault();
-        setIsCurrentState("CampaignTeam");
-      },
+        handleNavigation("campaignSorting", "/campaign/sorting");
+      }
     },
     {
-      id: "campaignGuarantees", // You can use a unique identifier here
-      label: "جميع المضامين", // Display campaign name
+      id: "campaignTeam",
+      label: "فريق العمل",
       icon: "ri-honour-line",
-      link: `/campaigns/${currentCampaign}/guarantees`, // Link to campaign details
-      click: function (e) {
+      link: "/campaign/members",
+      click: (e) => {
         e.preventDefault();
-        setIsCurrentState("campaignGuarantee");
-      },
+        handleNavigation("campaignDashboard", "/campaign/members");
+      }
     },
     {
-      id: "campaignMyGuarantees", // You can use a unique identifier here
-      label: "مضاميني", // Display campaign name
+      label: "الإنتخابات",
+      isHeader: true,
+    },
+    {
+      id: "campaignCandidates",
+      label: "المرشحين",
       icon: "ri-honour-line",
-      link: `/campaigns/${currentCampaign}/my-guarantees`, // Link to campaign details
+      link: "/campaign/candidates",
+      click: (e) => {
+        e.preventDefault();
+        handleNavigation("campaignCandidates", "/campaign/candidates");
+      }
+    },
+    {
+      id: "campaignVoters",
+      label: "الناخبين",
+      icon: "ri-honour-line",
+      link: "/campaign/voters",
+      click: (e) => {
+        e.preventDefault();
+        handleNavigation("campaignVoters", "/campaign/voters");
+      }
+    },
+    {
+      label: "إعدادات الحملة",
+      isHeader: true,
+    },
+    {
+      id: "campaignAddMember",
+      label: "إضافة مستخدم",
+      icon: "ri-honour-line",
+      link: "/campaign/add-member",
       click: function (e) {
         e.preventDefault();
-        setIsCurrentState("campaignMyGuarantee");
+        setIsCurrentState("campaignAddMember", "/campaign/add-member");
 
       },
     },
     {
-      id: "campaignAttendance", // You can use a unique identifier here
-      label: "الحضور", // Display campaign name
+      id: "campaignEdit",
+      label: "تعديل الحملة",
       icon: "ri-honour-line",
-      link: `/campaign/${currentCampaign}/attendees`, // Link to campaign details
+      link: `/campaign/edit-campaign`,
       click: function (e) {
         e.preventDefault();
-        setIsCurrentState("campaignAttendee");
-      },
-    },
-    {
-      label: "إعدادات الحملة", // Display campaign name
-      isHeader: true,
-    },
-    {
-      id: "campaignEdit", // You can use a unique identifier here
-      label: "تعديل", // Display campaign name
-      icon: "ri-honour-line",
-      link: `/campaigns/${currentCampaign}/edit`, // Link to campaign details
-      click: function (e) {
-        e.preventDefault();
+        setIsCurrentState("campaignEdit", "/campaign/edit-campaign");
+
       },
     },
   ];

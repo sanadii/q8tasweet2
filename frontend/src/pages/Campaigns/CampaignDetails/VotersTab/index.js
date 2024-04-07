@@ -12,7 +12,7 @@ import { Id, Name, Actions } from "./ElectorsCol";
 // Reactstrap (UI) imports
 import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 
-export const ElectorsTab = () => {
+export const VotersTab = () => {
   const dispatch = useDispatch();
 
   const {
@@ -23,7 +23,7 @@ export const ElectorsTab = () => {
     campaignAttendees,
   } = useSelector(campaignSelector);
 
-  const { electors } = useSelector(electorSelector);
+  const { voters } = useSelector(electorSelector);
   const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
   const [campaignAttendeeList, setCampaignAttendeeList] = useState(campaignAttendees);
 
@@ -38,11 +38,11 @@ export const ElectorsTab = () => {
 
   // Add New CampaignGuarantee Search & Filter
   const [searchElectorInput, setSearchElectorInput] = useState("");
-  const [electorList, setElectorList] = useState(electors);
+  const [electorList, setElectorList] = useState(voters);
 
   useEffect(() => {
-    setElectorList(electors);
-  }, [electors]);
+    setElectorList(voters);
+  }, [voters]);
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -71,19 +71,19 @@ export const ElectorsTab = () => {
 
 
   // View Elector Info
-  const [elector, setElector] = useState(null);
+  const [voter, setElector] = useState(null);
 
   const handleElectorClick = useCallback(
     (arg, modalMode) => {
-      const elector = arg;
+      const voter = arg;
       setElector({
         // Elector Fields
-        civil: elector.civil,
+        civil: voter.civil,
         campaignId: campaignDetails.id,
-        gender: elector.gender,
-        fullName: elector.fullName,
-        status: elector.status,
-        notes: elector.notes,
+        gender: voter.gender,
+        fullName: voter.fullName,
+        status: voter.status,
+        notes: voter.notes,
       });
       // Set the modalMode state here
       setModalMode(modalMode);
@@ -108,7 +108,7 @@ export const ElectorsTab = () => {
           campaignGuarantees={campaignGuarantees}
           campaignAttendees={campaignAttendees}
           campaignDetails={campaignDetails}
-          electors={electors} />
+          voters={voters} />
       },
     ],
     [
@@ -122,7 +122,7 @@ export const ElectorsTab = () => {
       currentCampaignMember?.role,
       currentCampaignMember?.user?.id,   // <-- safely accessing nested properties
       dispatch,
-      electors,
+      voters,
     ]);
   return (
     <React.Fragment>
@@ -130,7 +130,7 @@ export const ElectorsTab = () => {
         modal={isModalVisible}
         modalMode={modalMode}
         toggle={toggle}
-        elector={elector}
+        voter={voter}
       />
       <Row>
         <Col lg={12}>
@@ -187,4 +187,4 @@ export const ElectorsTab = () => {
   );
 };
 
-export default ElectorsTab;
+export default VotersTab;

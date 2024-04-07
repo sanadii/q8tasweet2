@@ -21,8 +21,8 @@ import Parties from "./parties/reducer";
 import Campaigns from "./campaigns/reducer";
 // import ElectionCandidates from "./electionCandidate/reducer";
 
-// Electors
-import Electors from "./voters/reducer";
+// Voters
+import Voters from "./voters/reducer";
 // import Guarantees from "./guarantees/reducer";
 // import Attendees from "./attendees/reducer";
 
@@ -57,7 +57,7 @@ const rootReducer = combineReducers({
     Candidates,
     Parties,
     Campaigns,
-    Electors,
+    Voters,
     // Guarantees,
     // Attendees,
 

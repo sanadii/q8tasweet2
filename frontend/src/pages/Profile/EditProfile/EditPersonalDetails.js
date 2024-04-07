@@ -1,10 +1,6 @@
 // React & Redux imports
 import React, { useEffect } from "react";
 
-// Redux
-import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "store/actions";
-import { userSelector } from 'selectors';
 
 // Shared
 import { FieldComponent } from "shared/components";
@@ -18,12 +14,10 @@ import { useFormik } from "formik";
 import { Button, Row, Form } from "reactstrap";
 
 
-const EditPersonalDetails = () => {
+const EditPersonalDetails = ({ validation }) => {
     document.title = "Profile Settings | Q8Tasweet - React Admin & Dashboard Template";
-    const dispatch = useDispatch();
 
     // State Management
-    const { user } = useSelector(userSelector);
 
     const fieldGroup = [
         {
@@ -108,74 +102,30 @@ const EditPersonalDetails = () => {
         },
     ];
 
-    // Form validation and submission
-    const validation = useFormik({
-        enableReinitialize: true,
-        initialValues: {
-            firstName: (user && user.firstName) || "",
-            lastName: (user && user.lastName) || "",
-            email: (user && user.email) || "",
-            phone: (user && user.phone) || "",
-            description: (user && user.description) || "",
-            civil: (user && user.civil) || "",
-            gender: (user && user.gender) || "",
-            dateOfBirth: (user && user.dateOfBirth) || null,
-        },
-        validationSchema: Yup.object({
-            firstName: Yup.string().required('Required'),
-            lastName: Yup.string().required('Required'),
-            email: Yup.string().email('Invalid email address').required('Required'),
-            civil: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(12, 'Must be exactly 12 digits').max(12, 'Must be exactly 12 digits').required('Required'),
-            phone: Yup.string().matches(/^[0-9]+$/, "Must be only digits").min(8, 'Must be exactly 8 digits').required('Required'),
-        }),
-
-        onSubmit: (values) => {
-            const updatedUserProfile = {
-                id: user.id,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                email: values.email,
-                phone: values.phone,
-                description: values.description,
-                civil: values.civil,
-                gender: values.gender,
-                dateOfBirth: values.dateOfBirth,
-            };
-            dispatch(updateUser(updatedUserProfile));
-        },
-    });
-
     return (
         <React.Fragment >
-            <Form
-                className="tablelist-form"
-                onSubmit={e => {
-                    e.preventDefault();
-                    validation.handleSubmit();
-                }}
-            >
-                <Row>
-                    {fieldGroup.map(group => (
-                        <div className="pb-3" key={group.fieldGroupTitle}>
-                            <h4>
-                                <strong>
-                                    {group.fieldGroupTitle}
-                                </strong>
-                            </h4>
-                            <Row>
-                                {group.fields.map(field => (
-                                    <FieldComponent
-                                        key={field.id}
-                                        field={field}
-                                        validation={validation}
-                                    />
-                                ))}
-                            </Row>
-                        </div>
-                    ))}
-                </Row>
-                <Button type="submit">تحديث</Button>
-            </Form>
+
+            <Row>
+                {fieldGroup.map(group => (
+                    <div className="pb-3" key={group.fieldGroupTitle}>
+                        <h4>
+                            <strong>
+                                {group.fieldGroupTitle}
+                            </strong>
+                        </h4>
+                        <Row>
+                            {group.fields.map(field => (
+                                <FieldComponent
+                                    key={field.id}
+                                    field={field}
+                                    validation={validation}
+                                />
+                            ))}
+                        </Row>
+                    </div>
+                ))}
+            </Row>
+            <button type="submit" className="btn btn-primary">تحديث</button>
         </React.Fragment >
 
     );

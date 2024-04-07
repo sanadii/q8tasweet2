@@ -8,17 +8,14 @@ import SwiperCore, { Autoplay } from "swiper";
 
 
 // Components
-import OverviewCompleteProfile from "./OverviewCompleteProfile";
 import OverviewPersonalDetails from "./OverviewPersonalDetails";
-import OverviewPortfolio from "./OverviewPortfolio";
+import OverviewAbout from "./OverviewAbout";
 
 
 import OverviewSkills from "./OverviewSkills";
 import OverviewSuggestion from "./OverviewSuggestion";
 import OverviewPopularPosts from "./OverviewPopularPosts";
-import OverviewAbout from "./OverviewAbout";
 import OverviewRecentActivities from "./OverviewRecentActivities";
-import OverviewProjects from "./OverviewProjects";
 
 
 
@@ -32,16 +29,11 @@ const ProfileOverview = ({ user }) => {
     }, [user]);
     SwiperCore.use([Autoplay]);
 
-
-    document.title = "Profile | Q8Tasweet - React Admin & Dashboard Template";
-
     return (
         <React.Fragment >
             <Row>
                 <Col lg={3}>
-                    <OverviewCompleteProfile />
                     <OverviewPersonalDetails user={user} />
-                    <OverviewPortfolio />
                 </Col>
                 <Col lg={9}>
                     <OverviewAbout user={user} />

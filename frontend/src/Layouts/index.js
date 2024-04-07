@@ -37,21 +37,7 @@ import {
 const Layout = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const [headerClass, setHeaderClass] = useState("");
-    const [currentCampaign, setCurrentCampaign] = useState("");
-
-    // useEffect(() => {
-    //     if (currentUser && currentCampaign) {
-    //         console.log("dispatching: ", currentCampaign)
-    //         setCurrentCampaign(currentUser?.campaigns[0]?.slug || null)
-
-    //         console.log("dispatching: ", currentCampaign)
-    //         dispatch(getCampaignDetails(currentCampaign))
-    //     }
-    // }, [dispatch, currentUser, currentCampaign])
-
-
 
     const defaultLayout = props.defaultLayout;
     const style = props.style;
@@ -163,24 +149,44 @@ const Layout = (props) => {
                     headerClass={headerClass}
                     layoutModeType={layoutModeType}
                     onChangeLayoutMode={onChangeLayoutMode}
-                    onChangeCampaign={onChangeCampaign}
+                    setCurrentCampaign={props.setCurrentCampaign}
                 />
                 <Sidebar
                     layoutType={layoutType}
                 />
-                <div className="main-content ">
-                    {props.style === "campaign" &&
-                        <div className="page-content">
-                            <Container fluid>
-                                <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
-                            </Container>
+                <div className="main-content">
+                    {props.style === "campaign" ? (
+                        campaign && campaign.election ? (
+                            // <>
+                            //     <div className="page-content">
+                            //         <Container fluid>
+                            //             <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
+                            //         </Container>
+                            //     </div>
+
+                            //     <div className="p-3">
+                            //         {props.children}
+                            //     </div>
+                            // </>
+
+                            <div className="page-content">
+                                <Container fluid>
+                                    {props.children}
+                                </Container>
+                            </div>
+
+
+                        ) : (
+                            <p>Loading...</p>
+                        )
+                    ) : (
+                        <div className="p-3">
+                            {props.children}
                         </div>
-                    }
-                    <div className="p-3">
-                        {props.children}
-                    </div>
+                    )}
                     <Footer />
                 </div>
+
             </div>
             {/* <RightSidebar /> */}
         </React.Fragment >

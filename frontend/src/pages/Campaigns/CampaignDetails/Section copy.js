@@ -21,7 +21,7 @@ import MembersTab from "./MembersTab";
 import GuaranteesTab from "./GuaranteesTab";
 import AttendeesTab from "./AttendeesTab";
 import SortingTab from "./SortingTab";
-import ElectorsTab from "./ElectorsTab";
+import VotersTab from "./VotersTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
@@ -52,7 +52,7 @@ const Section = () => {
     { id: "3", permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', text: 'الضمانات' },
     { id: "4", permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', text: 'الحضور' },
     { id: "5", permission: 'canViewCampaignSorting', href: '#sorting', icon: 'ri-sort-line', text: 'الفرز' },
-    { id: "6", permission: 'canViewElector', href: '#electors', icon: 'ri-user-voice-line', text: 'الناخبين' },
+    { id: "6", permission: 'canViewElector', href: '#voters', icon: 'ri-user-voice-line', text: 'الناخبين' },
     { id: "7", permission: 'canViewActivitie', href: '#activities', icon: 'ri-activity-line', text: 'الأنشطة' },
     { id: "9", permission: 'canViewCampaign', href: '#edit', icon: 'ri-activity-line', text: 'تعديل' },
   ];
@@ -63,7 +63,7 @@ const Section = () => {
     "3": <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />,
     "4": <AttendeesTab />,
     "5": <SortingTab />,
-    "6": <ElectorsTab />,
+    "6": <VotersTab />,
     "7": <ActivitiesTab />,
     "9": <EditTab />,
     // ... add other tabs similarly if they require props

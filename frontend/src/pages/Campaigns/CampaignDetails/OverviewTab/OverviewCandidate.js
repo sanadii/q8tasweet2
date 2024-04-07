@@ -32,7 +32,7 @@ const OverviewCandidate = () => {
     <React.Fragment>
       <Card>
         <CardBody>
-          <h5 className="card-title mb-3"><strong>عن المرشح</strong></h5>
+          <h5 className="card-title mb-3"><strong>{campaign.name}</strong></h5>
           {campaign.description}
           <Row className="flex-d">
             {candidateInfo.map(info => (

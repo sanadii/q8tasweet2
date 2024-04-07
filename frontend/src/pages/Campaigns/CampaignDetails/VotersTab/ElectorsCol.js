@@ -48,7 +48,7 @@ const Actions = (props) => {
         campaignGuarantees,
         campaignAttendees,
         campaignDetails,
-        electors,
+        voters,
     } = props;
 
     // if user is not a member (eg Admin, SuperAdmin), to open a model to assign the Guarantor / Attendand (+ Committee)
@@ -116,8 +116,8 @@ const Actions = (props) => {
                     to="#"
                     className="btn btn-sm btn-soft-warning edit-list"
                     onClick={() => {
-                        const elector = cellProps.row.original;
-                        handleElectorClick(elector, "CampaignElectorViewModal");
+                        const voter = cellProps.row.original;
+                        handleElectorClick(voter, "CampaignElectorViewModal");
                     }}
                 >
                     <i className="ri-eye-fill align-bottom" />

@@ -98,7 +98,7 @@ export const ImageMedium = ({ imagePath }) => {
 };
 
 export const ImageLarge = ({ imagePath }) => {
-  const imageUrl = imagePath ? `${imagePath}` : `${mediaUrl}${defaultImagePath}`;
+  const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
 
   return (
     <React.Fragment>

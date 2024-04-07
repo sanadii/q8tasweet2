@@ -2,88 +2,20 @@ import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import { useNavigate, Link } from 'react-router-dom';
 import { Collapse } from 'reactstrap';
-import { layoutSelector } from 'selectors/layoutSelector';
 
 // Import Data
-import menuItems from "../LayoutMenuData";
-import { withRouter } from 'shared/components';
-import { useSelector, useDispatch } from "react-redux";
-import { getCampaignDetails } from "store/actions";
+import LayoutMenuData from "../LayoutMenuData";
+import { withRouter, ImageLarge } from 'shared/components';
 
-const Menu = ({ item }) => (
-    item.isHeader ? (
-        <li className="menu-title"><span data-key="t-menu">{item.label}</span></li>
-        // ) : item.isCampaign ? (
-        //     <CampaignMenu item={item} />
-    ) : item.subItems ? (
-        <CollapsibleMenuItem item={item} />
-    ) : (
-        <MenuItem item={item} />
-    )
-);
-
-const MenuItem = ({ item }) => (
-    <li className="nav-item">
-        <Link
-            className="nav-link menu-link"
-            to={item.link ? item.link : "/#"}
-        >
-            <i className={item.icon}></i> <span>{item.label}</span>
-            {item.badgeName && (
-                <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
-            )}
-        </Link>
-    </li>
-);
-
-const CollapsibleMenuItem = ({ item }) => (
-    <li className="nav-item">
-        <Link
-            onClick={item.click}
-            className="nav-link menu-link"
-            to={item.link ? item.link : "/#"}
-            data-bs-toggle="collapse"
-        >
-            <i className={item.icon}></i>
-            <span data-key="t-apps">{item.label}</span>
-            {item.badgeName && (
-                <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
-            )}
-        </Link>
-        <Collapse
-            className="menu-dropdown"
-            isOpen={item.stateVariables}
-            id="sidebarApps"
-        >
-            <ul className="nav nav-sm flex-column test">
-                {item.subItems && item.subItems.map((subItem, key) => (
-                    <SubItem key={key} subItem={subItem} />
-                ))}
-            </ul>
-        </Collapse>
-    </li>
-);
-
-const SubItem = ({ subItem }) => (
-    <li className="nav-item">
-        <Link
-            to={subItem.link ? subItem.link : "/#"}
-            className="nav-link"
-            onClick={subItem.click}
-        >
-            {subItem.label}
-            {subItem.badgeName && (
-                <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
-            )}
-        </Link>
-    </li>
-);
+// Redux
+import { useSelector } from "react-redux";
+import { layoutSelector } from 'selectors';
 
 const VerticalLayout = (props) => {
 
-    const navData = menuItems().props.children;
     const path = props.router.location.pathname;
-    const [selectedCampaign, setSelectedCampaign] = useState("")
+    const navData = LayoutMenuData({ currentCampaign: props.currentCampaign, setCurrentCampaign: props.setCurrentCampaign }).props.children;
+
 
     /*
     layout settings
@@ -220,3 +152,83 @@ VerticalLayout.propTypes = {
 };
 
 export default withRouter(VerticalLayout);
+
+
+
+const Menu = ({ item }) => (
+    item.isHeader ? (
+        <li className="menu-title"><span data-key="t-menu">{item.label}</span></li>
+    ) : item.isCampaign ? (
+        <div className="text-center">
+            <div className="profile-user position-relative d-inline-block mx-auto mb-4">
+                <ImageLarge imagePath={item.image} />
+            </div>
+            <h5 className="menu-title fs-16 mb-1">{item.label}</h5>
+            <p className="text-white fs-16 mb-1">{item.name}</p>
+        </div>
+
+
+    ) : item.subItems ? (
+        <CollapsibleMenuItem item={item} />
+    ) : (
+        <MenuItem item={item} />
+    )
+);
+
+const MenuItem = ({ item }) => (
+    <li className="nav-item">
+        <Link
+            className="nav-link menu-link"
+            to={item.link ? item.link : "/#"}
+        >
+            <i className={item.icon}></i> <span>{item.label}</span>
+            {item.badgeName && (
+                <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
+            )}
+        </Link>
+    </li>
+);
+
+const CollapsibleMenuItem = ({ item }) => (
+    <li className="nav-item">
+        <Link
+            onClick={item.click}
+            className="nav-link menu-link"
+            to={item.link ? item.link : "/#"}
+            data-bs-toggle="collapse"
+        >
+            <i className={item.icon}></i>
+            <span data-key="t-apps">{item.label}</span>
+            {item.badgeName && (
+                <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
+            )}
+        </Link>
+        <Collapse
+            className="menu-dropdown"
+            isOpen={item.stateVariables}
+            id="sidebarApps"
+        >
+            <ul className="nav nav-sm flex-column test">
+                {item.subItems && item.subItems.map((subItem, key) => (
+                    <SubItem key={key} subItem={subItem} />
+                ))}
+            </ul>
+        </Collapse>
+    </li>
+);
+
+const SubItem = ({ subItem }) => (
+    <li className="nav-item">
+        <Link
+            to={subItem.link ? subItem.link : "/#"}
+            className="nav-link"
+            onClick={subItem.click}
+        >
+            {subItem.label}
+            {subItem.badgeName && (
+                <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
+            )}
+        </Link>
+    </li>
+);
+

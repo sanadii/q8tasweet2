@@ -12,6 +12,7 @@ import Guarantors from "./Guarantors";
 import OverviewSidebar from "./OverviewSidebar";
 
 // Components, Constants & Hooks
+import Widget from "./Widget"
 import GuaranteeCals from "./GuaranteeCals"
 import GuaranteeChart from "./GuaranteeChart"
 import GuaranteeTarget from "./GuaranteeRadialBar"
@@ -49,8 +50,9 @@ const OverviewTab = () => {
   return (
     <React.Fragment>
       <div id="layout-wrapper">
-
         <Row>
+          <OverviewCandidate />
+
           <Col lg={3}>
             <OverviewSidebar />
             <OverviewNotifications />
@@ -58,7 +60,7 @@ const OverviewTab = () => {
           </Col>
           <Col lg={9}>
             {/* Candidate */}
-            <OverviewCandidate />
+            <Widget />
 
             {/* Guarantees */}
             {canViewCampaignGuarantee && campaign.election.previousElections &&

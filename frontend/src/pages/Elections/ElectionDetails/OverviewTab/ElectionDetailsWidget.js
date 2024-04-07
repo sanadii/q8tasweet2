@@ -40,7 +40,7 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
     (candidate) => candidate.gender === 2
   ).length;
 
-  const percentageAttendees = ((election.attendees / election.electors) * 100).toFixed(2);
+  const percentageAttendees = ((election.attendees / election.voters) * 100).toFixed(2);
   const percentageAttendeesMales = ((election.attendeesMales / election.electorsMales) * 100).toFixed(2);
   const percentageAttendeesFemales = ((election.attendeesFemales / election.electorsFemales) * 100).toFixed(2);
 
@@ -119,7 +119,7 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
                 </p>
                 <h4 className="fs-22 fw-semibold ff-secondary mb-0">
                   <span className="counter-value" data-target="36894">
-                    {election.electors}
+                    {election.voters}
                   </span>
                 </h4>
                 <p>رجال: {election.electorsMales} | نساء: {election.electorsFemales}</p>

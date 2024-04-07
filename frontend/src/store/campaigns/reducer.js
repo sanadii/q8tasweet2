@@ -106,7 +106,7 @@ const Campaigns = (state = IntialState, action) => {
         case GET_CAMPAIGN_ATTENDEES:
           return {
             ...state,
-            campaignAttendees: action.payload.data.electors,
+            campaignAttendees: action.payload.data.voters,
             isCampaignAttendeeCreated: false,
             isCampaignAttendeeSuccess: true,
           };

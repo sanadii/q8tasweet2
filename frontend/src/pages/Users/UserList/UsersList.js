@@ -213,7 +213,7 @@ const ElectionList = () => {
       result: (user && user.result) || "",
       votes: (user && user.votes) || 0,
       seats: (user && user.seats) || 0,
-      electors: (user && user.electors) || 0,
+      voters: (user && user.voters) || 0,
       attendees: (user && user.attendees) || 0,
 
       // Admin
@@ -259,7 +259,7 @@ const ElectionList = () => {
           result: values.result,
           votes: values.votes,
           seats: values.seats,
-          electors: values.electors,
+          voters: values.voters,
           attendees: values.attendees,
 
           // Admin
@@ -395,7 +395,7 @@ const ElectionList = () => {
         result: user.result,
         votes: user.votes,
         seats: user.seats,
-        electors: user.electors,
+        voters: user.voters,
         attendees: user.attendees,
 
         // Admin
@@ -985,24 +985,24 @@ const ElectionList = () => {
                 ) : null}
               </Col>
               <Col lg={6}>
-                <Label for="electors-field" className="form-label">
-                  Number of Electors
+                <Label for="voters-field" className="form-label">
+                  Number of Voters
                 </Label>
                 <Input
-                  id="electors-field"
-                  name="electors"
+                  id="voters-field"
+                  name="voters"
                   type="number"
                   className="form-control"
                   placeholder="0"
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  value={validation.values.electors || ""}
+                  value={validation.values.voters || ""}
                 >
 
                 </Input>
-                {validation.touched.electors && validation.errors.seats ? (
-                  <FormFeedback electors="invalid">
-                    {validation.errors.electors}
+                {validation.touched.voters && validation.errors.seats ? (
+                  <FormFeedback voters="invalid">
+                    {validation.errors.voters}
                   </FormFeedback>
                 ) : null}
               </Col>

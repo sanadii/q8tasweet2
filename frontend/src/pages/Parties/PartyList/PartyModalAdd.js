@@ -10,7 +10,7 @@ import PartyModalUpdate from "./PartyModalUpdate";
 import PartyModalAdd from "./PartyModalAdd";
 import { GuaranteeStatusOptions } from "../../../../Components/Constants";
 
-const PartyModal = ({ modal, toggle, modalMode, elector }) => {
+const PartyModal = ({ modal, toggle, modalMode, voter }) => {
   const { campaignMembers } = useSelector(campaignSelector);
 
   const [modalSubmit, setModalSubmit] = useState(null);

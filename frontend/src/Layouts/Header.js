@@ -14,7 +14,7 @@ import { SearchOption, WebAppsDropdown, CampaignDropdown, MyCartDropdown, FullSc
 import { changeSidebarVisibility } from '../store/actions';
 import { useSelector, useDispatch } from "react-redux";
 
-const Header = ({ onChangeLayoutMode, onChangeCampaign, layoutModeType, headerClass }) => {
+const Header = ({ onChangeLayoutMode, setCurrentCampaign, layoutModeType, headerClass }) => {
     const [search, setSearch] = useState(false);
     const toogleSearch = () => {
         setSearch(!search);
@@ -113,7 +113,7 @@ const Header = ({ onChangeLayoutMode, onChangeCampaign, layoutModeType, headerCl
 
                             {/* WebAppsDropdown */}
                             <WebAppsDropdown />
-                            <CampaignDropdown onChangeCampaign={onChangeCampaign} />
+                            <CampaignDropdown setCurrentCampaign={setCurrentCampaign} />
 
                             {/* MyCartDropdwon */}
                             {/* <MyCartDropdown /> */}

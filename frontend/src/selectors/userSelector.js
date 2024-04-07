@@ -13,10 +13,10 @@ export const userSelector = createSelector(
         moderators: usersState.moderators,
 
         user: usersState.currentUser,
-        userId: usersState.currentUser.id,
+        userId: usersState.currentUser?.id,
         currentUser: usersState.currentUser,
-        userCampaigns: usersState.currentUser.campaigns,
-        currentUserCampaigns: usersState.currentUser.campaigns,
+        userCampaigns: usersState.currentUser?.campaigns,
+        currentUserCampaigns: usersState.currentUser?.campaigns,
         campaignModerators: usersState.campaignModerators,
     })
 );
