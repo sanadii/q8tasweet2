@@ -13,8 +13,6 @@ import { Card, CardBody, Col, Row, Progress } from "reactstrap";
 
 const GuaranteeCals = ({ campaignGuarantees, results }) => {
 
-
-
     return (
         <Card className="h-100">
             <CardBody>

@@ -2,11 +2,7 @@ import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import CountUp from "react-countup";
 
-//Import Icons
-import FeatherIcon from "feather-icons-react";
-
-
-const Widget = () => {
+const CampaignWidgets = () => {
 
     const cardData = [
         {
@@ -19,25 +15,26 @@ const Widget = () => {
         },
         {
             title: "الناخبين الرجال",
-            count: 8,
+            count: 13232,
             icon: "mdi-face-man",
             text: "نسبة التصويت",
 
         },
         {
             title: "الناخبين النساء",
-            count: 10,
+            count: 14427,
             icon: "mdi-face-woman",
             text: "نسبة التصويت",
         },
         {
             title: "ضماناتي الانتخابية",
-            count: 3,
+            count: 120,
             icon: "mdi-vote-outline",
         },
         {
             title: "تم التصويت",
             subtitle: "عدد : 13",
+            count: 103,
             extra: "نسبة : 100%",
             icon: "mdi-clipboard-check-outline",
 
@@ -46,6 +43,7 @@ const Widget = () => {
             title: "لم يتم التصويت",
             subtitle: "عدد : 5",
             extra: "نسبة : 27.78%",
+            count: 17,
             icon: "mdi-clipboard-clock-outline",
         },
         {
@@ -76,6 +74,12 @@ const Widget = () => {
     return (
         <React.Fragment>
             <Row>
+                <Col className="col-12">
+                    <h5 className="text-decoration-underline mb-3 mt-2 pb-3">إحصائيات</h5>
+                </Col>
+            </Row>
+            <Row>
+
                 {cardData.map((card, index) => (
                     <Col md={4} key={index}>
                         <Card className="card-animate">
@@ -85,7 +89,7 @@ const Widget = () => {
                                         <p className="fw-medium text-muted mb-0">{card.title}</p>
                                         <h2 className="mt-4 ff-secondary fw-semibold">
                                             <span className="counter-value">
-                                                <CountUp start={0} end={card.count} duration={4} />
+                                                <CountUp start={0} end={card.count} duration={2} />
                                                 {card.countUnit}
                                             </span>
                                         </h2>
@@ -112,4 +116,4 @@ const Widget = () => {
     );
 };
 
-export default Widget;
+export default CampaignWidgets;

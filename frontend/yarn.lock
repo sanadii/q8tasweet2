@@ -2750,6 +2750,11 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@south-paw/react-vector-maps@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@south-paw/react-vector-maps/-/react-vector-maps-3.2.0.tgz#36d5f1905a4e5c53ea03b05a2fb8e3437d1add88"
+  integrity sha512-4Y88ZA8RuXxlBD7hgguVZjiTZsxvnN0Eheip/7YeM22B8hwae058C4Xx7Fi1PyIhOF5yWU/yXxyCMwFE7Awrwg==
+
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
   resolved "https://registry.npmjs.org/@surma/rollup-plugin-off-main-thread/-/rollup-plugin-off-main-thread-2.2.3.tgz"

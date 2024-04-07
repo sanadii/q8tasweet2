@@ -8,19 +8,21 @@ import { campaignSelector } from 'selectors';
 
 // Components, Constants & Hooks
 import { usePermission } from 'shared/hooks';
-import Guarantors from "./Guarantors";
-import OverviewSidebar from "./OverviewSidebar";
+import Guarantors from "./OverviewGuarantees/Guarantors";
 
 // Components, Constants & Hooks
-import Widget from "./Widget"
-import GuaranteeCals from "./GuaranteeCals"
-import GuaranteeChart from "./GuaranteeChart"
-import GuaranteeTarget from "./GuaranteeRadialBar"
-import GuaranteeRadialBar from "./GuaranteeRadialBar"
-import GuaranteeTargetBar from "./GuaranteeTargetBar"
+import OverviewCandidate from "./OverviewGuarantees/OverviewCandidate";
+import CampaignWidgets from "./OverviewWidgets"
+import ChartMapWidgets from "./ChartMapWidgets"
+import OverviewGuarantees from "./OverviewGuarantees"
+
+import GuaranteeCals from "./OverviewGuarantees/GuaranteeCals"
+import GuaranteeChart from "./OverviewGuarantees/GuaranteeChart"
+import GuaranteeTarget from "./OverviewGuarantees/GuaranteeRadialBar"
+import GuaranteeRadialBar from "./OverviewGuarantees/GuaranteeRadialBar"
+import GuaranteeTargetBar from "./OverviewGuarantees/GuaranteeTargetBar"
 
 import OverviewNotifications from "./OverViewNotifications";
-import OverviewCandidate from "./OverviewCandidate";
 import { calculateCampaignData } from 'shared/hooks';
 
 // UI & Utilities
@@ -50,53 +52,19 @@ const OverviewTab = () => {
   return (
     <React.Fragment>
       <div id="layout-wrapper">
-        <Row>
-          <OverviewCandidate />
+        <OverviewCandidate />
+        <ChartMapWidgets />
 
-          <Col lg={3}>
-            <OverviewSidebar />
-            <OverviewNotifications />
+        <CampaignWidgets />
+        <OverviewGuarantees
+          campaign={campaign}
+          campaignGuarantees={campaignGuarantees}
+        />
 
-          </Col>
-          <Col lg={9}>
-            {/* Candidate */}
-            <Widget />
 
-            {/* Guarantees */}
-            {canViewCampaignGuarantee && campaign.election.previousElections &&
-              <GuaranteeTargetBar
-                campaign={campaign}
-                results={results}
-              />
-            }
-            <Row>
-              <Col sm={6}>
-                <GuaranteeChart
-                  campaign={campaign}
-                  campaignGuarantees={campaignGuarantees}
-                  results={results}
-                />
-              </Col>
-              <Col sm={6}>
-                <GuaranteeRadialBar
-                  campaign={campaign}
-                  campaignGuarantees={campaignGuarantees}
-                  results={results}
-                />
-              </Col>
-              {/* <Col sm={6}>
-              <GuaranteeCals
-                campaign={campaign}
-                campaignGuarantees={campaignGuarantees}
-                results={results}
-              />
-            </Col> */}
-            </Row>
-            {canViewCampaignGuarantee &&
-              <Guarantors />
-            }
-          </Col>
-        </Row>
+        <OverviewNotifications />
+
+
       </div>
     </React.Fragment>
   );
