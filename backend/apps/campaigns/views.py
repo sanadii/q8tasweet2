@@ -18,8 +18,12 @@ from rest_framework.exceptions import AuthenticationFailed
 from apps.auths.models import User, Group
 from apps.campaigns.models import (
     Campaign,
+    CampaignCommittee,
+    CampaignCommitteeAttendee,
+    CampaignCommitteeSorter,
     CampaignMember,
     CampaignGuarantee,
+    CampaignGuaranteeGroup,
     CampaignPartyGuarantee,
     CampaignAttendee,
     CampaignSorting,
@@ -42,8 +46,12 @@ from django.contrib.auth.models import Group
 # Serializers
 from apps.campaigns.serializers import (
     CampaignSerializer,
+    CampaignCommitteeSerializer,
+    CampaignCommitteeAttendeeSerializer,
+    CampaignCommitteeSorterSerializer,
     CampaignMemberSerializer,
     CampaignGuaranteeSerializer,
+    CampaignGuaranteeGroupSerializer,
     CampaignAttendeeSerializer, 
     CampaignSortingSerializer,
 
@@ -129,11 +137,32 @@ class GetCampaignDetails(APIView):
             member__user__id__in=campaign_managed_members.values_list('user__id', flat=True)
         ).select_related('campaign')
 
+        campaign_guarantee_groups = CampaignGuaranteeGroup.objects.all()
+        #     member__user__id__in=campaign_managed_members.values_list('user__id', flat=True)
+        # ).select_related('campaign')
+        
         election = campaign.election_candidate.election
         election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
         election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
         campaign_attendees = CampaignAttendee.objects.filter(election=election).select_related('election')
         campaign_notifications = CampaignNotification.objects.filter(campaign=campaign).select_related('campaign')
+
+        # Initialize dictionaries to store attendees and sorters for each committee
+        campaign_committee_attendees = {}
+        campaign_committee_sorters = {}
+
+        # Iterate over each committee and fetch its attendees and sorters
+        for committee in election_committees:
+            attendees = CampaignCommitteeAttendee.objects.filter(committee=committee)
+            sorters = CampaignCommitteeSorter.objects.filter(committee=committee)
+
+            # Serialize and store the data
+            campaign_committee_attendees[committee.id] = CampaignCommitteeAttendeeSerializer(attendees, many=True, context=context).data
+            campaign_committee_sorters[committee.id] = CampaignCommitteeSorterSerializer(sorters, many=True, context=context).data
+
+        # ... rest of your view logic ...
+
+
 
         # Prepare data for each election candidate
         election_candidates_data = []
@@ -150,11 +179,14 @@ class GetCampaignDetails(APIView):
                 "campaignDetails": CampaignSerializer(campaign, context=context).data,
                 "campaignMembers": CampaignMemberSerializer(campaign_members, many=True, context=context).data,
                 "campaignGuarantees": CampaignGuaranteeSerializer(campaign_guarantees, many=True, context=context).data,
+                "campaignGuaranteeGroups": CampaignGuaranteeGroupSerializer(campaign_guarantee_groups, many=True, context=context).data,
                 "campaignAttendees": CampaignAttendeeSerializer(campaign_attendees, many=True, context=context).data,
                 "campaignNotifications": CampaignNotificationSerializer(campaign_notifications, many=True, context=context).data,
                 "campaignElectionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
                 "campaignElectionCommittees": ElectionCommitteeSerializer(election_committees, many=True, context=context).data,
-                # "campaignElectionSorting": CampaignSortingSerializer(election_candidates_data, many=True, context=context).data,
+                # "campaignCommittees": CampaignCommitteeSerializer(campaign_committees, many=True, context=context).data,
+                "campaignCommitteeAttendees": campaign_committee_attendees,
+                "campaignCommitteeSorters": campaign_committee_sorters,
                 "campaign_roles": get_campaign_roles(context),
             },
             "code": 200

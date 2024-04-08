@@ -71,7 +71,7 @@ const GuaranteesModalView = ({ campaignGuarantee }) => {
                 </td>
               </tr>
               <tr>
-                <td className="fw-medium">ملاحضات</td>
+                <td className="fw-medium">ملاحظات</td>
                 <td>{campaignGuarantee.notes}</td>
               </tr>
             </tbody>

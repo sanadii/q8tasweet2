@@ -15,7 +15,7 @@ const GuaranteeStatusFilter = ({ filters, setFilters }) => {
   
     return (
       <React.Fragment>
-        <div className="col-lg-3 col-sm-2">
+        <div className="col-lg-2 col-sm-2">
           <strong>الحالة</strong>
           <div className="input-light">
             <select

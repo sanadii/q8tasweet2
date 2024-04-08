@@ -145,7 +145,7 @@ const AttendeeViewModal = ({
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className="fw-medium">ملاحضات</td>
+                                    <td className="fw-medium">ملاحظات</td>
                                     <td>
                                         <Input
                                             name="notes"

@@ -37,7 +37,7 @@ const EditElectionParty = ({ validation, electionParty }) => {
                 id="notes-field"
                 name="notes"
                 className="form-control"
-                placeholder="أدخل الملاحضات"
+                placeholder="أدخل الملاحظات"
                 type="text"
                 validate={{
                   required: { value: true },

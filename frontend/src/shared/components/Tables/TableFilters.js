@@ -104,28 +104,29 @@ const TableFilters = ({
         (showFilters || !isMobile) && (
 
           <div>
-            <Row className="g-4 mb-4">
-              <div className="d-flex align-items-center ">
-                <div className="col">
-                  {isElectionCategoryFilter && (
-                    <ElectionCategoryFilter
-                      setFilters={setFilters}
-                      activeTab={activeTab}
-                      setActiveTab={setActiveTab}
-                    />
-                  )}
-                  {isMemberRoleFilter && (
-                    <MemberRoleFilter
-                      setFilters={setFilters}
-                      activeTab={activeTab}
-                      setActiveTab={setActiveTab}
-                    />
-                  )}
+            {(isElectionCategoryFilter || isMemberRoleFilter) &&
+              <Row className="g-4 mb-4">
+                <div className="d-flex align-items-center ">
+                  <div className="col">
+                    {isElectionCategoryFilter && (
+                      <ElectionCategoryFilter
+                        setFilters={setFilters}
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                      />
+                    )}
+                    {isMemberRoleFilter && (
+                      <MemberRoleFilter
+                        setFilters={setFilters}
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                      />
+                    )}
+                  </div>
+                  <div className="flex-shrink-0"></div>
                 </div>
-                <div className="flex-shrink-0"></div>
-              </div>
-            </Row>
-
+              </Row>
+            }
             <Row className="g-4 mb-4">
               <div className="d-flex align-items-center ">
                 <div className="col d-flex g-2 row">

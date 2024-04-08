@@ -122,7 +122,7 @@ const SortingTab = () => {
               <i className="ri-eye-fill align-bottom pe-2" /> تعديل
             </button>
             <button className="btn btn-sm btn-soft-info edit-list me-2">
-              <i className="ri-pencil-fill align-bottom pe-2" /> ملاحضات
+              <i className="ri-pencil-fill align-bottom pe-2" /> ملاحظات
             </button>
           </>
         ),

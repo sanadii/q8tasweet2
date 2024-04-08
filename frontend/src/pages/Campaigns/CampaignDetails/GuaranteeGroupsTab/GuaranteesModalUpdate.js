@@ -236,13 +236,13 @@ const GuaranteesModalUpdate = ({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fw-medium">ملاحضات</td>
+                  <td className="fw-medium">ملاحظات</td>
                   <td>
                     <Input
                       name="notes"
                       id="guarantee-id-field"
                       className="form-control"
-                      placeholder="ادخل الملاحضات"
+                      placeholder="ادخل الملاحظات"
                       type="textarea"
                       validate={{
                         required: { value: true },

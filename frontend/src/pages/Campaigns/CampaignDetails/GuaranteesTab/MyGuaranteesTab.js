@@ -6,10 +6,10 @@ import { userSelector, campaignSelector } from 'selectors';
 // Shared imports
 import { Col, Row, Card, CardBody } from "reactstrap";
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
-import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Actions } from "./GuaranteesCol";
+import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Actions } from "./GuaranteeList/GuaranteesCol";
 import { useDelete, useFilter } from "shared/hooks"
 
-import GuaranteesModal from "./GuaranteesModal";
+import GuaranteesModal from "./GuaranteeList/GuaranteesModal";
 
 // Utility imports
 import { ToastContainer } from "react-toastify";

@@ -5,8 +5,6 @@ import OverviewTab from "pages/Campaigns/CampaignDetails/OverviewTab";
 import MembersTab from "pages/Campaigns/CampaignDetails/MembersTab";
 
 import GuaranteesTab from "pages/Campaigns/CampaignDetails/GuaranteesTab";
-import MyGuaranteesTab from "pages/Campaigns/CampaignDetails/GuaranteesTab/MyGuaranteesTab";
-import GuaranteeGroupsTab from "pages/Campaigns/CampaignDetails/GuaranteeGroupsTab";
 
 import AttendeesTab from "pages/Campaigns/CampaignDetails/AttendeesTab";
 import SortingTab from "pages/Campaigns/CampaignDetails/SortingTab";
@@ -25,8 +23,6 @@ const CampaignRoutes = [
     { path: "/campaign", component: <OverviewTab /> },
     { path: "/campaign/overview", component: <OverviewTab /> },
     { path: "/campaign/guarantees", component: <GuaranteesTab /> },
-    { path: "/campaign/my-guarantees", component: <MyGuaranteesTab /> },
-    { path: "/campaign/guarantee-groups", component: <GuaranteeGroupsTab /> },
     { path: "/campaign/attendees", component: <AttendeesTab /> },
     { path: "/campaign/sorting", component: <SortingTab /> },
 

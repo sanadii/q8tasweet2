@@ -91,6 +91,7 @@ const Campaigns = (state = IntialState, action) => {
             campaignRoles: action.payload.data.campaignRoles,
             campaignMembers: action.payload.data.campaignMembers,
             campaignGuarantees: action.payload.data.campaignGuarantees,
+            campaignGuaranteeGroups: action.payload.data.campaignGuaranteeGroups,
             campaignAttendees: action.payload.data.campaignAttendees,
             campaignNotifications: action.payload.data.campaignNotifications,
             campaignElectionCandidates: action.payload.data.campaignElectionCandidates,

@@ -5,6 +5,7 @@ from django.utils.text import slugify
 import uuid
 
 from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -67,6 +68,58 @@ class CampaignProfile(TrackModel, TaskModel):
         verbose_name_plural = "Campaign Profiles"
         default_permissions = []
 
+class CampaignCommittee(TrackModel):
+    campaign = models.ForeignKey('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_campaigns')
+    election_committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_campaigns')
+    campaign_member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_campaign_members')
+
+    class Meta:
+        db_table = 'campaign_committee'
+        verbose_name = "Campaign Committee"
+        verbose_name_plural = "Campaign Committees"
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaignCommittee", "Can View Campaign Committee"),
+            ("canAddCampaignCommittee", "Can Add Campaign Committee"),
+            ("canChangeCampaignCommittee", "Can Change Campaign Committee"),
+            ("canDeleteCampaignCommittee", "Can Delete Campaign Committee"),
+            ]
+
+class CampaignCommitteeAttendee(TrackModel):
+    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_committee_attendee_users')
+    campaign = models.ForeignKey('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_committee_attendee_campaigns')
+    committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_attendee_campaigns')
+
+    class Meta:
+        db_table = 'campaign_committee_attendee'
+        verbose_name = "Campaign Committee Attendee"
+        verbose_name_plural = "Campaign Committee Attendees"
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaignCommitteeAttendee", "Can View Campaign Committee Attendee"),
+            ("canAddCampaignCommitteeAttendee", "Can Add Campaign Committee Attendee"),
+            ("canChangeCampaignCommitteeAttendee", "Can Change Campaign Committee Attendee"),
+            ("canDeleteCampaignCommitteeAttendee", "Can Delete Campaign Committee Attendee"),
+            ]
+
+class CampaignCommitteeSorter(TrackModel):
+    user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_committee_sorter_users')
+    campaign = models.ForeignKey('Campaign', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_committee_sorter_campaigns')
+    committee = models.ForeignKey('elections.ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_committees')
+
+    class Meta:
+        db_table = 'campaign_committee_sorter'
+        verbose_name = "Campaign Committee Sorter"
+        verbose_name_plural = "Campaign Committee Sorters"
+        default_permissions = []
+        permissions  = [
+            ("canViewCampaignCommitteeSorter", "Can View Campaign Committee Sorter"),
+            ("canAddCampaignCommitteeSorter", "Can Add Campaign Committee Sorter"),
+            ("canChangeCampaignCommitteeSorter", "Can Change Campaign Committee Sorter"),
+            ("canDeleteCampaignCommitteeSorter", "Can Delete Campaign Committee Sorter"),
+            ]
+
+
 
 class CampaignMember(TrackModel):
     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_users')
@@ -85,10 +138,10 @@ class CampaignMember(TrackModel):
         verbose_name_plural = "Campaign Members"
         default_permissions = []
         permissions  = [
-            ("canViewCampaignMember", "Can View Test Now"),
-            ("canAddCampaignMember", "Can Add Test Now"),
-            ("canChangeCampaignMember", "Can Change Test Now"),
-            ("canDeleteCampaignMember", "Can Delete Test Now"),
+            ("canViewCampaignMember", "Can View Campaign Member"),
+            ("canAddCampaignMember", "Can Add Campaign Member"),
+            ("canChangeCampaignMember", "Can Change Campaign Member"),
+            ("canDeleteCampaignMember", "Can Delete Campaign Member"),
             ]
         
 
@@ -116,7 +169,9 @@ class CampaignGuarantee(TrackModel):
 class CampaignGuaranteeGroup(TrackModel):
     name = models.CharField(max_length=150, blank=True)
     member = models.ForeignKey('CampaignMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantee_group_members')
-    
+    phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
+    note = models.CharField(max_length=250, blank=True)
+
     class Meta:
         db_table = 'campaign_guarantee_group'
         verbose_name = "Campaign Guarantee Group"

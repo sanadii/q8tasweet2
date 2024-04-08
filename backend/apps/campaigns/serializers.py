@@ -7,10 +7,14 @@ from django.conf import settings  # Import Django settings to access MEDIA_URL
 from django.contrib.auth.models import Group, Permission
 from apps.campaigns.models import (
     Campaign,
+    CampaignCommittee,
+    CampaignCommitteeAttendee,
+    CampaignCommitteeSorter,
     CampaignMember,
     CampaignPartyMember,
     CampaignPartyGuarantee,
     CampaignGuarantee,
+    CampaignGuaranteeGroup,
     CampaignAttendee,
     CampaignSorting,
 )
@@ -205,6 +209,75 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
         representation["Candidate_deleted"] = instance.candidate.deleted
         return representation
 
+
+class CampaignCommitteeSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """Serializer for the ElectionCommittee model."""
+
+    admin_serializer_classes = (TrackMixin,)
+
+    # sorter = UserSerializer(read_only=True)
+
+    class Meta:
+        model = CampaignCommittee
+        fields = [
+            "id",
+            "campaign",
+            "election_committee",
+            "campaign_member",
+        ]
+
+    def create(self, validated_data):
+        """Customize creation (POST) of an instance"""
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        """Customize update (PUT, PATCH) of an instance"""
+        # Additional logic to customize instance updating
+        return super().update(instance, validated_data)
+
+
+class CampaignCommitteeAttendeeSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """Serializer for the ElectionCommittee model."""
+
+    admin_serializer_classes = (TrackMixin,)
+
+    # sorter = UserSerializer(read_only=True)
+
+    class Meta:
+        model = CampaignCommitteeAttendee
+        fields = ["id", "user", "campaign", "committee"]
+
+    def create(self, validated_data):
+        """Customize creation (POST) of an instance"""
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        """Customize update (PUT, PATCH) of an instance"""
+        # Additional logic to customize instance updating
+        return super().update(instance, validated_data)
+
+
+class CampaignCommitteeSorterSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """Serializer for the ElectionCommittee model."""
+
+    admin_serializer_classes = (TrackMixin,)
+
+    # sorter = UserSerializer(read_only=True)
+
+    class Meta:
+        model = CampaignCommitteeSorter
+        fields = ["id", "user", "campaign", "committee"]
+
+    def create(self, validated_data):
+        """Customize creation (POST) of an instance"""
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        """Customize update (PUT, PATCH) of an instance"""
+        # Additional logic to customize instance updating
+        return super().update(instance, validated_data)
+
+
 #
 # Campaign Members Serializers
 #
@@ -228,14 +301,18 @@ class BaseCampaignMemberSerializer(serializers.ModelSerializer):
     def get_permissions(self, obj):
         if obj.role:
             # Access permissions as a property, not as a method
-            campaign_member_permissions = list(obj.role.permissions.values_list('codename', flat=True))
+            campaign_member_permissions = list(
+                obj.role.permissions.values_list("codename", flat=True)
+            )
             return campaign_member_permissions
         return []
+
 
 class CampaignMemberSerializer(BaseCampaignMemberSerializer):
     class Meta:
         model = CampaignMember
         fields = "__all__"  # Or specify required fields
+
 
 class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
     class Meta:
@@ -299,6 +376,40 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
 
+
+#
+# Campaign Guarantee Serializers
+#
+class CampaignGuaranteeGroupSerializer(serializers.ModelSerializer):
+    # Example fields from related models, replace with actual fields
+    full_name = serializers.CharField(
+        source="member.full_name", default="Not Found", read_only=True
+    )
+
+    # Ensure these fields exist on the CampaignGuaranteeGroup model or related models
+    class Meta:
+        model = CampaignGuaranteeGroup
+        fields = [
+            "id",
+            "name",  # This field is from your CampaignGuaranteeGroup model
+            "member",  # ForeignKey to CampaignMember
+            "note",  # This field is from your CampaignGuaranteeGroup model
+            "full_name",
+            # Add other fields if they exist in the CampaignGuaranteeGroup model or related models
+        ]
+
+    def create(self, validated_data):
+        # Custom creation logic here
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Custom update logic here
+        return super().update(instance, validated_data)
+
+
+#
+# Campaign Party Guarantee Serializer
+#
 class CampaignPartyGuaranteeSerializer(serializers.ModelSerializer):
 
     # get the data from Voter Model Directly
@@ -351,6 +462,7 @@ class CampaignPartyGuaranteeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
+
 
 class CampaignAttendeeSerializer(serializers.ModelSerializer):
     # Directly get the data from the Voter Model
