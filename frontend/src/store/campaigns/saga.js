@@ -7,34 +7,34 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   GET_CAMPAIGNS,
   GET_CAMPAIGN_DETAILS,
-  ADD_NEW_CAMPAIGN,
+  ADD_CAMPAIGN,
   DELETE_CAMPAIGN,
   UPDATE_CAMPAIGN,
 
   // Campaign Members
   GET_ALL_CAMPAIGN_MEMBERS,
-  ADD_NEW_CAMPAIGN_MEMBER,
+  ADD_CAMPAIGN_MEMBER,
   DELETE_CAMPAIGN_MEMBER,
   UPDATE_CAMPAIGN_MEMBER,
   GET_CAMPAIGN_MEMBER_DETAILS,
 
   // Campaign Guarantees
   GET_ALL_CAMPAIGN_GUARANTEES,
-  ADD_NEW_CAMPAIGN_GUARANTEE,
+  ADD_CAMPAIGN_GUARANTEE,
   DELETE_CAMPAIGN_GUARANTEE,
   UPDATE_CAMPAIGN_GUARANTEE,
   GET_CAMPAIGN_GUARANTEE_DETAILS,
 
   // Campaign GuaranteeGroups
   GET_ALL_CAMPAIGN_GUARANTEE_GROUPS,
-  ADD_NEW_CAMPAIGN_GUARANTEE_GROUP,
+  ADD_CAMPAIGN_GUARANTEE_GROUP,
   DELETE_CAMPAIGN_GUARANTEE_GROUP,
   UPDATE_CAMPAIGN_GUARANTEE_GROUP,
   GET_CAMPAIGN_GUARANTEE_GROUP_DETAILS,
 
   // Campaign Attendees
   GET_CAMPAIGN_ATTENDEES,
-  ADD_NEW_CAMPAIGN_ATTENDEE,
+  ADD_CAMPAIGN_ATTENDEE,
   DELETE_CAMPAIGN_ATTENDEE,
   UPDATE_CAMPAIGN_ATTENDEE,
   GET_CAMPAIGN_ATTENDEE_DETAILS,
@@ -52,40 +52,40 @@ import {
   CampaignApiResponseError,
 
   // Campaigns
-  addNewCampaignSuccess,
-  addNewCampaignFail,
+  addCampaignSuccess,
+  addCampaignFail,
   updateCampaignSuccess,
   updateCampaignFail,
   deleteCampaignSuccess,
   deleteCampaignFail,
 
   // Campaign Members
-  addNewCampaignMemberSuccess,
-  addNewCampaignMemberFail,
+  addCampaignMemberSuccess,
+  addCampaignMemberFail,
   updateCampaignMemberSuccess,
   updateCampaignMemberFail,
   deleteCampaignMemberSuccess,
   deleteCampaignMemberFail,
 
   // Campaign Guarantees
-  addNewCampaignGuaranteeSuccess,
-  addNewCampaignGuaranteeFail,
+  addCampaignGuaranteeSuccess,
+  addCampaignGuaranteeFail,
   updateCampaignGuaranteeSuccess,
   updateCampaignGuaranteeFail,
   deleteCampaignGuaranteeSuccess,
   deleteCampaignGuaranteeFail,
 
   // Campaign GuaranteeGroups
-  addNewCampaignGuaranteeGroupSuccess,
-  addNewCampaignGuaranteeGroupFail,
+  addCampaignGuaranteeGroupSuccess,
+  addCampaignGuaranteeGroupFail,
   updateCampaignGuaranteeGroupSuccess,
   updateCampaignGuaranteeGroupFail,
   deleteCampaignGuaranteeGroupSuccess,
   deleteCampaignGuaranteeGroupFail,
 
   // Campaign Attendees
-  addNewCampaignAttendeeSuccess,
-  addNewCampaignAttendeeFail,
+  addCampaignAttendeeSuccess,
+  addCampaignAttendeeFail,
   updateCampaignAttendeeSuccess,
   updateCampaignAttendeeFail,
   deleteCampaignAttendeeSuccess,
@@ -102,32 +102,32 @@ import {
 import {
   getCampaigns as getCampaignsApi,
   getCampaignDetails as getCampaignDetailsApi,
-  addNewCampaign,
+  addCampaign,
   updateCampaign,
   deleteCampaign,
 
   // Campaign Members
   getAllCampaignMembers as getAllCampaignMembersApi,
-  addNewCampaignMember,
+  addCampaignMember,
   updateCampaignMember,
   deleteCampaignMember,
 
   // Campaign Guarantees
   getAllCampaignGuarantees as getAllCampaignGuaranteesApi,
-  addNewCampaignGuarantee,
+  addCampaignGuarantee,
   updateCampaignGuarantee,
   deleteCampaignGuarantee,
 
   // Campaign GuaranteeGroups
   getAllCampaignGuaranteeGroups as getAllCampaignGuaranteeGroupsApi,
-  addNewCampaignGuaranteeGroup,
+  addCampaignGuaranteeGroup,
   updateCampaignGuaranteeGroup,
   deleteCampaignGuaranteeGroup,
 
 
   // Campaign Attendees
   getAllCampaignAttendees as getAllCampaignAttendeesApi,
-  addNewCampaignAttendee,
+  addCampaignAttendee,
   updateCampaignAttendee,
   deleteCampaignAttendee,
 
@@ -168,13 +168,13 @@ function* getAllCampaignMembers({ payload: campaign }) {
   }
 }
 
-function* onAddNewCampaign({ payload: campaign }) {
+function* onAddCampaign({ payload: campaign }) {
   try {
-    const response = yield call(addNewCampaign, campaign);
-    yield put(addNewCampaignSuccess(response));
+    const response = yield call(addCampaign, campaign);
+    yield put(addCampaignSuccess(response));
     toast.success("تم إضافة الحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewCampaignFail(error));
+    yield put(addCampaignFail(error));
     toast.error("خطأ في إضافة الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
@@ -203,13 +203,13 @@ function* onUpdateCampaign({ payload: campaign }) {
   }
 }
 
-function* onAddNewCampaignMember({ payload: campaignMember }) {
+function* onAddCampaignMember({ payload: campaignMember }) {
   try {
-    const response = yield call(addNewCampaignMember, campaignMember);
-    yield put(addNewCampaignMemberSuccess(response));
+    const response = yield call(addCampaignMember, campaignMember);
+    yield put(addCampaignMemberSuccess(response));
     toast.success("تم إضافة عضو للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewCampaignMemberFail(error));
+    yield put(addCampaignMemberFail(error));
     toast.error("خطأ في إضافة عضو للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
@@ -250,13 +250,13 @@ function* getAllCampaignGuarantees({ payload: campaign }) {
   }
 }
 
-function* onAddNewCampaignGuarantee({ payload: campaignGuarantee }) {
+function* onAddCampaignGuarantee({ payload: campaignGuarantee }) {
   try {
-    const response = yield call(addNewCampaignGuarantee, campaignGuarantee);
-    yield put(addNewCampaignGuaranteeSuccess(response));
+    const response = yield call(addCampaignGuarantee, campaignGuarantee);
+    yield put(addCampaignGuaranteeSuccess(response));
     toast.success("تم إضافة المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewCampaignGuaranteeFail(error));
+    yield put(addCampaignGuaranteeFail(error));
     toast.error("خطأ في إضافة المضمون للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
@@ -300,13 +300,13 @@ function* getAllCampaignGuaranteeGroups({ payload: campaign }) {
   }
 }
 
-function* onAddNewCampaignGuaranteeGroup({ payload: campaignGuaranteeGroup }) {
+function* onAddCampaignGuaranteeGroup({ payload: campaignGuaranteeGroup }) {
   try {
-    const response = yield call(addNewCampaignGuaranteeGroup, campaignGuaranteeGroup);
-    yield put(addNewCampaignGuaranteeGroupSuccess(response));
+    const response = yield call(addCampaignGuaranteeGroup, campaignGuaranteeGroup);
+    yield put(addCampaignGuaranteeGroupSuccess(response));
     toast.success("تم إضافة المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewCampaignGuaranteeGroupFail(error));
+    yield put(addCampaignGuaranteeGroupFail(error));
     toast.error("خطأ في إضافة المضمون للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
@@ -350,13 +350,13 @@ function* getAllCampaignAttendees({ payload: campaign }) {
   }
 }
 
-function* onAddNewCampaignAttendee({ payload: campaignAttendee }) {
+function* onAddCampaignAttendee({ payload: campaignAttendee }) {
   try {
-    const response = yield call(addNewCampaignAttendee, campaignAttendee);
-    yield put(addNewCampaignAttendeeSuccess(response));
+    const response = yield call(addCampaignAttendee, campaignAttendee);
+    yield put(addCampaignAttendeeSuccess(response));
     // toast.success("CampaignAttendee Added Successfully", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewCampaignAttendeeFail(error));
+    yield put(addCampaignAttendeeFail(error));
     // toast.error("CampaignAttendee Added Failed", { autoClose: 2000 });
   }
 }
@@ -421,8 +421,8 @@ export function* watchGetCampaignDetails() {
   yield takeEvery(GET_CAMPAIGN_DETAILS, getCampaignDetails);
 }
 
-export function* watchAddNewCampaign() {
-  yield takeEvery(ADD_NEW_CAMPAIGN, onAddNewCampaign);
+export function* watchAddCampaign() {
+  yield takeEvery(ADD_CAMPAIGN, onAddCampaign);
 }
 
 export function* watchUpdateCampaign() {
@@ -438,8 +438,8 @@ export function* watchGetAllCampaignMembers() {
   yield takeEvery(GET_ALL_CAMPAIGN_MEMBERS, getAllCampaignMembers);
 }
 
-export function* watchAddNewCampaignMember() {
-  yield takeEvery(ADD_NEW_CAMPAIGN_MEMBER, onAddNewCampaignMember);
+export function* watchAddCampaignMember() {
+  yield takeEvery(ADD_CAMPAIGN_MEMBER, onAddCampaignMember);
 }
 
 export function* watchUpdateCampaignMember() {
@@ -455,8 +455,8 @@ export function* watchGetAllCampaignGuarantees() {
   yield takeEvery(GET_ALL_CAMPAIGN_GUARANTEES, getAllCampaignGuarantees);
 }
 
-export function* watchAddNewCampaignGuarantee() {
-  yield takeEvery(ADD_NEW_CAMPAIGN_GUARANTEE, onAddNewCampaignGuarantee);
+export function* watchAddCampaignGuarantee() {
+  yield takeEvery(ADD_CAMPAIGN_GUARANTEE, onAddCampaignGuarantee);
 }
 
 export function* watchUpdateCampaignGuarantee() {
@@ -472,8 +472,8 @@ export function* watchGetAllCampaignGuaranteeGroups() {
   yield takeEvery(GET_ALL_CAMPAIGN_GUARANTEE_GROUPS, getAllCampaignGuaranteeGroups);
 }
 
-export function* watchAddNewCampaignGuaranteeGroup() {
-  yield takeEvery(ADD_NEW_CAMPAIGN_GUARANTEE_GROUP, onAddNewCampaignGuaranteeGroup);
+export function* watchAddCampaignGuaranteeGroup() {
+  yield takeEvery(ADD_CAMPAIGN_GUARANTEE_GROUP, onAddCampaignGuaranteeGroup);
 }
 
 export function* watchUpdateCampaignGuaranteeGroup() {
@@ -490,8 +490,8 @@ export function* watchGetAllCampaignAttendees() {
   yield takeEvery(GET_CAMPAIGN_ATTENDEES, getAllCampaignAttendees);
 }
 
-export function* watchAddNewCampaignAttendee() {
-  yield takeEvery(ADD_NEW_CAMPAIGN_ATTENDEE, onAddNewCampaignAttendee);
+export function* watchAddCampaignAttendee() {
+  yield takeEvery(ADD_CAMPAIGN_ATTENDEE, onAddCampaignAttendee);
 }
 
 export function* watchUpdateCampaignAttendee() {
@@ -516,35 +516,35 @@ function* campaignSaga() {
     // Campaigns
     fork(watchGetCampaigns),
     fork(watchGetCampaignDetails),
-    fork(watchAddNewCampaign),
+    fork(watchAddCampaign),
     fork(watchUpdateCampaign),
     fork(watchDeleteCampaign),
 
     // Campaign Members
     fork(watchGetAllCampaignMembers),
     // fork(watchGetCampaignMemberDetails),
-    fork(watchAddNewCampaignMember),
+    fork(watchAddCampaignMember),
     fork(watchUpdateCampaignMember),
     fork(watchDeleteCampaignMember),
 
     // CampaignGuarantees
     fork(watchGetAllCampaignGuarantees),
     // fork(watchGetCampaignGuaranteeDetails),
-    fork(watchAddNewCampaignGuarantee),
+    fork(watchAddCampaignGuarantee),
     fork(watchUpdateCampaignGuarantee),
     fork(watchDeleteCampaignGuarantee),
 
     // CampaignGuaranteeGroups
     fork(watchGetAllCampaignGuaranteeGroups),
     // fork(watchGetCampaignGuaranteeGroupDetails),
-    fork(watchAddNewCampaignGuaranteeGroup),
+    fork(watchAddCampaignGuaranteeGroup),
     fork(watchUpdateCampaignGuaranteeGroup),
     fork(watchDeleteCampaignGuaranteeGroup),
     
     // CampaignAttendees
     fork(watchGetAllCampaignAttendees),
     // fork(watchGetCampaignAttendeeDetails),
-    fork(watchAddNewCampaignAttendee),
+    fork(watchAddCampaignAttendee),
     fork(watchUpdateCampaignAttendee),
     fork(watchDeleteCampaignAttendee),
 

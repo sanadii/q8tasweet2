@@ -104,10 +104,10 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     {
       id: "supervisor-field",
       name: "supervisor",
-      label: "المشرف",
+      label: "الوكيل",
       type: "select",
       options: [
-        { id: '', label: '- اختر المشرف - ', value: '' }, // Add this default option
+        { id: '', label: '- اختر الوكيل - ', value: '' }, // Add this default option
         ...supervisorOptions.map(supervisor => ({
           id: supervisor.id,
           label: supervisor.name,

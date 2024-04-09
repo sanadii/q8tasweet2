@@ -67,7 +67,7 @@ class Command(BaseCommand):
             {"id": 3204, "name": "الشعب", "slug": "coop-shaab", "parent": 3},
             {"id": 3205, "name": "بيان", "slug": "coop-bayan", "parent": 3},
             {"id": 3206, "name": "سلوى", "slug": "coop-salwa", "parent": 3},
-            {"id": 3207, "name": "مشرف", "slug": "coop-mishref", "parent": 3},
+            {"id": 3207, "name": "وكيل", "slug": "coop-mishref", "parent": 3},
 
             # محافظة الفروانية
             {"id": 3301, "name": "العارضية", "parent": 3},

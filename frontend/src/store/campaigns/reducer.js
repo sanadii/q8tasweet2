@@ -6,8 +6,8 @@ import {
   // Campaigns ------------
   GET_CAMPAIGNS,
   GET_CAMPAIGN_DETAILS,
-  ADD_NEW_CAMPAIGN_SUCCESS,
-  ADD_NEW_CAMPAIGN_FAIL,
+  ADD_CAMPAIGN_SUCCESS,
+  ADD_CAMPAIGN_FAIL,
   UPDATE_CAMPAIGN_SUCCESS,
   UPDATE_CAMPAIGN_FAIL,
   DELETE_CAMPAIGN_SUCCESS,
@@ -15,8 +15,8 @@ import {
 
   // Campaign Members
   GET_ALL_CAMPAIGN_MEMBERS,
-  ADD_NEW_CAMPAIGN_MEMBER_SUCCESS,
-  ADD_NEW_CAMPAIGN_MEMBER_FAIL,
+  ADD_CAMPAIGN_MEMBER_SUCCESS,
+  ADD_CAMPAIGN_MEMBER_FAIL,
   UPDATE_CAMPAIGN_MEMBER_SUCCESS,
   UPDATE_CAMPAIGN_MEMBER_FAIL,
   DELETE_CAMPAIGN_MEMBER_SUCCESS,
@@ -24,8 +24,8 @@ import {
 
   // Campaign Guarantees
   GET_ALL_CAMPAIGN_GUARANTEES,
-  ADD_NEW_CAMPAIGN_GUARANTEE_SUCCESS,
-  ADD_NEW_CAMPAIGN_GUARANTEE_FAIL,
+  ADD_CAMPAIGN_GUARANTEE_SUCCESS,
+  ADD_CAMPAIGN_GUARANTEE_FAIL,
   UPDATE_CAMPAIGN_GUARANTEE_SUCCESS,
   UPDATE_CAMPAIGN_GUARANTEE_FAIL,
   DELETE_CAMPAIGN_GUARANTEE_SUCCESS,
@@ -33,8 +33,8 @@ import {
 
   // Campaign Guarantees
   GET_ALL_CAMPAIGN_GUARANTEE_GROUPS,
-  ADD_NEW_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
-  ADD_NEW_CAMPAIGN_GUARANTEE_GROUP_FAIL,
+  ADD_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
+  ADD_CAMPAIGN_GUARANTEE_GROUP_FAIL,
   UPDATE_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
   UPDATE_CAMPAIGN_GUARANTEE_GROUP_FAIL,
   DELETE_CAMPAIGN_GUARANTEE_GROUP_SUCCESS,
@@ -42,8 +42,8 @@ import {
 
   // Campaign Attendees
   GET_CAMPAIGN_ATTENDEES,
-  ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS,
-  ADD_NEW_CAMPAIGN_ATTENDEE_FAIL,
+  ADD_CAMPAIGN_ATTENDEE_SUCCESS,
+  ADD_CAMPAIGN_ATTENDEE_FAIL,
   UPDATE_CAMPAIGN_ATTENDEE_SUCCESS,
   UPDATE_CAMPAIGN_ATTENDEE_FAIL,
   DELETE_CAMPAIGN_ATTENDEE_SUCCESS,
@@ -216,7 +216,7 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignCreated: false,
       };
     }
-    case ADD_NEW_CAMPAIGN_SUCCESS:
+    case ADD_CAMPAIGN_SUCCESS:
       return {
         ...state,
         isCampaignCreated: true,
@@ -224,7 +224,7 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignAdd: true,
         isCampaignAddFail: false,
       };
-    case ADD_NEW_CAMPAIGN_FAIL:
+    case ADD_CAMPAIGN_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -280,7 +280,7 @@ const Campaigns = (state = IntialState, action) => {
       };
     }
 
-    case ADD_NEW_CAMPAIGN_MEMBER_SUCCESS:
+    case ADD_CAMPAIGN_MEMBER_SUCCESS:
       return {
         ...state,
         isCampaignMemberCreated: true,
@@ -289,7 +289,7 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignMemberAddFail: false,
       };
 
-    case ADD_NEW_CAMPAIGN_MEMBER_FAIL:
+    case ADD_CAMPAIGN_MEMBER_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -343,7 +343,7 @@ const Campaigns = (state = IntialState, action) => {
       };
     }
 
-    case ADD_NEW_CAMPAIGN_GUARANTEE_SUCCESS:
+    case ADD_CAMPAIGN_GUARANTEE_SUCCESS:
       return {
         ...state,
         isCampaignGuaranteeCreated: true,
@@ -352,7 +352,7 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignGuaranteeAddFail: false,
       };
 
-    case ADD_NEW_CAMPAIGN_GUARANTEE_FAIL:
+    case ADD_CAMPAIGN_GUARANTEE_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -406,7 +406,7 @@ const Campaigns = (state = IntialState, action) => {
       };
     }
 
-    case ADD_NEW_CAMPAIGN_GUARANTEE_GROUP_SUCCESS:
+    case ADD_CAMPAIGN_GUARANTEE_GROUP_SUCCESS:
       return {
         ...state,
         isCampaignGuaranteeGroupCreated: true,
@@ -415,7 +415,7 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignGuaranteeGroupAddFail: false,
       };
 
-    case ADD_NEW_CAMPAIGN_GUARANTEE_GROUP_FAIL:
+    case ADD_CAMPAIGN_GUARANTEE_GROUP_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -469,7 +469,7 @@ const Campaigns = (state = IntialState, action) => {
       };
     }
 
-    case ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS:
+    case ADD_CAMPAIGN_ATTENDEE_SUCCESS:
       return {
         ...state,
         isCampaignAttendeeCreated: true,
@@ -478,7 +478,7 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignAttendeeAddFail: false,
       };
 
-    case ADD_NEW_CAMPAIGN_ATTENDEE_FAIL:
+    case ADD_CAMPAIGN_ATTENDEE_FAIL:
       return {
         ...state,
         error: action.payload,

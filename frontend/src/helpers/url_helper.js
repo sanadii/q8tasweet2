@@ -88,14 +88,14 @@ export const DELETE_PARTY = "/candidates/deleteParty";
 // Campaigns
 export const GET_CAMPAIGNS = "/campaigns/getCampaigns";
 export const GET_CAMPAIGN_DETAILS = "/campaigns/getCampaignDetails";
-export const ADD_NEW_CAMPAIGN = "/campaigns/addNewCampaign";
+export const ADD_CAMPAIGN = "/campaigns/ADD_CAMPAIGN";
 export const UPDATE_CAMPAIGN = "/campaigns/updateCampaign";
 export const DELETE_CAMPAIGN = "/campaigns/deleteCampaign";
 // export const GET_CAMPAIGN_CANDIDATES = "/campaigns/getcampaignCandidates";
 
 // Campaign Members
 export const GET_ALL_CAMPAIGN_MEMBERS = "/campaigns/getElectionMembers";
-export const ADD_NEW_CAMPAIGN_MEMBER = "/campaigns/addNewCampaignMember";
+export const ADD_CAMPAIGN_MEMBER = "/campaigns/ADD_CAMPAIGNMember";
 export const UPDATE_CAMPAIGN_MEMBER = "/campaigns/updateCampaignMember";
 export const DELETE_CAMPAIGN_MEMBER = "/campaigns/deleteCampaignMember";
 export const GET_CAMPAIGN_MEMBER_DETAILS = "/campaigns/getCampaignMemberDetails";
@@ -103,27 +103,27 @@ export const GET_CAMPAIGN_MEMBER_DETAILS = "/campaigns/getCampaignMemberDetails"
 // Campaign Guarantees
 export const GET_ALL_CAMPAIGN_GUARANTEES = "/campaigns/getAllCampaignGuarantees";
 export const DELETE_CAMPAIGN_GUARANTEE = "/campaigns/deleteCampaignGuarantee";
-export const ADD_NEW_CAMPAIGN_GUARANTEE = "/campaigns/addNewCampaignGuarantee";
+export const ADD_CAMPAIGN_GUARANTEE = "/campaigns/addCampaignGuarantee";
 export const UPDATE_CAMPAIGN_GUARANTEE = "/campaigns/updateCampaignGuarantee";
 
 // Campaign GuaranteeGroups
 export const GET_ALL_CAMPAIGN_GUARANTEE_GROUPS = "/campaigns/getAllCampaignGuaranteeGroups";
 export const DELETE_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/deleteCampaignGuaranteeGroup";
-export const ADD_NEW_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/addNewCampaignGuaranteeGroup";
+export const ADD_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/addCampaignGuaranteeGroup";
 export const UPDATE_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/updateCampaignGuaranteeGroup";
 
 
 // CampaignAttendee
 export const GET_CAMPAIGN_ATTENDEES = "/campaigns/getAllCampaignAttendees";
 export const DELETE_CAMPAIGN_ATTENDEE = "/campaigns/deleteCampaignAttendee";
-export const ADD_NEW_CAMPAIGN_ATTENDEE = "/campaigns/addNewCampaignAttendee";
+export const ADD_CAMPAIGN_ATTENDEE = "/campaigns/addCampaignAttendee";
 export const UPDATE_CAMPAIGN_ATTENDEE = "/campaigns/updateCampaignAttendee";
 
 // CampaignSorting
 export const GET_ALL_CAMPAIGN_SORTING = "/campaigns/getAllCampaignSorting";
 export const GET_CAMPAIGN_COMMITTEE_SORTING = "/campaigns/getCampaignCommitteeSorting";
 // export const DELETE_CAMPAIGN_SORTING = "/campaigns/deleteCampaignSorting";
-// export const ADD_NEW_CAMPAIGN_SORTING = "/campaigns/addNewCampaignSorting";
+// export const ADD_CAMPAIGN_SORTING = "/campaigns/ADD_CAMPAIGNSorting";
 // export const UPDATE_CAMPAIGN_SORTING = "/campaigns/updateCampaignSorting";
 
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
-import { addNewCampaignGuarantee, addNewCampaignAttendee } from "store/actions";
+import { addCampaignGuarantee, addCampaignAttendee } from "store/actions";
 import { usePermission } from 'shared/hooks';
 
 const Id = (cellProps) => {
@@ -37,7 +37,7 @@ const Actions = (props) => {
     const dispatch = useDispatch();
     const {
         canChangeConfig,
-        canAddCampaignGuarantee,
+        canaddCampaignGuarantee,
         canViewCampaignAttendee,
     } = usePermission();
 
@@ -76,7 +76,7 @@ const Actions = (props) => {
                         civil: cellProps.row.original.civil,
                         status: 1,
                     };
-                    dispatch(addNewCampaignGuarantee(newCampaignGuarantee));
+                    dispatch(addCampaignGuarantee(newCampaignGuarantee));
                 }}
             >
                 إضف للمضامين
@@ -102,7 +102,7 @@ const Actions = (props) => {
                         civil: cellProps.row.original.civil,
                         status: 1,
                     };
-                    dispatch(addNewCampaignAttendee(newCampaignAttendee));
+                    dispatch(addCampaignAttendee(newCampaignAttendee));
                 }}
             >
                 تسجيل حضور
@@ -123,7 +123,7 @@ const Actions = (props) => {
                     <i className="ri-eye-fill align-bottom" />
                 </button>
             </div>
-            {canAddCampaignGuarantee &&
+            {canaddCampaignGuarantee &&
                 <div className="flex-shrink-0">
                     {renderElectorGuaranteeButton()}
                 </div>

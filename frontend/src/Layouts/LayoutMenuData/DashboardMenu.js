@@ -381,12 +381,12 @@ export function useModeratorMenu(isCurrentState, setIsCurrentState) {
 
   return [
     {
-      label: "قائمة المشرف العام",
+      label: "قائمة الوكيل العام",
       isHeader: true,
     },
     {
       id: "moderatorDashboard",
-      label: "المشرف العام - تجربة",
+      label: "الوكيل العام - تجربة",
       icon: "ri-honour-line",
       link: "/dashboard/moderator",
       click: (e) => {

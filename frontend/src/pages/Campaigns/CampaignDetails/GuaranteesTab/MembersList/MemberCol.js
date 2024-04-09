@@ -9,14 +9,23 @@ const Id = (cellProps) => {
     );
 };
 
-const Name = (cellProps) => {
+const Name = (props) => {
+    const { cellProps, handleSelectCampaignMember } = props;
+
+    const campaignMember = cellProps.row.original;
+
     return (
         <div className="d-flex align-items-center">
             <div className="flex-shrink-0">
             </div>
-            <div className="flex-grow-1 ms-2 name">
-                {cellProps.row.original.name}{" "}
-                {cellProps.row.original.status}
+            <div
+                onClick={() => {
+                    handleSelectCampaignMember(campaignMember);
+                }}
+                className="flex-grow-1 ms-2 name"
+            >
+                {campaignMember.name}
+                {campaignMember.status}
             </div>
         </div>
 

@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 // Reactstrap (UI) imports
 import { ModalBody, Form } from "reactstrap";
 
-const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
+const MembersUpdateModal = ({ campaignMember, setOnModalSubmit, modalMode }) => {
   const dispatch = useDispatch();
   // State Managemenet
   const { currentUser } = useSelector(userSelector);
@@ -104,10 +104,10 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
     {
       id: "supervisor-field",
       name: "supervisor",
-      label: "المشرف",
+      label: "الوكيل",
       type: "select",
       options: [
-        { id: '', label: '- اختر المشرف - ', value: '' }, // Add this default option
+        { id: '', label: '- اختر الوكيل - ', value: '' }, // Add this default option
         ...supervisorOptions.map(supervisor => ({
           id: supervisor.id,
           label: supervisor.name,

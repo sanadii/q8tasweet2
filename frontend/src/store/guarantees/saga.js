@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
 
   GET_ALL_CAMPAIGN_GUARANTEES,
-  ADD_NEW_CAMPAIGN_GUARANTEE,
+  ADD_CAMPAIGN_GUARANTEE,
   DELETE_CAMPAIGN_GUARANTEE,
   UPDATE_CAMPAIGN_GUARANTEE,
 } from "./actionType";
@@ -15,8 +15,8 @@ import {
 import {
   campaignCampaignGuaranteesApiResponseSuccess,
   campaignCampaignGuaranteesApiResponseError,
-  addNewCampaignGuaranteeSuccess,
-  addNewCampaignGuaranteeFail,
+  addCampaignGuaranteeSuccess,
+  addCampaignGuaranteeFail,
   updateCampaignGuaranteeSuccess,
   updateCampaignGuaranteeFail,
   deleteCampaignGuaranteeSuccess,
@@ -26,7 +26,7 @@ import {
 //Include Both Helper CampaignGuarantee with needed methods
 import {
   getAllCampaignGuarantees as getAllCampaignGuaranteesApi,
-  addNewCampaignGuarantee,
+  addCampaignGuarantee,
   updateCampaignGuarantee,
   deleteCampaignGuarantee,
 } from "../../helpers/backend_helper";
@@ -44,11 +44,11 @@ function* getAllCampaignGuarantees() {
 function* onAddNewCampaignGuarantee({ payload: campaignCampaignGuarantee }) {
 
   try {
-    const response = yield call(addNewCampaignGuarantee, campaignCampaignGuarantee);
-    yield put(addNewCampaignGuaranteeSuccess(response));
+    const response = yield call(addCampaignGuarantee, campaignCampaignGuarantee);
+    yield put(addCampaignGuaranteeSuccess(response));
     toast.success("CampaignGuarantee Added Successfully", { autoClose: 3000 });
   } catch (error) {
-    yield put(addNewCampaignGuaranteeFail(error));
+    yield put(addCampaignGuaranteeFail(error));
     toast.error("CampaignGuarantee Added Failed", { autoClose: 3000 });
   }
 }
@@ -91,7 +91,7 @@ export function* watchDeleteCampaignGuarantee() {
 }
 
 export function* watchAddNewCampaignGuarantee() {
-  yield takeEvery(ADD_NEW_CAMPAIGN_GUARANTEE, onAddNewCampaignGuarantee);
+  yield takeEvery(ADD_CAMPAIGN_GUARANTEE, onAddNewCampaignGuarantee);
 }
 
 function* CampaignGuaranteeManager() {

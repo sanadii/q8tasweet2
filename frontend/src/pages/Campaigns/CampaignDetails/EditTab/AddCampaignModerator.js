@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Action & Selector imports
-import { getCampaignModerators, addNewCampaignMember, deleteCampaignMember } from "store/actions";
+import { getCampaignModerators, addCampaignMember, deleteCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'selectors';
 
 // Components, Constants & Hooks
@@ -48,7 +48,7 @@ const AddCampaignModerator = () => {
             />
             <Card>
                 <CardBody>
-                    <h5>إضافة مشرف للحملة</h5>
+                    <h5>إضافة وكيل للحملة</h5>
                     <SimpleBar className="mx-n4 px-4" data-simplebar="init" style={{ maxHeight: "225px" }}>
                         <div className="vstack gap-3">
                             {campaignModerators.map((user) => (
@@ -91,7 +91,7 @@ const AddCampaignModerator = () => {
                                                                 user: user.id,
                                                                 role: 30,
                                                             };
-                                                            dispatch(addNewCampaignMember(newCampaignModerator));
+                                                            dispatch(addCampaignMember(newCampaignModerator));
                                                         }}
                                                     >إضافة</button>
                                                 )}

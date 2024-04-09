@@ -27,32 +27,25 @@ import "react-toastify/dist/ReactToastify.css";
 const GuaranteesTab = () => {
   const dispatch = useDispatch();
 
-  // States
-  const {
-    campaignGuarantees,
-    campaignMembers,
-    isCampaignGuaranteeSuccess,
-    error
-  } = useSelector(campaignSelector);
-
   // Constants
+  const [campaignMember, setCampaignMember] = useState(null);
   const [campaignGuarantee, setCampaignGuarantee] = useState(null);
-  const [campaigGuaranteeModal, setCampaigGuaranteeModal] = useState(false);
-
   const [campaignGuaranteeGroup, setCampaignGuaranteeGroup] = useState([]);
+
+  const [campaigMemberModal, setCampaigMemberModal] = useState(false);
+  const [campaigGuaranteeModal, setCampaigGuaranteeModal] = useState(false);
   const [campaigGuaranteeGroupModal, setCampaigGuaranteeGroupModal] = useState(false);
+
+  const [selectedCampaignMember, setSelectedCampaignMember] = useState(null);
+  const [selectedCampaignGuaranteeGroup, setSelectedCampaignGuaranteeGroup] = useState(null);
+  const [selectedCampaignGuarantee, setSelectedCampaignGuarantee] = useState(null);
+
 
   const [modalMode, setModalMode] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
-
   const [currentStep, setCurrentStep] = useState(1);
 
-  const getProgressBarColor = (tabId) => {
-    return currentStep >= tabId ? "success" : "light";
-  };
 
-
-  console.log("campaignGuarantee:", campaignGuarantee)
   // Delete Hook
   const {
     handleDeleteItem,
@@ -67,10 +60,35 @@ const GuaranteesTab = () => {
     deleteMultiple,
   } = useDelete(deleteCampaignGuarantee);
 
-  // Modal Constants
+  // 
+  // Campaign Members Functions
+  // 
+  const toggleCampaignMember = useCallback(() => {
+    if (campaigMemberModal) {
+      setCampaigMemberModal(false);
+      setCampaignMember(null);
+    } else {
+      setCampaigMemberModal(true);
+    }
+  }, [campaigMemberModal]);
 
-  // campaignGuaranteeGroup Functions
-  const toggleGuaranteeGroup = useCallback(() => {
+  const handleMemberAddClick = () => {
+    setCampaignMember("");
+    setModalMode("memberAddModal")
+    setIsEdit(false);
+    toggleCampaignMember();
+  };
+
+  const handleSelectCampaignMember = (campaignMember) => {
+    // setCampaignMember(campaignMember)
+    setSelectedCampaignMember(campaignMember)
+  }
+
+  console.log("campaignMember: ", campaignMember)
+  // 
+  // Campaign Guarantee Groups Functions
+  // 
+  const toggleCampaignGuaranteeGroup = useCallback(() => {
     if (campaigGuaranteeGroupModal) {
       setCampaigGuaranteeGroupModal(false);
       setCampaignGuaranteeGroup(null);
@@ -81,13 +99,15 @@ const GuaranteesTab = () => {
 
   const handleGuaranteeGroupAddClick = () => {
     setCampaignGuaranteeGroup("");
-    setModalMode("GuaranteeGroupAddModal")
+    setModalMode("guaranteeGroupAddModal")
     setIsEdit(false);
-    toggleGuaranteeGroup();
+    toggleCampaignGuaranteeGroup();
   };
 
-  // campaignGuarantee Functions
-  const toggleGuarantee = useCallback(() => {
+  // 
+  // Campaign Guarantees Functions
+  // 
+  const toggleCampaignGuarantee = useCallback(() => {
     if (campaigGuaranteeModal) {
       setCampaigGuaranteeModal(false);
       setCampaignGuarantee(null);
@@ -97,25 +117,30 @@ const GuaranteesTab = () => {
   }, [campaigGuaranteeModal]);
 
   const handleGuaranteeAddClick = () => {
+    toggleCampaignGuarantee();
     setCampaignGuarantee("");
+    setModalMode("guaranteeAddModal")
     setIsEdit(false);
-    toggleGuarantee();
+    console.log("toggled, modalMod: ", modalMode, "campaigGuaranteeModal:", campaigGuaranteeModal)
+
   };
 
-
+  // 
   // Tabs
+  // 
+
+
   const tabs = [
     {
       tabId: "1",
       href: '#campaignGuarantor',
       icon: 'ri ri-user-4-fill',
-      title: 'فريق العمل',
+      title: "فريق العمل",
       component: <MembersList
-        setCampaignGuaranteeGroup={setCampaignGuaranteeGroup}
-        setModal={setCampaigGuaranteeGroupModal}
-        modalMode={modalMode}
+        toggle={toggleCampaignMember}
+        setCampaignMember={setCampaignMember}
         setModalMode={setModalMode}
-        toggle={toggleGuaranteeGroup}
+        handleSelectCampaignMember={handleSelectCampaignMember}
       />
     },
     {
@@ -128,7 +153,7 @@ const GuaranteesTab = () => {
         setModal={setCampaigGuaranteeGroupModal}
         modalMode={modalMode}
         setModalMode={setModalMode}
-        toggle={toggleGuaranteeGroup}
+        toggle={toggleCampaignGuaranteeGroup}
       />
     },
     {
@@ -142,7 +167,7 @@ const GuaranteesTab = () => {
         modalMode={modalMode}
         setModalMode={setModalMode}
         setModal={setCampaigGuaranteeModal}
-        toggle={toggleGuarantee}
+        toggle={toggleCampaignGuarantee}
       />
     },
   ];
@@ -157,8 +182,6 @@ const GuaranteesTab = () => {
       setCurrentStep(Number(tab.tabId));
     }
   };
-  console.log("modalMod: ", modalMode, "campaignGuarantee: ", campaignGuarantee)
-
 
   return (
     <React.Fragment>
@@ -177,23 +200,23 @@ const GuaranteesTab = () => {
       />
 
       <MembersModal
-        modal={campaigGuaranteeModal}
+        modal={campaigMemberModal}
+        toggle={toggleCampaignMember}
         modalMode={modalMode}
-        toggle={toggleGuarantee}
-        campaignGuarantee={campaignGuarantee}
+        campaignMember={campaignMember}
       />
 
       <GuaranteeGroupsModal
         modal={campaigGuaranteeGroupModal}
+        toggle={toggleCampaignGuaranteeGroup}
         modalMode={modalMode}
-        toggle={toggleGuaranteeGroup}
-        campaignGuarantee={campaignGuarantee}
+        campaignGuaranteeGroup={campaignGuaranteeGroup}
       />
 
       <GuaranteesModal
         modal={campaigGuaranteeModal}
+        toggle={toggleCampaignGuarantee}
         modalMode={modalMode}
-        toggle={toggleGuarantee}
         campaignGuarantee={campaignGuarantee}
       />
 
@@ -212,10 +235,10 @@ const GuaranteesTab = () => {
                 SecondaryButtonText="إضافة مجموعة"
                 HandleSecondaryButton={handleGuaranteeGroupAddClick}
                 TertiaryButtonText="إضافة عضو"
-                HandleTertiaryButton={handleGuaranteeGroupAddClick}
+                HandleTertiaryButton={handleMemberAddClick}
                 isEdit={isEdit}
                 setIsEdit={setIsEdit}
-                toggle={toggleGuarantee}
+                toggle={toggleCampaignGuarantee}
 
                 // Delete Button
                 isMultiDeleteButton={isMultiDeleteButton}
@@ -227,7 +250,6 @@ const GuaranteesTab = () => {
 
               <Progress multi className='progress-step-arrow progress-info'>
                 {tabs.map((tab) => (
-
                   <Progress
                     key={tab.tabId} bar value="35"
                     href={tab.href}
@@ -238,14 +260,16 @@ const GuaranteesTab = () => {
                     <div className={`card-title m-0 text-white`}>
                       <i className={`${tab.icon} circle-line align-middle me-1`}></i>
                       <strong>{tab.title}</strong>
+                      {/* <span className="fs-12">{tab.selectedItem}</span> */}
                     </div>
-
                   </Progress>
-
                 ))}
               </Progress>
-
-
+              {selectedCampaignMember &&
+                <div>
+                  <span className="muted">العضو: {selectedCampaignMember.name}</span>
+                </div>
+              }
               <TabContent activeTab={activeTab.tabId} className="pt-4">
                 {tabs.map((tab) => (
                   <TabPane key={tab.tabId} tabId={tab.tabId}>

@@ -16,7 +16,12 @@ import { Card, CardBody } from "reactstrap";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MembersTab = () => {
+const MembersList = ({
+  toggle,
+  setModalMode,
+  setCampaignMember,
+  handleSelectCampaignMember,
+}) => {
 
   // State Management
   const {
@@ -29,8 +34,6 @@ const MembersTab = () => {
     isCampaignMemberSuccess,
     error
   } = useSelector(campaignSelector);
-
-  console.log("campaignMembers: ", campaignMembers)
 
   // Permission Hook
   const {
@@ -45,22 +48,6 @@ const MembersTab = () => {
   // Finding Active Role to Show Different Table Columns
   const [activeTab, setActiveTab] = useState("all"); // Initialize with "campaignManagers"
   const activeRole = activeTab;
-  console.log("activte Tab: ", activeTab)
-  console.log("activte Tab: ", activeRole)
-  // Model & Toggle Function
-  const [campaignMember, setCampaignMember] = useState(null);
-  const [modal, setModal] = useState(false);
-  const [modalMode, setModalMode] = useState(null);
-
-
-  const toggle = useCallback(() => {
-    if (modal) {
-      setModal(false);
-      // setCampaignMember(null);
-    } else {
-      setModal(true);
-    }
-  }, [modal]);
 
   const handleCampaignMemberClick = useCallback(
     (arg, modalMode) => {
@@ -82,17 +69,13 @@ const MembersTab = () => {
       setModalMode(modalMode);
       toggle();
     },
-    [toggle]
+    [toggle, setCampaignMember, setModalMode]
   );
 
-  const handleCampaignMemberClicks = () => {
-    setCampaignMember("");
-    setModalMode("AddModal");
-    toggle();
-  };
 
-
+  // 
   // Table Columns
+  // 
   const columnsDefinition = useMemo(() => [
     {
       Header: "م.",
@@ -102,7 +85,12 @@ const MembersTab = () => {
     {
       Header: "العضو",
       accessor: "fullName",
-      Cell: (cellProps) => <Name {...cellProps} />
+      Cell: (cellProps) => (
+        <Name
+          cellProps={cellProps}
+          handleSelectCampaignMember={handleSelectCampaignMember}
+        />
+      )
     },
     {
       Header: "الهاتف",
@@ -121,7 +109,7 @@ const MembersTab = () => {
       Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
     },
     {
-      Header: "عدد المضامين",
+      Header: "المضامين",
       // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
       Cell: (cellProps) => (
         <Guarantees
@@ -132,7 +120,7 @@ const MembersTab = () => {
       )
     },
     {
-      Header: "عدد المصوتين",
+      Header: "المصوتين",
       // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
       Cell: (cellProps) => (
         <Guarantees
@@ -165,7 +153,7 @@ const MembersTab = () => {
       Cell: (cellProps) => <Sorted cellProps={cellProps} />
     },
     {
-      Header: "المشرف",
+      Header: "الوكيل",
       TabsToShow: ["campaignGuarantor", "campaignAttendant", "campaignSorter"],
       Cell: (cellProps) => <Supervisor campaignMembers={campaignMembers} cellProps={cellProps} />,
       show: canChangeCampaignSupervisor // Add this line
@@ -193,12 +181,10 @@ const MembersTab = () => {
     });
   }, [activeRole, columnsDefinition]);
 
+  // 
   // Table Filters
+  // 
   const { filteredData: campaignMemberList, filters, setFilters } = useFilter(campaignMembers);
-
-  // if (campaignMemberList.length === 0) {
-  //   return "waiting"
-  // }
 
   return (
     <React.Fragment>
@@ -246,4 +232,4 @@ const MembersTab = () => {
   );
 };
 
-export default MembersTab;
+export default MembersList;

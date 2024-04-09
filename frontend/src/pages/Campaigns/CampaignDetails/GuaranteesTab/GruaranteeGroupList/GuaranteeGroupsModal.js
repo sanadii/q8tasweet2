@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
+
+// Redux
+import { useSelector } from "react-redux";
 import { campaignSelector } from 'selectors';
 
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
@@ -36,20 +38,20 @@ const GuaranteeGroupsModal = ({ modal, toggle, modalMode, campaignGuaranteeGroup
       ModalContent = GuaranteeGroupsModalUpdate;
       ModalButtonText = "تعديل";
       break;
-      case "GuaranteeGroupAddModal":
-        ModalTitle = "إضافة مجموعة إنتخابية";
-        ModalContent = GuaranteeGroupsModalUpdate;
-        ModalButtonText = "إضافة";
-        break;
+    case "guaranteeGroupAddModal":
+      ModalTitle = "إضافة مجموعة إنتخابية";
+      ModalContent = GuaranteeGroupsModalUpdate;
+      ModalButtonText = "إضافة";
+      break;
     case "GuaranteeGroupViewModal":
       ModalTitle = "مشاهدة معلومات المضمون";
       ModalContent = GuaranteeGroupsModalView;
       ModalButtonText = "اغلق";
       break;
     default:
-      ModalTitle = "Default Modal"; // A default title for other cases
+      ModalTitle = "Default Modal";
       ModalContent = DefaultModalContent;
-      ModalButtonText = "اغلق"; // A default button text
+      ModalButtonText = "اغلق";
   }
 
   return (
@@ -65,9 +67,11 @@ const GuaranteeGroupsModal = ({ modal, toggle, modalMode, campaignGuaranteeGroup
 
       <ModalBody className="p-4">
         <ModalContent
+          toggle={toggle}
           campaignGuaranteeGroup={campaignGuaranteeGroup}
           setOnModalSubmit={setOnModalSubmit}
           campaignMembers={campaignMembers}
+          modalMode={modalMode}
         />
       </ModalBody>
 

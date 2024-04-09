@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Action & Selector imports
-import { getUsers, addNewCampaignMember } from "store/actions";
+import { getUsers, addCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'selectors';
 
 // UI Components & styling imports
@@ -81,7 +81,7 @@ const MembersAddModal = () => {
                   user: user.id,
                   role: 39, // campaignMember
                 };
-                dispatch(addNewCampaignMember(newCampaignMember));
+                dispatch(addCampaignMember(newCampaignMember));
               }}
             >
               <div className="d-flex align-items-center">

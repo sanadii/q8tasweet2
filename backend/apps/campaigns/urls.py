@@ -25,6 +25,11 @@ urlpatterns = [
     path("updateCampaignGuarantee/<int:pk>", UpdateCampaignGuarantee.as_view(), name="UpdateCampaignGuarantee"),
     path("deleteCampaignGuarantee/<int:pk>", DeleteCampaignGuarantee.as_view(), name="DeleteCampaignGuarantee"),
 
+    # Guarantees
+    path("addNewCampaignGuaranteeGroup", AddNewCampaignGuaranteeGroup.as_view(), name="AddNewMemberGuaranteeGroup"),
+    path("updateCampaignGuaranteeGroup/<int:pk>", UpdateCampaignGuaranteeGroup.as_view(), name="UpdateCampaignGuaranteeGroup"),
+    path("deleteCampaignGuaranteeGroup/<int:pk>", DeleteCampaignGuaranteeGroup.as_view(), name="DeleteCampaignGuaranteeGroup"),
+
     # Attendees
     path("addNewCampaignAttendee", AddNewCampaignAttendee.as_view(), name="AddNewCampaignAttendee"),
     path("deleteCampaignAttendee/<int:id>", DeleteCampaignAttendee.as_view(), name="DeleteCampaignAttendee"),

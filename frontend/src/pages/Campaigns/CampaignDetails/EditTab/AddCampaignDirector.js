@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Action & Selector imports
-import { addNewCampaignMember, deleteCampaignMember } from "store/actions";
+import { addCampaignMember, deleteCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'selectors';
 
 // Components & Constants
@@ -16,7 +16,7 @@ import { Card, Form, CardBody } from "reactstrap";
 import SimpleBar from "simplebar-react";
 
 
-const AddCampaignDirector = () => {
+const ADD_CAMPAIGNDirector = () => {
     const dispatch = useDispatch();
 
     const { campaignId, campaignMembers } = useSelector(campaignSelector);
@@ -39,7 +39,7 @@ const AddCampaignDirector = () => {
             />
             <Card>
                 <CardBody>
-                    <h5>إضافة مشرف للحملة</h5>
+                    <h5>إضافة وكيل للحملة</h5>
                     <SimpleBar className="mx-n4 px-4" data-simplebar="init" style={{ maxHeight: "225px" }}>
                         <div className="vstack gap-3">
                             {campaignDirectors.map((user) => (
@@ -82,7 +82,7 @@ const AddCampaignDirector = () => {
                                                                 user: user.id,
                                                                 role: 14,
                                                             };
-                                                            dispatch(addNewCampaignMember(newCampaignDirector));
+                                                            dispatch(addCampaignMember(newCampaignDirector));
                                                         }}
                                                     >إضافة</button>
                                                 )}
@@ -100,4 +100,4 @@ const AddCampaignDirector = () => {
 
 };
 
-export default AddCampaignDirector;
+export default ADD_CAMPAIGNDirector;

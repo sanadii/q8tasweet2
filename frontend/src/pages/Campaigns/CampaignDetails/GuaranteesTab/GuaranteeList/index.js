@@ -123,7 +123,7 @@ const GuaranteeList = ({
       },
     ], [checkedAll, deleteCheckbox, onClickDelete, handleCampaignGuaranteeClick, campaignMembers]);
 
-  // Filters
+  // Table Filters
   const { filteredData: campaignGuaranteeList, filters, setFilters } = useFilter(campaignGuarantees);
 
   return (
@@ -132,14 +132,6 @@ const GuaranteeList = ({
         show={deleteModal}
         onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
-      />
-      <DeleteModal
-        show={deleteModalMulti}
-        onDeleteClick={() => {
-          deleteMultiple();
-          setDeleteModalMulti(false);
-        }}
-        onCloseClick={() => setDeleteModalMulti(false)}
       />
 
       <TableFilters

@@ -149,7 +149,7 @@ def populate():
         { "id": 502, "name": "السالمية", "parent_id": 5, "disabled": 0 },
         { "id": 503, "name": "الرميثية", "parent_id": 5, "disabled": 0 },
         { "id": 504, "name": "الجابرية", "parent_id": 5, "disabled": 0 },
-        { "id": 505, "name": "مشرف", "parent_id": 5, "disabled": 0 },
+        { "id": 505, "name": "وكيل", "parent_id": 5, "disabled": 0 },
         { "id": 506, "name": "بيان", "parent_id": 5, "disabled": 0 },
         { "id": 507, "name": "آلبدع", "parent_id": 5, "disabled": 0 },
         { "id": 508, "name": "النقرة", "parent_id": 5, "disabled": 0 },

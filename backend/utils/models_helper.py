@@ -43,7 +43,7 @@ class GuaranteeStatusOptions(models.IntegerChoices):
 class RoleOptions(models.IntegerChoices):
     PARTY = 1, 'قائمة'
     CANDIDATE = 2, 'مرشح'
-    SUPERVISOR = 3, 'مشرف'
+    SUPERVISOR = 3, 'وكيل'
     GUARANTOR = 4, 'ضامن'
     ATTENDANT = 5, 'محضر'
     SORTER = 6, 'فارز'

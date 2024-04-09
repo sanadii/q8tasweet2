@@ -34,6 +34,7 @@ const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) =>
           campaignMember={campaignMember}
           setOnModalSubmit={setOnModalSubmit}
           toggle={toggle}
+          modalMode={modalMode}
         />
       </ModalBody>
 
@@ -73,26 +74,26 @@ const getModalDetails = (modalMode) => {
   let ModalTitle, ModalContent, ModalButtonText;
 
   switch (modalMode) {
-    case "CallModal":
+    case "memberCallModal":
       ModalTitle = modalName + "اتصال";
       ModalContent = CallModal;
       ModalButtonText = "اتصل";
       break;
-    case "TextModal":
+    case "memberTextModal":
       ModalTitle = modalName + "رسالة";
       ModalContent = TextModal;
       ModalButtonText = "ارسل";
       break;
-    case "UpdateModal":
+    case "memberUpdateModal":
       ModalTitle = "تعديل " + modalName;
       ModalContent = MembersUpdateModal;
       ModalButtonText = "تعديل";
       break;
-    case "AddModal":
+    case "memberAddModal":
       ModalTitle = "إضافة " + modalName;
       ModalContent = MembersAddModal;
       break;
-    case "ViewModal":
+    case "memberViewModal":
       ModalTitle = "مشاهدة " + modalName;
       ModalContent = MembersViewModal;
       break;

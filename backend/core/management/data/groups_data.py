@@ -18,14 +18,14 @@ GROUPS = {
         (30, 'campaignModerator', 'مراقب', 3),
         (31, 'campaignCandidate', 'مرشح', 3),
         (32, 'campaignCoordinator', 'منسق', 3),
-        (33, 'campaignSupervisor', 'مشرف', 3),
+        (33, 'campaignSupervisor', 'وكيل', 3),
         (34, 'campaignGuarantor', 'ضامن', 3),
         (35, 'campaignAttendant', 'محضر', 3),
         (36, 'campaignSorter', 'فارز', 3),
         (39, 'campaignMember', 'غير معرف', 3)
     ],
     "Party": [
-        (41, 'partyModerator', 'مشرف إدارة القائمة', 4),
+        (41, 'partyModerator', 'وكيل إدارة القائمة', 4),
         (42, 'partyCoordinator', 'منسق القائمة', 4)
     ],
     "Subscriber": [

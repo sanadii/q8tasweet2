@@ -3,8 +3,8 @@ import {
   API_RESPONSE_ERROR,
 
   GET_ALL_CAMPAIGN_GUARANTEES,
-  ADD_NEW_CAMPAIGN_GUARANTEEN_SUCCESS,
-  ADD_NEW_CAMPAIGN_GUARANTEEN_FAIL,
+  ADD_CAMPAIGN_GUARANTEEN_SUCCESS,
+  ADD_CAMPAIGN_GUARANTEEN_FAIL,
   UPDATE_CAMPAIGN_GUARANTEE_SUCCESS,
   UPDATE_CAMPAIGN_GUARANTEE_FAIL,
   DELETE_CAMPAIGN_GUARANTEE_SUCCESS,
@@ -43,13 +43,13 @@ const CampaignGuarantees = (state = initialState, action) => {
           return { ...state };
       }
 
-    case ADD_NEW_CAMPAIGN_GUARANTEEN_SUCCESS:
+    case ADD_CAMPAIGN_GUARANTEEN_SUCCESS:
       return {
         ...state,
         campaignCampaignGuaranteeList: [...state.campaignCampaignGuaranteeList, action.payload],
       };
 
-    case ADD_NEW_CAMPAIGN_GUARANTEEN_FAIL:
+    case ADD_CAMPAIGN_GUARANTEEN_FAIL:
       return {
         ...state,
         error: action.payload,
