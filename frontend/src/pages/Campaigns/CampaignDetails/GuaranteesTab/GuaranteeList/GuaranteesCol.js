@@ -1,26 +1,27 @@
 import React from "react";
 import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import Tooltip from 'react-bootstrap/Tooltip';  // Import Tooltip from your UI library
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';  // Import OverlayTrigger
 
 const CheckboxHeader = ({ checkedAll }) => (
     <input
-      type="checkbox"
-      id="checkBoxAll"
-      className="form-check-input"
-      onClick={checkedAll}
+        type="checkbox"
+        id="checkBoxAll"
+        className="form-check-input"
+        onClick={checkedAll}
     />
-  );
-  
-  
-  const CheckboxCell = ({ row, deleteCheckbox }) => (
-    <input
-      type="checkbox"
-      className="checkboxSelector form-check-input"
-      value={row.original.id}
-      onChange={deleteCheckbox}
-    />
-  );
+);
 
-  
+
+const CheckboxCell = ({ row, deleteCheckbox }) => (
+    <input
+        type="checkbox"
+        className="checkboxSelector form-check-input"
+        value={row.original.id}
+        onChange={deleteCheckbox}
+    />
+);
+
 const Id = (cellProps) => {
     return (
         <React.Fragment>
@@ -109,6 +110,45 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
     );
 }
 
+const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
+    const guaranteeGroupIds = cellProps.row.original.guaranteeGroups;
+
+    const guaranteeGroupNames = guaranteeGroupIds.map(groupId => {
+        const group = campaignGuaranteeGroups.find(g => g.id === groupId);
+        return group ? group.name : "-";
+    });
+
+    const renderTooltip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            <ul>
+                {guaranteeGroupNames.map((name, index) => (
+                    <li key={index} onClick={() => {/* handle click event here */}}>
+                        {name}
+                    </li>
+                ))}
+            </ul>
+        </Tooltip>
+    );
+
+    if (guaranteeGroupNames.length > 1) {
+        return (
+            <OverlayTrigger
+                placement="top"
+                delay={{ show: 250, hide: 400 }}
+                overlay={renderTooltip}
+            >
+                <span>
+                    {guaranteeGroupNames[0]} <span className="guarantee-group-extra" style={{backgroundColor: 'green', color: 'white', borderRadius: '50%', padding: '0 5px'}}>+{guaranteeGroupNames.length - 1}</span>
+                </span>
+            </OverlayTrigger>
+        );
+    } else {
+        return <span>{guaranteeGroupNames[0] || "-"}</span>;
+    }
+};
+
+
+
 
 const Actions = (props) => {
     const { cellProps, handleCampaignGuaranteeClick, onClickDelete, isAdmin } = props;
@@ -122,7 +162,7 @@ const Actions = (props) => {
                     const campaignGuarantee = cellProps.row.original;
                     handleCampaignGuaranteeClick(
                         campaignGuarantee,
-                        "GuaranteeViewModal"
+                        "guaranteeView"
                     );
                 }}
             >
@@ -135,7 +175,7 @@ const Actions = (props) => {
                     const campaignGuarantee = cellProps.row.original;
                     handleCampaignGuaranteeClick(
                         campaignGuarantee,
-                        "GuaranteeUpdateModal"
+                        "guaranteeUpdate"
                     );
                 }}
             >
@@ -164,6 +204,6 @@ export {
     Attended,
     Status,
     Guarantor,
+    GuaranteeGroups,
     Actions,
-
 };

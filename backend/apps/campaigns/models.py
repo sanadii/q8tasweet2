@@ -152,7 +152,12 @@ class CampaignGuarantee(TrackModel):
     phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
     notes = models.TextField(blank=True, null=True)
     status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)
-    guarantee_group = models.ForeignKey('CampaignGuaranteeGroup', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_guarantee_groups')
+    guarantee_groups = models.ManyToManyField(
+        'CampaignGuaranteeGroup', 
+        blank=True, 
+        related_name='campaign_guarantees'
+    )
+
 
     class Meta:
         db_table = 'campaign_guarantee'

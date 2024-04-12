@@ -312,6 +312,7 @@ function* onAddCampaignGuaranteeGroup({ payload: campaignGuaranteeGroup }) {
 }
 
 function* onUpdateCampaignGuaranteeGroup({ payload: campaignGuaranteeGroup }) {
+  console.log("SAGA: campaignGuaranteeGroup: ", campaignGuaranteeGroup)
   try {
     const response = yield call(updateCampaignGuaranteeGroup, campaignGuaranteeGroup);
     yield put(updateCampaignGuaranteeGroupSuccess(response));

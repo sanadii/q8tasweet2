@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 // Compontents, Constants, Hooks
 import { Loader, DeleteModal, TableContainer, TableFilters } from "shared/components";
 import { usePermission, useFilter, useDelete } from "shared/hooks";
-import { Id, Name, Mobile, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
+import { Id, CheckboxHeader, CheckboxCell, Name, Mobile, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
 
 // Store & Selectors
 import { deleteCampaignMember } from "store/actions";
@@ -43,7 +43,18 @@ const MembersList = ({
   } = usePermission();
 
   // Delete Hook
-  const { handleDeleteItem, onClickDelete, setDeleteModal, deleteModal } = useDelete(deleteCampaignMember);
+  const {
+    handleDeleteItem,
+    onClickDelete,
+    deleteModal,
+    setDeleteModal,
+    checkedAll,
+    deleteCheckbox,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    deleteMultiple,
+  } = useDelete(deleteCampaignMember);
 
   // Finding Active Role to Show Different Table Columns
   const [activeTab, setActiveTab] = useState("all"); // Initialize with "campaignManagers"
@@ -78,9 +89,9 @@ const MembersList = ({
   // 
   const columnsDefinition = useMemo(() => [
     {
-      Header: "م.",
+      Header: () => <CheckboxHeader checkedAll={checkedAll} />,
       accessor: "id",
-      Cell: (cellProps) => <Id {...cellProps} />
+      Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
     },
     {
       Header: "العضو",
@@ -171,7 +182,7 @@ const MembersList = ({
         />
       )
     }
-  ], [handleCampaignMemberClick, onClickDelete, campaignAttendees, campaignGuarantees, campaignElectionCommittees, canChangeConfig, canChangeCampaignSupervisor, campaignMembers, campaignRoles]);
+  ], [checkedAll, deleteCheckbox, handleSelectCampaignMember, handleCampaignMemberClick, onClickDelete, campaignAttendees, campaignGuarantees, campaignElectionCommittees, canChangeConfig, canChangeCampaignSupervisor, campaignMembers, campaignRoles]);
 
   const columns = useMemo(() => {
     return columnsDefinition.filter(column => {
@@ -193,7 +204,14 @@ const MembersList = ({
         onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
-
+      <DeleteModal
+        show={deleteModalMulti}
+        onDeleteClick={() => {
+          deleteMultiple();
+          setDeleteModalMulti(false);
+        }}
+        onCloseClick={() => setDeleteModalMulti(false)}
+      />
       <Card id="memberList">
         <CardBody>
           <div>

@@ -1,105 +1,44 @@
-import React, { useState } from "react";
+import React from "react";
 import "react-toastify/dist/ReactToastify.css";
 
-// Redux
-import { useSelector } from "react-redux";
-import { campaignSelector } from 'selectors';
-
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
-import GuaranteeGroupsModalUpdate from "./GuaranteeGroupsModalUpdate";
+import GuaranteeGroupsModalEdit from "./GuaranteeGroupsModalEdit";
 import GuaranteeGroupsModalView from "./GuaranteeGroupsModalView"
 
-const GuaranteeGroupsModal = ({ modal, toggle, modalMode, campaignGuaranteeGroup }) => {
-  console.log("modal: ", modal, "modalMod: ", modalMode, "campaignGuaranteeGroup: ", campaignGuaranteeGroup)
+// Reactstrap (UI) imports
+import { Modal } from "reactstrap";
 
-  // Define States
-  const { campaignMembers } = useSelector(campaignSelector);
-
-  // Set ConstantsF
-  const [onModalSubmit, setOnModalSubmit] = useState(null);
-
-  let ModalTitle;
-  let ModalContent;
-  let ModalButtonText;
-
-  switch (modalMode) {
-    case "GuaranteeGroupCallModal":
-      ModalTitle = "Campaign GuaranteeGroup Call";
-      ModalContent = CampaignGuaranteeGroupCallModal;
-      ModalButtonText = "Make Call";
-      break;
-    case "GuaranteeGroupTextModal":
-      ModalTitle = "Campaign GuaranteeGroup Text";
-      ModalContent = CampaignGuaranteeGroupTextModal;
-      ModalButtonText = "Send Text";
-      break;
-    case "GuaranteeGroupUpdateModal":
-      ModalTitle = "تعديل مجموعة إنتخابية";
-      ModalContent = GuaranteeGroupsModalUpdate;
-      ModalButtonText = "تعديل";
-      break;
-    case "guaranteeGroupAddModal":
-      ModalTitle = "إضافة مجموعة إنتخابية";
-      ModalContent = GuaranteeGroupsModalUpdate;
-      ModalButtonText = "إضافة";
-      break;
-    case "GuaranteeGroupViewModal":
-      ModalTitle = "مشاهدة معلومات المضمون";
-      ModalContent = GuaranteeGroupsModalView;
-      ModalButtonText = "اغلق";
-      break;
-    default:
-      ModalTitle = "Default Modal";
-      ModalContent = DefaultModalContent;
-      ModalButtonText = "اغلق";
-  }
+const GuaranteeGroupsModal = ({
+  modal,
+  toggle,
+  modalMode,
+  campaignGuaranteeGroup,
+}) => {
 
   return (
     <Modal
+      toggle={toggle}
       isOpen={modal}
       centered
       className="border-0"
       size="lg"
     >
-      <ModalHeader className="p-3 ps-4 bg-soft-success">
-        تعديل معلومات المضمون
-      </ModalHeader>
+      {(modalMode === "updateGuaranteeGroup" || modalMode === "addGuaranteeGroup") &&
+        <GuaranteeGroupsModalEdit
+          toggle={toggle}
+          modalMode={modalMode}
+          campaignGuaranteeGroup={campaignGuaranteeGroup} />
+      }
 
-      <ModalBody className="p-4">
-        <ModalContent
+      {modalMode === "viewGuaranteeGroup" &&
+        <GuaranteeGroupsModalView
           toggle={toggle}
           campaignGuaranteeGroup={campaignGuaranteeGroup}
-          setOnModalSubmit={setOnModalSubmit}
-          campaignMembers={campaignMembers}
-          modalMode={modalMode}
         />
-      </ModalBody>
-
-      <ModalFooter>
-        <div className="hstack gap-2 justify-content-end">
-          <Button color="light" onClick={() => toggle(false)}>
-            Close
-          </Button>
-
-          {/* if ModalButtonText and ModalButtonText is not empty */}
-          {ModalButtonText && ModalButtonText.length > 0 && (
-            <Button
-              color="success"
-              id="add-btn"
-              onClick={() => {
-                if (onModalSubmit) onModalSubmit();
-                toggle(false);
-              }}
-            >
-              {ModalButtonText}
-            </Button>
-          )}
-        </div>
-      </ModalFooter>
-
+      }
     </Modal>
   );
 };
+
 
 const CampaignGuaranteeGroupCallModal = () => {
   return <p>CampaignGuaranteeGroupCallModal</p>;

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Label, Input, FormFeedback } from "reactstrap";
+import Select from "react-select";
+
 import Flatpickr from "react-flatpickr";
 import defaultAvatar from 'assets/images/users/default.jpg';
 import { api } from "config";
@@ -7,12 +9,20 @@ const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_UR
 
 
 
-const FormFields = ({ field, validation, inLineStyle }) => {
+const FormFields = ({ field, validation, formStyle }) => {
+
     const { id, label, name, type, colSize, icon, iconBg } = field;
     const imageValue = validation?.values.image;
     const [imageSrc, setImageSrc] = useState(defaultAvatar);
     const [passwordShow, setPasswordShow] = useState(false);
 
+    // 
+    // Select Multi
+    // 
+
+    // 
+    // Image
+    // 
     useEffect(() => {
         if (imageValue) {
             if (typeof imageValue === 'string') {
@@ -135,6 +145,33 @@ const FormFields = ({ field, validation, inLineStyle }) => {
                         invalid={validation.touched[name] && validation.errors[name]}
                     />
                 );
+
+            case 'selectMulti': {
+                const handleMulti = (selectedOptions) => {
+                    validation.setFieldValue(name, selectedOptions.map(option => option.value));
+                };
+
+                const selectedValues = validation.values[name]
+                    ? validation.values[name].map(guaranteeGroupId => ({
+                        value: guaranteeGroupId,
+                        label: field.options.find(option => option.value === guaranteeGroupId)?.label || ''
+                    }))
+                    : [];
+
+                return (
+                    <Select
+                        id={id}
+                        placeholder={`اكتب ${label}`}
+                        onBlur={validation.handleBlur}
+                        invalid={validation.touched[name] && validation.errors[name]}
+                        value={selectedValues}
+                        isMulti={true}
+                        onChange={handleMulti}
+                        options={field.options}
+                    />
+                );
+            }
+
             case 'select':
                 return (
                     <Input
@@ -239,7 +276,7 @@ const FormFields = ({ field, validation, inLineStyle }) => {
         }
     };
     return (
-        <FormFieldLayout inLineStyle={inLineStyle} label={label} id={id} colSize={colSize} type={type}>
+        <FormFieldLayout formStyle={formStyle} label={label} id={id} colSize={colSize} type={type}>
             {renderInput()}
             {type !== 'separator' && type !== 'title' && validation?.touched[name] && validation?.errors[name] && (
                 <FormFeedback type="invalid" style={{ display: 'block' }}>
@@ -250,28 +287,49 @@ const FormFields = ({ field, validation, inLineStyle }) => {
     );
 
 };
-
-const FormFieldLayout = ({ inLineStyle, label, id, children, colSize, type }) => {
+const FormFieldLayout = ({ formStyle, label, id, children, colSize, type }) => {
+    // For separator or title types, just render the children directly
     if (type === 'separator' || type === 'title') {
         return <>{children}</>;
     }
 
-    return inLineStyle ? (
-        <Row key={id} className="mb-3">
-            <Col lg={3} className="align-self-center">
-                <Label htmlFor={id} className="form-label">{label}</Label>
-            </Col>
-            <Col lg={9}>
-                {children}
-            </Col>
-        </Row>
-    ) : (
+    // For inline style
+    if (formStyle === "inLineStyle") {
+        return (
+            <Row key={id} className="mb-3">
+                <Col lg={3} className="align-self-center">
+                    <Label htmlFor={id} className="form-label">{label}</Label>
+                </Col>
+                <Col lg={9}>
+                    {children}
+                </Col>
+            </Row>
+        );
+    }
+
+    // For table style
+    if (formStyle === "tableStyle") {
+        return (
+            <tr key={id} >
+                <td className="align-self-center">
+                    <Label htmlFor={id} className="form-label">{label}</Label>
+                </td>
+                <td>
+                    {children}
+                </td>
+            </tr>
+        );
+    }
+
+    // Fallback layout
+    return (
         <Col lg={colSize} className="mb-3">
             <Label htmlFor={id} className="form-label">{label}</Label>
             {children}
         </Col>
     );
 };
+
 
 
 export default FormFields;

@@ -176,7 +176,7 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit, modalMode }) => 
                 key={field.id}
                 field={field}
                 validation={validation}
-                inLineStyle={true}
+                formStyle="inLineStyle"
               />
             );
           })

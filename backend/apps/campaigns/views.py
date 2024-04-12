@@ -192,7 +192,7 @@ class GetCampaignDetails(APIView):
             "code": 200
         })
 
-class AddNewCampaign(APIView):
+class AddCampaign(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -241,7 +241,7 @@ class CampaignMemberViewMixin:
         """Return the appropriate serializer class."""
         return CampaignMemberSerializer
 
-class AddNewCampaignMember(CampaignMemberViewMixin, CreateAPIView):
+class AddCampaignMember(CampaignMemberViewMixin, CreateAPIView):
     """View for creating new campaign members."""
 
     permission_classes = [IsAuthenticated]
@@ -301,7 +301,7 @@ class CampaignGuaranteeViewMixin:
         """Return the appropriate serializer class."""
         return CampaignGuaranteeSerializer
 
-class AddNewCampaignGuarantee(CampaignGuaranteeViewMixin, CreateAPIView):
+class AddCampaignGuarantee(CampaignGuaranteeViewMixin, CreateAPIView):
     """View for creating new campaign guarantees."""
 
     permission_classes = [IsAuthenticated]
@@ -353,7 +353,7 @@ class CampaignGuaranteeGroupViewMixin:
     def get_serializer_class(self):
         """Return the appropriate serializer class."""
         return CampaignGuaranteeGroupSerializer
-class AddNewCampaignGuaranteeGroup(CampaignGuaranteeGroupViewMixin, CreateAPIView):
+class AddCampaignGuaranteeGroup(CampaignGuaranteeGroupViewMixin, CreateAPIView):
     """View for creating new campaign guarantee groups."""
 
     permission_classes = [IsAuthenticated]
@@ -394,7 +394,7 @@ class DeleteCampaignGuaranteeGroup(CampaignGuaranteeGroupViewMixin, DestroyAPIVi
 
 
 # Campaign Attendees
-class AddNewCampaignAttendee(APIView):
+class AddCampaignAttendee(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):

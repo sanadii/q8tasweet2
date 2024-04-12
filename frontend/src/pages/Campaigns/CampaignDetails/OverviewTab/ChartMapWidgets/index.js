@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 
 import CountUp from "react-countup";
 
-import { MyPortfolioCharts } from './WidgetsCharts';
-import { SessionsByCountriesCharts } from './WidgetsCharts';
-import { AudiencesMetricsCharts } from './WidgetsCharts';
-import { TopReferralsPagesCharts } from './WidgetsCharts';
+import { MyPortfolioCharts, SessionsByCountriesCharts, AudiencesMetricsCharts, TopReferralsPagesCharts } from './WidgetsCharts';
 import { widgetsAudiences, widgetsPortfolio, } from "shared/data/widgets";
 import { VectorMap } from '@south-paw/react-vector-maps'
 

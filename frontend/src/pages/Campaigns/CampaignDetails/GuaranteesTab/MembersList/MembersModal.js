@@ -10,7 +10,7 @@ import MembersViewModal from "./MembersViewModal";
 import { ModalBody, Modal, ModalHeader, ModalFooter, Button } from "reactstrap";
 
 
-const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) => {
+const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
 
   // State Constants
   const [onModalSubmit, setOnModalSubmit] = useState(null);
@@ -43,7 +43,7 @@ const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) =>
           <Button
             color="light"
             onClick={() => {
-              setModal(false);
+              toggle();
             }}
             className="btn-light"
           >

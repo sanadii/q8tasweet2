@@ -1,12 +1,11 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteCampaignGuarantee } from "store/actions";
+import { deleteCampaignGuaranteeGroup } from "store/actions";
 import { campaignSelector } from 'selectors';
 
 // Shared imports
-import { Col, Row, Card, CardBody, CardHeader, Nav, NavItem, NavLink } from "reactstrap";
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "shared/components";
-import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, Actions } from "../GuaranteeList/GuaranteesCol";
+import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Guarantees, Attended, AttendedPercentage, Guarantor, Actions } from "./GuaranteeGroupsCol";
 import { useDelete, useFilter } from "shared/hooks"
 
 // Utility imports
@@ -17,6 +16,9 @@ const GuaranteesGroupList = ({
     toggle,
     setModalMode,
     setCampaignGuaranteeGroup,
+    selectedCampaignMember,
+    campaignMember,
+    handleSelectCampaignGuaranteeGroup,
 }) => {
 
     // States
@@ -27,8 +29,6 @@ const GuaranteesGroupList = ({
         isCampaignGuaranteeSuccess,
         error
     } = useSelector(campaignSelector);
-
-    // Constants
 
     // Delete Hook
     const {
@@ -42,7 +42,7 @@ const GuaranteesGroupList = ({
         deleteModalMulti,
         setDeleteModalMulti,
         deleteMultiple,
-    } = useDelete(deleteCampaignGuarantee);
+    } = useDelete(deleteCampaignGuaranteeGroup);
 
 
     const handleCampaignGuaranteeClick = useCallback(
@@ -52,20 +52,16 @@ const GuaranteesGroupList = ({
                 id: campaignGuaranteeGroup.id,
                 member: campaignGuaranteeGroup.member,
                 campaign: campaignGuaranteeGroup.campaign,
-                civil: campaignGuaranteeGroup.civil,
-                fullName: campaignGuaranteeGroup.fullName,
+                name: campaignGuaranteeGroup.name,
                 gender: campaignGuaranteeGroup.gender,
-                boxNo: campaignGuaranteeGroup.boxNo,
-                membershipNo: campaignGuaranteeGroup.membershipNo,
-                enrollmentDate: campaignGuaranteeGroup.enrollmentDate,
                 phone: campaignGuaranteeGroup.phone,
-                status: campaignGuaranteeGroup.status,
                 notes: campaignGuaranteeGroup.notes,
             });
 
             // Set the modalMode state here
             setModalMode(modalMode);
             toggle();
+
         },
         [setCampaignGuaranteeGroup, setModalMode, toggle]
     );
@@ -89,8 +85,13 @@ const GuaranteesGroupList = ({
             },
             {
                 Header: "المجموعة",
-                accessor: row => ({ name: row.name, gender: row.gender }),
-                Cell: (cellProps) => <Name {...cellProps} />
+                accessor: "name",
+                Cell: (cellProps) => (
+                    <Name
+                        cellProps={cellProps}
+                        handleSelectCampaignGuaranteeGroup={handleSelectCampaignGuaranteeGroup}
+                    />
+                )
             },
             {
                 Header: "الضامن",
@@ -107,20 +108,20 @@ const GuaranteesGroupList = ({
                 Cell: (cellProps) => <Phone {...cellProps} />
             },
             {
-                Header: "عدد الناخبين",
+                Header: "الناخبين",
                 accessor: "guarantees",
-                Cell: (cellProps) => <Phone {...cellProps} />
+                Cell: (cellProps) => <Guarantees {...cellProps} />
             },
 
             {
-                Header: "إجمالي الحضور",
+                Header: "الحضور",
                 accessor: "guaranteesAttended",
                 Cell: (cellProps) => <Attended {...cellProps} />
             },
             {
                 Header: "نسبة التصويت",
                 filterable: false,
-                Cell: (cellProps) => <Status {...cellProps} />
+                Cell: (cellProps) => <AttendedPercentage {...cellProps} />
             },
             {
                 Header: "إجراءات",
@@ -137,10 +138,32 @@ const GuaranteesGroupList = ({
     const filterResult = useFilter(campaignGuaranteeGroups);
 
     // Now, if campaignGuaranteeGroups is truthy, we destructure filteredData from it
-    const campaignGuaranteeList = campaignGuaranteeGroups ? filterResult.filteredData : [];
+    const campaignGuaranteeGroupList = campaignGuaranteeGroups ? filterResult.filteredData : [];
 
     // Destructuring other properties directly as they are not dependent on campaignGuaranteeGroups
     const { filters, setFilters } = filterResult;
+
+    // useEffect(() => {
+    //     // Assuming setFilters is a function that updates something related to 'member' with the selectedCampaignMember
+    //     setFilters({ member: selectedCampaignMember.id });
+    //     console.log("filters: ", filters)
+    //     console.log("filterResult: ", filterResult)
+
+    // }, [selectedCampaignMember]); // Include setFilters in dependencies if it's a state setter or could change
+
+    useEffect(() => {
+        console.log("filters: ", filters)
+        console.log("filterResult: ", filterResult)
+
+        // Check if selectedCampaignMember and its id exist
+        if (selectedCampaignMember && selectedCampaignMember.id) {
+            // Update the filters using setFilters function
+            setFilters(prevFilters => ({
+                ...prevFilters,
+                member: selectedCampaignMember.id
+            }));
+        }
+    }, [selectedCampaignMember, setFilters]);
 
 
     return (
@@ -173,11 +196,11 @@ const GuaranteesGroupList = ({
 
             />
 
-            {campaignGuaranteeList ? (
+            {campaignGuaranteeGroupList ? (
                 <TableContainer
                     // Data
                     columns={columns}
-                    data={campaignGuaranteeList || []}
+                    data={campaignGuaranteeGroupList || []}
                     customPageSize={50}
 
                     // Styling

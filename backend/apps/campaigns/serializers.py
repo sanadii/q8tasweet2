@@ -323,6 +323,24 @@ class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
 #
 # Campaign Guarantee Serializers
 #
+class CampaignGuaranteeGroupSerializer(serializers.ModelSerializer):
+    # Ensure these fields exist on the CampaignGuaranteeGroup model or related models
+    class Meta:
+        model = CampaignGuaranteeGroup
+        fields = ["id", "name", "member", "phone", "note"]
+
+    def create(self, validated_data):
+        # Custom creation logic here
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Custom update logic here
+        return super().update(instance, validated_data)
+
+
+#
+# Campaign Guarantee Serializers
+#
 class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 
     # get the data from Voter Model Directly
@@ -346,6 +364,9 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
         source="civil.notes", default="Not Found", read_only=True
     )
     attended = serializers.SerializerMethodField()
+    guarantee_groups = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=CampaignGuaranteeGroup.objects.all(), required=False
+    )
 
     class Meta:
         model = CampaignGuarantee
@@ -365,46 +386,11 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
             "enrollment_date",
             "relationship",
             "voter_notes",
+            "guarantee_groups",
         ]
 
     def get_attended(self, obj):
         return CampaignAttendee.objects.filter(civil=obj.civil).exists()
-
-    def create(self, validated_data):
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
-
-
-#
-# Campaign Guarantee Serializers
-#
-class CampaignGuaranteeGroupSerializer(serializers.ModelSerializer):
-    # Example fields from related models, replace with actual fields
-    full_name = serializers.CharField(
-        source="member.full_name", default="Not Found", read_only=True
-    )
-
-    # Ensure these fields exist on the CampaignGuaranteeGroup model or related models
-    class Meta:
-        model = CampaignGuaranteeGroup
-        fields = [
-            "id",
-            "name",  # This field is from your CampaignGuaranteeGroup model
-            "member",  # ForeignKey to CampaignMember
-            "note",  # This field is from your CampaignGuaranteeGroup model
-            "full_name",
-            # Add other fields if they exist in the CampaignGuaranteeGroup model or related models
-        ]
-
-    def create(self, validated_data):
-        # Custom creation logic here
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        # Custom update logic here
-        return super().update(instance, validated_data)
 
 
 #

@@ -93,7 +93,7 @@ const ResetPasswordScreen = () => {
                                                         key={field.id}
                                                         field={field}
                                                         validation={validation}
-                                                        inLineStyle={true}
+                                                        formStyle="inLineStyle"
                                                     />
                                                 );
                                             })

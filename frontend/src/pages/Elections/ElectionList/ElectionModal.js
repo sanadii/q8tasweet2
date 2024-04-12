@@ -111,11 +111,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       name: "category",
       label: "تصنيف الانتخابات",
       type: "select",
-      options: categoryOptions,
-      options: categoryOptions.map(category => ({
-        id: category.id,
-        label: category.name,
-        value: category.id
+      options: categoryOptions.map(item => ({
+        id: item.id,
+        label: item.name,
+        value: item.id
       })),
       onChange: (e) => {
         validation.handleChange(e);
@@ -128,10 +127,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       name: "subCategory",
       label: "تصنيف الإنتخابات",
       type: "select",
-      options: subCategoryOptions.map(subCategory => ({
-        id: subCategory.id,
-        label: subCategory.name,
-        value: subCategory.id
+      options: subCategoryOptions.map(item => ({
+        id: item.id,
+        label: item.name,
+        value: item.id
       })),
       colSize: 4,
     },

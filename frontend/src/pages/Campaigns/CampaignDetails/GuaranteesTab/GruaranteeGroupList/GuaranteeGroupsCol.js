@@ -3,24 +3,24 @@ import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
 
 const CheckboxHeader = ({ checkedAll }) => (
     <input
-      type="checkbox"
-      id="checkBoxAll"
-      className="form-check-input"
-      onClick={checkedAll}
+        type="checkbox"
+        id="checkBoxAll"
+        className="form-check-input"
+        onClick={checkedAll}
     />
-  );
-  
-  
-  const CheckboxCell = ({ row, deleteCheckbox }) => (
-    <input
-      type="checkbox"
-      className="checkboxSelector form-check-input"
-      value={row.original.id}
-      onChange={deleteCheckbox}
-    />
-  );
+);
 
-  
+
+const CheckboxCell = ({ row, deleteCheckbox }) => (
+    <input
+        type="checkbox"
+        className="checkboxSelector form-check-input"
+        value={row.original.id}
+        onChange={deleteCheckbox}
+    />
+);
+
+
 const Id = (cellProps) => {
     return (
         <React.Fragment>
@@ -29,22 +29,41 @@ const Id = (cellProps) => {
     );
 };
 
-const Name = (cellProps) => {
-    const getGenderIcon = (gender) => {
-        const genderOption = GenderOptions.find(g => g.id === gender);
-        if (genderOption) {
-            const genderColorClass = `text-${genderOption.color}`;
-            return <i className={`mdi mdi-circle align-middle ${genderColorClass} me-2`}></i>;
-        }
-        return null;
-    };
+// const Name = (props) => {
+//     const { cellProps, handleSelectCampaignMember } = props;
+
+//     const campaignMember = cellProps.row.original;
+
+//     return (
+//         <div className="d-flex align-items-center">
+//             <div className="flex-shrink-0">
+//             </div>
+//             <div
+//                 onClick={() => {
+//                     handleSelectCampaignMember(campaignMember);
+//                 }}
+//                 className="flex-grow-1 ms-2 name"
+//             >
+//                 {campaignMember.name}
+//                 {campaignMember.status}
+//             </div>
+//         </div>
+//     );
+// };
+
+const Name = (props) => {
+    const { cellProps, handleSelectCampaignGuaranteeGroup } = props;
+
+    const campaignMember = cellProps.row.original;
 
     return (
-        <div>
-            {getGenderIcon(cellProps.row.original.gender)}
-            <b>{cellProps.row.original.fullName}</b>
-            <br />
-            {cellProps.row.original.civil}
+        <div
+            onClick={() => {
+                handleSelectCampaignGuaranteeGroup(campaignMember);
+            }}
+            className="flex-grow-1 ms-2 name"
+        >
+            <b>{campaignMember.name}</b>
         </div>
     );
 };
@@ -56,12 +75,25 @@ const Phone = (cellProps) => {
     );
 }
 
+const Guarantees = (cellProps) => {
+    const numberOfVoters = cellProps.row.original.voters
+    return (
+        <p>{numberOfVoters ? numberOfVoters : '-'}</p>
+    );
+}
+
 const Attended = (cellProps) => {
-    if (cellProps.row.original.attended) {
-        return <i className="ri-checkbox-circle-fill text-success"></i>;
-    } else {
-        return <i className="ri-close-circle-fill text-danger"></i>;
-    }
+    const numberOfVoters = cellProps.row.original.voters
+    return (
+        <p>{numberOfVoters ? numberOfVoters : '-'}</p>
+    );
+}
+
+const AttendedPercentage = (cellProps) => {
+    const numberOfVoters = cellProps.row.original.voters
+    return (
+        <p>{numberOfVoters ? numberOfVoters : '0%'}</p>
+    );
 }
 
 
@@ -119,10 +151,10 @@ const Actions = (props) => {
                 to="#"
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
-                    const campaignGuarantee = cellProps.row.original;
+                    const campaignGuaranteeGroup = cellProps.row.original;
                     handleCampaignGuaranteeClick(
-                        campaignGuarantee,
-                        "GuaranteeViewModal"
+                        campaignGuaranteeGroup,
+                        "viewGuaranteeGroup"
                     );
                 }}
             >
@@ -132,10 +164,10 @@ const Actions = (props) => {
                 to="#"
                 className="btn btn-sm btn-soft-info edit-list"
                 onClick={() => {
-                    const campaignGuarantee = cellProps.row.original;
+                    const campaignGuaranteeGroup = cellProps.row.original;
                     handleCampaignGuaranteeClick(
-                        campaignGuarantee,
-                        "GuaranteeUpdateModal"
+                        campaignGuaranteeGroup,
+                        "updateGuaranteeGroup"
                     );
                 }}
             >
@@ -145,8 +177,8 @@ const Actions = (props) => {
                 to="#"
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
-                    const campaignGuarantee = cellProps.row.original;
-                    onClickDelete(campaignGuarantee);
+                    const campaignGuaranteeGroup = cellProps.row.original;
+                    onClickDelete(campaignGuaranteeGroup);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />
@@ -161,7 +193,9 @@ export {
     Id,
     Name,
     Phone,
+    Guarantees,
     Attended,
+    AttendedPercentage,
     Status,
     Guarantor,
     Actions,

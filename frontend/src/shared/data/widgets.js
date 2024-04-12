@@ -321,27 +321,27 @@ const tileBoxes5 = [
         id: 1,
         img: image3,
         title: "Marketing Director",
-        class : "",
+        class: "",
         year: "(2-4 Yrs Exp.)"
     },
     {
         id: 2,
         img: image4,
-        class : "",
+        class: "",
         title: "Sr. Web Designer",
         year: "(2+ Yrs Exp.)"
     },
     {
         id: 3,
         img: image6,
-        class : "bg-primary-subtle shadow-none bg-opacity-10",
+        class: "bg-primary-subtle shadow-none bg-opacity-10",
         title: "Marketing Director",
         year: "(2+ Yrs Exp.)"
     },
     {
         id: 4,
         img: image8,
-        class : "bg-info-subtle shadow-none bg-opacity-10",
+        class: "bg-info-subtle shadow-none bg-opacity-10",
         title: "Sr. Web Designer",
         year: "(2+ Yrs Exp.)"
     },
@@ -584,7 +584,7 @@ const widgetsPortfolio = [
     {
         id: 1,
         img: btcCoin,
-        label: "Bitcoin",
+        label: "رجال",
         coinName: "BTC",
         coinVolume: "0.00584875",
         badgeClass: "primary",
@@ -595,7 +595,7 @@ const widgetsPortfolio = [
     {
         id: 2,
         img: ethCoin,
-        label: "Ethereum",
+        label: "نساء",
         coinName: "ETH",
         coinVolume: "2.25842108",
         badgeClass: "info",
@@ -627,6 +627,31 @@ const widgetsPortfolio = [
     },
 ];
 
+
+const guaranteeGroupPortfolio = [
+    {
+        id: 1,
+        img: btcCoin,
+        label: "رجال",
+        coinName: "BTC",
+        coinVolume: "0.00584875",
+        badgeClass: "primary",
+        price: "$19,405.12",
+        priceClass: "success",
+        coinNameClass: "primary"
+    },
+    {
+        id: 2,
+        img: ethCoin,
+        label: "نساء",
+        coinName: "ETH",
+        coinVolume: "2.25842108",
+        badgeClass: "info",
+        price: "$40552.18",
+        priceClass: "danger",
+        coinNameClass: "info"
+    },
+];
 export {
     tileBoxs1,
     tileBoxs2,
@@ -637,5 +662,8 @@ export {
     widgetsTasks,
     widgetsAudiences,
     widgetsPortfolio,
-    otherWidgets2
+    otherWidgets2,
+
+
+    guaranteeGroupPortfolio,
 };

@@ -119,9 +119,10 @@
         &::after {
             content: "";
             position: absolute;
-            border: 10px solid transparent;
-            bottom: 10px;
-            right: -20px;
+            border: 19px solid transparent;
+            bottom: 0px;
+            left: -38px!important;
+            right: auto;
             z-index: 1;
         }
     }
@@ -140,12 +141,13 @@
 
         &:nth-child(2) {
             // &:nth-child(2) {
-            background-color: rgb(240, 240, 240) !important;
+            background-color: #dedede !important;
             color: $bg !important;
             color: black;
 
             &::after {
-                border-right-color: rgb(240, 240, 240) !important;
+                border-left-color: #000000 !important;
+                border-right-color: #000000 !important;
                 z-index: 1;
 
             }
@@ -157,7 +159,7 @@
             color: $bg !important;
 
             &::after {
-                border-left-color: rgba($bg, 0.1);
+                border-right-color: #dedede !important;
                 z-index: 1;
 
             }

@@ -1,5 +1,5 @@
 import React from "react";
-import { usePermission, useDelete } from "shared/hooks";
+import { usePermission } from "shared/hooks";
 
 const Id = (cellProps) => {
     return (
@@ -8,6 +8,26 @@ const Id = (cellProps) => {
         </React.Fragment>
     );
 };
+
+const CheckboxHeader = ({ checkedAll }) => (
+    <input
+        type="checkbox"
+        id="checkBoxAll"
+        className="form-check-input"
+        onClick={checkedAll}
+    />
+);
+
+
+const CheckboxCell = ({ row, deleteCheckbox }) => (
+    <input
+        type="checkbox"
+        className="checkboxSelector form-check-input"
+        value={row.original.id}
+        onChange={deleteCheckbox}
+    />
+);
+
 
 const Name = (props) => {
     const { cellProps, handleSelectCampaignMember } = props;
@@ -28,7 +48,6 @@ const Name = (props) => {
                 {campaignMember.status}
             </div>
         </div>
-
     );
 };
 
@@ -239,6 +258,8 @@ const Actions = (props) => {
 
 export {
     Id,
+    CheckboxHeader,
+    CheckboxCell,
     Name,
     Mobile,
     Role,

@@ -6,7 +6,7 @@ import { campaignSelector } from 'selectors';
 // Shared imports
 import { Col, Row, Card, CardBody } from "reactstrap";
 import { Loader, DeleteModal, TableContainer, TableFilters } from "shared/components";
-import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, Actions } from "./GuaranteesCol";
+import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, GuaranteeGroups, Actions } from "./GuaranteesCol";
 import { useDelete, useFilter } from "shared/hooks"
 
 // Utility imports
@@ -23,6 +23,7 @@ const GuaranteeList = ({
   const {
     campaignGuarantees,
     campaignMembers,
+    campaignGuaranteeGroups,
     isCampaignGuaranteeSuccess,
     error
   } = useSelector(campaignSelector);
@@ -41,30 +42,15 @@ const GuaranteeList = ({
     deleteMultiple,
   } = useDelete(deleteCampaignGuarantee);
 
-  // console.log("modal: ", modal, "modalMod: ", modalMode, "campaignGuarantee: ", campaignGuarantee)
-  const handleCampaignGuaranteeClick = useCallback(
-    (arg, modalMode) => {
-      const campaignGuarantee = arg;
-      setCampaignGuarantee({
-        id: campaignGuarantee.id,
-        member: campaignGuarantee.member,
-        campaign: campaignGuarantee.campaign,
-        civil: campaignGuarantee.civil,
-        fullName: campaignGuarantee.fullName,
-        gender: campaignGuarantee.gender,
-        boxNo: campaignGuarantee.boxNo,
-        membershipNo: campaignGuarantee.membershipNo,
-        enrollmentDate: campaignGuarantee.enrollmentDate,
-        phone: campaignGuarantee.phone,
-        status: campaignGuarantee.status,
-        notes: campaignGuarantee.notes,
-      });
 
-      // Set the modalMode state here
+  console.log("isMultiDeleteButton: ", isMultiDeleteButton)
+  const handleCampaignGuaranteeClick = useCallback(
+    (campaignGuarantee, modalMode) => {
+      setCampaignGuarantee(campaignGuarantee);
       setModalMode(modalMode);
       toggle();
     },
-    [setModalMode, toggle]
+    [setModalMode, toggle, setCampaignGuarantee]
   );
 
   const memberName = (campaignMembers || []).reduce((acc, member) => {
@@ -113,6 +99,15 @@ const GuaranteeList = ({
           />
       },
       {
+        Header: "المجموعة",
+        filterable: false,
+        Cell: (cellProps) =>
+          <GuaranteeGroups
+            cellProps={cellProps}
+            campaignGuaranteeGroups={campaignGuaranteeGroups}
+          />
+      },
+      {
         Header: "إجراءات",
         Cell: (cellProps) =>
           <Actions
@@ -121,7 +116,19 @@ const GuaranteeList = ({
             onClickDelete={onClickDelete}
           />
       },
-    ], [checkedAll, deleteCheckbox, onClickDelete, handleCampaignGuaranteeClick, campaignMembers]);
+      {
+        Header:
+          isMultiDeleteButton && (
+            <button
+              className="btn btn-sm btn-soft-danger"
+              onClick={() => setDeleteModalMulti(true)}
+            >
+              <i className="ri-delete-bin-2-line "></i>
+            </button>
+          ),
+        accessor: "delete_action", // Unique accessor
+      },
+    ], [checkedAll, isMultiDeleteButton, handleCampaignGuaranteeClick, campaignMembers]);
 
   // Table Filters
   const { filteredData: campaignGuaranteeList, filters, setFilters } = useFilter(campaignGuarantees);
@@ -132,6 +139,14 @@ const GuaranteeList = ({
         show={deleteModal}
         onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
+      />
+      <DeleteModal
+        show={deleteModalMulti}
+        onDeleteClick={() => {
+          deleteMultiple();
+          setDeleteModalMulti(false);
+        }}
+        onCloseClick={() => setDeleteModalMulti(false)}
       />
 
       <TableFilters

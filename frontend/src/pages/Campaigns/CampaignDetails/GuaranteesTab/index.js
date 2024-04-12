@@ -6,10 +6,8 @@ import classnames from "classnames";
 import { usePermission } from 'shared/hooks';
 
 // Shared imports
-import { Col, Row, Card, CardBody, CardHeader, Nav, NavItem, NavLink, TabContent, TabPane, Progress } from "reactstrap";
-import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "shared/components";
-import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, Actions } from "./GuaranteeList/GuaranteesCol";
-import { useDelete, useFilter } from "shared/hooks"
+import { Col, Row, Badge, Button, Card, CardBody, CardHeader, TabContent, TabPane, Progress } from "reactstrap";
+import { TableContainerHeader, } from "shared/components";
 
 // Components
 import GuaranteeGroupList from "./GruaranteeGroupList"
@@ -46,20 +44,6 @@ const GuaranteesTab = () => {
   const [currentStep, setCurrentStep] = useState(1);
 
 
-  // Delete Hook
-  const {
-    handleDeleteItem,
-    onClickDelete,
-    deleteModal,
-    setDeleteModal,
-    checkedAll,
-    deleteCheckbox,
-    isMultiDeleteButton,
-    deleteModalMulti,
-    setDeleteModalMulti,
-    deleteMultiple,
-  } = useDelete(deleteCampaignGuarantee);
-
   // 
   // Campaign Members Functions
   // 
@@ -80,11 +64,11 @@ const GuaranteesTab = () => {
   };
 
   const handleSelectCampaignMember = (campaignMember) => {
-    // setCampaignMember(campaignMember)
     setSelectedCampaignMember(campaignMember)
+    setActiveTab(tabs[1]);
   }
 
-  console.log("campaignMember: ", campaignMember)
+
   // 
   // Campaign Guarantee Groups Functions
   // 
@@ -99,10 +83,15 @@ const GuaranteesTab = () => {
 
   const handleGuaranteeGroupAddClick = () => {
     setCampaignGuaranteeGroup("");
-    setModalMode("guaranteeGroupAddModal")
+    setModalMode("addGuaranteeGroup")
     setIsEdit(false);
     toggleCampaignGuaranteeGroup();
   };
+
+  const handleSelectCampaignGuaranteeGroup = (campaignGuaranteeGroup) => {
+    setSelectedCampaignGuaranteeGroup(campaignGuaranteeGroup)
+    setActiveTab(tabs[2]);
+  }
 
   // 
   // Campaign Guarantees Functions
@@ -121,15 +110,12 @@ const GuaranteesTab = () => {
     setCampaignGuarantee("");
     setModalMode("guaranteeAddModal")
     setIsEdit(false);
-    console.log("toggled, modalMod: ", modalMode, "campaigGuaranteeModal:", campaigGuaranteeModal)
 
   };
 
   // 
   // Tabs
   // 
-
-
   const tabs = [
     {
       tabId: "1",
@@ -154,6 +140,8 @@ const GuaranteesTab = () => {
         modalMode={modalMode}
         setModalMode={setModalMode}
         toggle={toggleCampaignGuaranteeGroup}
+        selectedCampaignMember={selectedCampaignMember}
+        handleSelectCampaignGuaranteeGroup={handleSelectCampaignGuaranteeGroup}
       />
     },
     {
@@ -181,24 +169,18 @@ const GuaranteesTab = () => {
       setActiveTab(tab);
       setCurrentStep(Number(tab.tabId));
     }
+    if (tab.tabId === "1") {
+      setSelectedCampaignMember(null);
+      setSelectedCampaignGuaranteeGroup(null);
+    }
+    if (tab.tabId === "2") {
+      setSelectedCampaignGuaranteeGroup(null);
+    }
   };
+
 
   return (
     <React.Fragment>
-      <DeleteModal
-        show={deleteModal}
-        onDeleteClick={handleDeleteItem}
-        onCloseClick={() => setDeleteModal(false)}
-      />
-      <DeleteModal
-        show={deleteModalMulti}
-        onDeleteClick={() => {
-          deleteMultiple();
-          setDeleteModalMulti(false);
-        }}
-        onCloseClick={() => setDeleteModalMulti(false)}
-      />
-
       <MembersModal
         modal={campaigMemberModal}
         toggle={toggleCampaignMember}
@@ -240,9 +222,9 @@ const GuaranteesTab = () => {
                 setIsEdit={setIsEdit}
                 toggle={toggleCampaignGuarantee}
 
-                // Delete Button
-                isMultiDeleteButton={isMultiDeleteButton}
-                setDeleteModalMulti={setDeleteModalMulti}
+              // // Delete Button
+              // isMultiDeleteButton={isMultiDeleteButton}
+              // setDeleteModalMulti={setDeleteModalMulti}
               />
 
             </CardHeader>
@@ -257,7 +239,7 @@ const GuaranteesTab = () => {
                     onClick={() => toggleTab(tab)}
 
                   >
-                    <div className={`card-title m-0 text-white`}>
+                    <div className={`card-title m-0`}>
                       <i className={`${tab.icon} circle-line align-middle me-1`}></i>
                       <strong>{tab.title}</strong>
                       {/* <span className="fs-12">{tab.selectedItem}</span> */}
@@ -265,11 +247,13 @@ const GuaranteesTab = () => {
                   </Progress>
                 ))}
               </Progress>
-              {selectedCampaignMember &&
-                <div>
-                  <span className="muted">العضو: {selectedCampaignMember.name}</span>
-                </div>
-              }
+              <SelectedInfo
+                selectedCampaignMember={selectedCampaignMember}
+                selectedCampaignGuaranteeGroup={selectedCampaignGuaranteeGroup}
+                onClearMember={() => setSelectedCampaignMember(null)}
+                onClearGroup={() => setSelectedCampaignGuaranteeGroup(null)}
+              />
+
               <TabContent activeTab={activeTab.tabId} className="pt-4">
                 {tabs.map((tab) => (
                   <TabPane key={tab.tabId} tabId={tab.tabId}>
@@ -287,5 +271,32 @@ const GuaranteesTab = () => {
     </React.Fragment>
   );
 };
+
+const SelectedInfo = ({ selectedCampaignMember, selectedCampaignGuaranteeGroup, onClearMember, onClearGroup }) => {
+  return (
+    <div className="p-2">
+      <h5>
+        {selectedCampaignMember && (
+          <span className="m-2 badge bg-soft-info text-info badge-border d-inline-flex align-items-center">
+            <span className="me-2">
+              العضو: {selectedCampaignMember.name}
+            </span>
+            <Badge bg="danger" onClick={onClearMember} style={{ cursor: 'pointer' }}>x</Badge>
+          </span>
+        )}
+
+        {selectedCampaignGuaranteeGroup && (
+          <span className="m-2 badge bg-soft-info text-info badge-border">
+            <span className="me-2">
+              المجموعة: {selectedCampaignGuaranteeGroup.name}
+            </span>
+            <Badge bg="danger" onClick={onClearGroup} style={{ cursor: 'pointer' }}>x</Badge>
+          </span>
+        )}
+      </h5>
+    </div>
+  );
+};
+
 
 export default GuaranteesTab;
