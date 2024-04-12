@@ -1,167 +1,123 @@
-id,area,governorate
-14000,Jibla,2
-14000,Al qebla,2
-14250,Al watya,2
-15000,Al-Mirqab,2
-15000,Al Murqab,2
-15000,Al salheya,2
-15300,Al-Sawaber,2
-15300,Sharq,2
-15300,Sharq,2
-15300,Al sawaber,2
-15400,Dasman,2
-15400,Dasman,2
-20000,Al salmeya,4
-20011,Maydan Hawalli,4
-20011,Al nugra,4
-25000,Al-Bidea,4
-25000,Al bede,4
-25200,Failaka Island,2
-25400,Al rumaitheya,4
-25600,Salwá,4
-25600,salwa,4
-26600,Al-Messila,6
-26600,Mesela,6
-26601,Al masayel,6
-30000,Huli District,4
-30000,Hawali,4
-35000,Al Dasma,2
-35001,Al doha,2
-35020,Beneid Al Gar,2
-35300,Al Deaya,2
-35500,Al Mansureya,2
-35700,Al qadseya,2
-35901,Al shueb,4
-36200,Bnaid Algar,2
-40000,Meshref,4
-40006,West Mishref,4
-40250,Mubarak al abdullah al jaber,4
-43600,Bayan,4
-44000,Sabah Al-Salem,6
-44000,Sabah Al salem,6
-45400,Al surra,2
-46000,Sabhan,6
-46000,Sabhan,6
-46300,Jabriya,4
-46300,Al jabreya,4
-47000,Al-Adan,6
-47000,AL Adan,6
-47020,Al-Qusor,6
-47040,Al-Qurain,6
-47040,Al qurain,6
-47060,Mubarak Al-Kabeer,6
-47060,Mubarak Al Kabeer,6
-47080,East Al-Qurain,6
-47080,Abu Fatera,6
-47700,Al salam,4
-47720,Al sadeq,4
-47740,Haten,4
-47760,Al zahra,4
-47780,Al shuhada,4
-50000,Al-Fintas,1
-50000,Fintas Investment,1
-50000,Al Fintas Sakani,6
-51215,Al thahar,1
-51400,Abu alhassani,6
-51600,Jaber Al ali,1
-52400,Fnaitees,1
-52400,Al Funaitess,6
-52700,Hadiya,1
-52700,Hadeya,1
-53301,Al ruqqa,1
-53700,Al-Manqaf,1
-53700,Al Manqaf,1
-53800,Fahad Al Ahmed,1
-54000,Al Mahabula,1
-54200,Al-Eqaila,1
-54200,Auqaila,1
-54600,Abu Halifa,1
-54600,Abu hulaifa,1
-55000,Al sabaheya,1
-60000,Al Ahmadi,1
-60000,Al ahmadi,1
-60000,Sharq Al Ahmadi,1
-60200,Magwa,1
-63000,Al Fahaiheel,1
-63000,Al Fahahel,1
-65000,Ali Al Salem Al Sabah,1
-65000,Ali salem Al sabah,1
-65200,Mena Abdulla,1
-65300,Al Shuaiba,1
-65500,Al-Nuwaiseb,1
-65500,Al Nuwaiseb,1
-65700,Al Wafra,1
-65700,Al wafra-1,1
-65701,Al wafra-2,1
-65900,Az Zawr,1
-65900,Alzur,1
-66100,Al-Kout,1
-66300,Al Khiran,1
-66301,Kubbar Island,1
-66302,Qaroh Island,1
-66304,Al-Julaia'a,1
-66304,Aljulea,1
-66305,Alillaih,1
-66306,Bnaider,1
-66391,Bnaider,1
-66450,Al nahda,2
-67500,Sabah Al Ahmed Sakanya,1
-67501,Sabah Al Ahmed Bahreya,1
-70031,Al naseem,5
-70031,Al shuwaik,2
-70070,Al rai,3
-70700,Al qairawan,2
-71501,Al Shameya,2
-71801,Kaifan,2
-72101,Abdullah Al salim,2
-72301,Al Khaldeya,2
-72501,Al yarmok,2
-72701,Al Faiha,2
-72901,Al Nuzha,2
-73100,Al odeileya,2
-73300,Al rauda,2
-73500,Qurtuba,2
-73921,Umm Al Namil Island,2
-83000,Abraq Kaitan,3
-83001,Khaitan,3
-85000,Al Farwaneya,3
-85000,Al Farwaniyah,3
-85001,Al Omareya,3
-85201,Al Rabya,3
-85400,Eshbeliya,3
-85600,Al-Ardiya,3
-85600,Al-Sideeq,3
-85600,Hassawi,3
-85600,Jaleeb Al-Shuyoukh,3
-85600,Jeleeb Al-Shuyoukh,3
-85600,Jaleb Al Shyokh,3
-85601,Al thatej,3
-85601,Jleeb Al-Shuyoukh,3
-85700,Abdulla AlMubarak,3
-86000,Al rehab,3
-90001,Sulebekhat,2
-90005,Sulaibikhat,2
-90006,Sulaibikhat,2
-91100,Saad Al Abdalla,5
-91710,Jaber Al Ahmad,2
-92000,Andalus,3
-92000,Andalus,3
-92201,Al ferdous,3
-92400,Al Ardeya,3
-92400,Al-Ardiya,3
-92420,Sabah Al naseer,3
-92700,Al-Riggae,3
-92700,Al raqee,3
-93500,Granada,2
-93500,Gurnata,2
-00003,Al Jahra,5
-00003,emgara,5
-00004,Al qasser,5
-00005,Al naeem,5
-00006,Taima,5
-00007,Al waha,5
-00008,Alyon,5
-00020,New Jahra,5
-03400,Al mutla,5
-03600,Al Surabeya,5
-04000,Al Sabeya,5
+﻿id,name,code,governorate
+50000,الفنطاس,alFintas,1
+51215,الظهر,alThahar,1
+51600,جابر العلي,jaberAlAli,1
+52400,الفنيطيس,fnaitees,1
+52700,هديّة,Hadeya,1
+53300,الرقة,alRuqqa,1
+53700,المنقف,alManqaf,1
+53800,فهد الأحمد,fahadAlAhmed,1
+54000,المهبولة,alMahabula,1
+54200,العقيلة,alEqaila,1
+54600,أبو حليفة,abuHalifa,1
+55000,الصباحية,alsabaheya,1
+60000,الأحمدي,alAhmadi,1
+60200,المقوع,magwa,1
+63000,الفحيحيل,alFahaiheel,1
+65000,علي السالم الصباح,aliAlSalemAlSabah,1
+65200,ميناء عبد الله,menaAbdulla,1
+65300,الشعيبة,alShuaiba,1
+65500,النويصيب,alNuwaiseb,1
+65700,الوفرة,alWafra,1
+65900,الزور,alZur,1
+66100,الكوت,alKout,1
+67500,الخيران,alKhiran,1
+66304,الجليعة,alJulea,1
+66390,اللياح,alLaiah,1
+67500,صباح الأحمد ١,sabahAlAhmed1,1
+67520,صباح الأحمد ٢,sabahAlAhmed2,1
+67540,صباح الأحمد ٣,sabahAlAhmed3,1
+67560,صباح الأحمد ٤,sabahAlAhmed4,1
+67580,صباح الأحمد ٥,sabahAlAhmed5,1
+14000,القبلة,alQebla,2
+14250,الوطية,alWatya,2
+15000,المرقاب,alMirqab,2
+15300,الصوابر,alSawaber,2
+15300,شرق,Sharq,2
+15400,دسمان,dasman,2
+25200,جزيرة فيلكا,failakaIsland,2
+35000,الدسمة,alDasma,2
+35000,الدوحة,alDoha,2
+35300,الدعية,alDeaya,2
+35500,المنصورية,alMansureya,2
+35700,القادسية,alqadseya,2
+36200,بنيد القار,beneidAlGar,2
+45400,السرة,alSurra,2
+66450,النهضة,alNahda,2
+70031,الشويخ,alShuwaik,2
+70700,القيروان,alQairawan,2
+71501,الشامية,alShameya,2
+71801,كيفان,kaifan,2
+72100,عبدالله السالم,abdullahAlSalim,2
+72300,الخالدية,alKhaldeya,2
+72500,اليرموك,alYarmok,2
+72700,الفيحاء,alFaiha,2
+72900,النزهة,alNuzha,2
+73100,العديلية,alOdeileya,2
+73300,الروضة,alRauda,2
+73500,قرطبة,Qurtuba,2
+90000,صليبيخات,Sulebekhat,2
+91710,جابر الأحمد,jaberAlAhmad,2
+93500,غرناطة,Granada,2
+66360,أم المرادم,ummAlMaradem,2
+66350,جزيرة قاروه,qarohIsland,2
+26640,جزيرة مسكان,miskanIsland,2
+26620,جزيرة عوهه,ouhahIsland,2
+73920,أم النمل,ummAlNamilIsland,2
+66430,جزيرة كبر,kubbarIsland,2
+70070,الري,alRai,3
+83000,خيطان,khaitan,3
+85000,الفروانية,alFarwaniyah,3
+85000,العمرية,alOmareya,3
+85200,الرابية,alRabya,3
+85400,اشبيلية,eshbeliya,3
+85600,الصديق,alSideeq,3
+85600,جليب الشيوخ,jaleebAlShuyoukh,3
+85601,الضجيج,alDhajej,3
+85700,عبدالله المبارك,abdullaAlMubarak,3
+86000,الرحاب,alRehab,3
+92000,الأندلس,alAndalus,3
+92200,الفردوس,alFerdous,3
+92400,العارضية,alArdeya,3
+92420,صباح الناصر,sabahAlNaseer,3
+92700,الرقة,alRiggae,3
+20000,السالمية,alSalmeya,4
+25000,البدع,alBidea,4
+25400,الرميثية,alRumaitheya,4
+25600,سلوى,salwa,4
+30000,حولي,Hawali,4
+35900,الشعب,alShueb,4
+40000,مشرف,meshref,4
+85700,عبدالله المبارك,abdullahAlMubarak,4
+40250,مبارك العبد الله الجابر,mubarakAlAbdullahAlJaber,3
+43600,بيان,bayan,4
+46300,الجابرية,alJabreya,4
+47700,السلام,alSalam,4
+47720,الصديق,alSadeq,4
+47740,حطين,haten,4
+47760,الزهراء,alZahra,4
+47780,الشهداء,alShuhada,4
+70031,النسيم,alNaseem,5
+91100,سعد العبدالله,saadAlAbdalla,5
+20,الجهراء,alJahra,5
+00003,أمغرة,amgara,5
+40,القصر,alQasser,5
+60,النعيم,alNaeem,5
+80,التيماء,taima,5
+100,الواحة,alWaha,5
+120,العيون,alOyon,5
+03400,المطلاع,alMutla,5
+03600,الصليبية,alSulabeya,5
+04000,الصباحية,alSabeya,5
+26600,المسيلة,alMessila,6
+26600,المسايل,alMasayel,6
+44000,صباح السالم,sabahAlSalem,6
+46000,صبحان,sabhan,6
+47000,العدان,alAdan,6
+47020,القصور,alQusor,6
+47040,القرين,alQurain,6
+47060,مبارك الكبير,mubarakAlKabeer,6
+47080,القرين الشرقي,eastAlQurain,6
+47080,أبو فطيرة,abuFatera,6
+51400,أبو الحصاني,abuAlHassani,6
+52400,الفنيطيس,alFunaitess,6

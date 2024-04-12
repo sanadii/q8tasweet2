@@ -57,14 +57,14 @@ class ElectionCandidatesAdmin(admin.ModelAdmin):
     def get_candidate_name(self, obj):
         return obj.candidate.name
     get_candidate_name.short_description = 'Candidate Name'
-class ElectionCommitteesAdmin(admin.ModelAdmin):
-    list_display = ['name', 'election', 'location']
-    list_filter = ['election']
-    search_fields = ['name', 'election__name', 'location']
-    # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
+# class ElectionCommitteesAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'election', 'location']
+#     list_filter = ['election']
+#     search_fields = ['name', 'election__name', 'location']
+#     # readonly_fields = ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at', 'deleted']
 
-class ElectionCommitteeResultsAdmin(admin.ModelAdmin):
-    list_display = ['id']
+# class ElectionCommitteeResultsAdmin(admin.ModelAdmin):
+#     list_display = ['id']
 
 
 
@@ -93,8 +93,8 @@ category_admin_site = CategoryAdminSite(name='category')
 admin.site.register(Election, ElectionsAdmin)
 admin.site.register(ElectionCategory, CategoriesAdmin)
 admin.site.register(ElectionCandidate, ElectionCandidatesAdmin)
-admin.site.register(ElectionCommittee, ElectionCommitteesAdmin)
-admin.site.register(ElectionCommitteeResult, ElectionCommitteeResultsAdmin)
+# admin.site.register(ElectionCommittee, ElectionCommitteesAdmin)
+# admin.site.register(ElectionCommitteeResult, ElectionCommitteeResultsAdmin)
 
 class ElectionAdminSite(AdminSite):
     site_header = 'Election Administration'

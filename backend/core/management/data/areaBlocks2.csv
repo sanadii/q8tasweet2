@@ -1,0 +1,350 @@
+Column1,Column2,Column3,Column4,Column5
+4,Al-Salimiya, Block 1,20001,20000
+4,Al-Salimiya, Block 2,20002,20000
+4,Al-Salimiya, Block 3,20003,20000
+4,Al-Salimiya, Block 4,20004,20000
+4,Al-Salimiya, Block 5,20005,20000
+4,Al-Salimiya, Block 6,20006,20000
+4,Al-Salimiya, Block 7,20007,20000
+4,Al-Salimiya, Block 8,20008,20000
+4,Al-Salimiya, Block 9,20009,20000
+4,Al-Salimiya, Block 10,20010,20000
+4,Al-Salimiya, Block 11,20011,20000
+4,Al-Salimiya, Block 12,20012,20000
+4,Al-Salimiya, Block 13,20013,20000
+4,Rumaithiya, Block 1,25401,25400
+4,Rumaithiya, Block 2,25402,25400
+4,Rumaithiya, Block 3,25403,25400
+4,Rumaithiya, Block 4,25404,25400
+4,Rumaithiya, Block 5,25405,25400
+4,Rumaithiya, Block 6,25406,25400
+4,Rumaithiya, Block 7,25407,25400
+4,Rumaithiya, Block 8,25408,25400
+4,Rumaithiya, Block 9,25409,25400
+4,Rumaithiya, Block 10,25410,25400
+4,Rumaithiya, Block 11,25411,25400
+4,Rumaithiya, Block 12,25412,25400
+2,Al-Mansouriya, Block 1,25501,25500
+6,Al-Messila, Block 1,26601,26600
+6,Al-Messila, Block 2,26602,26600
+6,Al-Messila, Block 3,26603,26600
+6,Al-Messila, Block 4,26604,26600
+6,Al-Messila, Block 5,26605,26600
+6,Al-Messila, Block 6,26606,26600
+6,Al-Messila, Block 7,26607,26600
+6,Al-Messila, Block 8,26608,26600
+6,Al-Messila, Block 9,26609,26600
+6,Al-Messila, Block 10,26610,26600
+2,Doha, Block 1,35001,35000
+2,Doha, Block 2,35002,35000
+2,Doha, Block 3,35003,35000
+2,Doha, Block 4,35004,35000
+2,Doha, Block 5,35005,35000
+2,Doha, Block 6,35006,35000
+2,Doha, Ahamaah and its aftermath,35007,35000
+2,Al-Daiya, Block 1,35301,35300
+2,Al-Daiya, Block 2,35302,35300
+2,Al-Daiya, Block 3,35303,35300
+2,Al-Daiya, Block 4,35304,35300
+2,Al-Daiya, Daiya view of the sea,35305,35300
+2,Al-Mansouriya, Block 2,35502,3500
+2,Al-Mansouriya, Al-Arabi Sport Club,35503,3500
+2,Al-Mansouriya, Assembly and Derivatives,35503,3500
+2,Al-Qadsiya, Block 1,35701,35700
+2,Al-Qadsiya, Block 2,35702,35700
+2,Al-Qadsiya, Block 3,35703,35700
+2,Al-Qadsiya, Block 4,35704,35700
+2,Al-Qadsiya, Block 5,35705,35700
+2,Al-Qadsiya, Block 6,35706,35700
+2,Al-Qadsiya, Block 7,35707,35700
+2,Al-Qadsiya, Block 8,35708,35700
+2,Al-Qadsiya, Block 9,35709,35700
+4,Al-Sha'ab, Block 1,35901,35900
+4,Al-Sha'ab, Block 2,35902,35900
+4,Al-Sha'ab, Block 3,35903,35900
+4,Al-Sha'ab, Block 4,35904,35900
+4,Al-Sha'ab, Block 5,35905,35900
+4,Al-Sha'ab, Block 6,35906,35900
+4,Al-Sha'ab, Block 7,35907,35900
+4,Al-Sha'ab, Block 8,35908,35900
+4,Mishref, Block 1,40001,40000
+4,Mishref, Block 2,40002,40000
+4,Mishref, Block 3,40003,40000
+4,Mishref, Block 4,40004,40000
+4,Mishref, Block 5,40005,40000
+4,Mishrif, Block 6,40006,40000
+4,Bayan, Block 1,43601,43600
+4,Bayan, Block 2,43602,43600
+4,Bayan, Block 3,43603,43600
+4,Bayan, Block 4,43604,43600
+4,Bayan, Block 5,43605,43600
+4,Bayan, Block 6,43606,43600
+4,Bayan, Block 7,43607,43600
+4,Bayan, Block 8,43608,43600
+4,Bayan, Block 9,43609,43600
+4,Bayan, Block 10,43610,43600
+4,Bayan, Block 11,43611,43600
+4,Bayan, Block 12,43612,43600
+6,Sabah Al-Salem, Block 1,44001,44000
+6,Sabah Al-Salem, Block 2,44002,44000
+6,Sabah Al-Salem, Block 3,44003,44000
+6,Sabah Al-Salem, Block 4,44004,44000
+6,Sabah Al-Salem, Block 5,44005,44000
+6,Sabah Al-Salem, Block 6,44006,44000
+6,Sabah Al-Salem, Block 7,44007,44000
+6,Sabah Al-Salem, Block 8,44008,44000
+6,Sabah Al-Salem, Block 9,44009,44000
+6,Sabah Al-Salem, Block 10,44010,44000
+6,Sabah Al-Salem, Block 11,44011,44000
+6,Sabah Al-Salem, Block 12,44012,44000
+6,Sabah Al-Salem, Block 13,44013,44000
+6,Sabah Al-Salem, Block B,44100,44000
+2,Al-Surra, Block 1,45401,4500
+2,Al-Surra, Block 2,45402,4500
+2,Al-Surra, Block 3,45403,4500
+2,Al-Surra, Block 4,45404,4500
+2,Al-Surra, Block 5,45405,4500
+2,Al-Surra, Block 6,45406,4500
+6,Sabhan, Block 1,46001,46000
+6,Sabhan, Block 2,46002,46000
+6,Sabhan, Block 3,46003,46000
+6,Sabhan, Block 4,46004,46000
+6,Sabhan, Block 5,46005,46000
+6,Sabhan, Block 6,46006,46000
+6,Sabhan, Block 7,46007,46000
+6,Sabhan, Block 8,46008,46000
+6,Sabhan, Block 9,46009,46000
+6,Sabhan, Block 10,46010,46000
+6,Sabhan, Block 11,46011,46000
+6,Sabhan, Block 12,46012,46000
+6,Al-Adan, Block 1,47001,47000
+6,Al-Adan, Block 2,47002,47000
+6,Al-Adan, Block 3,47003,47000
+6,Al-Adan, Block 4,47004,47000
+6,Al-Adan, Block 5,47005,47000
+6,Al-Adan, Block 6,47006,47000
+6,Al-Adan, Block 7,47007,47000
+6,Al-Adan, Block 8,47008,47000
+6,Al-Adan, Block 9,47009,47000
+6,Al-Adan, Block 10,47010,47000
+6,Al-Adan, Block 11,47011,47000
+6,Al-Adan, Block 12,47012,47000
+6,Al-Qusor, Block 1,47021,47020
+6,Al-Qusor, Block 2,47022,47020
+6,Al-Qusor, Block 3,47023,47020
+6,Al-Qusor, Block 4,47024,47020
+6,Al-Qusor, Block 5,47025,47020
+6,Al-Qusor, Block 6,47026,47020
+6,Al-Qusor, Block 7,47027,47020
+6,Al-Qusor, Block 8,47028,47020
+6,Al-Qusor, Block 9,47029,47020
+6,Al-Qusor, Block 10,47030,47020
+6,Al-Qusor, Block 11,47031,47020
+6,Al-Qusor, Block 12,47032,47020
+6,Al-Qurain, Block 1,47041,47040
+6,Al-Qurain, Block 2,47042,47040
+6,Al-Qurain, Block 3,47043,47040
+6,Al-Qurain, Block 4,47044,47040
+6,Al-Qurain, Block 5,47045,47040
+6,Al-Qurain, Block 6,47046,47040
+6,Al-Qurain, Block 7,47047,47040
+6,Al-Qurain, Block 8,47048,47040
+6,Al-Qurain, Block 9,47049,47040
+6,Al-Qurain, Block 10,47050,47040
+6,Al-Qurain, Block 11,47051,47040
+6,Al-Qurain, Block 12,47052,47040
+6,Mubarak Al-Kabeer, Block 1,47061,47060
+6,Mubarak Al-Kabeer, Block 2,47062,47060
+6,Mubarak Al-Kabeer, Block 3,47063,47060
+6,Mubarak Al-Kabeer, Block 4,47064,47060
+6,Mubarak Al-Kabeer, Block 5,47065,47060
+6,Mubarak Al-Kabeer, Block 6,47066,47060
+6,Mubarak Al-Kabeer, Block 7,47067,47060
+6,Mubarak Al-Kabeer, Block 8,47068,47060
+6,Mubarak Al-Kabeer, Block 9,47069,47060
+6,Mubarak Al-Kabeer, Block 10,47070,47060
+6,Mubarak Al-Kabeer, Block 11,47071,47060
+6,Mubarak Al-Kabeer, Block 12,47072,47060
+6,East Al-Qurain, Block 1,47081,47080
+6,East Al-Qurain, Block 2,47082,47080
+6,East Al-Qurain, Block 3,47083,47080
+6,East Al-Qurain, Block 4,47084,47080
+6,East Al-Qurain, Block 5,47085,47080
+6,East Al-Qurain, Block 6,47086,47080
+6,East Al-Qurain, Block 7,47087,47080
+6,East Al-Qurain, Block 8,47088,47080
+6,East Al-Qurain, Block 9,47089,47080
+6,East Al-Qurain, Block 10,47090,47080
+6,East Al-Qurain, Block 11,47091,47080
+6,East Al-Qurain, Block 12,47092,47080
+1,Dahar, Block 1,51251,51250
+1,Dahar, Block 2,51252,51250
+1,Dahar, Block 3,51253,51250
+1,Dahar, Block 4,51254,51250
+1,Dahar, Block 5,51255,51250
+1,Dahar, Block 6,51256,51250
+1,Al-Riqqa, Block 1,53301,53300
+1,Al-Riqqa, Block 2,53302,53300
+1,Al-Riqqa, Block 3,53303,53300
+1,Al-Riqqa, Block 4,53304,53300
+1,Al-Riqqa, Block 5,53305,53300
+1,Al-Riqqa, Block 6,53306,53300
+1,Al-Riqqa, Block 7,53307,53300
+1,Al-Sabahiya, Block 1,54401,54400
+1,Al-Sabahiya, Block 2,54402,54400
+1,Al-Sabahiya, Block 3,54403,54400
+1,Al-Sabahiya, Block 4,54404,54400
+1,Al-Sabahiya, Block 5,54405,54400
+1,Burgan, Burgan Oil Field,60100,
+1,Mina Abdullah, Mina Abdullah Refinery,65200,
+1,Mina Al Ahmadi, Mina Al Ahmadi Refinery,65300,
+1,Khiran, Khiran Pearl City,66300,
+2,Shuwaikh, Shuwaikh Administrative,70030,
+2,Shuwaikh, Shuwaikh Educational,70030,
+2,Shuwaikh Island, Block 1,70031,
+2, Shuwaikh Residential, Block 1,70031,
+2,Shuwaikh Island, Block 2,70032,
+2, Shuwaikh Residential, Block 2,70032,
+2,Shuwaikh Island, Block 3,70033,
+2, Shuwaikh Residential, Block 3,70033,
+2,Shuwaikh Island, Block 4,70034,
+2, Shuwaikh Residential, Block 4,70034,
+2,Shuwaikh Island, Block 5,70035,
+2, Shuwaikh Residential, Block 5,70035,
+2,Shuwaikh Island, Block 6,70036,
+2,Shuwaikh Island, Block 7,70037,
+2,Shuwaikh Island, Block 8,70038,
+2,Shuwaikh, Shuwaikh Industrial Port,70051,
+2,Shamiya, Block 1,71501,71500
+2,Shamiya, Block 2,71502,71500
+2,Shamiya, Block 3,71503,71500
+2,Shamiya, Block 4,71504,71500
+2,Shamiya, Block 5,71505,71500
+2,Shamiya, Block 6,71506,71500
+2,Shamiya, Block 7,71507,71500
+2,Shamiya, Block 8,71508,71500
+2,Shamiya, Block 9,71509,71500
+2,Kaifan, Block 1,71801,71800
+2,Kaifan, Block 2,71802,71800
+2,Kaifan, Block 3,71803,71800
+2,Kaifan, Block 4,71804,71800
+2,Kaifan, Block 5,71805,71800
+2,Kaifan, Block 6,71806,71800
+2,Kaifan, Block 7,71807,71800
+2,Dahiya Abduallah al Salem, Block 1,72101,72100
+2,Dahiya Abduallah al Salem, Block 2,72102,72100
+2,Dahiya Abduallah al Salem, Block 3,72103,72100
+2,Dahiya Abduallah al Salem, Block 4,72104,72100
+2,Al-Khaldiya, Block 1,72301,72300
+2,Al-Khaldiya, Block 2,72302,72300
+2,Al-Khaldiya, Block 3,72303,72300
+2,Al-Khaldiya, Block 4,72304,72300
+2,Al-Yarmuk, Block 1,72501,72500
+2,Al-Yarmuk, Block 2,72502,72500
+2,Al-Yarmuk, Block 3,72503,72500
+2,Al-Yarmuk, Block 4,72504,72500
+2,Al-Faiha, Block 1,72701,72700
+2,Al-Faiha, Block 2,72702,72700
+2,Al-Faiha, Block 3,72703,72700
+2,Al-Faiha, Block 4,72704,72700
+2,Al-Faiha, Block 5,72705,72700
+2,Al-Faiha, Block 6,72706,72700
+2,Al-Faiha, Block 7,72707,72700
+2,Al-Faiha, Block 8,72708,72700
+2,Al-Faiha, Block 9,72709,72700
+2,Al-Nuzha, Block 1,72901,72900
+2,Al-Nuzha, Block 2,72902,72900
+2,Al-Nuzha, Block 3,72903,72900
+2,Al-Adailiya, Block 1,73101,73100
+2,Al-Adailiya, Block 2,73102,73100
+2,Al-Adailiya, Block 3,73103,73100
+2,Al-Adailiya, Block 4,73104,73100
+2,Al-Rawda, Block 1,73301,73300
+2,Al-Rawda, Block 2,73302,73300
+2,Al-Rawda, Block 3,73303,73300
+2,Al-Rawda, Block 4,73304,73300
+2,Al-Rawda, Block 5,73305,73300
+2,Qortuba, Block 1,73501,73500
+2,Qortuba, Block 2,73502,73500
+2,Qortuba, Block 3,73503,73500
+2,Qortuba, Block 4,73504,73500
+2,Qortuba, Block 5,73505,73500
+3,Al-Omariya, Block 1,85001,85000
+3,Al-Omariya, Block 2,85002,85000
+3,Al-Omariya, Block 3,85003,85000
+3,Al-Omariya, Block 4,85004,85000
+3,Al-Omariya, Block 5,85005,85000
+3,Al-Rabia, Block 1,85201,85200
+3,Al-Rabia, Block 2,85202,85200
+3,Al-Rabia, Block 3,85203,85200
+3,Al-Rabia, Block 4,85204,85200
+3,Al-Rabia, Block 5,85205,85200
+3,Al-Rahab, Block 1,86000,
+3,Al-Rahab, Block 2,86001,
+3,Al-Rahab, Block 3,86002,
+3,Al-Rahab, Block 4,86003,
+3,Al-Rahab, Block 5,86004,
+3,Al-Rahab, Block 6,86005,
+3,Al-Rahab, Block 7,86006,
+3,Al-Rahab, Block 8,86007,
+3,Al-Rahab, Block 9,86008,
+3,Al-Rahab, Block 10,86009,
+3,Al-Rahab, Block 11,86010,
+3,Al-Rahab, Block 12,86011,
+3,Al-Rahab, Block 13,86012,
+2,Sulaibikhat, Block 1,90001,90000
+2,Sulaibikhat, Block 2,90002,90000
+2,Sulaibikhat, Block 3,90003,90000
+2,Sulaibikhat, Block 4,90004,90000
+2,Sulaibikhat, Shamiya & Shuwaikh Coop,90007,90000
+3,Al-Firdous, Block 1,92201,92200
+3,Al-Firdous, Block 2,92202,92200
+3,Al-Firdous, Block 3,92203,92200
+3,Al-Firdous, Block 4,92204,92200
+3,Al-Firdous, Block 5,92205,92200
+3,Al-Firdous, Block 6,92206,92200
+3,Al-Firdous, Block 7,92207,92200
+3,Al-Firdous, Block 8,92208,92200
+3,Al-Firdous, Block 9,92209,92200
+2,Al Dasma, Block 11 to 30,93001,93000
+2,Al Dasma, Block 31 to 50,93002,93000
+2,Al Dasma, Block 51 to 69,93003,93000
+2,Al Dasma, Block 71 to 90,93004,93000
+2,Al Dasma, Service Center,93005,93000
+2,Al Dasma, Schools Block,93006,93000
+2,Al Dasma, Barr Doha,93007,93000
+5,Al Jahra,,00003,
+5,Al-Na'eem,,00005,
+5,Al Jahra,,00020,
+5,Al Jahra,,00021,
+5,Al Jahra,,00022,
+5,Al Jahra,,00023,
+5,Al Jahra,,00024,
+5,Al Jahra,,00025,
+5,Al Jahra,,00026,
+5,Al Jahra,,00027,
+5,Al Jahra,,00028,
+5,Al Jahra,,00029,
+5,Al Jahra,,00030,
+5,Al Jahra,,00031,
+5,Al Jahra,,00032,
+5,Al-Na'eem,,00060,
+5,Al-Na'eem,,00061,
+5,Al-Na'eem,,00062,
+5,Al-Na'eem,,00063,
+5,Al-Na'eem,,00064,
+5,Al-Na'eem,,00065,
+5,Al Salmiya,,03000,
+5,Al Salmiya,,03001,
+5,Al Salmiya,,03010,
+5,Abdali,,03200,
+5,Abdali,,03201,
+5,Abdali,,03210,
+5,Almtalaa,,03400,
+5,Almtalaa,,03401,
+5,Almtalaa,,03410,
+governate,Locality,area_code,block_code,
+,,,,
+,,,,
+3,Khaitan, North Khaitan,83001,
+3,Khaitan, North Khaitan,83002,

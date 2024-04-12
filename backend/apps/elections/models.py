@@ -9,10 +9,13 @@ from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 import uuid
 
-from apps.configs.models import TrackModel, TaskModel
+from apps.settings.models import TrackModel, TaskModel
 
 from utils.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions
 from utils.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
+from django.db import models
+from apps.areas.models import Area
+# from django.contrib.postgres.fields import ArrayField
 
 User = get_user_model()
 
@@ -67,7 +70,7 @@ class Election(TrackModel, TaskModel):
         # managed = False
         db_table = "election"
         verbose_name = "Election"
-        verbose_name_plural = "Election"
+        verbose_name_plural = "Elections"
         default_permissions = []
         permissions  = [
             ("canViewElection", "Can View Election"),
@@ -191,34 +194,76 @@ class ElectionPartyCandidate(TrackModel):
         return f"{self.candidate.name} for {self.election_party.party.name} in {self.election_party.election.title}"
 
 
-class ElectionCommittee(TrackModel):
-    # Basic Information
-    election = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_elections')
-    name = models.CharField(max_length=255, blank=False, null=False)
+# class ElectionCommittee(TrackModel):
+#     # Basic Information
+#     election = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_elections')
+#     name = models.CharField(max_length=255, blank=False, null=False)
+#     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
+#     location = models.TextField(blank=True, null=True)
+#     sorter = models.OneToOneField(
+#         User,
+#         on_delete=models.SET_NULL,
+#         null=True,
+#         blank=True,
+#         related_name='election_committee_sorter'  # Singular related name
+#     )
+
+#     class Meta:
+#         db_table = "election_committee"
+#         verbose_name = "Election Committe"
+#         verbose_name_plural = "Election Committes"
+#         default_permissions = []
+#         permissions  = [
+#             ("canViewElectionCommitte", "Can View Election Committe"),
+#             ("canAddElectionCommitte", "Can Add Election Committe"),
+#             ("canChangeElectionCommitte", "Can Change Election Committe"),
+#             ("canDeleteElectionCommitte", "Can Delete Election Committe"),
+#             ]
+#     def __str__(self):
+#         return self.name
+
+
+
+class ElectionCommitteeGroup(TrackModel):
+    id = models.AutoField(primary_key=True)
+    election = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_group_elections')
+    name = models.CharField(max_length=255)
+    committee_no = models.IntegerField()
+    circle = models.IntegerField()
+    # Change area to a ForeignKey relation to the Area model
+    area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_areas')
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
-    location = models.TextField(blank=True, null=True)
-    sorter = models.OneToOneField(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='election_committee_sorter'  # Singular related name
-    )
+    description = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    voter_count = models.IntegerField()
+    committee_count = models.IntegerField()
+    total_voters = models.IntegerField()
+    tags = models.CharField(max_length=255, blank=True)
 
     class Meta:
-        db_table = "election_committee"
-        verbose_name = "Election Committe"
-        verbose_name_plural = "Election Committes"
+        db_table = "committee_group"
+        verbose_name = "Committee Group"
+        verbose_name_plural = "Committee Groups"
         default_permissions = []
-        permissions  = [
-            ("canViewElectionCommitte", "Can View Election Committe"),
-            ("canAddElectionCommitte", "Can Add Election Committe"),
-            ("canChangeElectionCommitte", "Can Change Election Committe"),
-            ("canDeleteElectionCommitte", "Can Delete Election Committe"),
-            ]
+
     def __str__(self):
         return self.name
 
+class ElectionCommittee(TrackModel):
+    id = models.AutoField(primary_key=True)
+    serial = models.IntegerField()
+    letters=models.CharField(max_length=255)
+    areas=models.CharField(max_length=255)
+    committee_group = models.ForeignKey(ElectionCommitteeGroup, on_delete=models.SET_NULL, null=True, blank=True, related_name='committees')
+
+    class Meta:
+        db_table = "committee"
+        verbose_name = "Committee Group"
+        verbose_name_plural = "Committee Groups"
+        default_permissions = []
+
+    def __str__(self):
+        return f"{self.areas} - {self.serial} - {self.letters}"
 
 class BaseElectionSorting(models.Model):
     user = models.ForeignKey(

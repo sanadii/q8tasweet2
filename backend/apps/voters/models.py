@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
 
-from apps.configs.models import TrackModel
+from apps.settings.models import TrackModel
 from utils.models_helper import GenderOptions
 
 

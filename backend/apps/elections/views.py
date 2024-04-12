@@ -28,16 +28,19 @@ from apps.elections.models import (
     ElectionParty,
     ElectionPartyCandidate,
     ElectionCommittee,
+    ElectionCommitteeGroup,
     ElectionCommitteeResult,
     ElectionPartyCommitteeResult,
     ElectionPartyCandidateCommitteeResult,
 )
+# from apps.committees.models import Committee, CommitteeGroup
 
 from apps.elections.serializers import (
     ElectionSerializer,
     CategoriesSerializer,
     SubCategoriesSerializer,
     ElectionCommitteeSerializer,
+    ElectionCommitteeGroupSerializer,
     ElectionCandidateSerializer,
     ElectionPartySerializer,
     ElectionPartyCandidateSerializer,
@@ -160,14 +163,15 @@ class GetElectionDetails(APIView):
         ).select_related('candidate', 'election_party', 'election_party__election')
 
 
-        election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
+        # election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
+        election_committee_groups = ElectionCommitteeGroup.objects.filter(election=election).select_related('election')
 
         response_data = {
             "electionDetails": ElectionSerializer(election, context=context).data,
             "electionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
             "electionParties": ElectionPartySerializer(election_parties, many=True, context=context).data,
             "electionPartyCandidates": ElectionPartyCandidateSerializer(election_party_candidates, many=True, context=context).data,
-            "electionCommittees": ElectionCommitteeSerializer(election_committees, many=True, context=context).data,
+            "electionCommittees": ElectionCommitteeGroupSerializer(election_committee_groups, many=True, context=context).data,
         }
 
         # Include electionCampaigns only if view is not public

@@ -1,20 +1,20 @@
 # Category & Tag Admin
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from apps.categories.models import Tag, Area
+from apps.categories.models import Tag
 from utils.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 
-class AreasAdmin(admin.ModelAdmin):
-    list_display = ['name', 'parent', 'is_active']
-    search_fields = ['name']
-    # list_filter = ['parent', 'is_active']
-    prepopulated_fields = {"slug": ("name",)}
-    # readonly_fields = ReadOnlyTrackFields
+# class AreasAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'parent', 'is_active']
+#     search_fields = ['name']
+#     # list_filter = ['parent', 'is_active']
+#     prepopulated_fields = {"slug": ("name",)}
+#     # readonly_fields = ReadOnlyTrackFields
 
-    fieldsets = [
-        ('Area Information', {'fields': ['name', 'parent', 'image', 'slug', 'description', 'is_active']}),
-        # TrackAdminFields
-    ]
+#     fieldsets = [
+#         ('Area Information', {'fields': ['name', 'parent', 'image', 'slug', 'description', 'is_active']}),
+#         # TrackAdminFields
+#     ]
 
 
 class TagsAdmin(admin.ModelAdmin):
@@ -31,4 +31,4 @@ class TagsAdmin(admin.ModelAdmin):
 
 # AdminSites
 admin.site.register(Tag, TagsAdmin)
-admin.site.register(Area, AreasAdmin)
+# admin.site.register(Area, AreasAdmin)

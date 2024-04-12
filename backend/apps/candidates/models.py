@@ -5,7 +5,7 @@ import uuid
 import secrets
 import string
 
-from apps.configs.models import TrackModel, TaskModel
+from apps.settings.models import TrackModel, TaskModel
 from utils.models_helper import GenderOptions
 
 def generate_random_slug(length=6):

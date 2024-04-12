@@ -21,7 +21,7 @@ const ChartMapWidgets = () => {
             </Row>
 
             <Row>
-                <Col xxl={4} xl={6}>
+                <Col xl={6}>
                     <Card className="card-height-100">
                         <CardHeader className="align-items-center d-flex">
                             <h4 className="card-title mb-0 flex-grow-1">Live Users By Country</h4>
@@ -73,7 +73,131 @@ const ChartMapWidgets = () => {
                     </Card>
                 </Col>
 
-                <Col xxl={4} xl={6}>
+                <Col xxl={6}>
+                    <Card className="card-height-100">
+                        <CardHeader className="align-items-center d-flex">
+                            <h4 className="card-title mb-0 flex-grow-1">Top Referrals Pages</h4>
+                            <div className="flex-shrink-0">
+                                <Button color="primary" size="sm" className="btn-soft-primary">
+                                    Export Report
+                                </Button>
+                            </div>
+                        </CardHeader>
+
+                        <CardBody>
+                            <div id="color_heatmap" className="apex-charts mt-n3" dir="ltr">
+                                {/* Top Referrals Pages Chart */}
+                                <TopReferralsPagesCharts dataColors='["--vz-success", "--vz-info", "--vz-primary", "--vz-warning", "--vz-secondary"]' />
+                            </div>
+
+                            <Row className="g-3">
+                                <Col md={6}>
+                                    <div className="d-flex mb-3">
+                                        <div className="flex-grow-1">
+                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-primary me-2"></i>www.google.com</p>
+                                        </div>
+                                        <div className="flex-shrink-0">
+                                            <p className="mb-0">24.58%</p>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex mb-3">
+                                        <div className="flex-grow-1">
+                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-warning me-2"></i>www.medium.com</p>
+                                        </div>
+                                        <div className="flex-shrink-0">
+                                            <p className="mb-0">12.22%</p>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex">
+                                        <div className="flex-grow-1">
+                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-secondary me-2"></i>Other</p>
+                                        </div>
+                                        <div className="flex-shrink-0">
+                                            <p className="mb-0">17.58%</p>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col md={6}>
+                                    <div className="d-flex mb-3">
+                                        <div className="flex-grow-1">
+                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-info me-2"></i>www.youtube.com</p>
+                                        </div>
+                                        <div className="flex-shrink-0">
+                                            <p className="mb-0">17.51%</p>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex mb-3">
+                                        <div className="flex-grow-1">
+                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-success me-2"></i>www.meta.com</p>
+                                        </div>
+                                        <div className="flex-shrink-0">
+                                            <p className="mb-0">23.05%</p>
+                                        </div>
+                                    </div>
+                                </Col>
+                            </Row>
+
+                            <div className="mt-2 text-center">
+                                <Link to="#" className="text-muted text-decoration-underline">Show All</Link>
+                            </div>
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row>
+
+                <Col xl={4}>
+                    <Card className="card-height-100">
+                        <CardHeader className="border-bottom-dashed align-items-center d-flex">
+                            <h4 className="card-title mb-0 flex-grow-1">My Portfolio</h4>
+                            <div>
+
+                                <UncontrolledDropdown className="card-header-dropdown">
+                                    <DropdownToggle tag="button" className="btn btn-soft-primary btn-sm" >
+                                        <span className="text-uppercase">Btc<i className="mdi mdi-chevron-down align-middle ms-1"></i></span>
+                                    </DropdownToggle>
+                                    <DropdownMenu className="dropdown-menu-end">
+                                        <DropdownItem>BTC</DropdownItem>
+                                        <DropdownItem>USD</DropdownItem>
+                                        <DropdownItem>Euro</DropdownItem>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
+
+                            </div>
+                        </CardHeader>
+
+                        <CardBody>
+                            <div id="portfolio_donut_charts" dir="ltr">
+                                {/* My Portfolio Chart */}
+                                <MyPortfolioCharts dataColors='["--vz-primary", "--vz-primary-rgb, 0.85", "--vz-primary-rgb, 0.65", "--vz-primary-rgb, 0.50"]' />
+                            </div>
+
+                            <ListGroup className="border-dashed mb-0" flush>
+
+                                {(widgetsPortfolio || []).map((item, key) => (<ListGroupItem className="px-0" key={key}>
+                                    <div className="d-flex">
+                                        <div className="flex-shrink-0 avatar-xs">
+                                            <span className="avatar-title bg-light p-1 rounded-circle">
+                                                <img src={item.img} className="img-fluid" alt="" />
+                                            </span>
+                                        </div>
+                                        <div className="flex-grow-1 ms-2">
+                                            <h6 className="mb-1">{item.label}</h6>
+                                            <p className="fs-12 mb-0 text-muted"><i className={"mdi mdi-circle fs-10 align-middle me-1 text-" + item.coinNameClass}></i>{item.coinName}</p>
+                                        </div>
+                                        <div className="flex-shrink-0 text-end">
+                                            <h6 className="mb-1">{item.coinName} {item.coinVolume}</h6>
+                                            <p className={"fs-12 mb-0 text-" + item.priceClass}>{item.price}</p>
+                                        </div>
+                                    </div>
+                                </ListGroupItem>))}
+                            </ListGroup>
+                        </CardBody>
+                    </Card>
+                </Col>
+
+                <Col xl={4}>
                     <Card className="card-height-100">
                         <CardHeader className="align-items-center d-flex">
                             <h4 className="card-title mb-0 flex-grow-1">Sessions by Countries</h4>
@@ -163,158 +287,6 @@ const ChartMapWidgets = () => {
                                     {/* Audiences Metrics Chart */}
                                     <AudiencesMetricsCharts dataColors='["--vz-primary", "--vz-gray-300"]' />
                                 </div>
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
-            </Row>
-
-            <Row>
-                <Col xxl={4} xl={6}>
-                    <Card className="card-height-100">
-                        <CardHeader className="align-items-center d-flex">
-                            <h4 className="card-title mb-0 flex-grow-1">Sales by Locations</h4>
-                            <div className="flex-shrink-0">
-                                <Button color="primary" size="sm" className="btn-soft-primary">
-                                    Export Report
-                                </Button>
-                            </div>
-                        </CardHeader>
-
-                        <CardBody>
-                            <div id="sales-by-locations" style={{ height: "269px" }}>
-                                <VectorMap {...at} />
-                            </div>
-                            <div className="px-2 py-2 mt-1">
-                                <p className="mb-1">New Maxico <span className="float-end">75%</span></p>
-                                <Progress color="primary" value={75} striped className="mt-2" style={{ height: "6px" }} />
-
-                                <p className="mt-3 mb-1">California <span className="float-end">47%</span></p>
-                                <Progress color="primary" value={47} striped className="mt-2" style={{ height: "6px" }} />
-
-                                <p className="mt-3 mb-1">Texas <span className="float-end">82%</span></p>
-                                <Progress color="primary" value={82} striped className="mt-2" style={{ height: "6px" }} />
-                            </div>
-                        </CardBody>
-                    </Card>
-                </Col>
-
-                <Col xxl={4} xl={6}>
-                    <Card className="card-height-100">
-                        <CardHeader className="border-bottom-dashed align-items-center d-flex">
-                            <h4 className="card-title mb-0 flex-grow-1">My Portfolio</h4>
-                            <div>
-
-                                <UncontrolledDropdown className="card-header-dropdown">
-                                    <DropdownToggle tag="button" className="btn btn-soft-primary btn-sm" >
-                                        <span className="text-uppercase">Btc<i className="mdi mdi-chevron-down align-middle ms-1"></i></span>
-                                    </DropdownToggle>
-                                    <DropdownMenu className="dropdown-menu-end">
-                                        <DropdownItem>BTC</DropdownItem>
-                                        <DropdownItem>USD</DropdownItem>
-                                        <DropdownItem>Euro</DropdownItem>
-                                    </DropdownMenu>
-                                </UncontrolledDropdown>
-
-                            </div>
-                        </CardHeader>
-
-                        <CardBody>
-                            <div id="portfolio_donut_charts" dir="ltr">
-                                {/* My Portfolio Chart */}
-                                <MyPortfolioCharts dataColors='["--vz-primary", "--vz-primary-rgb, 0.85", "--vz-primary-rgb, 0.65", "--vz-primary-rgb, 0.50"]' />
-                            </div>
-
-                            <ListGroup className="border-dashed mb-0" flush>
-
-                                {(widgetsPortfolio || []).map((item, key) => (<ListGroupItem className="px-0" key={key}>
-                                    <div className="d-flex">
-                                        <div className="flex-shrink-0 avatar-xs">
-                                            <span className="avatar-title bg-light p-1 rounded-circle">
-                                                <img src={item.img} className="img-fluid" alt="" />
-                                            </span>
-                                        </div>
-                                        <div className="flex-grow-1 ms-2">
-                                            <h6 className="mb-1">{item.label}</h6>
-                                            <p className="fs-12 mb-0 text-muted"><i className={"mdi mdi-circle fs-10 align-middle me-1 text-" + item.coinNameClass}></i>{item.coinName}</p>
-                                        </div>
-                                        <div className="flex-shrink-0 text-end">
-                                            <h6 className="mb-1">{item.coinName} {item.coinVolume}</h6>
-                                            <p className={"fs-12 mb-0 text-" + item.priceClass}>{item.price}</p>
-                                        </div>
-                                    </div>
-                                </ListGroupItem>))}
-                            </ListGroup>
-                        </CardBody>
-                    </Card>
-                </Col>
-
-                <Col xxl={4}>
-                    <Card className="card-height-100">
-                        <CardHeader className="align-items-center d-flex">
-                            <h4 className="card-title mb-0 flex-grow-1">Top Referrals Pages</h4>
-                            <div className="flex-shrink-0">
-                                <Button color="primary" size="sm" className="btn-soft-primary">
-                                    Export Report
-                                </Button>
-                            </div>
-                        </CardHeader>
-
-                        <CardBody>
-                            <div id="color_heatmap" className="apex-charts mt-n3" dir="ltr">
-                                {/* Top Referrals Pages Chart */}
-                                <TopReferralsPagesCharts dataColors='["--vz-success", "--vz-info", "--vz-primary", "--vz-warning", "--vz-secondary"]' />
-                            </div>
-
-                            <Row className="g-3">
-                                <Col md={6}>
-                                    <div className="d-flex mb-3">
-                                        <div className="flex-grow-1">
-                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-primary me-2"></i>www.google.com</p>
-                                        </div>
-                                        <div className="flex-shrink-0">
-                                            <p className="mb-0">24.58%</p>
-                                        </div>
-                                    </div>
-                                    <div className="d-flex mb-3">
-                                        <div className="flex-grow-1">
-                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-warning me-2"></i>www.medium.com</p>
-                                        </div>
-                                        <div className="flex-shrink-0">
-                                            <p className="mb-0">12.22%</p>
-                                        </div>
-                                    </div>
-                                    <div className="d-flex">
-                                        <div className="flex-grow-1">
-                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-secondary me-2"></i>Other</p>
-                                        </div>
-                                        <div className="flex-shrink-0">
-                                            <p className="mb-0">17.58%</p>
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col md={6}>
-                                    <div className="d-flex mb-3">
-                                        <div className="flex-grow-1">
-                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-info me-2"></i>www.youtube.com</p>
-                                        </div>
-                                        <div className="flex-shrink-0">
-                                            <p className="mb-0">17.51%</p>
-                                        </div>
-                                    </div>
-                                    <div className="d-flex mb-3">
-                                        <div className="flex-grow-1">
-                                            <p className="text-truncate text-muted fs-14 mb-0"><i className="mdi mdi-circle align-middle text-success me-2"></i>www.meta.com</p>
-                                        </div>
-                                        <div className="flex-shrink-0">
-                                            <p className="mb-0">23.05%</p>
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
-
-                            <div className="mt-2 text-center">
-                                <Link to="#" className="text-muted text-decoration-underline">Show All</Link>
                             </div>
                         </CardBody>
                     </Card>

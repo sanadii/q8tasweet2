@@ -38,7 +38,7 @@ from apps.elections.models import (
     Election,
     ElectionCandidate,
     ElectionParty,
-    ElectionCommittee
+    ElectionCommitteeGroup
 )
 
 from django.contrib.auth.models import Group
@@ -63,7 +63,7 @@ from apps.campaigns.serializers import (
     )
 
 from apps.notifications.models import CampaignNotification, CampaignPartyNotification
-from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteeSerializer
+from apps.elections.serializers import ElectionCandidateSerializer, ElectionCommitteeGroupSerializer
 from apps.auths.serializers import GroupSerializer
 from apps.notifications.serializers import CampaignNotificationSerializer
 
@@ -143,7 +143,7 @@ class GetCampaignDetails(APIView):
         
         election = campaign.election_candidate.election
         election_candidates = ElectionCandidate.objects.filter(election=election).select_related('election')
-        election_committees = ElectionCommittee.objects.filter(election=election).select_related('election')
+        election_committee_groups = ElectionCommitteeGroup.objects.filter(election=election).select_related('election')
         campaign_attendees = CampaignAttendee.objects.filter(election=election).select_related('election')
         campaign_notifications = CampaignNotification.objects.filter(campaign=campaign).select_related('campaign')
 
@@ -152,7 +152,7 @@ class GetCampaignDetails(APIView):
         campaign_committee_sorters = {}
 
         # Iterate over each committee and fetch its attendees and sorters
-        for committee in election_committees:
+        for committee in election_committee_groups:
             attendees = CampaignCommitteeAttendee.objects.filter(committee=committee)
             sorters = CampaignCommitteeSorter.objects.filter(committee=committee)
 
@@ -183,7 +183,7 @@ class GetCampaignDetails(APIView):
                 "campaignAttendees": CampaignAttendeeSerializer(campaign_attendees, many=True, context=context).data,
                 "campaignNotifications": CampaignNotificationSerializer(campaign_notifications, many=True, context=context).data,
                 "campaignElectionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
-                "campaignElectionCommittees": ElectionCommitteeSerializer(election_committees, many=True, context=context).data,
+                "campaignElectionCommitteeGroups": ElectionCommitteeGroupSerializer(election_committee_groups, many=True, context=context).data,
                 # "campaignCommittees": CampaignCommitteeSerializer(campaign_committees, many=True, context=context).data,
                 "campaignCommitteeAttendees": campaign_committee_attendees,
                 "campaignCommitteeSorters": campaign_committee_sorters,

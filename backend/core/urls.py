@@ -30,7 +30,7 @@ urlpatterns = [
     # path('admin/users/', user_admin_site.urls, name='user-admin'),
 
     # Setting Apps
-    path('Config/', include('apps.configs.urls')),
+    path('Config/', include('apps.settings.urls')),
     # path('media/', include('apps.media.urls')),
 
     # Main Apps

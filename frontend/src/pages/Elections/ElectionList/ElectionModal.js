@@ -32,7 +32,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       subCategory: (election && election.subCategory) || null,
       dueDate: (election && election.dueDate) || null,
       tags: (election && election.tags) || [],
-      electionMethod: (election && election.electionMethod) || 1,
+      electionMethod: (election && election.electionMethod) || "candidateOnly",
       electionResult: (election && election.electionResult) || "total",
       electVotes: (election && election.electVotes) || 0,
       electSeats: (election && election.electSeats) || 0,
@@ -146,11 +146,10 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       name: "electionMethod",
       label: "نوع الانتخابات",
       type: "select",
-      options: ElectionMethodOptions,
       options: ElectionMethodOptions.map(electionMethod => ({
         id: electionMethod.id,
         label: electionMethod.name,
-        value: electionMethod.id
+        value: electionMethod.value
       })),
       colSize: 4,
     },

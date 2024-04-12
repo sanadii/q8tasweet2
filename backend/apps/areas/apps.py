@@ -1,7 +1,6 @@
-from django.apps import AreaConfig
+# areas/apps.py
+from django.apps import AppConfig
 
-class AreaConfig(AreaConfig):
+class AreaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.areas'
-
-

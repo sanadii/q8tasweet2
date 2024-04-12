@@ -122,7 +122,7 @@ const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
         <Tooltip id="button-tooltip" {...props}>
             <ul>
                 {guaranteeGroupNames.map((name, index) => (
-                    <li key={index} onClick={() => {/* handle click event here */}}>
+                    <li key={index} onClick={() => {/* handle click event here */ }}>
                         {name}
                     </li>
                 ))}
@@ -138,9 +138,12 @@ const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
                 overlay={renderTooltip}
             >
                 <span>
-                    {guaranteeGroupNames[0]} <span className="guarantee-group-extra" style={{backgroundColor: 'green', color: 'white', borderRadius: '50%', padding: '0 5px'}}>+{guaranteeGroupNames.length - 1}</span>
+                    {guaranteeGroupNames[0]}
+                    <span class="badge bg-success align-middle ms-1">
+                        +{guaranteeGroupNames.length - 1}
+                    </span>
                 </span>
-            </OverlayTrigger>
+            </OverlayTrigger >
         );
     } else {
         return <span>{guaranteeGroupNames[0] || "-"}</span>;

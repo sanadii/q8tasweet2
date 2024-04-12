@@ -1,5 +1,5 @@
 from django.db import models
-from apps.configs.models import TrackModel
+from apps.settings.models import TrackModel
 from apps.campaigns.models import Campaign, CampaignParty
 from apps.elections.models import Election
 

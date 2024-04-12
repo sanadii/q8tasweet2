@@ -1,40 +1,33 @@
-# configs/models.py
-from django.conf import settings
 from django.db import models
-from django.utils import timezone
 
-from utils.html import TagCloser
-from utils.models import base_concrete_model, get_user_model_name, get_current_user
-
-
-# Governates
-class Governorate(models.Model):
-    AHMADI = "ahmadi"
-    CAPITAL = "capital"
-    FARWANIYA = "farwaniya"
-    HAWALLY = "hawally"
-    JAHRA = "jahra"
-    MUBARAK = "mubarak"
-
-    GOVERNORATE_CHOICES = [
-        (AHMADI, "الأحمدي"),
-        (CAPITAL, "العاصمة"),
-        (FARWANIYA, "الفروانية"),
-        (HAWALLY, "حولي"),
-        (JAHRA, "الجهراء"),
-        (MUBARAK, "مبارك الكبير"),
-    ]
-
-    name = models.CharField(
-        max_length=10,
-        choices=GOVERNORATE_CHOICES,
-        default=AHMADI,
-    )
-
-    # Rest of your model fields...
+# Governorates with Arabic names
+GOVERNORATE_CHOICES = [
+    (1, "الأحمدي"),
+    (2, "العاصمة"),
+    (3, "الفروانية"),
+    (4, "حولي"),
+    (5, "الجهراء"),
+    (6, "مبارك الكبير"),
+]
 
 
-# Areas
+# Areas model
 class Area(models.Model):
-    name = models.CharField(max_length=10,choices=GOVERNORATE_CHOICES,default=AHMADI)
-    governate = models.CharField(max_length=10,choices=GOVERNORATE_CHOICES,default=AHMADI)
+    name = models.CharField(max_length=50)
+    code = models.CharField(max_length=30)
+    governorate = models.IntegerField(choices=GOVERNORATE_CHOICES)
+
+    class Meta:
+        db_table = "area"
+        verbose_name = "Area"
+        verbose_name_plural = "Areas"
+        default_permissions = []
+
+    def __str__(self):
+        return self.name
+
+
+# class AreaBlock(models.Model):
+#     name = models.CharField(max_length=50)
+#     code = models.CharField(max_length=30)
+#     area = models.FKey(area)

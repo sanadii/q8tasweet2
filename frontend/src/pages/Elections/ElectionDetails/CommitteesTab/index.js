@@ -6,7 +6,7 @@ import { electionSelector } from 'selectors';
 
 import { deleteElectionCommittee } from "store/actions";
 import CommitteeModal from "./CommitteeModal";
-import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Sorter, Actions } from "./CommitteesCol";
+import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Circle, Areas, Sorter, Actions } from "./CommitteesCol";
 import { usePermission, useDelete } from "shared/hooks";
 
 // Utility and helper imports
@@ -101,6 +101,11 @@ const CommitteesTab = () => {
         id: "id",
       },
       {
+        Header: "م",
+        filterable: true,
+        Cell: (cellProps) => <Id {...cellProps} />
+      },
+      {
         Header: "اللجنة",
         filterable: true,
         Cell: (cellProps) => <Name {...cellProps} />
@@ -111,16 +116,26 @@ const CommitteesTab = () => {
         Cell: (cellProps) => <Gender {...cellProps} />
       },
       {
+        Header: "الدائرة",
+        filterable: true,
+        Cell: (cellProps) => <Circle {...cellProps} />
+      },
+      {
+        Header: "المنطقة",
+        filterable: true,
+        Cell: (cellProps) => <Areas {...cellProps} />
+      },
+      {
         Header: "الفارز",
         filterable: true,
         Cell: (cellProps) => (
           <Sorter
-              cellProps={cellProps}
-              electionSorters={electionSorters}
-              electionCampaigns={electionCampaigns}
+            cellProps={cellProps}
+            electionSorters={electionSorters}
+            electionCampaigns={electionCampaigns}
           />
-      )
-        },
+        )
+      },
       {
         Header: "إجراءات",
         Cell: (cellProps) => (
@@ -131,6 +146,20 @@ const CommitteesTab = () => {
             onClickDelete={onClickDelete}
           />
         )
+      },
+      {
+        // Other settings...
+        // Expander column
+        id: 'expander', // It's important to have an ID for this column
+        Header: ({ getToggleAllRowsExpandedProps }) => (
+          <span {...getToggleAllRowsExpandedProps()}>Expand</span>
+        ),
+        Cell: ({ row }) => (
+          // Use the row.getToggleRowExpandedProps to toggle the expanded state
+          <span {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? '👇' : '👉'}
+          </span>
+        ),
       },
     ],
     [handleElectionCommitteeClick, checkedAll]

@@ -32,9 +32,7 @@ class PartySerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Party
-        fields = [
-            "id", "name", "slug", "image",
-        ]
+        fields = ["id", "name", "slug", "image"]
 
     def get_image(self, obj):
         # Check if the image field is not empty and generate the desired URL format

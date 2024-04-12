@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-from apps.configs.models import TrackModel, TaskModel
+from apps.settings.models import TrackModel, TaskModel
 from utils.models_helper import GuaranteeStatusOptions
 from utils.validators import civil_validator, phone_validator
 
