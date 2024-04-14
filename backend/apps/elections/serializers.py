@@ -28,8 +28,9 @@ from apps.campaigns.models import CampaignSorting
 from apps.auths.serializers import UserSerializer
 
 
-class ElectionSerializer(serializers.ModelSerializer):
+class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """Serializer for the Election model."""
+    admin_serializer_classes = (TrackMixin, TaskMixin)
 
     # admin_serializer_classes = (TrackMixin, TaskMixin)
     name = serializers.SerializerMethodField("get_election_name")
@@ -77,15 +78,15 @@ class ElectionSerializer(serializers.ModelSerializer):
             "attendees_females",
             "previous_election",
             # Track & Task Fields
-            "created_by",
-            "updated_by",
-            "deleted_by",
-            "created_at",
-            "updated_at",
-            "deleted_at",
-            "deleted",
-            "priority",
-            "status",
+            # "created_by",
+            # "updated_by",
+            # "deleted_by",
+            # "created_at",
+            # "updated_at",
+            # "deleted_at",
+            # "deleted",
+            # "priority",
+            # "status",
         ]
 
     def get_election_name(self, obj):
@@ -446,7 +447,7 @@ class ElectionCommitteeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ElectionCommittee
-        fields = ['id', 'serial', 'letters', 'areas']
+        fields = ['id', 'serial', 'type', 'letters', 'areas']
 
 class AreaSerializer(serializers.ModelSerializer):
     """Serializer for the Area model."""

@@ -24,7 +24,7 @@ const ADD_CAMPAIGNDirector = () => {
 
     const {
         handleDeleteItem,
-        onClickDelete,
+        onDeleteCheckBoxClick,
         setDeleteModal,
         deleteModal,
     } = useDelete(deleteCampaignMember);
@@ -64,7 +64,7 @@ const ADD_CAMPAIGNDirector = () => {
                                                                 className="btn btn-sm btn-soft-danger remove-list"
                                                                 onClick={(e) => {
                                                                     const campaignMember = campaignMembers.find(item => item.user === user.id);
-                                                                    onClickDelete(campaignMember);
+                                                                    onDeleteCheckBoxClick(campaignMember);
                                                                 }}
                                                             >
                                                                 <i className="ri-delete-bin-5-fill align-bottom" />

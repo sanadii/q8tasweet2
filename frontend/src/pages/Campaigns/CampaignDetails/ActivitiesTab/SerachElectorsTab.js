@@ -59,7 +59,7 @@ const GuaranteesTab = ({ campaignGuarantees }) => {
     }
   };
 
-  const onClickDelete = (campaignGuarantee) => {
+  const onDeleteCheckBoxClick = (campaignGuarantee) => {
     setCampaignGuarantee(campaignGuarantee);
     setDeleteModal(true);
   };
@@ -278,7 +278,7 @@ const GuaranteesTab = ({ campaignGuarantees }) => {
                   className="remove-item-btn"
                   onClick={() => {
                     const campaignGuarantee = cellProps.row.original;
-                    onClickDelete(campaignGuarantee);
+                    onDeleteCheckBoxClick(campaignGuarantee);
                   }}
                   to="#"
                 >

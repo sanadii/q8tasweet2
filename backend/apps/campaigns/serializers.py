@@ -120,9 +120,9 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
         rep = super().to_representation(instance)
 
         # Remove unwanted fields from nested serializers
-        if "election" in rep:
-            rep["election"].pop("track", None)
-            rep["election"].pop("task", None)
+        # if "election" in rep:
+        #     rep["election"].pop("track", None)
+        #     rep["election"].pop("task", None)
 
         # if "candidate" in rep:
         #     rep["candidate"].pop("track", None)

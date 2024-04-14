@@ -49,7 +49,7 @@ const Votes = (cellProps) => {
 }
 
 const Actions = (cellProps) => {
-    const { setElectionCandidate, handleElectionCandidateClick, setIsElectionPartyAction, onClickDelete } = cellProps;
+    const { setElectionCandidate, handleElectionCandidateClick, setIsElectionPartyAction, onDeleteCheckBoxClick } = cellProps;
     const electionCandidate = cellProps.row.original;
 
     return (
@@ -95,7 +95,7 @@ const Actions = (cellProps) => {
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
                     setIsElectionPartyAction(false); // Set isPartyAction to true when this button is clicked
-                    onClickDelete(electionCandidate);
+                    onDeleteCheckBoxClick(electionCandidate);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />

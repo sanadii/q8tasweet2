@@ -35,7 +35,7 @@ const CommitteesTab = () => {
   // Delete Hook
   const {
     handleDeleteItem,
-    onClickDelete,
+    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
     checkedAll,
@@ -128,7 +128,7 @@ const CommitteesTab = () => {
             {...cellProps}
             setElectionCommittee={setElectionCommittee}
             handleElectionCommitteeClick={handleElectionCommitteeClick}
-            onClickDelete={onClickDelete}
+            onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           />
         )
       },

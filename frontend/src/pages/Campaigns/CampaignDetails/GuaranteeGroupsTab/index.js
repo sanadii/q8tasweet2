@@ -38,7 +38,7 @@ const GuaranteesGroupsTab = () => {
   // Delete Hook
   const {
     handleDeleteItem,
-    onClickDelete,
+    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
     checkedAll,
@@ -184,7 +184,7 @@ const GuaranteesGroupsTab = () => {
           <Actions
             cellProps={cellProps}
             handleCampaignGuaranteeClick={handleCampaignGuaranteeClick}
-            onClickDelete={onClickDelete}
+            onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           />
       },
     ], [handleCampaignGuaranteeClick, campaignMembers]);

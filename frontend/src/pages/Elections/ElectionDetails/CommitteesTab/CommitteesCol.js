@@ -106,12 +106,12 @@ const Sorter = ({ cellProps, electionSorters, electionCampaigns }) => {
     );
 };
 
-const Votes = (cellProps) => {
-    return <p>{cellProps.row.original.votes}</p>;
+const Voters = (cellProps) => {
+    return <p>{cellProps.row.original.voterCount}</p>;
 }
 
 const Actions = (cellProps) => {
-    const { setElectionCommittee, handleElectionCommitteeClick, onClickDelete } = cellProps;
+    const { setElectionCommittee, handleElectionCommitteeClick, onDeleteCheckBoxClick } = cellProps;
     const electionCommittee = cellProps.row.original;
 
     return (
@@ -138,7 +138,7 @@ const Actions = (cellProps) => {
                 to="#"
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
-                    onClickDelete(electionCommittee);
+                    onDeleteCheckBoxClick(electionCommittee);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />
@@ -148,11 +148,20 @@ const Actions = (cellProps) => {
 
 };
 
+const Expanded = (cellProps) => {
+    return (
+        <span {...cellProps.row.getToggleRowExpandedProps({ title: "مشاهدة اللجان الأصلية والفرعية" })}>
+            {cellProps.row.isExpanded ? '👇' : '👉'}
+        </span>
+    )
+        ;
+}
+
 export {
     Id,
     CheckboxHeader,
     CheckboxCell,
-    Votes,
+    Voters,
     Name,
     Gender,
     Circle,
@@ -160,4 +169,5 @@ export {
     Sorter,
     Position,
     Actions,
+    Expanded,
 };

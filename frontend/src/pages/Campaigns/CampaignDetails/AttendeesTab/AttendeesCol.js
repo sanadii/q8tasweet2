@@ -96,7 +96,7 @@ const Actions = (props) => {
     const {
         cellProps,
         handleCampaignAttendeeClick,
-        onClickDelete,
+        onDeleteCheckBoxClick,
         isAdmin,
         isAttendant
     } = props;
@@ -136,7 +136,7 @@ const Actions = (props) => {
                         className="btn btn-sm btn-soft-danger remove-list"
                         onClick={() => {
                             const campaignAttendee = cellProps.row.original;
-                            onClickDelete(campaignAttendee);
+                            onDeleteCheckBoxClick(campaignAttendee);
                         }}
                     >
                         <i className="ri-delete-bin-5-fill align-bottom" />

@@ -63,7 +63,7 @@ const CampaignsTab = () => {
     }
   };
 
-  const onClickDelete = (electionCampaign) => {
+  const onDeleteCheckBoxClick = (electionCampaign) => {
     setElectionCampaign(electionCampaign);
     setDeleteModal(true);
   };
@@ -145,7 +145,7 @@ const CampaignsTab = () => {
                               <li>
                                 <DropdownItem
                                   className="d-flex align-items-center"
-                                  onClick={() => onClickDelete(campaign)}
+                                  onClick={() => onDeleteCheckBoxClick(campaign)}
                                 >
                                   <i className="ri-delete-bin-5-fill text-muted me-2"></i>
                                   Delete

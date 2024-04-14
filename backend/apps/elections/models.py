@@ -28,10 +28,6 @@ class Election(TrackModel, TaskModel):
     category = models.ForeignKey('ElectionCategory', on_delete=models.SET_NULL, null=True, blank=True, related_name='category_elections')
     sub_category = models.ForeignKey('ElectionCategory', on_delete=models.SET_NULL, null=True, blank=True, related_name='subcategory_elections')
 
-    # Election Setting Options
-    # election_method = models.IntegerField(choices=ElectionTypeOptions.choices, blank=True, null=True)
-    # election_result = models.IntegerField(choices=ElectionResultsOptions.choices, blank=True, null=True)
-
     election_method = models.CharField(
         max_length=50,
         choices=ElectionTypeOptions.choices,
@@ -39,6 +35,7 @@ class Election(TrackModel, TaskModel):
         null=True,
         verbose_name="Election Type"
     )
+    
     election_result = models.TextField(
         max_length=150,
         # choices=ElectionResultsOptions.choices,
@@ -86,23 +83,13 @@ class Election(TrackModel, TaskModel):
         self.slug = slugify(f"{self.sub_category.slug}-{self.due_date.year if self.due_date else 'tba'}")
         super().save(*args, **kwargs)
 
-
-
-
-# class ElectionProfile(TrackModel, AbstractBaseUser, PermissionsMixin):
-#     election = models.OneToOneField('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name="profile_elections")
-
-#     class Meta:
-#         db_table = 'election_profile'
-#         verbose_name = "Election Profile"
-#         verbose_name_plural = "Election Profiles"
-#         default_permissions = []
-#         permissions  = [
-#             ("canViewElectionProfile", "Can View Election Profile"),
-#             ("canAddElectionProfile", "Can Add Election Profile"),
-#             ("canChangeElectionProfile", "Can Change Election Profile"),
-#             ("canDeleteElectionProfile", "Can Delete Election Profile"),
-#             ]
+    def save(self, *args, **kwargs):
+        # If the object is being created (doesn't have an ID yet), set the slug
+        if not self.id and not self.slug:
+            # Set the slug based on the sub_category slug and the due_date
+            self.slug = slugify(f"{self.sub_category.slug}{self.due_date.year if self.due_date else 'Tba'}")
+        
+        super(Election, self).save(*args, **kwargs)  # Call the "real" save() method
 
 class ElectionCategory(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -252,8 +239,9 @@ class ElectionCommitteeGroup(TrackModel):
 class ElectionCommittee(TrackModel):
     id = models.AutoField(primary_key=True)
     serial = models.IntegerField()
-    letters=models.CharField(max_length=255)
-    areas=models.CharField(max_length=255)
+    letters = models.CharField(max_length=255)
+    type = models.CharField(max_length=255)
+    areas = models.CharField(max_length=255)
     committee_group = models.ForeignKey(ElectionCommitteeGroup, on_delete=models.SET_NULL, null=True, blank=True, related_name='committees')
 
     class Meta:

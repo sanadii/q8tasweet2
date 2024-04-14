@@ -26,7 +26,7 @@ const AllParties = () => {
   // Delete Hook
   const {
     handleDeleteItem,
-    onClickDelete,
+    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
     checkedAll,
@@ -126,7 +126,7 @@ const AllParties = () => {
             <Actions
               {...cellProps}
               handlePartyClick={handlePartyClick}
-              onClickDelete={onClickDelete}
+              onDeleteCheckBoxClick={onDeleteCheckBoxClick}
             />
           );
         },

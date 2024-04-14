@@ -1,35 +1,28 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { categorySelector } from 'selectors';
-
 import { Link } from "react-router-dom";
-import * as moment from "moment";
 
 // Component, Constants & Hooks
 import { StatusOptions, PriorityOptions } from "shared/constants/";
 import { AvatarList } from "shared/components";
+import { handleValidDate } from "shared/utils";
 
-const handleValidDate = (dueDate) => {
-  const formattedDate = moment(dueDate).format("YYYY-MM-DD");
-  return formattedDate;
-};
-
-const CheckboxHeader = ({ checkedAll }) => (
+const CheckboxHeader = ({ handleCheckAllClick }) => (
   <input
     type="checkbox"
     id="checkBoxAll"
     className="form-check-input"
-    onClick={checkedAll}
+    onClick={handleCheckAllClick}
   />
 );
 
-
-const CheckboxCell = ({ row, deleteCheckbox }) => (
+const CheckboxCell = ({ row, handleCheckCellClick }) => (
   <input
     type="checkbox"
     className="checkboxSelector form-check-input"
     value={row.original.id}
-    onChange={deleteCheckbox}
+    onChange={handleCheckCellClick}
   />
 );
 
@@ -50,10 +43,14 @@ const Name = (cellProps) => (
   <AvatarList {...cellProps} dirName="elections" />
 );
 
-const CandidateCount = (cell) => { <b>{cell.value}</b> };
+const CandidateCount = (cellProps) => {
+  <b>{cellProps.value}</b>
+};
 
 
-const DueDate = (cellProps) => (handleValidDate(cellProps.row.original.dueDate));
+const DueDate = (cellProps) => (
+  handleValidDate(cellProps.row.original.dueDate)
+);
 
 const Category = ({ category }) => {
   const { categories } = useSelector(categorySelector);
@@ -74,7 +71,7 @@ const Status = (cellProps) => {
     return acc;
   }, {});
 
-  const { name, badgeClass } = statusMapping[cellProps.row.original.status] || {
+  const { name, badgeClass } = statusMapping[cellProps.row.original.task.status] || {
     name: "غير معرف",
     badgeClass: "badge bg-primary",
   };
@@ -90,16 +87,13 @@ const Priority = (cellProps) => {
     return acc;
   }, {});
 
-  const { name, badgeClass } = priorityMapping[cellProps.row.original.priority] || {
+  const { name, badgeClass } = priorityMapping[cellProps.row.original.task.priority] || {
     name: "غير معرف",
     badgeClass: "badge bg-primary",
   };
 
   return <span className={`${badgeClass} text-uppercase`}>{name}</span>;
 };
-
-
-
 
 
 const Moderators = (cell) => {
@@ -132,7 +126,7 @@ const CreateBy = (cell) => {
 };
 
 const Actions = (props) => {
-  const { cell, handleElectionClick, onClickDelete } = props;
+  const { cell, handleElectionClick, handleItemDeleteClick } = props;
   return (
     <React.Fragment>
       <div className="d-flex">
@@ -153,7 +147,7 @@ const Actions = (props) => {
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
               const electionData = cell.row.original;
-              onClickDelete(electionData);
+              handleItemDeleteClick(electionData);
             }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />

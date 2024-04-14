@@ -12,22 +12,23 @@ const useDelete = (deleteAction) => {
   const [isMultiDeleteButton, setIsMultiDeleteButton] = useState(false);
   const [selectedCheckBoxDelete, setSelectedCheckBoxDelete] = useState([]);
 
-  const onClickDelete = (item) => {
-    setItemToDelete(item);
-    setDeleteModal(true);
-  };
+  // 
+  // on Check Single Cell (Cell)
+  // 
+  const handleCheckCellClick = useCallback(() => {
+    const checkedEntries = document.querySelectorAll(".checkboxSelector:checked");
+    setSelectedCheckBoxDelete(Array.from(checkedEntries));
+    setIsMultiDeleteButton(checkedEntries.length > 0);
+  }, []);
 
-  const handleDeleteItem = () => {
-    if (itemToDelete) {
-      dispatch(deleteAction(itemToDelete.id));
-      setDeleteModal(false);
-    }
-  };
-
-  const checkedAll = useCallback(() => {
+  // 
+  // on Check All (Header)
+  // 
+  const handleCheckAllClick = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
     const checkedEntries = document.querySelectorAll(".checkboxSelector");
-    console.log("checked Entries:", checkedEntries);
+    console.log("Check All Checkbox:", checkall);
+    console.log("Individual Checkboxes:", checkedEntries);
 
     if (checkall.checked) {
       checkedEntries.forEach(entry => {
@@ -38,19 +39,30 @@ const useDelete = (deleteAction) => {
         entry.checked = false;
       });
     }
-    deleteCheckbox();
+    handleCheckCellClick();
+  }, [handleCheckCellClick,]);
+
+
+
+  const handleItemDeleteClick = useCallback((item) => {
+    setItemToDelete(item);
+    setDeleteModal(true);
   }, []);
 
-  const deleteCheckbox = () => {
-    const checkedEntry = document.querySelectorAll(".checkboxSelector:checked");
-    checkedEntry.length > 0
-      ? setIsMultiDeleteButton(true)
-      : setIsMultiDeleteButton(false);
-    setSelectedCheckBoxDelete(checkedEntry);
+  // 
+  // on Delete single Item action
+  // 
+  const handleDeleteItem = () => {
+    if (itemToDelete) {
+      dispatch(deleteAction(itemToDelete.id));
+      setDeleteModal(false);
+    }
   };
 
-  const deleteMultiple = () => {
-    const checkall = document.getElementById("checkBoxAll");
+  // 
+  // on Delete multiple action
+  // 
+  const handleDeleteMultiple = () => {
     selectedCheckBoxDelete.forEach((element) => {
       dispatch(deleteAction(element.value));
       setTimeout(() => {
@@ -58,15 +70,13 @@ const useDelete = (deleteAction) => {
       }, 3000);
     });
     setIsMultiDeleteButton(false);
-    checkall.checked = false;
+    setSelectedCheckBoxDelete([]);
   };
 
   return {
     // Basic delete actions
     handleDeleteItem,
-    onClickDelete,
-
-
+    handleItemDeleteClick,
 
     // Modals
     setDeleteModal,
@@ -75,11 +85,12 @@ const useDelete = (deleteAction) => {
     deleteModalMulti,
 
     // Checkbox related
-    checkedAll,
-    deleteCheckbox,
+    handleCheckAllClick,
+    handleCheckCellClick,
+    selectedCheckBoxDelete,
 
     // Multi-delete actions
-    deleteMultiple,
+    handleDeleteMultiple,
     isMultiDeleteButton,
   };
 };

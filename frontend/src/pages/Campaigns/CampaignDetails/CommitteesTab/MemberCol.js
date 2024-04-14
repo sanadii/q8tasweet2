@@ -130,7 +130,7 @@ const Supervisor = ({ cellProps, campaignMembers }) => {
 };
 
 const Actions = (props) => {
-    const { cellProps, campaignMembers, campaignRoles, handleCampaignMemberClick, onClickDelete } = props;
+    const { cellProps, campaignMembers, campaignRoles, handleCampaignMemberClick, onDeleteCheckBoxClick } = props;
 
     // Permission Hook
     const {
@@ -190,7 +190,7 @@ const Actions = (props) => {
                         className="btn btn-sm btn-soft-danger remove-list"
                         onClick={() => {
                             const campaignMember = cellProps.row.original;
-                            onClickDelete(campaignMember);
+                            onDeleteCheckBoxClick(campaignMember);
                         }}
                     >
                         <i className="ri-delete-bin-5-fill align-bottom" />

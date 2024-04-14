@@ -154,7 +154,7 @@ const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
 
 
 const Actions = (props) => {
-    const { cellProps, handleCampaignGuaranteeClick, onClickDelete, isAdmin } = props;
+    const { cellProps, handleCampaignGuaranteeClick, onDeleteCheckBoxClick, isAdmin } = props;
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -189,7 +189,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
                     const campaignGuarantee = cellProps.row.original;
-                    onClickDelete(campaignGuarantee);
+                    onDeleteCheckBoxClick(campaignGuarantee);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />

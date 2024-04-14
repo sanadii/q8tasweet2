@@ -6,6 +6,10 @@ Channels:
 - Global
 - Client ?
 
+
+<!-- backend -->
+- getting election with no date causes an issues
+- frontend reflection: cannot do election with no date (TBA)
 SORTING
 - Frontend
 # Candidate, Parties, ElectionCandidates

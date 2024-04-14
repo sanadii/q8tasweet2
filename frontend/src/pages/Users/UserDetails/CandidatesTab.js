@@ -69,7 +69,7 @@ const UsersTab = () => {
     }
   };
 
-  const onClickDelete = (userElection) => {
+  const onDeleteCheckBoxClick = (userElection) => {
     setUserElection(userElection);
     setDeleteModal(true);
   };
@@ -269,7 +269,7 @@ const UsersTab = () => {
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
                   const userElection = cellProps.row.original;
-                  onClickDelete(userElection);
+                  onDeleteCheckBoxClick(userElection);
                 }}
               >
                 <i className="ri-delete-bin-5-fill align-bottom" />

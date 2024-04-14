@@ -45,7 +45,7 @@ const MembersList = ({
   // Delete Hook
   const {
     handleDeleteItem,
-    onClickDelete,
+    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
     checkedAll,
@@ -175,14 +175,14 @@ const MembersList = ({
         <Actions
           cellProps={cellProps}
           handleCampaignMemberClick={handleCampaignMemberClick}
-          onClickDelete={onClickDelete}
+          onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           canChangeConfig={canChangeConfig}
           campaignMembers={campaignMembers}
           campaignRoles={campaignRoles}
         />
       )
     }
-  ], [checkedAll, deleteCheckbox, handleSelectCampaignMember, handleCampaignMemberClick, onClickDelete, campaignAttendees, campaignGuarantees, campaignElectionCommittees, canChangeConfig, canChangeCampaignSupervisor, campaignMembers, campaignRoles]);
+  ], [checkedAll, deleteCheckbox, handleSelectCampaignMember, handleCampaignMemberClick, onDeleteCheckBoxClick, campaignAttendees, campaignGuarantees, campaignElectionCommittees, canChangeConfig, canChangeCampaignSupervisor, campaignMembers, campaignRoles]);
 
   const columns = useMemo(() => {
     return columnsDefinition.filter(column => {

@@ -41,7 +41,7 @@ const MembersTab = () => {
   } = usePermission();
 
   // Delete Hook
-  const { handleDeleteItem, onClickDelete, setDeleteModal, deleteModal } = useDelete(deleteCampaignMember);
+  const { handleDeleteItem, onDeleteCheckBoxClick, setDeleteModal, deleteModal } = useDelete(deleteCampaignMember);
 
   // Finding Active Role to Show Different Table Columns
   const [activeTab, setActiveTab] = useState("all"); // Initialize with "campaignManagers"
@@ -154,14 +154,14 @@ const MembersTab = () => {
         <Actions
           cellProps={cellProps}
           handleCampaignMemberClick={handleCampaignMemberClick}
-          onClickDelete={onClickDelete}
+          onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           canChangeConfig={canChangeConfig}
           campaignMembers={campaignMembers}
           campaignRoles={campaignRoles}
         />
       )
     }
-  ], [handleCampaignMemberClick, onClickDelete, campaignAttendees, campaignGuarantees, campaignElectionCommittees, canChangeConfig, canChangeCampaignSupervisor, campaignMembers, campaignRoles]);
+  ], [handleCampaignMemberClick, onDeleteCheckBoxClick, campaignAttendees, campaignGuarantees, campaignElectionCommittees, canChangeConfig, canChangeCampaignSupervisor, campaignMembers, campaignRoles]);
 
   const columns = useMemo(() => {
     return columnsDefinition.filter(column => {

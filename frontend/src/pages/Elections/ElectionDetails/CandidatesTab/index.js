@@ -80,7 +80,7 @@ const CandidatesTab = () => {
   // Delete Hook
   const {
     handleDeleteItem,
-    onClickDelete,
+    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
     checkedAll,
@@ -231,7 +231,7 @@ const CandidatesTab = () => {
             setElectionCandidate={setElectionCandidate}
             handleElectionCandidateClick={handleElectionCandidateClick}
             setIsElectionPartyAction={setIsElectionPartyAction}
-            onClickDelete={onClickDelete}
+            onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           />
         )
       },
@@ -263,7 +263,7 @@ const CandidatesTab = () => {
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
               setIsElectionPartyAction(true);
-              onClickDelete(electionParty);
+              onDeleteCheckBoxClick(electionParty);
             }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />

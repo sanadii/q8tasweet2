@@ -212,6 +212,7 @@ const TableFilters = ({
                 <div className="flex-shrink-0">
                   {isResetFilters && (
                     <ResetFilters
+                      filters={filters}
                       setFilters={setFilters}
                       activeTab={activeTab}
                       setActiveTab={setActiveTab}

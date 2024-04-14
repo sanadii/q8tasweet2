@@ -11,9 +11,10 @@ import ElectionModal from "./ElectionModal";
 import { Id, CheckboxHeader, CheckboxCell, Name, DueDate, Status, Priority, Category, CreateBy, Actions } from "./ElectionListCol";
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
 import { useDelete, useFilter, useFetchDataIfNeeded } from "shared/hooks"
+import { defaultDate } from "shared/utils"
 
 // UI, Styles & Notifications
-import { Col, Row, Card, CardBody } from "reactstrap";
+import { Col, Row, Card, CardHeader, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,42 +25,7 @@ const AllElections = () => {
   // State Management
   const { elections, isElectionSuccess, error } = useSelector(electionSelector);
   const { categories } = useSelector(categorySelector);
-
-  // Delete Hook
-  const {
-    handleDeleteItem,
-    onClickDelete,
-    deleteModal,
-    setDeleteModal,
-    checkedAll,
-    deleteCheckbox,
-    isMultiDeleteButton,
-    deleteModalMulti,
-    setDeleteModalMulti,
-    deleteMultiple,
-  } = useDelete(deleteElection);
-
-  // Fetch Data If Needed Hook
-      // Election Data
-      useEffect(() => {
-        if (!isElectionSuccess) {
-          dispatch(getElections('admin'));
-        }
-    }, [dispatch, isElectionSuccess]);
-
-
-  useFetchDataIfNeeded(categories, getCategories);
-
-  // Dates
-  const defaultdate = () => {
-    let d = new Date();
-    const year = d.getFullYear();
-    const month = ("0" + (d.getMonth() + 1)).slice(-2);
-    const day = ("0" + d.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
-  };
-
-  const [dueDate, setDate] = useState(defaultdate());
+  const [dueDate, setDate] = useState(defaultDate());
 
   // Model & Toggle Function
   const [election, setElection] = useState(null);
@@ -68,50 +34,80 @@ const AllElections = () => {
   const [activeTab, setActiveTab] = useState("0"); // Initialize with "campaignManagers"
   const activeRole = activeTab;
 
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    handleItemDeleteClick,
+    deleteModal,
+    setDeleteModal,
+    handleCheckAllClick,
+    handleCheckCellClick,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    handleDeleteMultiple,
+  } = useDelete(deleteElection);
+
+  // Election Data
+  useEffect(() => {
+    if (!isElectionSuccess) {
+      dispatch(getElections('admin'));
+      dispatch(getCategories());
+    }
+  }, [dispatch, isElectionSuccess]);
+
+
   const toggle = useCallback(() => {
     if (modal) {
       setModal(false);
       setElection(null);
     } else {
       setModal(true);
-      setDate(defaultdate());
+      setDate(defaultDate());
     }
   }, [modal]);
 
 
   // Update Data
+  // const handleElectionClick = useCallback(
+  //   (arg) => {
+  //     const election = arg;
+
+  //     setElection({
+  //       id: election.id,
+  //       dueDate: election.dueDate,
+  //       candidateCount: election.candidateCount,
+
+  //       // Taxonomies
+  //       category: election.category,
+  //       subCategory: election.subCategory,
+  //       tags: election.tags,
+
+  //       // Election Spesifications
+  //       electionMethod: election.electionMethod,
+  //       electionResult: election.electionResult,
+  //       electVotes: election.electVotes,
+  //       electSeats: election.seats,
+  //       voters: election.voters,
+  //       attendees: election.attendees,
+
+  //       // Task
+  //       status: election.status,
+  //       priority: election.priority,
+  //     });
+
+  //     setIsEdit(true);
+  //     toggle();
+  //   },
+  //   [toggle]
+  // );
+
   const handleElectionClick = useCallback(
-    (arg) => {
-      const election = arg;
-
-      setElection({
-        id: election.id,
-        dueDate: election.dueDate,
-        candidateCount: election.candidateCount,
-
-        // Taxonomies
-        category: election.category,
-        subCategory: election.subCategory,
-        tags: election.tags,
-
-        // Election Spesifications
-        electionMethod: election.electionMethod,
-        electionResult: election.electionResult,
-        electVotes: election.electVotes,
-        electSeats: election.seats,
-        voters: election.voters,
-        attendees: election.attendees,
-
-        // Task
-        status: election.status,
-        priority: election.priority,
-      });
-
+    (electionData) => {
+      setElection(electionData);
       setIsEdit(true);
       toggle();
-    },
-    [toggle]
-  );
+    }, [toggle]);
 
   // Add Data
   const handleElectionClicks = () => {
@@ -125,9 +121,9 @@ const AllElections = () => {
   const columns = useMemo(
     () => [
       {
-        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
         accessor: "id",
-        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
+        Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
       },
       {
         Header: "م.",
@@ -173,33 +169,33 @@ const AllElections = () => {
           <Actions
             {...cellProps}
             handleElectionClick={handleElectionClick}
-            onClickDelete={onClickDelete}
+            handleItemDeleteClick={handleItemDeleteClick}
           />
       },
     ],
-    [handleElectionClick, checkedAll]
+    [handleCheckCellClick, handleCheckAllClick, handleElectionClick, handleItemDeleteClick]
   );
 
   // Filters
   const { filteredData: electionList, filters, setFilters } = useFilter(elections);
 
-  console.log("filters: ", filters);
-  console.log("filters: electionList: ", electionList);
   return (
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteItem}
+        onDeleteClick={() => handleDeleteItem()}
         onCloseClick={() => setDeleteModal(false)}
       />
+
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          deleteMultiple();
+          handleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
       />
+
       <ElectionModal
         modal={modal}
         toggle={toggle}
@@ -210,22 +206,23 @@ const AllElections = () => {
       <Row>
         <Col lg={12}>
           <Card id="electionList">
+            <TableContainerHeader
+              // Title
+              ContainerHeaderTitle="الإنتخابات"
+
+              // Add Button
+              isContainerAddButton={true}
+              AddButtonText="إضافة إنتخابات"
+              isEdit={isEdit}
+              handleEntryClick={handleElectionClicks}
+              toggle={toggle}
+
+              // Delete Button
+              isMultiDeleteButton={isMultiDeleteButton}
+              setDeleteModalMulti={setDeleteModalMulti}
+            />
+
             <CardBody>
-              <TableContainerHeader
-                // Title
-                ContainerHeaderTitle="الإنتخابات"
-
-                // Add Button
-                isContainerAddButton={true}
-                AddButtonText="إضافة إنتخابات"
-                isEdit={isEdit}
-                handleEntryClick={handleElectionClicks}
-                toggle={toggle}
-
-                // Delete Button
-                isMultiDeleteButton={isMultiDeleteButton}
-                setDeleteModalMulti={setDeleteModalMulti}
-              />
 
               <TableFilters
                 // Filters
@@ -243,7 +240,7 @@ const AllElections = () => {
                 setFilters={setFilters}
                 SearchPlaceholder="البحث بالاسم..."
               />
-              
+
               {isElectionSuccess && elections.length ? (
                 <TableContainer
                   // Data

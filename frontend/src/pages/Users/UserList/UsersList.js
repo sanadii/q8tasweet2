@@ -164,7 +164,7 @@ const ElectionList = () => {
   }, [modal]);
 
   // Delete Data
-  const onClickDelete = (user) => {
+  const onDeleteCheckBoxClick = (user) => {
     setElection(user);
     setDeleteModal(true);
   };
@@ -582,7 +582,7 @@ const ElectionList = () => {
             <Actions
               {...cellProps}
               handleElectionClick={handleElectionClick}
-              onClickDelete={onClickDelete}
+              onDeleteCheckBoxClick={onDeleteCheckBoxClick}
             />
           );
         },

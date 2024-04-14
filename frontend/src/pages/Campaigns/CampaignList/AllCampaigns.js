@@ -48,7 +48,7 @@ const AllCampaigns = () => {
   }, [modal]);
 
   // Delete Data
-  const onClickDelete = (campaign) => {
+  const onDeleteCheckBoxClick = (campaign) => {
     setCampaign(campaign);
     setDeleteModal(true);
   };
@@ -235,7 +235,7 @@ const AllCampaigns = () => {
             <Actions
               {...cellProps}
               handleCampaignClick={handleCampaignClick}
-              onClickDelete={onClickDelete}
+              onDeleteCheckBoxClick={onDeleteCheckBoxClick}
             />
           );
         },

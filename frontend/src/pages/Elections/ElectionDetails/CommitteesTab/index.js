@@ -5,9 +5,13 @@ import { Link } from "react-router-dom";
 import { electionSelector } from 'selectors';
 
 import { deleteElectionCommittee } from "store/actions";
-import CommitteeModal from "./CommitteeModal";
-import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Circle, Areas, Sorter, Actions } from "./CommitteesCol";
+import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Circle, Areas, Voters, Sorter, Actions, Expanded } from "./CommitteesCol";
 import { usePermission, useDelete } from "shared/hooks";
+
+// Components
+import CommitteeModal from "./CommitteeModal";
+import CommitteeExpandedContent from './CommitteeExpandedContent';
+
 
 // Utility and helper imports
 import { isEmpty } from "lodash";
@@ -18,10 +22,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "shared/components";
 
 // Reactstrap (UI) imports
-import { Badge, Col, Container, Row, Card, CardBody } from "reactstrap";
+import { Col, Row, Card, CardBody } from "reactstrap";
 
-// Additional package imports
-import SimpleBar from "simplebar-react";
 
 const CommitteesTab = () => {
   const { electionDetails, electionCommittees, electionSorters, electionCampaigns, error } = useSelector(electionSelector);
@@ -35,7 +37,7 @@ const CommitteesTab = () => {
   // Delete Hook
   const {
     handleDeleteItem,
-    onClickDelete,
+    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
     checkedAll,
@@ -126,6 +128,11 @@ const CommitteesTab = () => {
         Cell: (cellProps) => <Areas {...cellProps} />
       },
       {
+        Header: "الناخبين",
+        filterable: true,
+        Cell: (cellProps) => <Voters {...cellProps} />
+      },
+      {
         Header: "الفارز",
         filterable: true,
         Cell: (cellProps) => (
@@ -143,24 +150,24 @@ const CommitteesTab = () => {
             {...cellProps}
             setElectionCommittee={setElectionCommittee}
             handleElectionCommitteeClick={handleElectionCommitteeClick}
-            onClickDelete={onClickDelete}
+            onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           />
         )
       },
       {
-        // Other settings...
         // Expander column
-        id: 'expander', // It's important to have an ID for this column
+        id: 'expander',
         Header: ({ getToggleAllRowsExpandedProps }) => (
-          <span {...getToggleAllRowsExpandedProps()}>Expand</span>
+          <span {...getToggleAllRowsExpandedProps()}>اللجان الفرعية</span>
         ),
-        Cell: ({ row }) => (
-          // Use the row.getToggleRowExpandedProps to toggle the expanded state
-          <span {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
-          </span>
-        ),
+        Cell: (cellProps) => (
+          <Expanded
+            {...cellProps}
+          />
+        )
       },
+
+
     ],
     [handleElectionCommitteeClick, checkedAll]
   );
@@ -252,6 +259,7 @@ const CommitteesTab = () => {
                   columns={columns}
                   data={electionCommitteeList || []}
                   customPageSize={50}
+                  ExpandedComponent={CommitteeExpandedContent}
 
                   // Filters
                   isTableContainerFilter={true}

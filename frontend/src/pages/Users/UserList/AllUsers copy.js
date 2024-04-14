@@ -132,7 +132,7 @@ const CreateBy = (cell) => {
 };
 
 const Actions = (props) => {
-  const { cell, handleUserClick, onClickDelete } = props;
+  const { cell, handleUserClick, onDeleteCheckBoxClick } = props;
   return (
     <React.Fragment>
       <div className="d-flex">
@@ -153,7 +153,7 @@ const Actions = (props) => {
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
               const userData = cell.row.original;
-              onClickDelete(userData);
+              onDeleteCheckBoxClick(userData);
             }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />

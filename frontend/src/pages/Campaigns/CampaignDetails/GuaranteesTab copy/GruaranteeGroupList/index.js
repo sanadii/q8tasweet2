@@ -33,7 +33,7 @@ const GuaranteesGroupList = ({
     // Delete Hook
     const {
         handleDeleteItem,
-        onClickDelete,
+        onDeleteCheckBoxClick,
         deleteModal,
         setDeleteModal,
         checkedAll,
@@ -128,10 +128,10 @@ const GuaranteesGroupList = ({
                     <Actions
                         cellProps={cellProps}
                         handleCampaignGuaranteeClick={handleCampaignGuaranteeClick}
-                        onClickDelete={onClickDelete}
+                        onDeleteCheckBoxClick={onDeleteCheckBoxClick}
                     />
             },
-        ], [checkedAll, deleteCheckbox, onClickDelete, handleCampaignGuaranteeClick, campaignMembers]);
+        ], [checkedAll, deleteCheckbox, onDeleteCheckBoxClick, handleCampaignGuaranteeClick, campaignMembers]);
 
     // Assuming useFilter returns an object with a property named filteredData
     const filterResult = useFilter(campaignGuaranteeGroups);

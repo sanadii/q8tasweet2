@@ -36,6 +36,7 @@ class Command(BaseCommand):
                 for committee_obj in committee_objs:
                     committee_obj.letters = row['letters']
                     committee_obj.areas = row['areas']
+                    committee_obj.type = row['type']
                     committee_obj.committee_group = committee_group
                     committee_obj.save()
                 updated_count += len(committee_objs)
@@ -44,6 +45,7 @@ class Command(BaseCommand):
                 committee_obj = ElectionCommittee.objects.create(
                     serial=row['serial'],
                     letters=row['letters'],
+                    type=row['type'],
                     areas=row['areas'],
                     committee_group=committee_group
                 )

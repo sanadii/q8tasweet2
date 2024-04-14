@@ -54,7 +54,7 @@ const AttendeesList = () => {
     }
   };
 
-  const onClickDelete = (campaignAttendee) => {
+  const onDeleteCheckBoxClick = (campaignAttendee) => {
     setCampaignAttendee(campaignAttendee);
     setDeleteModal(true);
   };
@@ -212,7 +212,7 @@ const AttendeesList = () => {
         <Actions
           cellProps={cellProps}
           handleCampaignAttendeeClick={handleCampaignAttendeeClick}
-          onClickDelete={onClickDelete}
+          onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           isAdmin={isAdmin}
           isAttendant={isAttendant}
         />

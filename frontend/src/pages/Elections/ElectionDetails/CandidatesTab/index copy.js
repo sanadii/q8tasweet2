@@ -58,7 +58,7 @@ const CandidatesTab = () => {
   // Delete Hook
   const {
     handleDeleteItem,
-    onClickDelete,
+    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
     checkedAll,
@@ -140,7 +140,7 @@ const CandidatesTab = () => {
             {...cellProps}
             setElectionCandidate={setElectionCandidate}
             handleElectionCandidateClick={handleElectionCandidateClick}
-            onClickDelete={onClickDelete}
+            onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           />
         )
       },

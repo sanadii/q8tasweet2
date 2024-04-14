@@ -71,7 +71,7 @@ const Votes = (cellProps) => {
 }
 
 const Actions = (cellProps) => {
-    const { setElectionCommittee, handleElectionCommitteeClick, onClickDelete } = cellProps;
+    const { setElectionCommittee, handleElectionCommitteeClick, onDeleteCheckBoxClick } = cellProps;
     const electionCommittee = cellProps.row.original;
 
     return (
@@ -98,7 +98,7 @@ const Actions = (cellProps) => {
                 to="#"
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
-                    onClickDelete(electionCommittee);
+                    onDeleteCheckBoxClick(electionCommittee);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />

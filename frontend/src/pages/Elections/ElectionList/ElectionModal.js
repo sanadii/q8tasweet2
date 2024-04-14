@@ -1,10 +1,12 @@
 // React & Redux
 import React from "react";
+import * as moment from "moment";
+
 import { useSelector, useDispatch } from "react-redux";
 import { electionSelector, categorySelector, userSelector } from 'selectors';
 
 // Import Actions
-import { addElection, updateElection, getCategories } from "store/actions";
+import { addElection, updateElection } from "store/actions";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,22 +17,21 @@ import { Row, Form, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 import { FormFields } from "shared/components";
 import { ElectionMethodOptions, ElectionResultOptions, ElectionPartyResultOptions, ElectionSortingResultOptions, PriorityOptions, StatusOptions } from "shared/constants";
 import { useCategoryManager } from "shared/hooks";
-
+import { handleValidDate } from "shared/utils"
 
 const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
   const dispatch = useDispatch();
-
-  // State Management
   const { categories, subCategories } = useSelector(categorySelector);
 
   // validation
   const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
     initialValues: {
-      category: (election && election.category) || null,
-      subCategory: (election && election.subCategory) || null,
-      dueDate: (election && election.dueDate) || null,
+      category: (categories.length > 0) ? categories[0].id : null,
+      subCategory: (subCategories.length > 0) ? subCategories[0].id : null,
+      dueDate: (election && moment(election.dueDate, "YYYY-MM-DD", true).isValid()
+        ? election.dueDate
+        : moment().format("YYYY-MM-DD")),
       tags: (election && election.tags) || [],
       electionMethod: (election && election.electionMethod) || "candidateOnly",
       electionResult: (election && election.electionResult) || "total",
@@ -38,17 +39,20 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       electSeats: (election && election.electSeats) || 0,
       voters: (election && election.voters) || 0,
       attendees: (election && election.attendees) || 0,
-      status: (election && election.status) || 1,
-      priority: (election && election.priority) || 1,
+
+      // Task
+      status: (election && election.task && election.task.status) || 1,
+      priority: (election && election.task && election.task.priority) || 1,
       moderators:
         election && Array.isArray(election.moderators)
           ? election.moderators.map((moderator) => moderator.id)
           : [],
-
     },
+
     validationSchema: Yup.object({
       category: Yup.number().integer().nullable().notRequired('Category is required'),
       subCategory: Yup.number().integer().nullable().notRequired('Sub-Category is required'),
+      // dueDate: Yup.date().nullable().required('Due Date is required').min(new Date(), 'Due Date must be in the future'),
 
 
     }),
@@ -219,7 +223,6 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       name: "status",
       label: "الحالة",
       type: "select",
-      options: StatusOptions,
       options: StatusOptions.map(status => ({
         id: status.id,
         label: status.name,
@@ -232,13 +235,11 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
       name: "priority",
       label: "الأولية",
       type: "select",
-      options: PriorityOptions,
       options: PriorityOptions.map(priority => ({
         id: priority.id,
         label: priority.name,
         value: priority.id
       })),
-
       colSize: 6,
     },
   ];
@@ -247,7 +248,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
   return (
     <Modal
       isOpen={modal}
-      // toggle={toggle}
+      toggle={toggle}
       centered
       size="lg"
       className="border-0"
