@@ -8,8 +8,8 @@ import { getElectionDetails } from "store/actions";
 import { electionSelector } from 'selectors';
 
 // Components
-import SectionHeader from "pages/Elections/ElectionDetails/SectionHeader";
-import OverviewTab from "pages/Elections/ElectionDetails/OverviewTab";
+import SectionHeader from "pages/ElectionDetails/SectionHeader";
+import OverviewTab from "pages/ElectionDetails/OverviewTab";
 
 // UI & Utilities
 import { Container } from "reactstrap";

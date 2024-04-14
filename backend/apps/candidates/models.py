@@ -21,6 +21,9 @@ class Candidate(TrackModel, TaskModel):
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
     image = models.ImageField(upload_to="candidates/", blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True, null=True)
+    family = models.CharField(max_length=25, blank=True, null=True)
+    tribe = models.CharField(max_length=25, blank=True, null=True)
+    denomination = models.CharField(max_length=25, blank=True, null=True)
 
     class Meta:
         db_table = "candidate"

@@ -58,7 +58,7 @@ def index(request):
 
 # Election: getElection, deleteElection, addElection, updateElection
 class CustomPagination(PageNumberPagination):
-    page_size = 50
+    page_size = 200
 
     def get_paginated_response(self, data):
         return Response({

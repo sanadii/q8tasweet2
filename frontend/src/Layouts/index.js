@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import PropTypes from "prop-types";
 import { withRouter } from 'shared/components';
-import SectionHeader from "pages/Campaigns/CampaignDetails/SectionHeader"
+import SectionHeader from "pages/CampaignDetails/SectionHeader"
 import { Container } from "reactstrap";
 
 // Redux

@@ -5,6 +5,26 @@ import { Table, Row, Col, Button, Input, CardBody, CardFooter } from "reactstrap
 import { DefaultColumnFilter } from "../Filters";
 import { TableContainerFooter } from "shared/components";
 
+
+const defaultSortMethod = (rowA, rowB, columnId, desc) => {
+  const valA = rowA.values[columnId];
+  const valB = rowB.values[columnId];
+
+  // Consider rows without a position as the smallest values
+  if (valA === null && valB === null) return 0;
+  if (valA === null) return 1;
+  if (valB === null) return -1;
+
+  // Fallback to the default behavior
+  if (typeof valA === 'number' && typeof valB === 'number') {
+    return valA > valB ? 1 : valA < valB ? -1 : 0;
+  }
+
+  // Fallback to string comparison
+  return String(valA).localeCompare(String(valB));
+};
+
+
 const TableContainer = ({
   // Settings
   customPageSize,
@@ -68,11 +88,15 @@ const TableContainer = ({
         selectedRowIds: 0,
         sortBy: [
           {
-            id: sortBy, // replace with the actual column ID or accessor for the due date
+            id: sortBy,
             asc: sortAsc,
             desc: sortDesc,
           },
         ],
+
+      },
+      sortTypes: {
+        alphanumeric: defaultSortMethod,
       },
     },
     useGlobalFilter,

@@ -300,6 +300,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     committee_votes = ElectionCommitteeResultSerializer(
         source="committee_result_candidates", many=True, read_only=True
     )
+    
     committee_sorting = serializers.SerializerMethodField()
 
     class Meta:
@@ -315,6 +316,9 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "notes",
             "committee_votes",
             "committee_sorting",
+            
+            "result",
+            "position",
         ]
 
     def get_committee_sorting(self, obj):

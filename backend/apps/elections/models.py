@@ -112,7 +112,9 @@ class ElectionCategory(models.Model):
 class ElectionCandidate(TrackModel):
     election = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name="candidate_elections")
     candidate = models.ForeignKey('candidates.Candidate', on_delete=models.SET_NULL, null=True, blank=True, related_name="election_candidates")
-    votes = models.PositiveIntegerField(default=0)
+    position = models.IntegerField(null=True, blank=True)
+    result = models.CharField(max_length=25, null=True, blank=True)
+    votes = models.PositiveIntegerField(default=0, null=True, blank=True)
     notes = models.TextField(blank=True, null=True)
 
     #  Saving sum of votes from ElectionCommitteeResult for each candidate

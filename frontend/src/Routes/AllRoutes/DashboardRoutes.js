@@ -18,7 +18,7 @@ import GroupPermissions from "pages/Admin/GroupPermissions";
 
 // Election Pages
 import ElectionList from "pages/Elections/ElectionList";
-import ElectionDetails from "pages/Elections/ElectionDetails";
+import ElectionDetails from "pages/ElectionDetails";
 
 // Candidates Pages
 import CandidateList from "pages/Candidates/CandidateList";
@@ -32,7 +32,7 @@ import PartyDetails from "pages/Parties/PartyDetails";
 // Campaign Pages
 import CampaignList from "pages/Campaigns/CampaignList";
 import CampaignGrid from "pages/Campaigns/CampaignList/CampaignGrid";
-import CampaignDetails from "pages/Campaigns/CampaignDetails";
+import CampaignDetails from "pages/CampaignDetails";
 
 // User Pages
 import UserList from "pages/Users/UserList";

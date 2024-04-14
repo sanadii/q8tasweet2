@@ -7,7 +7,7 @@ import {
   getCandidates,
   addNewCandidate,
   updateCandidate,
-} from "../../../../store/actions";
+} from "store/actions";
 
 // Form validation imports
 import * as Yup from "yup";

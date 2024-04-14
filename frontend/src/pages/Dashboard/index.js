@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 // import useWebSocket from 'react-use-websocket';
 import { Container, Row } from "reactstrap";
 import { BreadCrumb } from "shared/components";
-import OverviewTab from "pages/Campaigns/CampaignDetails/OverviewTab";
+import OverviewTab from "pages/CampaignDetails/OverviewTab";
 
 import { useSelector, useDispatch } from "react-redux";
 import { campaignSelector } from 'selectors';

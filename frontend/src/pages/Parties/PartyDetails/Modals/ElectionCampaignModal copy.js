@@ -5,7 +5,7 @@ import {
     getCandidates,
     addNewElectionCampaign,
     updateCandidateCampaign,
-} from "../../../../store/actions";
+} from "store/actions";
 
 // Form validation imports
 import * as Yup from "yup";

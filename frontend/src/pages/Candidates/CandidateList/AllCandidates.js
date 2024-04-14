@@ -202,7 +202,7 @@ const AllCandidates = () => {
                   // Table Data
                   columns={columns}
                   data={candidateList || []}
-                  customPageSize={20}
+                  customPageSize={200}
 
                   // useFilters={true}
                   className="custom-header-css"

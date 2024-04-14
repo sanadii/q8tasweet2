@@ -5,7 +5,7 @@ import {
   getCandidates,
   addNewElectionCampaign,
   updateCandidateCampaign,
-} from "../../../../store/actions";
+} from "store/actions";
 
 import { ImageCircle } from "../../../../shared/components";
 // Form validation imports
