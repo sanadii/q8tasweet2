@@ -5,7 +5,7 @@ import DashboardCharts from "../DashboardCharts";
 import { SimplePie, SimpleDonut, UpdateDonut, MonochromePie, GradientDonut, PatternedDonut, ImagePieChart } from '../PieCharts'
 import FeatherIcon from "feather-icons-react";
 
-import { ElectionCandidatesByGender, ElectionVotersByGender, AttendeesGroupes } from './OverviewCharts/DashboardEcommerceCharts';
+// import { ElectionCandidatesByGender, ElectionVotersByGender, AttendeesGroupes } from './OverviewCharts/DashboardEcommerceCharts';
 
 const ElectionDetailsWidget = ({ election, electionCandidates }) => {
 
@@ -69,12 +69,12 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
           <span>{electionVoters}</span>
         </CardHeader>
 
-        <div className="card-body">
+        {/* <div className="card-body">
           <ElectionVotersByGender
             electionMaleVoters={electionMaleVoters}
             electionFemaleVoters={electionFemaleVoters}
           />
-        </div>
+        </div> */}
       </Card>
 
       <Card>
@@ -82,7 +82,7 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
           <h4 className="card-title mb-0">Grouped Bar Chart</h4>
         </CardHeader>
         <CardBody>
-          <AttendeesGroupes dataColors='["--vz-primary", "--vz-success"]' />
+          {/* <AttendeesGroupes dataColors='["--vz-primary", "--vz-success"]' /> */}
         </CardBody>
       </Card>
 
