@@ -9,12 +9,16 @@ import ReactApexChart from "react-apexcharts";
 
 import { getChartColorsArray } from "shared/components";
 
-const SimplePie = ({ dataColors, chartWidth, chartHeight }) => {
+const SimplePie = ({ dataColors, chartWidth, chartHeight,
+    maleCandidates,
+    femaleCandidates,
+
+}) => {
     var chartPieBasicColors = getChartColorsArray(dataColors);
-    const series = [45, 55]
+    const series = [maleCandidates, femaleCandidates]
     var options = {
         chart: {
-            height: 100,
+            height: 50,
             type: 'pie',
         },
         labels: ['Males', 'Females'],

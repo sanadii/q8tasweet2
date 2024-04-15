@@ -26,6 +26,7 @@ class Command(BaseCommand):
                 candidate, created = Candidate.objects.update_or_create(
                     defaults={
                         'name': row['name'],
+                        'gender': row['gender'],
                         'family': row['family'],
                         'tribe': row['tribe'],
                         'denomination': row['denomination'],

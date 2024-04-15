@@ -42,8 +42,8 @@ const EditElection = () => {
 
       // Voters
       voters: (election && election.voters) || 0,
-      electorsMales: (election && election.electorsMales) || 0,
-      electorsFemales: (election && election.electorsFemales) || 0,
+      votersMales: (election && election.votersMales) || 0,
+      votersFemales: (election && election.votersFemales) || 0,
 
       // Attendees
       attendees: (election && election.attendees) || 0,
@@ -87,8 +87,8 @@ const EditElection = () => {
         electionResult: JSON.stringify(electionResultJson), // Convert the object to a JSON string
         electSeats: values.electSeats,
         voters: values.voters,
-        electorsMales: values.electorsMales,
-        electorsFemales: values.electorsFemales,
+        votersMales: values.votersMales,
+        votersFemales: values.votersFemales,
 
         attendees: values.attendees,
         attendeesMales: values.attendeesMales,
@@ -241,15 +241,15 @@ const EditElection = () => {
               colSize: 12,
             },
             {
-              id: "electorsMales-input",
-              name: "electorsMales",
+              id: "votersMales-input",
+              name: "votersMales",
               label: "عدد الناخبين الرجال",
               type: "number",
               colSize: 6,
             },
             {
-              id: "electorsFemales-input",
-              name: "electorsFemales",
+              id: "votersFemales-input",
+              name: "votersFemales",
               label: "عدد الناخبين النساء",
               type: "number",
               colSize: 6,
