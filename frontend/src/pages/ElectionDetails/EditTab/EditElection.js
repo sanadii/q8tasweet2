@@ -36,9 +36,8 @@ const EditElection = () => {
       electionResultView: (election && election.electionResultView) || "total",
       electionResultParty: (election && election.electionResultParty) || "candidateOnly",
       electionResultSorting: (election && election.electionResultSorting) || false,
-
-      electVotes: (election && election.electVotes) || 0,
       electSeats: (election && election.electSeats) || 0,
+      electVotes: (election && election.electVotes) || 0,
 
       // Voters
       voters: (election && election.voters) || 0,
@@ -86,6 +85,7 @@ const EditElection = () => {
         electionMethod: values.electionMethod,
         electionResult: JSON.stringify(electionResultJson), // Convert the object to a JSON string
         electSeats: values.electSeats,
+        electVotes: values.electVotes,
         voters: values.voters,
         votersMales: values.votersMales,
         votersFemales: values.votersFemales,

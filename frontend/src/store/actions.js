@@ -10,6 +10,7 @@ export * from "./auth/resetpassword/actions";
 
 // Elections
 export * from "./elections/action";
+export * from "./electionStatistics/actions";
 export * from "./candidates/action";
 export * from "./parties/action";
 export * from "./campaigns/action";

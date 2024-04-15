@@ -4,12 +4,14 @@ export const PriorityOptions = [
     name: "منخفض",
     value: "low",
     badgeClass: "badge bg-info",
+    color: "bg-info",
     description: "الانتخابات ذات الأولوية المنخفضة. (منخفض)",
   },
   {
     id: 2,
     name: "متوسط",
     value: "medium",
+    color: "bg-warning",
     badgeClass: "badge bg-warning",
     description: "الانتخابات ذات الأولوية المتوسطة. (متوسط)",
   },
@@ -17,6 +19,7 @@ export const PriorityOptions = [
     id: 3,
     name: "عالي",
     value: "high",
+    color: "bg-danger",
     badgeClass: "badge bg-danger",
     description: "الانتخابات ذات الأولوية العالية. (عالي)",
   },
@@ -28,8 +31,8 @@ export const PriorityBadge = ({ priority }) => {
   if (!entryPriority) return null;
 
   return (
-    <div className={`badge rounded-pill ${entryPriority.badgeClass} fs-12`}>
+    <badge className={`${entryPriority.badgeClass} fs-12`}>
       {entryPriority.name}
-    </div>
+    </badge>
   );
 };

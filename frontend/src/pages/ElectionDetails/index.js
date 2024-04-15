@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Store & Selectors
-import { getElectionDetails } from "store/actions";
+import { getElectionDetails, getElectionStatistics } from "store/actions";
 import { electionSelector } from 'selectors';
 
 // Components
@@ -19,6 +19,7 @@ const ElectionDetails = () => {
   const { slug } = useParams();
   const { election } = useSelector(electionSelector);
 
+  const electionHasDatabase = election?.hasDatabase
   useEffect(() => {
     // Set the document title
     document.title = "الانتخابات | كويت تصويت";
@@ -27,9 +28,21 @@ const ElectionDetails = () => {
     if (slug && (isEmpty(election) || election.slug !== slug)) {
       dispatch(getElectionDetails(slug));
     }
-  }, [dispatch, slug]);
+
+  }, [dispatch, election, slug]);
 
 
+  useEffect(() => {
+
+    // Fetch election details if the slug is available and candidate is empty
+    if (election && electionHasDatabase) {
+      // dispatch(getElectionDetails(slug));
+      console.log("we have database")
+      dispatch(getElectionStatistics(slug));
+    }
+  }, [dispatch, election, slug, electionHasDatabase]);
+
+  
   return (
     <div className="page-content">
       <Container fluid>

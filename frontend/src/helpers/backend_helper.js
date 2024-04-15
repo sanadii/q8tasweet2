@@ -122,6 +122,9 @@ export const deleteElectionAttendee = (electionAttendee) => api.delete(url.DELET
 export const addNewElectionAttendee = (electionAttendee) => api.create(url.ADD_NEW_ELECTION_ATTENDEE, electionAttendee);
 export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_ELECTION_ATTENDEE, electionAttendee);
 
+// ELECTION STATISTICS
+export const getElectionStatistics = (election) => api.get(url.GET_ELECTION_STATISTICS + "/" + election);
+
 
 // Candidates
 export const getCandidates = () => api.get(url.GET_CANDIDATES);

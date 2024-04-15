@@ -1,0 +1,54 @@
+Auth Tables
+- authGroup
+- authPermission
+- authGroupPermission
+- authUser
+- authUserGroup
+- authUserUserPermission				??
+
+ELECTION
+- election
+- electionCategory
+- electionCommittee
+- electionNotification
+
+
+- electionCandidate					- electionCandidate
+- electionCommitteeResult				- electionCandidateCommitteeResult	
+- electionSorting					- electionCandidateSorting
+
+- electionParty
+- electionPartyCandidate
+- electionPartyCandidateCommitteeResult
+- electionPartyCandidateSorting
+- electionPartyCommitteeResult
+- electionPartySorting
+
+
+CANDIDATE
+- candidate
+- party
+- partyCandidate
+
+
+CAMPAIGN
+- campaign						NB
+- campaignMember					NB
+- campaignGuarantee
+- campaignGuaranteeGroup
+- campaignCommittee
+- campaignCommitteeAttendee
+- campaignCommitteeSorting
+- campaignAttendee
+- campaignSorting
+- campaignNotificaiton
+
+CAMPAIGN PARTY
++ campaignPartyCandidateSorting
+
+
+OTHERS
+- area
+- tag
+- elector (voter)
+

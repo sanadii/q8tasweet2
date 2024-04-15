@@ -63,9 +63,10 @@ const StatusBadge = ({ status }) => {
   if (!entryStatus) return null;
 
   return (
-    <div className={`badge rounded-pill ${entryStatus.badgeClass} fs-12`}>
+    <div className={`${entryStatus.badgeClass} fs-12`}>
       {entryStatus.name}
     </div>
+
   );
 };
 

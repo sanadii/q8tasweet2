@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'apps.voters',
     'apps.campaigns',
     'apps.elections.apps.ElectionConfig',
+    'apps.electionStatistics',
     'apps.categories',
     'apps.candidates',
     

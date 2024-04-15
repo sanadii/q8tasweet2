@@ -2,29 +2,24 @@ import React from 'react';
 import ReactApexChart from "react-apexcharts";
 
 //Import images
-// import smallImage1 from 'assets/images/small/img-1.jpg';
-// import smallImage2 from 'assets/images/small/img-2.jpg';
-// import smallImage3 from 'assets/images/small/img-3.jpg';
-// import smallImage4 from 'assets/images/small/img-4.jpg';
+import smallImage1 from '../../../../assets/images/small/img-1.jpg';
+import smallImage2 from '../../../../assets/images/small/img-2.jpg';
+import smallImage3 from '../../../../assets/images/small/img-3.jpg';
+import smallImage4 from '../../../../assets/images/small/img-4.jpg';
 
-import { getChartColorsArray } from "shared/components";
+import getChartColorsArray from "../../../../Components/Common/ChartsDynamicColor";
 
-const SimplePie = ({ dataColors, chartWidth, chartHeight,
-    maleCandidates,
-    femaleCandidates,
-
-}) => {
+const SimplePie = ({ dataColors }) => {
     var chartPieBasicColors = getChartColorsArray(dataColors);
-    const series = [maleCandidates, femaleCandidates]
+    const series = [44, 55, 13, 43, 22]
     var options = {
         chart: {
-            height: 50,
+            height: 300,
             type: 'pie',
         },
-        labels: ['Males', 'Females'],
+        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
         legend: {
-            position: 'bottom',
-            show: false
+            position: 'bottom'
         },
         dataLabels: {
             dropShadow: {
@@ -39,9 +34,7 @@ const SimplePie = ({ dataColors, chartWidth, chartHeight,
             series={series}
             options={options}
             type="pie"
-            width={chartWidth}
-            height={chartHeight}
-
+            height={300}
         />
     )
 }
@@ -70,7 +63,7 @@ const SimpleDonut = ({ dataColors }) => {
             series={series}
             options={options}
             type="donut"
-            height={267.7}
+            height={300}
         />
 
     )
@@ -98,14 +91,13 @@ const UpdateDonut = ({ dataColors }) => {
             series={series}
             options={options}
             type="donut"
-            height={267.7}
+            height={280.7}
         />
 
     )
 }
 
-const MonochromePie = ({ dataColors }) => {
-    var chartMonochromeColors = getChartColorsArray(dataColors);
+const MonochromePie = () => {
     const series = [25, 15, 44, 55, 41, 17]
     var options = {
 
@@ -155,7 +147,7 @@ const MonochromePie = ({ dataColors }) => {
             series={series}
             options={options}
             type="pie"
-            height={287.7}
+            height={300.7}
         />
 
     )
@@ -202,7 +194,7 @@ const GradientDonut = ({ dataColors }) => {
             series={series}
             options={options}
             type="donut"
-            height={267.7}
+            height={290.7}
         />
 
     )
@@ -280,7 +272,7 @@ const PatternedDonut = ({ dataColors }) => {
             series={series}
             options={options}
             type="donut"
-            height={267.7}
+            height={280.7}
         />
 
     )
@@ -300,7 +292,7 @@ const ImagePieChart = ({ dataColors }) => {
             opacity: 0.85,
 
             image: {
-                src: [],
+                src: [smallImage1, smallImage2, smallImage3, smallImage4],
                 width: 25,
                 imagedHeight: 25
             },
@@ -339,7 +331,7 @@ const ImagePieChart = ({ dataColors }) => {
             series={series}
             options={options}
             type="pie"
-            height={267.7}
+            height={263.6}
         />
 
     )

@@ -16,6 +16,8 @@ import ResetPassword from "./auth/resetpassword/reducer";
 
 // Elections
 import Elections from "./elections/reducer";
+import ElectionStatistics from "./electionStatistics/reducer";
+
 import Candidates from "./candidates/reducer";
 import Parties from "./parties/reducer";
 import Campaigns from "./campaigns/reducer";
@@ -54,6 +56,7 @@ const rootReducer = combineReducers({
 
     // Project
     Elections,
+    ElectionStatistics,
     Candidates,
     Parties,
     Campaigns,

@@ -71,6 +71,10 @@ export const UPDATE_ELECTION_CAMPAIGN = "/elections/updateElectionCampaign";
 export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
 
 
+// Election Statistics
+export const GET_ELECTION_STATISTICS = "/electionStatistics/getElectionStatistics";
+
+
 // Candidates
 export const GET_CANDIDATES = "/candidates/getCandidates";
 export const GET_CANDIDATE_DETAILS = "/candidates/getCandidateDetails";

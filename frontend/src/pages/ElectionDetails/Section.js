@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 
 // Store & Selectors
+import { useSelector } from "react-redux";
 import { electionSelector, categorySelector } from 'selectors';
 
-// UI & Utilities
-import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
-import { Link } from "react-router-dom";
-import classnames from "classnames";
+// Shared hooks
+import { usePermission } from "shared/hooks"
 
 //import Tabs & Widges
 import SectionHeader from "./SectionHeader";
-import ElectionDetailsWidget from "./OverviewTab/ElectionDetailsWidget";
 import OverviewTab from "./OverviewTab";
+import StatisticsTab from "./StatisticsTab";
+
+import ElectionDetailsWidget from "./OverviewTab/ElectionDetailsWidget";
 import CandidatesTab from "./CandidatesTab";
 import CampaignsTab from "./CampaignsTab";
 import CommitteesTab from "./CommitteesTab";
@@ -23,6 +23,10 @@ import ResultsTab from "./ResultsTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 
+// UI & Utilities
+import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
+import { Link } from "react-router-dom";
+import classnames from "classnames";
 
 const NavTabs = ({ tabs, activeTab, toggleTab }) => (
   <Nav
@@ -30,7 +34,7 @@ const NavTabs = ({ tabs, activeTab, toggleTab }) => (
     className="animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1"
     role="tablist"
   >
-    {tabs.filter(Boolean).map((tab) => (  // Filter out falsy values before mapping
+    {tabs.filter(Boolean).map((tab) => (
       <NavItem key={tab.id}>
         <NavLink
           className={classnames({ active: activeTab === tab.id }, "fw-semibold")}
@@ -45,91 +49,165 @@ const NavTabs = ({ tabs, activeTab, toggleTab }) => (
   </Nav>
 );
 
-
 const Section = ({ viewType }) => {
+  //state for collapsable menus
+  const [isCurrentState, setIsCurrentState] = useState("Dashboard");
+
+  const {
+    isActive,
+    canChangeConfig,
+    canViewCampaign,
+    isContributor,
+    isModerator,
+    isSubscriber
+  } = usePermission();
+
   const { election, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
   const { categories } = useSelector(categorySelector);
-  const categoryId = election.category; // assuming election object has a categoryId property
+  const categoryId = election.category;
   const category = categories.find(cat => cat.id === categoryId);
   const electionMethod = election.electionMethod
 
-  console.log('election tpe:', electionMethod)
   const electionCategoryName = category ? category.name : 'Category Not Found';
 
-  const mainTabs = [
-    { id: "1", title: "المرشحين والنتائج", icon: 'ri-activity-line', },
-    // ...(election.electionResultView === "total" ? [{ id: "3", title: "اللجان", icon: 'ri-activity-line', }] : []),
-    // ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line', }] : []),
-    // { id: "5", title: "النتائج التفصيلية", icon: 'ri-activity-line', },
-    // { id: "6", title: "عمليات المستخدم", icon: 'ri-activity-line', },
-    // { id: "7", title: "تعديل", icon: 'ri-activity-line', }
-  ];
 
-  console.log("viewType: ", viewType)
-  // Conditionally add tabs based on viewType and other conditions
-  if (viewType !== 'public') {
-    // Check the electionMethod and set the title accordingly
-    const candidatesTitle = election.electionMethod !== "candidateOnly" ? "القوائم والمرشحين" : "المرشحين";
-    mainTabs.push({ id: "2", title: candidatesTitle, icon: 'ri-activity-line' });
+  // get Election Statistics if isStaff
+  // useEffect () = {
+  //   if isStaff {
+  //     dispatchEvent(getElectionStatistics)
+  //   }
+  // }
 
-    if (election.electionResultView !== "total") {
-      mainTabs.push({ id: "3", title: "اللجان", icon: 'ri-activity-line' });
+  const tabs = [
+    {
+      type: "mainTab",
+      items: [
+        {
+          id: "1",
+          href: '#electionOverview',
+          icon: 'ri-activity-line',
+          title: "المرشحين والنتائج",
+          component: <OverviewTab />
+        },
+        {
+          id: "2",
+          href: '#electionStatistics',
+          icon: 'ri-activity-line',
+          title: "احصائيات",
+          component: <StatisticsTab />
+        },
+
+        // ...(viewType !== 'public' ? [
+        //   {
+        //     id: "2",
+        //     title: election.electionMethod !== "candidateOnly" ? "القوائم والمرشحين" : "المرشحين",
+        //     icon: 'ri-activity-line'
+        // component: <CandidatesTab setActiveTab={setActiveTab} />
+        //   },
+        ...(election.electionResultView !== "total" ? [
+          {
+            id: "3",
+            title: "اللجان",
+            icon: 'ri-activity-line',
+            component: <CommitteesTab />,
+          }
+        ] : []),
+        //   ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line' }] : [])
+        // ] : []),
+        // {
+        // id: "5",
+        // title: "النتائج التفصيلية",
+        // icon: 'ri-activity-line', 
+        // component: <ResultsTab/>
+
+        //   },
+        // { 
+        //   id: "6",
+        //    title: "عمليات المستخدم", 
+        //    icon: 'ri-activity-line',
+        //   component: <ActivitiesTab />
+        //  },
+        // { id: "7", title: "تعديل", icon: 'ri-activity-line', }
+      ]
+    },
+    {
+      type: "campaignTab",
+      items: [
+        {
+          id: "4",
+          title: "Campaigns",
+          icon: 'ri-activity-line',
+          component: <CampaignsTab />,
+        },
+        {
+          id: "42",
+          title: "Guarantees",
+          icon: 'ri-activity-line',
+          component: <GuaranteesTab electionCandidates={electionCandidates} />,
+        },
+        {
+          id: "43",
+          title: "Attendees",
+          icon: 'ri-activity-line',
+          component: <AttendeesTab electionCandidates={electionCandidates} />,
+
+        },
+        {
+          id: "44",
+          title: "Sorting",
+          icon: 'ri-activity-line',
+          // component: <SortingTab electionCandidates={electionCandidates} />,
+        },
+        {
+          id: "45",
+          title: "Sorting",
+          icon: 'ri-activity-line',
+          component: <ResultsTab />,
+        }
+      ]
+    },
+    {
+      type: "mainButton",
+      items: [
+        {
+          id: "8",
+          type: "button",
+          title: "تحديث النتائج",
+          color: "primary",
+          icon: 'ri-activity-line',
+          component: <ResultsTab />,
+        },
+        {
+          id: "9",
+          title: "تعديل",
+          color: "info",
+          icon: 'ri-activity-line',
+          component: <EditTab />,
+        }
+      ]
     }
-    if (electionCampaigns.length !== 0) {
-      mainTabs.push({ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line' });
-    }
-  }
-
-
-  const mainButtons = [
-    { id: "8", title: "تحديث النتائج", color: "primary", icon: 'ri-activity-line', },
-    { id: "9", title: "تعديل", color: "info", icon: 'ri-activity-line', },
   ];
-
-  const campaignTabs = [
-    { id: "4", title: "Campaigns", icon: 'ri-activity-line', },
-    { id: "42", title: "Guarantees", icon: 'ri-activity-line', },
-    { id: "43", title: "Attendees", icon: 'ri-activity-line', },
-    { id: "44", title: "Sorting", icon: 'ri-activity-line', },
-  ];
-
 
   const [activeTab, setActiveTab] = useState("1");
+  const mainTabs = tabs.find(tab => tab.type === "mainTab")?.items || [];
+  const campaignTabs = tabs.find(tab => tab.type === "campaignTab")?.items || [];
+  const mainButtons = tabs.find(tab => tab.type === "mainButton")?.items || [];
 
-  const tabComponents = {
-    "1": <OverviewTab />,
-    "2": <CandidatesTab setActiveTab={setActiveTab} />,
-    "3": <CommitteesTab />,
-    "4": <CampaignsTab />,
-    // "42": <GuaranteesTab electionCandidates={electionCandidates} />,
-    // "43": <AttendeesTab electionCandidates={electionCandidates} />,
-    // "44": <SortingTab electionCandidates={electionCandidates} />,
-    // "5": <ResultsTab />,
-    // "6": <ActivitiesTab />,
-    "8": <ResultsTab />,
-    "9": <EditTab />,
-  };
-
-  const electionName = election.name;
-  const electionImage = election.image;
-  const electionStatus = election.task?.status || 0;
-  const electionPriority = election.task?.priority || 0;
-
-  //Tab
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
     }
   };
+
   return (
     <React.Fragment>
       <SectionHeader />
-      <Row> {/* NavTab  */}
+      <Row>
         <Col lg={12}>
           <div className="d-flex profile-wrapper">
             <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} />
             <div className="flex-shrink-0">
-              {mainButtons.filter(Boolean).map((button) => (  // Filter out falsy values before mapping
+              {mainButtons.filter(Boolean).map((button) => (
                 <Link
                   key={button.id}
                   className={`btn btn-${button.color} me-2 `}
@@ -148,15 +226,15 @@ const Section = ({ viewType }) => {
           )}
 
           <TabContent activeTab={activeTab} className="pt-4">
-            {Object.entries(tabComponents).map(([key, component]) => (
-              <TabPane tabId={key} key={key}>
-                {component}
+            {mainTabs.concat(campaignTabs).concat(mainButtons).filter(tab => activeTab === tab.id).map((tab) => (
+              <TabPane tabId={tab.id} key={tab.id}>
+                {tab.component}
               </TabPane>
             ))}
           </TabContent>
-        </Col >
-      </Row >
-    </React.Fragment >
+        </Col>
+      </Row>
+    </React.Fragment>
   );
 };
 

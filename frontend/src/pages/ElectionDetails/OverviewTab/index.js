@@ -34,7 +34,6 @@ const OverviewTab = () => {
         </Col>
 
         <Col xl={3} lg={4}>
-          <ElectionDetails />
           <ElectionDetailsWidget election={election} electionCandidates={electionCandidates} />
           {/* <ElectionModerators /> */}
           {/* <ElectionCampaigns /> */}

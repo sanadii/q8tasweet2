@@ -12,6 +12,7 @@ import ResetPasswordSaga from "./auth/resetpassword/saga";
 
 // Elections
 import electionSaga from "./elections/saga";
+import electionStatisticSaga from "./electionStatistics/saga";
 import candidatesSaga from "./candidates/saga";
 import partiesSaga from "./parties/saga";
 import campaignsSaga from "./campaigns/saga";
@@ -41,6 +42,7 @@ export default function* rootSaga() {
 
     // Project
     fork(electionSaga),
+    fork(electionStatisticSaga),
     fork(candidatesSaga),
     fork(partiesSaga),
     fork(campaignsSaga),

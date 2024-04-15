@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardBody, CardHeader, Col, DropdownItem, DropdownMenu, DropdownToggle, Row, UncontrolledDropdown } from "reactstrap";
-import DashboardCharts from "../DashboardCharts";
-import { SimplePie, SimpleDonut, UpdateDonut, MonochromePie, GradientDonut, PatternedDonut, ImagePieChart } from '../PieCharts'
+import DashboardCharts from "../OverviewTab/OverviewCharts/DashboardCharts";
+import { SimplePie, SimpleDonut, UpdateDonut, MonochromePie, GradientDonut, PatternedDonut, ImagePieChart } from '../OverviewTab/OverviewCharts/PieCharts'
 
 const ElectionDetailsWidget = ({ election, electionCandidates }) => {
   const moderators = Array.isArray(election.moderators)
