@@ -92,6 +92,8 @@ const IntialState = {
 
 const Elections = (state = IntialState, action) => {
   switch (action.type) {
+
+    
     case API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
         case GET_ELECTIONS: {

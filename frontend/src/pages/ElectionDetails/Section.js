@@ -170,7 +170,7 @@ const Section = ({ viewType }) => {
       type: "mainButton",
       items: [
         {
-          id: "8",
+          id: "91",
           type: "button",
           title: "تحديث النتائج",
           color: "primary",
@@ -178,12 +178,12 @@ const Section = ({ viewType }) => {
           component: <ResultsTab />,
         },
         {
-          id: "9",
+          id: "92",
           title: "تعديل",
           color: "info",
           icon: 'ri-activity-line',
           component: <EditTab />,
-        }
+        },
       ]
     }
   ];

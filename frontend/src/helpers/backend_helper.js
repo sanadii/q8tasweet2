@@ -122,8 +122,11 @@ export const deleteElectionAttendee = (electionAttendee) => api.delete(url.DELET
 export const addNewElectionAttendee = (electionAttendee) => api.create(url.ADD_NEW_ELECTION_ATTENDEE, electionAttendee);
 export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_ELECTION_ATTENDEE, electionAttendee);
 
+// ELECTION DATABASE
+export const addElectionDatabase = (electionSlug) => api.get(url.ADD_ELECTION_DATABASE + "/" + electionSlug);
+
 // ELECTION STATISTICS
-export const getElectionStatistics = (election) => api.get(url.GET_ELECTION_STATISTICS + "/" + election);
+export const getElectionStatistics = (electionSlug) => api.get(url.GET_ELECTION_STATISTICS + "/" + electionSlug);
 
 
 // Candidates

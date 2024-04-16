@@ -72,6 +72,7 @@ export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
 
 
 // Election Statistics
+export const ADD_ELECTION_DATABASE = "/electionStatistics/addElectionDatabase"
 export const GET_ELECTION_STATISTICS = "/electionStatistics/getElectionStatistics";
 
 

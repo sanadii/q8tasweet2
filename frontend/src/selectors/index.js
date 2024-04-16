@@ -1,5 +1,6 @@
 // Elections & Categories
 export { electionSelector } from './electionSelector';
+export { electionDataSelector } from './electionDataSelector'
 export { categorySelector } from './categorySelector';
 
 

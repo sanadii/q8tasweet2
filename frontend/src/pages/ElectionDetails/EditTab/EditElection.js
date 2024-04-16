@@ -3,14 +3,14 @@ import { electionSelector, categorySelector } from 'selectors';
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { updateElection } from "store/actions";
+import { updateElection, addElectionDatabase } from "store/actions";
 import { useCategoryManager } from "shared/hooks";
 import { FormFields } from "shared/components";
 
 // Formik
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Col, Row, Form, Card, CardHeader, CardBody } from "reactstrap";
+import { Button, Col, Row, Form, Card, CardHeader, CardBody } from "reactstrap";
 
 //Import Flatepicker
 import Dropzone from "react-dropzone";
@@ -330,6 +330,9 @@ const EditElection = () => {
     },
   ];
 
+  const handleAddElectionDatabase = () => {
+    dispatch(addElectionDatabase(election.slug))
+  }
 
   return (
     <React.Fragment>
@@ -342,6 +345,27 @@ const EditElection = () => {
         }}
       >
         <Row className="g-3">
+          <Button
+            onClick={handleAddElectionDatabase}>Add Election Dtabase
+            </Button>
+
+{/* TODO: to add different upload sections for different use
+1) add sqlite table
+// Elections
+1) upload electors
+2) upload electors stats
+3) upload committees
+4) upload candidates / results
+* make sure ids are compatables
+
+// Campaign
+1) campaign Data,
+2) team images, background images and stuff
+
+3) upload team
+4) upload guarantees
+5) upload s */}
+
           {fields.map((column) => (
             <Col lg={4} key={column.column}>
               {column.sections.map((section) => (
