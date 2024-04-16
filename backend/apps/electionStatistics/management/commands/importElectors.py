@@ -31,7 +31,7 @@ class Command(BaseCommand):
             conn = sqlite3.connect(db_path)
             # Insert data from DataFrame into the database table 'electors'
             # 'if_exists' parameter can be set to 'replace' or 'append'
-            df.to_sql('electors', conn, if_exists='replace', index=False)
+            df.to_sql('elector', conn, if_exists='replace', index=False)
             conn.close()
             self.stdout.write(self.style.SUCCESS(f'Successfully imported data into {db_path}.'))
         except Exception as e:

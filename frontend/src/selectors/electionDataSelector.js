@@ -10,6 +10,11 @@ export const electionDataSelector = createSelector(
     electorsByFamily: electionStatisticsState.electorsByFamily,
     electorsByGender: electionStatisticsState.electorsByGender,
     electorsByArea: electionStatisticsState.electorsByArea,
+
+
+
+    // Elections
+    electionCommittees: electionStatisticsState.electionCommittees,
     // futureElections: electionStatisticsState.futureElections,
 
     isElectionSuccess: electionStatisticsState.isElectionSuccess,

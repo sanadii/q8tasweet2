@@ -2,293 +2,98 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { electionSelector } from 'selectors';
+import { electionDataSelector } from 'selectors';
+import { DashboardCharts } from "./DashboardCharts";
 
-import { deleteElectionCommittee } from "store/actions";
-import { Id, CheckboxHeader, CheckboxCell, Name, Gender, Circle, Areas, Voters, Sorter, Actions, Expanded } from "./CommitteesCol";
-import { usePermission, useDelete } from "shared/hooks";
-
-// Components
-import CommitteeModal from "./CommitteeModal";
-import CommitteeExpandedContent from './CommitteeExpandedContent';
-
-
-// Utility and helper imports
-import { isEmpty } from "lodash";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-// Custom component imports
-import { DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "shared/components";
 
 // Reactstrap (UI) imports
 import { Col, Row, Card, CardBody } from "reactstrap";
 
 
 const CommitteesTab = () => {
-  const { electionDetails, electionCommittees, electionSorters, electionCampaigns, error } = useSelector(electionSelector);
-  const [electionCommittee, setElectionCommittee] = useState([]);
+  const { electionCommittees } = useSelector(electionDataSelector);
+  const [selectedCommittee, setSelectedCommittee] = useState(null);
 
-  // Modals: Delete, Set, Edit
-  const [modal, setModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-
-
-  // Delete Hook
-  const {
-    handleDeleteItem,
-    onDeleteCheckBoxClick,
-    deleteModal,
-    setDeleteModal,
-    checkedAll,
-    deleteCheckbox,
-    isMultiDeleteButton,
-    deleteModalMulti,
-    setDeleteModalMulti,
-    deleteMultiple,
-  } = useDelete(deleteElectionCommittee);
-
-
-  // Toggle for Add / Edit Models
-  const toggle = useCallback(() => {
-    if (modal) {
-      setModal(false);
-      setElectionCommittee(null);
-    } else {
-      setModal(true);
-    }
-  }, [modal]);
-
-
-
-  // Add Dataa
-  // handleElectionCommitteeClicks Function
-  // const handleElectionCommitteeClicks = () => {
-  //   setElectionCommittee(""); // Changed from empty string to null
-  //   setIsEdit(false);
-  //   toggle();
-  // };
-
-  // Update Data
-  const handleElectionCommitteeClick = useCallback(
-    (arg) => {
-      const electionCommittee = arg;
-
-      setElectionCommittee({
-        // Basic Information
-        id: electionCommittee.id,
-        name: electionCommittee.name,
-        gender: electionCommittee.gender,
-        sorter: electionCommittee.sorter,
-      });
-
-      setIsEdit(true);
-      toggle();
-    },
-    [toggle]
-
-  );
-
-  const handleElectionCommitteeClicks = () => {
-    setElectionCommittee("");
-    setIsEdit(false);
-    toggle();
+  const toggleCommittee = (committeeId) => {
+    setSelectedCommittee((prevCommittee) =>
+      prevCommittee === committeeId ? null : committeeId
+    );
   };
-
-  const columns = useMemo(
-    () => [
-      {
-        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
-        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
-        id: "id",
-      },
-      {
-        Header: "م",
-        filterable: true,
-        Cell: (cellProps) => <Id {...cellProps} />
-      },
-      {
-        Header: "اللجنة",
-        filterable: true,
-        Cell: (cellProps) => <Name {...cellProps} />
-      },
-      {
-        Header: "النوع",
-        filterable: true,
-        Cell: (cellProps) => <Gender {...cellProps} />
-      },
-      {
-        Header: "الدائرة",
-        filterable: true,
-        Cell: (cellProps) => <Circle {...cellProps} />
-      },
-      {
-        Header: "المنطقة",
-        filterable: true,
-        Cell: (cellProps) => <Areas {...cellProps} />
-      },
-      {
-        Header: "الناخبين",
-        filterable: true,
-        Cell: (cellProps) => <Voters {...cellProps} />
-      },
-      {
-        Header: "الفارز",
-        filterable: true,
-        Cell: (cellProps) => (
-          <Sorter
-            cellProps={cellProps}
-            electionSorters={electionSorters}
-            electionCampaigns={electionCampaigns}
-          />
-        )
-      },
-      {
-        Header: "إجراءات",
-        Cell: (cellProps) => (
-          <Actions
-            {...cellProps}
-            setElectionCommittee={setElectionCommittee}
-            handleElectionCommitteeClick={handleElectionCommitteeClick}
-            onDeleteCheckBoxClick={onDeleteCheckBoxClick}
-          />
-        )
-      },
-      {
-        // Expander column
-        id: 'expander',
-        Header: ({ getToggleAllRowsExpandedProps }) => (
-          <span {...getToggleAllRowsExpandedProps()}>اللجان الفرعية</span>
-        ),
-        Cell: (cellProps) => (
-          <Expanded
-            {...cellProps}
-          />
-        )
-      },
-
-
-    ],
-    [handleElectionCommitteeClick, checkedAll]
-  );
-
-  // Export Modal
-  const [isExportCSV, setIsExportCSV] = useState(false);
-
-
-  // Filters----------
-  const [filters, setFilters] = useState({
-    global: "",
-    gender: null,
-  });
-
-  const electionCommitteeList = electionCommittees.filter(electionCommittee => {
-    let isValid = true;
-    if (filters.global) {
-      isValid = isValid && electionCommittee.name && typeof electionCommittee.name === 'string' && electionCommittee.name.toLowerCase().includes(filters.global.toLowerCase());
-    }
-
-    if (filters.gender !== null) {
-      isValid = isValid && electionCommittee.gender === filters.gender;
-    }
-    return isValid;
-  });
-
-
 
   return (
     <React.Fragment>
-      <ExportCSVModal
-        show={isExportCSV}
-        onCloseClick={() => setIsExportCSV(false)}
-        data={electionCommitteeList}
-      />
-      <DeleteModal
-        show={deleteModal}
-        onDeleteClick={handleDeleteItem}
-        onCloseClick={() => setDeleteModal(false)}
-      />
-      <DeleteModal
-        show={deleteModalMulti}
-        onDeleteClick={() => {
-          deleteMultiple();
-          setDeleteModalMulti(false);
-        }}
-        onCloseClick={() => setDeleteModalMulti(false)}
-      />
-      <CommitteeModal
-        modal={modal}
-        setModal={setModal}
-        isEdit={isEdit}
-        toggle={toggle}
-        electionCommittee={electionCommittee}
-      />
+      <div className="d-flex flex-column h-100">
+        <Row>
+          {electionCommittees.map((committee, key) => (
+            <Col xl={selectedCommittee === committee.committeeId ? 12 : 4} md={6} key={key}>
+              <Card
+                className={`card-animate overflow-hidden ${selectedCommittee === committee.committeeId && "full-width-card"
+                  }`}
+                onClick={() => toggleCommittee(committee.committeeId)}
+              >
+                <div
+                  className="position-absolute start-0"
+                  style={{ zIndex: "0" }}
+                >
+                  <svg
+                    version="1.2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 200 120"
+                    width="200"
+                    height="120"
+                  >
+                    <path
+                      id="Shape 8"
+                      style={{ opacity: ".05", fill: "rgb(11 152 93)" }}
+                      d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"
+                    />
+                  </svg>
+                </div>
+                <CardBody style={{ zIndex: "1" }}>
+                  <div className="d-flex align-items-center">
+                    <div className="flex-grow-1 overflow-hidden">
+                      <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
 
-      <Row>
-        <Col lg={12}>
-          {/* <div>
-            <button
-              className="btn btn-soft-success"
-              onClick={() => setIsExportCSV(true)}
-            >
-              Export
-            </button>
-          </div> */}
-          <Card id="electionCommitteeList">
-            <CardBody>
-              <div>
-                <TableContainerHeader
-                  // Title
-                  ContainerHeaderTitle="لجان الإنتخابات"
+                        <b><span className="text-info">{committee.committeeArea}</span></b>   <br />
+                        {committee.committeeId}: <b>{committee.committeeName}</b>   <br />
+                        <span className="text-info">عدد اللجان الفرعية: {committee.committeeCount}</span>
+                      </p>
+                      <h4 className="fs-22 fw-semibold ff-secondary mb-0">
+                        <span className="counter-value" data-target="36894">
+                          {committee.committeeVoterCount} ناخب
+                        </span>
+                      </h4>
 
-                  // Add Elector Button
-                  isContainerAddButton={true}
-                  AddButtonText="إضافة لجنة"
-                  isEdit={isEdit}
-                  handleEntryClick={handleElectionCommitteeClicks}
-                  setIsEdit={setIsEdit}
-                  toggle={toggle}
+                    </div>
+                    <div className="flex-shrink-0">
+                      <DashboardCharts
+                        seriesData={committee.series}
+                        colors={committee.color}
+                      />
+                    </div>
+                  </div>
+                  {selectedCommittee === committee.committeeId && (
+                    <div>
+                      <hr />
+                      <p>اللجان الأصلية والفرعية</p>
+                      {committee.subCommittees.map((subCommittee, key) => (
+                        <div key={key}>
+                          {/* Render details for each subcommittee */}
+                          <p>اللجنة: أصلية {subCommittee.subCommitteeId}</p>
+                          {/* Add more details here as needed */}
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
-                  // Delete Button
-                  isMultiDeleteButton={isMultiDeleteButton}
-                  setDeleteModalMulti={setDeleteModalMulti}
-                />
+                </CardBody>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
+    </React.Fragment >
 
-                <TableContainer
-                  // Data
-                  columns={columns}
-                  data={electionCommitteeList || []}
-                  customPageSize={50}
-                  ExpandedComponent={CommitteeExpandedContent}
-
-                  // Filters
-                  isTableContainerFilter={true}
-                  isGlobalFilter={true}
-                  preGlobalFilteredRows={true}
-                  isGenderFilter={true}
-
-                  // Settings
-                  filters={filters}
-                  setFilters={setFilters}
-                  isMultiDeleteButton={isMultiDeleteButton}
-
-                  SearchPlaceholder="البحث..."
-                  // handleElectionCommitteeClick={handleElectionCommitteeClicks}
-
-                  // Styling
-                  divClass="table-responsive table-card mb-3"
-                  tableClass="align-middle table-nowrap mb-0"
-                  theadClass="table-light table-nowrap"
-                  thClass="table-light text-muted"
-                />
-
-              </div>
-              <ToastContainer closeButton={false} limit={1} />
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </React.Fragment>
   );
 };
 

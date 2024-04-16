@@ -17,7 +17,8 @@ import {
 const IntialState = {
   electorsByGender: [],
   electorsByFamily: [],
-  electorsByArea: []
+  electorsByArea: [],
+  electionCommittees: [],
 };
 
 const ElectionStatistics = (state = IntialState, action) => {
@@ -31,7 +32,11 @@ const ElectionStatistics = (state = IntialState, action) => {
             electorsByGender: action.payload.data.electorsByGender,
             electorsByFamily: action.payload.data.electorsByFamily,
             electorsByArea: action.payload.data.electorsByArea,
-            
+
+
+            // election
+            electionCommittees: action.payload.data.electionCommittees,
+
             
             isElectionStatisticCreated: false,
             isElectionStatisticsuccess: true,

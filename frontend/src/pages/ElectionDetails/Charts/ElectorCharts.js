@@ -8,8 +8,8 @@ const ElectorsByFamilyPieChart = ({ electorsByFamily }) => {
     const slicedElectors = electorsByFamily.slice(0, 19);
 
     // Extract data for the first 19 families
-    const seriesData = slicedElectors.map((family) => family.count);
-    const familyNames = slicedElectors.map((family) => family.lastName);
+    const seriesData = slicedElectors.map((family) => family[1]);
+    const familyNames = slicedElectors.map((family) => family[0]);
 
     // Sum the rest of the families' counts
     const othersCount = electorsByFamily.slice(19).reduce((acc, family) => acc + family.count, 0);
@@ -67,10 +67,20 @@ const ElectorsByFamilyPieChart = ({ electorsByFamily }) => {
 
 
 const ElectorsByAreaPieChart = ({ electorsByArea }) => {
-    console.log("electorsByArea: ", electorsByArea)
+
+    // Take first 19 families
+    const slicedElectors = electorsByArea.slice(0, 19);
+
     // Extract data for the first 19 families
-    const seriesData = electorsByArea.map((area) => area.count);
-    const areaNames = electorsByArea.map((area) => area.area);
+    const seriesData = slicedElectors.map((family) => family[1]);
+    const familyNames = slicedElectors.map((family) => family[0]);
+
+    // Sum the rest of the families' counts
+    const othersCount = electorsByArea.slice(19).reduce((acc, family) => acc + family.count, 0);
+
+    // Add 'Others' to the seriesData and familyNames arrays
+    seriesData.push(othersCount);
+    familyNames.push('Others');
 
     // Get the chart colors
     const dataColors = '["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info","--vz-gray","--vz-pink","--vz-purple","--vz-secondary", "--vz-dark"]';
@@ -101,14 +111,9 @@ const ElectorsByAreaPieChart = ({ electorsByArea }) => {
             borderColor: "#f1f1f1",
         },
         xaxis: {
-            categories: areaNames,
+            categories: familyNames,
         }
     };
-
-    if (!electorsByArea) {
-        return <p>Loading electors data...</p>; // Or display a loading indicator
-    }
-
 
     return (
         <React.Fragment>
@@ -122,7 +127,6 @@ const ElectorsByAreaPieChart = ({ electorsByArea }) => {
         </React.Fragment>
     );
 };
-
 
 // const ElectorsByFamilyPieChart = ({ electionCandidates }) => {
 
