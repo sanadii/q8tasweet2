@@ -1,111 +1,191 @@
-id,group_id,permission_id
-4043,1,961
-4044,2,961
-4045,1,962
-4046,2,962
-4047,1,963
-4048,2,963
-4049,1,964
-4050,2,964
-4051,1,965
-4052,2,965
-4053,30,965
-4054,31,965
-4055,32,965
-4056,33,965
-4057,34,965
-4058,35,965
-4059,36,965
-4060,1,966
-4061,2,966
-4062,1,967
-4063,2,967
-4064,30,967
-4065,31,967
-4066,32,967
-4067,2,968
-4068,1,969
-4069,2,969
-4070,30,969
-4071,31,969
-4072,32,969
-4073,33,969
-4074,1,970
-4075,2,970
-4076,1,971
-4077,2,971
-4078,30,971
-4079,31,971
-4080,32,971
-4081,33,971
-4082,1,972
-4083,2,972
-4084,1,973
-4085,2,973
-4086,1,974
-4087,2,974
-4088,30,974
-4089,1,975
-4090,2,975
-4091,30,975
-4092,31,975
-4093,1,976
-4094,2,976
-4095,30,976
-4096,31,976
-4097,32,976
-4098,1,977
-4099,2,977
-4100,30,977
-4101,31,977
-4102,32,977
-4103,33,977
-4104,34,977
-4105,1,978
-4106,2,978
-4107,30,978
-4108,31,978
-4109,32,978
-4110,33,978
-4111,34,978
-4112,1,979
-4113,2,979
-4114,30,979
-4115,31,979
-4116,32,979
-4117,33,979
-4118,34,979
-4119,1,980
-4120,2,980
-4121,30,980
-4122,31,980
-4123,32,980
-4124,33,980
-4125,34,980
-4126,1,981
-4127,2,981
-4128,30,981
-4129,31,981
-4130,32,981
-4131,33,981
-4132,34,981
-4133,35,981
-4134,36,981
-4135,1,982
-4136,2,982
-4137,36,982
-4138,1,983
-4139,2,983
-4140,36,983
-4141,1,984
-4142,2,984
-4143,36,984
-4144,1,985
-4145,2,985
-4146,30,985
-4147,31,985
-4148,32,985
-4149,33,985
-4150,34,985
-4151,35,985
-4152,36,985
+id,name,content_type_id,codename
+1,,39,canViewConfig
+2,,39,canAddConfig
+3,,39,canChangeConfig
+4,,39,canDeleteConfig
+5,,25,canViewCampaign
+6,,25,canAddCampaign
+7,,25,canChangeCampaign
+8,,25,canDeleteCampaign
+9,,27,canViewCampaignMember
+10,,27,canAddCampaignMember
+11,,27,canChangeCampaignMember
+12,,27,canDeleteCampaignMember
+13,,27,canChangeCampaignModerator
+14,,27,canChangeCampaignCandidate
+15,,27,canChangeCampaignCoordinator
+16,,27,canChangeCampaignSupervisor
+17,,28,canViewCampaignGuarantee
+18,,28,canAddCampaignGuarantee
+19,,28,canChangeCampaignGuarantee
+20,,28,canDeleteCampaignGuarantee
+21,,29,canViewCampaignAttendee
+22,,29,canAddCampaignAttendee
+23,,29,canDeleteCampaignAttendee
+24,,29,canChangeCampaignAttendee
+25,,38,canViewElector
+26,Can add log entry,1,add_logentry
+27,Can change log entry,1,change_logentry
+28,Can delete log entry,1,delete_logentry
+29,Can view log entry,1,view_logentry
+30,Can add permission,3,add_permission
+31,Can change permission,3,change_permission
+32,Can delete permission,3,delete_permission
+33,Can view permission,3,view_permission
+34,Can add group,2,add_group
+35,Can change group,2,change_group
+36,Can delete group,2,delete_group
+37,Can view group,2,view_group
+38,Can add content type,4,add_contenttype
+39,Can change content type,4,change_contenttype
+40,Can delete content type,4,delete_contenttype
+41,Can view content type,4,view_contenttype
+42,Can add session,5,add_session
+43,Can change session,5,change_session
+44,Can delete session,5,delete_session
+45,Can view session,5,view_session
+46,Can add blacklisted token,22,add_blacklistedtoken
+47,Can change blacklisted token,22,change_blacklistedtoken
+48,Can delete blacklisted token,22,delete_blacklistedtoken
+49,Can view blacklisted token,22,view_blacklistedtoken
+50,Can add outstanding token,23,add_outstandingtoken
+51,Can change outstanding token,23,change_outstandingtoken
+52,Can delete outstanding token,23,delete_outstandingtoken
+53,Can view outstanding token,23,view_outstandingtoken
+54,Can View User,24,canViewUser
+55,Can Add User,24,canAddUser
+56,Can Change User,24,canChangeUser
+57,Can Delete User,24,canDeleteUser
+58,Can View Elector,60,canViewElector
+59,Can Add Elector,60,canAddElector
+60,Can Change Elector,60,canChangeElector
+61,Can Delete Elector,60,canDeleteElector
+62,can Change Campaign Moderator,25,canChangeCampaignModerator
+63,can Change Campaign Candidate,25,canChangeCampaignCandidate
+64,can Change Campaign Manager,25,canChangeCampaignManager
+65,can Change Campaign Assistant,25,canChangeCampaignAssistant
+66,Can add Campaign Sorting,41,add_campaignsorting
+67,Can change Campaign Sorting,41,change_campaignsorting
+68,Can delete Campaign Sorting,41,delete_campaignsorting
+69,Can view Campaign Sorting,41,view_campaignsorting
+70,Can View Campaign Sorting,41,canViewCampaignSorting
+71,Can Add Campaign Sorting,41,canAddCampaignSorting
+72,Can Change Campaign Sorting,41,canChangeCampaignSorting
+73,Can Delete Campaign Sorting,41,canDeleteCampaignSorting
+74,Can add Campaign Party Sorting,53,add_campaignpartysorting
+75,Can change Campaign Party Sorting,53,change_campaignpartysorting
+76,Can delete Campaign Party Sorting,53,delete_campaignpartysorting
+77,Can view Campaign Party Sorting,53,view_campaignpartysorting
+78,Can View Campaign Sorting,53,canViewCampaignSorting
+79,Can Add Campaign Sorting,53,canAddCampaignSorting
+80,Can Change Campaign Sorting,53,canChangeCampaignSorting
+81,Can Delete Campaign Sorting,53,canDeleteCampaignSorting
+82,Can add Campaign Party Candidate Sorting,54,add_campaignpartycandidatesorting
+83,Can change Campaign Party Candidate Sorting,54,change_campaignpartycandidatesorting
+84,Can delete Campaign Party Candidate Sorting,54,delete_campaignpartycandidatesorting
+85,Can view Campaign Party Candidate Sorting,54,view_campaignpartycandidatesorting
+86,Can View Campaign Sorting,54,canViewCampaignSorting
+87,Can Add Campaign Sorting,54,canAddCampaignSorting
+88,Can Change Campaign Sorting,54,canChangeCampaignSorting
+89,Can Delete Campaign Sorting,54,canDeleteCampaignSorting
+90,Can View Election,30,canViewElection
+91,Can Add Election,30,canAddElection
+92,Can Change Election,30,canChangeElection
+93,Can Delete Election,30,canDeleteElection
+94,Can View Election Candidate,31,canViewElectionCandidate
+95,Can Add Election Candidate,31,canAddElectionCandidate
+96,Can Change Election Candidate,31,canChangeElectionCandidate
+97,Can Delete Election Candidate,31,canDeleteElectionCandidate
+98,Can View Election Committe,32,canViewElectionCommitte
+99,Can Add Election Committe,32,canAddElectionCommitte
+100,Can Change Election Committe,32,canChangeElectionCommitte
+101,Can Delete Election Committe,32,canDeleteElectionCommitte
+102,Can add Election Committee Result,33,add_electioncommitteeresult
+103,Can change Election Committee Result,33,change_electioncommitteeresult
+104,Can delete Election Committee Result,33,delete_electioncommitteeresult
+105,Can view Election Committee Result,33,view_electioncommitteeresult
+106,Can add Election Sorting,55,add_electionsorting
+107,Can change Election Sorting,55,change_electionsorting
+108,Can delete Election Sorting,55,delete_electionsorting
+109,Can view Election Sorting,55,view_electionsorting
+110,Can View Election Sorting,55,canViewElectionSorting
+111,Can Add Election Sorting,55,canAddElectionSorting
+112,Can Change Election Sorting,55,canChangeElectionSorting
+113,Can Delete Election Sorting,55,canDeleteElectionSorting
+114,Can add Election Party Sorting,56,add_electionpartysorting
+115,Can change Election Party Sorting,56,change_electionpartysorting
+116,Can delete Election Party Sorting,56,delete_electionpartysorting
+117,Can view Election Party Sorting,56,view_electionpartysorting
+118,Can View Election Sorting,56,canViewElectionSorting
+119,Can Add Election Sorting,56,canAddElectionSorting
+120,Can Change Election Sorting,56,canChangeElectionSorting
+121,Can Delete Election Sorting,56,canDeleteElectionSorting
+122,Can add Election Party Committee Result,57,add_electionpartycommitteeresult
+123,Can change Election Party Committee Result,57,change_electionpartycommitteeresult
+124,Can delete Election Party Committee Result,57,delete_electionpartycommitteeresult
+125,Can view Election Party Committee Result,57,view_electionpartycommitteeresult
+126,Can add Election Party Candidate Sorting,58,add_electionpartycandidatesorting
+127,Can change Election Party Candidate Sorting,58,change_electionpartycandidatesorting
+128,Can delete Election Party Candidate Sorting,58,delete_electionpartycandidatesorting
+129,Can view Election Party Candidate Sorting,58,view_electionpartycandidatesorting
+130,Can View Election Sorting,58,canViewElectionSorting
+131,Can Add Election Sorting,58,canAddElectionSorting
+132,Can Change Election Sorting,58,canChangeElectionSorting
+133,Can Delete Election Sorting,58,canDeleteElectionSorting
+134,Can add Election Party Candidate Committee Result,59,add_electionpartycandidatecommitteeresult
+135,Can change Election Party Candidate Committee Result,59,change_electionpartycandidatecommitteeresult
+136,Can delete Election Party Candidate Committee Result,59,delete_electionpartycandidatecommitteeresult
+137,Can view Election Party Candidate Committee Result,59,view_electionpartycandidatecommitteeresult
+138,Can View Candidate,37,canViewCandidate
+139,Can Add Candidate,37,canAddCandidate
+140,Can Change Candidate,37,canChangeCandidate
+141,Can Delete Candidate,37,canDeleteCandidate
+142,Can View Voter,60,canViewVoter
+143,Can Add Voter,60,canAddVoter
+144,Can Change Voter,60,canChangeVoter
+145,Can Delete Voter,60,canDeleteVoter
+146,Can View Campaign Guarantee Group,61,canViewCampaignGuaranteeGroup
+147,Can Add Campaign Guarantee Group,61,canAddCampaignGuaranteeGroup
+148,Can Change Campaign Guarantee Group,61,canChangeCampaignGuaranteeGroup
+149,Can Delete Campaign GuaranteeGroup,61,canDeleteCampaignGuaranteeGroup
+150,Can View Campaign Committee,62,canViewCampaignCommittee
+151,Can Add Campaign Committee,62,canAddCampaignCommittee
+152,Can Change Campaign Committee,62,canChangeCampaignCommittee
+153,Can Delete Campaign Committee,62,canDeleteCampaignCommittees
+154,Can Delete Campaign Committee,62,canDeleteCampaignCommittee
+155,Can View Campaign Committee Sorter,63,canViewCampaignCommitteeSorter
+156,Can Add Campaign Committee Sorter,63,canAddCampaignCommitteeSorter
+157,Can Change Campaign Committee Sorter,63,canChangeCampaignCommitteeSorter
+158,Can Delete Campaign Committee Sorter,63,canDeleteCampaignCommitteeSorter
+159,Can View Campaign Committee Attendee,64,canViewCampaignCommitteeAttendee
+160,Can Add Campaign Committee Attendee,64,canAddCampaignCommitteeAttendee
+161,Can Change Campaign Committee Attendee,64,canChangeCampaignCommitteeAttendee
+162,Can Delete Campaign Committee Attendee,64,canDeleteCampaignCommitteeAttendee
+163,Can View Setting,65,canViewSetting
+164,Can Add Setting,65,canAddSetting
+165,Can Change Setting,65,canChangeSetting
+166,Can Delete Setting,65,canDeleteSetting
+167,Can add area,66,add_area
+168,Can change area,66,change_area
+169,Can delete area,66,delete_area
+170,Can view area,66,view_area
+171,Can add committee,68,add_committee
+172,Can change committee,68,change_committee
+173,Can delete committee,68,delete_committee
+174,Can view committee,68,view_committee
+175,Can add Election Database,72,add_electiondatabase
+176,Can change Election Database,72,change_electiondatabase
+177,Can delete Election Database,72,delete_electiondatabase
+178,Can view Election Database,72,view_electiondatabase
+179,Can add committee,73,add_committee
+180,Can change committee,73,change_committee
+181,Can delete committee,73,delete_committee
+182,Can view committee,73,view_committee
+183,Can add sub committee,74,add_subcommittee
+184,Can change sub committee,74,change_subcommittee
+185,Can delete sub committee,74,delete_subcommittee
+186,Can view sub committee,74,view_subcommittee
+187,Can add elector,75,add_elector
+188,Can change elector,75,change_elector
+189,Can delete elector,75,delete_elector
+190,Can view elector,75,view_elector
