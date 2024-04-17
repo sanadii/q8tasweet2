@@ -5,12 +5,12 @@ from django.contrib.contenttypes.models import ContentType
 # Define the permissions for each model
 
 PERMISSIONS = {
-    'Config': {
-        'canViewConfig': ['superAdmin', 'admin'],
-        'canAddConfig': ['superAdmin', 'admin'],
-        'canChangeConfig': ['superAdmin', 'admin'],
-        'canDeleteConfig': ['superAdmin', 'admin'],
-    },
+    # 'Config': {
+    #     'canViewConfig': ['superAdmin', 'admin'],
+    #     'canAddConfig': ['superAdmin', 'admin'],
+    #     'canChangeConfig': ['superAdmin', 'admin'],
+    #     'canDeleteConfig': ['superAdmin', 'admin'],
+    # },
 
 
     # Campaigns

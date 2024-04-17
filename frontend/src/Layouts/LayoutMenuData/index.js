@@ -27,7 +27,7 @@ const LayoutMenuData = () => {
 
   const {
     isActive,
-    canChangeConfig,
+    isStaff,
     canViewCampaign,
     isContributor,
     isModerator,
@@ -64,7 +64,7 @@ const LayoutMenuData = () => {
   } else if (layoutType === 'vertical') {
 
     // Admin
-    if (canChangeConfig) {
+    if (isStaff) {
       menuItems.push(...AdminMenu, ...SettingsMenu, ...UserMenu);
     }
     // Campaign

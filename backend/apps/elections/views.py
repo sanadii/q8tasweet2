@@ -56,21 +56,9 @@ from apps.elections.utils import ( get_election_committee_results )
 def index(request):
     return render(request, "index.html")
 
+
 # Election: getElection, deleteElection, addElection, updateElection
-class CustomPagination(PageNumberPagination):
-    page_size = 200
-
-    def get_paginated_response(self, data):
-        return Response({
-            "count": self.page.paginator.count,
-            "next": self.get_next_link(),
-            "previous": self.get_previous_link(),
-            "data": data,
-        })
-
 # View: Public / Admin
-
-
 class GetElections(APIView):
     """
     Instantiates and returns the list of permissions that this view requires.

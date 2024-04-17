@@ -1,53 +1,116 @@
+import os
 import pandas as pd
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
-from apps.auths.models import User  # Assuming Django's default User model
+from apps.auths.models import User
+from django.core.files import File
+from django.core.exceptions import ValidationError  # <-- Add this import
+from utils.validators import today, civil_validator, phone_validator  
+
 
 class Command(BaseCommand):
-    help = 'Imports users from a CSV file into the database'
+    help = "Imports users from an Excel file into the database"
 
     def handle(self, *args, **options):
-        # Define the file path
-        file_path = 'core/management/data/users.csv'
+        file_path = "core/management/data/elections.xlsx"
+        df = pd.read_excel(file_path, sheet_name="users")
 
-        # Read data from CSV file
-        df = pd.read_csv(file_path)
-
-        # Initialize counters
         created_count = 0
         updated_count = 0
         ignored_count = 0
 
-        # Iterate over each row in the DataFrame
         for index, row in df.iterrows():
-            # Assuming 'id' is a unique identifier for users in the CSV file
-            user_id = row['id']
+            user_id = row["id"]
+            image_path = row["image"] if pd.notna(row["image"]) else None
+            background_path = row["background"] if pd.notna(row["background"]) else None
+
+            image_file = None
+            background_file = None
+            if image_path and os.path.exists(image_path):
+                image_file = File(open(image_path, "rb"))
+            if background_path and os.path.exists(background_path):
+                background_file = File(open(background_path, "rb"))
+
+
+            # Check if the gender is valid or set to default
+            gender_value = row.get('gender')
+            if pd.isna(gender_value) or gender_value == '':
+                gender_value = None  # Or use GenderOptions.UNDEFINED or any default you prefer
+
+
+            civil_value = str(int(row['civil'])) if pd.notna(row['civil']) else None
+            phone_value = str(int(row['phone'])) if pd.notna(row['phone']) else None
+            # Validate the civil number
             try:
-                # Try to update the user if it already exists
+                civil_validator(civil_value)
+            except ValidationError as e:
+                self.stdout.write(self.style.WARNING(f"Invalid civil number for user {row['username']}: {e}"))
+                ignored_count += 1
+                continue  # Skip this user and go to the next row
+
+
+            try:
                 user, created = User.objects.update_or_create(
                     defaults={
-                        'username': row['username'],
-                        'email': row['email'],
-                        'password': row['password'],  # Assuming password is stored in plaintext for simplicity (not recommended in production)
-                        # Add other fields as needed
+                        "username": row["username"],
+                        "email": row["email"],
+                        "password": row["password"],
+                        "is_superuser": row["is_superuser"],
+                        "first_name": row["first_name"],
+                        "last_name": row["last_name"],
+                        'description': row['description'],
+                        
+                        'twitter': row['twitter'],
+                        'instagram': row['instagram'],
+                        'is_staff': row['is_staff'],
+                        'is_active': row['is_active'],
+                        'token': row['token'],
+                        # 'token_expiry': row['token_expiry'],
+                        
+                        
+                        # image, Gender validation if nan, None
+                        "image": image_file,
+                        "background": background_file,
+                        'gender': gender_value,
+                        
+                        # Number Validation
+                        "civil": civil_value,  # Use the cleaned civil_value
+                        'phone': phone_value,
+                        
+                        
+                        # DateTime Validation
                     },
-                    id=user_id
+                    id=user_id,
                 )
                 if created:
                     created_count += 1
-                    self.stdout.write(self.style.SUCCESS(f'Created new user: {user.username}'))
+                    self.stdout.write(
+                        self.style.SUCCESS(f"Created new user: {user.username}")
+                    )
                 else:
                     updated_count += 1
-                    self.stdout.write(self.style.SUCCESS(f'Updated user: {user.username}'))
+                    self.stdout.write(
+                        self.style.SUCCESS(f"Updated user: {user.username}")
+                    )
+
+                # Close files after they are no longer needed
+                if image_file:
+                    image_file.close()
+                if background_file:
+                    background_file.close()
 
             except IntegrityError as e:
-                # If there is an IntegrityError, it likely means that there is a duplicate entry or other data issue
-                self.stdout.write(self.style.WARNING(f'Failed to import user: {row["username"]}. Error: {str(e)}'))
+                self.stdout.write(
+                    self.style.WARNING(
+                        f'Failed to import user: {row["username"]}. Error: {str(e)}'
+                    )
+                )
                 ignored_count += 1
                 continue
 
-        # Print summary
-        self.stdout.write(self.style.SUCCESS('Import completed. Summary:'))
-        self.stdout.write(self.style.SUCCESS(f'Created: {created_count} users'))
-        self.stdout.write(self.style.SUCCESS(f'Updated: {updated_count} users'))
-        self.stdout.write(self.style.SUCCESS(f'Ignored: {ignored_count} entries due to errors'))
+        self.stdout.write(self.style.SUCCESS("Import completed. Summary:"))
+        self.stdout.write(self.style.SUCCESS(f"Created: {created_count} users"))
+        self.stdout.write(self.style.SUCCESS(f"Updated: {updated_count} users"))
+        self.stdout.write(
+            self.style.SUCCESS(f"Ignored: {ignored_count} entries due to errors")
+        )

@@ -7,8 +7,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Read the Excel file
-        excel_file = 'core/management/data/electionCategories.xlsx'
-        df = pd.read_excel(excel_file)
+        file_path = "core/management/data/elections.xlsx"
+        df = pd.read_excel(file_path, sheet_name="electionCategories")
 
         # Replace NaN values in 'parent' column with None
         df['parent'] = df['parent'].fillna(pd.NA)

@@ -7,7 +7,7 @@ class Command(BaseCommand):
         # Implement your logic here
         self.set_groups()
         self.set_permissions()
-        # self.set_categories()
+        self.set_categories()
 
     def set_groups(self):
         # Logic for set_groups
@@ -17,6 +17,6 @@ class Command(BaseCommand):
         # Logic for set_permissions
         pass
 
-    # def set_categories(self):
-    #     # Logic for set_categories
-    #     pass
+    def set_categories(self):
+        # Logic for set_categories
+        pass

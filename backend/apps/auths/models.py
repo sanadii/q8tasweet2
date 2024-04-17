@@ -49,7 +49,12 @@ class User(TrackModel, AbstractUser):
     
     # User Information
     civil = models.CharField(max_length=12, null=True, blank=True, validators=[civil_validator])
-    gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
+    gender = models.IntegerField(
+        choices=GenderOptions.choices, 
+        null=True, 
+        blank=True, 
+        default=GenderOptions.MALE  # Set default as MALE
+    )
     date_of_birth = models.DateField(null=True, blank=True, validators=[MaxValueValidator(limit_value=today)])
     description = models.TextField(_('description'), blank=True)
 
@@ -58,7 +63,7 @@ class User(TrackModel, AbstractUser):
     twitter = models.CharField(max_length=150, blank=True)  # New
     instagram = models.CharField(max_length=150, blank=True)  # New
 
-    token = models.CharField(max_length=150, blank=True)  # New 29/03/24
+    token = models.CharField(max_length=150, null=True, blank=True)  # New 29/03/24
     token_expiry = models.DateTimeField(blank=True, null=True)
     
     # User Permissions
