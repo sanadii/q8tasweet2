@@ -1,5 +1,32 @@
 import React from "react";
 
+<<<<<<< HEAD
+const ResetFilters = ({ setFilters, activeTab, setActiveTab }) => {
+
+    return (
+        <React.Fragment>
+            <p></p>
+            <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => {
+                    setFilters({
+                        status: null,
+                        priority: null,
+                        category: null,
+                        role: null,
+                        gender: null,
+                        member: null,
+                        attended: null,
+                        guaranteeStatus: null,
+                        global: ""
+                    });
+                    // Need to specify it
+                    setActiveTab("0");
+                }}
+            >
+                <i className="ri-filter-2-line me-1 align-bottom"></i> إعادة
+=======
 const ResetFilters = ({ filters, setFilters, setActiveTab }) => {
     // Default filter values
     const defaultFilters = {
@@ -27,6 +54,7 @@ const ResetFilters = ({ filters, setFilters, setActiveTab }) => {
                 }}
             >
                 <i className="mdi mdi-filter-off-outline"></i>
+>>>>>>> sanad
             </button>
         </React.Fragment>
     );

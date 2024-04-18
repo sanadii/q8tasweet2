@@ -1,0 +1,221 @@
+It looks like you're still encountering warnings related to deprecated packages and unmet peer dependencies even after attempting to clean and reinstall your project's dependencies. These warnings can be challenging to resolve, especially when dealing with a complex package ecosystem.
+
+Since the warnings involve various packages and dependencies, here's what you can consider doing next:
+
+Review Deprecated Packages: Take note of the packages that are being flagged as deprecated. Deprecated packages are no longer actively maintained and can potentially cause issues in your project. Look for alternative packages that offer similar functionality and are actively maintained.
+
+Resolve Peer Dependency Warnings: Address the unmet peer dependency warnings by ensuring that the required versions of peer dependencies are correctly installed. You may need to update or downgrade certain packages to achieve compatibility.
+
+Check Package Versions: Go through your project's package.json file and make sure that the versions of key dependencies like React, React DOM, and others are specified correctly. Double-check their compatibility with each other.
+
+Consider Simplifying Dependencies: If possible, try simplifying your project's dependencies by removing unnecessary packages. This might help reduce conflicts and compatibility issues.
+
+Consult Documentation and Communities: Check the documentation for the packages you're using, as well as any GitHub repositories or community forums associated with those packages. Others might have encountered similar issues and could provide insights or workarounds.
+
+Try a Different Setup: If you continue to face difficulties, consider trying a different setup or approach that involves using alternative packages. Sometimes, a fresh start with different dependencies can lead to a smoother development experience.
+
+Update Node.js: Make sure you're using a recent and stable version of Node.js. Newer versions often come with improvements and bug fixes that can help with package management.
+
+Seek Professional Help: If your project is critical and you're unable to resolve the issues on your own, consider seeking help from experienced developers or consultants who have expertise in working with complex package ecosystems.
+
+Remember that package management and compatibility issues can be quite complex, and there might not always be a straightforward solution. It's important to be patient and persistent in troubleshooting, and to keep an eye on the community discussions for any updates or solutions related to the specific warnings you're encountering.
+
+
+
+
+
+
+config.js
+Dependencies:
+
+Regularly update your dependencies to their latest versions to benefit from bug fixes, performance improvements, and new features. Use npm outdated to check for outdated packages.
+Be careful with ^ in version numbers as it can lead to unexpected updates. If you want to lock a specific version, just provide the version number without the ^.
+Scripts:
+
+Your build script has --max_old_space_size=8000 build. This seems to be increasing Node's memory limit for large projects. Ensure this is necessary for your project. If not, remove it. If you have a reason for it (e.g., you've faced memory issues during build), then keep it.
+For linting and formatting, you have separate scripts for eslint and prettier. It might be a good idea to integrate them, so ESLint uses Prettier under the hood. This way, you avoid potential conflicts between the two.
+eslintConfig:
+
+Your ESLint config seems tailored to your needs, but always make sure to revisit and adjust your rules as your project evolves.
+Consider adding "eslint-plugin-react-hooks" for linting rules for React hooks.
+Always ensure that your ESLint settings are consistent across your team to avoid different coding styles and issues.
+babelOptions:
+
+For now, you only have the preset for React. As your project grows, you might need other Babel plugins or presets, but for now, this is sufficient.
+resolutions:
+
+You're using the resolutions field to force a specific version for sub-dependencies. This is usually a good solution for handling conflicting versions or avoiding buggy updates. Ensure that you keep these resolutions up-to-date and re-evaluate them periodically.
+devDependencies:
+
+Currently, only babel-plugin-prismjs is a dev dependency. Ensure that tools or packages only used in development (like linting tools, test runners, etc.) are in devDependencies and not dependencies.
+Housekeeping:
+
+Use tools like npm-check or depcheck to identify unused or unnecessary packages. Over time, projects tend to accumulate dependencies that are no longer in use.
+If you're using react-router-dom v6, ensure that you've migrated your routing code from v5 (if you were previously using v5) since there are breaking changes.
+Lastly, always keep a backup before making significant changes, and if you're using version control (like Git), commit your changes often.
+
+If you have specific areas of concern or functionality you want to add, let me know, and we can dive deeper!
+
+
+continuation
+Yes, in a standard React (JavaScript) project created with Create React App (CRA), you can't use TypeScript's path mapping. However, you can achieve the same outcome using Babel with the babel-plugin-module-resolver.
+
+Here's a step-by-step guide:
+
+Install the Babel Plugin:
+
+You'll need the babel-plugin-module-resolver package:
+
+bash
+Copy code
+npm install --save-dev babel-plugin-module-resolver
+Configure the Babel Plugin:
+
+If you haven't already, you need a .babelrc or babel.config.js file at the root of your project. If it doesn't exist, create a .babelrc file with the following configuration:
+
+json
+Copy code
+{
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "helpers": "./src/helpers",
+        "Common": "./src/Components/Common",
+        "constants": "./src/Components/constants",
+        "Hooks": "./src/Components/Hooks",
+        "store": "./src/store"
+      }
+    }]
+  ]
+}
+Adjust ESLint (if you use it):
+
+Since you are also using ESLint, it may show errors because it doesn't understand the new import paths. To fix that, you can use the eslint-import-resolver-babel-module package:
+
+bash
+Copy code
+npm install eslint-import-resolver-babel-module --save-dev
+Then, in your .eslintrc (or wherever you have your ESLint configuration), add:
+
+json
+Copy code
+"settings": {
+  "import/resolver": {
+    "babel-module": {}
+  }
+}
+This tells ESLint to use the Babel module resolver for import paths, which will respect your alias configuration.
+
+Remember the Restriction:
+
+Unfortunately, the default setup of CRA does not let you modify the Babel config unless you eject or use a tool like react-app-rewired to override the default config.
+
+If you don't want to eject or use workarounds like react-app-rewired, you might be limited in the modifications you can make to your Babel configuration.
+
+Do note that changing configurations like this might make your setup more complex and may make upgrades or troubleshooting a bit trickier in the future. Always keep track of changes made to default configurations and ensure your team (if you're working with others) understands these modifications.
+
+
+
+=== on Yarn Build
+One of your dependencies, babel-preset-react-app, is importing the
+"@babel/plugin-proposal-private-property-in-object" package without
+declaring it in its dependencies. This is currently working because
+"@babel/plugin-proposal-private-property-in-object" is already in your
+node_modules folder for unrelated reasons, but it may break at any time.
+
+babel-preset-react-app is part of the create-react-app project, which
+is not maintianed anymore. It is thus unlikely that this bug will
+ever be fixed. Add "@babel/plugin-proposal-private-property-in-object" to
+your devDependencies to work around this error. This will make this message
+go away.
+
+
+- Document title (getConfigs as main)
+Yes, updating `document.title` directly in the component body is not a recommended practice. 
+
+In React, there are a few ways you can handle changing the `document.title`:
+
+1. **Using `useEffect`**:
+    It's the most basic way to set `document.title`. By placing it inside a `useEffect`, you ensure that it only runs once the component mounts, and not on every render.
+
+    ```javascript
+    useEffect(() => {
+        document.title = "الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template";
+    }, []);
+    ```
+
+2. **Using a Custom Hook**:
+    You can create a custom hook `useDocumentTitle` which makes your intent clearer and the functionality reusable.
+
+    ```javascript
+    // hooks/useDocumentTitle.js
+    import { useEffect } from 'react';
+
+    function useDocumentTitle(title) {
+        useEffect(() => {
+            document.title = title;
+        }, [title]);
+    }
+
+    export default useDocumentTitle;
+    ```
+
+    Then, in your component:
+
+    ```javascript
+    import useDocumentTitle from 'path_to_hooks/useDocumentTitle';
+
+    ...
+
+    useDocumentTitle("الحملة الإنتخابية | Q8Tasweet - React Admin & Dashboard Template");
+    ```
+
+3. **Using a Library**:
+    There are libraries like `react-helmet` that provide components to manage changes to the head of the document, including the title. This might be overkill if you're just updating the title, but if you foresee needing to manage other parts of the `<head>` (like meta tags, styles, etc.), it's a great option.
+
+Using the custom hook approach is clean and makes the functionality reusable across different components.
+
+
+Make Default Groupt to be created as soon as the project launch with its roles
+
+GROUP
+	Campaign Admin
+	Campaign Attendant
+	Campaign Candidate
+	Campaign Candidate Admin
+	Campaign Guarantor
+	Campaign Sorter
+	Campaign Supervisor
+	Website Admin
+	Website Editor
+	Website Moderator
+	Website Supervisor
+	Website Support
+
+
+
+  100. work on Loadish
+
+101. Profile models
+  User Profile model
+  Candidate Profile Model
+
+
+  102. Reset all tables / rename all directories to make them apps
+
+
+  103. User Can write message (Election)
+  def user_can_vote(self, user):
+  """ 
+  Return False if user already voted
+  """
+  user_votes = user.vote_set.all()
+  qs = user_votes.filter(poll=self)
+  if qs.exists():
+      return False
+  return True
+
+@property
+def get_vote_count(self):
+  return self.vote_set.count()

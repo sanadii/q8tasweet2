@@ -5,9 +5,15 @@ import {
 
   // Campaigns
   GET_CAMPAIGNS,
+<<<<<<< HEAD
+  ADD_NEW_CAMPAIGN,
+  ADD_NEW_CAMPAIGN_SUCCESS,
+  ADD_NEW_CAMPAIGN_FAIL,
+=======
   ADD_CAMPAIGN,
   ADD_CAMPAIGN_SUCCESS,
   ADD_CAMPAIGN_FAIL,
+>>>>>>> sanad
   UPDATE_CAMPAIGN,
   UPDATE_CAMPAIGN_SUCCESS,
   UPDATE_CAMPAIGN_FAIL,
@@ -21,9 +27,15 @@ import {
 
   // CampaignMembers
   GET_ALL_CAMPAIGN_MEMBERS,
+<<<<<<< HEAD
+  ADD_NEW_CAMPAIGN_MEMBER,
+  ADD_NEW_CAMPAIGN_MEMBER_SUCCESS,
+  ADD_NEW_CAMPAIGN_MEMBER_FAIL,
+=======
   ADD_CAMPAIGN_MEMBER,
   ADD_CAMPAIGN_MEMBER_SUCCESS,
   ADD_CAMPAIGN_MEMBER_FAIL,
+>>>>>>> sanad
   UPDATE_CAMPAIGN_MEMBER,
   UPDATE_CAMPAIGN_MEMBER_SUCCESS,
   UPDATE_CAMPAIGN_MEMBER_FAIL,
@@ -32,9 +44,15 @@ import {
   DELETE_CAMPAIGN_MEMBER_FAIL,
 
   // CampaignGuarantees
+<<<<<<< HEAD
+  ADD_NEW_CAMPAIGN_GUARANTEE,
+  ADD_NEW_CAMPAIGN_GUARANTEE_SUCCESS,
+  ADD_NEW_CAMPAIGN_GUARANTEE_FAIL,
+=======
   ADD_CAMPAIGN_GUARANTEE,
   ADD_CAMPAIGN_GUARANTEE_SUCCESS,
   ADD_CAMPAIGN_GUARANTEE_FAIL,
+>>>>>>> sanad
   UPDATE_CAMPAIGN_GUARANTEE,
   UPDATE_CAMPAIGN_GUARANTEE_SUCCESS,
   UPDATE_CAMPAIGN_GUARANTEE_FAIL,
@@ -42,6 +60,12 @@ import {
   DELETE_CAMPAIGN_GUARANTEE_SUCCESS,
   DELETE_CAMPAIGN_GUARANTEE_FAIL,
 
+<<<<<<< HEAD
+  // CampaignAttendees
+  ADD_NEW_CAMPAIGN_ATTENDEE,
+  ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS,
+  ADD_NEW_CAMPAIGN_ATTENDEE_FAIL,
+=======
   // CampaignGuarantees
   GET_CAMPAIGN_GUARANTEE_GROUPS,
   ADD_CAMPAIGN_GUARANTEE_GROUP,
@@ -58,6 +82,7 @@ import {
   ADD_CAMPAIGN_ATTENDEE,
   ADD_CAMPAIGN_ATTENDEE_SUCCESS,
   ADD_CAMPAIGN_ATTENDEE_FAIL,
+>>>>>>> sanad
   UPDATE_CAMPAIGN_ATTENDEE,
   UPDATE_CAMPAIGN_ATTENDEE_SUCCESS,
   UPDATE_CAMPAIGN_ATTENDEE_FAIL,
@@ -121,6 +146,20 @@ export const updateCampaignFail = (error) => ({
 });
 
 // Add Campaign
+<<<<<<< HEAD
+export const addNewCampaign = (campaign) => ({
+  type: ADD_NEW_CAMPAIGN,
+  payload: campaign,
+});
+
+export const addNewCampaignSuccess = (campaign) => ({
+  type: ADD_NEW_CAMPAIGN_SUCCESS,
+  payload: campaign,
+});
+
+export const addNewCampaignFail = (error) => ({
+  type: ADD_NEW_CAMPAIGN_FAIL,
+=======
 export const addCampaign = campaign => ({
   type: ADD_CAMPAIGN,
   payload: campaign,
@@ -133,6 +172,7 @@ export const addCampaignSuccess = campaign => ({
 
 export const addCampaignFail = (error) => ({
   type: ADD_CAMPAIGN_FAIL,
+>>>>>>> sanad
   payload: error,
 });
 
@@ -153,6 +193,20 @@ export const deleteCampaignFail = (error) => ({
 });
 
 // // Campaign Members
+<<<<<<< HEAD
+export const addNewCampaignMember = (campaignMember) => ({
+  type: ADD_NEW_CAMPAIGN_MEMBER,
+  payload: campaignMember,
+});
+
+export const addNewCampaignMemberSuccess = (campaignMember) => ({
+  type: ADD_NEW_CAMPAIGN_MEMBER_SUCCESS,
+  payload: campaignMember,
+});
+
+export const addNewCampaignMemberFail = (error) => ({
+  type: ADD_NEW_CAMPAIGN_MEMBER_FAIL,
+=======
 export const addCampaignMember = (campaignMember) => ({
   type: ADD_CAMPAIGN_MEMBER,
   payload: campaignMember,
@@ -165,6 +219,7 @@ export const addCampaignMemberSuccess = (campaignMember) => ({
 
 export const addCampaignMemberFail = (error) => ({
   type: ADD_CAMPAIGN_MEMBER_FAIL,
+>>>>>>> sanad
   payload: error,
 });
 
@@ -197,6 +252,24 @@ export const updateCampaignMemberFail = (error) => ({
 });
 
 // CampaignGuarantees
+<<<<<<< HEAD
+export const addNewCampaignGuarantee = (campaignGuarantee) => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEE,
+  payload: campaignGuarantee,
+});
+
+export const addNewCampaignGuaranteeSuccess = (campaignGuarantee) => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEE_SUCCESS,
+  payload: campaignGuarantee,
+});
+
+export const addNewCampaignGuaranteeFail = (error) => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEE_FAIL,
+  payload: error,
+});
+
+
+=======
 export const addCampaignGuarantee = (campaignGuarantee) => ({
   type: ADD_CAMPAIGN_GUARANTEE,
   payload: campaignGuarantee,
@@ -212,6 +285,7 @@ export const addCampaignGuaranteeFail = (error) => ({
   payload: error,
 });
 
+>>>>>>> sanad
 export const updateCampaignGuarantee = (campaignGuarantee) => ({
   type: UPDATE_CAMPAIGN_GUARANTEE,
   payload: campaignGuarantee
@@ -240,6 +314,8 @@ export const deleteCampaignGuaranteeFail = (error) => ({
   payload: error,
 });
 
+<<<<<<< HEAD
+=======
 // CampaignGuaranteeGroups
 export const addCampaignGuaranteeGroup = (campaignGuaranteeGroup) => ({
   type: ADD_CAMPAIGN_GUARANTEE_GROUP,
@@ -284,10 +360,25 @@ export const deleteCampaignGuaranteeGroupFail = (error) => ({
   payload: error,
 });
 
+>>>>>>> sanad
 
 
 // ----------- Attendeees -------------
 // CampaignAttendees
+<<<<<<< HEAD
+export const addNewCampaignAttendee = (campaignAttendee) => ({
+  type: ADD_NEW_CAMPAIGN_ATTENDEE,
+  payload: campaignAttendee,
+});
+
+export const addNewCampaignAttendeeSuccess = (campaignAttendee) => ({
+  type: ADD_NEW_CAMPAIGN_ATTENDEE_SUCCESS,
+  payload: campaignAttendee,
+});
+
+export const addNewCampaignAttendeeFail = (error) => ({
+  type: ADD_NEW_CAMPAIGN_ATTENDEE_FAIL,
+=======
 export const addCampaignAttendee = (campaignAttendee) => ({
   type: ADD_CAMPAIGN_ATTENDEE,
   payload: campaignAttendee,
@@ -300,6 +391,7 @@ export const addCampaignAttendeeSuccess = (campaignAttendee) => ({
 
 export const addCampaignAttendeeFail = (error) => ({
   type: ADD_CAMPAIGN_ATTENDEE_FAIL,
+>>>>>>> sanad
   payload: error,
 });
 export const updateCampaignAttendee = (campaignAttendee) => ({

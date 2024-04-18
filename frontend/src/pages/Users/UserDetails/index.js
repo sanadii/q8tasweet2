@@ -5,7 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getElectionDetails,
   // getUserElections,
+<<<<<<< HEAD
+  getElectionCampaigns,
+=======
   getCampaigns,
+>>>>>>> sanad
 } from "../../../store/actions";
 import { isEmpty } from "lodash";
 import Section from "./Section";

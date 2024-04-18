@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+// React & Redux
+import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+
+// Import Actions
+import { addNewUser, updateUser } from "store/actions";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import "react-toastify/dist/ReactToastify.css";
+import { GenderOptions } from "shared/constants"
+import { FieldComponent } from "shared/components";
+import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+
+const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
+  const dispatch = useDispatch();
+
+  const [showPassword, setShowPassword] = useState(false);
+=======
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,6 +33,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState([]);
+>>>>>>> sanad
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -24,6 +45,20 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
     }
   }, [modal]);
 
+<<<<<<< HEAD
+  // validation
+  const validation = useFormik({
+    // enableReinitialize : use this flag when initial values needs to be changed
+    enableReinitialize: true,
+    initialValues: {
+      id: (user && user.id) || 0,
+      email: (user && user.email) || "",
+      username: (user && user.username) || "",
+      firstName: (user && user.firstName) || "",
+      lastName: (user && user.lastName) || "",
+
+      phone: (user && user.phone) || "",
+=======
   useEffect(() => {
     // Ensure user object and groups are defined before setting selectedFilter
     if (user && user.groups) {
@@ -42,12 +77,40 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
       lastName: user?.lastName || "",
       phone: user?.phone || "",
       groups: selectedFilter,
+>>>>>>> sanad
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("Please Enter First Name"),
       email: Yup.string().required("Please Enter Email"),
     }),
     onSubmit: (values) => {
+<<<<<<< HEAD
+
+      if (isEdit) {
+        const updatedUser = {
+          id: user ? user.id : 0,
+          username: values.email,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          phone: values.phone,
+          email: values.email,
+          ...(values.password && { password: values.password }),
+
+        };
+
+        // Update user
+        dispatch(updateUser(updatedUser));
+      } else {
+        const newUser = {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          phone: values.phone,
+          email: values.email,
+          username: values.email,
+          password: showPassword ? values.password : values.phone,
+        };
+        dispatch(addNewUser(newUser));
+=======
       const updatedUser = {
         id: user ? user.id : 0,
         username: values.email,
@@ -65,6 +128,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
       } else {
         // Add new user
         dispatch(addUser(updatedUser));
+>>>>>>> sanad
       }
 
       validation.resetForm();
@@ -81,14 +145,57 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
       placeholder: "ادخل الاسم الأول",
       colSize: "6",
     },
+<<<<<<< HEAD
+    {
+      id: "last-name-field",
+      name: "lastName",
+      label: "اسم العائلة",
+      type: "text",
+      placeholder: "ادخل اسم العائلة",
+      colSize: "6",
+    },
+    {
+      id: "email-field",
+      name: "email",
+      label: "البريد الالكتروني",
+      type: "email",
+      placeholder: "ادخل البريد الالكتروني",
+      colSize: "6",
+    },
+    {
+      id: "phone-field",
+      name: "phone",
+      label: "الهاتف",
+      type: "tel",
+      placeholder: "ادخل رقم الهاتف",
+      colSize: "6",
+    },
+    {
+      id: "password-field",
+      name: "password",
+      label: "كلمة المرور",
+      type: showPassword ? "text" : "password",
+      placeholder: "ادخل كلمة المرور",
+      colSize: "6",
+      // isEditPassword: true,
+    },
+  ];
+
+
+=======
     // Add other fields here...
   ];
 
+>>>>>>> sanad
   return (
     <Modal
       isOpen={modal}
       centered
+<<<<<<< HEAD
+      size="md"
+=======
       size="lg"
+>>>>>>> sanad
       className="border-0"
       modalClassName="modal fade zoomIn"
     >
@@ -107,8 +214,14 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
         <ModalBody className="modal-body">
           <Row>
             {fields.map((field) => (
+<<<<<<< HEAD
+              // Render all fields except the password field
+              (field.name !== "password" || showPassword) && (
+                <FieldComponent
+=======
               (field.name !== "password" || showPassword) && (
                 <FormFields
+>>>>>>> sanad
                   key={field.id}
                   field={field}
                   validation={validation}
@@ -116,6 +229,10 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
               )
             ))}
           </Row>
+<<<<<<< HEAD
+          {/* Add a link to show the password field */}
+=======
+>>>>>>> sanad
           <Row>
             <Col>
               <Link
@@ -128,6 +245,12 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
                 {isEdit && !showPassword ? (
                   "لتغيير كلمة المرور"
                 ) : "لا لتغيير كلمة المرور"}
+<<<<<<< HEAD
+
+              </Link>
+            </Col>
+          </Row>
+=======
               </Link>
             </Col>
           </Row>
@@ -172,6 +295,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
               </div>
             </Col>
           </Row>
+>>>>>>> sanad
         </ModalBody>
         <ModalFooter>
           <div className="hstack gap-2 justify-content-end">
@@ -195,3 +319,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
 };
 
 export default UserModal;
+<<<<<<< HEAD
+
+=======
+>>>>>>> sanad

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 Template Name: Velzon - Admin & Dashboard Template
 Author: Q8Vision
@@ -14,3 +15,21 @@ File: Custom Bootstrap Css File
 @import "variables";
 @import "./node_modules/bootstrap/scss/bootstrap";
 
+=======
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Q8Vision
+Version: 2.4.0
+Website: https://Q8Vision.com/
+Contact: Q8Vision@gmail.com
+File: Custom Bootstrap Css File
+*/
+
+
+//Core files
+@import "./node_modules/bootstrap/scss/functions";
+@import "./node_modules/bootstrap/scss/variables";
+@import "variables";
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+>>>>>>> sanad

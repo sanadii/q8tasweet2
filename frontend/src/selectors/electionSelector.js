@@ -12,13 +12,12 @@ export const electionSelector = createSelector(
     futureElections: electionsState.futureElections || [],
 
     election: electionsState.electionDetails,
-    electionId: electionsState.electionDetails.id,
-    electionSlug: electionsState.electionDetails?.slug,
     electionMethod: electionsState.electionDetails.electionMethod,
 
     electionDetails: electionsState.electionDetails,
     previousElection: electionsState.electionDetails.previousElection,
-
+    electionId: electionsState.electionDetails.id,
+    electionCommittees: electionsState.electionCommittees,
 
     electionCandidates: electionsState.electionCandidates || [],
     electionParties: electionsState.electionParties || [],
@@ -34,10 +33,7 @@ export const electionSelector = createSelector(
     // partyResult: electionsState.electionDetails.electionResult.,
     // SortingResult: electionsState.electionDetails.electionResult.,
 
-
     electionSorters: electionsState.electionSorters || [],
-
-
     // From Schema
     electionAreas: electionsState.electionAreas,
     electionCommitteeSites: electionsState.electionCommitteeSites,
@@ -46,7 +42,6 @@ export const electionSelector = createSelector(
     // Success / Error
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,
-
   })
 );
 

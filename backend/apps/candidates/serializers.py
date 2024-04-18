@@ -5,7 +5,11 @@ from django.conf import settings  # Import Django settings to access MEDIA_URL
 from apps.candidates.models import Candidate, Party
 from apps.auths.models import User
 
+<<<<<<< HEAD
+from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+=======
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+>>>>>>> sanad
 
 class CandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Candidate model. """
@@ -25,7 +29,10 @@ class CandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             return f"{settings.MEDIA_URL}{obj.image}"  # Use Django's MEDIA_URL to build the URL
         return None  # Return None if the image field is empty
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> sanad
 class PartySerializer(AdminFieldMixin, serializers.ModelSerializer):
     """ Serializer for the Candidate model. """
     admin_serializer_classes = (TrackMixin, TaskMixin)
@@ -33,7 +40,13 @@ class PartySerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Party
+<<<<<<< HEAD
+        fields = [
+            "id", "name", "slug", "image",
+        ]
+=======
         fields = ["id", "name", "slug", "image"]
+>>>>>>> sanad
 
     def get_image(self, obj):
         # Check if the image field is not empty and generate the desired URL format

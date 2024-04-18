@@ -3,8 +3,13 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
+<<<<<<< HEAD
+import { getUsers, deleteUser } from "store/actions";
+import { userSelector } from 'selectors';
+=======
 import { getUsers, deleteUser, getGroups } from "store/actions";
 import { userSelector, groupSelector } from 'selectors';
+>>>>>>> sanad
 
 // Custom Components & ConstantsImports
 import UserModal from "./UserModal";
@@ -30,6 +35,25 @@ const AllUsers = () => {
 
   // State Management
   const { users, isUserSuccess, error } = useSelector(userSelector);
+<<<<<<< HEAD
+
+
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    onClickDelete,
+    deleteModal,
+    setDeleteModal,
+    checkedAll,
+    deleteCheckbox,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    deleteMultiple,
+  } = useDelete(deleteUser);
+
+  console.log("checkedAll: ", checkedAll)
+=======
   const { groups, categories } = useSelector(groupSelector);
 
   const transformGroups = (categories, groups) => {
@@ -68,6 +92,7 @@ const AllUsers = () => {
   } = useDelete(deleteUser);
 
 
+>>>>>>> sanad
   // Model & Toggle Function
   const [user, setUser] = useState([]);
   const [modal, setModal] = useState(false);
@@ -77,11 +102,17 @@ const AllUsers = () => {
   useEffect(() => {
     if (users && !users.length) {
       dispatch(getUsers());
+<<<<<<< HEAD
+    }
+  }, [dispatch, users]);
+
+=======
       dispatch(getGroups());
     }
   }, [dispatch, users]);
 
 
+>>>>>>> sanad
   const toggle = useCallback(() => {
     if (modal) {
       setModal(false);
@@ -93,8 +124,23 @@ const AllUsers = () => {
 
   // Update Data
   const handleUserClick = useCallback(
+<<<<<<< HEAD
+    (arg) => {
+      const user = arg;
+
+      setUser({
+        id: user.id,
+        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        email: user.email,
+      });
+
+=======
     (selectedUser) => {
       setUser(selectedUser);
+>>>>>>> sanad
       setIsEdit(true);
       toggle();
     },
@@ -111,9 +157,19 @@ const AllUsers = () => {
   const columns = useMemo(
     () => [
       {
+<<<<<<< HEAD
+        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        accessor: "id",
+        Cell: (cellProps) =>
+          <CheckboxCell
+            {...cellProps}
+            deleteCheckbox={deleteCheckbox}
+          />,
+=======
         Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
         accessor: "id",
         Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
+>>>>>>> sanad
       },
       {
         Header: "م.",
@@ -137,6 +193,22 @@ const AllUsers = () => {
       },
       {
         Header: "إجراءات",
+<<<<<<< HEAD
+        accessor: "user",
+        filterable: false,
+        Cell: (cellProps) => {
+          return (
+            <Actions
+              {...cellProps}
+              handleUserClick={handleUserClick}
+              onClickDelete={onClickDelete}
+            />
+          );
+        },
+      },
+    ],
+    [handleUserClick, checkedAll]
+=======
         accessor: "election",
         Cell: (cellProps) =>
           <Actions
@@ -147,6 +219,7 @@ const AllUsers = () => {
       },
     ],
     [handleCheckCellClick, handleCheckAllClick, handleUserClick, handleItemDeleteClick]
+>>>>>>> sanad
   );
 
   // Filters----------
@@ -162,11 +235,23 @@ const AllUsers = () => {
     }
     return isValid;
   });
+<<<<<<< HEAD
+=======
 
+>>>>>>> sanad
   return (
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
+<<<<<<< HEAD
+        onDeleteClick={handleDeleteItem}
+        onCloseClick={() => setDeleteModal(false)}
+      />
+      <DeleteModal
+        show={deleteModalMulti}
+        onDeleteClick={() => {
+          deleteMultiple();
+=======
         onDeleteClick={() => handleDeleteItem()}
         onCloseClick={() => setDeleteModal(false)}
       />
@@ -175,6 +260,7 @@ const AllUsers = () => {
         show={deleteModalMulti}
         onDeleteClick={() => {
           handleDeleteMultiple();
+>>>>>>> sanad
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
@@ -185,7 +271,10 @@ const AllUsers = () => {
         user={user}
         isEdit={isEdit}
         setModal={setModal}
+<<<<<<< HEAD
+=======
         userGroups={userGroups}
+>>>>>>> sanad
       />
       <Row>
         <Col lg={12}>

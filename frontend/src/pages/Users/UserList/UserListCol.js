@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import * as moment from "moment";
 
 
+<<<<<<< HEAD
+=======
 const CheckboxHeader = ({ handleCheckAllClick }) => (
   <input
     type="checkbox"
@@ -23,6 +25,7 @@ const CheckboxCell = ({ row, handleCheckCellClick }) => (
   />
 );
 
+>>>>>>> sanad
 const Id = (cellProps) => {
   return (
     <React.Fragment>
@@ -31,6 +34,34 @@ const Id = (cellProps) => {
   );
 };
 
+<<<<<<< HEAD
+const CheckboxHeader = ({ checkedAll }) => (
+  <input
+    type="checkbox"
+    id="checkBoxAll"
+    className="form-check-input"
+    onClick={checkedAll}
+  />
+);
+
+
+
+
+
+const CheckboxCell = (props) => {
+  const { cell, deleteCheckbox } = props;
+  return (
+    <input
+      type="checkbox"
+      className="checkboxSelector form-check-input"
+      value={cell.row.id}
+      onChange={deleteCheckbox}
+    />
+  );
+};
+
+=======
+>>>>>>> sanad
 
 const Name = (cell) => {
   return (
@@ -64,9 +95,13 @@ const CreateBy = (cell) => {
 };
 
 const Actions = (props) => {
+<<<<<<< HEAD
+  const { cell, handleUserClick, onClickDelete } = props;
+=======
   const { cell, handleUserClick, handleItemDeleteClick } = props;
   const userData = cell.row.original;
 
+>>>>>>> sanad
   return (
     <React.Fragment>
       <div className="d-flex">
@@ -75,7 +110,14 @@ const Actions = (props) => {
           <button
             to="#"
             className="btn btn-sm btn-soft-info edit-list"
+<<<<<<< HEAD
+            onClick={() => {
+              const userData = cell.row.original;
+              handleUserClick(userData);
+            }}
+=======
             onClick={() => { handleUserClick(userData); }}
+>>>>>>> sanad
           >
             <i className="ri-pencil-fill align-bottom" />
           </button>
@@ -92,7 +134,14 @@ const Actions = (props) => {
           <button
             to="#"
             className="btn btn-sm btn-soft-danger remove-list"
+<<<<<<< HEAD
+            onClick={() => {
+              const userData = cell.row.original;
+              onClickDelete(userData);
+            }}
+=======
             onClick={() => { handleItemDeleteClick(userData); }}
+>>>>>>> sanad
           >
             <i className="ri-delete-bin-5-fill align-bottom" />
           </button>
