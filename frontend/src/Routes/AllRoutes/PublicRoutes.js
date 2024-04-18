@@ -48,7 +48,8 @@ import ResetPasswordScreen from "pages/Authentication/ResetPassword";
 
 const PublicRoutes = [
     // Public Pages
-    { path: "/", component: <Public /> },
+    // { path: "/", component: <Public /> },
+    { path: "/", component: <Login /> },
     { path: "elections/:slug", component: <PublicElectionDetails /> },
     { path: "elections", component: <ElectionGrid /> },
     { path: "candidates", component: <CandidateGrid /> },

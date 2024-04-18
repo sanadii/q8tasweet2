@@ -15,7 +15,7 @@ class Command(BaseCommand):
         work_sheet = "candidates"
         required_data = [
             "id", "status", "priority", "name", "gender", "image", "tags", "slug", "denomination", 
-            "family", "tribe", "position", "result", "votes"
+            "family", "tribe"
         ]
 
         df = read_excel_file(file_path, work_sheet, required_data, self.stdout)
@@ -29,20 +29,27 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"Updated: {updated_count} Candidates"))
 
         # Now update ElectionCandidate model
-        election_id = 23  # Static for now, you can modify as needed
-        for _, row in df.iterrows():
-            candidate = Candidate.objects.get(id=row["id"])
+        election_id = 8  # Static for now, you can modify as needed
+        election_created_count = 0
+        election_updated_count = 0
+        for candidate in processed_candidates:
             election_candidate, created = ElectionCandidate.objects.update_or_create(
                 candidate=candidate,
                 election_id=election_id,
                 defaults={
-                    'position': row["position"],  # Use actual data from DataFrame
-                    'result': row["result"],      # Use actual data from DataFrame
-                    'votes': row["votes"],        # Use actual data from DataFrame
-                    'notes': row.get('notes', '')   # Use actual data from DataFrame, or provide a default value
+                    'position': None,  # Replace with actual data if available
+                    'result': None,    # Replace with actual data if available
+                    'votes': 0,        # Replace with actual data if available
+                    'notes': ''         # Replace with actual data if available
                 }
             )
-            action = "Created" if created else "Updated"
-            self.stdout.write(self.style.SUCCESS(f"{action} ElectionCandidate for Candidate ID {candidate.id}"))
+            if created:
+                election_created_count += 1
+            else:
+                election_updated_count += 1
+
+        self.stdout.write(self.style.SUCCESS(f"ElectionCandidate creation completed. Summary:"))
+        self.stdout.write(self.style.SUCCESS(f"Created: {election_created_count} ElectionCandidates"))
+        self.stdout.write(self.style.SUCCESS(f"Updated: {election_updated_count} ElectionCandidates"))
 
         self.stdout.write(self.style.SUCCESS("ElectionCandidate update completed."))

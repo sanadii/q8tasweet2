@@ -120,10 +120,11 @@ def get_campaign_managers(campaign):
 
 # CAMPAIGNS MEMBERS
 def get_campaign_members_by_role(campaign, user_role, current_campaign_member):
-    HIGHER_PRIVILEGE_ROLES = {"higherPrivilege"}
+    HIGHER_PRIVILEGE_ROLES = {"higherPrivilage"}
     MANAGER_ROLES = {"campaignModerator", "campaignCandidate", "partyAdmin", "campaignAdmin"}
     SUPERVISOR_ROLES = {"campaignFieldAdmin", "campaignDigitalAdmin", "campaignFieldAgent", "campaignDigitalAgent"}
 
+    print("user_role: ", user_role)
     if user_role in HIGHER_PRIVILEGE_ROLES:
         campaign_members = CampaignMember.objects.filter(campaign=campaign)
         campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"

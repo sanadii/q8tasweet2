@@ -8,7 +8,7 @@ export const campaignSelector = createSelector(
   (campaignsState) => ({
 
     // Campaign Selectors
-    campaigns: campaignsState.campaigns,
+    campaigns: campaignsState.campaigns || [],
     campaign: campaignsState.campaignDetails,
     activeCampaign: campaignsState.campaignDetails,
     campaignId: campaignsState.campaignDetails.id,
@@ -21,7 +21,7 @@ export const campaignSelector = createSelector(
 
     electionSlug: campaignsState.electionDetails?.slug,
     campaignDetails: campaignsState.campaignDetails,
-    campaignMembers: campaignsState.campaignMembers,
+    campaignMembers: campaignsState.campaignMembers || [],
 
     campaignGuarantees: campaignsState.campaignGuarantees || [],
     campaignGuaranteeGroups: campaignsState.campaignGuaranteeGroups || [],

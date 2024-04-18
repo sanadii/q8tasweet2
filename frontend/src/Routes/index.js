@@ -11,7 +11,7 @@ import { AuthProtected } from './AuthProtected';
 const routeConfig = [
     {
         routes: PublicRoutes,
-        layout: "horizontal",
+        // layout: "horizontal",
         isAuthProtected: false,
     },
     {

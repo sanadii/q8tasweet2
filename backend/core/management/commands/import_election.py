@@ -14,7 +14,7 @@ class Command(BaseCommand):
         # call_command("import_election_details", election)
 
         # Participants: Candidate, ElectionCandidate, Party, ElectionParty, ElectionPartyCandidate
-        call_command("import_election_related_candidates", election)
+        # call_command("import_election_related_candidates", election)
         # # call_command('import_election_related_parties')
         # # call_command('import_election_related_party_candidates')
 
@@ -27,7 +27,7 @@ class Command(BaseCommand):
         # call_command("import_election_related_members", election)
         
         # # Import Guarantees
-        # call_command("import_election_related_schema_guarantees", election)
+        call_command("import_election_related_schema_guarantees", election)
 
         self.stdout.write(
             self.style.SUCCESS("setup Q8tasweet command called successfully.")

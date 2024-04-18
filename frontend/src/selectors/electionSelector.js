@@ -7,9 +7,9 @@ export const electionSelector = createSelector(
   selectElectionsState,
   (electionsState) => ({
     // Election Selectors
-    elections: electionsState.elections,
-    recentElections: electionsState.recentElections,
-    futureElections: electionsState.futureElections,
+    elections: electionsState.elections || [],
+    recentElections: electionsState.recentElections || [],
+    futureElections: electionsState.futureElections || [],
 
     election: electionsState.electionDetails,
     electionId: electionsState.electionDetails.id,
@@ -20,12 +20,12 @@ export const electionSelector = createSelector(
     previousElection: electionsState.electionDetails.previousElection,
 
 
-    electionCandidates: electionsState.electionCandidates,
-    electionParties: electionsState.electionParties,
-    electionPartyCandidates: electionsState.electionPartyCandidates,
+    electionCandidates: electionsState.electionCandidates || [],
+    electionParties: electionsState.electionParties || [],
+    electionPartyCandidates: electionsState.electionPartyCandidates || [],
 
-    electionCampaigns: electionsState.electionCampaigns,
-    electionAttendees: electionsState.electionAttendees,
+    electionCampaigns: electionsState.electionCampaigns || [],
+    electionAttendees: electionsState.electionAttendees || [],
     // electionResult: electionsState.electionDetails.electionResult,
     electionResultView: electionsState.electionDetails.electionResultView,
     electionResultParty: electionsState.electionDetails.electionResultParty,
@@ -35,14 +35,14 @@ export const electionSelector = createSelector(
     // SortingResult: electionsState.electionDetails.electionResult.,
 
 
-    electionSorters: electionsState.electionSorters,
+    electionSorters: electionsState.electionSorters || [],
 
 
     // From Schema
     electionAreas: electionsState.electionAreas,
     electionCommitteeSites: electionsState.electionCommitteeSites,
     schemaDetails: electionsState.schemaDetails,
-    
+
     // Success / Error
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,

@@ -126,7 +126,7 @@ const GuaranteeTargetBar = ({ campaign, results, previousElection }) => {
 
                                 <div className="position-absolute top-0" style={{ width: '100%', height: '100%' }}>
                                     <Marker percentage={calculatePercentage(firstWinnerVotes)} color="success" label="الأول" total={firstWinnerVotes} height={12} />
-                                    <Marker percentage={calculatePercentage(lastWinnerVotes)} color="danger" label={getArabicOrdinal(previousElectionDetails.electSeats)} total={lastWinnerVotes} height={12} />
+                                    <Marker percentage={calculatePercentage(lastWinnerVotes)} color="danger" label={getArabicOrdinal(previousElectionDetails?.electSeats)} total={lastWinnerVotes} height={12} />
                                     <Marker percentage={calculatePercentage(medianWinnerVotes)} color="info" label="المتوسط" total={medianWinnerVotes} height={12} />
                                     <Marker percentage={calculatePercentage(targetVotes)} color="primary" label="الهدف" total={targetVotes} height={56} />
                                 </div>

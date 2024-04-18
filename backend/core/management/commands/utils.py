@@ -1,4 +1,3 @@
-# utils.py
 import pandas as pd
 from django.db import models, connection
 from contextlib import contextmanager
@@ -6,31 +5,29 @@ import random
 import string
 from django.utils import timezone
 import numpy as np
+from apps.auths.models import User
 
 def generate_random_slug(length=6):
     """Generate a random slug of specified length."""
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(length))
 
-
 def isNaN(value):
     """Check if a value is NaN."""
     return value != value or (isinstance(value, float) and np.isnan(value))
-
 
 @contextmanager
 def set_search_path(schema_name):
     if schema_name:
         try:
             with connection.cursor() as cursor:
-                cursor.execute(f"SET search_path TO {schema_name}")
+                cursor.execute(f"SET search_path TO '{schema_name}'")
             yield
         finally:
             with connection.cursor() as cursor:
                 cursor.execute("SET search_path TO public")
     else:
         yield  # No-op if schema_name is None
-
 
 def read_excel_file(file_path, work_sheet, required_data, stdout):
     try:
@@ -49,7 +46,6 @@ def read_excel_file(file_path, work_sheet, required_data, stdout):
         stdout.write(f"Failed to read Excel file: {e}\n")
         return None
 
-
 def check_required_columns(df, required_data, stdout):
     if not all(column in df.columns for column in required_data):
         missing_columns = ", ".join(
@@ -58,7 +54,6 @@ def check_required_columns(df, required_data, stdout):
         stdout.write(f"Missing required columns in the Excel file: {missing_columns}\n")
         return False
     return True
-
 
 def process_row_fields(row, model, stdout, schema_name):
     # Extract the 'id' separately if it's always present
@@ -113,6 +108,7 @@ def process_row_fields(row, model, stdout, schema_name):
         # Handle DateField fields
         if isinstance(field, models.DateField):
             field_value = defaults.get(field.name)
+
             if isNaN(field_value) or field_value == "":
                 defaults[field.name] = None  # Set the DateField to None if it's empty
             else:
@@ -124,10 +120,16 @@ def process_row_fields(row, model, stdout, schema_name):
                     defaults[field.name] = None  # Assign None if the value is invalid
 
         # Handle IntegerField and FloatField fields
-        if isinstance(field, (models.IntegerField, models.FloatField)):
+        if isinstance(field, models.IntegerField):
             field_value = defaults.get(field.name)
-            if isNaN(field_value) or field_value == "":
-                defaults[field.name] = None  # Set the field to None if it's empty
+            if isNaN(field_value) or field_value == None or field_value == "":
+                print("whatIsTheFieldValue: ", field_value)
+                defaults[field.name] = None  # Set the DateField to None if it's empty
+            else:
+                try:
+                    defaults[field.name] = int(field_value)
+                except ValueError:
+                    stdout.write(f"Invalid integer format for field {field.name}: {field.value}\n")
 
         if isinstance(field, models.SlugField):
             field_value = defaults.get(field.name)
@@ -144,7 +146,6 @@ def process_row_fields(row, model, stdout, schema_name):
     stdout.write(f"Defaults after processing: {defaults}\n")
     return object_id, defaults
 
-
 def generate_unique_integer_id(model):
     """
     Generate a unique integer ID for the model.
@@ -152,10 +153,10 @@ def generate_unique_integer_id(model):
     latest_id = model.objects.aggregate(max_id=models.Max('id'))['max_id']
     return (latest_id or 0) + 1
 
-
 def import_objects_from_df(df, model_name, stdout, schema_name=None):
     created_count = 0
     updated_count = 0
+    processed_candidates = []
 
     model_instance = model_name()
     if hasattr(model_instance, 'add_dynamic_fields'):
@@ -174,6 +175,40 @@ def import_objects_from_df(df, model_name, stdout, schema_name=None):
     with set_search_path(schema_name):  # Ensure we are in the correct schema
         for _, row in df.iterrows():
             try:
+                defaults = {col: (None if isNaN(row[col]) else row[col]) for col in row.index if col not in ["id", "username", "email"]}
+
+                # Check if the model is User and handle it separately
+                if model_name == User:
+                    user = None
+                    try:
+                        user = model_name.objects.get(username=row["username"])
+                        stdout.write(f"Found existing user with username: {row['username']}\n")
+                    except model_name.DoesNotExist:
+                        try:
+                            user = model_name.objects.get(email=row["email"])
+                            stdout.write(f"Found existing user with email: {row['email']}\n")
+                        except model_name.DoesNotExist:
+                            pass
+
+                    if user:
+                        # Update existing user
+                        for attr, value in defaults.items():
+                            setattr(user, attr, value)
+                        user.save()
+                        updated_count += 1
+                        stdout.write(f"Updated user with username: {row['username']} or email: {row['email']}\n")
+                    else:
+                        # Create new user
+                        defaults["username"] = row["username"]
+                        defaults["email"] = row["email"]
+                        user, created = model_name.objects.update_or_create(id=row["id"], defaults=defaults)
+                        if created:
+                            created_count += 1
+                        stdout.write(f"Created new user with username: {row['username']} or email: {row['email']}\n")
+
+                    processed_candidates.append(user)
+                    continue  # Skip the rest of the loop for User model
+
                 object_id, defaults = process_row_fields(row, model_name, stdout, schema_name)
                 if object_id is None or defaults is None:
                     continue  # Skip this row if there was an issue processing it
@@ -195,9 +230,10 @@ def import_objects_from_df(df, model_name, stdout, schema_name=None):
                     created_count += 1
                 else:
                     updated_count += 1
+                processed_candidates.append(obj)  # Track processed candidates
             except model_name.DoesNotExist:
                 stdout.write(f"{model_name} with ID {object_id} not found.\n")
             except Exception as e:
                 stdout.write(f"Error occurred while importing or updating {model_name.__name__}: {e}\n")
 
-    return created_count, updated_count
+    return created_count, updated_count, processed_candidates
