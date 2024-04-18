@@ -122,11 +122,23 @@ export const deleteElectionAttendee = (electionAttendee) => api.delete(url.DELET
 export const addNewElectionAttendee = (electionAttendee) => api.create(url.ADD_NEW_ELECTION_ATTENDEE, electionAttendee);
 export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_ELECTION_ATTENDEE, electionAttendee);
 
-// ELECTION DATABASE
-export const addElectionDatabase = (electionSlug) => api.get(url.ADD_ELECTION_DATABASE + "/" + electionSlug);
+// ELECTION  SCHEMA
+
+export const getElectionSchemas = (electionSlug) => api.get(url.GET_ELECTION_SCHEMAS + "/" + electionSlug);
+export const getElectionSchemaDetails = (electionSlug) => api.get(url.GET_ELECTION_SCHEMA_DETAILS + "/" + electionSlug);
+export const addElectionSchema = (electionSlug) => api.get(url.ADD_ELECTION_SCHEMA + "/" + electionSlug);
+export const updateElectionSchema = (electionSlug) => api.update(url.UPDATE_ELECTION_SCHEMA + "/" +  electionSlug);
+export const deleteElectionSchema = (electionSlug) => api.delete(url.DELETE_ELECTION_SCHEMA + "/" + electionSlug);
+
+
+
 
 // ELECTION STATISTICS
-export const getElectionStatistics = (electionSlug) => api.get(url.GET_ELECTION_STATISTICS + "/" + electionSlug);
+export const getElectionDatas = (electionSlug) => api.get(url.GET_ELECTION_DATAS + "/" + electionSlug);
+export const getElectionDataDetails = (electionSlug) => api.get(url.GET_ELECTION_DATA_DETAILS + "/" + electionSlug);
+export const addElectionData = (electionSlug) => api.get(url.ADD_ELECTION_DATA + "/" + electionSlug);
+export const updateElectionData = (electionSlug) => api.update(url.UPDATE_ELECTION_DATA + "/" +  electionSlug);
+export const deleteElectionData = (electionSlug) => api.delete(url.DELETE_ELECTION_DATA + "/" + electionSlug);
 
 
 // Candidates

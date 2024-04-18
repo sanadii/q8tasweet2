@@ -4,8 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Store & Selectors
-import { getElectionDetails, getElectionStatistics } from "store/actions";
+import { getElectionDetails, getElectionDatas, getElectionSchemaDetails } from "store/actions";
 import { electionSelector } from 'selectors';
+
+// Shared: hooks
+import { usePermission } from 'shared/hooks';
 
 // Components
 import Section from "./Section";
@@ -19,7 +22,11 @@ const ElectionDetails = () => {
   const { slug } = useParams();
   const { election } = useSelector(electionSelector);
 
-  const electionHasDatabase = election?.hasDatabase
+  const {
+    isStaff,
+   } = usePermission();
+
+  const hasElectionHasSchema = election?.hasSchema
   useEffect(() => {
     // Set the document title
     document.title = "الانتخابات | كويت تصويت";
@@ -31,18 +38,17 @@ const ElectionDetails = () => {
 
   }, [dispatch, election, slug]);
 
-
+console.log("hasElectionHasSchema: ", hasElectionHasSchema)
   useEffect(() => {
 
     // Fetch election details if the slug is available and candidate is empty
-    if (election && electionHasDatabase) {
-      // dispatch(getElectionDetails(slug));
-      console.log("we have database")
-      dispatch(getElectionStatistics(slug));
+    if (election && hasElectionHasSchema) {
+      dispatch(getElectionSchemaDetails(slug))
+      dispatch(getElectionDatas(slug));
     }
-  }, [dispatch, election, slug, electionHasDatabase]);
+  }, [dispatch, election, slug, hasElectionHasSchema]);
 
-  
+
   return (
     <div className="page-content">
       <Container fluid>

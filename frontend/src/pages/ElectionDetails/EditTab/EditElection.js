@@ -3,7 +3,7 @@ import { electionSelector, categorySelector } from 'selectors';
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { updateElection, addElectionDatabase } from "store/actions";
+import { updateElection } from "store/actions";
 import { useCategoryManager } from "shared/hooks";
 import { FormFields } from "shared/components";
 
@@ -13,8 +13,11 @@ import { useFormik } from "formik";
 import { Button, Col, Row, Form, Card, CardHeader, CardBody } from "reactstrap";
 
 //Import Flatepicker
-import Dropzone from "react-dropzone";
 import { StatusOptions, PriorityOptions, RoleOptions, ElectionMethodOptions, ElectionResultOptions, PartyResultOptions, SortingResultOptions, TagOptions } from "shared/constants";
+
+
+// Components
+import ElectionDataBase from "./ElectionDataBase";
 
 const EditElection = () => {
   const dispatch = useDispatch();
@@ -123,8 +126,7 @@ const EditElection = () => {
               name: "dueDate",
               label: "الموعد",
               type: "date",
-              colSize: 4,
-              colSize: 12,
+              colSize: 12, // Corrected colSize value
             },
             {
               id: "category-field",
@@ -171,121 +173,63 @@ const EditElection = () => {
               })),
               colSize: 6,
             },
-            {
-              id: "electionResultView-field",
-              name: "electionResultView",
-              label: "عرض النتائج",
-              type: "select",
-              options: ElectionResultOptions.map(option => ({
-                id: option.id,
-                label: option.name,
-                value: option.value
-              })),
-              colSize: 6,
-            },
-            {
-              id: "electionResultParty-field",
-              name: "electionResultParty",
-              label: "عرض نتائج القوائم",
-              type: "select",
-              options: PartyResultOptions.map(option => ({
-                id: option.id,
-                label: option.name,
-                value: option.value
-              })),
-              colSize: 6,
-            },
-            {
-              id: "electionResultSorting-field",
-              name: "electionResultSorting",
-              label: "عرض نتائج الفرز",
-              type: "select",
-              options: SortingResultOptions.map(option => ({
-                id: option.id,
-                label: option.name,
-                value: option.value // No need to convert to a string
-              })),
-              colSize: 6,
-            },
-            {
-              id: "electSeats-input",
-              name: "electSeats",
-              label: "عدد المقاعد للفائزين",
-              type: "number",
-              value: validation.values.electSeats || "",
-              colSize: 6,
-            },
-            {
-              id: "electVotes-input",
-              name: "electVotes",
-              label: "عدد الأصوات للناخبين",
-              type: "number",
-              value: validation.values.electVotes || "",
-              colSize: 6,
-            },
+            // Add more fields as needed...
           ]
-        },
+        }
       ]
     },
     {
       column: "columnTwo",
       sections: [
         {
-          section: "الناخبين",
+          section: "الناخبين والحضور",
           fields: [
             {
               id: "voters-input",
               name: "voters",
-              label: "عدد الناخبين",
+              label: "الناخبين",
               type: "number",
-              colSize: 12,
+              colSize: 4,
             },
             {
               id: "votersMales-input",
               name: "votersMales",
-              label: "عدد الناخبين الرجال",
+              label: "الرجال",
               type: "number",
-              colSize: 6,
+              colSize: 4,
             },
             {
               id: "votersFemales-input",
               name: "votersFemales",
-              label: "عدد الناخبين النساء",
+              label: "النساء",
               type: "number",
-              colSize: 6,
+              colSize: 4,
             },
-          ]
-        },
-        {
-          section: "الحضور",
-          fields: [
+
             {
               id: "attendees-input",
               name: "attendees",
-              label: "عدد الحضور",
+              label: "الحضور",
               type: "number",
-              colSize: 12,
+              colSize: 4,
             },
             {
               id: "attendeesMales-input",
               name: "attendeesMales",
-              label: "حضور الرجال",
+              label: "الرجال",
               type: "number",
-              colSize: 6,
+              colSize: 4,
             },
             {
               id: "attendeesFemales-input",
               name: "attendeesFemales",
-              label: "حضور النساء",
+              label: "النساء",
               type: "number",
-              colSize: 6,
-            },]
+              colSize: 4,
+            },
+          ],
+
         },
-      ]
-    },
-    {
-      column: "columnThree",
-      sections: [
         {
           section: "الإدارة",
           fields: [
@@ -313,29 +257,17 @@ const EditElection = () => {
               })),
               colSize: 12,
             },
-            // {
-            //   id: "file-upload",
-            //   name: "fileUpload",
-            //   label: "Add Attached files here.",
-            //   type: "file",
-            //   dropzoneOptions: {
-            //     onDrop: handleAcceptedFiles,
-            //     // Additional Dropzone options as needed
-            //   },
-            //   colSize: 12,
-            // },
           ]
         },
-      ]
-    },
+      ],
+    }
   ];
 
-  const handleAddElectionDatabase = () => {
-    dispatch(addElectionDatabase(election.slug))
-  }
+
+
 
   return (
-    <React.Fragment>
+    <React.Fragment >
       <Form
         className="tablelist-form"
         onSubmit={(e) => {
@@ -345,27 +277,6 @@ const EditElection = () => {
         }}
       >
         <Row className="g-3">
-          <Button
-            onClick={handleAddElectionDatabase}>Add Election Dtabase
-            </Button>
-
-{/* TODO: to add different upload sections for different use
-1) add sqlite table
-// Elections
-1) upload electors
-2) upload electors stats
-3) upload committees
-4) upload candidates / results
-* make sure ids are compatables
-
-// Campaign
-1) campaign Data,
-2) team images, background images and stuff
-
-3) upload team
-4) upload guarantees
-5) upload s */}
-
           {fields.map((column) => (
             <Col lg={4} key={column.column}>
               {column.sections.map((section) => (
@@ -390,6 +301,10 @@ const EditElection = () => {
               ))}
             </Col>
           ))}
+          <Col lg={4}>
+            <ElectionDataBase election={election} />
+
+          </Col>
         </Row>
         <Row>
           <div className="text-end mb-4">

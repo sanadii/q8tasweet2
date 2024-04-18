@@ -74,7 +74,7 @@ const Section = ({ viewType }) => {
   // get Election Statistics if isStaff
   // useEffect () = {
   //   if isStaff {
-  //     dispatchEvent(getElectionStatistics)
+  //     dispatchEvent(getElectionData)
   //   }
   // }
 

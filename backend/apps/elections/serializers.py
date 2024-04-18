@@ -88,7 +88,7 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             # "priority",
             # "status",
             
-            "has_database"
+            "has_schema"
         ]
 
     def get_election_name(self, obj):

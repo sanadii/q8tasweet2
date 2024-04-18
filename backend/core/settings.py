@@ -21,27 +21,18 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 # SQLITE_DATABASE = os.environ.get("SQLITE_DATABASE")
 
-# Database: TODO: To be outside of settings
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#         'OPTIONS': {
-#             'timeout': 30,  # Adjust the timeout value as needed
-#         },
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'q8tasweet',
         'USER': 'postgres',
-        'PASSWORD': 'KWT11782',
+        'PASSWORD': 'I4ksb@11782',
         'HOST': 'localhost',
         'PORT': '5432',
-    }
+    },
 }
 
+# DATABASE_ROUTERS = ['core.routers.ElectionRouter']
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -93,8 +84,8 @@ INSTALLED_APPS = [
     "apps.committees",
     "apps.voters",
     "apps.campaigns",
-    "apps.elections.apps.ElectionConfig",
-    "apps.electionStatistics",
+    "apps.elections",
+    "apps.electionData",
     "apps.categories",
     "apps.candidates",
     "apps.notifications",
@@ -106,12 +97,18 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    
+    # 'backend.core.middleware.DatabaseSwitchMiddleware',
+
+    
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'django_hosts.middleware.HostsRequestMiddleware',
     # 'admin_reorder.middleware.ModelAdminReorder',
+    'core.middleware.SchemaMiddleware',  # Add your middleware here
+
 ]
 
 ROOT_URLCONF = "core.urls"

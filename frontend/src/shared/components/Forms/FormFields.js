@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Label, Input, FormFeedback } from "reactstrap";
 import Select from "react-select";
 
+import Dropzone from "react-dropzone";
 import Flatpickr from "react-flatpickr";
 import defaultAvatar from 'assets/images/users/default.jpg';
 import { api } from "config";
@@ -49,6 +50,10 @@ const FormFields = ({ field, validation, formStyle }) => {
             validation.setFieldValue("image", selectedImage);
         }
     };
+
+    // 
+    // DataTime Selection
+    // 
 
     const dateformate = (e) => {
         const selectedDate = new Date(e);
@@ -193,6 +198,29 @@ const FormFields = ({ field, validation, formStyle }) => {
                                 </option>
                             ))}
                     </Input>
+                );
+
+            case "file":
+                return (
+                    <Dropzone
+                        onDrop={acceptedFiles => {
+                            handleAcceptedFiles(acceptedFiles);
+                        }}
+                    >
+                        {({ getRootProps, getInputProps }) => (
+                            <div className="dropzone dz-clickable">
+                                <div
+                                    className="dz-message needsclick"
+                                    {...getRootProps()}
+                                >
+                                    <div className="mb-3">
+                                        <i className="display-4 text-muted ri-upload-cloud-2-fill" />
+                                    </div>
+                                    <h4>Drop files here or click to upload.</h4>
+                                </div>
+                            </div>
+                        )}
+                    </Dropzone>
                 );
             case "image":
                 return (

@@ -23,6 +23,7 @@ class Command(BaseCommand):
                 id=int(row['id']),
                 name=row['name'],
                 slug=row['slug'],
+                image=row['image'],
                 parent_id=parent_id,
                 is_active=is_active
             )

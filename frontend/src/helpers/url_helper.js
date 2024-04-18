@@ -71,9 +71,20 @@ export const UPDATE_ELECTION_CAMPAIGN = "/elections/updateElectionCampaign";
 export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
 
 
-// Election Statistics
-export const ADD_ELECTION_DATABASE = "/electionStatistics/addElectionDatabase"
-export const GET_ELECTION_STATISTICS = "/electionStatistics/getElectionStatistics";
+// Election  Schema
+export const GET_ELECTION_SCHEMAS = "/electionData/getElectionSchemas";
+export const GET_ELECTION_SCHEMA_DETAILS = "/electionData/getElectionSchemaDetails";
+export const ADD_ELECTION_SCHEMA = "/electionData/addElectionSchema";
+export const UPDATE_ELECTION_SCHEMA = "/electionData/updateElectionSchema";
+export const DELETE_ELECTION_SCHEMA = "/electionData/deleteElectionSchema";
+
+
+// Election Data
+export const GET_ELECTION_DATAS = "/electionData/getElectionDatas";
+export const GET_ELECTION_DATA_DETAILS = "/electionData/getElectionDataDetails";
+export const ADD_ELECTION_DATA = "/electionData/addElectionData";
+export const UPDATE_ELECTION_DATA = "/electionData/updateElectionData";
+export const DELETE_ELECTION_DATA = "/electionData/deleteElectionData";
 
 
 // Candidates

@@ -38,7 +38,7 @@ urlpatterns = [
     path('candidates/', include('apps.candidates.urls')),
     path('categories/', include('apps.categories.urls')),
     path('elections/', include('apps.elections.urls')),
-    path('electionStatistics/', include('apps.electionStatistics.urls')),
+    path('electionData/', include('apps.electionData.urls')),
     path('voters/', include('apps.voters.urls')),
     path('auth/', include('apps.auths.urls')),
 
