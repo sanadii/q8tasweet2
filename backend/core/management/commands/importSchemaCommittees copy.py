@@ -1,6 +1,6 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
-from apps.electionData.models import ElectionCommittee, ElectionCommitteeSubset
+from apps.electionData.models import ElectionCommittee, ElectionCommitte
 
 class Command(BaseCommand):
     help = 'Imports committees and subsets from an Excel file into the database'
@@ -12,7 +12,7 @@ class Command(BaseCommand):
         # Read data from Excel file for committees
         df_committees = pd.read_excel(file_path, sheet_name='committees')
         # Read data from Excel file for committee subsets
-        df_subsets = pd.read_excel(file_path, sheet_name='committee_subsets')
+        df_subsets = pd.read_excel(file_path, sheet_name='committees')
 
         # Initialize counters
         created_committees_count = 0
@@ -66,7 +66,7 @@ class Command(BaseCommand):
         #     try:
         #         committee = ElectionCommittee.objects.get(serial=row['committee'])
         #         # Create Committee Subset
-        #         subset = ElectionCommitteeSubset.objects.create(
+        #         subset = ElectionCommitte.objects.create(
         #             areas=row['areas'],
         #             letters=row['letters'],
         #             committee=committee,

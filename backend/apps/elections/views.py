@@ -40,14 +40,14 @@ from apps.committees.models import (
 # Schema Models
 from apps.committees.models import (
     Committee, 
-    CommitteeSubset,
+    Committee,
     # CommitteeResult
     )
 
 # Schema Serializers
 from apps.committees.serializers import (
     CommitteeSerializer,
-    CommitteeSubsetSerializer,
+    CommitteSerializer,
     # CommitteeResultSerializer,
 )
 
@@ -159,11 +159,7 @@ class GetElections(APIView):
 
 
 class GetElectionDetails(APIView):
-
     def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
         view = self.request.query_params.get("view", None)
         if view == "public":
             return [AllowAny()]
@@ -173,68 +169,107 @@ class GetElectionDetails(APIView):
         election = get_object_or_404(Election, slug=slug)
         context = {"request": request}
 
-        election_candidates = (
-            ElectionCandidate.objects.filter(election=election)
-            .prefetch_related("candidate")
-            .only("id")
-        )
+        election_candidates = ElectionCandidate.objects.filter(election=election).prefetch_related("candidate").only("id")
         election_parties = ElectionParty.objects.filter(election=election)
-        election_party_candidates = ElectionPartyCandidate.objects.filter(
-            election_party__in=election_parties
-        ).select_related("candidate", "election_party", "election_party__election")
-
-        # Use the schema context manager
-        with schema_context(request, slug):
-            election_committees = Committee.objects.all()
-
-            # Serialize data outside the context manager
-            committees_data = CommitteeSerializer(election_committees, many=True, context=context).data
-
-       
+        election_party_candidates = ElectionPartyCandidate.objects.filter(election_party__in=election_parties).select_related("candidate", "election_party", "election_party__election")
+        
         response_data = {
             "electionDetails": ElectionSerializer(election, context=context).data,
-            "electionCandidates": ElectionCandidateSerializer(
-                election_candidates, many=True, context=context
-            ).data,
-            "electionParties": ElectionPartySerializer(
-                election_parties, many=True, context=context
-            ).data,
-            "electionPartyCandidates": ElectionPartyCandidateSerializer(
-                election_party_candidates, many=True, context=context
-            ).data,
-            "electionCommittees": committees_data,
+            "electionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
+            "electionParties": ElectionPartySerializer(election_parties, many=True, context=context).data,
+            "electionPartyCandidates": ElectionPartyCandidateSerializer(election_party_candidates, many=True, context=context).data,
         }
 
-        # Include electionCampaigns only if view is not public
-        # if view != "public":
-        #     response_data["electionCampaigns"] = self.get_election_campaigns(
-        #         election, context
-        #     )
-        #     response_data["electionSorters"] = self.get_election_campaign_sorters(
-        #         election, context
-        #     )
+        with schema_context(request, slug):
+            try:
+                election_committees = Committee.objects.all()
+                if election_committees.exists():
+                    committees_data = CommitteeSerializer(election_committees, many=True, context=context).data
+                    response_data["electionCommittees"] = committees_data
+            except Exception:
+                # Add a note or error message indicating the absence of committee data
+                response_data["committeeDataError"] = "Failed to fetch committee data"
 
         return Response({"data": response_data, "code": 200})
 
-    # def get_election_campaigns(self, election, context):
-    #     election_candidate_ids = ElectionCandidate.objects.filter(
-    #         election=election
-    #     ).values_list("id", flat=True)
-    #     election_campaigns = Campaign.objects.filter(
-    #         election_candidate__in=election_candidate_ids
-    #     )
-    #     return CampaignSerializer(election_campaigns, many=True, context=context).data
 
-    # def get_election_campaign_sorters(self, election, context):
-    #     election_campaigns = Campaign.objects.filter(
-    #         election_candidate__election=election
-    #     )
-    #     election_campaign_sorters = CampaignMember.objects.filter(
-    #         campaign__in=election_campaigns, role=36  # Filter by role 36
-    #     )
-    #     return CampaignMemberSerializer(
-    #         election_campaign_sorters, many=True, context=context
-    #     ).data
+# class GetElectionDetails(APIView):
+
+#     def get_permissions(self):
+#         """
+#         Instantiates and returns the list of permissions that this view requires.
+#         """
+#         view = self.request.query_params.get("view", None)
+#         if view == "public":
+#             return [AllowAny()]
+#         return [IsAuthenticated()]
+
+#     def get(self, request, slug):
+#         election = get_object_or_404(Election, slug=slug)
+#         context = {"request": request}
+
+#         election_candidates = (
+#             ElectionCandidate.objects.filter(election=election)
+#             .prefetch_related("candidate")
+#             .only("id")
+#         )
+#         election_parties = ElectionParty.objects.filter(election=election)
+#         election_party_candidates = ElectionPartyCandidate.objects.filter(
+#             election_party__in=election_parties
+#         ).select_related("candidate", "election_party", "election_party__election")
+
+#         # Use the schema context manager
+#         with schema_context(request, slug):
+#             election_committees = Committee.objects.all()
+
+#             # Serialize data outside the context manager
+#             committees_data = CommitteeSerializer(election_committees, many=True, context=context).data
+
+       
+#         response_data = {
+#             "electionDetails": ElectionSerializer(election, context=context).data,
+#             "electionCandidates": ElectionCandidateSerializer(
+#                 election_candidates, many=True, context=context
+#             ).data,
+#             "electionParties": ElectionPartySerializer(
+#                 election_parties, many=True, context=context
+#             ).data,
+#             "electionPartyCandidates": ElectionPartyCandidateSerializer(
+#                 election_party_candidates, many=True, context=context
+#             ).data,
+#             "electionCommittees": committees_data,
+#         }
+
+#         # Include electionCampaigns only if view is not public
+#         # if view != "public":
+#         #     response_data["electionCampaigns"] = self.get_election_campaigns(
+#         #         election, context
+#         #     )
+#         #     response_data["electionSorters"] = self.get_election_campaign_sorters(
+#         #         election, context
+#         #     )
+
+#         return Response({"data": response_data, "code": 200})
+
+#     # def get_election_campaigns(self, election, context):
+#     #     election_candidate_ids = ElectionCandidate.objects.filter(
+#     #         election=election
+#     #     ).values_list("id", flat=True)
+#     #     election_campaigns = Campaign.objects.filter(
+#     #         election_candidate__in=election_candidate_ids
+#     #     )
+#     #     return CampaignSerializer(election_campaigns, many=True, context=context).data
+
+#     # def get_election_campaign_sorters(self, election, context):
+#     #     election_campaigns = Campaign.objects.filter(
+#     #         election_candidate__election=election
+#     #     )
+#     #     election_campaign_sorters = CampaignMember.objects.filter(
+#     #         campaign__in=election_campaigns, role=36  # Filter by role 36
+#     #     )
+#     #     return CampaignMemberSerializer(
+#     #         election_campaign_sorters, many=True, context=context
+#     #     ).data
 
 
 class AddElection(APIView):

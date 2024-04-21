@@ -21,20 +21,20 @@ class ElectionCommittee(models.Model):
     class Meta:
         managed = False
         db_table = "election_committee"
-        verbose_name = "Election Committe"
+        verbose_name = "Election Committee"
         verbose_name_plural = "Election Committes"
         default_permissions = []
         permissions  = [
             ("canViewElectionCommittes", "Can View Election Committes"),
-            ("canAddElectionCommitte", "Can Add Election Committe"),
-            ("canChangeElectionCommitte", "Can Change Election Committe"),
-            ("canDeleteElectionCommitte", "Can Delete Election Committe"),
+            ("canAddElectionCommitte", "Can Add Election Committee"),
+            ("canChangeElectionCommitte", "Can Change Election Committee"),
+            ("canDeleteElectionCommitte", "Can Delete Election Committee"),
             ]
     def __str__(self):
         return self.name
 
 
-class ElectionCommitteeSubset(models.Model):
+class ElectionCommitte(models.Model):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
     committee = models.ForeignKey(ElectionCommittee, on_delete=models.CASCADE, related_name='CommitteSubsetes')
@@ -43,15 +43,15 @@ class ElectionCommitteeSubset(models.Model):
 
     class Meta:
         managed = False
-        db_table = "election_committee_subset"
-        verbose_name = "Election Committe Subset"
+        db_table = "election_committee"
+        verbose_name = "Election Committee"
         verbose_name_plural = "Election Subsets"
         default_permissions = []
         permissions  = [
-            ("canViewElectionCommitteSubsets", "Can View Election Committe Subsets"),
-            ("canAddElectionCommitteSubset", "Can Add Election Committe Subset"),
-            ("canChangeElectionCommitteSubset", "Can Change Election Committe Subset"),
-            ("canDeleteElectionCommitteSubset", "Can Delete Election Committe Subset"),
+            ("canViewElectionCommitteSubsets", "Can View Election Committes"),
+            ("canAddElectionCommitteSubset", "Can Add Election Committee"),
+            ("canChangeElectionCommitteSubset", "Can Change Election Committee"),
+            ("canDeleteElectionCommitteSubset", "Can Delete Election Committee"),
             ]
     def __str__(self):
         return self.name
@@ -90,7 +90,7 @@ class ElectionElector(models.Model):
     lane = models.TextField(blank=True, null=True)
     house = models.TextField(blank=True, null=True)
     column6 = models.TextField(blank=True, null=True)
-    committee_subset = models.ForeignKey(ElectionCommitteeSubset, on_delete=models.CASCADE, blank=True, null=True)
+    committee = models.ForeignKey(ElectionCommitte, on_delete=models.CASCADE, blank=True, null=True)
     national_table_name = models.TextField(blank=True, null=True)
     status_code = models.TextField(blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)

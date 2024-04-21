@@ -8,22 +8,22 @@ def count_total_electors():
 def count_electors_by_gender():
     """ Count electors grouped by gender within the current schema. """
     gender_counts = Elector.objects.values('gender').annotate(count=Count('id')).order_by('gender')
-    return {gender['gender']: gender['count'] for gender in gender_counts}
+    return [{'category': gender.get('gender'), 'count': gender.get('count')} for gender in gender_counts]
 
 def count_electors_by_family():
     """ Count electors grouped by family name within the current schema. """
     family_counts = Elector.objects.values('last_name').annotate(count=Count('id')).order_by('-count')
-    return list(family_counts)
+    return [{'category': family.get('last_name'), 'count': family.get('count')} for family in family_counts]
 
 def count_electors_by_area():
     """ Count electors grouped by area name within the current schema. """
     area_counts = Elector.objects.values('area').annotate(count=Count('id')).order_by('-count')
-    return list(area_counts)
+    return [{'category': area.get('area'), 'count': area.get('count')} for area in area_counts]
 
-def count_electors_by_committee_subset():
+def count_electors_by_committee():
     """ Count electors grouped by committee ID within the current schema. """
-    committee_subset_counts = Elector.objects.values('committee').annotate(count=Count('id')).order_by('-count')
-    return list(committee_subset_counts)
+    committee_counts = Elector.objects.values('committee__area_name').annotate(count=Count('id')).order_by('-count')
+    return [{'category': committee.get('committee__area_name'), 'count': committee.get('count')} for committee in committee_counts]
 
 
 # def get_election_committees(connection):

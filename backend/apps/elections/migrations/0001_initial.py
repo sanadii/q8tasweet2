@@ -90,10 +90,10 @@ class Migration(migrations.Migration):
                 ('updated_by', models.ForeignKey(blank=True, help_text='The user who updated this object.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_updated', to=settings.AUTH_USER_MODEL, verbose_name='Updated by')),
             ],
             options={
-                'verbose_name': 'Election Committe',
+                'verbose_name': 'Election Committee',
                 'verbose_name_plural': 'Election Committes',
                 'db_table': 'election_committee',
-                'permissions': [('canViewElectionCommitte', 'Can View Election Committe'), ('canAddElectionCommitte', 'Can Add Election Committe'), ('canChangeElectionCommitte', 'Can Change Election Committe'), ('canDeleteElectionCommitte', 'Can Delete Election Committe')],
+                'permissions': [('canViewElectionCommitte', 'Can View Election Committee'), ('canAddElectionCommitte', 'Can Add Election Committee'), ('canChangeElectionCommitte', 'Can Change Election Committee'), ('canDeleteElectionCommitte', 'Can Delete Election Committee')],
                 'default_permissions': [],
             },
         ),
@@ -113,8 +113,8 @@ class Migration(migrations.Migration):
                 ('updated_by', models.ForeignKey(blank=True, help_text='The user who updated this object.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_updated', to=settings.AUTH_USER_MODEL, verbose_name='Updated by')),
             ],
             options={
-                'verbose_name': 'Committe Result',
-                'verbose_name_plural': 'Committe Results',
+                'verbose_name': 'Committee Result',
+                'verbose_name_plural': 'Committee Results',
                 'db_table': 'election_committee_result',
                 'permissions': [('canViewCommitteeResult', 'Can View Committee Result'), ('canAddCommitteeResult', 'Can Add Committee Result'), ('canChangeCommitteeResult', 'Can Change Committee Result'), ('canDeleteCommitteeResult', 'Can Delete Committee Result')],
                 'default_permissions': [],

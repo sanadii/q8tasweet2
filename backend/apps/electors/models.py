@@ -8,9 +8,12 @@ from utils.models_helper import GenderOptions
 from utils.models import GENDER_CHOICES
 
 
-from apps.committees.models import CommitteeSubset
+from apps.committees.models import CommitteeSite, Committee
+
 
 class Elector(models.Model):
+
+    # Name Details
     full_name = models.TextField(blank=True, null=True)
     first_name = models.TextField(blank=True, null=True)
     second_name = models.TextField(blank=True, null=True)
@@ -28,22 +31,30 @@ class Elector(models.Model):
     tribe = models.TextField(blank=True, null=True)
     family = models.TextField(blank=True, null=True)
     sect = models.TextField(blank=True, null=True)
+
+    # Elector Details
     gender = models.CharField(
         max_length=1, choices=GENDER_CHOICES, blank=True, null=True
     )
-    circle = models.TextField(blank=True, null=True)
     job = models.TextField(blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)  # Age
+
+    # Elector Address
     address = models.TextField(blank=True, null=True)
     area = models.TextField(blank=True, null=True)
     block = models.TextField(blank=True, null=True)
     street = models.TextField(blank=True, null=True)
     lane = models.TextField(blank=True, null=True)
     house = models.TextField(blank=True, null=True)
-    birth_date = models.DateField(blank=True, null=True)
-    
-    # Committee
-    committee = models.TextField(blank=True, null=True)
-    committee_subset = models.ForeignKey(CommitteeSubset, on_delete=models.CASCADE, blank=True, null=True)
+
+    # Elector Election Details
+    circle = models.TextField(blank=True, null=True)
+    # committee = models.ForeignKey(
+    #     Committee, on_delete=models.CASCADE, blank=True, null=True
+    # )
+
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE, related_name='committees')
+
     committee_area = models.TextField(blank=True, null=True)
     committee_name = models.TextField(blank=True, null=True)
     letter = models.TextField(blank=True, null=True)

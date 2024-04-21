@@ -40,12 +40,12 @@ from apps.committees.models import (
 # Schema
 from apps.committees.models import (
     Committee, 
-    CommitteeSubset,
+    Committee,
     # CommitteeResult
     )
 from apps.committees.serializers import (
     CommitteeSerializer,
-    CommitteeSubsetSerializer,
+    CommitteSerializer,
     # CommitteeResultSerializer,
 )
 

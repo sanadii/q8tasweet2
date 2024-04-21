@@ -10,6 +10,7 @@ export const electorSelector = createSelector(
     electorsByFamily: electorsState.electorsByFamily,
     electorsByGender: electorsState.electorsByGender,
     electorsByArea: electorsState.electorsByArea,
+    electorsByCommittee: electorsState.electorsByCommittee,
 
 
 

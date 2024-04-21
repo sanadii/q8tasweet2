@@ -50,7 +50,7 @@ GENDER_CHOICES = [
 #             super().save(*args, **kwargs)
 
 
-class Committee(models.Model):
+class CommitteeSite(models.Model):
     serial = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     circle = models.CharField(max_length=255, blank=True, null=True)
@@ -68,9 +68,9 @@ class Committee(models.Model):
 
     class Meta:
         managed = False
-        db_table = "committee"
-        verbose_name = "Committe"
-        verbose_name_plural = "Committes"
+        db_table = "committee_site"
+        verbose_name = "Committee Location"
+        verbose_name_plural = "Committee Locations"
         default_permissions = []
 
     def __str__(self):
@@ -87,18 +87,18 @@ class Committee(models.Model):
         return None
 
 
-class CommitteeSubset(models.Model):
+class Committee(models.Model):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
-    committee = models.ForeignKey(Committee, on_delete=models.CASCADE, related_name='committee_subsets')
+    committee_site = models.ForeignKey(CommitteeSite, on_delete=models.CASCADE, related_name='committee_sites')
     type = models.TextField(max_length=25, blank=True, null=True)
     main = models.BooleanField(default=False)
 
     class Meta:
         managed = False
-        db_table = "committee_subset"
-        verbose_name = "Committe Subset"
-        verbose_name_plural = "Committe Subsets"
+        db_table = "committee"
+        verbose_name = "Committee"
+        verbose_name_plural = "Committes"
         default_permissions = []
 
     def __init__(self, *args, **kwargs):

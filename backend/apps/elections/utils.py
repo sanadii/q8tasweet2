@@ -2,8 +2,8 @@ from slugify import slugify
 from django.apps import apps
 
 # Campaign App
-from apps.campaigns.models import Campaign, CampaignMember
-from apps.campaigns.serializers import CampaignSerializer, CampaignMemberSerializer
+# from apps.campaigns.models import Campaign, CampaignMember
+# from apps.campaigns.serializers import CampaignSerializer, CampaignMemberSerializer
 
 # Election App
 from apps.elections.models import (
@@ -14,7 +14,7 @@ from apps.elections.models import (
 
 from apps.committees.models import (
     Committee,
-    CommitteeSubset,
+    Committee,
     # CommitteeResult,
     # PartyCommitteeResult,
     # PartyCandidateCommitteeResult,
@@ -31,7 +31,7 @@ from apps.elections.serializers import (
 
 from apps.committees.serializers import (
     CommitteeSerializer,
-    CommitteeSubsetSerializer,
+    CommitteSerializer,
     # CommitteeResultSerializer,
 )
 

@@ -5,42 +5,64 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from apps.elections.models import Election
-from apps.committees.models import Committee, CommitteeSubset
+from apps.committees.models import Committee, CommitteeSite
 from apps.electors.models import Elector
-
-
-@contextmanager
-def schema_context(schema_name):
-    cursor = connection.cursor()
-    quoted_schema_name = f'"{schema_name}"'
-    try:
-        cursor.execute("SHOW search_path;")
-        old_schema = cursor.fetchone()[0]
-        new_search_path = f'{quoted_schema_name}, public'
-        cursor.execute(f"SET search_path TO {new_search_path};")
-        yield
-    finally:
-        cursor.execute(f"SET search_path TO {old_schema};")
-
+from utils.schema import schema_context
 
 class AddElectionSchema(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         slug = kwargs.get("slug")
+        schema_name = slug.replace("-", "_")  # Format the schema name properly
 
-        with schema_context(slug.replace("-", "_")):
-            try:
-                # Check if the election exists
-                Election.objects.get(slug=slug)
-            except Election.DoesNotExist:
-                return Response({"error": "Election not found"}, status=404)
+        try:
+            with connection.cursor() as cursor:
+                # Check if schema already exists
+                cursor.execute("SELECT schema_name FROM information_schema.schemata WHERE schema_name = %s", [schema_name])
+                if cursor.fetchone():
+                    return Response({"message": "Schema already exists"}, status=200)
 
-            try:
-                connection.schema_editor().create_schema(schema_name=slug.replace("-", "_"))
-                return Response({"message": "Schema created successfully"}, status=201)
-            except Exception as e:
-                return Response({"error": str(e)}, status=500)
+                # Create new schema
+                cursor.execute(f"CREATE SCHEMA \"{schema_name}\"")
+            return Response({"message": "Schema created successfully"}, status=201)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
+
+
+from django.db import IntegrityError
+
+class AddElectionSchemaTables(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get("slug")
+
+        with schema_context(request, slug) as election:
+            if hasattr(request, 'response'):
+                return request.response  # Return the early response if set
+
+            results = {}
+            with connection.schema_editor() as schema_editor:
+                models = [Committee, CommitteeSite, Elector]
+                for Model in models:
+                    try:
+                        table_name = Model._meta.db_table
+                        if not self.table_exists(table_name):
+                            schema_editor.create_model(Model)
+                            results[table_name] = "Created successfully"
+                        else:
+                            results[table_name] = "Table already exists"
+                    except Exception as e:
+                        results[table_name] = f"Failed to create table: {str(e)}"
+
+            return Response({"results": results}, status=200)
+
+    def table_exists(self, table_name):
+        """ Check if a table exists in the current schema. """
+        with connection.cursor() as cursor:
+            cursor.execute(f"SELECT to_regclass('{table_name}');")
+            return cursor.fetchone()[0] is not None
 
 
 class GetElectionSchemaDetails(APIView):
@@ -48,7 +70,7 @@ class GetElectionSchemaDetails(APIView):
         slug = kwargs.get("slug")
         schema_name = slug.replace("-", "_")
 
-        with schema_context(schema_name):
+        with schema_context(request, schema_name):
             try:
                 tables = connection.introspection.table_names()
                 return JsonResponse({"data": {"schemaName": schema_name, "schemaTables": tables}}, status=200)
@@ -56,23 +78,6 @@ class GetElectionSchemaDetails(APIView):
                 return JsonResponse({"error": str(e)}, status=500)
 
 
-class AddElectionSchemaTables(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        slug = kwargs.get("slug")
-        schema_name = slug.replace("-", "_")
-
-        with schema_context(schema_name):
-            try:
-                # List of models to create tables for
-                models = [Committee, CommitteeSubset, Elector]
-                for Model in models:
-                    with connection.schema_editor() as schema_editor:
-                        schema_editor.create_model(Model)
-                return JsonResponse({"message": "Tables created successfully"}, status=200)
-            except Exception as e:
-                return JsonResponse({"error": str(e)}, status=500)
 
 
 # import os
@@ -91,7 +96,7 @@ class AddElectionSchemaTables(APIView):
 # from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 # from apps.elections.models import Election
-# from apps.committees.models import Committee, CommitteeSubset
+# from apps.committees.models import Committee, Committee
 # from apps.electors.models import Elector
 
 
@@ -193,7 +198,7 @@ class AddElectionSchemaTables(APIView):
 #                 cursor.execute(f'CREATE SCHEMA IF NOT EXISTS "{schema_name}"')
 
 #             # List of models to create tables for
-#             models = [Committee, CommitteeSubset, Elector]
+#             models = [Committee, Committee, Elector]
 
 #             for Model in models:
 #                 # Construct the SQL query to create the table with the specified schema

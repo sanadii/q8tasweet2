@@ -2,7 +2,7 @@
 """this app contains
 Elections are in the default database
 
-but sometimes i need extra tables, like commitee, committee_subsets, campaigns, and stuff
+but sometimes i need extra tables, like commitee, committees, campaigns, and stuff
 
 these extra tables are going to the new schema dynamically created
 
@@ -11,7 +11,7 @@ schema_name : {election.slug}
 
 schema_tables (SchemaModels) : 
 Schema Apps
-- Committee: Models {Committee, CommitteeSubset, CommitteeResult}
+- Committee: Models {Committee, Committee, CommitteeResult}
 - Campaign:  Models {campaign_guarantee, campaign_attendee, campaign_sorting, .....}"""
     
 from django.apps import AppConfig

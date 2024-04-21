@@ -22,7 +22,7 @@ from .requests import (
     count_electors_by_gender,
     count_electors_by_family,
     count_electors_by_area,
-    count_electors_by_committee_subset,
+    count_electors_by_committee,
 )
 
 
@@ -59,14 +59,14 @@ class GetElectorStatistics(APIView):
             electors_by_gender = count_electors_by_gender()
             electors_by_family = count_electors_by_family()
             electors_by_area = count_electors_by_area()
-            electors_by_committee_subset = count_electors_by_committee_subset()
+            electors_by_committee = count_electors_by_committee()
 
         response_data = {
             "totalElectors": total_electors,
             "electorsByGender": electors_by_gender,
             "electorsByFamily": electors_by_family,
             "electorsByArea": electors_by_area,
-            "electorsByCommitteeSubset": electors_by_committee_subset,
+            "electorsByCommittee": electors_by_committee,
         }
 
         return Response({"data": response_data}, status=200)

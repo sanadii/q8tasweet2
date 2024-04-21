@@ -41,7 +41,7 @@ from apps.campaigns.models import (
 
 from apps.elections.models import Election, ElectionCandidate, ElectionParty
 
-from apps.committees.models import Committee, CommitteeSubset
+from apps.committees.models import Committee, Committee
 
 from django.contrib.auth.models import Group
 

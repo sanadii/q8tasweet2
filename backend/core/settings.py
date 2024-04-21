@@ -26,11 +26,31 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "q8tasweet",
         "USER": "postgres",
-        "PASSWORD": "KWT11782",
+        "PASSWORD": "I4ksb@11782",
         "HOST": "localhost",
         "PORT": "5432",
     },
 }
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
+
 
 # DATABASE_ROUTERS = ['middleware.SchemaDatabaseRouter']
 

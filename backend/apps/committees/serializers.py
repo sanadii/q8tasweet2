@@ -10,19 +10,19 @@ from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 # Models
 from apps.areas.models import Area
 
-from apps.committees.models import CommitteeSubset, Committee
+from apps.committees.models import Committee, Committee
 
-# ,CommitteeSubsetResult
+# ,CommitteResult
 
 from apps.areas.serializers import AreaSerializer
 
 
 # Serializers
-class CommitteeSubsetSerializer(serializers.ModelSerializer):
-    """Serializer for the CommitteeSubset model."""
+class CommitteSerializer(serializers.ModelSerializer):
+    """Serializer for the Committee model."""
 
     class Meta:
-        model = CommitteeSubset
+        model = Committee
         fields = ["id",
                 #   "serial", 
                   "type", "letters", 
@@ -33,7 +33,7 @@ class CommitteeSubsetSerializer(serializers.ModelSerializer):
 class CommitteeSerializer(serializers.ModelSerializer):
     """Serializer for the Committee model."""
 
-    committee_subsets = CommitteeSubsetSerializer(many=True, read_only=True)
+    committees = CommitteSerializer(many=True, read_only=True)
     # area = AreaSerializer(read_only=True)
 
     class Meta:
@@ -52,7 +52,7 @@ class CommitteeSerializer(serializers.ModelSerializer):
             "committee_count",
             "tag",
             "election",
-            "committee_subsets",
+            "committees",
         ]
 
     def create(self, validated_data):
@@ -70,7 +70,7 @@ class CommitteeSerializer(serializers.ModelSerializer):
 #     admin_serializer_classes = (TrackMixin,)
 
 #     class Meta:
-#         model = CommitteeSubsetResult
+#         model = CommitteResult
 #         # fields = "__all__"
 #         fields = ["election_committee", "votes"]
 
