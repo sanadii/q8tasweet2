@@ -72,19 +72,20 @@ export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
 
 
 // Election  Schema
-export const GET_ELECTION_SCHEMAS = "/electionData/getElectionSchemas";
-export const GET_ELECTION_SCHEMA_DETAILS = "/electionData/getElectionSchemaDetails";
-export const ADD_ELECTION_SCHEMA = "/electionData/addElectionSchema";
-export const UPDATE_ELECTION_SCHEMA = "/electionData/updateElectionSchema";
-export const DELETE_ELECTION_SCHEMA = "/electionData/deleteElectionSchema";
+export const GET_ELECTION_SCHEMAS = "/electionSchemas/getElectionSchemas";
+export const GET_ELECTION_SCHEMA_DETAILS = "/electionSchemas/getElectionSchemaDetails";
+export const ADD_ELECTION_SCHEMA = "/electionSchemas/addElectionSchema";
+// export const ADD_ELECTION_SCHEMA_TABLES = "/electors/addElectionSchemaTables";
+export const UPDATE_ELECTION_SCHEMA = "/electionSchemas/updateElectionSchema";
+export const DELETE_ELECTION_SCHEMA = "/electionSchemas/deleteElectionSchema";
 
 
 // Election Data
-export const GET_ELECTION_DATAS = "/electionData/getElectionDatas";
-export const GET_ELECTION_DATA_DETAILS = "/electionData/getElectionDataDetails";
-export const ADD_ELECTION_DATA = "/electionData/addElectionData";
-export const UPDATE_ELECTION_DATA = "/electionData/updateElectionData";
-export const DELETE_ELECTION_DATA = "/electionData/deleteElectionData";
+export const GET_ELECTORS = "/electors/getElectors";
+export const GET_ELECTOR_STATISTICS = "/electors/getElectorStatistics";
+export const ADD_ELECTOR = "/electors/addElector";
+export const UPDATE_ELECTOR = "/electors/updateElector";
+export const DELETE_ELECTOR = "/electors/deleteElector";
 
 
 // Candidates

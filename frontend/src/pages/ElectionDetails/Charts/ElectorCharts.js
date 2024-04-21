@@ -8,15 +8,15 @@ const ElectorsByFamilyPieChart = ({ electorsByFamily }) => {
     const slicedElectors = electorsByFamily.slice(0, 19);
 
     // Extract data for the first 19 families
-    const seriesData = slicedElectors.map((family) => family[1]);
-    const familyNames = slicedElectors.map((family) => family[0]);
+    const seriesData = electorsByFamily.map(elector => elector.count);
+    const familyNames = electorsByFamily.map(elector => elector.lastName);
 
-    // Sum the rest of the families' counts
-    const othersCount = electorsByFamily.slice(19).reduce((acc, family) => acc + family.count, 0);
+    // // Sum the rest of the families' counts
+    // const othersCount = electorsByFamily.slice(19).reduce((acc, family) => acc + family.count, 0);
 
-    // Add 'Others' to the seriesData and familyNames arrays
-    seriesData.push(othersCount);
-    familyNames.push('Others');
+    // // Add 'Others' to the seriesData and familyNames arrays
+    // seriesData.push(othersCount);
+    // familyNames.push('Others');
 
     // Get the chart colors
     const dataColors = '["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info","--vz-gray","--vz-pink","--vz-purple","--vz-secondary", "--vz-dark"]';

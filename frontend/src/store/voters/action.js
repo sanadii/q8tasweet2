@@ -30,7 +30,7 @@ export const getAllVoters = () => ({
   type: GET_ALL_VOTERS,
 });
 
-export const getVoters = (voter) => ({
+export const getElectors = (voter) => ({
   type: GET_VOTERS,
   payload: voter,
 });

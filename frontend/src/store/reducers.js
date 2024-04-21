@@ -17,7 +17,7 @@ import ResetPassword from "./auth/resetpassword/reducer";
 // Elections
 import Elections from "./elections/reducer";
 import ElectionSchema from "./electionSchema/reducer";
-import ElectionData from "./electionData/reducer";
+import Electors from "./electors/reducer";
 
 import Candidates from "./candidates/reducer";
 import Parties from "./parties/reducer";
@@ -25,7 +25,7 @@ import Campaigns from "./campaigns/reducer";
 // import ElectionCandidates from "./electionCandidate/reducer";
 
 // Voters
-import Voters from "./voters/reducer";
+// import Voters from "./voters/reducer";
 // import Guarantees from "./guarantees/reducer";
 // import Attendees from "./attendees/reducer";
 
@@ -57,12 +57,13 @@ const rootReducer = combineReducers({
 
     // Project
     Elections,
+
+    // Schema & Related Apps
     ElectionSchema,
-    ElectionData,
+    Electors,
     Candidates,
     Parties,
     Campaigns,
-    Voters,
     // Guarantees,
     // Attendees,
 

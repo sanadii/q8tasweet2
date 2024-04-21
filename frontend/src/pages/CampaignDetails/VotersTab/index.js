@@ -1,7 +1,7 @@
 // React, Redux & Store imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getVoters } from "store/actions";
+import { getElectors } from "store/actions";
 import { Loader, TableContainer } from "shared/components";
 import { campaignSelector, electorSelector } from 'selectors';
 
@@ -51,7 +51,7 @@ export const VotersTab = () => {
       searchInput: searchElectorInput,
     };
 
-    dispatch(getVoters(searchParameters));
+    dispatch(getElectors(searchParameters));
   };
 
   const [campaignGuarantee, setCampaignGuarantee] = useState(null); // initialized to null

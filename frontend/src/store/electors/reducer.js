@@ -4,13 +4,12 @@ import {
   API_RESPONSE_ERROR,
 
   // Election Database
-  ADD_ELECTION_DATABASE_SUCCESS,
-  ADD_ELECTION_DATABASE_FAIL,
+  ADD_ELECTOR_SUCCESS,
+  ADD_ELECTOR_FAIL,
 
   // ElectionStatistics
-  GET_ELECTION_STATISTICS,
+  GET_ELECTOR_STATISTICS,
   GET_ELECTORS_BY_FAMILY,
-
 
 } from "./actionType";
 
@@ -21,12 +20,12 @@ const IntialState = {
   electionCommittees: [],
 };
 
-const ElectionStatistics = (state = IntialState, action) => {
+const Electors = (state = IntialState, action) => {
   switch (action.type) {
 
     case API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
-        case GET_ELECTION_STATISTICS:
+        case GET_ELECTOR_STATISTICS:
           return {
             ...state,
             electorsByGender: action.payload.data.electorsByGender,
@@ -56,7 +55,7 @@ const ElectionStatistics = (state = IntialState, action) => {
 
     case API_RESPONSE_ERROR:
       switch (action.payload.actionType) {
-        case GET_ELECTION_STATISTICS:
+        case GET_ELECTOR_STATISTICS:
           return {
             ...state,
             error: action.payload.error,
@@ -79,24 +78,24 @@ const ElectionStatistics = (state = IntialState, action) => {
 
 
     // Add Election Database
-    case ADD_ELECTION_DATABASE_SUCCESS:
+    case ADD_ELECTOR_SUCCESS:
       return {
         ...state,
         isElectionCreated: true,
         // elections: [...state.elections, action.payload.data],
-        isElectionDatabaseAdd: true,
+        isElectorAdd: true,
         isElectionAddDatabaseFail: false,
       };
-    case ADD_ELECTION_DATABASE_FAIL:
+    case ADD_ELECTOR_FAIL:
       return {
         ...state,
         error: action.payload,
-        isElectionDatabaseAdd: false,
+        isElectorAdd: false,
         isElectionAddDatabaseFail: true,
       };
 
     // Election Statistics
-    case GET_ELECTION_STATISTICS: {
+    case GET_ELECTOR_STATISTICS: {
       return {
         ...state,
         isElectionStatisticCreated: false,
@@ -115,4 +114,4 @@ const ElectionStatistics = (state = IntialState, action) => {
   }
 };
 
-export default ElectionStatistics;
+export default Electors;

@@ -26,7 +26,7 @@ import {
 //Include Both Helper Voter with needed methods
 import {
   getAllVoters as getAllVotersApi,
-  getVoters as getVotersApi,
+  getElectors as getElectorsApi,
   addNewVoter,
   updateVoter,
   deleteVoter,
@@ -41,9 +41,9 @@ function* getAllVoters() {
   }
 }
 
-function* getVoters({ payload: voter }) {
+function* getElectors({ payload: voter }) {
   try {
-    const response = yield call(getVotersApi, voter);
+    const response = yield call(getElectorsApi, voter);
     yield put(votersApiResponseSuccess(GET_VOTERS, response.data));
   } catch (error) {
     yield put(votersApiResponseError(GET_VOTERS, error));
@@ -89,7 +89,7 @@ export function* watchGetAllVoters() {
 }
 
 export function* watchGetvoters() {
-  yield takeEvery(GET_VOTERS, getVoters);
+  yield takeEvery(GET_VOTERS, getElectors);
 }
 
 export function* watchUpdateVoter() {

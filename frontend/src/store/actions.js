@@ -10,14 +10,17 @@ export * from "./auth/resetpassword/actions";
 
 // Elections
 export * from "./elections/action";
-export * from "./electionSchema/actions";
-export * from "./electionData/actions";
 export * from "./candidates/action";
 export * from "./parties/action";
 export * from "./campaigns/action";
 
+
+// Schema & related Apps
+export * from "./electionSchema/actions";
+export * from "./electors/actions";
+
 // Voters
-export * from "./voters/action";
+// export * from "./voters/action";
 // export * from "./guarantees/action";
 // export * from "./attendees/action";
 

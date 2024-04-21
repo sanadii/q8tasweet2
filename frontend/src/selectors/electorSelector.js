@@ -1,15 +1,26 @@
-// Selectors/electorSelector.js
+// Selectors/electionSelectors.js
 import { createSelector } from 'reselect';
 
-const selectElectorState = state => state.Voters;
+const selectElectorState = state => state.Electors;
 
 export const electorSelector = createSelector(
-    selectElectorState,
-  (electorState) => ({
+  selectElectorState,
+  (electorsState) => ({
     // Election Selectors
-    voters: electorState.voters,
-    isElectorSuccess: electorState.isElectorSuccess,
-    error: electorState.error,
+    electorsByFamily: electorsState.electorsByFamily,
+    electorsByGender: electorsState.electorsByGender,
+    electorsByArea: electorsState.electorsByArea,
+
+
+
+    // // Elections
+    // electionCommittees: electionStatisticsState.electionCommittees,
+    // // futureElections: electionStatisticsState.futureElections,
+
+
+    voters: electorsState.voters,
+    isElectorSuccess: electorsState.isElectorSuccess,
+    isElectorerror: electorsState.error,
 
   })
 );

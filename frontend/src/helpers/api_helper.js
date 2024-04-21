@@ -16,6 +16,7 @@ axios.interceptors.request.use(
 
     // Retrieve CSRF token from cookie and set it to header
     const csrfToken = getCookie('csrftoken');
+    console.log("csrfToken: ", csrfToken)
     if (csrfToken) {
       config.headers["X-CSRFToken"] = csrfToken;
     }
@@ -37,6 +38,7 @@ function getCookie(name) {
       }
     }
   }
+  console.log("cookieValue:", document);  // Added line to log the value
   return cookieValue;
 }
 
@@ -76,15 +78,6 @@ axios.interceptors.response.use(
   }
 );
 
-// Set Authorization
-const setAuthorization = (token) => {
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-  } else {
-    delete axios.defaults.headers.common["Authorization"];
-  }
-};
-
 class APIClient {
   get = (url, params) => {
     const queryString = params
@@ -118,6 +111,16 @@ class APIClient {
     return axios.post(url, data, { headers: headers });
   };
 }
+
+// Set Authorization
+const setAuthorization = (token) => {
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+  } else {
+    delete axios.defaults.headers.common["Authorization"];
+  }
+};
+
 
 const getLoggedinUser = () => {
   const user = sessionStorage.getItem("authUser");

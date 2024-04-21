@@ -12,12 +12,13 @@ import ResetPasswordSaga from "./auth/resetpassword/saga";
 
 // Elections
 import electionSaga from "./elections/saga";
-import electionSchemaSaga from "./electionSchema/saga";
-import electionDataSaga from "./electionData/saga";
 import candidatesSaga from "./candidates/saga";
 import partiesSaga from "./parties/saga";
 import campaignsSaga from "./campaigns/saga";
-import electorSaga from "./voters/saga";
+
+// Schema & Related Apps
+import electionSchemaSaga from "./electionSchema/saga";
+import electorSaga from "./electors/saga";
 
 // System
 import UploadImageSaga from "./uploadImage/saga";
@@ -44,7 +45,7 @@ export default function* rootSaga() {
     // Project
     fork(electionSaga),
     fork(electionSchemaSaga),
-    fork(electionDataSaga),
+    fork(electorSaga),
     fork(candidatesSaga),
     fork(partiesSaga),
     fork(campaignsSaga),

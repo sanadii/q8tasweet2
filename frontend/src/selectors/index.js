@@ -1,7 +1,7 @@
 // Elections & Categories
 export { electionSelector } from './electionSelector';
 export { electionSchemaSelector } from "./electionSchemaSelector";
-export { electionDataSelector } from './electionDataSelector'
+export { electorSelector } from './electorSelector'
 export { categorySelector } from './categorySelector';
 
 
@@ -16,7 +16,7 @@ export { campaignSelector } from './campaignSelector';
 
 
 // Voters
-export { electorSelector } from './electorSelector';
+// export { electorSelector } from './electorSelector ';
 
 
 // Authentications

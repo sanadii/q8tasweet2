@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Store & Selectors
-import { getElectionDetails, getElectionDatas, getElectionSchemaDetails } from "store/actions";
+import { getElectionDetails, getElectionDatas, getElectorStatistics, getElectionSchemaDetails } from "store/actions";
 import { electionSelector } from 'selectors';
 
 // Shared: hooks
@@ -44,7 +44,8 @@ console.log("hasElectionHasSchema: ", hasElectionHasSchema)
     // Fetch election details if the slug is available and candidate is empty
     if (election && hasElectionHasSchema) {
       dispatch(getElectionSchemaDetails(slug))
-      dispatch(getElectionDatas(slug));
+      dispatch(getElectorStatistics(slug));
+      // dispatch(getElectionDataDetails(slug));
     }
   }, [dispatch, election, slug, hasElectionHasSchema]);
 
