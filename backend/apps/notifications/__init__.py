@@ -1,1 +1,1 @@
-default_app_config = 'voters.apps.VoterConfig'
+default_app_config = 'electors.apps.ElectorConfig'

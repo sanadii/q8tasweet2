@@ -10,21 +10,29 @@ from apps.elections.models import (
     ElectionCandidate,
     ElectionParty,
     ElectionPartyCandidate,
-    ElectionCommittee,
-    ElectionCommitteeResult,
-    ElectionPartyCommitteeResult,
-    ElectionPartyCandidateCommitteeResult,
+)
+
+from apps.committees.models import (
+    Committee,
+    CommitteeSubset,
+    # CommitteeResult,
+    # PartyCommitteeResult,
+    # PartyCandidateCommitteeResult,
 )
 
 from apps.elections.serializers import (
     ElectionSerializer,
     CategoriesSerializer,
     SubCategoriesSerializer,
-    ElectionCommitteeSerializer,
     ElectionCandidateSerializer,
     ElectionPartySerializer,
     ElectionPartyCandidateSerializer,
-    ElectionCommitteeResultSerializer,
+)
+
+from apps.committees.serializers import (
+    CommitteeSerializer,
+    CommitteeSubsetSerializer,
+    # CommitteeResultSerializer,
 )
 
 

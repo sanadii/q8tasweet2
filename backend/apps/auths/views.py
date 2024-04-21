@@ -18,7 +18,7 @@ from .serializers import (
     GroupSerializer,
 )
 
-from utils.views import get_current_user_campaigns
+# from utils.views import get_current_user_campaigns
 
 # from utils.auths import generate_username
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -48,9 +48,7 @@ class UserLogin(APIView):
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
-        user = User.objects.filter(
-            email=email
-        ).first()  # Assuming your User model has an email field
+        user = User.objects.filter(email=email).first()
 
         if user is None:
             return Response(
@@ -247,21 +245,29 @@ class UpdateUserProfile(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request):
-        user = request.user  # Get the authenticated user directly from the request due to the middleware
-        serializer = UserSerializer(user, data=request.data, partial=True)  # Update existing instance
+        user = (
+            request.user
+        )  # Get the authenticated user directly from the request due to the middleware
+        serializer = UserSerializer(
+            user, data=request.data, partial=True
+        )  # Update existing instance
 
         if serializer.is_valid():
-            if 'image' in request.FILES:
-                user.image = request.FILES['image']
+            if "image" in request.FILES:
+                user.image = request.FILES["image"]
 
             serializer.save()  # This will save other fields
 
             user.save()  # This will save the image file
             return Response(
-                {"success": True, "message": "User profile updated successfully", "data": serializer.data},
-                status=status.HTTP_200_OK
+                {
+                    "success": True,
+                    "message": "User profile updated successfully",
+                    "data": serializer.data,
+                },
+                status=status.HTTP_200_OK,
             )
-        
+
         return Response(
             {"success": False, "errors": serializer.errors},
             status=status.HTTP_400_BAD_REQUEST,
@@ -372,8 +378,8 @@ class GetCurrentUser(APIView):
         user_data = UserSerializer(user).data
 
         # Get Related Campaigns. TODO: to be changed later for get Favourite // GetRelated Election / Campaigns
-        campaigns = get_current_user_campaigns(user)  # Call the function
-        user_data["campaigns"] = campaigns
+        # campaigns = get_current_user_campaigns(user)  # Call the function
+        # user_data["campaigns"] = campaigns
 
         return Response({"data": user_data, "code": 200})
 

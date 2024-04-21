@@ -11,6 +11,11 @@ from django.apps import apps
 from utils.importing import import_dotted_path
 
 
+GENDER_CHOICES = [
+    ("1", "Male"),
+    ("2", "Female"),
+]
+
 def get_current_user(request):
     return request.user if request.user.is_authenticated else None
 

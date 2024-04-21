@@ -22,18 +22,28 @@ JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 # SQLITE_DATABASE = os.environ.get("SQLITE_DATABASE")
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'q8tasweet',
-        'USER': 'postgres',
-        'PASSWORD': 'I4ksb@11782',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "q8tasweet",
+        "USER": "postgres",
+        "PASSWORD": "KWT11782",
+        "HOST": "localhost",
+        "PORT": "5432",
     },
 }
 
-# DATABASE_ROUTERS = ['core.routers.ElectionRouter']
+# DATABASE_ROUTERS = ['middleware.SchemaDatabaseRouter']
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.environ.get("DB_NAME"),
+#         "USER": os.environ.get("DB_USER"),
+#         "PASSWORD": os.environ.get("DB_PASSWORD"),
+#         "HOST": os.environ.get("DB_HOST"),
+#         "PORT": os.environ.get("DB_PORT"),
+#     },
+# }
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -74,21 +84,27 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_extensions",
     # 'admin_reorder',
+    # 
     # Q8 Tasweet Apps
     "core",
     # 'management',
     # 'apps.media',
-    "apps.settings",
     "apps.auths",
+    "apps.settings",
     "apps.areas",
-    "apps.committees",
-    "apps.voters",
-    "apps.campaigns",
     "apps.elections",
-    "apps.electionData",
     "apps.categories",
     "apps.candidates",
-    "apps.notifications",
+    # "apps.notifications",
+
+    # ElectionSchemas and related Apps
+    'apps.electionSchemas',
+    "apps.committees",
+    "apps.electors",
+    # "apps.campaigns",
+
+    # "apps.electionData",
+
 ]
 
 # Order is important TODO: for more info to be written
@@ -97,19 +113,17 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    
-    # 'backend.core.middleware.DatabaseSwitchMiddleware',
-
-    
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "core.middleware.SchemaMiddleware",
+    # Uncomment if these are used:
+    # 'backend.core.middleware.DatabaseSwitchMiddleware',
     # 'django_hosts.middleware.HostsRequestMiddleware',
     # 'admin_reorder.middleware.ModelAdminReorder',
-    'core.middleware.SchemaMiddleware',  # Add your middleware here
-
 ]
+
 
 ROOT_URLCONF = "core.urls"
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
@@ -132,7 +146,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
+# WSGI_APPLICATION = "core.wsgi.application"
 ASGI_APPLICATION = "core.asgi.application"
 
 
@@ -186,12 +200,9 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
-# For Development only
-CORS_ALLOW_ALL_ORIGINS = True
-
-CSRF_COOKIE_SECURE = False  # Set to True in a production environment with HTTPS
-CSRF_COOKIE_SAMESITE = "None"  # or 'Lax' or 'Strict' depending on your needs
+CORS_ALLOW_ALL_ORIGINS = True  # For Development only
+CSRF_COOKIE_SECURE = True  # Set to True in production with HTTPS
+CSRF_COOKIE_SAMESITE = "Lax"  # Adjust based on your security needs
 
 # Custom user model
 AUTH_USER_MODEL = "auths.User"

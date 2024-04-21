@@ -6,30 +6,28 @@ import json
 
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
-# Models
-from apps.areas.models import Area
-
 from apps.elections.models import (
     Election,
     ElectionCategory,
     ElectionCandidate,
     ElectionParty,
     ElectionPartyCandidate,
-    ElectionCommittee,
-    ElectionCommitteeGroup,
-    ElectionCommitteeResult,
-    ElectionPartyCandidateCommitteeResult,
-    ElectionPartyCommitteeResult,
 )
 
-# from apps.committees.models import Committee, CommitteeGroup
-from apps.campaigns.models import CampaignSorting
-
+from apps.committees.models import Committee
+from apps.committees.models import (
+    Committee,
+    # CommitteeResult,
+    # PartyCandidateCommitteeResult,
+    # PartyCommitteeResult,
+)
+# from apps.campaigns.models import CampaignSorting
 from apps.auths.serializers import UserSerializer
 
 
 class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """Serializer for the Election model."""
+
     admin_serializer_classes = (TrackMixin, TaskMixin)
 
     # admin_serializer_classes = (TrackMixin, TaskMixin)
@@ -47,9 +45,9 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     category_name = serializers.SerializerMethodField("get_category_name")
     sub_category_name = serializers.SerializerMethodField("get_sub_category_name")
 
-    election_result_view = serializers.SerializerMethodField()
-    election_result_party = serializers.SerializerMethodField()
-    election_result_sorting = serializers.SerializerMethodField()
+    # election_result_view = serializers.SerializerMethodField()
+    # election_result_party = serializers.SerializerMethodField()
+    # election_result_sorting = serializers.SerializerMethodField()
 
     class Meta:
         model = Election
@@ -64,10 +62,6 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "category_name",
             "sub_category_name",
             "election_method",
-            "election_result",
-            "election_result_view",
-            "election_result_party",
-            "election_result_sorting",
             "elect_votes",
             "elect_seats",
             "voters",
@@ -77,6 +71,13 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "attendees_males",
             "attendees_females",
             "previous_election",
+            
+            
+            # "election_result",
+            # "election_result_view",
+            # "election_result_party",
+            # "election_result_sorting",
+
             # Track & Task Fields
             # "created_by",
             # "updated_by",
@@ -87,8 +88,7 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             # "deleted",
             # "priority",
             # "status",
-            
-            "has_schema"
+            "has_schema",
         ]
 
     def get_election_name(self, obj):
@@ -118,21 +118,21 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
                 return image.url
         return None
 
-    # Results
-    def get_election_result_view(self, obj):
-        return self.parse_json_field(obj.election_result).get("view")
+    # # Results
+    # def get_election_result_view(self, obj):
+    #     return self.parse_json_field(obj.election_result).get("view")
 
-    def get_election_result_party(self, obj):
-        return self.parse_json_field(obj.election_result).get("party")
+    # def get_election_result_party(self, obj):
+    #     return self.parse_json_field(obj.election_result).get("party")
 
-    def get_election_result_sorting(self, obj):
-        return self.parse_json_field(obj.election_result).get("sorting")
+    # def get_election_result_sorting(self, obj):
+    #     return self.parse_json_field(obj.election_result).get("sorting")
 
-    def parse_json_field(self, json_str):
-        try:
-            return json.loads(json_str) if json_str else {}
-        except json.JSONDecodeError:
-            return {}
+    # def parse_json_field(self, json_str):
+    #     try:
+    #         return json.loads(json_str) if json_str else {}
+    #     except json.JSONDecodeError:
+    #         return {}
 
     # Used for Add / Update / Delete
     def to_internal_value(self, data):
@@ -253,43 +253,6 @@ class SubCategoriesSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "parent", "image"]
 
 
-# Votting and Sorting
-class ElectionCommitteeResultSerializer(serializers.ModelSerializer):
-    admin_serializer_classes = (TrackMixin,)
-
-    class Meta:
-        model = ElectionCommitteeResult
-        # fields = "__all__"
-        fields = ["election_committee", "votes"]
-
-
-class ElectionPartyCommitteeResultSerializer(
-    AdminFieldMixin, serializers.ModelSerializer
-):
-    admin_serializer_classes = (TrackMixin,)
-
-    class Meta:
-        model = ElectionPartyCommitteeResult
-        fields = ["election_committee", "votes"]
-
-
-class ElectionPartyCandidateCommitteeResultSerializer(
-    AdminFieldMixin, serializers.ModelSerializer
-):
-    admin_serializer_classes = (TrackMixin,)
-
-    class Meta:
-        model = ElectionPartyCandidateCommitteeResult
-        fields = ["election_committee", "votes"]
-
-
-class CampaignSortingSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CampaignSorting
-        fields = "__all__"
-
-
 # Candidates and Parties
 class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """Serializer for the ElectionCandidate model."""
@@ -299,11 +262,11 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     name = serializers.CharField(source="candidate.name", read_only=True)
     gender = serializers.IntegerField(source="candidate.gender", read_only=True)
     image = serializers.SerializerMethodField("get_candidate_image")
-    committee_votes = ElectionCommitteeResultSerializer(
-        source="committee_result_candidates", many=True, read_only=True
-    )
-    
-    committee_sorting = serializers.SerializerMethodField()
+    # committee_votes = ElectionCommitteeResultSerializer(
+    #     source="committee_result_candidates", many=True, read_only=True
+    # )
+
+    # committee_sorting = serializers.SerializerMethodField()
 
     class Meta:
         model = ElectionCandidate
@@ -316,24 +279,23 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "image",
             "votes",
             "notes",
-            "committee_votes",
-            "committee_sorting",
-            
+            # "committee_votes",
+            # "committee_sorting",
             "result",
             "position",
         ]
 
-    def get_committee_sorting(self, obj):
-        # Access the request context from self.context
-        request = self.context.get("request") if self.context else None
-        source = (
-            "election_candidate_sortings"
-            if request and "GetElectionDetails" in request.resolver_match.url_name
-            else "campaign_candidate_sortings"
-        )
-        # Assuming you have a method to get the sorting data from the source
-        sorting_data = self.get_sorting_data_from_source(obj, source)
-        return CampaignSortingSerializer(sorting_data, many=True, read_only=True).data
+    # def get_committee_sorting(self, obj):
+    #     # Access the request context from self.context
+    #     request = self.context.get("request") if self.context else None
+    #     source = (
+    #         "election_candidate_sortings"
+    #         if request and "GetElectionDetails" in request.resolver_match.url_name
+    #         else "campaign_candidate_sortings"
+    #     )
+    #     # Assuming you have a method to get the sorting data from the source
+    #     sorting_data = self.get_sorting_data_from_source(obj, source)
+    #     return CampaignSortingSerializer(sorting_data, many=True, read_only=True).data
 
     # You might need to implement this method based on your logic
     def get_sorting_data_from_source(self, obj, source):
@@ -370,9 +332,9 @@ class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     name = serializers.CharField(source="party.name", read_only=True)
     image = serializers.SerializerMethodField("get_party_image")
-    committee_votes = ElectionPartyCommitteeResultSerializer(
-        source="party_committee_result_candidates", many=True, read_only=True
-    )
+    # committee_votes = ElectionPartyCommitteeResultSerializer(
+    #     source="party_committee_result_candidates", many=True, read_only=True
+    # )
     # committee_sorting = serializers.SerializerMethodField()
 
     class Meta:
@@ -385,7 +347,7 @@ class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
             "image",
             "votes",
             "notes",
-            "committee_votes",
+            # "committee_votes",
             # "committee_sorting"
         ]
 
@@ -412,9 +374,9 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
     name = serializers.CharField(source="candidate.name", read_only=True)
     gender = serializers.IntegerField(source="candidate.gender", read_only=True)
     image = serializers.SerializerMethodField("get_candidate_image")
-    committee_votes = ElectionPartyCandidateCommitteeResultSerializer(
-        source="party_candidate_committee_result_candidates", many=True, read_only=True
-    )
+    # committee_votes = ElectionPartyCandidateCommitteeResultSerializer(
+    #     source="party_candidate_committee_result_candidates", many=True, read_only=True
+    # )
     # committee_sorting = serializers.SerializerMethodField()
 
     class Meta:
@@ -428,7 +390,7 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
             "image",
             "votes",
             "notes",
-            "committee_votes",
+            # "committee_votes",
             # "committee_sorting"
         ]
 
@@ -436,45 +398,6 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
         if obj.candidate and obj.candidate.image:
             return obj.candidate.image.url
         return None
-
-    def create(self, validated_data):
-        """Customize creation (POST) of an instance"""
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        """Customize update (PUT, PATCH) of an instance"""
-        # Additional logic to customize instance updating
-        return super().update(instance, validated_data)
-
-
-# Committees & Committee Results
-class ElectionCommitteeSerializer(serializers.ModelSerializer):
-    """Serializer for the ElectionCommittee model."""
-
-    class Meta:
-        model = ElectionCommittee
-        fields = ['id', 'serial', 'type', 'letters', 'areas']
-
-class AreaSerializer(serializers.ModelSerializer):
-    """Serializer for the Area model."""
-
-    class Meta:
-        model = Area
-        fields = ['id', 'name', 'code', 'governorate']
-
-class ElectionCommitteeGroupSerializer(serializers.ModelSerializer):
-    """Serializer for the ElectionCommitteeGroup model."""
-
-    committees = ElectionCommitteeSerializer(many=True, read_only=True)
-    area = AreaSerializer(read_only=True)
-
-    class Meta:
-        model = ElectionCommitteeGroup
-        fields = [
-            'id', 'name', 'committee_no', 'circle', 'area', 'gender', 
-            'description', 'address', 'voter_count', 'committee_count', 'total_voters', 'tags', 
-            'committees'
-        ]
 
     def create(self, validated_data):
         """Customize creation (POST) of an instance"""

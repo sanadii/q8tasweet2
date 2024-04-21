@@ -29,3 +29,8 @@ yarn-debug.log*
 yarn-error.log*
 backend/apps/electionStatistics/management/data/nationalAssembly5-2024.xlsx
 backend/database/national-assembly-5-2024.sqlite3
+backend/core/management/data/na_5_2024_electors.xlsx
+backend/core/management/data/na_5_2024_electorsx.csv
+backend/core/management/data/national_assembly_5_2024.xlsx
+backend/core/management/data/nationalAssembly5-2024 copy.xlsx
+backend/core/management/data/national_assembly_5_2024.xlsx

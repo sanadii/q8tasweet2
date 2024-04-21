@@ -4,10 +4,7 @@ from django.contrib.admin import AdminSite
 from apps.elections.models import (
     Election,
     ElectionCategory,
-    ElectionCandidate,
-    ElectionCommittee,
-    ElectionCommitteeResult,
-)
+    ElectionCandidate,)
 
 from utils.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
 

@@ -34,12 +34,14 @@ urlpatterns = [
     # path('media/', include('apps.media.urls')),
 
     # Main Apps
-    path('campaigns/', include('apps.campaigns.urls')),
+    # path('campaigns/', include('apps.campaigns.urls')),
     path('candidates/', include('apps.candidates.urls')),
     path('categories/', include('apps.categories.urls')),
     path('elections/', include('apps.elections.urls')),
-    path('electionData/', include('apps.electionData.urls')),
-    path('voters/', include('apps.voters.urls')),
+    
+    path('electionSchemas/', include('apps.electionSchemas.urls')),
+    # path('electionData/', include('apps.electionData.urls')),
+    path('electors/', include('apps.electors.urls')),
     path('auth/', include('apps.auths.urls')),
 
     # Schema & Documentation

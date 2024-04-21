@@ -1,16 +1,16 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
 from django.db import connection
-from apps.electionData.models import ElectionCommittee
+from apps.electionSchemas.models import Committee
 
 class Command(BaseCommand):
     help = 'Imports or updates committees from an Excel file into the database based on the specified schema'
 
     def add_arguments(self, parser):
-        parser.add_argument('--schema', type=str, help='Specify the schema name')
+        parser.add_argument('--schema', type=str, help='national_assembly_5_2024')
 
     def handle(self, *args, **options):
-        schema_name = options.get('schema', 'public')  # Default to 'public' schema if not provided
+        schema_name = 'national_assembly_5_2024'  # Add spaces around the schema name
 
         # Set the database schema
         with connection.cursor() as cursor:
@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
         # Define the file path
         file_path = 'core/management/data/national_assembly_5_2024.xlsx'
-        required_data = ['id', 'serial', 'name', 'circle', 'area', 'gender', 'description', 'address', 'voter_count', 'committee_count', 'tag']
+        required_data = ['id', 'serial', 'name', 'circle', 'area', 'area_name', 'gender', 'description', 'address', 'voter_count', 'committee_count', 'tag']
 
         # Read data from Excel file
         try:
@@ -46,7 +46,7 @@ class Command(BaseCommand):
             try:
                 # Create or update Committee object
                 defaults = {col: row[col] for col in required_columns if col != 'id'}
-                committee_obj, created = ElectionCommittee.objects.update_or_create(
+                committee_obj, created = Committee.objects.update_or_create(
                     id=row['id'],
                     defaults=defaults
                 )
