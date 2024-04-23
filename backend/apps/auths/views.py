@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 import jwt
+import json
 
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -12,7 +13,6 @@ from rest_framework.views import APIView
 
 from .models import Group, GroupCategories
 from .serializers import UserSerializer, UserLoginSerializer, ContentTypeSerializer, GroupPermissionSerializer, GroupSerializer, UserImageSerializer
-
 
 from utils.views import get_current_user_campaigns 
 # from utils.auths import generate_username
@@ -31,14 +31,17 @@ from django.utils.encoding import force_bytes
 from rest_framework.parsers import MultiPartParser
 import os
 from django.core.files.storage import FileSystemStorage
+from django.middleware import csrf
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 class UserLogin(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
-        user = User.objects.filter(email=email).first() # Assuming your User model has an email field
+        user = User.objects.filter(email=email).first()
 
         if user is None:
             return Response({'error': 'User not found!'}, status=status.HTTP_404_NOT_FOUND)
@@ -50,13 +53,26 @@ class UserLogin(APIView):
 
         user_data = UserLoginSerializer(user).data
 
-        return Response({
-            'status': 'success',
-            'refresh_token': str(refresh),
-            'access_token': access_token,
-            'data': user_data
-        })
+        response_data = {
+            "status": "success",
+            "refresh_token": str(refresh),
+            "access_token": access_token,
+            "data": user_data,
+        }
 
+        response = Response(response_data)
+        response_data_json = json.dumps(response_data)
+
+        response.set_cookie(
+            key='user_data_cookie',  
+            value=response_data_json,  
+            max_age=60 * 60 * 24 * 60,  
+            secure=True, 
+            httponly=True, 
+            samesite='Strict'  
+        )
+
+        return response
 
 
 
@@ -64,7 +80,6 @@ User = get_user_model()
 
 class UserRegister(APIView):
     permission_classes = [AllowAny]
-
     def post(self, request):
         #return Response({'msg':"Api Called!"})
         # Extract username from email or generate a new one
@@ -74,8 +89,18 @@ class UserRegister(APIView):
 
         serializer = UserSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(): 
-            # Pass 'created_by' as an argument to the save method
             new_user = serializer.save(created_by=None)
+            if new_user:
+                subject, from_email, to = 'Register', 'shankar.wxit@gmail.com', email
+                # Load and render the HTML template
+                html_content = render_to_string('emails/registration_email.html', {'username': username})
+                text_content = strip_tags(html_content)
+                
+                #msg = f'Your registration was successful! Thank you for joining us'
+                msg1 = EmailMultiAlternatives(subject, text_content, from_email, [to])
+                msg1.attach_alternative(html_content, "text/html") 
+                #msg1.content_subtype = 'html'
+                msg1.send()
             return Response({
                 "data": UserSerializer(new_user, context={'request': request}).data,
                 "count": 1,
@@ -118,15 +143,13 @@ class UpdateProfile(APIView):
     
 class UpdateProfileImage(APIView):
     parser_classes = (MultiPartParser,)
-
     def post(self, request, *args, **kwargs):
         serializer = UserImageSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({'success': True, 'msg': 'User image updated!','status': status.HTTP_200_OK,})
+            return Response({'success': True, 'msg': 'User profile updated successfully',"status":status.HTTP_200_OK})
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 class BlacklistTokenUpdateView(APIView):
     permission_classes = [AllowAny]
@@ -161,7 +184,6 @@ class GetCurrentUser(APIView):
     def get(self, request):
         user = request.user
         user_data = UserSerializer(user).data
-
         # Get Related Campaigns. TODO: to be changed later for get Favourite // GetRelated Election / Campaigns
         campaigns = get_current_user_campaigns(user)  # Call the function
         user_data["campaigns"] = campaigns
@@ -186,10 +208,8 @@ class GetCampaignModerators(APIView):
         try:
             # Get the group object where name is 'campaignModerator' (or 'Editor' if it's the correct name)
             group = Group.objects.get(name='moderator')  # Update 'campaignModerator' if needed
-
             # Get the users in the group with name 'campaignModerator'
             moderators = group.user_set.all()
-            
             # Serialize the data
             data_serializer = UserSerializer(moderators, many=True)
 
@@ -234,6 +254,7 @@ class UpdateUser(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, id):
+        #return Response({"data":"API Called!"})
         try:
             user = User.objects.get(id=id)
         except User.DoesNotExist:
@@ -365,7 +386,7 @@ class ForgotPassword(APIView):
                 #expiry_time = timezone.now() + timezone.timedelta(minutes=5)
                 subject, from_email, to = 'Password Reset', 'shankar.wxit@gmail.com', email
                 #text_content = 'This is an important message.'
-                msg = f'Click the link to reset your password: http://localhost:3000/reset-password/{token}'
+                msg = f'Click the link to reset your password: http://127.0.0.1:8001/reset-password/{token}'
                 msg1 = EmailMultiAlternatives(subject, msg, from_email, [to])
                 msg1.content_subtype = 'html'
                 msg1.send()
@@ -433,7 +454,7 @@ class ResetPassword(APIView):
                 hashed_password = make_password(password)
                 user.password = hashed_password
                 user.token = token
-                
+
                 # Save the user object
                 user.save()
                 response_data = {
@@ -442,7 +463,7 @@ class ResetPassword(APIView):
                     'status':status.HTTP_200_OK
                 }
                 return Response(response_data, status=status.HTTP_200_OK)
-           
+
         except Exception as e:
             response_data = {
                 'success': False,
@@ -450,4 +471,3 @@ class ResetPassword(APIView):
                 'status':status.HTTP_500_INTERNAL_SERVER_ERROR
             }
             return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        

@@ -10,6 +10,8 @@ import {
   postJwtLogin,
   postSocialLogin,
 } from "../../../helpers/backend_helper";
+import { getCookie } from "../../../helpers/api_helper";
+
 
 function* loginUser({ payload: { user, history } }) {
   try {

@@ -13,7 +13,7 @@ const useProfile = () => {
     const userProfileSession = getLoggedinUser();
     var token =
       userProfileSession &&
-      userProfileSession["token"];
+      userProfileSession["refreshToken"];
     setUserProfile(userProfileSession ? userProfileSession : null);
     setLoading(token ? false : true);
   }, []);
