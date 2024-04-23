@@ -85,7 +85,7 @@ const IntialState = {
   electionParties: [],
   electionPartyCandidates: [],
   electionCampaigns: [],
-  electionCommittees: [],
+  electionCommitteeSites: [],
   electionResults: [],
   electionSorters: [],
 };
@@ -126,7 +126,7 @@ const Elections = (state = IntialState, action) => {
             electionPartyCandidates: action.payload.data.electionPartyCandidates,
             electionCandidates: action.payload.data.electionCandidates,
             electionCampaigns: action.payload.data.electionCampaigns,
-            electionCommittees: action.payload.data.electionCommittees,
+            electionCommitteeSites: action.payload.data.electionCommitteeSites,
             electionResults: action.payload.data.electionResults,
             electionSorters: action.payload.data.electionSorters,
             isElectionCreated: false,

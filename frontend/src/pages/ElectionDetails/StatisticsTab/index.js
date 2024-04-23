@@ -1,25 +1,82 @@
-import React, { useState, dispatch } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 // Redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { electionSelector, electorSelector } from 'selectors';
+import { getElectorsByCategory } from "store/actions";
 
-import { Row, Col, Card, CardHeader, CardBody } from "reactstrap";
-import { ElectorsByFamilyPieChart, ElectorsByAreaPieChart } from "../Charts/ElectorCharts"
+// Related Components
+import { ElectorsOverviewCharts } from './DashboardAnalyticsCharts';
+import ElectorStatisticCounter from "./ElectorStatisticCounter"
 
-import { ElectorsOverviewCharts, FamilyCharts } from './DashboardAnalyticsCharts';
-import classNames from "classnames";
-
-
+// UI&UX
+import { Row, Col, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
+import Select from "react-select";
 
 const StatisticsTab = () => {
-    const { election, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
-    const { electorsByGender, electorsByFamily, electorsByArea, electorsByCommittee } = useSelector(electorSelector)
+    const dispatch = useDispatch();
+
+    const { electionStatistics, electorsByCategories, electorsByFamily, electorsByFamilyArea, electorsByArea, electorsByCommittee } = useSelector(electorSelector)
+    const { election } = useSelector(electionSelector)
+    const [resultsToDisplay, setResultsToDisplay] = useState("10")
+    const [resultByGender, setResultByGender] = useState(true)
+    const [selectedFamilies, setSelectedFamilies] = useState([]);
+    const [selectedAreas, setSelectedAreas] = useState([]);
+    const [familyAreaView, setFamilyAreaView] = useState("familyArea");
+
+
+    // Details FamilyArea
+    const areaCategories = electorsByCategories?.areaCategories;
+    const areaDataSeries = electorsByCategories?.areaDataSeries;
+    const areaFamilyDataSeries = electorsByCategories?.areaFamilyDataSeries;
+    const areaFamilyDataSeriesTotal = electorsByCategories?.areaFamilyDataSeries?.total;
+
+    const familyCategories = electorsByCategories?.familyCategories;
+    const familyDataSeries = electorsByCategories?.familyDataSeries;
+    const familyAreaDataSeries = electorsByCategories?.familyAreaDataSeries;
+    const familyAreaDataSeriesTotal = electorsByCategories?.familyAreaDataSeries?.total;
+
+    // let electorsByCommitteeDataSeries;
+
+    // useEffect(() => {
+    //     // Check if electorsByFamilyArea is not empty
+    //     if (familyAreaView === "familyArea") {
+    //         electorsByCommitteeDataSeries = familyAreaDataSeries
+    //     } else {
+    //         electorsByCommitteeDataSeries = areaFamilyDataSeries
+
+    //     }
+    // }, [electorsByCategories]);
+
+
+
+    // const electorsByCategoriesSeries = electorsByCategories?.electorsByFamily
+
+    console.log("electorsByFamilyArea:", electorsByFamilyArea)
 
     const [chartInfo, setChartInfo] = useState({
         type: 'byFamily',
+        // dataSeries: electorsByFamilyArea
         dataSeries: electorsByFamily
     });
+
+    const chartElectorButtons = [
+        { period: 'byFamily', label: 'العائلة - القبيلة', dataSeries: electorsByFamily },
+        { period: 'byArea', label: 'المناطق السكنية', dataSeries: electorsByArea },
+        // { period: 'byCommittee', label: 'اللجان الإنتخابية', dataSeries: electorsByCommitteeDataSeries },
+        { period: 'byFamilyArea', label: 'مفصل', dataSeries: electorsByCommittee },
+
+    ];
+
+
+    const familyOptions = useMemo(() => (
+        electorsByFamily.map(elector => ({ label: `${elector.category} - ${elector.total} ناخب`, value: elector.category }))
+    ), [electorsByFamily]);
+
+    const areaOptions = useMemo(() => (
+        electorsByArea.map(elector => ({ label: `${elector.category} - ${elector.total} ناخب`, value: elector.category }))
+    ), [electorsByArea]);
+
 
     const onChangeElectorChartType = (button) => {
         setChartInfo({
@@ -28,147 +85,159 @@ const StatisticsTab = () => {
         });
     };
 
-    const chartElectorButtons = [
-        { period: 'byFamily', label: 'By Family', dataSeries: electorsByFamily },
-        { period: 'byArea', label: 'By Area', dataSeries: electorsByArea },
-        { period: 'byGender', label: 'By Gender', dataSeries: electorsByGender },
-        { period: 'byCommittee', label: 'By Committee', dataSeries: electorsByCommittee }
-    ];
+    console.log("electorsByFamilyArea: ", electorsByFamilyArea)
+
+    useEffect(() => {
+        const familyValues = selectedFamilies.map(option => option.value);
+        const areaValues = selectedAreas.map(option => option.value);
+        if (familyValues.length || areaValues.length) {
+            dispatch(getElectorsByCategory({ slug: election.slug, families: familyValues, areas: areaValues }));
+        }
+
+    }, [selectedFamilies, selectedAreas, resultsToDisplay, election.slug, dispatch]);
+
+    useEffect(() => {
+        // Check if electorsByFamilyArea is not empty
+        if (Object.keys(electorsByFamilyArea).length > 0) {
+            // Run your code here
+            // setChartInfo({
+            //     type: 'byFamilyArea',
+            //     dataSeries: electorsByFamilyArea,
+            // });
+        }
+    }, [electorsByFamilyArea]); // Run effect when electorsByFamilyArea changes
+
+
+
+    const handleFamilySelection = (selectedOptions) => {
+        setSelectedFamilies(selectedOptions || []);
+    };
+
+    const handleAreaSelection = (selectedOptions) => {
+        setSelectedAreas(selectedOptions || []);
+    };
+
+    const handleNumberToDisplayChange = (event) => {
+        setResultsToDisplay(event.target.value);
+    };
+
+    const handleGenderDisplayChange = (event) => {
+        setResultByGender(event.target.checked);
+    };
+
 
 
     return (
         <React.Fragment>
             <Row>
-
                 <Card>
-                    <CardHeader className="border-0 align-items-center d-flex">
-                        <h4 className="card-title mb-0 flex-grow-1">Electors Overview</h4>
-                        <div className="d-flex gap-1">
-                            {chartElectorButtons.map((button, index) => (
-                                <button
-                                    key={index}
-                                    type="button"
-                                    className={`btn ${chartInfo.type === button.period ? 'btn-soft-primary' : 'btn-soft-secondary'} btn-sm`}
-                                    onClick={() => onChangeElectorChartType(button)}
-                                >
-                                    {button.label}
-                                </button>
-                            ))}
+                    <CardHeader className="border-0  ">
+                        <div className="align-items-center d-flex mb-2">
+                            <h2 className="card-title mb-0 flex-grow-1">إحصائيات شاملة</h2>
+                            <div className="d-flex gap-1">
+                                {chartElectorButtons.map((button, index) => (
+                                    <button
+                                        key={index}
+                                        type="button"
+                                        className={`btn ${chartInfo.type === button.period ? 'btn-primary' : 'btn-soft-secondary'} btn-sm`}
+                                        onClick={() => onChangeElectorChartType(button)}
+                                    >
+                                        {button.label}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </CardHeader>
-                    <CardHeader className="p-0 border-0 bg-light-subtle">
-                        {/* <Row className="g-0 text-center">
-                            <Col xs={6} sm={3}>
-                                <div className="p-3 border border-dashed border-start-0">
-                                    <h5 className="mb-1"><span className="counter-value" data-target="9851">
-                                        <CountUp
-                                            start={0}
-                                            end={9851}
-                                            separator={","}
-                                            duration={4}
+                    <CardBody>
+                        <div className="chat-wrapper d-lg-flex mx-n4 mt-n4 p-1">
+                            <div className="chat-leftsidebar bg-light">
+                                <div className="px-2 pt-2 mb-2">
+                                    {/* Display Category */}
+                                    <div className="mb-3">
+                                        <h4>طريقة العرض</h4>
+
+                                    </div>
+                                    <div className="mt-3 mt-sm-0">
+
+                                        {/* Selections */}
+                                        <Label>القبائل</Label>
+                                        <Select
+                                            value={selectedFamilies}
+                                            isMulti={true}
+                                            onChange={(e) => {
+                                                handleFamilySelection(e);
+                                            }}
+                                            options={familyOptions}
+                                            classNamePrefix="js-example-basic-multiple mb-0"
+                                        // styles={customStyles}
                                         />
-                                    </span></h5>
-                                    <p className="text-muted mb-0">Number of Projects</p>
-                                </div>
-                            </Col>
-                            <Col xs={6} sm={3}>
-                                <div className="p-3 border border-dashed border-start-0">
-                                    <h5 className="mb-1"><span className="counter-value">
-                                        <CountUp
-                                            start={0}
-                                            end={1026}
-                                            separator={","}
-                                            duration={4}
+
+                                        <Label>المناطق</Label>
+                                        <Select
+                                            value={selectedAreas}
+                                            isMulti={true}
+                                            onChange={(e) => {
+                                                handleAreaSelection(e);
+                                            }}
+                                            options={areaOptions}
+                                            classNamePrefix="js-example-basic-multiple mb-0"
+                                        // styles={customStyles}
                                         />
-                                    </span></h5>
-                                    <p className="text-muted mb-0">Active Projects</p>
-                                </div>
-                            </Col>
-                            <Col xs={6} sm={3}>
-                                <div className="p-3 border border-dashed border-start-0">
-                                    <h5 className="mb-1">$<span className="counter-value" data-target="228.89">
-                                        <CountUp
-                                            start={0}
-                                            end={228.89}
-                                            decimals={2}
-                                            duration={4}
+                                    </div>
+
+
+                                    {/* OnOff & Pagination */}
+                                    <h4>طريقة العرض</h4>
+
+                                    <div className="form-check form-switch form-check-right form-switch-sm">
+                                        <Input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            id="flexSwitchCheckRightDisabled"
+                                            checked={resultByGender}
+                                            onChange={handleGenderDisplayChange}
                                         />
-                                    </span>k</h5>
-                                    <p className="text-muted mb-0">Revenue</p>
+                                        <Label className="form-check-label" for="flexSwitchCheckRightDisabled">النوع</Label>
+                                    </div>
+                                    <select
+                                        className="form-select w-25"
+                                        aria-label="Default select example"
+                                        onChange={handleNumberToDisplayChange}
+                                        value={resultsToDisplay}
+                                    >
+                                        <option disabled>العرض</option>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option value="25">25</option>
+                                    </select>
                                 </div>
-                            </Col>
-                            <Col xs={6} sm={3}>
-                                <div className="p-3 border border-dashed border-start-0 border-end-0">
-                                    <h5 className="mb-1 text-success"><span className="counter-value" data-target="10589">
-                                        <CountUp
-                                            start={0}
-                                            end={10589}
-                                            separator={","}
-                                            duration={4}
-                                        />
-                                    </span>h</h5>
-                                    <p className="text-muted mb-0">Working Hours</p>
-                                </div>
-                            </Col>
-                        </Row> */}
-                    </CardHeader>
-                    <CardBody className="p-0 pb-2">
-                        <div>
-                            <div dir="ltr" className="apex-charts">
-                                <ElectorsOverviewCharts
-                                    dataSeries={chartInfo.dataSeries}
-                                    dataColors='["--vz-primary", "--vz-warning", "--vz-success"]'
-                                />
+                            </div>
+                            <div className="file-manager-content w-100 p-4 pb-0">
+                                {electionStatistics &&
+                                    <ElectorStatisticCounter
+                                        electionStatistics={electionStatistics} />
+                                }
+                                <CardBody className="p-0 pb-2">
+                                    <div>
+                                        <div dir="ltr" className="apex-charts">
+                                            <ElectorsOverviewCharts
+                                                electorsByCategories={electorsByCategories}
+                                                resultByGender={resultByGender}
+                                                resultsToDisplay={resultsToDisplay}
+                                                dataSeries={chartInfo.dataSeries}
+                                            />
+                                        </div>
+                                    </div>
+                                </CardBody>
                             </div>
                         </div>
                     </CardBody>
                 </Card>
-
-
-                {/* 
-                <Card className="card-height-100">
-                    <div className="card-header align-items-center d-flex">
-                        <h4 className="card-title mb-0 flex-grow-1">Sessions by Countries</h4>
-                        <div className="d-flex gap-1">
-                            <button type="button" className={classNames({ active: periodType === "all" }, "btn btn-soft-secondary btn-sm")} onClick={() => { onChangeChartPeriod("all"); }}>
-                                ALL
-                            </button>
-                            <button type="button" className={classNames({ active: periodType === "monthly" }, "btn btn-soft-primary btn-sm")} onClick={() => { onChangeChartPeriod("monthly"); }}>
-                                1M
-                            </button>
-                            <button type="button" className={classNames({ active: periodType === "halfyearly" }, "btn btn-soft-secondary btn-sm")} onClick={() => { onChangeChartPeriod("halfyearly"); }}>
-                                6M
-                            </button>
-                        </div>
-                    </div>
-                    <div className="card-body p-0">
-                        <div>
-                            <FamilyCharts
-                                electorsByFamily={electorsByFamily}
-                                dataColors='["--vz-info", "--vz-info", "--vz-info", "--vz-info", "--vz-danger", "--vz-info", "--vz-info", "--vz-info", "--vz-info", "--vz-info"]'
-                            />
-                        </div>
-                    </div>
-                </Card> */}
-
-                <Card>
-                    <CardHeader>
-                        <h4 className="card-title mb-0">حسب المناطق السكنية</h4>
-                    </CardHeader>
-                    <CardBody>
-                        {/* <ElectorsByFamilyPieChart electorsByFamily={electorsByFamily} /> */}
-                    </CardBody>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <h4 className="card-title mb-0">عدد الناخبين حسب القبيلة\العائلة - أول 12</h4>
-                    </CardHeader>
-                    <CardBody>
-                        {/* <ElectorsByAreaPieChart electorsByArea={electorsByArea} /> */}
-                    </CardBody>
-                </Card>
             </Row>
-        </React.Fragment>
+        </React.Fragment >
     );
 };
 

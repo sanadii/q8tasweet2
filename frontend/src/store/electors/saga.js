@@ -6,17 +6,16 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   ADD_ELECTOR,
   GET_ELECTOR_STATISTICS,
+  GET_ELECTORS_BY_CATEGORY,
 } from "./actionType";
 
 
 import {
   ElectorApiResponseSuccess,
   ElectorApiResponseError,
-  // getElectorStatistics,
   // API Response
   addElectorSuccess,
   addElectorFail,
-
 
 } from "./actions";
 
@@ -24,7 +23,7 @@ import {
 //Include Both Helper File with needed methods
 import {
   addElector as AddElectorApi,
-
+  getElectorsByCategory as getElectorsByCategoryApi,
   getElectorStatistics as getElectorStatisticsApi,
 } from "../../helpers/backend_helper";
 
@@ -34,6 +33,27 @@ import {
 // 
 
 // Elections
+
+
+function* getElectorStatistics({ payload: election }) {
+  try {
+    const response = yield call(getElectorStatisticsApi, election);
+    yield put(ElectorApiResponseSuccess(GET_ELECTOR_STATISTICS, response.data));
+  } catch (error) {
+    yield put(ElectorApiResponseError(GET_ELECTOR_STATISTICS, error));
+  }
+}
+
+function* getElectorsByCategory({ payload: electorCategory }) {
+  console.log("are we dispatching?")
+  try {
+    const response = yield call(getElectorsByCategoryApi, electorCategory);
+    yield put(ElectorApiResponseSuccess(GET_ELECTORS_BY_CATEGORY, response.data));
+  } catch (error) {
+    yield put(ElectorApiResponseError(GET_ELECTORS_BY_CATEGORY, error));
+  }
+}
+
 function* addElector({ payload: elector }) {
   try {
     const response = yield call(AddElectorApi, elector);
@@ -43,37 +63,34 @@ function* addElector({ payload: elector }) {
   }
 }
 
-function* getElectorStatistics({ payload: election }) {
-  console.log("is there an issue with dispatch?")
-  try {
-    const response = yield call(getElectorStatisticsApi, election);
-    yield put(ElectorApiResponseSuccess(GET_ELECTOR_STATISTICS, response.data));
-  } catch (error) {
-    yield put(addElectorFail(GET_ELECTOR_STATISTICS, error));
-  }
-}
-
 // 
 // Watchers
 // 
 
 // Election Database
-// Election Parties Watchers
+export function* watchGetElectionStatistics() {
+  yield takeEvery(GET_ELECTOR_STATISTICS, getElectorStatistics);
+}
+
+export function* watchGetElectorsByCategory() {
+  yield takeEvery(GET_ELECTORS_BY_CATEGORY, getElectorsByCategory);
+}
+
+
 export function* watchAddElector() {
   yield takeEvery(ADD_ELECTOR, addElector);
 }
 
 
 // Election Statistics
-export function* watchGetElectionStatistics() {
-  yield takeEvery(GET_ELECTOR_STATISTICS, getElectorStatistics);
-}
+
 function* electionStatisticSaga() {
   yield all([
     // Election Dtabase
     fork(watchAddElector),
     // ElectionStatistics
     fork(watchGetElectionStatistics),
+    fork(watchGetElectorsByCategory),
   ]);
 }
 

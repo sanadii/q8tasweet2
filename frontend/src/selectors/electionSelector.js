@@ -17,7 +17,7 @@ export const electionSelector = createSelector(
     electionDetails: electionsState.electionDetails,
     previousElection: electionsState.electionDetails.previousElection,
     electionId: electionsState.electionDetails.id,
-    electionCommittees: electionsState.electionCommittees,
+    electionCommitteeSites: electionsState.electionCommitteeSites,
 
     electionCandidates: electionsState.electionCandidates,
     electionParties: electionsState.electionParties,

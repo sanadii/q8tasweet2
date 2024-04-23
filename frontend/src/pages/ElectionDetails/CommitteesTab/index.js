@@ -20,18 +20,18 @@ const GenderColorAvatar = ({ genderId }) => {
 };
 
 // Helper component for Committee Details
-const CommitteeDetails = ({ committee }) => (
+const CommitteeSiteDetails = ({ committeeSite }) => (
 
   <>
     <div class="mini-stats-wid d-flex align-items-center mt-3">
       <div class="flex-shrink-0 avatar-sm">
-        <span className={`mini-stat-icon avatar-title rounded-circle text-white bg-${committee.gender === "1" ? 'info' : 'pink'}`}>
-          {committee.id}
+        <span className={`mini-stat-icon avatar-title rounded-circle text-white bg-${committeeSite.gender === "1" ? 'info' : 'pink'}`}>
+          {committeeSite.id}
         </span>
       </div>
       <div class="flex-grow-1 ms-3">
-        <b><span className={`text-${committee.gender === "1" ? 'info' : 'pink'}`}>{committee.areaName} - {committee.gender === "1" ? 'ذكور' : 'إناث'}</span></b>
-        <h6 class="mb-1">{committee.name}</h6>
+        <b><span className={`text-${committeeSite.gender === "1" ? 'info' : 'pink'}`}>{committeeSite.areaName} - {committeeSite.gender === "1" ? 'ذكور' : 'إناث'}</span></b>
+        <h6 class="mb-1">{committeeSite.name}</h6>
       </div>
       <div class="flex-shrink-0">
       </div>
@@ -41,14 +41,14 @@ const CommitteeDetails = ({ committee }) => (
 
         <h4 className="fs-22 fw-semibold ff-secondary mb-0">
           <span className="counter-value" data-target="36894">
-            {committee.voterCount} ناخب
+            {committeeSite.voterCount} ناخب
           </span>
         </h4>
         <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
-          <span className="text-info">عدد اللجان: {committee.committeeCount}</span>
+          <span className="text-info">عدد اللجان: {committeeSite.committeeSiteCount}</span>
         </p>
       </div>
-      <DashboardCharts seriesData={committee.series} colors={committee.color} />
+      <DashboardCharts seriesData={committeeSite.series} colors={committeeSite.color} />
     </div>
   </>
 );
@@ -56,24 +56,24 @@ const CommitteeDetails = ({ committee }) => (
 
 
 // Helper component for SubCommittee details
-const SubCommitteeDetails = ({ committee, subCommittee }) => (
+const CommitteeDetails = ({ committeeSite, committee }) => (
   <Col xl={4}>
-    <Card className={`card-animate bg-soft-${committee.gender === "1" ? 'info' : 'pink'}`}>
+    <Card className={`card-animate bg-soft-${committeeSite.gender === "1" ? 'info' : 'pink'}`}>
       <CardBody>
         <div className="d-flex justify-content-between">
           <div>
             <div className="d-flex align-items-center py-2">
               <div class="avatar-xs me-2">
-                <span class={`avatar-title rounded-circle bg-white text-${committee.gender === "1" ? 'info' : 'pink'}`}>
-                  {subCommittee.id}
+                <span class={`avatar-title rounded-circle bg-white text-${committeeSite.gender === "1" ? 'info' : 'pink'}`}>
+                  {committee.id}
                 </span>
               </div>
               <span className="fw-medium fw-semibold text-black mb-0">
-                {subCommittee.areaName} - {subCommittee.type}
+                {committee.areaName} - {committee.type}
               </span>
             </div>
             <h4 className="fw-semibold text-black">
-              {subCommittee.letters}
+              {committee.letters}
 
             </h4>
             <p className="mb-0 text-muted"><span className="badge bg-light text-danger mb-0">
@@ -97,32 +97,32 @@ const Counters = ({ duration, startValue, endValue }) => (
 );
 
 const CommitteesTab = () => {
-  const { electionCommittees } = useSelector(electionSelector);
-  const [selectedCommittee, setSelectedCommittee] = useState(null);
+  const { electionCommitteeSites } = useSelector(electionSelector);
+  const [selectedCommitteesite, setSelectedCommitteeSite] = useState(null);
 
-  const toggleCommittee = (committeeId) => setSelectedCommittee(
-    prev => (prev === committeeId ? null : committeeId)
+  const toggleCommitteeSite = (committeeSiteId) => setSelectedCommitteeSite(
+    prev => (prev === committeeSiteId ? null : committeeSiteId)
   );
 
   return (
     <React.Fragment>
       <div className="d-flex flex-column h-100">
         <Row>
-          {electionCommittees && electionCommittees.map((committee, index) => (
-            <Col xl={selectedCommittee === committee.committeeId ? 12 : 3} md={6} key={index}>
+          {electionCommitteeSites && electionCommitteeSites.map((committeeSite, index) => (
+            <Col xl={selectedCommitteesite === committeeSite.id ? 12 : 3} md={6} key={index}>
               <Card
-                className={`card-animate overflow-hidden ${selectedCommittee === committee.committeeId ? "full-width-card" : ""}`}
-                onClick={() => toggleCommittee(committee.committeeId)}
+                className={`card-animate overflow-hidden ${selectedCommitteesite === committeeSite.id ? "full-width-card" : ""}`}
+                onClick={() => toggleCommitteeSite(committeeSite.id)}
               >
                 <CardBody>
-                  <CommitteeDetails committee={committee} />
-                  {selectedCommittee === committee.committeeId && (
+                  <CommitteeSiteDetails committeeSite={committeeSite} />
+                  {selectedCommitteesite === committeeSite.id && (
                     <div>
                       <hr />
                       <p>اللجان الأصلية والفرعية</p>
                       <Row>
-                        {committee.committeeSubsets.map((sub, idx) => (
-                          <SubCommitteeDetails key={idx} committee={committee} subCommittee={sub} />
+                        {committeeSite.committees.map((committee, idx) => (
+                          <CommitteeDetails key={idx} committeeSite={committeeSite} committee={committee} />
                         ))}
                       </Row>
                     </div>

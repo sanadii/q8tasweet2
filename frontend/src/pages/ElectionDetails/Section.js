@@ -62,7 +62,7 @@ const Section = ({ viewType }) => {
     isSubscriber
   } = usePermission();
 
-  const { election, electionCandidates, electionCampaigns, electionCommittees } = useSelector(electionSelector);
+  const { election, electionCandidates, electionCampaigns, electionCommitteeSites } = useSelector(electionSelector);
   const { categories } = useSelector(categorySelector);
   const categoryId = election.category;
   const category = categories.find(cat => cat.id === categoryId);

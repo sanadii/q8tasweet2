@@ -90,7 +90,8 @@ class CommitteeSite(models.Model):
 class Committee(models.Model):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
-    committee_site = models.ForeignKey(CommitteeSite, on_delete=models.CASCADE, related_name='committee_sites')
+    committee_site = models.ForeignKey(CommitteeSite, on_delete=models.CASCADE, related_name='committees')
+
     type = models.TextField(max_length=25, blank=True, null=True)
     main = models.BooleanField(default=False)
 

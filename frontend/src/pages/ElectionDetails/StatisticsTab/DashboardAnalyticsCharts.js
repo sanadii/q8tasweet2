@@ -4,19 +4,61 @@ import ReactApexChart from "react-apexcharts";
 import { getChartColorsArray } from "shared/components";
 
 
-const ElectorsOverviewCharts = ({ dataColors, dataSeries }) => {
+const ElectorsOverviewCharts = ({ electorsByCategories, electorsByFamilyArea, resultsToDisplay, resultByGender, dataSeries }) => {
 
-    const slicedSeries = dataSeries.slice(0, 20);
 
-    const seriesData = slicedSeries.map(elector => elector.count);
+    console.log("electorsByCategories: ", electorsByCategories)    // get the number of results to display
+
+    // Calculate the slice endpoint based on the length of dataSeries
+    const sliceEndpoint = Math.min(resultsToDisplay, dataSeries.length);
+
+    // Slice the dataSeries array
+    const slicedSeries = dataSeries.slice(0, sliceEndpoint);
     const categories = slicedSeries.map(elector => elector.category);
 
-    const series = [{
-        name: "Count",
-        data: seriesData
-    }];
+    const totalCount = slicedSeries.map(elector => elector.total);
+    const maleCount = slicedSeries.map(elector => elector.male);
+    const femaleCount = slicedSeries.map(elector => elector.female);
 
-    var barchartColors = getChartColorsArray(dataColors);
+
+    // Details FamilyArea
+    const areaCategories = electorsByCategories?.areaCategories;
+    const areaDataSeries = electorsByCategories?.areaDataSeries;
+    const areaFamilyDataSeries = electorsByCategories?.areaFamilyDataSeries;
+    const areaFamilyDataSeriesTotal = electorsByCategories?.areaFamilyDataSeries?.total;
+
+    const familyCategories = electorsByCategories?.familyCategories;
+    const familyDataSeries = electorsByCategories?.familyDataSeries;
+    const familyAreaDataSeries = electorsByCategories?.familyAreaDataSeries;
+    const familyAreaDataSeriesTotal = electorsByCategories?.familyAreaDataSeries?.total;
+
+
+
+    // General Settings
+    const resultTotal = [
+        { name: "الناخبين", data: totalCount }
+    ]
+    const resultsByCategory = [
+        { name: "رجال", data: maleCount },
+        { name: "نساء", data: femaleCount }
+    ]
+
+    const selecteData = {
+        totalElectors: "12",
+        totalCommittees: "12",
+        totalAreas: "12",
+        totalCommitteeSites: "12",
+        categories: resultByGender ? familyCategories : areaCategories,
+        series: resultByGender ? areaFamilyDataSeries : familyAreaDataSeries,
+        datacolors: resultByGender ? ['var(--vz-info)', 'var(--vz-pink)'] : ['var(--vz-success)'],
+    };
+
+    // const selecteData = {
+    //     categories: slicedSeries.map(elector => elector.category),
+    //     series: resultByGender ? resultsByCategory : resultTotal,
+    //     datacolors: resultByGender ? ['var(--vz-info)', 'var(--vz-pink)'] : ['var(--vz-success)'],
+    // };
+
 
     var options = {
         chart: {
@@ -43,7 +85,7 @@ const ElectorsOverviewCharts = ({ dataColors, dataSeries }) => {
             }
         },
         xaxis: {
-            categories: categories,
+            categories: selecteData.categories,
         },
         yaxis: {
             title: {
@@ -53,14 +95,14 @@ const ElectorsOverviewCharts = ({ dataColors, dataSeries }) => {
         grid: {
             borderColor: '#f1f1f1',
         },
-        colors: barchartColors,
+        colors: selecteData.dataColors,
     };
 
     return (
         <React.Fragment>
             <ReactApexChart dir="ltr"
                 options={options}
-                series={[{ data: seriesData }, { data: seriesData }]} // Ensure series data is correctly structured
+                series={selecteData.series} // Ensure series data is correctly structured
                 type="bar"
                 height="374"
                 className="apex-charts"
@@ -87,6 +129,7 @@ const FamilyCharts = ({ electorsByFamily, dataColors }) => {
     }];
 
     var barchartCountriesColors = getChartColorsArray(dataColors);
+
     var options = {
         chart: {
             type: 'bar',
@@ -137,221 +180,5 @@ const FamilyCharts = ({ electorsByFamily, dataColors }) => {
 
 
 
-const AudiencesCharts = ({ dataColors, series }) => {
-    var chartAudienceColumnChartsColors = getChartColorsArray(dataColors);
-    var options = {
-        chart: {
-            type: 'bar',
-            height: 309,
-            stacked: true,
-            toolbar: {
-                show: false,
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                columnWidth: '20%',
-                borderRadius: 6,
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        legend: {
-            show: true,
-            position: 'bottom',
-            horizontalAlign: 'center',
-            fontWeight: 400,
-            fontSize: '8px',
-            offsetX: 0,
-            offsetY: 0,
-            markers: {
-                width: 9,
-                height: 9,
-                radius: 4,
-            },
-        },
-        stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-        },
-        grid: {
-            show: false,
-        },
-        colors: chartAudienceColumnChartsColors,
-        xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            axisTicks: {
-                show: false,
-            },
-            axisBorder: {
-                show: true,
-                strokeDashArray: 1,
-                height: 1,
-                width: '100%',
-                offsetX: 0,
-                offsetY: 0
-            },
-        },
-        yaxis: {
-            show: false
-        },
-        fill: {
-            opacity: 1
-        }
-    };
-    return (
-        <React.Fragment>
-            <ReactApexChart dir="ltr"
-                options={options}
-                series={series}
-                type="bar"
-                height="309"
-                className="apex-charts"
-            />
-        </React.Fragment>
-    );
-};
 
-const AudiencesSessionsCharts = ({ dataColors, series }) => {
-    var chartHeatMapBasicColors = getChartColorsArray(dataColors);
-
-    var options = {
-        chart: {
-            height: 400,
-            type: 'heatmap',
-            offsetX: 0,
-            offsetY: -8,
-            toolbar: {
-                show: false
-            }
-        },
-        plotOptions: {
-            heatmap: {
-                colorScale: {
-                    ranges: [{
-                        from: 0,
-                        to: 50,
-                        color: chartHeatMapBasicColors[0]
-                    },
-                    {
-                        from: 51,
-                        to: 100,
-                        color: chartHeatMapBasicColors[1]
-                    },
-                    ],
-                },
-
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        legend: {
-            show: true,
-            horizontalAlign: 'center',
-            offsetX: 0,
-            offsetY: 20,
-            markers: {
-                width: 20,
-                height: 6,
-                radius: 2,
-            },
-            itemMargin: {
-                horizontal: 12,
-                vertical: 0
-            },
-        },
-        colors: chartHeatMapBasicColors,
-        tooltip: {
-            y: [{
-                formatter: function (y) {
-                    if (typeof y !== "undefined") {
-                        return y.toFixed(0) + "k";
-                    }
-                    return y;
-                }
-            }]
-        }
-    };
-    return (
-        <React.Fragment>
-            <ReactApexChart dir="ltr"
-                options={options}
-                series={series}
-                type="heatmap"
-                height="400"
-                className="apex-charts"
-            />
-        </React.Fragment>
-    );
-};
-
-
-
-const UsersByDeviceCharts = ({ dataColors, series }) => {
-    var dountchartUserDeviceColors = getChartColorsArray(dataColors);
-    const options = {
-        labels: ["Desktop", "Mobile", "Tablet"],
-        chart: {
-            type: "donut",
-            height: 219,
-        },
-        plotOptions: {
-            pie: {
-                size: 100,
-                donut: {
-                    size: "76%",
-                },
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        legend: {
-            show: false,
-            position: 'bottom',
-            horizontalAlign: 'center',
-            offsetX: 0,
-            offsetY: 0,
-            markers: {
-                width: 20,
-                height: 6,
-                radius: 2,
-            },
-            itemMargin: {
-                horizontal: 12,
-                vertical: 0
-            },
-        },
-        stroke: {
-            width: 0
-        },
-        yaxis: {
-            labels: {
-                formatter: function (value) {
-                    return value + 'k Users';
-                }
-            },
-            tickAmount: 4,
-            min: 0
-        },
-        colors: dountchartUserDeviceColors,
-    };
-    return (
-        <React.Fragment>
-            <ReactApexChart dir="ltr"
-                options={options}
-                series={series}
-                type="donut"
-                height="219"
-                className="apex-charts"
-            />
-        </React.Fragment>
-    );
-};
-
-
-export { ElectorsOverviewCharts, AudiencesCharts, AudiencesSessionsCharts, FamilyCharts, UsersByDeviceCharts };
+export { ElectorsOverviewCharts, FamilyCharts, };

@@ -9,35 +9,29 @@ from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # Models
 from apps.areas.models import Area
-
-from apps.committees.models import Committee, Committee
+from apps.committees.models import CommitteeSite, Committee
 
 # ,CommitteResult
-
 from apps.areas.serializers import AreaSerializer
 
 
 # Serializers
-class CommitteSerializer(serializers.ModelSerializer):
-    """Serializer for the Committee model."""
-
-    class Meta:
-        model = Committee
-        fields = ["id",
-                #   "serial", 
-                  "type", "letters", 
-                  "area_name",
-                  "committee"]
-
-
 class CommitteeSerializer(serializers.ModelSerializer):
     """Serializer for the Committee model."""
 
-    committees = CommitteSerializer(many=True, read_only=True)
+    class Meta:
+        model = Committee
+        fields = ["id", "type", "letters", "area_name", "committee_site"]
+
+
+class CommitteeSiteSerializer(serializers.ModelSerializer):
+    """Serializer for the Committee model."""
+
+    committees = CommitteeSerializer(many=True, read_only=True)
     # area = AreaSerializer(read_only=True)
 
     class Meta:
-        model = Committee
+        model = CommitteeSite
         fields = [
             'id',
             "serial",

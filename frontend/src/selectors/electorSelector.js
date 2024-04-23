@@ -6,12 +6,16 @@ const selectElectorState = state => state.Electors;
 export const electorSelector = createSelector(
   selectElectorState,
   (electorsState) => ({
+    // Election
+    electionStatistics: electorsState.electionStatistics,
+
     // Election Selectors
     electorsByFamily: electorsState.electorsByFamily,
-    electorsByGender: electorsState.electorsByGender,
     electorsByArea: electorsState.electorsByArea,
     electorsByCommittee: electorsState.electorsByCommittee,
-
+    electorsByCategories: electorsState.electorsByCategories,
+    electorsByFamilyArea: electorsState.electorsByCategories?.electorsByFamily || [],
+    
 
 
     // // Elections

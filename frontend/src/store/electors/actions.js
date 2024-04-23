@@ -5,6 +5,7 @@ import {
 
   // Database
   GET_ELECTORS,
+  GET_ELECTORS_BY_CATEGORY,
   ADD_ELECTOR,
   ADD_ELECTOR_SUCCESS,
   ADD_ELECTOR_FAIL,
@@ -19,10 +20,16 @@ import {
 
 
 // Election Committee Results
-export const getElectors = (voter) => ({
+export const getElectors = (elector) => ({
   type: GET_ELECTORS,
-  payload: voter,
+  payload: elector,
 });
+
+export const getElectorsByCategory = (elector) => ({
+  type: GET_ELECTORS_BY_CATEGORY,
+  payload: elector,
+});
+
 export const addElector = elector => ({
   type: ADD_ELECTOR,
   payload: elector,

@@ -287,8 +287,7 @@ def count_electors_by_category(request):
 
 def restructure_elector_data(elector_data):
     """
-    Restructure the list of electors data into the desired nested dictionary format,
-    enhancing the breakdown by family within areas similar to the areaFamilyDataSeries.
+    Restructure the list of electors data into the desired nested dictionary format.
     """
     # Initialize dictionaries to store data
     family_data = {}
@@ -301,32 +300,34 @@ def restructure_elector_data(elector_data):
         family = item["last_name"]
         area = item["area"]
         total = item["total"]
+        male = item["male"]
+        female = item["female"]
 
         # Update family data
         if family not in family_data:
-            family_data[family] = {"total": []}
+            family_data[family] = {"total": [], "male": [], "female": []}
         family_data[family]["total"].append(total)
+        family_data[family]["male"].append(male)
+        family_data[family]["female"].append(female)
 
         # Update area data
         if area not in area_data:
-            area_data[area] = {"total": 0}
+            area_data[area] = {"total": 0, "male": 0, "female": 0}
         area_data[area]["total"] += total
+        area_data[area]["male"] += male
+        area_data[area]["female"] += female
 
-        # # Update family-area data
-        # family_area_key = (family, area)
-        # if family_area_key not in family_area_data:
-        #     family_area_data[family_area_key] = {"total": []}
-        # family_area_data[family_area_key]["total"].append(total)
+        # Update family-area data
+        family_area_key = f"{family}-{area}"
+        if family_area_key not in family_area_data:
+            family_area_data[family_area_key] = {"total": total, "male": male, "female": female}
 
-        # Update area-family data
-        if family not in family_area_data:
-            family_area_data[family] = {"total": []}
-        family_area_data[family]["total"].append(total)
-        
         # Update area-family data
         if area not in area_family_data:
-            area_family_data[area] = {"total": []}
+            area_family_data[area] = {"total": [], "male": [], "female": []}
         area_family_data[area]["total"].append(total)
+        area_family_data[area]["male"].append(male)
+        area_family_data[area]["female"].append(female)
 
     # Create series for family categories
     family_categories = list(family_data.keys())
@@ -337,25 +338,41 @@ def restructure_elector_data(elector_data):
     # Create series for familyDataSeries
     family_data_series = [{
         "name": family,
-        "data": family_data[family]["total"]
+        "data": {
+            "total": family_data[family]["total"],
+            "male": family_data[family]["male"],
+            "female": family_data[family]["female"]
+        }
     } for family in family_categories]
 
     # Create series for areaDataSeries
     area_data_series = [{
         "name": area,
-        "data": area_data[area]["total"]
+        "data": {
+            "total": [area_data[area]["total"]],
+            "male": [area_data[area]["male"]],
+            "female": [area_data[area]["female"]]
+        }
     } for area in area_categories]
 
     # Create series for familyAreaDataSeries
     family_area_data_series = [{
         "name": family,
-        "data": family_area_data[family]["total"]
-    } for family in family_data]
+        "data": {
+            "total": sum(family_area_data[key]["total"] for key in family_area_data if key.startswith(f"{family}-")),
+            "male": sum(family_area_data[key]["male"] for key in family_area_data if key.startswith(f"{family}-")),
+            "female": sum(family_area_data[key]["female"] for key in family_area_data if key.startswith(f"{family}-"))
+        }
+    } for family in family_categories]
 
     # Create series for areaFamilyDataSeries
     area_family_data_series = [{
         "name": area,
-        "data": area_family_data[area]["total"]
+        "data": {
+            "total": area_family_data[area]["total"],
+            "male": area_family_data[area]["male"],
+            "female": area_family_data[area]["female"]
+        }
     } for area in area_categories]
 
     aggregated_electors = calculate_electors_in_categories(elector_data)
@@ -369,15 +386,6 @@ def restructure_elector_data(elector_data):
         "areaFamilyDataSeries": area_family_data_series,
         "aggregatedElectors": aggregated_electors,
     }
-
-def calculate_electors_in_categories(elector_data):
-    """
-    Placeholder function to calculate aggregated elector data.
-    You may define your own logic here as needed.
-    """
-    # Implement your aggregation logic based on the elector_data
-    return {}
-
 
 
 def calculate_electors_in_categories(elector_data):

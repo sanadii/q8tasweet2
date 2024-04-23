@@ -8,16 +8,19 @@ import {
   ADD_ELECTOR_FAIL,
 
   // ElectionStatistics
+  GET_ELECTORS_BY_CATEGORY,
   GET_ELECTOR_STATISTICS,
   GET_ELECTORS_BY_FAMILY,
 
 } from "./actionType";
 
 const IntialState = {
-  electorsByGender: [],
+  electionStatistics: [],
   electorsByFamily: [],
   electorsByArea: [],
   electorsByCommittee: [],
+  electionDataCategories: [],
+  electorsByCategories: []
 };
 
 const Electors = (state = IntialState, action) => {
@@ -28,13 +31,19 @@ const Electors = (state = IntialState, action) => {
         case GET_ELECTOR_STATISTICS:
           return {
             ...state,
-            electorsByGender: action.payload.data.electorsByGender,
+            electionStatistics: action.payload.data.electionStatistics,
             electorsByFamily: action.payload.data.electorsByFamily,
             electorsByArea: action.payload.data.electorsByArea,
             electorsByCommittee: action.payload.data.electorsByCommittee,
-            
             isElectionStatisticCreated: false,
             isElectionStatisticsuccess: true,
+          };
+        case GET_ELECTORS_BY_CATEGORY:
+          return {
+            ...state,
+            electorsByCategories: action.payload.data,
+            isElectionSCategoryCreated: false,
+            isElectionCategorySuccess: true,
           };
 
         case GET_ELECTORS_BY_FAMILY:
@@ -59,6 +68,15 @@ const Electors = (state = IntialState, action) => {
             isElectionStatisticsuccess: true,
           };
 
+        case GET_ELECTORS_BY_CATEGORY:
+          return {
+            ...state,
+            error: action.payload.error,
+            isElectorsByCategoryCreated: false,
+            isElectorsByCategorySuccess: true,
+          };
+
+
         case GET_ELECTORS_BY_FAMILY:
           return {
             ...state,
@@ -66,8 +84,6 @@ const Electors = (state = IntialState, action) => {
             isElectorsByFamilyCreated: false,
             isElectorsByFamilySuccess: true,
           };
-
-
         default:
           return { ...state };
       }
@@ -95,6 +111,13 @@ const Electors = (state = IntialState, action) => {
       return {
         ...state,
         isElectionStatisticCreated: false,
+      };
+    }
+
+    case GET_ELECTORS_BY_CATEGORY: {
+      return {
+        ...state,
+        isElectorsByCategoryCreated: false,
       };
     }
 

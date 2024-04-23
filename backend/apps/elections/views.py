@@ -39,15 +39,13 @@ from apps.committees.models import (
 
 # Schema Models
 from apps.committees.models import (
-    Committee, 
-    Committee,
-    # CommitteeResult
-    )
+    CommitteeSite,
+)
 
 # Schema Serializers
 from apps.committees.serializers import (
     CommitteeSerializer,
-    CommitteSerializer,
+    CommitteeSiteSerializer,
     # CommitteeResultSerializer,
 )
 
@@ -169,23 +167,37 @@ class GetElectionDetails(APIView):
         election = get_object_or_404(Election, slug=slug)
         context = {"request": request}
 
-        election_candidates = ElectionCandidate.objects.filter(election=election).prefetch_related("candidate").only("id")
+        election_candidates = (
+            ElectionCandidate.objects.filter(election=election)
+            .prefetch_related("candidate")
+            .only("id")
+        )
         election_parties = ElectionParty.objects.filter(election=election)
-        election_party_candidates = ElectionPartyCandidate.objects.filter(election_party__in=election_parties).select_related("candidate", "election_party", "election_party__election")
-        
+        election_party_candidates = ElectionPartyCandidate.objects.filter(
+            election_party__in=election_parties
+        ).select_related("candidate", "election_party", "election_party__election")
+
         response_data = {
             "electionDetails": ElectionSerializer(election, context=context).data,
-            "electionCandidates": ElectionCandidateSerializer(election_candidates, many=True, context=context).data,
-            "electionParties": ElectionPartySerializer(election_parties, many=True, context=context).data,
-            "electionPartyCandidates": ElectionPartyCandidateSerializer(election_party_candidates, many=True, context=context).data,
+            "electionCandidates": ElectionCandidateSerializer(
+                election_candidates, many=True, context=context
+            ).data,
+            "electionParties": ElectionPartySerializer(
+                election_parties, many=True, context=context
+            ).data,
+            "electionPartyCandidates": ElectionPartyCandidateSerializer(
+                election_party_candidates, many=True, context=context
+            ).data,
         }
 
         with schema_context(request, slug):
             try:
-                election_committees = Committee.objects.all()
-                if election_committees.exists():
-                    committees_data = CommitteeSerializer(election_committees, many=True, context=context).data
-                    response_data["electionCommittees"] = committees_data
+                election_committee_sites = CommitteeSite.objects.all()
+                if election_committee_sites.exists():
+                    committees_data = CommitteeSiteSerializer(
+                        election_committee_sites, many=True, context=context
+                    ).data
+                    response_data["electionCommitteeSites"] = committees_data
             except Exception:
                 # Add a note or error message indicating the absence of committee data
                 response_data["committeeDataError"] = "Failed to fetch committee data"
@@ -225,7 +237,7 @@ class GetElectionDetails(APIView):
 #             # Serialize data outside the context manager
 #             committees_data = CommitteeSerializer(election_committees, many=True, context=context).data
 
-       
+
 #         response_data = {
 #             "electionDetails": ElectionSerializer(election, context=context).data,
 #             "electionCandidates": ElectionCandidateSerializer(

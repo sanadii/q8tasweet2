@@ -126,15 +126,46 @@ export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_E
 export const getElectionSchemas = (electionSlug) => api.get(url.GET_ELECTION_SCHEMAS + "/" + electionSlug);
 export const getElectionSchemaDetails = (electionSlug) => api.get(url.GET_ELECTION_SCHEMA_DETAILS + "/" + electionSlug);
 export const addElectionSchema = (electionSlug) => api.get(url.ADD_ELECTION_SCHEMA + "/" + electionSlug);
-export const updateElectionSchema = (electionSlug) => api.update(url.UPDATE_ELECTION_SCHEMA + "/" +  electionSlug);
+export const updateElectionSchema = (electionSlug) => api.update(url.UPDATE_ELECTION_SCHEMA + "/" + electionSlug);
 export const deleteElectionSchema = (electionSlug) => api.delete(url.DELETE_ELECTION_SCHEMA + "/" + electionSlug);
 
 
 // ELECTION STATISTICS
 export const getElectors = (electionSlug) => api.get(url.GET_ELECTORS + "/" + electionSlug);
+// export const getElectorsByCategory = (electorCategories) => api.get(url.GET_ELECTORS_BY_CATEGORY + "/" + electorCategories);
+
+export const getElectorsByCategory = ({ slug, families, areas }) => {
+  let queryString = `?`;
+
+  if (families.length > 0) {
+    queryString += `families=${families.join(',')}`;
+  }
+  if (areas.length > 0) {
+    if (families.length > 0) queryString += '&';
+    queryString += `areas=${areas.join(',')}`;
+  }
+  // queryString += `slug=${slug.join(',')}`;
+
+
+
+  console.log("Final URL:", `${url.GET_ELECTORS_BY_CATEGORY}/${queryString}`);  // Debug: Check the final URL
+
+  return api.get(`${url.GET_ELECTORS_BY_CATEGORY}/${slug}/${queryString}`);
+};
+
+
+//   // Adjust the action to fetch data with family and area parameters
+//   export const getElectorsByCategory = (families, areas) => {
+//     const params = new URLSearchParams();
+//     if (families.length > 0) params.append('families', families.join(','));
+//     if (areas.length > 0) params.append('areas', areas.join(','));
+//     return api.get(`${url.GET_ELECTORS_BY_CATEGORY}?${params.toString()}`);
+//   };
+
+
 export const getElectorStatistics = (electionSlug) => api.get(url.GET_ELECTOR_STATISTICS + "/" + electionSlug);
 export const addElector = (electionSlug) => api.get(url.ADD_ELECTOR + "/" + electionSlug);
-export const updateElector = (electionSlug) => api.update(url.UPDATE_ELECTOR + "/" +  electionSlug);
+export const updateElector = (electionSlug) => api.update(url.UPDATE_ELECTOR + "/" + electionSlug);
 export const deleteElector = (electionSlug) => api.delete(url.DELETE_ELECTOR + "/" + electionSlug);
 
 
@@ -211,7 +242,7 @@ export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + use
 
 export const addNewUser = (user) => api.create(url.ADD_NEW_USER, user);
 // export const updateUser = (user) => api.update(url.UPDATE_USER_PROFILE + "/" + user.id, user);
-export const updateUser = (user) => api.put(url.UPDATE_USER_PROFILE , user);
+export const updateUser = (user) => api.put(url.UPDATE_USER_PROFILE, user);
 export const changeUserPassword = (user) => api.update(url.CHANGE_USER_PASSWORD + "/" + user.id, user);
 export const deleteUser = (user) => api.delete(url.DELETE_USER + "/" + user);
 
