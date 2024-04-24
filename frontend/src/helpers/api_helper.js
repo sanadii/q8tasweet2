@@ -1,10 +1,37 @@
 import axios from "axios";
 import { api } from "../config";
 
+
 // Default axios settings
 axios.defaults.baseURL = api.API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.withCredentials = true;
+function setCookie(name, object, days) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+  const cookieValue = JSON.stringify(object);
+  document.cookie = `${name}=${cookieValue};expires=${expires.toUTCString()};path=/`;
+}
+
+// Deserialize JSON string from cookie and return object
+function getCookies(name) {
+  const cookieName = `${name}=`;
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(';');
+  for (let i = 0; i < cookieArray.length; i++) {
+    let cookie = cookieArray[i];
+    while (cookie.charAt(0) === ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(cookieName) === 0) {
+      const cookieValue = cookie.substring(cookieName.length, cookie.length);
+      return JSON.parse(cookieValue);
+    }
+  }
+  return null;
+}
+
+
 
 // Request interceptor for setting the Authorization header
 axios.interceptors.request.use(
@@ -27,7 +54,7 @@ axios.interceptors.request.use(
 // Utility function to get a cookie by name
 function getCookie(name) {
   let cookieValue = null;
-  console.log("this is cookie in fun :----", document)
+  // console.log("this is cookie in fun :----", JSON.parse(document?.cookie))
   if (document?.cookie && document?.cookie !== '') {
     const cookies = document?.cookie?.split(';');
     for (let i = 0; i < cookies?.length; i++) {
@@ -135,4 +162,4 @@ const getToken = () => {
   return authUser ? JSON.parse(authUser).accessToken : null;
 };
 
-export { APIClient, setAuthorization, getLoggedinUser, getToken, getCookie };
+export { APIClient, setAuthorization, getLoggedinUser, getToken, getCookie, setCookie, getCookies };
