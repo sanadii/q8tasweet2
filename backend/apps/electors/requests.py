@@ -76,18 +76,18 @@ def get_aggregated_data_by_filters(families=None, areas=None):
     queryset = Elector.objects.all()
 
     if families:
-        queryset = queryset.filter(last_name__in=families)
+        queryset = queryset.filter(family__in=families)
     if areas:
         queryset = queryset.filter(area__in=areas)
 
     result = (
-        queryset.values("last_name", "area")
+        queryset.values("family", "area")
         .annotate(
             total=Count("id"),
             female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
             male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
         )
-        .order_by("last_name", "area")
+        .order_by("family", "area")
     )
 
     return list(result)
@@ -102,18 +102,18 @@ def get_aggregated_data_by_filters(families=None, areas=None):
     queryset = Elector.objects.all()
 
     if families:
-        queryset = queryset.filter(last_name__in=families)
+        queryset = queryset.filter(family__in=families)
     if areas:
         queryset = queryset.filter(area__in=areas)
 
     result = (
-        queryset.values("last_name", "area")
+        queryset.values("family", "area")
         .annotate(
             total=Count("id"),
             female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
             male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
         )
-        .order_by("last_name", "area")
+        .order_by("family", "area")
     )
 
     return result
@@ -121,19 +121,19 @@ def get_aggregated_data_by_filters(families=None, areas=None):
 
 def get_aggregated_family_data():
     families = (
-        Elector.objects.values("last_name")
+        Elector.objects.values("family")
         .annotate(
             total=Count("id"),
             female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
             male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
         )
-        .order_by("last_name")
+        .order_by("family")
     )
 
     family_data = {}
     for family in families:
         area_data = (
-            Elector.objects.filter(last_name=family["last_name"])
+            Elector.objects.filter(family=family["family"])
             .values("area")
             .annotate(
                 total=Count("id"),
@@ -145,7 +145,7 @@ def get_aggregated_family_data():
             .order_by("area")
         )
 
-        family_data[family["last_name"]] = {
+        family_data[family["family"]] = {
             "total": family["total"],
             "female": family["female"],
             "male": family["male"],
@@ -213,7 +213,7 @@ def count_election_statistics():
 
 def count_electors_by_family():
     """Count electors grouped by family name within the current schema."""
-    return get_aggregated_data(Elector, "last_name")
+    return get_aggregated_data(Elector, "family")
 
 
 def count_electors_by_area():
@@ -278,8 +278,6 @@ def count_electors_by_category(request):
     num_areas = len(areas) if areas else 0
 
     electors_by_categories = get_aggregated_data_by_filters(families, areas)
-
-
     electors_by_family = restructure_elector_data(electors_by_categories)
 
     return electors_by_family
@@ -298,7 +296,7 @@ def restructure_elector_data(elector_data):
 
     # Iterate over the elector data
     for item in elector_data:
-        family = item["last_name"]
+        family = item["family"]
         area = item["area"]
         total = item["total"]
 
@@ -309,8 +307,8 @@ def restructure_elector_data(elector_data):
 
         # Update area data
         if area not in area_data:
-            area_data[area] = {"total": 0}
-        area_data[area]["total"] += total
+            area_data[area] = {"total": []}
+        area_data[area]["total"].append(total)
 
         # # Update family-area data
         # family_area_key = (family, area)

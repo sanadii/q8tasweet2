@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         schema_name = 'national_assembly_5_2024'  # Add spaces around the schema name
-        file_path = "core/management/data/na_5_2024_electors.xlsx"
+        file_path = "core/management/data/na_5_2024_committees.xlsx"
 
         # Set the database schema
         with connection.cursor() as cursor:
@@ -30,10 +30,13 @@ class Command(BaseCommand):
         required_columns = [
             'id', 'full_name', 'first_name', 'second_name', 'third_name', 'fourth_name',
             'fifth_name', 'sixth_name', 'seventh_name', 'eighth_name', 'ninth_name', 'tenth_name',
-            'eleventh_name', 'twelveth_name', 'last_name', 'tribe', 'family', 'sect', 'gender',
+            'eleventh_name', 'twelveth_name', 'last_name',
+            'family', 'family_division', 'sect', 'gender',
             'circle', 'job', 'address', 'area', 'block', 'street', 'lane', 'house',
             'committee', 
-            'committee_area', 'committee_name', 'letter', 'code_number'
+            'committee_area', 'committee_name', 
+            'letter',
+            'code_number'
         ]
         if not set(required_columns).issubset(df.columns):
             missing_columns = set(required_columns) - set(df.columns)

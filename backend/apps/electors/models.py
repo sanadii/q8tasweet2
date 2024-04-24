@@ -28,8 +28,8 @@ class Elector(models.Model):
     eleventh_name = models.TextField(blank=True, null=True)
     twelveth_name = models.TextField(blank=True, null=True)
     last_name = models.TextField(blank=True, null=True)
-    tribe = models.TextField(blank=True, null=True)
     family = models.TextField(blank=True, null=True)
+    family_division = models.TextField(blank=True, null=True)
     sect = models.TextField(blank=True, null=True)
 
     # Elector Details
@@ -49,12 +49,7 @@ class Elector(models.Model):
 
     # Elector Election Details
     circle = models.TextField(blank=True, null=True)
-    # committee = models.ForeignKey(
-    #     Committee, on_delete=models.CASCADE, blank=True, null=True
-    # )
-
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE, related_name='committees')
-
     committee_area = models.TextField(blank=True, null=True)
     committee_name = models.TextField(blank=True, null=True)
     letter = models.TextField(blank=True, null=True)
