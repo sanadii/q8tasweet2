@@ -43,8 +43,6 @@ export const WebSocketProvider = ({ children, channel, slug, uuid }) => {
     useEffect(() => {
         if (lastMessage !== null) {
             const data = JSON.parse(lastMessage.data);
-            console.log("data:", data)
-            console.log("messageHistory: ", messageHistory)
 
             // Check if the message was sent by you to avoid processing it again
             const dataType = data.dataType

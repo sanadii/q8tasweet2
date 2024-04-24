@@ -134,15 +134,15 @@ export const deleteElectionSchema = (electionSlug) => api.delete(url.DELETE_ELEC
 export const getElectors = (electionSlug) => api.get(url.GET_ELECTORS + "/" + electionSlug);
 // export const getElectorsByCategory = (electorCategories) => api.get(url.GET_ELECTORS_BY_CATEGORY + "/" + electorCategories);
 
-export const getElectorsByCategory = ({ slug, family, families, areas }) => {
+export const getElectorsByCategory = ({ slug, families, areas }) => {
   let queryString = `?`;
 
   if (families.length > 0) {
     queryString += `families=${families.join(',')}`;
   }
-  if (family !=="") {
-    queryString += `family=${family.join(',')}`;
-  }
+  // if (family !=="") {
+  //   queryString += `family=${family.join(',')}`;
+  // }
   if (areas.length > 0) {
     if (families.length > 0) queryString += '&';
     queryString += `areas=${areas.join(',')}`;

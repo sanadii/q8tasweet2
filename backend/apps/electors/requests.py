@@ -9,12 +9,13 @@ from django.http import JsonResponse
 
 def get_aggregated_data(model, group_by_field=None):
     """
-    Helper function to aggregate data by a given field or overall if no field is provided.
+    Helper function to aggregate data by a given field or overall if no field is provided,
+    returning organized data including top 25 categories and counts for total, female, and male.
     """
-    queryset = model.objects.all()
     if group_by_field:
+        # Aggregating data by group field and ordering by total count in descending order
         queryset = (
-            queryset.values(group_by_field)
+            model.objects.values(group_by_field)
             .annotate(
                 total=Count("id"),
                 female=Count(
@@ -22,27 +23,31 @@ def get_aggregated_data(model, group_by_field=None):
                 ),
                 male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
             )
-            .order_by("-total")
-        )
+            .order_by("-total")[:25]
+        )  # Only take the top 25
     else:
-        queryset = queryset.aggregate(
+        # Aggregate total counts across all instances if no group field provided
+        aggregated_data = model.objects.aggregate(
             total=Count("id"),
             female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
             male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
         )
+        return aggregated_data  # Returns a single dictionary with aggregated counts
 
-    if group_by_field:
-        return [
-            {
-                "category": entry[group_by_field],
-                "total": entry["total"],
-                "female": entry["female"],
-                "male": entry["male"],
-            }
-            for entry in queryset
-        ]
-    else:
-        return queryset
+    # Preparing the structured response for grouped data
+    categories = [entry[group_by_field] for entry in queryset]
+    dataSeries = [entry["total"] for entry in queryset]
+    seriesFemale = [entry["female"] for entry in queryset]
+    seriesMale = [entry["male"] for entry in queryset]
+
+    return {
+        "categories": categories,
+        "dataSeries": [{"name": "الناخبين", "data": dataSeries}],
+        "dataSeriesByGender": [
+            {"name": "إناث", "data": seriesFemale},
+            {"name": "ذكور", "data": seriesMale},
+        ],
+    }
 
 
 def get_aggregated_committee_data():
@@ -240,7 +245,6 @@ def count_electors_by_gender():
         .order_by("gender")
     ]
 
-
     # election_data = {
     #     "total": Elector.objects.count(),
     #     "male": Elector.objects.filter(gender="1").count(),
@@ -254,8 +258,8 @@ def count_electors_by_gender():
     #     "male": Committee.objects.filter(committee_site__gender="1").count(),
     #     "female": Committee.objects.filter(committee_site__gender="2").count(),
     # }
-    
-    
+
+
 # #
 # #
 # getElector By Category
@@ -320,7 +324,7 @@ def restructure_elector_data(elector_data):
         if family not in family_area_data:
             family_area_data[family] = {"total": []}
         family_area_data[family]["total"].append(total)
-        
+
         # Update area-family data
         if area not in area_family_data:
             area_family_data[area] = {"total": []}
@@ -333,40 +337,44 @@ def restructure_elector_data(elector_data):
     area_categories = list(area_data.keys())
 
     # Create series for familyDataSeries
-    family_data_series = [{
-        "name": family,
-        "data": family_data[family]["total"]
-    } for family in family_categories]
+    family_data_series = [
+        {"name": family, "data": family_data[family]["total"]}
+        for family in family_categories
+    ]
 
     # Create series for areaDataSeries
-    area_data_series = [{
-        "name": area,
-        "data": area_data[area]["total"]
-    } for area in area_categories]
+    area_data_series = [
+        {"name": area, "data": area_data[area]["total"]} for area in area_categories
+    ]
 
     # Create series for familyAreaDataSeries
-    family_area_data_series = [{
-        "name": family,
-        "data": family_area_data[family]["total"]
-    } for family in family_data]
+    family_area_data_series = [
+        {"name": area, "data": area_family_data[area]["total"]}
+        for area in area_categories
+    ]
 
     # Create series for areaFamilyDataSeries
-    area_family_data_series = [{
-        "name": area,
-        "data": area_family_data[area]["total"]
-    } for area in area_categories]
+    area_family_data_series = [
+        {"name": family, "data": family_area_data[family]["total"]}
+        for family in family_data
+    ]
 
     aggregated_electors = calculate_electors_in_categories(elector_data)
 
     return {
-        "familyCategories": family_categories,
-        "areaCategories": area_categories,
-        "familyDataSeries": family_data_series,
-        "areaDataSeries": area_data_series,
-        "familyAreaDataSeries": family_area_data_series,
-        "areaFamilyDataSeries": area_family_data_series,
+        "familyAreaDetailed": {
+            "categories": family_categories,
+            "dataSeries": family_area_data_series,
+        },
+        "areaFamilyDetailed": {
+            "categories": area_categories,
+            "dataSeries": area_family_data_series,
+        },
+        # "familyDataSeries": family_data_series,
+        # "areaDataSeries": area_data_series,
         "aggregatedElectors": aggregated_electors,
     }
+
 
 def calculate_electors_in_categories(elector_data):
     """
@@ -375,7 +383,6 @@ def calculate_electors_in_categories(elector_data):
     """
     # Implement your aggregation logic based on the elector_data
     return {}
-
 
 
 def calculate_electors_in_categories(elector_data):

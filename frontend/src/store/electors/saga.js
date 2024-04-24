@@ -45,7 +45,6 @@ function* getElectorStatistics({ payload: election }) {
 }
 
 function* getElectorsByCategory({ payload: electorCategory }) {
-  console.log("are we dispatching?")
   try {
     const response = yield call(getElectorsByCategoryApi, electorCategory);
     yield put(ElectorApiResponseSuccess(GET_ELECTORS_BY_CATEGORY, response.data));

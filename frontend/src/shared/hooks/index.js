@@ -16,6 +16,9 @@ export { useFilter } from "./useFilter";
 // Elections & Election Categories
 export { useCategoryManager } from "./CategoryHooks";
 
+// Electors
+export { useElectorData } from "./useElectorData"
+export { useElectorDataSource } from "./useElectorDataSource"
 
 // Candidates
 

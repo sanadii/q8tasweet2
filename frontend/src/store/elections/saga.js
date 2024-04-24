@@ -270,18 +270,13 @@ function* onDeleteElectionCandidate({ payload: electionCandidate }) {
 // Election Candidate Votes
 function* onUpdateElectionCandidateVotes({ payload: electionCandidateVotes }) {
   try {
-    console.log("onUpdateElectionCandidateVotes saga started", electionCandidateVotes);
     const response = yield call(updateElectionCandidateVotes, electionCandidateVotes);
-    console.log("Received response from update API:", response);
     yield put(updateElectionCandidateVotesSuccess(response));
-    console.log("Dispatched updateElectionCandidateVotesSuccess");
     toast.success("تم تحديث نتائج الإنتخابات بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
-    console.error("Caught an error in onUpdateElectionCandidateVotes:", error);
     yield put(updateElectionCandidateVotesFail(error));
-    console.log("Dispatched updateElectionCandidateVotesFail");
     toast.error("خطأ في تحديث نتائج الإنتخابات", { autoClose: 2000 });
   }
 }
@@ -338,18 +333,13 @@ function* onDeleteElectionParty({ payload: electionParty }) {
 // Election Party Votes
 function* onUpdateElectionPartyVotes({ payload: electionPartyResults }) {
   try {
-    console.log("onUpdateElectionPartyVotes saga started", electionPartyResults);
     const response = yield call(updateElectionPartyResults, electionPartyResults);
-    console.log("Received response from update API:", response);
     yield put(updateElectionPartyResultsSuccess(response));
-    console.log("Dispatched updateElectionPartyResultsSuccess");
     toast.success("تم تحديث نتائج الإنتخابات بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
-    console.error("Caught an error in onUpdateElectionPartyVotes:", error);
     yield put(updateElectionPartyResultsFail(error));
-    console.log("Dispatched updateElectionPartyResultsFail");
     toast.error("خطأ في تحديث نتائج الإنتخابات", { autoClose: 2000 });
   }
 }
@@ -407,18 +397,13 @@ function* onDeleteElectionPartyCandidate({ payload: electionPartyCandidate }) {
 // Election PartyCandidate Votes
 function* onUpdateElectionPartyCandidateVotes({ payload: electionPartyCandidateVotes }) {
   try {
-    console.log("onUpdateElectionPartyCandidateVotes saga started", electionPartyCandidateVotes);
     const response = yield call(updateElectionPartyCandidateVotes, electionPartyCandidateVotes);
-    console.log("Received response from update API:", response);
     yield put(updateElectionPartyCandidateVotesSuccess(response));
-    console.log("Dispatched updateElectionPartyCandidateVotesSuccess");
     toast.success("تم تحديث نتائج الإنتخابات بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
-    console.error("Caught an error in onUpdateElectionPartyCandidateVotes:", error);
     yield put(updateElectionPartyCandidateVotesFail(error));
-    console.log("Dispatched updateElectionPartyCandidateVotesFail");
     toast.error("خطأ في تحديث نتائج الإنتخابات", { autoClose: 2000 });
   }
 }
@@ -489,9 +474,7 @@ function* onUpdateElectionCommittee({ payload: electionCommittee }) {
 
 function* onUpdateElectionCommitteeResults({ payload: electionResult }) {
   try {
-    console.log('Saga triggered with electionResult:', electionResult);
     const response = yield call(updateElectionResults, electionResult);
-    console.log('API response:', response);
     yield put(updateElectionResultsSuccess(response));
     toast.success("تم تحديث النتائج بنجاح", {
       autoClose: 2000,

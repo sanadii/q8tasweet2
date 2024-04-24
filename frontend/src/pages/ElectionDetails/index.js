@@ -38,7 +38,6 @@ const ElectionDetails = () => {
 
   }, [dispatch, election, slug]);
 
-console.log("hasElectionHasSchema: ", hasElectionHasSchema)
   useEffect(() => {
 
     // Fetch election details if the slug is available and candidate is empty

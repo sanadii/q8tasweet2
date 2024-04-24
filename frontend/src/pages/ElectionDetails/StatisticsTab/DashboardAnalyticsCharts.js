@@ -43,7 +43,7 @@ const ElectorsOverviewCharts = ({ dataSource }) => {
         },
         colors: dataSource?.colors,
     };
-    console.log("dataSource : ", dataSource)
+    // console.log("dataSource : ", dataSource)
 
     return (
         <React.Fragment>

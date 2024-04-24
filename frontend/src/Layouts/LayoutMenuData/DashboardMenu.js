@@ -187,7 +187,6 @@ export function useUserMenu(isCurrentState, setIsCurrentState) {
 export function useCampaignMenu(setIsCurrentState, currentCampaign) {
   const history = useNavigate();
 
-  console.log("currentCampaign: ", currentCampaign)
   const handleNavigation = (state, path) => {
     setIsCurrentState(state);
     history(path);

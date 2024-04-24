@@ -16,7 +16,6 @@ axios.interceptors.request.use(
 
     // Retrieve CSRF token from cookie and set it to header
     const csrfToken = getCookie('csrftoken');
-    console.log("csrfToken: ", csrfToken)
     if (csrfToken) {
       config.headers["X-CSRFToken"] = csrfToken;
     }
@@ -38,7 +37,6 @@ function getCookie(name) {
       }
     }
   }
-  console.log("cookieValue:", document);  // Added line to log the value
   return cookieValue;
 }
 
