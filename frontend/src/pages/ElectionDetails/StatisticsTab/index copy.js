@@ -6,8 +6,8 @@ import { electionSelector, electorSelector } from 'selectors';
 import { getElectorsByCategory } from "store/actions";
 
 // Related Components
-import { ElectorsOverviewCharts } from './DashboardAnalyticsCharts';
-import ElectorStatisticCounter from "./ElectorStatisticCounter"
+import { ElectorsOverviewCharts } from './Charts';
+import ElectorStatisticCounter from "./ChartCounter"
 
 // UI&UX
 import { Row, Col, Card, CardHeader, CardBody, Label, Input } from "reactstrap";

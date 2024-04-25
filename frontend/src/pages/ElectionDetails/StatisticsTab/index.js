@@ -1,15 +1,22 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { electionSelector, electorSelector } from 'selectors';
-import { useElectorData, useElectorDataSource } from "shared/hooks";  // Adjust the import path according to your project structure
+import useElectorData from "./useElectorData";
+import useElectorDataSource from "./useElectorDataSource";
 import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
-import { ElectorsOverviewCharts } from './DashboardAnalyticsCharts';
-import ElectorStatisticCounter from "./ElectorStatisticCounter";
+import { ElectorsOverviewCharts } from './Charts';
+import ElectorStatisticCounter from "./ChartCounter";
 import ChartLeftSideBar from "./ChartLeftSideBar";
 import classNames from 'classnames';
 
+import { useDispatch } from 'react-redux';
+import { getElectorsByCategory } from "store/actions";
+
+
 const StatisticsTab = () => {
-    const { electionStatistics, electorsByFamily, electorsByArea, electorsByCommittee } = useSelector(electorSelector);
+    const dispatch = useDispatch();
+
+    const { electionStatistics, electorsByFamily, electorsByArea, electorsByCommittee, electorsByCategories } = useSelector(electorSelector);
     const { election } = useSelector(electionSelector);
 
     const [options, setOptions] = useState({
@@ -19,7 +26,7 @@ const StatisticsTab = () => {
             areas: [],
             resultsToDisplay: "10",
             resultByGender: true, // Ensure this is correctly set initially
-            currentView: 'electorsByArea',
+            currentView: 'electorsByFamily',
         },
         detailedChart: {
             familyChart: false,
@@ -27,23 +34,44 @@ const StatisticsTab = () => {
             committeeChart: false,
         }
     });
-    
 
-    // Destructure for easier access
+    console.log("optionsoptions: ", options)
+    // // Destructure for easier access
     const { selected, detailedChart } = options;
 
-    useElectorData(selected, election.slug);  // Assuming dispatch is used within the hook
-    const dataSource = useElectorDataSource(electionStatistics, electorsByFamily, electorsByArea, electorsByCommittee, selected, detailedChart);
+    // useElectorData(selected, election.slug);  // Assuming dispatch is used within the hook
+    const dataSource = useElectorDataSource(electionStatistics, electorsByFamily, electorsByArea, electorsByCommittee, electorsByCategories, options);
 
     const handleChartTypeChange = useCallback((view) => {
         setOptions(prev => ({
             ...prev,
-            selected: {
-                ...prev.selected,
-                currentView: view
-            }
+            selected: { ...prev.selected, currentView: view }
         }));
     }, []);
+
+    const handleFamilySelectionChange = useCallback((type, selectedOptions) => {
+        setOptions(prev => ({
+            ...prev,
+            selected: { ...prev.selected, [type]: selectedOptions || [] },
+            detailedChart: { ...prev.detailedChart, familyChart: true }
+        }));
+
+    }, [setOptions]);
+
+    useEffect(() => {
+        const selectedFamilies = selected.families.map(option => option.value);
+        const selectedAreas = selected.areas.map(option => option.value);
+        dispatch(getElectorsByCategory({
+            slug: election.slug,
+            families: selectedFamilies,
+            areas: selectedAreas
+        }));
+
+    }, [dispatch, selected, election.slug]);  // Make sure this logs the updated state
+
+    console.log("THE SELECTED families:", selected.families);
+    console.log("THE SELECTED areas:", selected.areas);
+    console.log("THE SELECTED family: ", selected.family);
 
     return (
         <Row>
@@ -71,17 +99,7 @@ const StatisticsTab = () => {
                     <CardBody>
                         <div className="chat-wrapper d-lg-flex mt-n4">
                             <ChartLeftSideBar
-                                handleFamilySelectionChange={(type, option) => setOptions(prev => ({
-                                    ...prev,
-                                    selected: {
-                                        ...prev.selected,
-                                        [type]: option || [],
-                                    },
-                                    detailedChart: {
-                                        ...prev.detailedChart,
-                                        familyChart: true
-                                    }
-                                }))}
+                                handleFamilySelectionChange={handleFamilySelectionChange}
                                 setOptions={setOptions}
                                 options={options}
                             />

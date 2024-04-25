@@ -77,7 +77,7 @@ const ChartLeftSideBar = ({
                                     id="familySelect"
                                     value={options.selected.families}
                                     isMulti
-                                    onChange={(value) => handleFamilySelectionChange('families', value)}
+                                    onChange={selectedOptionArray => handleFamilySelectionChange('families', selectedOptionArray)}
                                     options={familyOptions}
                                     classNamePrefix="select"
                                 />
@@ -90,7 +90,7 @@ const ChartLeftSideBar = ({
                                 id="areaSelect"
                                 value={options.selected.areas}
                                 isMulti
-                                onChange={(value) => handleFamilySelectionChange('areas', value)}
+                                onChange={selectedOptionArray => handleFamilySelectionChange('areas', selectedOptionArray)}
                                 options={areaOptions}
                                 classNamePrefix="select"
                             />
