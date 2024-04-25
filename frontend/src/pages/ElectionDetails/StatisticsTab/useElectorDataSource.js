@@ -10,8 +10,8 @@ const useElectorDataSource = (electionStatistics, electorsByFamily, electorsByAr
 
     const electorsByFamilyDetailed = electorsByCategories?.familyAreaDetailed
 
-    console.log("detailedFamilyChart:", detailedFamilyChart)
-    console.log("detailedFamilyChart electorsByFamilyDetailed:", electorsByFamilyDetailed)
+    // console.log("detailedFamilyChart:", detailedFamilyChart)
+    // console.log("detailedFamilyChart electorsByFamilyDetailed:", electorsByFamilyDetailed)
 
 
     return useMemo(() => {

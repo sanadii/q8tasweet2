@@ -6,11 +6,11 @@ import useElectorDataSource from "./useElectorDataSource";
 import { Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 import { ElectorsOverviewCharts } from './Charts';
 import ElectorStatisticCounter from "./ChartCounter";
-import ChartLeftSideBar from "./ChartLeftSideBar";
+import ChartLeftSideBar from "./ChartSideBar";
 import classNames from 'classnames';
 
 import { useDispatch } from 'react-redux';
-import { getElectorsByCategory } from "store/actions";
+import { getElectorsByCategory, getElectorFamilyDivisions } from "store/actions";
 
 
 const StatisticsTab = () => {
@@ -21,7 +21,8 @@ const StatisticsTab = () => {
 
     const [options, setOptions] = useState({
         selected: {
-            familyDivision: [],
+            family: [],
+            familyDivisions: [],
             families: [],
             areas: [],
             resultsToDisplay: "10",
@@ -35,8 +36,7 @@ const StatisticsTab = () => {
         }
     });
 
-    console.log("optionsoptions: ", options)
-    // // Destructure for easier access
+    // Destructure for easier access
     const { selected, detailedChart } = options;
 
     // useElectorData(selected, election.slug);  // Assuming dispatch is used within the hook
@@ -61,17 +61,37 @@ const StatisticsTab = () => {
     useEffect(() => {
         const selectedFamilies = selected.families.map(option => option.value);
         const selectedAreas = selected.areas.map(option => option.value);
-        dispatch(getElectorsByCategory({
-            slug: election.slug,
-            families: selectedFamilies,
-            areas: selectedAreas
-        }));
 
-    }, [dispatch, selected, election.slug]);  // Make sure this logs the updated state
+        // family_division
+        const selectedFamily = selected.family.value;
+        const selectedFamilyDivisions = selected.familyDivisions.map(option => option.value);
+        // console.log("THE SELECTED family:", selectedFamily);
 
-    console.log("THE SELECTED families:", selected.families);
-    console.log("THE SELECTED areas:", selected.areas);
-    console.log("THE SELECTED family: ", selected.family);
+        if (selectedFamilies.length > 0 || selectedAreas.length > 0) {
+            dispatch(getElectorsByCategory({
+                slug: election.slug,
+                families: selectedFamilies,
+                areas: selectedAreas
+            }));
+
+        }
+
+        if (selectedFamily) {
+            // console.log("THE SELECTED families:", selectedFamilies);
+            // console.log("THE SELECTED areas:", selectedAreas);
+            console.log("THE SELECTED family: ", selectedFamily);
+            // console.log("THE SELECTED: dispatch(getElectorsFamilyDivisions");
+
+            const electorData = {
+                slug: election.slug,
+                family: selectedFamily
+
+            }
+            dispatch(getElectorFamilyDivisions(electorData));
+        }
+
+    }, [selected]);  // Make sure this logs the updated state
+
 
     return (
         <Row>

@@ -5,7 +5,7 @@ import { electionSelector, electorSelector } from 'selectors';
 import { ButtonGroup, Button, Label, Input } from "reactstrap";
 import Select from "react-select";
 
-const ChartLeftSideBar = ({
+const ChartSideBar = ({
     handleFamilySelectionChange,
     setOptions,
     options
@@ -156,4 +156,4 @@ const ChartLeftSideBar = ({
     );
 };
 
-export default ChartLeftSideBar;
+export default ChartSideBar;

@@ -25,6 +25,10 @@ from .requests import (
     # Categories
     count_electors_by_family,
     count_electors_by_category,
+    
+    
+    # Elector Family Division
+    get_elector_family_divisions,
 )
 
 
@@ -43,48 +47,6 @@ class GetAllElectors(APIView):
         return Response(
             {"data": {"allElectors": electors_serializer.data}, "code": 200}
         )
-
-
-class GetElectorsByCategory(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        slug = kwargs.get("slug")
-
-        with schema_context(request, slug):
-            if hasattr(request, "response"):
-                return request.response
-
-            elector_by_category = count_electors_by_category(request)
-
-            response_data = elector_by_category
-
-        return Response({"data": response_data}, status=200)
-
-
-class GetElectorStatistics(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        slug = kwargs.get("slug")
-
-        with schema_context(request, slug) as election:
-            if hasattr(request, "response"):
-                return request.response
-
-            election_statistics = count_election_statistics()
-            electors_by_family = count_electors_by_family()
-            electors_by_area = count_electors_by_area()
-            electors_by_committee = count_electors_by_committee()
-
-        response_data = {
-            "electionStatistics": election_statistics,
-            "electorsByFamily": electors_by_family,
-            "electorsByArea": electors_by_area,
-            "electorsByCommittee": electors_by_committee,
-        }
-
-        return Response({"data": response_data}, status=200)
 
 
 class GetElectors(APIView):
@@ -122,3 +84,60 @@ class GetElectors(APIView):
         }
 
         return Response(response_data)
+
+
+class GetElectorStatistics(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get("slug")
+
+        with schema_context(request, slug) as election:
+            if hasattr(request, "response"):
+                return request.response
+
+            election_statistics = count_election_statistics()
+            electors_by_family = count_electors_by_family()
+            electors_by_area = count_electors_by_area()
+            electors_by_committee = count_electors_by_committee()
+
+        response_data = {
+            "electionStatistics": election_statistics,
+            "electorsByFamily": electors_by_family,
+            "electorsByArea": electors_by_area,
+            "electorsByCommittee": electors_by_committee,
+        }
+
+        return Response({"data": response_data}, status=200)
+
+
+
+
+class GetElectorsByCategory(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get("slug")
+
+        with schema_context(request, slug):
+            if hasattr(request, "response"):
+                return request.response
+
+            elector_by_category = count_electors_by_category(request)
+
+            response_data = elector_by_category
+
+        return Response({"data": response_data}, status=200)
+
+class GetElectorFamilyDivisions(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, *args, ** kwargs):
+        slug = kwargs.get("slug")
+        with schema_context(request, slug):
+            if hasattr(request, "response"):
+                return request.response
+            
+            elector_family_division = get_elector_family_divisions(request)
+            response_data = elector_family_division
+        return Response({"data": response_data}, status=200)

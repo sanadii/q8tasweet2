@@ -12,6 +12,8 @@ import {
   GET_ELECTOR_STATISTICS,
   GET_ELECTORS_BY_FAMILY,
 
+
+  GET_ELECTOR_FAMILY_DIVISIONS,
 } from "./actionType";
 
 const IntialState = {
@@ -20,7 +22,11 @@ const IntialState = {
   electorsByArea: [],
   electorsByCommittee: [],
   electionDataCategories: [],
-  electorsByCategories: []
+  electorsByCategories: [],
+
+  // 
+  electorFamilyDivisions: []
+
 };
 
 const Electors = (state = IntialState, action) => {
@@ -54,6 +60,14 @@ const Electors = (state = IntialState, action) => {
             isElectionStatisticsuccess: true,
           };
 
+        case GET_ELECTOR_FAMILY_DIVISIONS:
+          return {
+            ...state,
+            electorFamilyDivisions: action.payload.date,
+            isElectorFamilyDivisionCreated: false,
+            isElectorFamilyDivisionSuccess: true,
+          }
+
         default:
           return { ...state };
       }
@@ -83,6 +97,13 @@ const Electors = (state = IntialState, action) => {
             error: action.payload.error,
             isElectorsByFamilyCreated: false,
             isElectorsByFamilySuccess: true,
+          };
+        case GET_ELECTOR_FAMILY_DIVISIONS:
+          return {
+            ...state,
+            error: action.payload.error,
+            isElectorFamilyDivisionCreated: false,
+            isElectorsFamilyDivisionSuccess: true,
           };
         default:
           return { ...state };

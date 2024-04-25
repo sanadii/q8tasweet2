@@ -15,6 +15,9 @@ import {
   GET_ELECTOR_STATISTICS,
   GET_ELECTORS_BY_FAMILY,
 
+  // Specifications
+  GET_ELECTOR_FAMILY_DIVISIONS,
+
 } from "./actionType";
 
 
@@ -66,3 +69,8 @@ export const getElectorsByFamily = (electors) => ({
   payload: electors
 });
 
+
+export const getElectorFamilyDivisions = (electorData) => ({
+  type: GET_ELECTOR_FAMILY_DIVISIONS,
+  payload: electorData
+})

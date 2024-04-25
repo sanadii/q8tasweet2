@@ -7,6 +7,8 @@ import {
   ADD_ELECTOR,
   GET_ELECTOR_STATISTICS,
   GET_ELECTORS_BY_CATEGORY,
+
+  GET_ELECTOR_FAMILY_DIVISIONS,
 } from "./actionType";
 
 
@@ -25,6 +27,9 @@ import {
   addElector as AddElectorApi,
   getElectorsByCategory as getElectorsByCategoryApi,
   getElectorStatistics as getElectorStatisticsApi,
+
+  // 
+  getElectorFamilyDivisions as getElectorFamilyDivisionsApi,
 } from "../../helpers/backend_helper";
 
 
@@ -53,6 +58,15 @@ function* getElectorsByCategory({ payload: electorCategory }) {
   }
 }
 
+function* getElectorFamilyDivisions({ payload: electorData }) {
+  try {
+    const response = yield call(getElectorFamilyDivisionsApi, electorData);
+    yield put(ElectorApiResponseSuccess(GET_ELECTOR_FAMILY_DIVISIONS, response.data));
+  } catch (error) {
+    yield put(ElectorApiResponseError(GET_ELECTOR_FAMILY_DIVISIONS, error));
+  }
+}
+
 function* addElector({ payload: elector }) {
   try {
     const response = yield call(AddElectorApi, elector);
@@ -76,6 +90,10 @@ export function* watchGetElectorsByCategory() {
 }
 
 
+export function* watchGetElectorFamilyDivisions() {
+  yield takeEvery(GET_ELECTOR_FAMILY_DIVISIONS, getElectorFamilyDivisions);
+}
+
 export function* watchAddElector() {
   yield takeEvery(ADD_ELECTOR, addElector);
 }
@@ -90,6 +108,9 @@ function* electionStatisticSaga() {
     // ElectionStatistics
     fork(watchGetElectionStatistics),
     fork(watchGetElectorsByCategory),
+
+    // 
+    fork(watchGetElectorFamilyDivisions),
   ]);
 }
 

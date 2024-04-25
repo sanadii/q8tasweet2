@@ -10,4 +10,6 @@ urlpatterns = [
     path("getElectorStatistics/<slug:slug>", GetElectorStatistics.as_view(), name="GetElectorStatistics"),
     path("getElectorsByCategory/<slug:slug>/", GetElectorsByCategory.as_view(), name="getElectorsByCategory"),
     # path("getElectors", GetElectors.as_view(), name="GetElectors"),
+    
+    path("getElectorFamilyDivisions/<slug:slug>", GetElectorFamilyDivisions.as_view(), name="GetElectorFamilyDivisions")
 ]
