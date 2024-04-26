@@ -8,7 +8,6 @@ import NotificationPanel from "./NotificationPanel";
 import { getCookie } from '../../helpers/api_helper';
 
 export const Dashboard = () => {
-    // getCookie('user_id')
     return (
         <React.Fragment>
             <div className="page-content">

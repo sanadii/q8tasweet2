@@ -2,11 +2,11 @@
 Alright, considering that you're using JWT with both `access_token` and `refresh_token`, let's go step by step:
 
 **1. Update Session Storage Key**
-Currently, you're trying to get the token from `sessionStorage` with a key named `authUser`.
+Currently, you're trying to get the token from `localStorage` with a key named `authUser`.
 But based on the provided session storage data, you should be referencing `access_token` inside it:
 
 ```javascript
-const token = JSON.parse(sessionStorage.getItem("status")) ? JSON.parse(sessionStorage.getItem("status")).access_token : null;
+const token = JSON.parse(localStorage.getItem("status")) ? JSON.parse(localStorage.getItem("status")).access_token : null;
 ```
 
 **2. Set Authorization Header Dynamically**
@@ -19,10 +19,10 @@ import { setAuthorization } from './api_helper';
 setAuthorization(response.data.access_token);
 ```
 
-Make sure to also store both the `access_token` and `refresh_token` in the `sessionStorage`:
+Make sure to also store both the `access_token` and `refresh_token` in the `localStorage`:
 
 ```javascript
-sessionStorage.setItem('status', JSON.stringify(response.data));
+localStorage.setItem('status', JSON.stringify(response.data));
 ```
 
 **3. Handle Token Expiry (Optional, but Recommended)**
@@ -31,13 +31,13 @@ JWT `access_token` often has a short expiration time for security reasons. You c
 To achieve this, you can set up an axios response interceptor in `api_helper.js`. When a request returns a 401, use the `refresh_token` to get a new `access_token`, set this new token as the default authorization header, and then retry the original request.
 
 **4. Review User Authentication Checks**
-In `backend_helper.js`, you have the `isUserAuthenticated` function which checks the existence of a user in `localStorage`. Ensure that this check is consistent with where you store user data. If you plan to store user info in `sessionStorage`, then your check should also be against `sessionStorage`.
+In `backend_helper.js`, you have the `isUserAuthenticated` function which checks the existence of a user in `localStorage`. Ensure that this check is consistent with where you store user data. If you plan to store user info in `localStorage`, then your check should also be against `localStorage`.
 
 **5. Cleanup**
 Currently, you have two functions `getLoggedinUser` in `api_helper.js` and `getLoggedInUser` in `backend_helper.js` which essentially do the same thing. It's better to keep just one and use it consistently.
 
 **6. Refresh Token Logic**
-Later on, when you handle token expiration, you'd need to use the `refresh_token` to obtain a new `access_token`. When you do this, ensure that the new `access_token` is saved to `sessionStorage` and also set as the default authorization header for axios. You can call `setAuthorization` again with the new token.
+Later on, when you handle token expiration, you'd need to use the `refresh_token` to obtain a new `access_token`. When you do this, ensure that the new `access_token` is saved to `localStorage` and also set as the default authorization header for axios. You can call `setAuthorization` again with the new token.
 
 To sum up:
 

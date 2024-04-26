@@ -1,7 +1,7 @@
 // React & Redux core
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Store & Selectors
 import { loginUser, socialLogin, resetLoginFlag } from "store/actions";
@@ -18,10 +18,13 @@ import { withRouter, FormFields } from "shared/components";
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useProfile } from "shared/hooks";
 
 const Login = (props) => {
   document.title = "تسجيل الدخول | كويت تصويت";
   const dispatch = useDispatch();
+  const { token } = useProfile();
+  const navigate = useNavigate();
 
   const { user = null, loading, errorMsg = "", error = false } = useSelector(state => state.Login);
 
@@ -70,7 +73,9 @@ const Login = (props) => {
       dispatch(loginUser(values, props.router.navigate));
     },
   });
-
+  if (token) {
+    navigate('/dashboard')
+  }
   return (
     <React.Fragment>
       <ParticlesAuth>

@@ -43,6 +43,8 @@
  * Licensed under the MIT license.
  */
 
+/*! js-cookie v3.0.5 | MIT */
+
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
 /*! svg.draggable.js - v2.2.2 - 2019-01-08

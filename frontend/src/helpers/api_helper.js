@@ -9,11 +9,10 @@ axios.defaults.withCredentials = true;
 // Request interceptor for setting the Authorization header
 axios.interceptors.request.use(
   (config) => {
-    const token = JSON.parse(sessionStorage.getItem("authUser"))?.accessToken;
+    const token = JSON.parse(localStorage.getItem("authUser"))?.accessToken;
     if (token) {
       config.headers["Authorization"] = "Bearer " + token;
     }
-
     // Retrieve CSRF token from cookie and set it to header
     const csrfToken = getCookie('csrftoken');
     if (csrfToken) {
@@ -27,7 +26,6 @@ axios.interceptors.request.use(
 // Utility function to get a cookie by name
 function getCookie(name) {
   let cookieValue = null;
-  console.log("this is cookie in fun :----", document)
   if (document?.cookie && document?.cookie !== '') {
     const cookies = document?.cookie?.split(';');
     for (let i = 0; i < cookies?.length; i++) {
@@ -37,8 +35,6 @@ function getCookie(name) {
         break;
       }
     }
-  } else {
-    alert('cookie not found')
   }
   return cookieValue;
 }
@@ -53,10 +49,9 @@ axios.interceptors.response.use(
 
       // Check for unauthorized error
       if (status === 401) {
-        sessionStorage.removeItem("authUser");
+        localStorage.removeItem("authUser");
         window.location.href = "/login";
       }
-
       switch (status) {
         case 500:
           message = "خطأ في الخادم الداخلي";
@@ -123,7 +118,7 @@ class APIClient {
 }
 
 const getLoggedinUser = () => {
-  const user = sessionStorage.getItem("authUser");
+  const user = localStorage.getItem("authUser");
   return user ? JSON.parse(user) : null;
 };
 
@@ -131,7 +126,7 @@ const getLoggedinUser = () => {
 // Create a function here called getToken
 // Utility function to get the access token
 const getToken = () => {
-  const authUser = sessionStorage.getItem("authUser");
+  const authUser = localStorage.getItem("authUser");
   return authUser ? JSON.parse(authUser).accessToken : null;
 };
 

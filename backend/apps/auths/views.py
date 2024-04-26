@@ -69,7 +69,7 @@ class UserLogin(APIView):
             max_age=60 * 60 * 24 * 60,  
             secure=True, 
             httponly=True, 
-            samesite='Strict'  
+            samesite='Strict'
         )
 
         return response
