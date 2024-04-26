@@ -3,7 +3,6 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 import jwt
-import json
 
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -14,7 +13,7 @@ from rest_framework.views import APIView
 from .models import Group, GroupCategories
 from .serializers import UserSerializer, UserLoginSerializer, ContentTypeSerializer, GroupPermissionSerializer, GroupSerializer, UserImageSerializer
 
-from utils.views import get_current_user_campaigns 
+from utils.views import get_current_user_campaigns,set_cookie 
 # from utils.auths import generate_username
 from django.core.mail import send_mail,EmailMultiAlternatives
 from django.utils.crypto import get_random_string
@@ -34,6 +33,9 @@ from django.core.files.storage import FileSystemStorage
 from django.middleware import csrf
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import json
+User = get_user_model()
+from django.middleware.csrf import get_token
 
 class UserLogin(APIView):
     permission_classes = [AllowAny]
@@ -50,33 +52,23 @@ class UserLogin(APIView):
 
         refresh = RefreshToken.for_user(user)
         access_token = str(AccessToken().for_user(user))
-
+        csrf_token = get_token(request)  # Get CSRF token from the request
         user_data = UserLoginSerializer(user).data
-
+        
         response_data = {
             "status": "success",
             "refresh_token": str(refresh),
             "access_token": access_token,
+            "csrf_token": csrf_token,
             "data": user_data,
         }
 
         response = Response(response_data)
         response_data_json = json.dumps(response_data)
-
-        response.set_cookie(
-            key='user_data_cookie',  
-            value=response_data_json,  
-            max_age=60 * 60 * 24 * 60,  
-            secure=True, 
-            httponly=True, 
-            samesite='Strict'  
-        )
-
+        set_cookie(response, 'user_data_cookie', response_data_json)
         return response
 
 
-
-User = get_user_model()
 
 class UserRegister(APIView):
     permission_classes = [AllowAny]
