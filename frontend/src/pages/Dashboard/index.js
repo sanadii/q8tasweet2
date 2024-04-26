@@ -5,9 +5,10 @@ import { Container, Row } from "reactstrap";
 import { BreadCrumb } from "shared/components";
 import WebSocketChannels from "./NotificationPanel";
 import NotificationPanel from "./NotificationPanel";
+import { getCookie } from '../../helpers/api_helper';
 
-export const Dashboard = ({ }) => {
-
+export const Dashboard = () => {
+    // getCookie('user_id')
     return (
         <React.Fragment>
             <div className="page-content">

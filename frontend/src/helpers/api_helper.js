@@ -27,6 +27,7 @@ axios.interceptors.request.use(
 // Utility function to get a cookie by name
 function getCookie(name) {
   let cookieValue = null;
+  console.log("this is cookie in fun :----", document)
   if (document?.cookie && document?.cookie !== '') {
     const cookies = document?.cookie?.split(';');
     for (let i = 0; i < cookies?.length; i++) {
@@ -36,6 +37,8 @@ function getCookie(name) {
         break;
       }
     }
+  } else {
+    alert('cookie not found')
   }
   return cookieValue;
 }
@@ -132,4 +135,4 @@ const getToken = () => {
   return authUser ? JSON.parse(authUser).accessToken : null;
 };
 
-export { APIClient, setAuthorization, getLoggedinUser, getToken };
+export { APIClient, setAuthorization, getLoggedinUser, getToken, getCookie };
