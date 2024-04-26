@@ -14,10 +14,10 @@ urlpatterns = [
     path("userRegister", UserRegister.as_view(), name="UserRegister"),
 
     # --Comment Before ----
-    # path("postProfile/", UserProfileUpdateAPIView.as_view(), name="user_profile_update"),
+    path("postProfile/", UpdateProfile.as_view(), name="user_profile_update"),
 
     # New Url for Update Profile ---
-    path('update-profile',UpdateProfile.as_view(),name="update-profile"),
+    #path('update-profile',UpdateProfile.as_view(),name="update-profile"),
     path('uploadImage',UpdateProfileImage.as_view(),name="uploadImage"),
     # path("user/", UserCreate.as_view(), name="listpost"),
     path("auth/", include("rest_framework.urls", namespace="rest_framework")),
@@ -63,5 +63,6 @@ urlpatterns = [
     #------ Forgot password------
     path('forgot-password',ForgotPassword.as_view(),name="forgot-password"),
     path('reset-password',ResetPassword.as_view(),name="reset-password"),
+
 
 ]

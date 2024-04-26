@@ -11,7 +11,6 @@ import CoverPasswReset from "pages/AuthenticationInner/PasswordReset/CoverPasswR
 
 import BasicLockScreen from "pages/AuthenticationInner/LockScreen/BasicLockScr";
 import CoverLockScreen from "pages/AuthenticationInner/LockScreen/CoverLockScr";
-
 import BasicLogout from "pages/AuthenticationInner/Logout/BasicLogout";
 import CoverLogout from "pages/AuthenticationInner/Logout/CoverLogout";
 

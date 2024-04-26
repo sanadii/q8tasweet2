@@ -30,6 +30,7 @@ const AuthProtected = (props) => {
     );
   }
 
+
   if (!user || user.length === 0) {
     return <div>Loading...</div>;
   }
