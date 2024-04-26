@@ -64,8 +64,9 @@ class UserLogin(APIView):
         }
 
         response = Response(response_data)
-        response_data_json = json.dumps(response_data)
-        set_cookie(response, 'user_data_cookie', response_data_json)
+        # response_data_json = json.dumps(response_data)
+        # set_cookie(response, 'user_data_cookie', response_data_json)
+        set_cookie(response, 'csrftoken', csrf_token)
         return response
 
 
