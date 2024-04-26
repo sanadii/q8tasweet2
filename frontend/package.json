@@ -1,7 +1,7 @@
 {
   "name": "q8tasweet",
   "version": "1.0.1",
-  "homepage":"/",
+  "homepage": "http://127.0.0.1:8000/",
   "private": true,
   "license": "Q8VISION",
   "dependencies": {
