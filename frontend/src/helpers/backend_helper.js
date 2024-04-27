@@ -162,7 +162,7 @@ export const getElectorsByCategory = ({ slug, families, areas }) => {
 //     return api.get(`${url.GET_ELECTORS_BY_CATEGORY}?${params.toString()}`);
 //   };
 
-export const getElectorFamilyDivisions = (electorData) => api.get(url.GET_ELECTOR_FAMILY_DIVISIONS + "/" + electorData.slug, electorData);
+export const getElectorFamilyDivisions = (electorData) => api.get(url.GET_ELECTOR_FAMILY_DIVISIONS, electorData);
 
 export const getElectorStatistics = (electionSlug) => api.get(url.GET_ELECTOR_STATISTICS + "/" + electionSlug);
 export const addElector = (electionSlug) => api.get(url.ADD_ELECTOR + "/" + electionSlug);

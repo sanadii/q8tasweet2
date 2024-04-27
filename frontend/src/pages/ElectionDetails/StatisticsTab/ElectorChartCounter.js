@@ -3,7 +3,7 @@ import React from "react";
 import { Row, Col, CardHeader } from "reactstrap";
 import CountUp from "react-countup";
 
-const ElectorStatisticCounter = ({ dataSource }) => {
+const ElectorChartCounter = ({ dataSource }) => {
 
     return (
         <CardHeader className="p-0 border-0 bg-light-subtle">
@@ -98,4 +98,4 @@ const ElectorStatisticCounter = ({ dataSource }) => {
     )
 }
 
-export default ElectorStatisticCounter
+export default ElectorChartCounter

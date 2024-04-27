@@ -7,7 +7,7 @@ import { getElectorsByCategory } from "store/actions";
 
 // Related Components
 import { ElectorsOverviewCharts } from './Charts';
-import ElectorStatisticCounter from "./ChartCounter"
+import ElectorStatisticCounter from "./ElectorChartCounter"
 
 // UI&UX
 import { Row, Col, Card, CardHeader, CardBody, Label, Input } from "reactstrap";

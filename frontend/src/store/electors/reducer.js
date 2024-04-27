@@ -25,7 +25,7 @@ const IntialState = {
   electorsByCategories: [],
 
   // 
-  electorFamilyDivisions: []
+  electorsByFamilyDivision: [],
 
 };
 
@@ -63,7 +63,7 @@ const Electors = (state = IntialState, action) => {
         case GET_ELECTOR_FAMILY_DIVISIONS:
           return {
             ...state,
-            electorFamilyDivisions: action.payload.date,
+            electorsByFamilyDivision: action.payload.data,
             isElectorFamilyDivisionCreated: false,
             isElectorFamilyDivisionSuccess: true,
           }

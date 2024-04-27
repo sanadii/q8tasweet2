@@ -29,7 +29,7 @@ class Elector(models.Model):
     twelveth_name = models.TextField(blank=True, null=True)
     last_name = models.TextField(blank=True, null=True)
     family = models.TextField(blank=True, null=True)
-    family_division = models.TextField(blank=True, null=True)
+    branch = models.TextField(blank=True, null=True)
     sect = models.TextField(blank=True, null=True)
 
     # Elector Details

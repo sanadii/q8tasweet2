@@ -74,59 +74,27 @@ def get_aggregated_committee_data():
     }
 
 
-def get_aggregated_data_by_filters(families=None, areas=None):
-    """
-    Aggregate data for electors filtering by families and areas.
-    """
-    queryset = Elector.objects.all()
+# def get_aggregated_data_by_family_area(families=None, areas=None, family=None):
+#     """
+#     Aggregate data for electors filtering by families and areas.
+#     """
+#     queryset = Elector.objects.all()
 
-    if families:
-        queryset = queryset.filter(family__in=families)
-    if areas:
-        queryset = queryset.filter(area__in=areas)
+#     if families:
+#         queryset = queryset.filter(family__in=families)
+#     if areas:
+#         queryset = queryset.filter(area__in=areas)
 
-    result = (
-        queryset.values("family", "area")
-        .annotate(
-            total=Count("id"),
-            female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
-            male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
-        )
-        .order_by("family", "area")
-    )
+#     if family:
+#         queryset = Elector.objects.filter(family=family) if family else Elector.objects.all()
 
-    return list(result)
+#     result = queryset.values("family", "area").annotate(
+#         total=Count("id"),
+#         female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
+#         male=Count(Case(When(gender="1", then=1), output_field=IntegerField()))
+#     ).order_by("family", "area")
 
-    return list(result)  # Make sure to convert QuerySet to list if returning directly
-
-
-def get_aggregated_data_by_filters(families=None, areas=None, family=None):
-    """
-    Aggregate data for electors filtering by families and areas.
-    """
-    queryset = Elector.objects.all()
-
-    if families:
-        queryset = queryset.filter(family__in=families)
-    if areas:
-        queryset = queryset.filter(area__in=areas)
-
-    # Family/FamilyDivision
-    if family:
-        queryset = queryset.filter(family__in=family)
-        
-        
-    result = (
-        queryset.values("family", "area")
-        .annotate(
-            total=Count("id"),
-            female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
-            male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
-        )
-        .order_by("family", "area")
-    )
-
-    return result
+#     return result
 
 
 def get_aggregated_family_data():
@@ -176,7 +144,7 @@ def count_electors_by_family(request):
     )
     areas = request.GET.get("areas", "").split(",") if request.GET.get("areas") else []
 
-    electors_by_categories = get_aggregated_data_by_filters(
+    electors_by_categories = get_aggregated_data_by_family_area(
         families=families, areas=areas
     )
     structured_data = restructure_elector_data(electors_by_categories)
@@ -194,7 +162,7 @@ def count_electors_by_family(request):
     )
     areas = request.GET.get("areas", "").split(",") if request.GET.get("areas") else []
 
-    electors_by_categories = get_aggregated_data_by_filters(
+    electors_by_categories = get_aggregated_data_by_family_area(
         families=families, areas=areas
     )
     structured_data = restructure_elector_data(electors_by_categories)
@@ -265,8 +233,102 @@ def count_electors_by_gender():
     # }
 
 
+# def calculate_electors_in_categories(elector_data):
+#     """
+#     Placeholder function to calculate aggregated elector data.
+#     You may define your own logic here as needed.
+#     """
+#     # Implement your aggregation logic based on the elector_data
+#     return {}
 
-def restructure_elector_data(elector_data):
+
+def calculate_electors_in_categories(elector_data):
+    """
+    Restructure the list of electors data into the desired nested dictionary format.
+    """
+    total_electors = 0  # Initialize total electors count
+    total_female = 0  # Initialize total female electors count
+    total_male = 0  # Initialize total male electors count
+
+    for item in elector_data:
+
+        # Update total electors count
+        total_electors += item["total"]
+
+        # Update female and male electors count
+        total_female += item["female"]
+        total_male += item["male"]
+
+    return {
+        "total": total_electors,
+        "female": total_female,
+        "male": total_male,
+    }
+
+
+# #
+# #
+# getElector By Category
+# #
+# #
+
+
+def count_electors_by_category(request):
+    """
+    Fetches and counts elector data by family and area while providing overall election data.
+    """
+    families = (
+        request.GET.get("families", "").split(",")
+        if request.GET.get("families")
+        else None
+    )
+    areas = (
+        request.GET.get("areas", "").split(",")
+        if request.GET.get("areas")
+        else None
+    )
+    
+    num_areas = len(areas) if areas else 0
+
+    electors_by_categories = get_aggregated_data_by_family_area(families, areas)
+    electors_by_family = restructure_data_by_family_area(electors_by_categories)
+
+    return electors_by_family
+
+
+def get_aggregated_data_by_family_area(families=None, areas=None, family=None):
+    """
+    Aggregate data for electors filtering by families and areas.
+    """
+    queryset = Elector.objects.all()
+
+    if families:
+        queryset = queryset.filter(family__in=families)
+    if areas:
+        queryset = queryset.filter(area__in=areas)
+
+    # Family/FamilyDivision
+    if family:
+        queryset = queryset.filter(family__in=family)
+
+    result = (
+        queryset.values("family", "area")
+        .annotate(
+            total=Count("id"),
+            female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
+            male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
+        )
+        .order_by("family", "area")
+    )
+
+    return result
+
+
+# #
+# #
+# #
+# #
+def restructure_data_by_family_area(elector_data):
     """
     Restructure the list of electors data into the desired nested dictionary format,
     enhancing the breakdown by family within areas similar to the areaFamilyDataSeries.
@@ -309,10 +371,8 @@ def restructure_elector_data(elector_data):
             area_family_data[area] = {"total": []}
         area_family_data[area]["total"].append(total)
 
-    # Create series for family categories
+    # Create series for family and area categories
     family_categories = list(family_data.keys())
-
-    # Create series for area categories
     area_categories = list(area_data.keys())
 
     # Create series for familyDataSeries
@@ -354,81 +414,3 @@ def restructure_elector_data(elector_data):
         "aggregatedElectors": aggregated_electors,
     }
 
-
-def calculate_electors_in_categories(elector_data):
-    """
-    Placeholder function to calculate aggregated elector data.
-    You may define your own logic here as needed.
-    """
-    # Implement your aggregation logic based on the elector_data
-    return {}
-
-
-def calculate_electors_in_categories(elector_data):
-    """
-    Restructure the list of electors data into the desired nested dictionary format.
-    """
-    total_electors = 0  # Initialize total electors count
-    total_female = 0  # Initialize total female electors count
-    total_male = 0  # Initialize total male electors count
-
-    for item in elector_data:
-
-        # Update total electors count
-        total_electors += item["total"]
-
-        # Update female and male electors count
-        total_female += item["female"]
-        total_male += item["male"]
-
-    return {
-        "total": total_electors,
-        "female": total_female,
-        "male": total_male,
-    }
-
-
-
-# #
-# #
-# getElector By Category
-# #
-# #
-
-
-def count_electors_by_category(request):
-    """
-    Fetches and counts elector data by family and area while providing overall election data.
-    """
-    families = (
-        request.GET.get("families", "").split(",")
-        if request.GET.get("families")
-        else None
-    )
-    areas = (
-        request.GET.get("areas", "").split(",") if request.GET.get("areas") else None
-    )
-    num_areas = len(areas) if areas else 0
-
-    electors_by_categories = get_aggregated_data_by_filters(families, areas)
-    electors_by_family = restructure_elector_data(electors_by_categories)
-
-    return electors_by_family
-
-# #
-# #
-# Elector Family Divisions
-# #
-# #
-def get_elector_family_divisions(request):
-    """
-    Fetches and counts elector data by family / family divisions and area while providing overall election data.
-    """
-    family = (
-        request.GET.get("areas", "").split(",") if request.GET.get("areas") else None
-    )
-
-    electors_by_categories = get_aggregated_data_by_filters(family)
-    electors_by_family = restructure_elector_data(electors_by_categories)
-
-    return electors_by_family

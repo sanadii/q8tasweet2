@@ -25,13 +25,11 @@ from .requests import (
     # Categories
     count_electors_by_family,
     count_electors_by_category,
-    
-    
     # Elector Family Division
-    get_elector_family_divisions,
+
 )
 
-
+from .requestElectorByFamilyDivision import get_electors_by_family_branches
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 100  # default number of items per page
     page_size_query_param = (
@@ -111,8 +109,6 @@ class GetElectorStatistics(APIView):
         return Response({"data": response_data}, status=200)
 
 
-
-
 class GetElectorsByCategory(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -131,13 +127,12 @@ class GetElectorsByCategory(APIView):
 
 class GetElectorFamilyDivisions(APIView):
     permission_classes = [IsAuthenticated]
-    
-    def get(self, request, *args, ** kwargs):
-        slug = kwargs.get("slug")
-        with schema_context(request, slug):
+
+    def get(self, request, *args, **kwargs):
+        schema = request.GET.get("schema")
+        with schema_context(request, schema):
             if hasattr(request, "response"):
                 return request.response
-            
-            elector_family_division = get_elector_family_divisions(request)
-            response_data = elector_family_division
-        return Response({"data": response_data}, status=200)
+
+            electors_by_family_branches = get_electors_by_family_branches(request)
+        return Response({"data": electors_by_family_branches}, status=200)
