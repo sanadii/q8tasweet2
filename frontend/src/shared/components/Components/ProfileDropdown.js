@@ -10,12 +10,14 @@ import { logoutUser } from "../../../store/actions";
 
 //import images
 import avatar1 from "assets/images/users/avatar-1.jpg";
+import { useProfile } from "shared/hooks";
 
 const ProfileDropdown = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(userSelector);
-  const isStaff = user.isStaff
+  const { token } = useProfile();
 
+  const isStaff = user.isStaff
   //Dropdown Toggle
   const [isProfileDropdown, setIsProfileDropdown] = useState(false);
   const toggleProfileDropdown = () => {
@@ -103,12 +105,16 @@ const ProfileDropdown = () => {
               <i className="mdi mdi-lock text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle">قفل الشاشة</span>
             </DropdownItem>
-            <DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "/logout"} onClick={()=>dispatch(logoutUser())}>
-              <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
-              <span className="align-middle" data-key="t-logout">
-                تسجيل خروج
-              </span>
-            </DropdownItem>
+
+            {
+              user?.id && (<DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "/logout"} onClick={() => dispatch(logoutUser())}>
+                <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
+                <span className="align-middle" data-key="t-logout">
+                  تسجيل خروج
+                </span>
+              </DropdownItem>)
+            }
+
           </DropdownMenu>
         </Dropdown>
       </div>
