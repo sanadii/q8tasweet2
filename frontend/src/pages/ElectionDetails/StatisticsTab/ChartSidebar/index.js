@@ -11,13 +11,34 @@ const ChartSideBar = ({
     setViewState,
     viewState
 }) => {
-    const { selectionFilters, displaySettings, viewDetails } = viewState;
+    const { selectionFilters, viewSettings, viewDetails } = viewState;
+
+
+    const handleDisplayOptionToggle = (option) => () => {
+        setViewState(prevState => ({
+            ...prevState,
+            viewSettings: {
+                ...prevState.viewSettings,
+                display: option
+            }
+        }));
+    };
+
+    const handleDisplaySeriesOptionToggle = (option) => () => {
+        setViewState(prevState => ({
+            ...prevState,
+            viewSettings: {
+                ...prevState.viewSettings,
+                displaySeries: option
+            }
+        }));
+    };
 
 
     return (
         <div className="chat-leftsidebar bg-light">
             <div className="px-2 pt-2 mb-2">
-                {displaySettings.activeView === "electorsByFamily" &&
+                {viewSettings.activeView === "electorsByFamily" &&
                     <ChartSideBarFamilyView
                         viewState={viewState}
                         setViewState={setViewState}
@@ -26,17 +47,74 @@ const ChartSideBar = ({
                         handleFamilyAreaChange={handleFamilyAreaChange}
                     />
                 }
-                <div>
+                <div className="view-settings">
+                    <ButtonGroup className="w-100 pb-1">
+                        <Button
+                            className={` material-shadow-none ${viewSettings.display === "all" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
+                            onClick={handleDisplayOptionToggle("all")}
+                            active={viewState.viewSettings.display === 'all'}
+                        >
+                            الكل
+                        </Button>
+                        <Button
+                            className={` material-shadow-none ${viewSettings.display === "gender" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
+                            onClick={handleDisplayOptionToggle("gender")}
+                            active={viewState.viewSettings.display === 'gender'}
+                        >
+                            ذكور \ إناث
+                        </Button>
+                    </ButtonGroup>
+                    <ButtonGroup className="w-100 pb-1">
+                        <Button
+                            className={` material-shadow-none ${viewSettings.displaySeries === "all" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
+                            onClick={handleDisplaySeriesOptionToggle("all")}
+                            active={viewState.viewSettings.display === 'all'}
+                        >
+                            الكل
+                        </Button>
+                        <Button
+                            className={` material-shadow-none ${viewSettings.displaySeries === "branches" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
+                            onClick={handleDisplaySeriesOptionToggle("branches")}
+                            active={viewState.viewSettings.display === 'branches'}
+                        >
+                            العوائل
+                        </Button>
+                        <Button
+                            className={`material-shadow-none ${viewSettings.displaySeries === "areas" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
+                            onClick={handleDisplaySeriesOptionToggle("areas")}
+                            active={viewState.viewSettings.display === 'areas'}
+                        >
+                            المناطق
+                        </Button>
+                        <Button
+                            className={`material-shadow-none ${viewSettings.displaySeries === "committees" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
+                            onClick={handleDisplaySeriesOptionToggle("committees")}
+                            active={viewState.viewSettings.display === 'committees'}
+                        >
+                            اللجان
+                        </Button>
+
+                    </ButtonGroup>
+                    <ButtonGroup className="w-100 pb-1">
+                        <Button color="soft-primary" className="btn-icon material-shadow-none"> <i className="ri-pie-chart-fill" /> </Button>
+                        <Button color="soft-danger" className="btn-icon material-shadow-none"> <i className="ri-bar-chart-2-fill" /> </Button>
+                        <Button color="soft-success" className="btn-icon material-shadow-none"> <i className="ri-line-chart-fill" /> </Button>
+                        <Button color="soft-secondary" className="btn-icon material-shadow-none"> <i className="ri-bubble-chart-fill" /> </Button>
+                    </ButtonGroup>
+                </div>
+
+
+                {/* <div>
                     <h5><b>تصنيف</b></h5>
                     <Label for="genderSwitch">ذكور \ إناث</Label>
                     <Input
                         id="genderSwitch"
                         type="checkbox"
-                        checked={displaySettings.filterByGender}
+                        checked={viewSettings.filterByGender}
                         onChange={(e) => setViewState(prev => ({
                             ...prev,
-                            displaySettings: {
-                                ...prev.displaySettings,
+                            viewSettings: {
+                                ...prev.viewSettings,
                                 filterByGender: e.target.checked
                             }
                         }))}
@@ -48,31 +126,31 @@ const ChartSideBar = ({
                     <Input
                         id="resultCount"
                         type="select"
-                        value={displaySettings.resultsToShow}
+                        value={viewSettings.resultsToShow}
                         onChange={(e) => setViewState(prev => ({
                             ...prev,
-                            displaySettings: {
-                                ...prev.displaySettings,
+                            viewSettings: {
+                                ...prev.viewSettings,
                                 resultsToShow: e.target.value
                             }
                         }))}
                     >
                         {["5", "10", "15", "20", "25"].map(count => <option key={count} value={count}>{count}</option>)}
                     </Input>
-                </div>
-                {displaySettings.activeView === "detailedFamilyChart" &&
+                </div> */}
+                {viewSettings.activeView === "detailedFamilyChart" &&
                     <Button
                         color="primary"
                         className="btn-icon material-shadow-none"
                         title="إعادة تعيين القبائل"
                         outline
-                        onClick={() => setViewState(prev => ({ ...prev, displaySettings: { ...prev.displaySettings, activeView: "detailedFamilyChart" } }))}
+                        onClick={() => setViewState(prev => ({ ...prev, viewSettings: { ...prev.viewSettings, activeView: "detailedFamilyChart" } }))}
                     >
                         <i className="ri-refresh-line" />
                     </Button>
                 }
             </div>
-        </div>
+        </div >
     );
 };
 

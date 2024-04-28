@@ -43,7 +43,7 @@ def get_all_family_branches():
 # Elector Family Branches
 # #
 # #
-def get_elector_family_branches(request):
+def get_electors_by_family_branches(request):
     """
     Fetches and counts elector data by family and family branches while providing overall election data.
     """
@@ -194,14 +194,14 @@ def restructure_data_by_family_branch_area(elector_data):
                 {"name": "ذكور", "data": seriesMale},
             ],
         },
-        "electorsByFamilyBranchesAreas": {
-            "categories": family_branches_areas_categories,
-            "dataSeries": family_branches_area_data,
-            "dataSeriesByGender": [
-                {"name": "إناث", "data": seriesFemale},
-                {"name": "ذكور", "data": seriesMale},
-            ],
-        },
+        # "electorsByFamilyBranchesAreas": {
+        #     "categories": family_branches_areas_categories,
+        #     "dataSeries": family_branches_area_data,
+        #     "dataSeriesByGender": [
+        #         {"name": "إناث", "data": seriesFemale},
+        #         {"name": "ذكور", "data": seriesMale},
+        #     ],
+        # },
         "aggregatedElectors": aggregated_electors,
         "familyBranches": all_family_branches,
     }

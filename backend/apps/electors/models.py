@@ -49,7 +49,7 @@ class Elector(models.Model):
 
     # Elector Election Details
     circle = models.TextField(blank=True, null=True)
-    committee = models.ForeignKey(Committee, on_delete=models.CASCADE, related_name='committees')
+    committee = models.ForeignKey(Committee, blank=True, null=True, on_delete=models.CASCADE, related_name='committees')
     committee_area = models.TextField(blank=True, null=True)
     committee_name = models.TextField(blank=True, null=True)
     letter = models.TextField(blank=True, null=True)

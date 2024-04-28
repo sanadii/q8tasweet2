@@ -1,43 +1,53 @@
 import { useMemo } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { electionSelector, electorSelector } from 'selectors';
 
-const useElectorDataSource = (
-    electionStatistics,
-    electorsByFamily,
-    electorsByArea,
-    electorsByCommittee,
-    electorsByCategories,
+const useElectorDataSource = (viewState) => {
+    const { viewSettings = {}, viewDetails } = viewState;
 
-    // Family
-    electorsByBranchFamily, 
-    electorsByFamilyBranches,
-    
-    viewState,
-) => {
-    const { displaySettings = {}, viewDetails } = viewState;
+
+    const { electionStatistics, electorsByFamily, electorsByArea,
+        electorsByCommittee, electorsByCategories, electorsByFamilyDivision
+
+        // Family Branch
+    } = useSelector(electorSelector);
+
+    const { electorsByFamilyBranch, electorsByFamilyBranchArea, electorsByAreaFamilyBranch } = electorsByFamilyDivision
 
     const getFamilyData = () => {
         switch (viewDetails?.activeFamilyView) {
             case 'detailedFamilyAreaView':
                 return electorsByCategories?.areaFamilyDetailed;
             case 'detailedFamilyDivisionView':
-                return electorsByFamilyBranches;
+                if (viewSettings.displaySeries === "all") {
+                    return electorsByFamilyBranch;
+                }
+                if (viewSettings.displaySeries === "branches") {
+                    return electorsByAreaFamilyBranch;
+                }
+                if (viewSettings.displaySeries === "branches") {
+                    return electorsByAreaFamilyBranch;
+                }
+                if (viewSettings.displaySeries === "areas") {
+                    return electorsByFamilyBranchArea;
+                }
+                return electorsByFamilyBranch;
             default:
                 return electorsByFamily;
         }
     };
 
+    console.log("electorsByFamilyBranch: ", electorsByFamilyBranch)
 
-    console.log("electorsByFamilyBranches: ", electorsByFamilyBranches)
 
-    
     return useMemo(() => {
-        const colors = displaySettings.filterByGender
+        const colors = viewSettings.display === "gender"
             ? ['var(--vz-info)', 'var(--vz-pink)']
             : ["var(--vz-primary)", "var(--vz-secondary)", "var(--vz-success)", "var(--vz-info)", "var(--vz-warning)", "var(--vz-danger)", "var(--vz-dark)", "var(--vz-primary)", "var(--vz-success)", "var(--vz-secondary)"];
 
         const familyData = getFamilyData();
 
-        const dataKey = displaySettings.filterByGender ? 'dataSeriesByGender' : 'dataSeries';
+        const dataKey = viewSettings.display === "gender" ? 'dataSeriesByGender' : 'dataSeries';
 
         const commonOptions = {
             statistics: electionStatistics,
@@ -64,7 +74,7 @@ const useElectorDataSource = (
                 series: electorsByCommittee?.[dataKey] || [],
             }
         };
-    }, [electionStatistics, electorsByFamily, electorsByArea, electorsByCommittee, electorsByCategories, electorsByFamilyBranches, viewState]);
+    }, [electionStatistics, electorsByFamily, electorsByArea, electorsByCommittee, electorsByCategories, getFamilyData, electorsByFamilyBranch, viewState]);
 };
 
 export default useElectorDataSource;

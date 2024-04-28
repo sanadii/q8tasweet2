@@ -20,7 +20,7 @@ import classNames from 'classnames';
 const StatisticsTab = () => {
     const { electionStatistics, electorsByFamily, electorsByArea,
         electorsByCommittee, electorsByCategories,
-        electorsByBranchFamilies, electorsByFamilyBranches, electorsByFamilyDivision } = useSelector(electorSelector);
+        electorsByBranchFamilies, electorsByFamilyBranch, electorsByFamilyBranchArea } = useSelector(electorSelector);
 
     const [viewState, setViewState] = useState({
         selectionFilters: {
@@ -31,10 +31,12 @@ const StatisticsTab = () => {
             selectedFamily: null,
             selectedFamilyBranches: [],
             selectedFamilyBranchesAreas: [],
+            selectedFamilyBranchesCommittees: [],
         },
-        displaySettings: {
+        viewSettings: {
             resultsToShow: "10",
-            filterByGender: true,
+            display: "all",                  // options: gender, all, branch, area, committees
+            displaySeries: "all",                  // options: gender, all, branch, area, committees
             activeView: 'electorsByFamily',
         },
         viewDetails: {
@@ -44,23 +46,17 @@ const StatisticsTab = () => {
         }
     });
 
-    const { selectionFilters, displaySettings, viewDetails } = viewState;
+    const { selectionFilters, viewSettings, viewDetails } = viewState;
 
-
+    console.log("viewState.viewSettings.displaySeries: ", viewState.viewSettings.displaySeries)
     const dataSource = useElectorDataSource(
-        electionStatistics,
-        electorsByFamily,
-        electorsByArea,
-        electorsByCommittee,
-        electorsByCategories,
-        electorsByBranchFamilies, electorsByFamilyBranches,
         viewState,
     );
 
     const handleViewChange = useCallback((viewType) => {
         setViewState(prev => ({
             ...prev,
-            displaySettings: { ...prev.displaySettings, activeView: viewType }
+            viewSettings: { ...prev.viewSettings, activeView: viewType }
         }));
     }, []);
 
@@ -81,8 +77,8 @@ const StatisticsTab = () => {
                                     <Button
                                         key={key}
                                         className={classNames('btn btn-sm', {
-                                            'btn-primary': displaySettings.activeView === key,
-                                            'btn-soft-secondary': displaySettings.activeView !== key
+                                            'btn-primary': viewSettings.activeView === key,
+                                            'btn-soft-secondary': viewSettings.activeView !== key
                                         })}
                                         onClick={() => handleViewChange(key)}
                                     >
@@ -100,12 +96,12 @@ const StatisticsTab = () => {
                             />
                             <div className="file-manager-content w-100 p-4 pb-0">
                                 <ElectorStatisticCounter
-                                    dataSource={dataSource[displaySettings.activeView]}
+                                    dataSource={dataSource[viewSettings.activeView]}
                                     electionStatistics={electionStatistics}
                                 />
 
                                 <ElectorsOverviewCharts
-                                    dataSource={dataSource[displaySettings.activeView]}
+                                    dataSource={dataSource[viewSettings.activeView]}
                                 />
                             </div>
                         </div>

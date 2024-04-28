@@ -7,20 +7,6 @@ from apps.committees.models import (
 from django.http import JsonResponse
 
 
-def calculate_electors_in_categories(elector_data):
-    """
-    Calculate and summarize elector counts.
-    """
-    total_electors = sum(item["total"] for item in elector_data)
-    total_female = sum(item["female"] for item in elector_data)
-    total_male = sum(item["male"] for item in elector_data)
-    return {
-        "total": total_electors,
-        "female": total_female,
-        "male": total_male,
-    }
-
-
 # #
 # #
 # Elector Family Branches
@@ -31,63 +17,39 @@ def get_electors_by_family_branches(request):
     Fetches and counts elector data by family and family branches while providing overall election data.
     """
     family = request.GET.get("family") if request.GET.get("family") else None
-    electors = get_aggregated_data_by_family_branch_area(family)
-    electors_by_family = restructure_data_by_family_branch_area(electors)
+
+    branches = (
+        request.GET.get("branches", "").split(",")
+        if request.GET.get("branches")
+        else None
+    )
+    areas = (
+        request.GET.get("areas", "").split(",") if request.GET.get("areas") else None
+    )
+
+    electors_by_family = restructure_data_by_family_branch_area(family, branches, areas)
 
     return electors_by_family
 
 
-def get_all_family_branches(family=None):
+def restructure_data_by_family_branch_area(family, branches, areas):
     """
-    Fetch all unique family branches for a given family.
-    """
-    if family:
-        return list(
-            Elector.objects.filter(family__icontains=family)
-            .values_list("family_branch", flat=True)
-            .distinct()
-        )
-    else:
-        return list(
-            Elector.objects.values_list("family_branch", flat=True).distinct()
-        )
+    Restructures elector data into a nested dictionary format.
 
+    Args:
+        elector_data (list): List of dictionaries containing elector data.
 
-def get_aggregated_data_by_family_branch_area(family=None):
+    Returns:
+        dict: Nested dictionary with aggregated data by family and family branch.
     """
-    Aggregate data for electors filtered by family, limiting to top 25 entries based on total count.
-    """
-    queryset = Elector.objects.all()
-    if family:
-        queryset = queryset.filter(family__icontains=family)
 
-    result = (
-        queryset.values("family", "branch")
-        .annotate(
-            total=Count("id"),
-            female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
-            male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
-        )
-        .order_by("-total")[:25]  # Limit to first 25 entries
-    )
-    return result
+    elector_data = get_aggregated_data_by_family_branch_area(family, branches, areas)
 
-
-def get_all_family_branches():
-    """
-    Retrieve all unique family branches.
-    """
-    branches = Elector.objects.values_list("branch", flat=True).distinct()
-    return list(branches)
-
-
-def restructure_data_by_family_branch_area(elector_data):
-    """
-    Restructure the list of electors data into the desired nested dictionary format,
-    including a breakdown by gender within familyBranch_FamilyDataSeries.
-    """
     family_data = {}
     family_branch_data = {}
+    area_data = {}
+    family_branches_area_data = {}
+    area_family_branches_data = {}
 
     # Iterate over the elector data
     for item in elector_data:
@@ -145,16 +107,17 @@ def restructure_data_by_family_branch_area(elector_data):
 
     # Call calculate_electors_in_categories to get overall elector data (unmodified)
     aggregated_electors = calculate_electors_in_categories(elector_data)
+    """
+    Calculates and summarizes elector counts.
+
+    Args:
+        elector_data (list): List of dictionaries containing elector data.
+
+    Returns:
+        dict: Dictionary containing total electors, females, and males.
+    """
 
     return {
-        "electorsByBranchFamily": {
-            "categories": family_categories,
-            "dataSeries": family_branch_family_data_series,
-            "dataSeriesByGender": [
-                {"name": "إناث", "data": seriesFemale},
-                {"name": "ذكور", "data": seriesMale},
-            ],
-        },
         "electorsByFamilyBranches": {
             "categories": family_branch_categories,
             "dataSeries": family_branch_family_data_series,
@@ -167,30 +130,52 @@ def restructure_data_by_family_branch_area(elector_data):
         "familyBranches": all_family_branches,
     }
 
-    # # Prepare the gender data series
-    # seriesFemale = [
-    #     sum(family_branch_data[div]["female"]) for div in family_branch_categories
-    # ]
-    # seriesMale = [
-    #     sum(family_branch_data[div]["male"]) for div in family_branch_categories
-    # ]
 
-    # # Call calculate_electors_in_categories to get overall elector data
-    # aggregated_electors = calculate_electors_in_categories(elector_data)
+def get_aggregated_data_by_family_branch_area(family=None, branches=None, areas=None):
+    """
+    Fetches and aggregates elector data based on provided filters.
 
-    # return {
-    #     "electorsByBranchFamily": {
-    #         "categories": family_categories,
-    #         "dataSeries": dataSeries,
-    #         "dataSeriesByGender": [
-    #             {"name": "إناث", "data": seriesFemale},
-    #             {"name": "ذكور", "data": seriesMale},
-    #         ],
-    #     },
-    #     "electorsByFamilyBranches": {
-    #         "categories": family_branch_categories,
-    #         "dataSeries": dataSeries,
-    #     },
-    #     "aggregatedElectors": aggregated_electors,
-    #     "familyBranches": all_family_branches,
-    # }
+    Args:
+        family (str, optional): Family to filter by. Defaults to None.
+        family_branches (list, optional): List of family branches to filter by. Defaults to None.
+        areas (list, optional): List of areas to filter by. Defaults to None.
+
+    Returns:
+        dict: Dictionary containing aggregated elector data.
+    """
+    queryset = Elector.objects.all()
+    if family:
+        queryset = queryset.filter(family__icontains=family)
+
+    if branches:
+        queryset = queryset.filter(branch__in=branches)
+
+    if areas:
+        queryset = queryset.filter(areas__in=areas)
+
+    result = (
+        queryset.values("family", "branch")
+        # queryset.values("family", "branch", "area")
+        .annotate(
+            total=Count("id"),
+            female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
+            male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
+        ).order_by("-total")[
+            :20
+        ]  # Limit to first 25 entries
+    )
+    return result
+
+
+def calculate_electors_in_categories(elector_data):
+    """
+    Calculate and summarize elector counts.
+    """
+    total_electors = sum(item["total"] for item in elector_data)
+    total_female = sum(item["female"] for item in elector_data)
+    total_male = sum(item["male"] for item in elector_data)
+    return {
+        "total": total_electors,
+        "female": total_female,
+        "male": total_male,
+    }

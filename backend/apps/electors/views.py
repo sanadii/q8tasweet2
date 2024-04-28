@@ -9,11 +9,16 @@ from django.db.models import Count
 
 # Models
 from apps.electors.models import Elector
-from apps.committees.models import Committee
 
 # Serializers
-from apps.electors.serializers import ElectorSerializer
-from apps.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
+from apps.electors.serializers import (
+    ElectorSerializer,
+)
+
+from django.db.models import Count, Case, When, IntegerField, Sum, Q
+from django.contrib.postgres.aggregates import ArrayAgg
+from django.db.models.query import QuerySet
+
 
 # Utils
 from utils.schema import schema_context
@@ -26,10 +31,11 @@ from .requests import (
     count_electors_by_family,
     count_electors_by_category,
     # Elector Family Division
-
 )
 
-from .requestElectorByFamilyDivision import get_electors_by_family_branches
+from .requestElectorByFamilyDivision import restructure_data_by_family_branch_area
+
+
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 100  # default number of items per page
     page_size_query_param = (
@@ -125,14 +131,36 @@ class GetElectorsByCategory(APIView):
 
         return Response({"data": response_data}, status=200)
 
+
+# The code that isworking
 class GetElectorFamilyDivisions(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         schema = request.GET.get("schema")
+        family = request.GET.get("family")
+        branches = (
+            request.GET.get("branches", "").split(",")
+            if request.GET.get("branches")
+            else None
+        )
+        areas = (
+            request.GET.get("areas", "").split(",")
+            if request.GET.get("areas")
+            else None
+        )
+        committees = (
+            request.GET.get("committees", "").split(",")
+            if request.GET.get("committees")
+            else None
+        )
         with schema_context(request, schema):
             if hasattr(request, "response"):
                 return request.response
 
-            electors_by_family_branches = get_electors_by_family_branches(request)
-        return Response({"data": electors_by_family_branches}, status=200)
+            electors_by_family_branch_area = restructure_data_by_family_branch_area(
+                family, branches, areas, committees
+            )
+
+        return Response({"data": electors_by_family_branch_area}, status=200)
+

@@ -31,7 +31,7 @@ class Command(BaseCommand):
             'id', 'full_name', 'first_name', 'second_name', 'third_name', 'fourth_name',
             'fifth_name', 'sixth_name', 'seventh_name', 'eighth_name', 'ninth_name', 'tenth_name',
             'eleventh_name', 'twelveth_name', 'last_name',
-            'family', 'family_division', 'sect', 'gender',
+            'family', 'branch', 'sect', 'gender',
             'circle', 'job', 'address', 'area', 'block', 'street', 'lane', 'house',
             'committee', 
             'committee_area', 'committee_name', 
