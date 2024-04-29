@@ -22,21 +22,21 @@ const useElectorDataSource = (viewState) => {
                     return electorsByFamilyAllBranches;
                 }
                 if (viewSettings.displaySeries === "branches") {
-                    return electorsByAreaFamilyBranch;
+                    return electorsByFamilyAllBranches;
                 }
                 if (viewSettings.displaySeries === "branches") {
-                    return electorsByAreaFamilyBranch;
+                    return electorsByFamilyAllBranches;
                 }
                 if (viewSettings.displaySeries === "areas") {
-                    return electorsByFamilyBranchArea;
+                    return electorsByAreaFamilyBranch;
                 }
-                return electorsByFamilyBranch;
+                return electorsByAreaFamilyBranch;
             default:
-                return electorsByFamily;
+                return electorsByAreaFamilyBranch;
         }
     };
 
-    console.log("electorsByFamilyBranch: ", electorsByFamilyBranch)
+    console.log("electorsByFamilyAllBranches: ", electorsByFamilyAllBranches)
 
 
     return useMemo(() => {

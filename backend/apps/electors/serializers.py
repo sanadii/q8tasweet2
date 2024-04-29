@@ -18,183 +18,123 @@ class ElectorSerializer(serializers.ModelSerializer):
 
 class ElectorDataByCategory(serializers.BaseSerializer):
     def to_representation(self, instance):
-        # Unpack data for easier access and manipulation
-        family, branches, areas, committees, main = instance["instance"]
+        (
+            family,
+            branches,
+            areas,
+            committees,
+            primary_data,
+            secondary_data,
+            filter_key,
+        ) = instance["instance"]
 
-        elector_data = get_aggregated_data(family, branches, areas, committees)
-        count_aggregated_electors = count_aggregated_data(elector_data)
+        # Ensure filter_key is a tuple, which is hashable and can be used safely
+        filter_keys = tuple(filter_key)  # Convert set to tuple
+
+        elector_data = self.get_aggregated_data(family, branches, areas, committees, filter_keys)
+        count_aggregated_electors = self.count_aggregated_data(elector_data)
 
         # Initialize containers
-        family_data = defaultdict(list)
-        branch_data = defaultdict(list)
-        area_data = defaultdict(list)
-        committee_data = defaultdict(list)
+        data_mappings = {
+            "family_data": defaultdict(lambda: defaultdict(int)),
+            "branch_data": defaultdict(lambda: defaultdict(int)),
+            "area_data": defaultdict(lambda: defaultdict(int)),
+            "committee_data": defaultdict(lambda: defaultdict(int)),
+        }
 
-        # Update data for family, branch, and area (combined logic)
+        # Update data for each category using a hashable type for keys
         for item in elector_data:
-            update_data(family_data, item.get("family", ""), item)
-            update_data(branch_data, item.get("branch", ""), item)
-            update_data(area_data, item.get("area", ""), item)
-            update_data(committee_data, item.get("committee_area", ""), item)
-                
-        # Build category names and corresponding series data
-        
-        print("area_data: ", area_data)
-        categories = []  # Initialize categories to ensure it's always defined
-        if main == "families":
-            dataSeries = [
-                {"name": title, "data": family_data[title]["total"]}
-                for title in family_data
-            ]
-            categories = list(branch_data.keys())
-            
-        # familyBranches
-        elif main == "familyBranches":
-            dataSeries = [
-                {"name": title, "data": family_data[title]["total"]}
-                for title in family_data
-            ]
-            categories = list(branch_data.keys())
-            
-        elif main == "familyAreas":
-            dataSeries = [
-                {"name": title, "data": family_data[title]["total"]}
-                for title in family_data
-            ]
-            categories = list(area_data.keys())
-                        
-        elif main == "familyAllCommittees":
-            dataSeries = [
-                {"name": title, "data": family_data[title]["total"]}
-                for title in family_data
-            ]
-            categories = list(committee_data.keys())
+            self.update_data(data_mappings["family_data"], item.get("family", ""), item)
+            self.update_data(data_mappings["branch_data"], item.get("branch", ""), item)
+            self.update_data(data_mappings["area_data"], item.get("area", ""), item)
+            self.update_data(data_mappings["committee_data"], item.get("committee_area", ""), item)
 
-        elif main == "familyAllCommittees":
-            dataSeries = [
-                {"name": title, "data": family_data[title]["total"]}
-                for title in family_data
-            ]
-            categories = list(committee_data.keys())
-            
-        elif main == "branchAreas":
-            dataSeries = [
-                {"name": title, "data": branch_data[title]["total"]}
-                for title in branch_data
-            ]
-            categories = list(area_data.keys())
+            print("elector_data: ", data_mappings["branch_data"])
 
-        elif main == "areaBranches":
-            dataSeries = [
-                {"name": title, "data": area_data[title]["total"]}
-                for title in area_data
-            ]
-            categories = list(branch_data.keys())
-        else:
-            dataSeries = []  # Define dataSeries as empty if none of the conditions met
+        primary_data_dict = data_mappings[primary_data]
+        secondary_data_dict = data_mappings[secondary_data]
 
-        series_female, series_male = self.prepare_gender_data_series( )
+        data_series = [
+            {"name": key, "data": [data["total"] for data in secondary_data_dict.values()]}
+            for key in primary_data_dict
+        ]
+        categories = list(secondary_data_dict.keys())
 
-        # # Gender data compilation across all categories
-        # seriesFemale = [
-        #     sum(branch_data[div]["female"]) for div in branch_data
-        # ]
-        # seriesMale = [
-        #     sum(branch_data[div]["male"]) for div in branch_data
-        # ]
+        data_series_by_gender = self.prepare_gender_data_series(secondary_data_dict)
 
         return {
             "counter": count_aggregated_electors,
             "categories": categories,
-            "dataSeries": dataSeries,
-            "dataSeriesByGender": [
-                {"name": "إناث", "data": series_female},
-                {"name": "ذكور", "data": series_male},
-            ],
+            "dataSeries": data_series,
+            "dataSeriesByGender": data_series_by_gender,
         }
+
+
+    def update_data(self, data_dict, key, data):
+        if key not in data_dict:
+            data_dict[key] = {'total': 0, 'female': 0, 'male': 0}  # Properly initialize the dictionary
+        data_dict[key]['total'] += data.get('total', 0)
+        data_dict[key]['female'] += data.get('female', 0)
+        data_dict[key]['male'] += data.get('male', 0)
+
+
+    def prepare_gender_data_series(self, secondary_data_dict):
+        """Prepare gender-specific data series, ensuring each entry corresponds to a category."""
+        series_female = []
+        series_male = []
         
-    def prepare_gender_data_series(self, elector_data):
-        """ Prepare gender-specific data series. """
-        series_female = [item["female"] for item in elector_data]
-        series_male = [item["male"] for item in elector_data]
-        return series_female, series_male
-
-
-
-def count_aggregated_data(elector_data):
-    """Summarizes elector counts."""
-    total = sum(item["total"] for item in elector_data)
-    female = sum(item["female"] for item in elector_data)
-    male = sum(item["male"] for item in elector_data)
-    return {
-        "total": total,
-        "female": female,
-        "male": male,
-    }
-
-
-def get_aggregated_data(family=None, branches=None, areas=None, committees=None):
-    """Fetch and aggregate elector data based on filters."""
-    queryset = Elector.objects.all()
-
-    # Apply filters if they exist
-    if family:
-        queryset = queryset.filter(family__icontains=family)
-    if branches:
-        queryset = queryset.filter(branch__in=branches)
-    if areas:
-        queryset = queryset.filter(area__in=areas)
-    if committees:
-        queryset = queryset.filter(committee_area__in=committees)
-    
-    print("committees: ", committees)    
-    # Define fields to group by dynamically based on provided filters
-    grouping_fields = ["family", "branch"]  # Adjust as needed
-    if areas:  # Only include area in the output if it's a part of the filter
-        grouping_fields.append("area")
-        
-    if committees:  # Only include area in the output if it's a part of the filter
-        grouping_fields.append("committee_area")
-    print("grouping_fields, ", grouping_fields)    
-    # Annotate and aggregate data based on the dynamic fields
-    return (
-        queryset.values(*grouping_fields)
-        .annotate(
-            total=Count("id"),
-            female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
-            male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
-        )
-        .order_by("-total")[:20]
-    )
-
-
-def update_data(data_dict, key, data):
-    # Ensure each key initializes with a default dictionary if it doesn't exist
-    if key not in data_dict:
-        data_dict[key] = defaultdict(
-            list
-        )  # Initializes missing keys with a dictionary whose values are lists
-
-    # Assuming 'data' is a dictionary with structure { 'total': x, 'female': y, 'male': z }
-    data_dict[key]["total"].append(data["total"])
-    data_dict[key]["female"].append(data["female"])
-    data_dict[key]["male"].append(data["male"])
-
-
-class ElectorDataSeriesByGenderSerializer(serializers.BaseSerializer):
-    def to_representation(self, branch_data):
-
-        family_branch_categories = list(branch_data.keys())
-
-        # Calculate totals for each gender across all family branches
-        seriesFemale = [
-            sum(branch_data[div]["female"]) for div in family_branch_categories
-        ]
-        seriesMale = [
-            sum(branch_data[div]["male"]) for div in family_branch_categories
-        ]
+        # Iterate over each category in the dictionary
+        for category, stats in secondary_data_dict.items():
+            # Append female and male counts directly
+            series_female.append(stats.get("female", 0))
+            series_male.append(stats.get("male", 0))
 
         return [
-            {"name": "إناث", "data": seriesFemale},
-            {"name": "ذكور", "data": seriesMale},
+            {"name": "إناث", "data": series_female},
+            {"name": "ذكور", "data": series_male},
         ]
+            
+    def count_aggregated_data(self, elector_data):
+        """Summarizes elector counts."""
+        total = sum(item["total"] for item in elector_data)
+        female = sum(item["female"] for item in elector_data)
+        male = sum(item["male"] for item in elector_data)
+        return {
+            "total": total,
+            "female": female,
+            "male": male,
+        }
+            
+    def get_aggregated_data(self, family=None, branches=None, areas=None, committees=None, filter_keys=set()):
+        """Fetch and aggregate elector data based on dynamic filters."""
+        queryset = Elector.objects.all()
+
+
+
+        # Apply filters dynamically based on filter_keys
+        # what i want to do is not like this
+        # if family, filter family, if branches, filter branches
+        if family and family:
+            queryset = queryset.filter(family__icontains=family)
+        if branches and branches:
+            queryset = queryset.filter(branch__in=branches)
+        if 'areas' in filter_keys and areas:
+            queryset = queryset.filter(area__in=areas)
+        if 'committees' in filter_keys and committees:
+            queryset = queryset.filter(committee_area__in=committees)
+
+        # Define fields to group by dynamically based on provided filter_keys
+        grouping_fields = ["family", "branch"]
+
+        # Annotate and aggregate data based on the dynamic fields
+        aggregated_data = (
+            queryset.values(*grouping_fields)
+            .annotate(
+                total=Count("id"),
+                female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
+                male=Count(Case(When(gender="1", then=1), output_field=IntegerField()))
+            )
+            .order_by("-total")[:20]  # Adjust the slice as necessary
+        )
+
+        return aggregated_data

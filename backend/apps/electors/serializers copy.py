@@ -66,21 +66,7 @@ class ElectorDataByCategory(serializers.BaseSerializer):
                 for title in area_data
             ]
             categories = list(branch_data.keys())
-            
-        # elif main == "familyAllCommittees":
-        #         dataSeries = [
-        #             {"name": title, "data": family_data[title]["total"]}
-        #             for title in family_data
-        #         ]
-        #         categories = list(committee_data.keys())
-
-        # elif main == "familyAllCommittees":
-        #     dataSeries = [
-        #         {"name": title, "data": family_data[title]["total"]}
-        #         for title in family_data
-        #     ]
-        #     categories = list(committee_data.keys())
-        
+     
         else:
             dataSeries = []  # Define dataSeries as empty if none of the conditions met
 

@@ -33,7 +33,7 @@ from .requests import (
     # Elector Family Division
 )
 
-from .requestElectorByFamilyDivision import restructure_data_by_family_branch_area
+from apps.electors.electorsByFamily import restructure_electors_by_family
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -158,7 +158,7 @@ class GetElectorFamilyDivisions(APIView):
             if hasattr(request, "response"):
                 return request.response
 
-            electors_by_family_branch_area = restructure_data_by_family_branch_area(
+            electors_by_family_branch_area = restructure_electors_by_family(
                 family, branches, areas, committees
             )
 
