@@ -8,11 +8,10 @@ const useElectorDataSource = (viewState) => {
 
     const { electionStatistics, electorsByFamily, electorsByArea,
         electorsByCommittee, electorsByCategories, electorsByFamilyDivision
-
-        // Family Branch
     } = useSelector(electorSelector);
 
-    const { electorsByFamilyBranch, electorsByFamilyBranchArea, electorsByAreaFamilyBranch } = electorsByFamilyDivision
+    const { electorsByFamilyAllBranches, electorsByFamilyAllAreas, electorsByFamilyAllCommittees,
+    electorsByFamilyBranch, electorsByFamilyBranchArea, electorsByAreaFamilyBranch } = electorsByFamilyDivision
 
     const getFamilyData = () => {
         switch (viewDetails?.activeFamilyView) {
@@ -20,7 +19,7 @@ const useElectorDataSource = (viewState) => {
                 return electorsByCategories?.areaFamilyDetailed;
             case 'detailedFamilyDivisionView':
                 if (viewSettings.displaySeries === "all") {
-                    return electorsByFamilyBranch;
+                    return electorsByFamilyAllBranches;
                 }
                 if (viewSettings.displaySeries === "branches") {
                     return electorsByAreaFamilyBranch;

@@ -9,38 +9,61 @@ from collections import defaultdict, Counter, OrderedDict
 def restructure_data_by_family_branch_area(family, branches, areas, committees):
     """Restructures elector data into a nested dictionary format."""
 
-    instance_family_only = {"instance": (family, None, None, None, "families")}
-    instance_family_all_committees = {"instance": (family, None, None, None, "familyAllCommittees")}
+    # instance_family_all_committees = {"instance": (family, None, None, None, "familyAllCommittees")}
+    # family_branches_only = {"instance": (family, None, None, None, "families")}
+
+
+    # family_all_committees_serializer = ElectorDataByCategory(instance_family_all_committees)
+    # family_branch_serializer = ElectorDataByCategory(family_branches_only)
+       
     
-    family_branches_only = {"instance": (family, None, None, None, "families")}
-    family_branches_areas = {"instance": (family, branches, areas, None, "branchAreas")}
-    areas_family_branches = {"instance": (family, branches, areas, None, "areaBranches")}
+    # electors_by_family_all_committees = family_serializer.to_representation(instance_family_all_committees)  
+    # electors_by_family_branch = family_branch_serializer.to_representation(family_branches_only)
+    
+    
+    
+    # 
+    # 
+    # 
+    
+    instance_family_only = {"instance": (family, None, None, None, "family")}
+    instance_family_all_branches = {"instance": (family, None, None, None, "familyBranches")}
+    instance_family_all_areas = {"instance": (family, None, None, None, "familyAreas")}
+
+    instance_family_branches_areas = {"instance": (family, branches, areas, None, "branchAreas")}
+    instance_areas_family_branches = {"instance": (family, branches, areas, None, "areaBranches")}
 
     family_serializer = ElectorDataByCategory(instance_family_only)
-    family_all_committees_serializer = ElectorDataByCategory(instance_family_all_committees)
-    # familyByBranch
-    # familyByArea
-    # familyByCommittee  
-    family_branch_serializer = ElectorDataByCategory(family_branches_only)
-    family_branch_area_serializer = ElectorDataByCategory(family_branches_areas)
-    area_family_branch_serializer = ElectorDataByCategory(areas_family_branches)
-    
+    family_all_branches_serializer = ElectorDataByCategory(instance_family_all_branches)
+    family_all_areas_serializer = ElectorDataByCategory(instance_family_all_areas)
+
+    family_branch_area_serializer = ElectorDataByCategory(instance_family_branches_areas)
+    area_family_branch_serializer = ElectorDataByCategory(instance_areas_family_branches)
     
     
     electors_by_family = family_serializer.to_representation(instance_family_only)
-    electors_by_family_all_committees = family_serializer.to_representation(instance_family_all_committees)
-    
-    
-    electors_by_family_branch = family_branch_serializer.to_representation(family_branches_only)
-    electors_by_family_branch_area = family_branch_area_serializer.to_representation(family_branches_areas)
-    electors_by_area_family_branch = area_family_branch_serializer.to_representation(areas_family_branches)
+    electors_by_family_all_branches = family_all_branches_serializer.to_representation(instance_family_all_branches)
+    electors_by_family_all_areas = family_all_areas_serializer.to_representation(instance_family_all_areas)
+
+    electors_by_family_branch_area = family_branch_area_serializer.to_representation(instance_family_branches_areas)
+    electors_by_area_family_branch = area_family_branch_serializer.to_representation(instance_areas_family_branches)
 
     return {
+        # All
         "electorsByFamily": electors_by_family,
-        "electorsByFamilyAllCommittees": electors_by_family_all_committees,
-        "electorsByFamilyBranch": electors_by_family_branch,
+        "electorsByFamilyAllBranches": electors_by_family_all_branches,
+        "electorsByFamilyAllAreas": electors_by_family_all_areas,
+
+        
         "electorsByFamilyBranchArea": electors_by_family_branch_area,
         "electorsByAreaFamilyBranch": electors_by_area_family_branch,
+        
+        
+        # "electorsByFamilyAllBranches": electors_by_family_all_committees,
+        # "electorsByFamilyAllAreas": electors_by_family_all_committees,
+        # "electorsByFamilyAllCommittees": electors_by_family_all_committees,
+        # "electorsByFamilyBranch": electors_by_family_branch,
+
         "familyBranches": fetch_selection_options(family, "branch"),
         "familyBranchesAreas": fetch_selection_options(family, "area", branches),
         "familyCommittees": fetch_selection_options(family, "committee_area", committees),

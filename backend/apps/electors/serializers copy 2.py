@@ -93,32 +93,24 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         else:
             dataSeries = []  # Define dataSeries as empty if none of the conditions met
 
-        series_female, series_male = self.prepare_gender_data_series( )
 
-        # # Gender data compilation across all categories
-        # seriesFemale = [
-        #     sum(branch_data[div]["female"]) for div in branch_data
-        # ]
-        # seriesMale = [
-        #     sum(branch_data[div]["male"]) for div in branch_data
-        # ]
+        # Gender data compilation across all categories
+        seriesFemale = [
+            sum(branch_data[div]["female"]) for div in branch_data
+        ]
+        seriesMale = [
+            sum(branch_data[div]["male"]) for div in branch_data
+        ]
 
         return {
             "counter": count_aggregated_electors,
             "categories": categories,
             "dataSeries": dataSeries,
             "dataSeriesByGender": [
-                {"name": "إناث", "data": series_female},
-                {"name": "ذكور", "data": series_male},
+                {"name": "إناث", "data": seriesFemale},
+                {"name": "ذكور", "data": seriesMale},
             ],
         }
-        
-    def prepare_gender_data_series(self, elector_data):
-        """ Prepare gender-specific data series. """
-        series_female = [item["female"] for item in elector_data]
-        series_male = [item["male"] for item in elector_data]
-        return series_female, series_male
-
 
 
 def count_aggregated_data(elector_data):

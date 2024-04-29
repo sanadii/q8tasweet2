@@ -38,8 +38,6 @@ class ElectorDataByCategory(serializers.BaseSerializer):
             update_data(committee_data, item.get("committee_area", ""), item)
                 
         # Build category names and corresponding series data
-        
-        print("area_data: ", area_data)
         categories = []  # Initialize categories to ensure it's always defined
         if main == "families":
             dataSeries = [
@@ -47,36 +45,14 @@ class ElectorDataByCategory(serializers.BaseSerializer):
                 for title in family_data
             ]
             categories = list(branch_data.keys())
-            
-        # familyBranches
-        elif main == "familyBranches":
-            dataSeries = [
-                {"name": title, "data": family_data[title]["total"]}
-                for title in family_data
-            ]
-            categories = list(branch_data.keys())
-            
-        elif main == "familyAreas":
+           
+        if main == "familieAreas":
             dataSeries = [
                 {"name": title, "data": family_data[title]["total"]}
                 for title in family_data
             ]
             categories = list(area_data.keys())
-                        
-        elif main == "familyAllCommittees":
-            dataSeries = [
-                {"name": title, "data": family_data[title]["total"]}
-                for title in family_data
-            ]
-            categories = list(committee_data.keys())
-
-        elif main == "familyAllCommittees":
-            dataSeries = [
-                {"name": title, "data": family_data[title]["total"]}
-                for title in family_data
-            ]
-            categories = list(committee_data.keys())
-            
+                       
         elif main == "branchAreas":
             dataSeries = [
                 {"name": title, "data": branch_data[title]["total"]}
@@ -90,35 +66,42 @@ class ElectorDataByCategory(serializers.BaseSerializer):
                 for title in area_data
             ]
             categories = list(branch_data.keys())
+            
+        # elif main == "familyAllCommittees":
+        #         dataSeries = [
+        #             {"name": title, "data": family_data[title]["total"]}
+        #             for title in family_data
+        #         ]
+        #         categories = list(committee_data.keys())
+
+        # elif main == "familyAllCommittees":
+        #     dataSeries = [
+        #         {"name": title, "data": family_data[title]["total"]}
+        #         for title in family_data
+        #     ]
+        #     categories = list(committee_data.keys())
+        
         else:
             dataSeries = []  # Define dataSeries as empty if none of the conditions met
 
-        series_female, series_male = self.prepare_gender_data_series( )
 
-        # # Gender data compilation across all categories
-        # seriesFemale = [
-        #     sum(branch_data[div]["female"]) for div in branch_data
-        # ]
-        # seriesMale = [
-        #     sum(branch_data[div]["male"]) for div in branch_data
-        # ]
+        # Gender data compilation across all categories
+        seriesFemale = [
+            sum(branch_data[div]["female"]) for div in branch_data
+        ]
+        seriesMale = [
+            sum(branch_data[div]["male"]) for div in branch_data
+        ]
 
         return {
             "counter": count_aggregated_electors,
             "categories": categories,
             "dataSeries": dataSeries,
             "dataSeriesByGender": [
-                {"name": "إناث", "data": series_female},
-                {"name": "ذكور", "data": series_male},
+                {"name": "إناث", "data": seriesFemale},
+                {"name": "ذكور", "data": seriesMale},
             ],
         }
-        
-    def prepare_gender_data_series(self, elector_data):
-        """ Prepare gender-specific data series. """
-        series_female = [item["female"] for item in elector_data]
-        series_male = [item["male"] for item in elector_data]
-        return series_female, series_male
-
 
 
 def count_aggregated_data(elector_data):
@@ -155,7 +138,7 @@ def get_aggregated_data(family=None, branches=None, areas=None, committees=None)
         
     if committees:  # Only include area in the output if it's a part of the filter
         grouping_fields.append("committee_area")
-    print("grouping_fields, ", grouping_fields)    
+        
     # Annotate and aggregate data based on the dynamic fields
     return (
         queryset.values(*grouping_fields)
@@ -198,3 +181,41 @@ class ElectorDataSeriesByGenderSerializer(serializers.BaseSerializer):
             {"name": "إناث", "data": seriesFemale},
             {"name": "ذكور", "data": seriesMale},
         ]
+
+
+# class FamilyBranchSerializer(serializers.Serializer):
+#     family = serializers.CharField()
+#     total = serializers.IntegerField()
+#     female = serializers.IntegerField()
+#     male = serializers.IntegerField()
+
+
+# class ElectorAggregatedSerializer(serializers.ModelSerializer):
+#     dataSeriesByGender = serializers.SerializerMethodField()
+#     familyBranches = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Elector
+#         fields = ("dataSeriesByGender", "familyBranches")
+
+#     def get_dataSeriesByGender(self, obj):
+#         queryset = Elector.objects.filter(
+#             family=obj.family
+#         )  # Ensure obj is a valid queryset
+#         females = queryset.filter(gender="2").count()
+#         males = queryset.filter(gender="1").count()
+#         return [
+#             {"name": "إناث", "data": [females]},
+#             {"name": "ذكور", "data": [males]},
+#         ]
+
+#     def get_familyBranches(self, obj):
+#         branches = (
+#             Elector.objects.filter(family=obj.family)
+#             .values_list("branch", flat=True)
+#             .distinct()
+#         )
+#         return list(branches)
+
+
+# # Ensure your view is passing the correct data to the serializer:

@@ -21,6 +21,13 @@ export const electorSelector = createSelector(
     electorsByBranchFamilies: electorsState.electorsByFamilyDivision?.electorFamilyDivisionFamilies || [],
 
 
+
+    electorsByFamilyAllBranches: electorsState.electorsByFamilyDivision?.electorsByFamilyAllBranches || [],
+    electorsByFamilyAllAreas: electorsState.electorsByFamilyDivision?.electorsByFamilyAllAreas || [],
+    electorsByFamilyAllCommittees: electorsState.electorsByFamilyDivision?.electorsByFamilyAllCommittees || [],
+
+
+
     electorsByFamilyBranch: electorsState.electorsByFamilyDivision?.electorsByFamilyBranch || [],
     electorsByFamilyBranchArea: electorsState.electorsByFamilyDivision?.electorsByFamilyBranchArea || [],
     electorsByAreaFamilyBranch: electorsState.electorsByFamilyDivision?.electorsByFamilyBranchArea || [],
