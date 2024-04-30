@@ -12,27 +12,201 @@ const ChartSideBar = ({
     viewState
 }) => {
     const { selectionFilters, viewSettings, viewDetails } = viewState;
+    const { resultsToShow, displayByGender, displayByOption, displayWithoutOption, displayWithOption } = viewSettings
 
 
-    const handleDisplayOptionToggle = (option) => () => {
+    const handleDisplayByGenderSelection = useCallback((option) => () => {
         setViewState(prevState => ({
             ...prevState,
             viewSettings: {
                 ...prevState.viewSettings,
-                display: option
+                displayByGender: option
             }
         }));
-    };
+    }, [setViewState]);
+    
 
-    const handleDisplaySeriesOptionToggle = (option) => () => {
+
+    const handleDisplayByOptionSelection = useCallback((option) => () => {
         setViewState(prevState => ({
             ...prevState,
             viewSettings: {
                 ...prevState.viewSettings,
-                displaySeries: option
+                displayByOption: option
             }
         }));
-    };
+    }, [setViewState]);
+    
+    const handleDisplayWithoutOptionToggle = useCallback((option) => () => {
+
+        setViewState(prevState => ({
+            ...prevState,
+            viewSettings: {
+                ...prevState.viewSettings,
+                displayWithoutOption: option
+            }
+        }));
+        
+    }, [setViewState]);
+    
+    const handleDisplayWithOptionToggle = useCallback((option) => () => {
+
+        setViewState(prevState => {
+            const currentOptions = prevState.viewSettings.displayWithOption;
+            const newOptions = currentOptions.includes(option)
+                ? currentOptions.filter(item => item !== option)  // Remove the option if it's already included
+                : [...currentOptions, option];  // Add the option if it's not included
+    
+            return {
+                ...prevState,
+                viewSettings: {
+                    ...prevState.viewSettings,
+                    displayWithOption: newOptions
+                }
+            };
+
+        });
+
+    }, [setViewState]);
+
+        
+    const handleDisplayOptionToggle = useCallback((option) => () => {
+        if (displayByOption) {
+            handleDisplayWithOptionToggle(option)();  // Notice the double call
+        } else {
+            handleDisplayWithoutOptionToggle(option)();  // Notice the double call
+        }
+    }, [displayByOption, handleDisplayWithOptionToggle, handleDisplayWithoutOptionToggle]);
+        
+
+
+    const getDisplayBySelectionIcon = useCallback((option) => () => {
+        if (displayByOption) {
+            return displayWithOption.includes(option) ? "mdi mdi-sticker-check" : "mdi mdi-sticker-remove";
+        } else {
+            return displayWithoutOption === option ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal";
+        }
+    }, [displayByOption, displayWithOption, displayWithoutOption]);
+
+
+    const handleDisplayChartToggle = useCallback((option) => () => {
+        setViewState(prevState => ({
+            ...prevState,
+            viewSettings: {
+                ...prevState.viewSettings,
+                displayByOption: option
+            }
+        }));
+    }, [setViewState]);
+
+    
+
+    // Constants for button configurations
+    const displayByGenderButtons = useMemo(() => [
+        {
+            text: "الكل",
+            icon: displayByGender ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
+            isActive: displayByGender === false, // Ensure this correctly checks the boolean state
+            onClick: handleDisplayByGenderSelection(false),
+        },
+        {
+            text: "ذكور \\ إناث",
+            icon: displayByGender ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal",
+            isActive: displayByGender === true,
+            onClick: handleDisplayByGenderSelection(true),
+        },
+    ], [displayByGender, handleDisplayByGenderSelection]);
+    
+    const displayBySelectionButtons = useMemo(() => [
+        {
+            text: "بدون تحديد",
+            icon: displayByOption ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
+            isActive: displayByOption === false,
+            onClick: handleDisplayByOptionSelection(false),
+        },
+        {
+            text: "مع التحديد",
+            icon: displayByOption ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal",
+            isActive: displayByOption === true,
+            onClick: handleDisplayByOptionSelection(true),
+        },
+    ], [displayByOption, handleDisplayByOptionSelection]);
+
+
+    const displayChartButtons = useMemo(() => [
+        { icon: "ri-pie-chart-fill", onClick: handleDisplayChartToggle("pie"),},
+        { icon: "ri-bar-chart-2-fill", onClick: handleDisplayChartToggle("bar"),},
+        { icon: "ri-line-chart-fill", onClick: handleDisplayChartToggle("line")},
+        { icon: "ri-bubble-chart-fill", onClick: handleDisplayChartToggle("bubble")},
+
+    ], [handleDisplayChartToggle]);
+
+
+    
+    // console.log("displayByOption:", displayByOption, "displayWithOption: ", displayWithOption, "true?: ", displayWithOption.includes("branch"))
+    // // mdi mdi-sticker-remove
+    // // mdi mdi-sticker-minus
+    // // mdi mdi-sticker-check
+    const displayByFieldButtons = useMemo(() => {
+        const options = ["branches", "areas", "committees"];
+        const optionLabels = {
+            branches: "العوائل",
+            areas: "المناطق",
+            committees: "اللجان"
+        };
+
+        return options.map(option => ({
+            text: optionLabels[option],
+            icon: getDisplayBySelectionIcon(option),
+            isActive: displayByOption ? displayWithOption.includes(option) : displayWithoutOption === option,
+            onClick: handleDisplayOptionToggle(option),
+        }));
+    }, [displayByOption, displayWithOption, displayWithoutOption, getDisplayBySelectionIcon, handleDisplayOptionToggle]);
+    
+    const renderButtonGroup = (buttonConfigs) => (
+        <ButtonGroup className="w-100 pb-1">
+            {buttonConfigs.map((btn, index) => (
+                <Button
+                    key={index}
+                    className={`btn-label btn-sm material-shadow-none ${btn.isActive ? "bg-primary " : "bg-light text-primary"}`}
+                    onClick={btn.onClick}
+                    active={btn.isActive}
+                >
+                    <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
+                    {btn.text}
+                </Button>
+            ))}
+        </ButtonGroup>
+    );
+    const renderChartButtonGroup = (buttonConfigs, isIconOnly = false) => (
+        <ButtonGroup className="w-100 pb-1">
+            {buttonConfigs.map((btn, index) => (
+                <Button
+                    key={index}
+                    className={`btn-icon material-shadow-none ${btn.isActive ? "bg-primary" : "bg-soft-primary text-primary"}`}
+                    onClick={btn.onClick}
+                    active={btn.isActive}
+                >
+                    {isIconOnly ? <i className={`${btn.icon} fs-16`}></i> : (
+                        <>
+                            <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
+                            {btn.text}
+                        </>
+                    )}
+                </Button>
+            ))}
+        </ButtonGroup>
+    
+    );
+
+
+//     <ButtonGroup className="w-100 pb-1">
+//     <Button color="soft-primary" className="btn-icon material-shadow-none"> <i className="ri-pie-chart-fill" /> </Button>
+//     <Button color="soft-danger" className="btn-icon material-shadow-none"> <i className="ri-bar-chart-2-fill" /> </Button>
+//     <Button color="soft-success" className="btn-icon material-shadow-none"> <i className="ri-line-chart-fill" /> </Button>
+//     <Button color="soft-secondary" className="btn-icon material-shadow-none"> <i className="ri-bubble-chart-fill" /> </Button>
+// </ButtonGroup>
+
 
 
     return (
@@ -48,53 +222,11 @@ const ChartSideBar = ({
                     />
                 }
                 <div className="view-settings">
-                    <ButtonGroup className="w-100 pb-1">
-                        <Button
-                            className={` material-shadow-none ${viewSettings.display === "all" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
-                            onClick={handleDisplayOptionToggle("all")}
-                            active={viewState.viewSettings.display === 'all'}
-                        >
-                            الكل
-                        </Button>
-                        <Button
-                            className={` material-shadow-none ${viewSettings.display === "gender" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
-                            onClick={handleDisplayOptionToggle("gender")}
-                            active={viewState.viewSettings.display === 'gender'}
-                        >
-                            ذكور \ إناث
-                        </Button>
-                    </ButtonGroup>
-                    <ButtonGroup className="w-100 pb-1">
-                        <Button
-                            className={` material-shadow-none ${viewSettings.displaySeries === "all" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
-                            onClick={handleDisplaySeriesOptionToggle("all")}
-                            active={viewState.viewSettings.display === 'all'}
-                        >
-                            الكل
-                        </Button>
-                        <Button
-                            className={` material-shadow-none ${viewSettings.displaySeries === "branches" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
-                            onClick={handleDisplaySeriesOptionToggle("branches")}
-                            active={viewState.viewSettings.display === 'branches'}
-                        >
-                            العوائل
-                        </Button>
-                        <Button
-                            className={`material-shadow-none ${viewSettings.displaySeries === "areas" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
-                            onClick={handleDisplaySeriesOptionToggle("areas")}
-                            active={viewState.viewSettings.display === 'areas'}
-                        >
-                            المناطق
-                        </Button>
-                        <Button
-                            className={`material-shadow-none ${viewSettings.displaySeries === "committees" ? "bg-secondary" : "bg-soft-secondary text-secondary"}`}
-                            onClick={handleDisplaySeriesOptionToggle("committees")}
-                            active={viewState.viewSettings.display === 'committees'}
-                        >
-                            اللجان
-                        </Button>
+                    {renderButtonGroup(displayByGenderButtons)}
+                    {renderButtonGroup(displayBySelectionButtons)}
+                    {renderButtonGroup(displayByFieldButtons)}
+                    {renderChartButtonGroup(displayChartButtons)}
 
-                    </ButtonGroup>
                     <ButtonGroup className="w-100 pb-1">
                         <Button color="soft-primary" className="btn-icon material-shadow-none"> <i className="ri-pie-chart-fill" /> </Button>
                         <Button color="soft-danger" className="btn-icon material-shadow-none"> <i className="ri-bar-chart-2-fill" /> </Button>
@@ -155,6 +287,8 @@ const ChartSideBar = ({
 };
 
 export default ChartSideBar;
+
+// Render Button Groups as a component or within existing component
 
 
 
@@ -321,3 +455,56 @@ const ChartSideBarCommitteeView = () => { }
 // };
 
 // export default ChartSideBar;
+
+
+//                         {/* mdi-bookmark-remove mdi-bookmark-outline mdi-bookmark-plus-outline
+//                         mdi-bookmark-check mdi-bookmark mdi-bookmark-minus mdi-bookmark-plus
+//                         mdi-checkbox-blank-circle mdi-checkbox-marked-circle
+
+
+//                         mdi-plus-circle
+
+                        
+//                         mdi-layers-off mdi-layers
+//  mdi-layers-outline mdi-layers-plus mdi-layers-minus
+//  mdi-clipboard-flow
+// mdi-clipboard-flow-outline
+
+//  mdi-sticker
+// mdi-sticker-alert
+// mdi-sticker-alert-outline
+// mdi-sticker-check
+// mdi-sticker-check-outline
+// mdi-sticker-circle-outline
+// mdi-sticker-emoji
+// mdi-sticker-minus
+// mdi-sticker-minus-outline
+// mdi-sticker-outline
+// mdi-sticker-plus
+// mdi-sticker-plus-outline
+// mdi-sticker-remove
+// mdi-sticker-remove-outline
+// mdi-sticker-text
+// mdi-sticker-text-outline
+
+
+// mdi-filter
+// mdi-filter-check
+// mdi-filter-check-outline
+// mdi-filter-menu
+// mdi-filter-menu-outline
+// mdi-filter-minus
+// mdi-filter-minus-outline
+// mdi-filter-off
+// mdi-filter-off-outline
+// mdi-filter-outline
+// mdi-filter-plus
+// mdi-filter-plus-outline
+// mdi-filter-remove
+// mdi-filter-remove-outline
+//  */}
+
+
+
+
+

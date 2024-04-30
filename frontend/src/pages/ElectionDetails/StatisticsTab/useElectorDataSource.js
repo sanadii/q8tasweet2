@@ -4,49 +4,53 @@ import { electionSelector, electorSelector } from 'selectors';
 
 const useElectorDataSource = (viewState) => {
     const { viewSettings = {}, viewDetails } = viewState;
-
+    const { resultsToShow, displayByGender, displayByOption, displayWithoutOption, displayWithOption } = viewSettings
 
     const { electionStatistics, electorsByFamily, electorsByArea,
         electorsByCommittee, electorsByCategories, electorsByFamilyDivision
     } = useSelector(electorSelector);
 
     const { electorsByFamilyAllBranches, electorsByFamilyAllAreas, electorsByFamilyAllCommittees,
-    electorsByFamilyBranch, electorsByFamilyBranchArea, electorsByAreaFamilyBranch } = electorsByFamilyDivision
+        electorsByFamilyBranch, electorsByFamilyArea, electorsByFamilyCommittee,
+        electorsByFamilyBranchArea, electorsByFamilyBranchCommitee, electorsByAreaFamilyBranch,
+    } = electorsByFamilyDivision
+
+
+    // need to add the flipping part
+    const displayMapping = useMemo(() => ({
+        branches: displayByOption ? electorsByFamilyBranch : electorsByFamilyAllBranches,
+        areas: displayByOption ? electorsByFamilyArea : electorsByFamilyAllAreas,
+        committees: displayByOption ? electorsByFamilyCommittee : electorsByFamilyAllCommittees,
+        branches_areas: displayByOption ? electorsByAreaFamilyBranch : null,
+        branches_committees: displayByOption ? electorsByFamilyBranchCommitee : null,
+    }), [displayByOption, electorsByFamilyDivision]);
 
     const getFamilyData = () => {
         switch (viewDetails?.activeFamilyView) {
             case 'detailedFamilyAreaView':
-                return electorsByCategories?.areaFamilyDetailed;
+                return electorsByFamilyDivision?.areaFamilyDetailed;
             case 'detailedFamilyDivisionView':
-                if (viewSettings.displaySeries === "all") {
-                    return electorsByFamilyAllBranches;
+                if (displayByOption) {
+                    return displayWithOption.reduce((acc, option) => displayMapping[option] || acc, null);
+                } else {
+                    return displayMapping[displayWithoutOption] || electorsByFamilyBranch;
                 }
-                if (viewSettings.displaySeries === "branches") {
-                    return electorsByFamilyAllBranches;
-                }
-                if (viewSettings.displaySeries === "branches") {
-                    return electorsByFamilyAllBranches;
-                }
-                if (viewSettings.displaySeries === "areas") {
-                    return electorsByAreaFamilyBranch;
-                }
-                return electorsByAreaFamilyBranch;
             default:
-                return electorsByAreaFamilyBranch;
+                return electorsByFamilyAllBranches;
         }
     };
 
-    console.log("electorsByFamilyAllBranches: ", electorsByFamilyAllBranches)
+
 
 
     return useMemo(() => {
-        const colors = viewSettings.display === "gender"
+        const colors = viewSettings.displayByGender === true
             ? ['var(--vz-info)', 'var(--vz-pink)']
             : ["var(--vz-primary)", "var(--vz-secondary)", "var(--vz-success)", "var(--vz-info)", "var(--vz-warning)", "var(--vz-danger)", "var(--vz-dark)", "var(--vz-primary)", "var(--vz-success)", "var(--vz-secondary)"];
 
         const familyData = getFamilyData();
 
-        const dataKey = viewSettings.display === "gender" ? 'dataSeriesByGender' : 'dataSeries';
+        const dataKey = viewSettings.displayByGender === true ? 'dataSeriesByGender' : 'dataSeries';
 
         const commonOptions = {
             statistics: electionStatistics,

@@ -9,7 +9,7 @@ import { electionSelector, electorSelector } from 'selectors';
 import useElectorDataSource from './useElectorDataSource';
 
 // Components
-import { ElectorsOverviewCharts } from './Charts';
+import { ElectorsOverviewCharts, ElectorSimplePie } from './Charts';
 import ChartLeftSideBar from "./ChartSidebar";
 import ElectorStatisticCounter from "./ElectorChartCounter";
 
@@ -35,8 +35,13 @@ const StatisticsTab = () => {
         },
         viewSettings: {
             resultsToShow: "10",
-            display: "all",                  // options: gender, all, branch, area, committees
-            displaySeries: "all",                  // options: gender, all, branch, area, committees
+            displayChart: "bar",
+            // display: "all",                                 // options: true / false
+            displayByGender: false,                         // options: true / false
+            displayByOption: false,                           // Options:  true / false
+            displayWithoutOption: "branch",                 // Options:  branch, area, committee
+            displayWithOption: [],                          // Options:  branch, area, committee
+            displaySeries: "all",                           // options: all, branch, area, committees
             activeView: 'electorsByFamily',
         },
         viewDetails: {
@@ -44,6 +49,7 @@ const StatisticsTab = () => {
             activeAreaView: "",
             activeCommitteeView: ""
         }
+        // All / Male/Female
     });
 
     const { selectionFilters, viewSettings, viewDetails } = viewState;
@@ -100,9 +106,13 @@ const StatisticsTab = () => {
                                     electionStatistics={electionStatistics}
                                 />
 
-                                <ElectorsOverviewCharts
+                                {viewSettings.displayChart === "bar" ? <ElectorsOverviewCharts
                                     dataSource={dataSource[viewSettings.activeView]}
                                 />
+                                    :
+                                    <ElectorSimplePie dataSource={dataSource[viewSettings.activeView]}
+                                    />
+                                }
                             </div>
                         </div>
                     </CardBody>

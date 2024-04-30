@@ -5,11 +5,10 @@ import { getChartColorsArray } from "shared/components";
 
 
 const ElectorsOverviewCharts = ({ dataSource }) => {
-
     var options = {
         chart: {
             height: 374,
-            type: 'bar', // Set the chart type to bar
+            type: 'bar',
             toolbar: {
                 show: false,
             }
@@ -58,5 +57,35 @@ const ElectorsOverviewCharts = ({ dataSource }) => {
     );
 };
 
+const ElectorSimplePie = ({ dataSource }) => {
 
-export { ElectorsOverviewCharts, };
+    console.log("dataSource?.series: ", dataSource?.series)
+    const series = [44, 55, 13, 43, 22]
+    var options = {
+        chart: {
+            height: 300,
+            type: 'pie',
+        },
+        labels: dataSource?.categories,
+        legend: {
+            position: 'left'
+        },
+        dataLabels: {
+            dropShadow: {
+                enabled: false,
+            }
+        },
+        colors: dataSource?.colors
+    };
+    return (
+        <ReactApexChart dir="ltr"
+            className="apex-charts"
+            series={dataSource?.series[0]?.data || []}
+            options={options}
+            type="pie"
+            height={267.7}
+        />
+    )
+}
+
+export { ElectorsOverviewCharts, ElectorSimplePie };
