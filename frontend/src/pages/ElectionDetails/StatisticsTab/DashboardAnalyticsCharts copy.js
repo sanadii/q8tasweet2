@@ -4,7 +4,7 @@ import ReactApexChart from "react-apexcharts";
 import { getChartColorsArray } from "shared/components";
 
 
-const ElectorsOverviewCharts = ({ electorsByFamilyArea,resultsToDisplay, resultByGender, dataSeries }) => {
+const ElectorsOverviewCharts = ({ electorsByFamiliesArea,resultsToDisplay, resultByGender, dataSeries }) => {
 
 
     console.log("dataSeries: ", dataSeries)    // get the number of results to display

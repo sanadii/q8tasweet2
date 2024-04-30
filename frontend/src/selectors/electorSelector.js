@@ -14,7 +14,7 @@ export const electorSelector = createSelector(
     electorsByArea: electorsState.electorsByArea,
     electorsByCommittee: electorsState.electorsByCommittee,
     electorsByCategories: electorsState.electorsByCategories,
-    electorsByFamilyArea: electorsState.electorsByCategories?.electorsByFamily || [],
+    electorsByFamiliesArea: electorsState.electorsByCategories?.electorsByFamily || [],
 
     // ElectorsByFamilyDivision
     electorsByFamilyDivision: electorsState.electorsByFamilyDivision,
@@ -26,13 +26,18 @@ export const electorSelector = createSelector(
     electorsByFamilyAllAreas: electorsState.electorsByFamilyDivision?.electorsByFamilyAllAreas || [],
     electorsByFamilyAllCommittees: electorsState.electorsByFamilyDivision?.electorsByFamilyAllCommittees || [],
 
-
-
     electorsByFamilyBranch: electorsState.electorsByFamilyDivision?.electorsByFamilyBranch || [],
+    electorsByFamilyArea: electorsState.electorsByFamilyDivision?.electorsByFamilyArea || [],
+
     electorsByFamilyBranchArea: electorsState.electorsByFamilyDivision?.electorsByFamilyBranchArea || [],
-    electorsByAreaFamilyBranch: electorsState.electorsByFamilyDivision?.electorsByFamilyBranchArea || [],
+    electorsByFamilyAreaBranch: electorsState.electorsByFamilyDivision?.electorsByFamilyAreaBranch || [],
+
+    electorsByFamilyBranchCommittee: electorsState.electorsByFamilyDivision?.electorsByFamilyBranchCommittee || [],
+    electorsByFamilyCommitteeBranch: electorsState.electorsByFamilyDivision?.electorsByFamilyCommitteeBranch || [],
+    
     familyBranches: electorsState.electorsByFamilyDivision?.familyBranches || [],
     familyBranchesAreas: electorsState.electorsByFamilyDivision?.familyBranchesAreas || [],
+
     // electorFamilyBranches: electorsState.electorsByFamilyDivision?.electorFamilyBranches || [],
 
     // // Elections

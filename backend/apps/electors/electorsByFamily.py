@@ -5,59 +5,95 @@ from collections import defaultdict, Counter, OrderedDict
 from rest_framework import serializers
 
 
+# Things to do
+# 5. Optimize Database Queries
+# Your fetch_selection_options function could be optimized by reducing database hits. If these data are not frequently updated, consider caching the results to avoid repeated database queries.
+
+
 # #
 # Elector Family Branches
 # #
-def restructure_electors_by_family(family, branches, areas, committees):
+
+
+def restructure_electors_by_family(request):
     """Restructures elector data into a nested dictionary format using a DRY approach."""
 
     instances = {
         "electorsByFamilyAllBranches": {
-            "family": family,
             "primary_data": "family_data",
             "secondary_data": "branch_data",
-            "filter_key": {"family", "branch"},  # Corrected from 'branches' to 'branch'
+            "filter_fields": {"family"},
+            "data_fields": {"family", "branch"},
         },
-        # "electorsByFamilyAllAreas": {
-        #     "family": family,
-        #     "primary_data": "family_data",
-        #     "secondary_data": "area_data",
-        #     "filter_key": {"family", "area"},
-        # },
-        # "electorsByFamilyAllCommittees": {
-        #     "family": family,
-        #     "primary_data": "family_data",
-        #     "secondary_data": "committee_data",
-        #     "filter_key": {"family", "committee"},
-        # },
-        # "electorsByFamilyBranch": {
-        #     "family": family,
-        #     "branches": branches,
-        #     "primary_data": "family_data",
-        #     "secondary_data": "branch_data",
-        #     "filter_key": {"family", "branch"},
-        # },
+        "electorsByFamilyAllAreas": {
+            "primary_data": "family_data",
+            "secondary_data": "area_data",
+            "filter_fields": {"family"},
+            "data_fields": {"family", "area"},
+        },
+        "electorsByFamilyAllCommittees": {
+            "primary_data": "family_data",
+            "secondary_data": "committee_data",
+            "filter_fields": {"family"},
+            "data_fields": {"family", "committee_area"},
+        },
+        "electorsByFamilyBranch": {
+            "primary_data": "family_data",
+            "secondary_data": "branch_data",
+            "filter_fields": {"family", "branches"},
+            "data_fields": {"family", "branch"},
+        },
+        "electorsByFamilyArea": {
+            "primary_data": "family_data",
+            "secondary_data": "area_data",
+            "filter_fields": {"family", "areas"},
+            "data_fields": {"family", "area"},
+        },
+        "electorsByFamilyBranchArea": {
+            "primary_data": "branch_data",
+            "secondary_data": "area_data",
+            "filter_fields": {"family", "branches", "areas"},
+            "data_fields": {"family", "branch", "area"},
+        },
+        "electorsByFamilyBranchCommitee": {
+            "primary_data": "family_data",
+            "secondary_data": "committee_data",
+            "filter_fields": {"family", "branches", "committees"},
+            "data_fields": {"family", "branch", "committee_area"},
+        },
+        "electorsByFamilyAreaBranch": {
+            "primary_data": "area_data",
+            "secondary_data": "branch_data",
+            "filter_fields": {"family", "branches", "areas"},
+            "data_fields": {"family", "branch", "area"},
+        },
+        "electorsByFamilyCommitteeBranch": {
+            "primary_data": "committee_data",
+            "secondary_data": "branch_data",
+            "filter_fields": {"family", "branches", "committee"},
+            "data_fields": {"family", "branch", "committee_area"},
+        },
     }
 
-
     results = {}
-    for key, params in instances.items():
+    for key, instance in instances.items():
+        params = prepare_parameters(request, instance["data_fields"])
         results[key] = process_elector_data(
-            family,
-            branches,
-            areas,
-            committees,
-            params["primary_data"],
-            params["secondary_data"],
-            params["filter_key"],
+            params,
+            instance["primary_data"],
+            instance["secondary_data"],
+            instance["filter_fields"],
+            instance["data_fields"],
         )
 
     results.update(
         {
-            "familyBranches": fetch_selection_options(family, "branch"),
-            "familyBranchesAreas": fetch_selection_options(family, "area", branches),
+            "familyBranches": fetch_selection_options(params.get("family"), "branch"),
+            "familyBranchesAreas": fetch_selection_options(
+                params.get("family"), "area", params.get("branches")
+            ),
             "familyCommittees": fetch_selection_options(
-                family, "committee_area", committees
+                params.get("family"), "committee_area", params.get("committees")
             ),
         }
     )
@@ -65,83 +101,54 @@ def restructure_electors_by_family(family, branches, areas, committees):
     return results
 
 
+def extract_query_params(request, param):
+    value = request.GET.get(param, "")
+    return value.split(",") if value else None
+
+
+def prepare_parameters(request, filter_fields):
+    """Extract parameters from the request based on required fields."""
+
+    params = {}
+    if "family" in filter_fields:
+        params["family"] = request.GET.get("family")
+    if "branches" in filter_fields:
+        params["branches"] = extract_query_params(request, "branches")
+    if "areas" in filter_fields:
+        params["areas"] = extract_query_params(request, "areas")
+    if "committees" in filter_fields:
+        params["committees"] = extract_query_params(request, "committees")
+    return params
+
+
 def process_elector_data(
-    family, branches, areas, committees, primary_data, secondary_data, filter
+    params, primary_data, secondary_data, filter_fields, data_fields
 ):
     """Helper function to create a serializer instance and retrieve data."""
     instance = {
         "instance": (
-            family,
-            branches,
-            areas,
-            committees,
+            params.get("family"),
+            params.get("branches"),
+            params.get("areas"),
+            params.get("committees"),
             primary_data,
             secondary_data,
-            filter,
+            filter_fields,
+            data_fields,
         )
     }
     serializer = ElectorDataByCategory(instance)
     return serializer.to_representation(instance)
 
 
-def count_aggregated_data(elector_data):
-    """Summarizes elector counts."""
-    total = sum(item["total"] for item in elector_data)
-    female = sum(item["female"] for item in elector_data)
-    male = sum(item["male"] for item in elector_data)
-    return {
-        "total": total,
-        "female": female,
-        "male": male,
-    }
-
-
-def get_aggregated_data(family=None, branches=None, areas=None, committees=None):
-    """Fetch and aggregate elector data based on filters."""
-    queryset = Elector.objects.all()
-
-    # Apply filters if they exist
+def fetch_selection_options(family, field, branches=None):
+    """Fetch options for dropdowns based on context (family or branches)."""
+    queryset = Elector.objects
     if family:
         queryset = queryset.filter(family__icontains=family)
     if branches:
         queryset = queryset.filter(branch__in=branches)
-    if areas:
-        queryset = queryset.filter(area__in=areas)
-    if committees:
-        queryset = queryset.filter(committee_area__in=committees)
-
-    print("committees: ", committees)
-    # Define fields to group by dynamically based on provided filters
-    grouping_fields = ["family", "branch"]  # Adjust as needed
-    if areas:  # Only include area in the output if it's a part of the filter
-        grouping_fields.append("area")
-
-    if committees:  # Only include area in the output if it's a part of the filter
-        grouping_fields.append("committee_area")
-    print("grouping_fields, ", grouping_fields)
-    # Annotate and aggregate data based on the dynamic fields
-    return (
-        queryset.values(*grouping_fields)
-        .annotate(
-            total=Count("id"),
-            female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
-            male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
-        )
-        .order_by("-total")[:20]
-    )
-
-
-def update_data(data_dict, key, data):
-    # Ensure each key initializes with a default dictionary if it doesn't exist
-    if key not in data_dict:
-        data_dict[key] = defaultdict(
-            list
-        )  # Initializes missing keys with a dictionary whose values are lists
-
-    # Assuming 'data' is a dictionary with structure { 'total': x, 'female': y, 'male': z }
-    data_dict[key]["total"].append(data["total"])
-    data_dict[key]["female"].append(data["female"])
-    data_dict[key]["male"].append(data["male"])
+    return list(queryset.values_list(field, flat=True).distinct())
 
 
 class ElectorDataSeriesByGenderSerializer(serializers.BaseSerializer):
@@ -159,63 +166,3 @@ class ElectorDataSeriesByGenderSerializer(serializers.BaseSerializer):
             {"name": "إناث", "data": seriesFemale},
             {"name": "ذكور", "data": seriesMale},
         ]
-
-
-def update_data(data_dict, key, data):
-    # Ensure each key initializes with a default dictionary if it doesn't exist
-    if key not in data_dict:
-        data_dict[key] = defaultdict(
-            list
-        )  # Initializes missing keys with a dictionary whose values are lists
-
-    # Assuming 'data' is a dictionary with structure { 'total': x, 'female': y, 'male': z }
-    data_dict[key]["total"].append(data["total"])
-    data_dict[key]["female"].append(data["female"])
-    data_dict[key]["male"].append(data["male"])
-
-
-def get_aggregated_data_by_family_branch_area(family=None, branches=None, areas=None):
-    """Fetch and aggregate elector data based on filters."""
-    queryset = Elector.objects.all()
-
-    # Apply filters if they exist
-    if family:
-        queryset = queryset.filter(family__icontains=family)
-    if branches:
-        queryset = queryset.filter(branch__in=branches)
-    if areas:
-        queryset = queryset.filter(area__in=areas)
-
-    # Define fields to group by dynamically based on provided filters
-    grouping_fields = ["family", "branch"]
-    if areas:  # Only include area in the output if it's a part of the filter
-        grouping_fields.append("area")
-
-    # Annotate and aggregate data based on the dynamic fields
-    return (
-        queryset.values(*grouping_fields)
-        .annotate(
-            total=Count("id"),
-            female=Count(Case(When(gender="2", then=1), output_field=IntegerField())),
-            male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
-        )
-        .order_by("-total")[:20]
-    )
-
-
-def update_data_structure(data_dict, key, total, female, male):
-    if key not in data_dict:
-        data_dict[key] = {"total": [], "female": [], "male": []}
-    data_dict[key]["total"].append(total)
-    data_dict[key]["female"].append(female)
-    data_dict[key]["male"].append(male)
-
-
-def fetch_selection_options(family, field, branches=None):
-    """Fetch options for dropdowns based on context (family or branches)."""
-    queryset = Elector.objects
-    if family:
-        queryset = queryset.filter(family__icontains=family)
-    if branches and field == "area":
-        queryset = queryset.filter(branch__in=branches)
-    return list(queryset.values_list(field, flat=True).distinct())

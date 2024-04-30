@@ -16,7 +16,7 @@ import Select from "react-select";
 const StatisticsTab = () => {
     const dispatch = useDispatch();
 
-    const { electionStatistics, electorsByFamily, electorsByArea, electorsByCommittee, electorsByCategories, electorsByFamilyArea } = useSelector(electorSelector)
+    const { electionStatistics, electorsByFamily, electorsByArea, electorsByCommittee, electorsByCategories, electorsByFamiliesArea } = useSelector(electorSelector)
     const { election } = useSelector(electionSelector)
     const [resultsToDisplay, setResultsToDisplay] = useState("10")
     const [resultByGender, setResultByGender] = useState(true)
@@ -35,7 +35,7 @@ const StatisticsTab = () => {
     // let electorsByCommitteeDataSeries;
 
     // useEffect(() => {
-    //     // Check if electorsByFamilyArea is not empty
+    //     // Check if electorsByFamiliesArea is not empty
     //     if (familyAreaView === "familyArea") {
     //         electorsByCommitteeDataSeries = familyAreaDataSeries
     //     } else {
@@ -48,11 +48,11 @@ const StatisticsTab = () => {
 
     // const electorsByCategoriesSeries = electorsByCategories?.electorsByFamily
 
-    // console.log("electorsByFamilyArea:", electorsByFamilyArea)
+    // console.log("electorsByFamiliesArea:", electorsByFamiliesArea)
 
     const [chartInfo, setChartInfo] = useState({
         type: 'byFamily',
-        // dataSeries: electorsByFamilyArea
+        // dataSeries: electorsByFamiliesArea
         dataSeries: electorsByFamily
     });
 
@@ -83,7 +83,7 @@ const StatisticsTab = () => {
     const familyAreaDataSeriesTotal = electorsByCategories?.familyAreaDataSeries?.total;
 
     const dataSource = {
-        electorsByFamilyArea: {
+        electorsByFamiliesArea: {
             // statistics: "12",
             categories: resultByGender ? familyCategories : areaCategories,
             series: resultByGender ? areaFamilyDataSeries : familyAreaDataSeries,
@@ -114,7 +114,7 @@ const StatisticsTab = () => {
         });
     };
 
-    // console.log("electorsByFamilyArea: ", electorsByFamilyArea)
+    // console.log("electorsByFamiliesArea: ", electorsByFamiliesArea)
 
     useEffect(() => {
         const familyValues = selectedFamilies.map(option => option.value);
@@ -126,21 +126,21 @@ const StatisticsTab = () => {
     }, [selectedFamilies, selectedAreas, resultsToDisplay, election.slug, dispatch]);
 
     useEffect(() => {
-        // Check if electorsByFamilyArea is not empty
-        if (Object.keys(electorsByFamilyArea).length > 0) {
+        // Check if electorsByFamiliesArea is not empty
+        if (Object.keys(electorsByFamiliesArea).length > 0) {
             // Run your code here
             // setChartInfo({
             //     type: 'byFamilyArea',
-            //     dataSeries: electorsByFamilyArea,
+            //     dataSeries: electorsByFamiliesArea,
             // });
         }
-    }, [electorsByFamilyArea]); // Run effect when electorsByFamilyArea changes
+    }, [electorsByFamiliesArea]); // Run effect when electorsByFamiliesArea changes
 
     const chartElectorButtons = [
         { period: 'byFamily', label: 'العائلة - القبيلة', dataSource: dataSource.electorsByFamily },
         { period: 'byArea', label: 'المناطق السكنية', dataSource: dataSource.electorsByArea },
         { period: 'byCommittee', label: 'اللجان الإنتخابية', dataSource: dataSource.electorsByCommittee },
-        { period: 'byFamilyArea', label: 'مفصل', dataSource: dataSource.electorsByFamilyArea },
+        { period: 'byFamilyArea', label: 'مفصل', dataSource: dataSource.electorsByFamiliesArea },
 
     ];
 

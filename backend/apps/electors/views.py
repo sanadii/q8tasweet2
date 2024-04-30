@@ -138,29 +138,12 @@ class GetElectorFamilyDivisions(APIView):
 
     def get(self, request, *args, **kwargs):
         schema = request.GET.get("schema")
-        family = request.GET.get("family")
-        branches = (
-            request.GET.get("branches", "").split(",")
-            if request.GET.get("branches")
-            else None
-        )
-        areas = (
-            request.GET.get("areas", "").split(",")
-            if request.GET.get("areas")
-            else None
-        )
-        committees = (
-            request.GET.get("committees", "").split(",")
-            if request.GET.get("committees")
-            else None
-        )
         with schema_context(request, schema):
             if hasattr(request, "response"):
                 return request.response
 
-            electors_by_family_branch_area = restructure_electors_by_family(
-                family, branches, areas, committees
-            )
+            electors_by_family = restructure_electors_by_family(request)
+            if "error" in electors_by_family:
+                return Response({"error": electors_by_family["error"]}, status=400)
 
-        return Response({"data": electors_by_family_branch_area}, status=200)
-
+        return Response({"data": electors_by_family}, status=200)
