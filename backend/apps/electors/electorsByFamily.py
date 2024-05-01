@@ -55,30 +55,30 @@ def restructure_electors_by_family(request):
             "filter_fields": {"family", "committees"},
             "data_fields": {"family", "committee_area"},
         },
-        "electorsByFamilyBranchArea": {
-            "primary_data": "branch_data",
-            "secondary_data": "area_data",
-            "filter_fields": {"family", "branches", "areas"},
-            "data_fields": {"family", "branch", "area"},
-        },
-        "electorsByFamilyAreaBranch": {
-            "primary_data": "area_data",
-            "secondary_data": "branch_data",
-            "filter_fields": {"family", "branches", "areas"},
-            "data_fields": {"family", "branch", "area"},
-        },
-        "electorsByFamilyBranchCommittee": {
-            "primary_data": "branch_data",
-            "secondary_data": "committee_data",
-            "filter_fields": {"family", "branches", "committees"},
-            "data_fields": {"family", "branch", "committee_area"},
-        },
-        "electorsByFamilyCommitteeBranch": {
-            "primary_data": "committee_data",
-            "secondary_data": "branch_data",
-            "filter_fields": {"family", "branches", "committees"},
-            "data_fields": {"family", "branch", "committee_area"},
-        },
+        # "electorsByFamilyBranchArea": {
+        #     "primary_data": "branch_data",
+        #     "secondary_data": "branch_area_data",
+        #     "filter_fields": {"family", "branches", "areas"},
+        #     "data_fields": {"family", "branch", "area"},
+        # },
+        # "electorsByFamilyAreaBranch": {
+        #     "primary_data": "area_data",
+        #     "secondary_data": "area_branch_data",
+        #     "filter_fields": {"family", "branches", "areas"},
+        #     "data_fields": {"family", "branch", "area"},
+        # },
+        # "electorsByFamilyBranchCommittee": {
+        #     "primary_data": "branch_data",
+        #     "secondary_data": "committee_data",
+        #     "filter_fields": {"family", "branches", "committees"},
+        #     "data_fields": {"family", "branch", "committee_area"},
+        # },
+        # "electorsByFamilyCommitteeBranch": {
+        #     "primary_data": "committee_data",
+        #     "secondary_data": "branch_data",
+        #     "filter_fields": {"family", "branches", "committees"},
+        #     "data_fields": {"family", "branch", "committee_area"},
+        # },
     }
     results = {}
     for key, params in instances.items():
