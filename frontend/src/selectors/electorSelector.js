@@ -30,13 +30,14 @@ export const electorSelector = createSelector(
     electorsByFamilyArea: electorsState.electorsByFamilyDivision?.electorsByFamilyArea || [],
 
     electorsByFamilyBranchArea: electorsState.electorsByFamilyDivision?.electorsByFamilyBranchArea || [],
-    electorsByFamilyAreaBranch: electorsState.electorsByFamilyDivision?.electorsByFamilyAreaBranch || [],
+    electorsByAreaBranch: electorsState.electorsByFamilyDivision?.electorsByAreaBranch || [],
 
     electorsByFamilyBranchCommittee: electorsState.electorsByFamilyDivision?.electorsByFamilyBranchCommittee || [],
     electorsByFamilyCommitteeBranch: electorsState.electorsByFamilyDivision?.electorsByFamilyCommitteeBranch || [],
     
     familyBranches: electorsState.electorsByFamilyDivision?.familyBranches || [],
-    familyBranchesAreas: electorsState.electorsByFamilyDivision?.familyBranchesAreas || [],
+    familyAreas: electorsState.electorsByFamilyDivision?.familyAreas || [],
+    familyCommittees: electorsState.electorsByFamilyDivision?.familyCommittees || [],
 
     // electorFamilyBranches: electorsState.electorsByFamilyDivision?.electorFamilyBranches || [],
 

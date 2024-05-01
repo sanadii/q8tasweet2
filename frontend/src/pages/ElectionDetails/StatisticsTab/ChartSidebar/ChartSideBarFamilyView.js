@@ -18,7 +18,7 @@ const ChartSideBarFamilyView = ({
     const dispatch = useDispatch();
     const { electionSlug } = useSelector(electionSelector);
 
-    const { electorsByFamily, electorsByArea, familyBranches, familyBranchesAreas } = useSelector(electorSelector);
+    const { electorsByFamily, electorsByArea, familyBranches, familyAreas, familyCommittees } = useSelector(electorSelector);
 
     const familyOptions = useMemo(() => (
         electorsByFamily.categories.map(category => ({ label: category, value: category })) || []
@@ -33,10 +33,13 @@ const ChartSideBarFamilyView = ({
         electorsByArea.categories?.map(category => ({ label: category, value: category }))
     ), [electorsByArea]);
 
-    const familyBranchAreaOptions = useMemo(() => (
-        familyBranchesAreas.map(category => ({ label: category, value: category }))
-    ), [familyBranchesAreas]);
+    const familyAreaOptions = useMemo(() => (
+        familyAreas.map(category => ({ label: category, value: category }))
+    ), [familyAreas]);
 
+    const familyCommitteeOptions = useMemo(() => (
+        familyCommittees.map(category => ({ label: category, value: category }))
+    ), [familyCommittees]);
 
     const handleFamilyChartView = useCallback((selectedChartView) => {
         setViewState(prev => ({
@@ -139,7 +142,7 @@ const ChartSideBarFamilyView = ({
                                 classNamePrefix="select"
                             />
                         </div>
-                        {familyBranchAreaOptions &&
+                        {familyAreaOptions &&
                             <div className="pb-3">
                                 <Label for="areaSelect">المناطق</Label>
                                 <Select
@@ -147,21 +150,21 @@ const ChartSideBarFamilyView = ({
                                     value={selectionFilters.familyDivisionsAreas}
                                     isMulti
                                     onChange={(value) => handleFamilyBranchChange('selectedFamilyBranchesAreas', value)}
-                                    options={familyBranchAreaOptions}
+                                    options={familyAreaOptions}
                                     classNamePrefix="select"
                                 />
                             </div>
                         }
 
-                        {familyBranchAreaOptions &&
+                        {familyAreaOptions &&
                             <div className="pb-3">
                                 <Label for="areaSelect">اللجان</Label>
                                 <Select
                                     id="areaSelect"
                                     value={selectionFilters.familyDivisionsAreas}
                                     isMulti
-                                    onChange={(value) => handleFamilyBranchChange('selectedFamilyBranchesAreas', value)}
-                                    options={familyBranchAreaOptions}
+                                    onChange={(value) => handleFamilyBranchChange('selectedFamilyBranchesCommittees', value)}
+                                    options={familyCommitteeOptions}
                                     classNamePrefix="select"
                                 />
                             </div>

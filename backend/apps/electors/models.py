@@ -63,4 +63,4 @@ class Elector(models.Model):
         default_permissions = []
 
     def __str__(self):
-        return self.name
+        return self.full_name

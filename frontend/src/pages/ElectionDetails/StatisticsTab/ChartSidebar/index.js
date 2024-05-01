@@ -80,21 +80,24 @@ const ChartSideBar = ({
         
 
 
-    const getDisplayBySelectionIcon = useCallback((option) => () => {
+    const getDisplayBySelectionIcon = useCallback((option) => {
         if (displayByOption) {
             return displayWithOption.includes(option) ? "mdi mdi-sticker-check" : "mdi mdi-sticker-remove";
         } else {
             return displayWithoutOption === option ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal";
         }
     }, [displayByOption, displayWithOption, displayWithoutOption]);
+    
 
 
+    console.log("displayWithOption", displayWithOption)
+    console.log("displayWithoutOption", displayWithoutOption)
     const handleDisplayChartToggle = useCallback((option) => () => {
         setViewState(prevState => ({
             ...prevState,
             viewSettings: {
                 ...prevState.viewSettings,
-                displayByOption: option
+                displayChartType: option
             }
         }));
     }, [setViewState]);
@@ -133,20 +136,13 @@ const ChartSideBar = ({
     ], [displayByOption, handleDisplayByOptionSelection]);
 
 
-    const displayChartButtons = useMemo(() => [
-        { icon: "ri-pie-chart-fill", onClick: handleDisplayChartToggle("pie"),},
-        { icon: "ri-bar-chart-2-fill", onClick: handleDisplayChartToggle("bar"),},
-        { icon: "ri-line-chart-fill", onClick: handleDisplayChartToggle("line")},
-        { icon: "ri-bubble-chart-fill", onClick: handleDisplayChartToggle("bubble")},
 
-    ], [handleDisplayChartToggle]);
-
-
-    
+   
     // console.log("displayByOption:", displayByOption, "displayWithOption: ", displayWithOption, "true?: ", displayWithOption.includes("branch"))
     // // mdi mdi-sticker-remove
     // // mdi mdi-sticker-minus
     // // mdi mdi-sticker-check
+
     const displayByFieldButtons = useMemo(() => {
         const options = ["branches", "areas", "committees"];
         const optionLabels = {
@@ -162,6 +158,14 @@ const ChartSideBar = ({
             onClick: handleDisplayOptionToggle(option),
         }));
     }, [displayByOption, displayWithOption, displayWithoutOption, getDisplayBySelectionIcon, handleDisplayOptionToggle]);
+    
+    const displayChartButtons = useMemo(() => [
+        { icon: "ri-pie-chart-fill", color: "soft-primary", onClick: handleDisplayChartToggle("pie"),},
+        { icon: "ri-bar-chart-2-fill", color: "soft-danger",  onClick: handleDisplayChartToggle("bar"),},
+        { icon: "ri-line-chart-fill", color: "soft-success", onClick: handleDisplayChartToggle("line")},
+        { icon: "ri-bubble-chart-fill", color: "soft-secondary", onClick: handleDisplayChartToggle("bubble")},
+
+    ], [handleDisplayChartToggle]);
     
     const renderButtonGroup = (buttonConfigs) => (
         <ButtonGroup className="w-100 pb-1">
@@ -183,32 +187,19 @@ const ChartSideBar = ({
             {buttonConfigs.map((btn, index) => (
                 <Button
                     key={index}
-                    className={`btn-icon material-shadow-none ${btn.isActive ? "bg-primary" : "bg-soft-primary text-primary"}`}
+                    color={btn.color}
+                    className={`btn-icon material-shadow-none"}`}
                     onClick={btn.onClick}
                     active={btn.isActive}
                 >
-                    {isIconOnly ? <i className={`${btn.icon} fs-16`}></i> : (
-                        <>
                             <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
                             {btn.text}
-                        </>
-                    )}
                 </Button>
+
             ))}
         </ButtonGroup>
     
     );
-
-
-//     <ButtonGroup className="w-100 pb-1">
-//     <Button color="soft-primary" className="btn-icon material-shadow-none"> <i className="ri-pie-chart-fill" /> </Button>
-//     <Button color="soft-danger" className="btn-icon material-shadow-none"> <i className="ri-bar-chart-2-fill" /> </Button>
-//     <Button color="soft-success" className="btn-icon material-shadow-none"> <i className="ri-line-chart-fill" /> </Button>
-//     <Button color="soft-secondary" className="btn-icon material-shadow-none"> <i className="ri-bubble-chart-fill" /> </Button>
-// </ButtonGroup>
-
-
-
     return (
         <div className="chat-leftsidebar bg-light">
             <div className="px-2 pt-2 mb-2">
@@ -227,15 +218,8 @@ const ChartSideBar = ({
                     {renderButtonGroup(displayByFieldButtons)}
                     {renderChartButtonGroup(displayChartButtons)}
 
-                    <ButtonGroup className="w-100 pb-1">
-                        <Button color="soft-primary" className="btn-icon material-shadow-none"> <i className="ri-pie-chart-fill" /> </Button>
-                        <Button color="soft-danger" className="btn-icon material-shadow-none"> <i className="ri-bar-chart-2-fill" /> </Button>
-                        <Button color="soft-success" className="btn-icon material-shadow-none"> <i className="ri-line-chart-fill" /> </Button>
-                        <Button color="soft-secondary" className="btn-icon material-shadow-none"> <i className="ri-bubble-chart-fill" /> </Button>
-                    </ButtonGroup>
-                </div>
 
-
+</div>
                 {/* <div>
                     <h5><b>تصنيف</b></h5>
                     <Label for="genderSwitch">ذكور \ إناث</Label>

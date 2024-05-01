@@ -9,7 +9,7 @@ import { electionSelector, electorSelector } from 'selectors';
 import useElectorDataSource from './useElectorDataSource';
 
 // Components
-import { ElectorsOverviewCharts, ElectorSimplePie } from './Charts';
+import { ElectorSimpleBarChart, ElectorSimplePieChart, ElectorSimpleBubbleChart, ElectorMultipleHeatmap } from './Charts';
 import ChartLeftSideBar from "./ChartSidebar";
 import ElectorStatisticCounter from "./ElectorChartCounter";
 
@@ -35,7 +35,7 @@ const StatisticsTab = () => {
         },
         viewSettings: {
             resultsToShow: "10",
-            displayChart: "bar",
+            displayChartType: "bar",
             // display: "all",                                 // options: true / false
             displayByGender: false,                         // options: true / false
             displayByOption: false,                           // Options:  true / false
@@ -54,10 +54,12 @@ const StatisticsTab = () => {
 
     const { selectionFilters, viewSettings, viewDetails } = viewState;
 
-    console.log("viewState.viewSettings.displaySeries: ", viewState.viewSettings.displaySeries)
+    // console.log("viewState.viewSettings.displaySeries: ", viewState.viewSettings.displaySeries)
     const dataSource = useElectorDataSource(
         viewState,
     );
+
+    // console.log("dataSource:", dataSource)
 
     const handleViewChange = useCallback((viewType) => {
         setViewState(prev => ({
@@ -65,11 +67,6 @@ const StatisticsTab = () => {
             viewSettings: { ...prev.viewSettings, activeView: viewType }
         }));
     }, []);
-
-
-
-
-
 
     return (
         <Row>
@@ -106,13 +103,20 @@ const StatisticsTab = () => {
                                     electionStatistics={electionStatistics}
                                 />
 
-                                {viewSettings.displayChart === "bar" ? <ElectorsOverviewCharts
+                                {viewSettings.displayChartType === "bar" && <ElectorSimpleBarChart
                                     dataSource={dataSource[viewSettings.activeView]}
                                 />
-                                    :
-                                    <ElectorSimplePie dataSource={dataSource[viewSettings.activeView]}
+                                }
+                                {viewSettings.displayChartType === "pie" &&
+                                    <ElectorSimplePieChart dataSource={dataSource[viewSettings.activeView]}
                                     />
                                 }
+
+                                {/* <ElectorSimpleBubbleChart /> */}
+                                <ElectorMultipleHeatmap
+                                    dataSource={dataSource[viewSettings.activeView]}
+                                />
+
                             </div>
                         </div>
                     </CardBody>

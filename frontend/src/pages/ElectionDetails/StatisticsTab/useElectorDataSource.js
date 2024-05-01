@@ -12,33 +12,59 @@ const useElectorDataSource = (viewState) => {
 
     const { electorsByFamilyAllBranches, electorsByFamilyAllAreas, electorsByFamilyAllCommittees,
         electorsByFamilyBranch, electorsByFamilyArea, electorsByFamilyCommittee,
-        electorsByFamilyBranchArea, electorsByFamilyBranchCommitee, electorsByAreaFamilyBranch,
+        electorsByFamilyBranchArea, electorsByFamilyBranchCommittee, electorsByAreaBranch,
     } = electorsByFamilyDivision
 
-
-    // need to add the flipping part
-    const displayMapping = useMemo(() => ({
-        branches: displayByOption ? electorsByFamilyBranch : electorsByFamilyAllBranches,
-        areas: displayByOption ? electorsByFamilyArea : electorsByFamilyAllAreas,
-        committees: displayByOption ? electorsByFamilyCommittee : electorsByFamilyAllCommittees,
-        branches_areas: displayByOption ? electorsByAreaFamilyBranch : null,
-        branches_committees: displayByOption ? electorsByFamilyBranchCommitee : null,
-    }), [displayByOption, electorsByFamilyDivision]);
-
     const getFamilyData = () => {
-        switch (viewDetails?.activeFamilyView) {
+        const { activeFamilyView } = viewDetails;
+        switch (activeFamilyView) {
             case 'detailedFamilyAreaView':
-                return electorsByFamilyDivision?.areaFamilyDetailed;
+                return electorsByCategories?.areaFamilyDetailed;
+    
             case 'detailedFamilyDivisionView':
                 if (displayByOption) {
-                    return displayWithOption.reduce((acc, option) => displayMapping[option] || acc, null);
+                    const hasAllOptions = (options) => options.every(option => displayWithOption.includes(option));
+                    console.log("WHAT?:  display Option: ", displayByOption, "displayWithOption: ", displayWithOption, "hasAllOptions: ", hasAllOptions);
+    
+                    // Check for combinations with more elements first
+                    if (hasAllOptions(["branches", "committees"])) {
+                        console.log("WHAT?: electorsByFamilyBranchCommittee");
+                        return electorsByFamilyBranchCommittee;
+                    }
+                    if (hasAllOptions(["branches", "areas"])) {
+                        console.log("WHAT?: electorsByFamilyBranchArea");
+                        return electorsByFamilyBranchArea;
+                    }
+    
+                    // Then check for single elements
+                    if (hasAllOptions(["committees"])) {
+                        console.log("WHAT?: electorsByFamilyCommittee");
+                        return electorsByFamilyCommittee;
+                    }
+                    if (hasAllOptions(["areas"])) {
+                        console.log("WHAT?: electorsByFamilyArea");
+                        return electorsByFamilyArea;
+                    }
+                    if (hasAllOptions(["branches"])) {
+                        console.log("WHAT?: electorsByFamilyBranch");
+                        return electorsByFamilyBranch;
+                    }
                 } else {
-                    return displayMapping[displayWithoutOption] || electorsByFamilyBranch;
+                    return {
+                        "branches": electorsByFamilyAllBranches,
+                        "areas": electorsByFamilyAllAreas,
+                        "committees": electorsByFamilyAllCommittees
+                    }[displayWithoutOption];
                 }
+                break;
+    
             default:
                 return electorsByFamilyAllBranches;
         }
     };
+    
+
+
 
 
 
@@ -50,6 +76,7 @@ const useElectorDataSource = (viewState) => {
 
         const familyData = getFamilyData();
 
+        console.log("familyData: ", familyData)
         const dataKey = viewSettings.displayByGender === true ? 'dataSeriesByGender' : 'dataSeries';
 
         const commonOptions = {

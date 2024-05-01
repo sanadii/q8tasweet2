@@ -1,9 +1,6 @@
-from django.db.models import Count, Case, When, IntegerField, Sum, Q
 from apps.electors.models import Elector
 from apps.electors.serializers import ElectorDataByCategory
-from collections import defaultdict, Counter, OrderedDict
 from rest_framework import serializers
-
 
 # Things to do
 # 5. Optimize Database Queries
@@ -13,8 +10,6 @@ from rest_framework import serializers
 # #
 # Elector Family Branches
 # #
-
-
 def restructure_electors_by_family(request):
     """Restructures elector data into a nested dictionary format using a DRY approach."""
 
@@ -22,7 +17,6 @@ def restructure_electors_by_family(request):
     branches = extract_query_params(request, "branches")
     areas = extract_query_params(request, "areas")
     committees = extract_query_params(request, "committees")
-
 
     instances = {
         "electorsByFamilyAllBranches": {
@@ -67,22 +61,22 @@ def restructure_electors_by_family(request):
             "filter_fields": {"family", "branches", "areas"},
             "data_fields": {"family", "branch", "area"},
         },
-        "electorsByFamilyBranchCommitee": {
-            "primary_data": "family_data",
-            "secondary_data": "committee_data",
-            "filter_fields": {"family", "branches", "committees"},
-            "data_fields": {"family", "branch", "committee_area"},
-        },
         "electorsByFamilyAreaBranch": {
             "primary_data": "area_data",
             "secondary_data": "branch_data",
             "filter_fields": {"family", "branches", "areas"},
             "data_fields": {"family", "branch", "area"},
         },
+        "electorsByFamilyBranchCommittee": {
+            "primary_data": "branch_data",
+            "secondary_data": "committee_data",
+            "filter_fields": {"family", "branches", "committees"},
+            "data_fields": {"family", "branch", "committee_area"},
+        },
         "electorsByFamilyCommitteeBranch": {
             "primary_data": "committee_data",
             "secondary_data": "branch_data",
-            "filter_fields": {"family", "branches", "committee"},
+            "filter_fields": {"family", "branches", "committees"},
             "data_fields": {"family", "branch", "committee_area"},
         },
     }
@@ -101,11 +95,9 @@ def restructure_electors_by_family(request):
 
     results.update(
         {
-            "familyBranches": fetch_selection_options(family, "branch"),
-            "familyBranchesAreas": fetch_selection_options(family, "area", branches),
-            "familyCommittees": fetch_selection_options(
-                family, "committee_area", committees
-            ),
+        "familyBranches": fetch_selection_options(family, "branch"),
+        "familyAreas": fetch_selection_options(family, "area", branches=branches),
+        "familyCommittees": fetch_selection_options(family, "committee_area", committees=committees),
         }
     )
 
@@ -143,19 +135,21 @@ def process_elector_data(
     serializer = ElectorDataByCategory(instance)
     return serializer.to_representation(instance)
 
-
-def fetch_selection_options(family, field, branches=None):
-    """Fetch options for dropdowns based on context (family or branches)."""
-    queryset = Elector.objects
-    if family:
-        queryset = queryset.filter(family__icontains=family)
-    if branches and field == "area":
-        queryset = queryset.filter(branch__in=branches)
-    return list(queryset.values_list(field, flat=True).distinct())
-
 def extract_query_params(request, param):
     value = request.GET.get(param, "")
     return value.split(",") if value else None
+
+def fetch_selection_options(family, field, branches=None, committees=None):
+    """Fetch options for dropdowns based on context (family, branches, or committees)."""
+    queryset = Elector.objects.all()
+    if field == "branch" and family:
+        queryset = queryset.filter(family__icontains=family)
+    elif field == "area" and branches:
+        queryset = queryset.filter(branch__in=branches)
+    elif field == "committee_area" and branches:
+        queryset = queryset.filter(committee_area__in=committees)
+
+    return list(queryset.values_list(field, flat=True).distinct())
 
 
 def prepare_parameters(request, filter_fields):
@@ -191,7 +185,6 @@ def prepare_parameters(request, filter_fields):
 #     }
 #     serializer = ElectorDataByCategory(instance)
 #     return serializer.to_representation(instance)
-
 
 
 class ElectorDataSeriesByGenderSerializer(serializers.BaseSerializer):
