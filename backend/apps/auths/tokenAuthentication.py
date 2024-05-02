@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 User = get_user_model()
 
 class JWTAuthentication(BaseAuthentication):
-
     def authenticate(self, request):
         token = self.extract_token(request=request)
         if token is None:

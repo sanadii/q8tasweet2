@@ -18,8 +18,7 @@ from .serializers import (
     GroupSerializer,
 )
 
-# from utils.views import get_current_user_campaigns
-
+from utils.views import get_current_user_campaigns,set_cookie 
 # from utils.auths import generate_username
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils.crypto import get_random_string
@@ -36,6 +35,12 @@ from django.utils.encoding import force_bytes
 from rest_framework.parsers import MultiPartParser, FormParser
 import os
 from django.core.files.storage import FileSystemStorage
+from django.middleware import csrf
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+import json
+User = get_user_model()
+from django.middleware.csrf import get_token
 
 from utils.views_helper import CustomPagination
 
@@ -61,22 +66,38 @@ class UserLogin(APIView):
 
         refresh = RefreshToken.for_user(user)
         access_token = str(AccessToken().for_user(user))
-
+        csrf_token = get_token(request)  # Get CSRF token from the request
         user_data = UserLoginSerializer(user).data
+        
+        response_data = {
+            "status": "success",
+            "refresh_token": str(refresh),
+            "access_token": access_token,
+            "csrf_token": csrf_token,
+            "data": user_data,
+        }
 
-        return Response(
-            {
-                "status": "success",
-                "refresh_token": str(refresh),
-                "access_token": access_token,
-                "data": user_data,
-            }
-        )
+# <<<<<<< HEAD
+#         return Response(
+#             {
+#                 "status": "success",
+#                 "refresh_token": str(refresh),
+#                 "access_token": access_token,
+#                 "data": user_data,
+#             }
+#         )
 
 
+# =======
+        response = Response(response_data)
+        # response_data_json = json.dumps(response_data)
+        # set_cookie(response, 'user_data_cookie', response_data_json)
+        set_cookie(response, 'csrftoken', csrf_token)
+        return response
+
+# >>>>>>> origin/main
 class UserRegister(APIView):
     permission_classes = [AllowAny]
-
     def post(self, request):
         # return Response({'msg':"Api Called!"})
         # Extract username from email or generate a new one
@@ -84,18 +105,39 @@ class UserRegister(APIView):
         username = self.generate_username(email)
         request.data["username"] = username
 
-        serializer = UserSerializer(data=request.data, context={"request": request})
-        if serializer.is_valid():
-            # Pass 'created_by' as an argument to the save method
+# <<<<<<< HEAD
+#         serializer = UserSerializer(data=request.data, context={"request": request})
+#         if serializer.is_valid():
+#             # Pass 'created_by' as an argument to the save method
+#             new_user = serializer.save(created_by=None)
+#             return Response(
+#                 {
+#                     "data": UserSerializer(new_user, context={"request": request}).data,
+#                     "count": 1,
+#                     "code": 200,
+#                 },
+#                 status=status.HTTP_201_CREATED,
+#             )
+# =======
+        serializer = UserSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid(): 
             new_user = serializer.save(created_by=None)
-            return Response(
-                {
-                    "data": UserSerializer(new_user, context={"request": request}).data,
-                    "count": 1,
-                    "code": 200,
-                },
-                status=status.HTTP_201_CREATED,
-            )
+            if new_user:
+                subject, from_email, to = 'Register', 'shankar.wxit@gmail.com', email
+                # Load and render the HTML template
+                html_content = render_to_string('emails/registration_email.html', {'username': username})
+                text_content = strip_tags(html_content)
+                
+                #msg = f'Your registration was successful! Thank you for joining us'
+                msg1 = EmailMultiAlternatives(subject, text_content, from_email, [to])
+                msg1.attach_alternative(html_content, "text/html") 
+                #msg1.content_subtype = 'html'
+                msg1.send()
+            return Response({
+                "data": UserSerializer(new_user, context={'request': request}).data,
+                "count": 1,
+                "code": 200
+            }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def generate_username(self, email):
@@ -245,34 +287,53 @@ class UpdateUserProfile(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request):
-        user = (
-            request.user
-        )  # Get the authenticated user directly from the request due to the middleware
-        serializer = UserSerializer(
-            user, data=request.data, partial=True
-        )  # Update existing instance
+# <<<<<<< HEAD
+#         user = (
+#             request.user
+#         )  # Get the authenticated user directly from the request due to the middleware
+#         serializer = UserSerializer(
+#             user, data=request.data, partial=True
+#         )  # Update existing instance
 
+#         if serializer.is_valid():
+#             if "image" in request.FILES:
+#                 user.image = request.FILES["image"]
+
+#             serializer.save()  # This will save other fields
+
+#             user.save()  # This will save the image file
+#             return Response(
+#                 {
+#                     "success": True,
+#                     "message": "User profile updated successfully",
+#                     "data": serializer.data,
+#                 },
+#                 status=status.HTTP_200_OK,
+#             )
+
+#         return Response(
+#             {"success": False, "errors": serializer.errors},
+#             status=status.HTTP_400_BAD_REQUEST,
+#         )
+
+# =======
+        user = request.user  # Get the authenticated user directly from the request due to the middleware
+        serializer = UserSerializer(user, data=request.data, partial=True) # Update existing instance
         if serializer.is_valid():
-            if "image" in request.FILES:
-                user.image = request.FILES["image"]
-
-            serializer.save()  # This will save other fields
-
-            user.save()  # This will save the image file
-            return Response(
-                {
-                    "success": True,
-                    "message": "User profile updated successfully",
-                    "data": serializer.data,
-                },
-                status=status.HTTP_200_OK,
-            )
-
-        return Response(
-            {"success": False, "errors": serializer.errors},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
+            serializer.save()
+            return Response({"success": True, "message": "User profile updated successfully"})
+        return Response({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+# class UpdateProfileImage(APIView):
+#     parser_classes = (MultiPartParser,)
+#     def post(self, request, *args, **kwargs):
+#         serializer = UserImageSerializer(request.user, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({'success': True, 'msg': 'User profile updated successfully',"status":status.HTTP_200_OK})
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+# >>>>>>> origin/main
 
 class BlacklistTokenUpdateView(APIView):
     permission_classes = [AllowAny]
@@ -301,7 +362,68 @@ class GetUsers(APIView):
 
         return paginator.get_paginated_response(data_serializer.data)
 
+# <<<<<<< HEAD
 
+# =======
+class GetCurrentUser(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = request.user
+        user_data = UserSerializer(user).data
+        # Get Related Campaigns. TODO: to be changed later for get Favourite // GetRelated Election / Campaigns
+        campaigns = get_current_user_campaigns(user)  # Call the function
+        user_data["campaigns"] = campaigns
+
+        return Response({"data": user_data, "code": 200})
+    
+class GetModeratorUsers(APIView):
+    def get(self, request):
+        # Get the group object for 'Moderator'
+        group = Group.objects.get(name='CampaignModerator')
+
+        # Get the users in the group 'Moderator' - ID is 14
+        moderators = group.user_set.all()
+
+        # Serialize the data
+        data_serializer = UserSerializer(moderators, many=True)
+
+        return Response({"data": data_serializer.data, "code": 200})
+
+class GetCampaignModerators(APIView):
+    def get(self, request):
+        try:
+            # Get the group object where name is 'campaignModerator' (or 'Editor' if it's the correct name)
+            group = Group.objects.get(name='moderator')  # Update 'campaignModerator' if needed
+            # Get the users in the group with name 'campaignModerator'
+            moderators = group.user_set.all()
+            # Serialize the data
+            data_serializer = UserSerializer(moderators, many=True)
+
+            return Response({"data": data_serializer.data, "code": 200})
+        except ObjectDoesNotExist:
+            return Response({"data": [], "code": 200, "message": "No moderators found."})
+    
+
+class GetCampaignSorters(APIView):
+    def get(self, request):
+        try:
+            # Get the group object where name is 'campaignModerator' (or 'Editor' if it's the correct name)
+            group = Group.objects.get(name='moderator')  # Update 'campaignModerator' if needed
+            
+            # Get the users in the group with name 'campaignModerator'
+            moderators = group.user_set.all()
+            
+            # Serialize the data
+            data_serializer = UserSerializer(moderators, many=True)
+
+            return Response({"data": data_serializer.data, "code": 200})
+        except ObjectDoesNotExist:
+            return Response({"data": [], "code": 200, "message": "No moderators found."})
+        
+
+    
+# >>>>>>> origin/main
 class AddNewUser(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -328,6 +450,7 @@ class UpdateUser(APIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, id):
+        #return Response({"data":"API Called!"})
         try:
             user = User.objects.get(id=id)
         except User.DoesNotExist:
@@ -529,4 +652,118 @@ class GetGroupPermissions(APIView):
                     "categories": categories,
                 },
             }
+<<<<<<< HEAD
         )
+=======
+        })
+
+#---- Reset password Api's 29-03-2024 --      
+class ForgotPassword(APIView):
+    #authentication_classes = []  # Remove authentication
+    permission_classes = [AllowAny]
+    def post(self,request):
+        try:
+            email = request.data.get('email')
+            user = User.objects.filter(email=email).first()
+            if user is None:
+                response_data = {
+                    'success': False,
+                    'status':status.HTTP_404_NOT_FOUND,
+                    'msg': 'Email not registered',
+                }
+                return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+            else:
+                #otp = random.randint(1000, 9999)
+                #token = get_random_string(length=32)
+                token_generator = PasswordResetTokenGenerator()
+                token = token_generator.make_token(user)
+                expiry_time = timezone.now() + timezone.timedelta(hours=1)
+                #expiry_time = timezone.now() + timezone.timedelta(minutes=5)
+                subject, from_email, to = 'Password Reset', 'shankar.wxit@gmail.com', email
+                #text_content = 'This is an important message.'
+                msg = f'Click the link to reset your password: http://127.0.0.1:8001/reset-password/{token}'
+                msg1 = EmailMultiAlternatives(subject, msg, from_email, [to])
+                msg1.content_subtype = 'html'
+                msg1.send()
+               
+                User.objects.filter(id=user.id).update(token=token,token_expiry=expiry_time)
+                response_data = {
+                    'success': True,
+                    'msg': 'Password reset email sent!',
+                    'status':status.HTTP_200_OK
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
+           
+        except Exception as e:
+            response_data = {
+                'success': False,
+                'msg': f'{str(e)}',
+                'status':status.HTTP_500_INTERNAL_SERVER_ERROR
+            }
+            return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+class ResetPassword(APIView):
+    permission_classes = [AllowAny]
+    def post(self,request):
+        try:
+            password = request.data.get('password')
+            cpassword = request.data.get('cpassword')
+            token = request.data.get('token')
+            user = User.objects.filter(token=token).first()
+            
+            if user is None:
+                response_data = {
+                    'success': False,
+                    'status':status.HTTP_404_NOT_FOUND,
+                    'msg': 'Token not registered',
+                }
+                return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+            if password != cpassword:
+                response_data = {
+                    'success': False,
+                    'status':status.HTTP_404_NOT_FOUND,
+                    'msg': 'Confirm Password Not Matched !',
+                }
+                return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+            # Check if token has expired
+            if user.token_expiry and user.token_expiry < timezone.now():
+                response_data = {
+                    'success': False,
+                    'status': status.HTTP_400_BAD_REQUEST,
+                    'msg': 'Token has expired',
+                }
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+            
+            if token != user.token:
+                response_data = {
+                    'success': False,
+                    'status':status.HTTP_404_NOT_FOUND,
+                    'msg': 'Token Not Matched !',
+                }
+                return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+            else:
+                token = ' '
+                User.objects.filter(id=user.id).update(token=token)
+                # Hash the password
+                hashed_password = make_password(password)
+                user.password = hashed_password
+                user.token = token
+
+                # Save the user object
+                user.save()
+                response_data = {
+                    'success': True,
+                    'msg': 'Your password has been updated !',
+                    'status':status.HTTP_200_OK
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            response_data = {
+                'success': False,
+                'msg': f'{str(e)}',
+                'status':status.HTTP_500_INTERNAL_SERVER_ERROR
+            }
+            return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+>>>>>>> origin/main

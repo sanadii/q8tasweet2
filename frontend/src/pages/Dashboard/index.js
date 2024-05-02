@@ -13,10 +13,15 @@ import { campaignSelector } from 'selectors';
 import WebSocketChannels from "./NotificationPanel";
 import ViewProfile from "pages/Profile";
 import NotificationPanel from "./NotificationPanel";
+import { getCookie } from '../../helpers/api_helper';
 
-export const Dashboard = ({ }) => {
+// <<<<<<< HEAD
+export const Dashboard = () => {
     const { campaign } = useSelector(campaignSelector);
 
+// =======
+// export const Dashboard = () => {
+// >>>>>>> origin/main
     return (
         <React.Fragment>
             <div className="page-content">

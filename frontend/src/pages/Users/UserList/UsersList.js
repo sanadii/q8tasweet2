@@ -132,8 +132,8 @@ const ElectionList = () => {
 
   // User & id
   useEffect(() => {
-    if (sessionStorage.getItem("authUser")) {
-      const obj = JSON.parse(sessionStorage.getItem("authUser"));
+    if (localStorage.getItem("authUser")) {
+      const obj = JSON.parse(localStorage.getItem("authUser"));
       let loggedUserId = "Not Logged In"; // default to "Logged In"
       let name = "Not Logged In"; // default to "Logged In"
 
@@ -144,7 +144,7 @@ const ElectionList = () => {
       }
 
       setUserName(name);
-      setUserId(loggedUserId); // set userId from sessionStorage
+      setUserId(loggedUserId); // set userId from localStorage
     }
   }, [user]);
 

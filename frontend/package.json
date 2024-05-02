@@ -1,9 +1,9 @@
 {
   "name": "q8tasweet",
   "version": "1.0.1",
+  "homepage": "http://127.0.0.1:8000/",
   "private": true,
   "license": "Q8VISION",
-  "homepage": "http://127.0.0.1:8001/",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^36.0.1",
     "@ckeditor/ckeditor5-react": "^5.1.0",
@@ -39,6 +39,7 @@
     "google-maps-react": "^2.0.6",
     "gridjs": "^6.0.6",
     "gridjs-react": "^6.0.1",
+    "js-cookie": "^3.0.5",
     "leaflet": "^1.9.3",
     "list.js": "^2.3.1",
     "lord-icon-element": "^4.0.3",
@@ -101,7 +102,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build --max_old_space_size=8000 build",
+    "build": "craco build --max_old_space_size=8000 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
@@ -168,6 +169,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@craco/craco": "^7.1.0",
     "babel-plugin-prismjs": "^2.1.0"
   }
 }

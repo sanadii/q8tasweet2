@@ -23,7 +23,6 @@ const Logout = (props) => {
   if (isUserLogout) {
     return <Navigate to="/login" />;
   }
-
   return <></>;
 };
 

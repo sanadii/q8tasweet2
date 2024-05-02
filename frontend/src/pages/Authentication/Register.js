@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // Formik Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useProfile } from "shared/hooks";
 
 
 const Register = () => {
@@ -27,6 +28,8 @@ const Register = () => {
 
     const history = useNavigate();
     const dispatch = useDispatch();
+    const { token } = useProfile();
+    const navigate = useNavigate();
 
     const { loading = false, error = false, registrationError = null, success = false } = useSelector(state => state.Account);
 
@@ -61,6 +64,9 @@ const Register = () => {
         onSubmit: (values) => { dispatch(registerUser(values)); }
     });
 
+    if (token) {
+        navigate('/dashboard')
+    }
     return (
         <React.Fragment>
             <ParticlesAuth>

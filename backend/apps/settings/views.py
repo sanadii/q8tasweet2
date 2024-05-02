@@ -10,13 +10,13 @@ from rest_framework.views import APIView
 # Built-in Python libraries
 import os, base64, random, string
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from rest_framework.parsers import MultiPartParser
 SECRET_KEY = b'pseudorandomly generated server secret key'
 AUTH_SIZE = 16
 
 class UploadImage(APIView):
     permission_classes = [IsAuthenticated]
-
+    parser_classes = (MultiPartParser,)
     def post(self, request):
         
         if request.method == 'POST':
@@ -32,12 +32,11 @@ class UploadImage(APIView):
                 with open(full_path, 'wb+') as destination:
                     for chunk in image.chunks():
                         destination.write(chunk)
-                
                 # Get file details like size etc.
                 # You can add any other info you'd like in the 'data' dictionary.
                 data = {
                     'url': filename,
-                    # 'someotherinfo': 'value'
+                    #'someotherinfo': 'value'
                 }
                 
                 return JsonResponse({'data': data, 'code': 200})

@@ -6,14 +6,18 @@ import { createSelector } from 'reselect';
 
 // Store & Selectors
 import { userSelector } from 'selectors';
+import { logoutUser } from "../../../store/actions";
 
 //import images
 import avatar1 from "assets/images/users/avatar-1.jpg";
+import { useProfile } from "shared/hooks";
 
 const ProfileDropdown = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector(userSelector);
-  const isStaff = user.isStaff
+  const { token } = useProfile();
 
+  const isStaff = user.isStaff
   //Dropdown Toggle
   const [isProfileDropdown, setIsProfileDropdown] = useState(false);
   const toggleProfileDropdown = () => {
@@ -46,18 +50,22 @@ const ProfileDropdown = () => {
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-end">
             {/* <h6 className="dropdown-header">Welcome {userName}!</h6> */}
+{/* <<<<<<< HEAD */}
             <DropdownItem href={"/dashboard"}>
               <i className="mdi mdi mdi-monitor-dashboard text-muted fs-16 align-middle me-1"></i>
               <span className="align-middle">لوحة التحكم</span>
             </DropdownItem>
             <DropdownItem href={"dashboard/profile"}>
+{/* =======
+            <DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "profile"}>
+>>>>>>> origin/main */}
               <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
               <span className="align-middle">الملف الشخصي</span>
             </DropdownItem>
 
             {isStaff && (
               <>
-                <DropdownItem href={process.env.REACT_APP_ROUTE_URL + "/apps-chat"}>
+                <DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "/apps-chat"}>
                   <span className="badge bg-soft-danger text-danger mt-1 float-end">
                     معطّل
                   </span>
@@ -71,7 +79,7 @@ const ProfileDropdown = () => {
                   <i className="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i>{" "}
                   <span className="align-middle">المفضلة</span>
                 </DropdownItem>
-                <DropdownItem href={process.env.REACT_APP_ROUTE_URL + "/pages-faqs"}>
+                <DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "/pages-faqs"}>
                   <span className="badge bg-soft-danger text-danger mt-1 float-end">
                     معطّل
                   </span>
@@ -82,7 +90,7 @@ const ProfileDropdown = () => {
 
             )}
             <div className="dropdown-divider"></div>
-            <DropdownItem href={process.env.REACT_APP_ROUTE_URL + "/pages-profile"}>
+            <DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "/pages-profile"}>
               <i className="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle">
                 الاشتراك : <b>أساسي</b>
@@ -91,7 +99,7 @@ const ProfileDropdown = () => {
             {isStaff && (
 
               <DropdownItem
-                href={process.env.REACT_APP_ROUTE_URL + "/pages-profile-settings"}
+                href={process.env.REACT_APP_PUBLIC_URL + "/pages-profile-settings"}
               >
                 <span className="badge bg-soft-danger text-danger mt-1 float-end">
                   معطّل
@@ -101,17 +109,21 @@ const ProfileDropdown = () => {
               </DropdownItem>
             )}
             <DropdownItem
-              href={process.env.REACT_APP_ROUTE_URL + "/auth-lockscreen-basic"}
+              href={process.env.REACT_APP_PUBLIC_URL + "/auth-lockscreen-basic"}
             >
               <i className="mdi mdi-lock text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle">قفل الشاشة</span>
             </DropdownItem>
-            <DropdownItem href={process.env.REACT_APP_ROUTE_URL + "/logout"}>
-              <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
-              <span className="align-middle" data-key="t-logout">
-                تسجيل خروج
-              </span>
-            </DropdownItem>
+
+            {
+              user?.id && (<DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "/logout"} onClick={() => dispatch(logoutUser())}>
+                <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
+                <span className="align-middle" data-key="t-logout">
+                  تسجيل خروج
+                </span>
+              </DropdownItem>)
+            }
+
           </DropdownMenu>
         </Dropdown>
       </div>
