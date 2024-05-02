@@ -108,15 +108,20 @@ const StatisticsTab = () => {
                                 />
                                 }
                                 {viewSettings.displayChartType === "pie" &&
-                                    <ElectorSimplePieChart dataSource={dataSource[viewSettings.activeView]}
+                                    <ElectorSimplePieChart
+                                        dataSource={dataSource[viewSettings.activeView]}
                                     />
                                 }
 
-                                {/* <ElectorSimpleBubbleChart /> */}
-                                <ElectorMultipleHeatmap
+                                {/* <ElectorSimpleBubbleChart
                                     dataSource={dataSource[viewSettings.activeView]}
-                                />
-
+                                    dataColors='["--vz-primary", "--vz-info", "--vz-warning", "--vz-success"]' /
+                                    > */}
+                                {viewSettings.displayChartType === "heatMap" &&
+                                    <ElectorMultipleHeatmap
+                                        dataSource={dataSource[viewSettings.activeView]}
+                                    />
+                                }
                             </div>
                         </div>
                     </CardBody>

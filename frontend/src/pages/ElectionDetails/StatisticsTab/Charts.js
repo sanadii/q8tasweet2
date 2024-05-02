@@ -89,105 +89,80 @@ const ElectorSimplePieChart = ({ dataSource }) => {
 }
 
 
-const ElectorSimpleBubbleChart = ({ dataSource }) => {
-
-    // const seriesColors = dataSource?.colors;
-    const seriesData = dataSource?.series;
-    const seriesCategories = dataSource?.categories;
-    const seriesColors = ["--vz-primary", "--vz-secondary", "--vz-success", "--vz-info", "--vz-warning", "--vz-danger", "--vz-dark", "--vz-primary", "--vz-card-custom"]
-    var chartHeatMapColors = getChartColorsArray(seriesColors);
-
+const ElectorSimpleBubbleChart = ({ dataSeries, dataColors }) => {
+    var chartBubbleSimpleColors = getChartColorsArray(dataColors);
 
     const generateData = (baseval, count, yrange) => {
-        var i = 0;
-        var series = [];
-        while (i < count) {
-            var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
-            var y =
-                Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-            var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
-
-            series.push([x, y, z]);
-            baseval += 86400000;
-            i++;
-        }
-        return series;
+      var i = 0;
+      var series = [];
+      while (i < count) {
+        var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
+        var y =
+          Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+        var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
+  
+        series.push([x, y, z]);
+        baseval += 86400000;
+        i++;
+      }
+      return series;
     };
-
+  
     const series = [{
-        name: 'Bubble1',
-        data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
-            min: 10,
-            max: 60
-        })
+      name: 'Bubble1',
+      data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
+        min: 10,
+        max: 60
+      })
     },
-    {
-        name: 'Bubble2',
-        data: generateData(new Date('12 Feb 2017 GMT').getTime(), 20, {
-            min: 10,
-            max: 60
-        })
-    },
-    {
-        name: 'Bubble3',
-        data: generateData(new Date('13 Feb 2017 GMT').getTime(), 20, {
-            min: 10,
-            max: 60
-        })
-    },
-    {
-        name: 'Bubble4',
-        data: generateData(new Date('14 Feb 2017 GMT').getTime(), 20, {
-            min: 10,
-            max: 60
-        })
-    }
+    
     ];
 
-    console.log("seriesseriesseries: ", series)
+    console.log("seriesseriesseriesseries: ", series)
     var options = {
-
-        chart: {
-            height: 350,
-            type: 'bubble',
-            toolbar: {
-                show: false,
-            }
+  
+      chart: {
+        height: 350,
+        type: 'bubble',
+        toolbar: {
+          show: false,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      fill: {
+        opacity: 0.8
+      },
+      title: {
+        text: 'Simple Bubble Chart',
+        style: {
+          fontWeight: 500,
         },
-        dataLabels: {
-            enabled: false
-        },
-        fill: {
-            opacity: 0.8
-        },
-        title: {
-            text: 'Simple Bubble Chart',
-            style: {
-                fontWeight: 500,
-            },
-        },
-        xaxis: {
-            tickAmount: 12,
-            type: 'category',
-        },
-        yaxis: {
-            max: 70
-        },
-        colors: chartHeatMapColors
+      },
+      xaxis: {
+        tickAmount: 12,
+        type: 'category',
+      },
+      yaxis: {
+        max: 70
+      },
+      colors: chartBubbleSimpleColors
     };
-
+  
     return (
-        <React.Fragment>
-            <ReactApexChart dir="ltr"
-                className="apex-charts"
-                options={options}
-                series={seriesData}
-                type="bubble"
-                height={350}
-            />
-        </React.Fragment>
+      <React.Fragment>
+        <ReactApexChart dir="ltr"
+          className="apex-charts"
+          options={options}
+          series={series}
+          type="bubble"
+          height={350}
+        />
+      </React.Fragment>
     );
-};
+  };
+  
 
 function generateData(count, yrange) {
     var i = 0;
@@ -207,133 +182,25 @@ function generateData(count, yrange) {
 
 const ElectorMultipleHeatmap = ({ dataSource }) => {
 
-    const seriesColors = dataSource?.colors;
+    // const seriesColors = dataSource?.colors;
     const seriesData = dataSource?.series;
     const seriesCategories = dataSource?.categories;
 
+    const dataColors = '["--vz-danger", "--vz-secondary", "--vz-success", "--vz-info", "--vz-warning", "--vz-danger", "--vz-dark", "--vz-primary", "--vz-card-custom"]'
+    var chartHeatMapMultipleColors = getChartColorsArray(dataColors);
 
-    // var chartHeatMapMultipleColors = getChartColorsArray(dataColors);
-    generateData();
-    const data = [{
-        name: 'W1',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W2',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W3',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W4',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W5',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W6',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W7',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W8',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W9',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W10',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W11',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W12',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W13',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W14',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    },
-    {
-        name: 'W15',
-        data: generateData(8, {
-            min: 0,
-            max: 90
-        })
-    }
-    ]
-
-    const series = data
     var options = {
         chart: {
             height: 450,
             type: 'heatmap',
             toolbar: {
-                show: false
+                show: true
             }
         },
         dataLabels: {
-            enabled: false
+            enabled: true
         },
-        colors: seriesColors,
+        colors: [chartHeatMapMultipleColors[0]],
         xaxis: {
             type: 'category',
             categories: seriesCategories

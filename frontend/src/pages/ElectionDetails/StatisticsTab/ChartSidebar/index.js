@@ -160,10 +160,32 @@ const ChartSideBar = ({
     }, [displayByOption, displayWithOption, displayWithoutOption, getDisplayBySelectionIcon, handleDisplayOptionToggle]);
     
     const displayChartButtons = useMemo(() => [
-        { icon: "ri-pie-chart-fill", color: "soft-primary", onClick: handleDisplayChartToggle("pie"),},
-        { icon: "ri-bar-chart-2-fill", color: "soft-danger",  onClick: handleDisplayChartToggle("bar"),},
-        { icon: "ri-line-chart-fill", color: "soft-success", onClick: handleDisplayChartToggle("line")},
-        { icon: "ri-bubble-chart-fill", color: "soft-secondary", onClick: handleDisplayChartToggle("bubble")},
+
+        {
+            icon: "mdi mdi-chart-bar",
+            color: "soft-danger",
+            onClick: handleDisplayChartToggle("bar"),
+        },
+        {
+            icon: "mdi mdi-chart-pie",
+            color: "soft-primary",
+            onClick: handleDisplayChartToggle("pie"),
+        },
+        {
+            icon: "mdi mdi-chart-line",
+            color: "soft-success",
+            onClick: handleDisplayChartToggle("line")
+        },
+        {
+            icon: "mdi mdi-apps",
+            color: "soft-success",
+            onClick: handleDisplayChartToggle("heatMap")
+        },
+        {
+            icon: "mdi mdi-chart-bubble",
+            color: "soft-secondary",
+            onClick: handleDisplayChartToggle("bubble")
+        },
 
     ], [handleDisplayChartToggle]);
     
