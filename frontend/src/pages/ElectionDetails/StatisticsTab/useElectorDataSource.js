@@ -4,7 +4,7 @@ import { electionSelector, electorSelector } from 'selectors';
 
 const useElectorDataSource = (viewState) => {
     const { viewSettings = {}, viewDetails } = viewState;
-    const { resultsToShow, displayByGender, displayByOption, displayWithoutOption, displayWithOption } = viewSettings
+    const { resultsToShow, displayByGender, displayByOption, displayWithoutOption, displayWithOption, swapView } = viewSettings
 
     const { electionStatistics, electorsByFamily, electorsByArea,
         electorsByCommittee, electorsByCategories, electorsByFamilyDivision
@@ -12,7 +12,8 @@ const useElectorDataSource = (viewState) => {
 
     const { electorsByFamilyAllBranches, electorsByFamilyAllAreas, electorsByFamilyAllCommittees,
         electorsByFamilyBranch, electorsByFamilyArea, electorsByFamilyCommittee,
-        electorsByFamilyBranchArea, electorsByFamilyBranchCommittee, electorsByAreaBranch,
+        electorsByFamilyBranchArea, electorsByFamilyAreaBranch,
+        electorsByFamilyBranchCommittee, electorsByFamilyCommitteeBranch
     } = electorsByFamilyDivision
 
     const getFamilyData = () => {
@@ -20,22 +21,28 @@ const useElectorDataSource = (viewState) => {
         switch (activeFamilyView) {
             case 'detailedFamilyAreaView':
                 return electorsByCategories?.areaFamilyDetailed;
-    
+
             case 'detailedFamilyDivisionView':
                 if (displayByOption) {
                     const hasAllOptions = (options) => options.every(option => displayWithOption.includes(option));
                     console.log("WHAT?:  display Option: ", displayByOption, "displayWithOption: ", displayWithOption, "hasAllOptions: ", hasAllOptions);
-    
+
                     // Check for combinations with more elements first
                     if (hasAllOptions(["branches", "committees"])) {
-                        console.log("WHAT?: electorsByFamilyBranchCommittee");
-                        return electorsByFamilyBranchCommittee;
+                        if (swapView) {
+                            return electorsByFamilyCommitteeBranch;
+                        } else
+                            return electorsByFamilyBranchCommittee;
                     }
+
+
                     if (hasAllOptions(["branches", "areas"])) {
-                        console.log("WHAT?: electorsByFamilyBranchArea");
-                        return electorsByFamilyBranchArea;
+                        if (swapView) {
+                            return electorsByFamilyAreaBranch;
+                        } else
+                            return electorsByFamilyBranchArea;
                     }
-    
+
                     // Then check for single elements
                     if (hasAllOptions(["committees"])) {
                         console.log("WHAT?: electorsByFamilyCommittee");
@@ -57,12 +64,12 @@ const useElectorDataSource = (viewState) => {
                     }[displayWithoutOption];
                 }
                 break;
-    
+
             default:
                 return electorsByFamilyAllBranches;
         }
     };
-    
+
 
 
 

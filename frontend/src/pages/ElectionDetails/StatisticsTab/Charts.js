@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactApexChart from "react-apexcharts";
 
 import { getChartColorsArray } from "shared/components";
@@ -59,12 +59,23 @@ const ElectorSimpleBarChart = ({ dataSource }) => {
 
 const ElectorSimplePieChart = ({ dataSource }) => {
 
-    console.log("dataSource?.series: ", dataSource?.series)
+    const [selectedCategory, setSelectedCategory] = useState("")
+    // Example click handler function
+    const handlePieClick = (event, chartContext, config) => {
+        const clickedSeriesIndex = config.dataPointIndex;
+        const clickedSeries = dataSource.categories[clickedSeriesIndex];
+        setSelectedCategory(clickedSeries)
+    };
+
     const series = [44, 55, 13, 43, 22]
     var options = {
         chart: {
             height: 300,
             type: 'pie',
+            events: {
+                dataPointSelection: handlePieClick  // This event is triggered when a data point (pie segment) is clicked
+            }
+
         },
         labels: dataSource?.categories,
         legend: {
@@ -78,13 +89,19 @@ const ElectorSimplePieChart = ({ dataSource }) => {
         colors: dataSource?.colors
     };
     return (
-        <ReactApexChart dir="ltr"
-            className="apex-charts"
-            series={dataSource?.series[0]?.data || []}
-            options={options}
-            type="pie"
-            height={267.7}
-        />
+        <React.Fragment>
+            <ReactApexChart dir="ltr"
+                className="apex-charts"
+                series={dataSource?.series[0]?.data || []}
+                options={options}
+                type="pie"
+                height={267.7}
+            />
+            {
+                selectedCategory &&
+                <p>Show {selectedCategory}</p>
+            }
+        </React.Fragment>
     )
 }
 
@@ -93,76 +110,76 @@ const ElectorSimpleBubbleChart = ({ dataSeries, dataColors }) => {
     var chartBubbleSimpleColors = getChartColorsArray(dataColors);
 
     const generateData = (baseval, count, yrange) => {
-      var i = 0;
-      var series = [];
-      while (i < count) {
-        var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
-        var y =
-          Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-        var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
-  
-        series.push([x, y, z]);
-        baseval += 86400000;
-        i++;
-      }
-      return series;
+        var i = 0;
+        var series = [];
+        while (i < count) {
+            var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
+            var y =
+                Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+            var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
+
+            series.push([x, y, z]);
+            baseval += 86400000;
+            i++;
+        }
+        return series;
     };
-  
+
     const series = [{
-      name: 'Bubble1',
-      data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
-        min: 10,
-        max: 60
-      })
+        name: 'Bubble1',
+        data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
+            min: 10,
+            max: 60
+        })
     },
-    
+
     ];
 
     console.log("seriesseriesseriesseries: ", series)
     var options = {
-  
-      chart: {
-        height: 350,
-        type: 'bubble',
-        toolbar: {
-          show: false,
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      fill: {
-        opacity: 0.8
-      },
-      title: {
-        text: 'Simple Bubble Chart',
-        style: {
-          fontWeight: 500,
+
+        chart: {
+            height: 350,
+            type: 'bubble',
+            toolbar: {
+                show: false,
+            }
         },
-      },
-      xaxis: {
-        tickAmount: 12,
-        type: 'category',
-      },
-      yaxis: {
-        max: 70
-      },
-      colors: chartBubbleSimpleColors
+        dataLabels: {
+            enabled: false
+        },
+        fill: {
+            opacity: 0.8
+        },
+        title: {
+            text: 'Simple Bubble Chart',
+            style: {
+                fontWeight: 500,
+            },
+        },
+        xaxis: {
+            tickAmount: 12,
+            type: 'category',
+        },
+        yaxis: {
+            max: 70
+        },
+        colors: chartBubbleSimpleColors
     };
-  
+
     return (
-      <React.Fragment>
-        <ReactApexChart dir="ltr"
-          className="apex-charts"
-          options={options}
-          series={series}
-          type="bubble"
-          height={350}
-        />
-      </React.Fragment>
+        <React.Fragment>
+            <ReactApexChart dir="ltr"
+                className="apex-charts"
+                options={options}
+                series={series}
+                type="bubble"
+                height={350}
+            />
+        </React.Fragment>
     );
-  };
-  
+};
+
 
 function generateData(count, yrange) {
     var i = 0;
@@ -200,7 +217,7 @@ const ElectorMultipleHeatmap = ({ dataSource }) => {
         dataLabels: {
             enabled: true
         },
-        colors: [chartHeatMapMultipleColors[0]],
+        colors: [chartHeatMapMultipleColors[1]],
         xaxis: {
             type: 'category',
             categories: seriesCategories

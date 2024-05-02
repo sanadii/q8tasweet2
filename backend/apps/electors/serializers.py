@@ -48,11 +48,13 @@ class ElectorDataByCategory(serializers.BaseSerializer):
             "area_branch_data": defaultdict(lambda: defaultdict(int)),
             "branch_area_data": defaultdict(lambda: defaultdict(int)),
             "area_branch_data": defaultdict(lambda: defaultdict(int)),
+            "branch_committee_data": defaultdict(lambda: defaultdict(int)),
+            "committee_branch_data": defaultdict(lambda: defaultdict(int)),
 
         }
 
         # Update data for each category using a hashable type for keys
-        self.update_elector_data(elector_data, data_mappings)
+        self.update_elector_data(elector_data, data_mappings, primary_data, secondary_data)
         primary_data_dict = data_mappings[primary_data]
         secondary_data_dict = data_mappings[secondary_data]
 
@@ -86,29 +88,57 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         data_dict[key]["male"] += data.get("male", 0)
 
 
-    def update_elector_data(self, elector_data, data_mappings):
+    def update_elector_data(self, elector_data, data_mappings, primary_data, secondary_data):
         for item in elector_data:
-            self.update_data(data_mappings["family_data"], item.get("family", ""), item)
-            self.update_data(data_mappings["branch_data"], item.get("branch", ""), item)
-            self.update_data(data_mappings["area_data"], item.get("area", ""), item)
-            self.update_data(
-                data_mappings["committee_data"],
-                item.get("committee_area", ""),
-                item
-                )
-            self.update_data_with_related_fields(
-                data_mappings["branch_area_data"],
-                item.get("branch", ""),
-                item.get("area", ""),
-                item
-                )
-            self.update_data_with_related_fields(
-                data_mappings["area_branch_data"],
-                item.get("area", ""),
-                item.get("branch", ""),
-                item
-                )
+            if secondary_data == "family_data" or primary_data == "family_data":
+                self.update_data(data_mappings["family_data"], item.get("family", ""), item)
+                
+            if secondary_data == "branch_data" or primary_data == "branch_data":
+                self.update_data(data_mappings["branch_data"], item.get("branch", ""), item)
+                
+            if secondary_data == "area_data" or primary_data == "area_data":
+                self.update_data(data_mappings["area_data"], item.get("area", ""), item)
+                
+            if secondary_data == "committee_data" or primary_data == "committee_data":
+                self.update_data(
+                    data_mappings["committee_data"],
+                    item.get("committee_area", ""),
+                    item
+                    )
+            
+            # Branches with Areas
+            if secondary_data == "branch_area_data" or primary_data == "branch_area_data":
+                self.update_data_with_related_fields(
+                    data_mappings["branch_area_data"],
+                    item.get("branch", ""),
+                    item.get("area", ""),
+                    item
+                    )
+                
+            if secondary_data == "area_branch_data" or primary_data == "area_branch_data":
+                self.update_data_with_related_fields(
+                    data_mappings["area_branch_data"],
+                    item.get("area", ""),
+                    item.get("branch", ""),
+                    item
+                    )
 
+            # Branches with Committees
+            if secondary_data == "branch_committee_data" or primary_data == "branch_committee_data":
+                self.update_data_with_related_fields(
+                    data_mappings["branch_committee_data"],
+                    item.get("branch", ""),
+                    item.get("committee_area", ""),
+                    item
+                    )
+                
+            if secondary_data == "committee_branch_data" or primary_data == "committee_branch_data":
+                self.update_data_with_related_fields(
+                    data_mappings["committee_branch_data"],
+                    item.get("committee_area", ""),
+                    item.get("branch", ""),
+                    item
+                    )
 
     def update_data_with_related_fields(self, data_dict, parent_key, child_key, item):
         # Ensure the parent key exists in the dictionary
@@ -190,7 +220,7 @@ class ElectorDataByCategory(serializers.BaseSerializer):
     def prepare_elector_data_series(self, primary_data_dict, secondary_data_dict, secondary_data):
         data_series = []
 
-        if secondary_data in ["branch_area_data", "area_branch_data"]:
+        if secondary_data in ["branch_area_data", "area_branch_data", "committee_branch_data", "branch_committee_data"]:
             # Iterate through each area in the secondary data, assuming it's structured with areas as keys
             for area, families_data in secondary_data_dict.items():
                 area_series = {
@@ -217,7 +247,7 @@ class ElectorDataByCategory(serializers.BaseSerializer):
 
 
     def prepare_elector_data_categories(self, primary_data_dict, secondary_data_dict, secondary_data):
-        if secondary_data in ["branch_area_data", "area_branch_data"]:
+        if secondary_data in ["branch_area_data", "area_branch_data", "committee_branch_data", "branch_committee_data"]:
             categories = list(primary_data_dict.keys())
         else:
             categories = list(secondary_data_dict.keys())
@@ -229,7 +259,7 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         series_female = []
         series_male = []
         
-        if secondary_data in ["branch_area_data", "area_branch_data"]:
+        if secondary_data in ["branch_area_data", "area_branch_data", "committee_branch_data", "branch_committee_data"]:
             return [
                 {"name": "إناث", "data": 0},
                 {"name": "ذكور", "data": 0},

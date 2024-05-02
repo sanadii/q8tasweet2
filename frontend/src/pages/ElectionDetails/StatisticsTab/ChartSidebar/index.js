@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { ButtonGroup, Button, Label, Input } from "reactstrap";
+import { ButtonGroup, Button, Label, Input, Row, Col } from "reactstrap";
 import Select from "react-select";
 
 
@@ -12,7 +12,7 @@ const ChartSideBar = ({
     viewState
 }) => {
     const { selectionFilters, viewSettings, viewDetails } = viewState;
-    const { resultsToShow, displayByGender, displayByOption, displayWithoutOption, displayWithOption } = viewSettings
+    const { resultsToShow, displayByGender, displayByOption, displayWithoutOption, displayWithOption, swapView } = viewSettings
 
 
     const handleDisplayByGenderSelection = useCallback((option) => () => {
@@ -90,8 +90,6 @@ const ChartSideBar = ({
     
 
 
-    console.log("displayWithOption", displayWithOption)
-    console.log("displayWithoutOption", displayWithoutOption)
     const handleDisplayChartToggle = useCallback((option) => () => {
         setViewState(prevState => ({
             ...prevState,
@@ -143,6 +141,31 @@ const ChartSideBar = ({
     // // mdi mdi-sticker-minus
     // // mdi mdi-sticker-check
 
+
+
+    // const displayByFieldButtons2 = useMemo(() => [
+    //     {
+    //         text: "العوائل",
+    //         icon: displayByOption ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
+    //         isActive: displayByOption === false,
+    //         onClick: handleDisplayByOptionSelection(false),
+    //     },
+    //     { 
+    //         text: "المناطق",
+    //         icon: displayByOption ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
+    //         isActive: displayByOption === false,
+    //         onClick: handleDisplayByOptionSelection(false),
+    //     },
+    //     {
+    //         icon: displayByOption ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
+    //         isActive: displayByOption === false,
+    //         onClick: handleDisplayByOptionSelection(false),
+    //     },
+    // ], [displayByOption, displayWithOption, displayWithoutOption, getDisplayBySelectionIcon, handleDisplayOptionToggle]);
+
+
+
+    
     const displayByFieldButtons = useMemo(() => {
         const options = ["branches", "areas", "committees"];
         const optionLabels = {
@@ -190,11 +213,11 @@ const ChartSideBar = ({
     ], [handleDisplayChartToggle]);
     
     const renderButtonGroup = (buttonConfigs) => (
-        <ButtonGroup className="w-100 pb-1">
+        <ButtonGroup vertical className="w-100 pb-1">
             {buttonConfigs.map((btn, index) => (
                 <Button
                     key={index}
-                    className={`btn-label btn-sm material-shadow-none ${btn.isActive ? "bg-primary " : "bg-light text-primary"}`}
+                    className={`w-100 btn-label btn-sm material-shadow-none ${btn.isActive ? "bg-primary " : "bg-light text-primary"}`}
                     onClick={btn.onClick}
                     active={btn.isActive}
                 >
@@ -237,8 +260,31 @@ const ChartSideBar = ({
                 <div className="view-settings">
                     {renderButtonGroup(displayByGenderButtons)}
                     {renderButtonGroup(displayBySelectionButtons)}
-                    {renderButtonGroup(displayByFieldButtons)}
-                    {renderChartButtonGroup(displayChartButtons)}
+               {/* <div className="d-flex"> */}
+               <Row>
+                <Col lg={9}>
+                {renderButtonGroup(displayByFieldButtons)}
+
+                </Col>
+                <Col lg={3}>
+                <Button color="warning" outline className="w-100 btn-sm custom-toggle active"
+                    // onClick={(e) => favouriteBtn(e.target)}
+                    >
+                    <span className="icon-on"><i className="mdi mdi-swap-horizontal align-bottom"></i></span>
+                    <span className="icon-off"><i className="mdi mdi-swap-horizontal align-bottom"></i></span>
+                </Button>
+                </Col>
+               </Row>
+
+                    {/* <Button color="warning" outline className="btn-sm custom-toggle active"
+                    // onClick={(e) => favouriteBtn(e.target)}
+                    >
+                    <span className="icon-on"><i className="mdi mdi-swap-horizontal align-bottom"></i></span>
+                    <span className="icon-off"><i className="mdi mdi-swap-horizontal align-bottom"></i></span>
+                </Button> */}
+               {/* </div> */}
+               {renderChartButtonGroup(displayChartButtons)}
+
 
 
 </div>

@@ -67,18 +67,19 @@ def restructure_electors_by_family(request):
             "filter_fields": {"family", "branches", "areas"},
             "data_fields": {"family", "branch", "area"},
         },
-        # "electorsByFamilyBranchCommittee": {
-        #     "primary_data": "branch_data",
-        #     "secondary_data": "committee_data",
-        #     "filter_fields": {"family", "branches", "committees"},
-        #     "data_fields": {"family", "branch", "committee_area"},
-        # },
-        # "electorsByFamilyCommitteeBranch": {
-        #     "primary_data": "committee_data",
-        #     "secondary_data": "branch_data",
-        #     "filter_fields": {"family", "branches", "committees"},
-        #     "data_fields": {"family", "branch", "committee_area"},
-        # },
+        # Committees
+        "electorsByFamilyBranchCommittee": {
+            "primary_data": "committee_branch_data",
+            "secondary_data": "branch_committee_data",
+            "filter_fields": {"family", "branches", "committees"},
+            "data_fields": {"family", "branch", "committee_area"},
+        },
+        "electorsByFamilyCommitteeBranch": {
+            "primary_data": "branch_committee_data",
+            "secondary_data": "committee_branch_data",
+            "filter_fields": {"family", "branches", "committees"},
+            "data_fields": {"family", "branch", "committee_area"},
+        },
     }
     results = {}
     for key, params in instances.items():
@@ -95,9 +96,11 @@ def restructure_electors_by_family(request):
 
     results.update(
         {
-        "familyBranches": fetch_selection_options(family, "branch"),
-        "familyAreas": fetch_selection_options(family, "area", branches=branches),
-        "familyCommittees": fetch_selection_options(family, "committee_area", committees=committees),
+            "familyBranches": fetch_selection_options(family, "branch"),
+            "familyAreas": fetch_selection_options(family, "area", branches=branches),
+            "familyCommittees": fetch_selection_options(
+                family, "committee_area", committees=committees
+            ),
         }
     )
 
@@ -135,9 +138,11 @@ def process_elector_data(
     serializer = ElectorDataByCategory(instance)
     return serializer.to_representation(instance)
 
+
 def extract_query_params(request, param):
     value = request.GET.get(param, "")
     return value.split(",") if value else None
+
 
 def fetch_selection_options(family, field, branches=None, committees=None):
     """Fetch options for dropdowns based on context (family, branches, or committees)."""

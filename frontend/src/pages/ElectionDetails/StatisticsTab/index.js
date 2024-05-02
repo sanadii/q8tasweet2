@@ -43,6 +43,7 @@ const StatisticsTab = () => {
             displayWithOption: [],                          // Options:  branch, area, committee
             displaySeries: "all",                           // options: all, branch, area, committees
             activeView: 'electorsByFamily',
+            swapView: false,
         },
         viewDetails: {
             activeFamilyView: "",

@@ -652,10 +652,8 @@ class GetGroupPermissions(APIView):
                     "categories": categories,
                 },
             }
-<<<<<<< HEAD
         )
-=======
-        })
+
 
 #---- Reset password Api's 29-03-2024 --      
 class ForgotPassword(APIView):
@@ -766,4 +764,4 @@ class ResetPassword(APIView):
                 'status':status.HTTP_500_INTERNAL_SERVER_ERROR
             }
             return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
->>>>>>> origin/main
+# >>>>>>> origin/main

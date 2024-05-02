@@ -27,8 +27,8 @@ DATABASES = {
         "NAME": "q8tasweet",
         "USER": "postgres",
         # "PASSWORD": os.environ.get("DB_PASSWORD"),
-        # "PASSWORD": "I4ksb@11782",
-        "PASSWORD": "KWT11782",
+        "PASSWORD": "I4ksb@11782",
+        # "PASSWORD": "KWT11782",
         "HOST": "localhost",
         "PORT": "5432",
     },
@@ -150,7 +150,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', #was disabled by backend
 
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',

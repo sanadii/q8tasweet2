@@ -19,8 +19,8 @@ from django.utils.translation import gettext as _
 from apps.auths.models import Group, User
 from django.db.models import Q
 
-from apps.campaigns.models import Campaign, CampaignParty, CampaignMember, CampaignPartyMember
-from apps.campaigns.serializers import CampaignMemberSerializer, CampaignPartyMemberSerializer
+# from apps.campaigns.models import Campaign, CampaignParty, CampaignMember, CampaignPartyMember
+# from apps.campaigns.serializers import CampaignMemberSerializer, CampaignPartyMemberSerializer
 from apps.auths.serializers import GroupSerializer
 
 
@@ -30,9 +30,9 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from apps.auths.models import User
-from apps.campaigns.models import CampaignMember
+# from apps.campaigns.models import CampaignMember
 from apps.auths.serializers import UserSerializer
-from apps.campaigns.serializers import  CampaignSerializer
+# from apps.campaigns.serializers import  CampaignSerializer
 
 
 
