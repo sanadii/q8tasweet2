@@ -133,7 +133,7 @@ class GetElectorsByCategory(APIView):
 
 
 # The code that isworking
-class GetElectorFamilyDivisions(APIView):
+class GetElectorBySelection(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):

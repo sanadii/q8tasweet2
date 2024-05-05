@@ -30,24 +30,36 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         ) = instance["instance"]
 
         # Ensure data_fields is a tuple, which is hashable and can be used safely
-        data_fields = tuple(data_fields)  # Ensure it's hashable
+        data_fields = tuple(data_fields)
+
         query_set = self.get_aggregated_elector_data(
             family, branches, areas, committees, filter_fields
         )
+
         elector_data = self.get_annotated_elector_data(query_set, data_fields)
-        data_mappings = self.initialize_data_mappings(data_fields)
+
+        data_mappings = self.initialize_data_mappings(primary_data, secondary_data)
+
+        # Initialize containers
+        # data_mappings = {
+        #     "family_data": defaultdict(lambda: defaultdict(int)),
+        #     "branch_data": defaultdict(lambda: defaultdict(int)),
+        #     "area_data": defaultdict(lambda: defaultdict(int)),
+        #     "committee_data": defaultdict(lambda: defaultdict(int)),
+        #     "branch_area_data": defaultdict(lambda: defaultdict(int)),
+        #     "area_branch_data": defaultdict(lambda: defaultdict(int)),
+        #     "branch_area_data": defaultdict(lambda: defaultdict(int)),
+        #     "area_branch_data": defaultdict(lambda: defaultdict(int)),
+        #     "branch_committee_data": defaultdict(lambda: defaultdict(int)),
+        #     "committee_branch_data": defaultdict(lambda: defaultdict(int)),
+        # }
 
         # Update data for each category using a hashable type for keys
-        self.update_elector_data(elector_data, data_mappings, data_fields)
-
-
-        main_field, sub_field, *extra = data_fields
-        attr_field = extra[0] if extra else None  # attr_field is None if not provided
-        
-        primary_data_dict = data_mappings[f"{main_field}_data"]
-        secondary_data_dict = data_mappings[f"{sub_field}_data"]
-        if len(data_fields) == 3:
-            tertiary_data_dict = data_mappings[f"{attr_field}_data"]
+        self.update_elector_data(
+            elector_data, data_mappings, data_fields, primary_data, secondary_data
+        )
+        primary_data_dict = data_mappings[primary_data]
+        secondary_data_dict = data_mappings[secondary_data]
 
         # prepare data for response
         count_aggregated_electors = self.prepare_elector_data_counter(elector_data)
@@ -57,19 +69,18 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         categories = self.prepare_elector_data_categories(
             primary_data_dict, secondary_data_dict, secondary_data
         )
-        # data_series_by_gender = self.prepare_elector_data_gender_series(
-        #     secondary_data_dict, secondary_data
-        # )
+        data_series_by_gender = self.prepare_elector_data_gender_series(
+            secondary_data_dict, secondary_data
+        )
 
         return {
-            "elector_data": elector_data,
             "data_mappings": data_mappings,
             "primary_data_dict": primary_data_dict,
             "secondary_data_dict": secondary_data_dict,
             "counter": count_aggregated_electors,
             "categories": categories[:20],
             "dataSeries": data_series[:20],
-            # "dataSeriesByGender": data_series_by_gender[:20],
+            "dataSeriesByGender": data_series_by_gender[:20],
         }
 
     def get_aggregated_elector_data(
@@ -113,13 +124,18 @@ class ElectorDataByCategory(serializers.BaseSerializer):
 
         return aggregated_data
 
-    def initialize_data_mappings(self, data_fields):
+    def initialize_data_mappings(
+        self,
+        primary_data,
+        secondary_data,
+    ):
+        data_types = set()
+        data_types.add(primary_data)
+        data_types.add(secondary_data)
+
         return {
-            f"{field}_data": defaultdict(lambda: defaultdict(int))  # Ensure field names are correct here
-            for field in data_fields
+            data_type: defaultdict(lambda: defaultdict(int)) for data_type in data_types
         }
-
-
 
     def update_data(self, data_dict, key, data):
         if key not in data_dict:
@@ -132,47 +148,26 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         data_dict[key]["female"] += data.get("female", 0)
         data_dict[key]["male"] += data.get("male", 0)
 
-    def update_elector_data(self, elector_data, data_mappings, data_fields):
-        for item in elector_data:
-            if len(data_fields) == 2:
-
-                # Directly handle two fields.
-                for field in data_fields:
-                    key = (f"{field}_data")
-                    self.update_data(data_mappings[key], item.get(field, ""), item)
-
-            elif len(data_fields) == 3:
-                # Assume a more complex structure where the first field is the main category,
-                # the second field is a subcategory, and the third field is an additional attribute.
-                main_field, sub_field, _ = (
-                    data_fields  # Ignore the third field for this loop
-                )
-
-                for field in data_fields:
-                    key = (f"{field}_data")
-                    self.update_data(data_mappings[key], item.get(field, ""), item)
-            else:
-                print("Unsupported number of data fields provided.")
-
-    def update_related_data(
-        self, main_data_dict, main_key, sub_key, attribute_key, item
+    def update_elector_data(
+        self, elector_data, data_mappings, data_fields, primary_data, secondary_data
     ):
-        if main_key not in main_data_dict:
-            main_data_dict[main_key] = {}
-        if sub_key not in main_data_dict[main_key]:
-            main_data_dict[main_key][sub_key] = {"total": 0, "female": 0, "male": 0}
 
-        # Update the subcategory under the main category
-        sub_data_dict = main_data_dict[main_key][sub_key]
-        sub_data_dict["total"] += item["total"]
-        sub_data_dict["female"] += item["female"]
-        sub_data_dict["male"] += item["male"]
+        for item in elector_data:
+            for field in data_fields:
+                if field == "committee_area":
+                    category = "committee_data"
+                else:
+                    category = f"{field}_data"  # Properly append '_data' to match keys in data_mappings
 
-        # Optionally handle additional attributes if required
-        # Example: Updating a third dimension of data, such as an attribute specific to the item
-        if attribute_key in item:
-            # Here you would implement logic specific to handling this attribute
-            pass
+                # Check if the category key exists in data_mappings to prevent KeyError
+                if category in data_mappings:
+                    self.update_data(
+                        data_mappings[category],
+                        item.get(field, ""),  # Corrected to use 'field' directly
+                        item,
+                    )
+                else:
+                    print(f"Warning: {category} not found in data_mappings.")
 
     def update_data(self, data_dict, key, data):
         if key not in data_dict:
@@ -180,15 +175,6 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         data_dict[key]["total"] += data["total"]
         data_dict[key]["female"] += data["female"]
         data_dict[key]["male"] += data["male"]
-
-    def update_data_with_related_fields(self, data_dict, parent_key, child_key, item):
-        if parent_key not in data_dict:
-            data_dict[parent_key] = {}
-        if child_key not in data_dict[parent_key]:
-            data_dict[parent_key][child_key] = {"total": 0, "female": 0, "male": 0}
-        data_dict[parent_key][child_key]["total"] += item["total"]
-        data_dict[parent_key][child_key]["female"] += item["female"]
-        data_dict[parent_key][child_key]["male"] += item["male"]
 
     def prepare_elector_data_counter(self, elector_data):
         """Summarizes elector counts."""

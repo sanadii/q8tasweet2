@@ -9,7 +9,7 @@ import { electionSelector, electorSelector } from 'selectors';
 import useElectorDataSource from './useElectorDataSource';
 
 // Components
-import { ElectorSimpleBarChart, ElectorSimplePieChart, ElectorSimpleBubbleChart, ElectorMultipleHeatmap } from './Charts';
+import { ElectorSimpleBarChart, ElectorSimplePieChart, ElectorSimpleBubbleChart, ElectorMultipleHeatmap, MultipleHeatmap } from './Charts';
 import ChartLeftSideBar from "./ChartSidebar";
 import ElectorStatisticCounter from "./ElectorChartCounter";
 
@@ -27,7 +27,7 @@ const StatisticsTab = () => {
             selectedFamilies: [],
             selectedAreas: [],
 
-            // 
+            // for dispatching
             selectedFamily: null,
             selectedFamilyBranches: [],
             selectedFamilyBranchesAreas: [],
@@ -36,11 +36,16 @@ const StatisticsTab = () => {
         viewSettings: {
             resultsToShow: "10",
             displayChartType: "bar",
-            // display: "all",                                 // options: true / false
+
+            displayAllElectors: true,                         // options: true / false
+            familyBranchOption: "branch",                      // Options:  branch, area, committee
+            areaCommitteeOption: "area",                      // Options:  branch, area, committee
+
             displayByGender: false,                         // options: true / false
+
             displayByOption: false,                           // Options:  true / false
-            displayWithoutOption: "branch",                 // Options:  branch, area, committee
-            displayWithOption: [],                          // Options:  branch, area, committee
+            displayAllOption: "branch",                 // Options:  branch, area, committee
+            displayWithOption: [],
             displaySeries: "all",                           // options: all, branch, area, committees
             activeView: 'electorsByFamily',
             swapView: false,
@@ -123,6 +128,8 @@ const StatisticsTab = () => {
                                         dataSource={dataSource[viewSettings.activeView]}
                                     />
                                 }
+                                    <MultipleHeatmap dataColors='["--vz-primary", "--vz-secondary", "--vz-success", "--vz-info", "--vz-warning", "--vz-danger", "--vz-dark", "--vz-primary", "--vz-card-custom"]'/>
+
                             </div>
                         </div>
                     </CardBody>

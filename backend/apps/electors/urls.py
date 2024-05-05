@@ -11,5 +11,5 @@ urlpatterns = [
     path("getElectorsByCategory/<slug:slug>/", GetElectorsByCategory.as_view(), name="getElectorsByCategory"),
     # path("getElectors", GetElectors.as_view(), name="GetElectors"),
     
-    path("getElectorFamilyDivisions", GetElectorFamilyDivisions.as_view(), name="GetElectorFamilyDivisions")
+    path("getElectorFamilyDivisions", GetElectorBySelection.as_view(), name="GetElectorBySelection")
 ]

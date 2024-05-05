@@ -16,162 +16,97 @@ class ElectorSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
+# class ElectorDataByCategory(serializers.BaseSerializer):
+#     def to_representation(self, instance):
+#         (family, branches, areas, committees, filter_fields, data_fields) = instance["instance"]
+#         data_fields = tuple(data_fields)
+#         query_set = self.get_aggregated_elector_data(family, branches, areas, committees, filter_fields)
+#         elector_data = self.get_annotated_elector_data(query_set, data_fields)
+        
+#         # Initialize data mappings including combinations of field keys
+#         data_mappings = self.initialize_data_mappings(data_fields)
+
+#         # Update data for each category using a hashable type for keys
+#         self.update_data_mapping(elector_data, data_mappings, data_fields)
+
+#         # Assuming data_fields has main_field and sub_field defined, extract them
+#         main_field, sub_field, *extra = data_fields
+#         attr_field = extra[0] if extra else None  # attr_field is None if not provided
+
+#         # Retrieve individual and combined data dictionaries
+#         primary_data_dict = data_mappings[f"{main_field}_data"]
+#         secondary_data_dict = data_mappings[f"{sub_field}_data"]
+#         tertiary_data_dict = data_mappings[f"{main_field}_{sub_field}_data"]  # Combined key
+
+#         # prepare data for response
+#         count_aggregated_electors = self.prepare_elector_data_counter(elector_data)
+#         data_series = self.prepare_elector_data_series(primary_data_dict, secondary_data_dict)
+#         categories = self.prepare_elector_data_categories(secondary_data_dict)
+
+#         return {
+#             "elector_data": elector_data,
+#             "data_mappings": data_mappings,
+#             "primary_data_dict": primary_data_dict,
+#             "secondary_data_dict": secondary_data_dict,
+#             "tertiary_data_dict": tertiary_data_dict,  # Include this in your output for debugging or further use
+#             "counter": count_aggregated_electors,
+#             "categories": categories[:20],
+#             "dataSeries": data_series[:20],
+#         }
+
+
+
 class ElectorDataByCategory(serializers.BaseSerializer):
     def to_representation(self, instance):
-        (
-            family,
-            branches,
-            areas,
-            committees,
-            primary_data,
-            secondary_data,
-            filter_fields,
-            data_fields,
-        ) = instance["instance"]
+        (family, branches, areas, committees, filter_fields, data_fields) = instance[
+            "instance"
+        ]
 
         # Ensure data_fields is a tuple, which is hashable and can be used safely
-        data_fields = tuple(data_fields)  # Convert set to tuple
-
+        data_fields = tuple(data_fields)  # Ensure it's hashable
         query_set = self.get_aggregated_elector_data(
             family, branches, areas, committees, filter_fields
         )
         
         elector_data = self.get_annotated_elector_data(query_set, data_fields)
-
-        # Initialize containers
-        data_mappings = {
-            "family_data": defaultdict(lambda: defaultdict(int)),
-            "branch_data": defaultdict(lambda: defaultdict(int)),
-            "area_data": defaultdict(lambda: defaultdict(int)),
-            "committee_data": defaultdict(lambda: defaultdict(int)),
-            "branch_area_data": defaultdict(lambda: defaultdict(int)),
-            "area_branch_data": defaultdict(lambda: defaultdict(int)),
-            "branch_area_data": defaultdict(lambda: defaultdict(int)),
-            "area_branch_data": defaultdict(lambda: defaultdict(int)),
-            "branch_committee_data": defaultdict(lambda: defaultdict(int)),
-            "committee_branch_data": defaultdict(lambda: defaultdict(int)),
-
-        }
+        
+        # Creating Data mapping
+        data_mappings = self.initialize_data_mappings(data_fields)
 
         # Update data for each category using a hashable type for keys
-        self.update_elector_data(elector_data, data_mappings, primary_data, secondary_data)
-        primary_data_dict = data_mappings[primary_data]
-        secondary_data_dict = data_mappings[secondary_data]
+        self.update_data_mapping(elector_data, data_mappings, data_fields)
 
-        
+        main_field, sub_field, *extra = data_fields
+        attr_field = extra[0] if extra else None  # attr_field is None if not provided
+
+        primary_data_dict = data_mappings[f"{main_field}_data"]
+        secondary_data_dict = data_mappings[f"{sub_field}_data"]
+        tertiary_data_dict = data_mappings[f"{main_field}_{sub_field}_data"]
+
         # prepare data for response
         count_aggregated_electors = self.prepare_elector_data_counter(elector_data)
-        data_series = self.prepare_elector_data_series(primary_data_dict, secondary_data_dict, secondary_data)
-        categories = self.prepare_elector_data_categories(primary_data_dict, secondary_data_dict, secondary_data)
-        data_series_by_gender = self.prepare_elector_data_gender_series(secondary_data_dict, secondary_data)
+        data_series = self.prepare_elector_data_series(
+            primary_data_dict, secondary_data_dict
+        )
+        categories = self.prepare_elector_data_categories(secondary_data_dict)
+        # data_series_by_gender = self.prepare_elector_data_gender_series(
+        #     primary_data_dict, data_fields
+        # )
 
+        print("Number of entries in data_mappings:", len(data_mappings))
 
         return {
-            # "data_mappings": data_mappings,
-            # "primary_data_dict": primary_data_dict,
-            # "secondary_data_dict": secondary_data_dict,
+            # "query_set": query_set,
+            "elector_data": elector_data,
+            "data_mappings": data_mappings,
+            "primary_data_dict": primary_data_dict,
+            "secondary_data_dict": secondary_data_dict,
+            "tertiary_data_dict ": tertiary_data_dict ,
             "counter": count_aggregated_electors,
-            "categories": categories,
-            "dataSeries": data_series,
-            "dataSeriesByGender": data_series_by_gender,
-        }
-
-    def update_data(self, data_dict, key, data):
-        if key not in data_dict:
-            data_dict[key] = {
-                "total": 0,
-                "female": 0,
-                "male": 0,
-            }  # Properly initialize the dictionary
-        data_dict[key]["total"] += data.get("total", 0)
-        data_dict[key]["female"] += data.get("female", 0)
-        data_dict[key]["male"] += data.get("male", 0)
-
-
-    def update_elector_data(self, elector_data, data_mappings, primary_data, secondary_data):
-        for item in elector_data:
-            if secondary_data == "family_data" or primary_data == "family_data":
-                self.update_data(data_mappings["family_data"], item.get("family", ""), item)
-                
-            if secondary_data == "branch_data" or primary_data == "branch_data":
-                self.update_data(data_mappings["branch_data"], item.get("branch", ""), item)
-                
-            if secondary_data == "area_data" or primary_data == "area_data":
-                self.update_data(data_mappings["area_data"], item.get("area", ""), item)
-                
-            if secondary_data == "committee_data" or primary_data == "committee_data":
-                self.update_data(
-                    data_mappings["committee_data"],
-                    item.get("committee_area", ""),
-                    item
-                    )
-            
-            # Branches with Areas
-            if secondary_data == "branch_area_data" or primary_data == "branch_area_data":
-                self.update_data_with_related_fields(
-                    data_mappings["branch_area_data"],
-                    item.get("branch", ""),
-                    item.get("area", ""),
-                    item
-                    )
-                
-            if secondary_data == "area_branch_data" or primary_data == "area_branch_data":
-                self.update_data_with_related_fields(
-                    data_mappings["area_branch_data"],
-                    item.get("area", ""),
-                    item.get("branch", ""),
-                    item
-                    )
-
-            # Branches with Committees
-            if secondary_data == "branch_committee_data" or primary_data == "branch_committee_data":
-                self.update_data_with_related_fields(
-                    data_mappings["branch_committee_data"],
-                    item.get("branch", ""),
-                    item.get("committee_area", ""),
-                    item
-                    )
-                
-            if secondary_data == "committee_branch_data" or primary_data == "committee_branch_data":
-                self.update_data_with_related_fields(
-                    data_mappings["committee_branch_data"],
-                    item.get("committee_area", ""),
-                    item.get("branch", ""),
-                    item
-                    )
-
-    def update_data_with_related_fields(self, data_dict, parent_key, child_key, item):
-        # Ensure the parent key exists in the dictionary
-        if parent_key not in data_dict:
-            data_dict[parent_key] = []
-
-        # Create a new entry for the child if it does not exist
-        child_exists = next((entry for entry in data_dict[parent_key] if entry["name"] == child_key), None)
-        if not child_exists:
-            child_entry = {
-                "name": child_key,
-                "total": 0,
-                "female": 0,
-                "male": 0
-            }
-            data_dict[parent_key].append(child_entry)
-        else:
-            child_entry = child_exists
-
-        # Update counts for the specific child entry
-        child_entry["total"] += item["total"]
-        child_entry["female"] += item["female"]
-        child_entry["male"] += item["male"]
-        
-    def prepare_elector_data_counter(self, elector_data):
-        """Summarizes elector counts."""
-        total = sum(item["total"] for item in elector_data)
-        female = sum(item["female"] for item in elector_data)
-        male = sum(item["male"] for item in elector_data)
-        return {
-            "total": total,
-            "female": female,
-            "male": male,
+            "categories": categories[:20],
+            "dataSeries": data_series[:20],
+            # "dataSeriesByGender": data_series_by_gender[:20],
         }
 
     def get_aggregated_elector_data(
@@ -210,63 +145,122 @@ class ElectorDataByCategory(serializers.BaseSerializer):
                 ),
                 male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
             )
-            .order_by("-total")[:20]  # Adjust the slice as necessary
+            .order_by("-total")  # Adjust the slice as necessary
         )
 
         return aggregated_data
 
-    
-    
-    def prepare_elector_data_series(self, primary_data_dict, secondary_data_dict, secondary_data):
+    def initialize_data_mappings(self, data_fields):
+        main_field, sub_field, *extra = data_fields
+
+        data_mappings = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+        for field in data_fields:
+            # Adding '_data' suffix to match your access pattern in update functions
+            data_mappings[f"{field}_data"]
+        
+        
+        return data_mappings
+
+
+
+
+
+
+    def update_data_mapping(self, elector_data, data_mappings, data_fields):
+        for item in elector_data:
+            for field in data_fields:
+                key = f"{field}_data"  # This matches the pattern in your initialization
+                if key in data_mappings:
+                    self.update_data(data_mappings[key], item.get(field, ""), item)
+                else:
+                    print(f"Warning: {key} not found in data_mappings. Check initialization.")
+   
+                    
+    def update_data(self, data_dict, primary_key, secondary_key, data):
+        # Initialize nested dictionary structure if not already present
+        if primary_key not in data_dict:
+            data_dict[primary_key] = {}
+        if secondary_key not in data_dict[primary_key]:
+            data_dict[primary_key][secondary_key] = {"total": 0, "female": 0, "male": 0}
+
+        # Update data counts
+        sub_dict = data_dict[primary_key][secondary_key]
+        sub_dict["total"] += data.get("total", 0)
+        sub_dict["female"] += data.get("female", 0)
+        sub_dict["male"] += data.get("male", 0)
+        
+    def update_related_data(
+        self, main_data_dict, main_key, sub_key, attribute_key, item
+    ):
+        if main_key not in main_data_dict:
+            main_data_dict[main_key] = {}
+        if sub_key not in main_data_dict[main_key]:
+            main_data_dict[main_key][sub_key] = {"total": 0, "female": 0, "male": 0}
+
+        # Update the subcategory under the main category
+        sub_data_dict = main_data_dict[main_key][sub_key]
+        sub_data_dict["total"] += item["total"]
+        sub_data_dict["female"] += item["female"]
+        sub_data_dict["male"] += item["male"]
+
+        # Optionally handle additional attributes if required
+        # Example: Updating a third dimension of data, such as an attribute specific to the item
+        if attribute_key in item:
+            # Here you would implement logic specific to handling this attribute
+            pass
+
+    def update_data(self, data_dict, key, data):
+        if key not in data_dict:
+            data_dict[key] = {"total": 0, "female": 0, "male": 0}
+        data_dict[key]["total"] += data["total"]
+        data_dict[key]["female"] += data["female"]
+        data_dict[key]["male"] += data["male"]
+
+    def update_data_with_related_fields(self, data_dict, parent_key, child_key, item):
+        if parent_key not in data_dict:
+            data_dict[parent_key] = {}
+        if child_key not in data_dict[parent_key]:
+            data_dict[parent_key][child_key] = {"total": 0, "female": 0, "male": 0}
+        data_dict[parent_key][child_key]["total"] += item["total"]
+        data_dict[parent_key][child_key]["female"] += item["female"]
+        data_dict[parent_key][child_key]["male"] += item["male"]
+
+    def prepare_elector_data_counter(self, elector_data):
+        """Summarizes elector counts."""
+        total = sum(item["total"] for item in elector_data)
+        female = sum(item["female"] for item in elector_data)
+        male = sum(item["male"] for item in elector_data)
+        return {
+            "total": total,
+            "female": female,
+            "male": male,
+        }
+
+    def prepare_elector_data_series(self, primary_data_dict, secondary_data_dict):
         data_series = []
-
-        if secondary_data in ["branch_area_data", "area_branch_data", "committee_branch_data", "branch_committee_data"]:
-            # Iterate through each area in the secondary data, assuming it's structured with areas as keys
-            for area, families_data in secondary_data_dict.items():
-                area_series = {
-                    "name": area,
-                    "data": []
+        # For single field data
+        for key in primary_data_dict:
+            data_series.append(
+                {
+                    "name": key,
+                    "data": [data["total"] for data in secondary_data_dict.values()][:20],
                 }
-                
-                # Assuming families_data is a list of dictionaries with each family's data
-                for family_data in families_data:
-                    # Append each family's data as a separate dictionary within the 'data' list
-                    area_series["data"].append(family_data["total"]
-                    )
-
-                data_series.append(area_series)
-        else:
-            # For single field data
-            for key in primary_data_dict:
-                data_series.append({
-                "name": key,
-                "data": [data["total"] for data in secondary_data_dict.values()],
-                })
+            )
 
         return data_series
 
-
-    def prepare_elector_data_categories(self, primary_data_dict, secondary_data_dict, secondary_data):
-        if secondary_data in ["branch_area_data", "area_branch_data", "committee_branch_data", "branch_committee_data"]:
-            categories = list(primary_data_dict.keys())
-        else:
-            categories = list(secondary_data_dict.keys())
- 
+    def prepare_elector_data_categories(self, secondary_data_dict):
+        categories = list(secondary_data_dict.keys())
         return categories
 
-    def prepare_elector_data_gender_series(self, secondary_data_dict, secondary_data):
+    def prepare_elector_data_gender_series(self, primary_data_dict, data_fields):
         """Prepare gender-specific data series, ensuring each entry corresponds to a category."""
         series_female = []
         series_male = []
-        
-        if secondary_data in ["branch_area_data", "area_branch_data", "committee_branch_data", "branch_committee_data"]:
-            return [
-                {"name": "إناث", "data": 0},
-                {"name": "ذكور", "data": 0},
-            ]        
-        else:
+
+        if len(data_fields) == 2:
             # Iterate over each category in the dictionary
-            for category, stats in secondary_data_dict.items():
+            for category, stats in primary_data_dict.items():
                 # Append female and male counts directly
                 series_female.append(stats.get("female", 0))
                 series_male.append(stats.get("male", 0))

@@ -3,12 +3,22 @@ import { useSelector, useDispatch } from "react-redux";
 import { electionSelector, electorSelector } from 'selectors';
 
 const useElectorDataSource = (viewState) => {
-    const { viewSettings = {}, viewDetails } = viewState;
-    const { resultsToShow, displayByGender, displayByOption, displayWithoutOption, displayWithOption, swapView } = viewSettings
+    const { viewSettings, viewDetails } = viewState;
+    const {
+        resultsToShow, displayByGender, displayByOption, displayWithOption,
+        displayAllElectors, displayAllOption, familyBranchOption, areaCommitteeOption, swapView
+    } = viewSettings
+
+    console.log("whhat is the viewSettings?",
+        "familyBranchOption: ", familyBranchOption,
+        "areaCommitteeOption: ", areaCommitteeOption,
+        "displayAllElectors: ", displayAllElectors,)
 
     const { electionStatistics, electorsByFamily, electorsByArea,
         electorsByCommittee, electorsByCategories, electorsByFamilyDivision
     } = useSelector(electorSelector);
+
+
 
     const { electorsByFamilyAllBranches, electorsByFamilyAllAreas, electorsByFamilyAllCommittees,
         electorsByFamilyBranch, electorsByFamilyArea, electorsByFamilyCommittee,
@@ -16,58 +26,141 @@ const useElectorDataSource = (viewState) => {
         electorsByFamilyBranchCommittee, electorsByFamilyCommitteeBranch
     } = electorsByFamilyDivision
 
+
     const getFamilyData = () => {
-        const { activeFamilyView } = viewDetails;
-        switch (activeFamilyView) {
-            case 'detailedFamilyAreaView':
-                return electorsByCategories?.areaFamilyDetailed;
+        // const { swapView, familyBranchOption, areaCommitteeOption } = viewDetails;
 
-            case 'detailedFamilyDivisionView':
-                if (displayByOption) {
-                    const hasAllOptions = (options) => options.every(option => displayWithOption.includes(option));
-                    console.log("WHAT?:  display Option: ", displayByOption, "displayWithOption: ", displayWithOption, "hasAllOptions: ", hasAllOptions);
-
-                    // Check for combinations with more elements first
-                    if (hasAllOptions(["branches", "committees"])) {
-                        if (swapView) {
-                            return electorsByFamilyCommitteeBranch;
-                        } else
-                            return electorsByFamilyBranchCommittee;
-                    }
-
-
-                    if (hasAllOptions(["branches", "areas"])) {
-                        if (swapView) {
-                            return electorsByFamilyAreaBranch;
-                        } else
-                            return electorsByFamilyBranchArea;
-                    }
-
-                    // Then check for single elements
-                    if (hasAllOptions(["committees"])) {
-                        console.log("WHAT?: electorsByFamilyCommittee");
-                        return electorsByFamilyCommittee;
-                    }
-                    if (hasAllOptions(["areas"])) {
-                        console.log("WHAT?: electorsByFamilyArea");
-                        return electorsByFamilyArea;
-                    }
-                    if (hasAllOptions(["branches"])) {
-                        console.log("WHAT?: electorsByFamilyBranch");
-                        return electorsByFamilyBranch;
-                    }
-                } else {
-                    return {
-                        "branches": electorsByFamilyAllBranches,
-                        "areas": electorsByFamilyAllAreas,
-                        "committees": electorsByFamilyAllCommittees
-                    }[displayWithoutOption];
+        if (displayAllElectors) {
+            // Handle combinations of familyBranchOption and areaCommitteeOption
+            if (familyBranchOption === "") {
+                if (areaCommitteeOption === "") {
+                    return electorsByFamilyAllBranches;
                 }
-                break;
+                if (areaCommitteeOption === "area") {
+                    return electorsByFamilyAllAreas;
+                }
+                if (areaCommitteeOption === "committee") {
+                    return electorsByFamilyAllCommittees;
+                }
 
-            default:
-                return electorsByFamilyAllBranches;
+            }
+            if (familyBranchOption === "family") {
+                if (areaCommitteeOption === "") {
+                    return electorsByFamilyAllBranches;
+                }
+                if (areaCommitteeOption === "area") {
+                    return electorsByFamilyAllAreas;
+                }
+                if (areaCommitteeOption === "committee") {
+                    return electorsByFamilyAllCommittees;
+                }
+            }
+            if (familyBranchOption === "branch") {
+                if (areaCommitteeOption === "") {
+                    return electorsByFamilyAllBranches;
+                }
+                if (areaCommitteeOption === "committee") {
+                    return swapView ? electorsByFamilyBranchCommittee : electorsByFamilyCommitteeBranch;
+                }
+                if (areaCommitteeOption === "area") {
+                    return swapView ? electorsByFamilyBranchArea : electorsByFamilyAreaBranch;
+                }
+            }
+
+
+            // switch (familyBranchOption) {
+            //     case "":
+            //         console.log("Displaying all areas");
+            //         return electorsByFamilyAllAreas;
+            //     case "area":
+            //         console.log("Displaying all areas");
+            //         return electorsByFamilyAllAreas;
+            //     case "committee":
+            //         console.log("Displaying all committees");
+            //         return electorsByFamilyAllCommittees;
+            //     default:
+            //         console.log("No specific view option selected. Defaulting to branches.");
+            //         return electorsByFamilyAllBranches;  // Return all branches by default if nothing matches
+            // }
+
+
+        } else {
+            // Handle combinations of familyBranchOption and areaCommitteeOption
+            if (familyBranchOption === "") {
+                if (areaCommitteeOption === "") {
+                    return electorsByFamilyBranch;
+                }
+                if (areaCommitteeOption === "area") {
+                    return electorsByFamilyArea;
+                }
+                if (areaCommitteeOption === "committee") {
+                    return electorsByFamilyCommittee;
+                }
+
+            }
+            if (familyBranchOption === "family") {
+                if (areaCommitteeOption === "") {
+                    return electorsByFamilyBranch;
+                }
+                if (areaCommitteeOption === "area") {
+                    return electorsByFamilyArea;
+                }
+                if (areaCommitteeOption === "committee") {
+                    return electorsByFamilyCommittee;
+                }
+            }
+            if (familyBranchOption === "branch") {
+                if (areaCommitteeOption === "") {
+                    return electorsByFamilyBranch;
+                }
+                if (areaCommitteeOption === "committee") {
+                    return swapView ? electorsByFamilyBranchCommittee : electorsByFamilyCommitteeBranch;
+                }
+                if (areaCommitteeOption === "area") {
+                    return swapView ? electorsByFamilyBranchArea : electorsByFamilyAreaBranch;
+                }
+            }
         }
+
+
+        //         // Check for combinations with more elements first
+        //         if (familyBranchOption === "branch" && areaCommitteeOption === "committee") {
+        //             console.log("calling electorsByFamilyCommitteeBranch: ")
+
+        //             return swapView ? electorsByFamilyCommitteeBranch : electorsByFamilyBranchCommittee;
+
+        //         }
+
+        //         if (familyBranchOption === "branch" && areaCommitteeOption === "area") {
+        //             return swapView ? electorsByFamilyAreaBranch : electorsByFamilyBranchArea;
+        //         }
+
+        //         // Then check for single elements
+        //         if (familyBranchOption === "committee") {
+        //             console.log("Returning data for committees");
+        //             return electorsByFamilyCommittee;
+        //         }
+        //         if (familyBranchOption === "area") {
+        //             console.log("Returning data for areas");
+        //             return electorsByFamilyArea;
+        //         }
+        //         if (familyBranchOption === "branch") {
+        //             console.log("Returning data for branches");
+        //             return electorsByFamilyBranch;
+        //         }
+
+        //         // Default case when no specific option matches
+        //         switch (areaCommitteeOption) {
+        //             case "branches":
+        //                 return electorsByFamilyAllBranches;
+        //             case "areas":
+        //                 return electorsByFamilyAllAreas;
+        //             case "committees":
+        //                 return electorsByFamilyAllCommittees;
+        //             default:
+        //                 console.log("Default case: no specific view option selected.");
+        //                 return electorsByFamilyAllBranches;  // Return all branches by default if nothing matches
+        //         }
     };
 
 

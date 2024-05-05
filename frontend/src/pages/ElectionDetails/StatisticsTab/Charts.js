@@ -132,10 +132,8 @@ const ElectorSimpleBubbleChart = ({ dataSeries, dataColors }) => {
             max: 60
         })
     },
-
     ];
 
-    console.log("seriesseriesseriesseries: ", series)
     var options = {
 
         chart: {
@@ -180,7 +178,103 @@ const ElectorSimpleBubbleChart = ({ dataSeries, dataColors }) => {
     );
 };
 
+const BasicHeatmap = ({ dataColors }) => {
+    var chartHeatMapBasicColors = getChartColorsArray(dataColors);
+    generateData();
+    const series = [{
+        name: 'Metric1',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'Metric2',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'Metric3',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'Metric4',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'Metric5',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'Metric6',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'Metric7',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'Metric8',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'Metric9',
+        data: generateData(18, {
+            min: 0,
+            max: 90
+        })
+    }
+    ];
 
+    var options = {
+        chart: {
+            height: 450,
+            type: 'heatmap',
+            toolbar: {
+                show: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        colors: [chartHeatMapBasicColors[0]],
+        title: {
+            text: 'HeatMap Chart (Single color)',
+            style: {
+                fontWeight: 500,
+            },
+        },
+    };
+    return (
+        <ReactApexChart dir="ltr"
+            className="apex-charts"
+            series={series}
+            options={options}
+            type="heatmap"
+            height={450}
+        />
+    )
+}
 function generateData(count, yrange) {
     var i = 0;
     var series = [];
@@ -246,9 +340,164 @@ const ElectorMultipleHeatmap = ({ dataSource }) => {
     );
 
 }
+
+const MultipleHeatmap = ({ dataColors }) => {
+    var chartHeatMapMultipleColors = getChartColorsArray(dataColors);
+    generateData();
+    const data = [{
+        name: 'W1',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W2',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W3',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W4',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W5',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W6',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W7',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W8',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W9',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W10',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W11',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W12',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W13',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W14',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    },
+    {
+        name: 'W15',
+        data: generateData(8, {
+            min: 0,
+            max: 90
+        })
+    }
+    ]
+
+    console.log("the max data: ", data)
+    const series = data
+    var options = {
+        chart: {
+            height: 450,
+            type: 'heatmap',
+            toolbar: {
+                show: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        colors: [chartHeatMapMultipleColors[0], chartHeatMapMultipleColors[1], chartHeatMapMultipleColors[2], chartHeatMapMultipleColors[3], chartHeatMapMultipleColors[4], chartHeatMapMultipleColors[5], chartHeatMapMultipleColors[6], chartHeatMapMultipleColors[7]],
+        xaxis: {
+            type: 'category',
+            categories: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '01:00', '01:30']
+        },
+        title: {
+            text: 'HeatMap Chart (Different color shades for each series)',
+            style: {
+                fontWeight: 500,
+            },
+        },
+        grid: {
+            padding: {
+                right: 20
+            }
+        }
+    };
+    return (
+
+        <ReactApexChart dir="ltr"
+            className="apex-charts"
+            series={series}
+            options={options}
+            type="heatmap"
+            height={450}
+        />
+    );
+
+}
 export {
     ElectorSimpleBarChart,
     ElectorSimplePieChart,
     ElectorSimpleBubbleChart,
-    ElectorMultipleHeatmap
+    ElectorMultipleHeatmap,
+    BasicHeatmap,
+    MultipleHeatmap
 };

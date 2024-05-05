@@ -12,82 +12,33 @@ const ChartSideBar = ({
     viewState
 }) => {
     const { selectionFilters, viewSettings, viewDetails } = viewState;
-    const { resultsToShow, displayByGender, displayByOption, displayWithoutOption, displayWithOption, swapView } = viewSettings
+    const { resultsToShow, displayByGender, displayByOption, displayAllOption, displayWithOption,
+        displayAllElectors, familyBranchOption, areaCommitteeOption, swapView } = viewSettings
 
+    console.log("familyBranchOption: ", familyBranchOption)
+    console.log("areaCommitteeOption: ", areaCommitteeOption)
 
-    const handleDisplayByGenderSelection = useCallback((option) => () => {
+    const handleDisplayAllToggle = useCallback((option) => () => {
         setViewState(prevState => ({
             ...prevState,
             viewSettings: {
                 ...prevState.viewSettings,
-                displayByGender: option
+                displayAllElectors: option  // Dynamically set displayAllElectors based on the option
             }
         }));
-    }, [setViewState]);
-    
+    }, [setViewState]); // Only setViewState is needed in the dependency array
 
 
-    const handleDisplayByOptionSelection = useCallback((option) => () => {
+    const handleDisplayByOptionSelection = useCallback((optionType, option) => () => {
         setViewState(prevState => ({
             ...prevState,
             viewSettings: {
                 ...prevState.viewSettings,
-                displayByOption: option
+                [optionType]: option,
+                displayAllElectors: false,
             }
         }));
     }, [setViewState]);
-    
-    const handleDisplayWithoutOptionToggle = useCallback((option) => () => {
-
-        setViewState(prevState => ({
-            ...prevState,
-            viewSettings: {
-                ...prevState.viewSettings,
-                displayWithoutOption: option
-            }
-        }));
-        
-    }, [setViewState]);
-    
-    const handleDisplayWithOptionToggle = useCallback((option) => () => {
-
-        setViewState(prevState => {
-            const currentOptions = prevState.viewSettings.displayWithOption;
-            const newOptions = currentOptions.includes(option)
-                ? currentOptions.filter(item => item !== option)  // Remove the option if it's already included
-                : [...currentOptions, option];  // Add the option if it's not included
-    
-            return {
-                ...prevState,
-                viewSettings: {
-                    ...prevState.viewSettings,
-                    displayWithOption: newOptions
-                }
-            };
-
-        });
-
-    }, [setViewState]);
-
-        
-    const handleDisplayOptionToggle = useCallback((option) => () => {
-        if (displayByOption) {
-            handleDisplayWithOptionToggle(option)();  // Notice the double call
-        } else {
-            handleDisplayWithoutOptionToggle(option)();  // Notice the double call
-        }
-    }, [displayByOption, handleDisplayWithOptionToggle, handleDisplayWithoutOptionToggle]);
-        
-
-
-    const getDisplayBySelectionIcon = useCallback((option) => {
-        if (displayByOption) {
-            return displayWithOption.includes(option) ? "mdi mdi-sticker-check" : "mdi mdi-sticker-remove";
-        } else {
-            return displayWithoutOption === option ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal";
-        }
-    }, [displayByOption, displayWithOption, displayWithoutOption]);
-    
 
 
     const handleDisplayChartToggle = useCallback((option) => () => {
@@ -100,88 +51,101 @@ const ChartSideBar = ({
         }));
     }, [setViewState]);
 
-    
+
+    console.log("displayAllElectors: ", displayAllElectors)
 
     // Constants for button configurations
-    const displayByGenderButtons = useMemo(() => [
-        {
-            text: "الكل",
-            icon: displayByGender ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
-            isActive: displayByGender === false, // Ensure this correctly checks the boolean state
-            onClick: handleDisplayByGenderSelection(false),
-        },
-        {
-            text: "ذكور \\ إناث",
-            icon: displayByGender ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal",
-            isActive: displayByGender === true,
-            onClick: handleDisplayByGenderSelection(true),
-        },
-    ], [displayByGender, handleDisplayByGenderSelection]);
-    
     const displayBySelectionButtons = useMemo(() => [
         {
-            text: "بدون تحديد",
-            icon: displayByOption ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
-            isActive: displayByOption === false,
-            onClick: handleDisplayByOptionSelection(false),
+            text: "الكل",
+            icon: displayAllElectors ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal",
+            isActive: displayAllElectors, // Ensure this correctly checks the boolean state
+            onClick: handleDisplayAllToggle(true),
         },
         {
-            text: "مع التحديد",
-            icon: displayByOption ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal",
-            isActive: displayByOption === true,
-            onClick: handleDisplayByOptionSelection(true),
+            text: "تحديد",
+            icon: displayAllElectors ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
+            isActive: !displayAllElectors,
+            onClick: handleDisplayAllToggle(false),
         },
-    ], [displayByOption, handleDisplayByOptionSelection]);
+
+        // {
+        //     text: "ذكور \\ إناث",
+        //     icon: displayByGender ? "mdi mdi-check-all" : "mdi mdi-dots-horizontal",
+        //     isActive: displayByGender === true,
+        //     onClick: handleDisplayByGenderSelection(true),
+        // },
+    ], [displayAllElectors, handleDisplayAllToggle]);
+
+    const displayBySelectedOptions = useMemo(() => [
+        {
+            groupType: "familyBranchOption",
+            color: 'primary',
+            items: [
+                {
+                    text: "",
+                    icon: familyBranchOption === "" ? "mdi mdi-mdi mdi-eye-off" : "mdi mdi-eye",
+                    isActive: familyBranchOption === "",
+                    onClick: handleDisplayByOptionSelection("familyBranchOption", "")
+                },
+                {
+                    text: "القبائل",
+                    icon: familyBranchOption === "family" ? "mdi mdi-checkbox-marked-circle-outline" : "mdi mdi-checkbox-blank-circle-outline",
+                    isActive: familyBranchOption === "family",
+                    onClick: handleDisplayByOptionSelection("familyBranchOption", "family")
+                },
+                {
+                    text: "العوائل",
+                    icon: familyBranchOption === "branch" ? "mdi mdi-checkbox-marked-circle-outline" : "mdi mdi-checkbox-blank-circle-outline",
+                    isActive: familyBranchOption === "branch",
+                    onClick: handleDisplayByOptionSelection("familyBranchOption", "branch")
+                }
+            ],
+        },
+        {
+            title: "Area Committee",
+            color: 'success',
+            items: [
+                {
+                    text: "",
+                    icon: areaCommitteeOption === "" ? "mdi mdi-mdi mdi-eye-off" : "mdi mdi-eye",
+                    isActive: areaCommitteeOption === "",
+                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", "")
+                },
+                {
+                    text: "المناطق",
+                    icon: areaCommitteeOption === "area" ? "mdi mdi-checkbox-marked-circle-outline" : "mdi mdi-checkbox-blank-circle-outline",
+                    isActive: areaCommitteeOption === "area",
+                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", "area")
+                },
+                {
+                    text: "اللجان",
+                    icon: areaCommitteeOption === "committee" ? "mdi mdi-checkbox-marked-circle-outline" : "mdi mdi-checkbox-blank-circle-outline",
+                    isActive: areaCommitteeOption === "committee",
+                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", "committee")
+                },
+            ]
+        }
+    ], [areaCommitteeOption, familyBranchOption, handleDisplayByOptionSelection]);
 
 
+    // const displayByAreaCommitteeButtons = useMemo(() => {
+    //     const options = ["areas", "committees", "family", "branches"];
+    //     const optionLabels = {
+    //         areas: "",
+    //         committees: "اللجان",
+    //         family: "القبائل",
+    //         branches: "العوائل",
+    //     };
 
-   
-    // console.log("displayByOption:", displayByOption, "displayWithOption: ", displayWithOption, "true?: ", displayWithOption.includes("branch"))
-    // // mdi mdi-sticker-remove
-    // // mdi mdi-sticker-minus
-    // // mdi mdi-sticker-check
+    //     return options.map(option => ({
+    //         text: optionLabels[option],
+    //         icon: getDisplayBySelectionIcon(option),
+    //         isActive: displayByOption ? displayWithOption.includes(option) : displayAllOption === option,
+    //         onClick: handleDisplayOptionToggle(option),
+    //     }));
+    // }, [displayByOption, displayWithOption, displayAllOption, getDisplayBySelectionIcon, handleDisplayOptionToggle]);
 
-
-
-    // const displayByFieldButtons2 = useMemo(() => [
-    //     {
-    //         text: "العوائل",
-    //         icon: displayByOption ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
-    //         isActive: displayByOption === false,
-    //         onClick: handleDisplayByOptionSelection(false),
-    //     },
-    //     { 
-    //         text: "المناطق",
-    //         icon: displayByOption ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
-    //         isActive: displayByOption === false,
-    //         onClick: handleDisplayByOptionSelection(false),
-    //     },
-    //     {
-    //         icon: displayByOption ? "mdi mdi-dots-horizontal" : "mdi mdi-check-all",
-    //         isActive: displayByOption === false,
-    //         onClick: handleDisplayByOptionSelection(false),
-    //     },
-    // ], [displayByOption, displayWithOption, displayWithoutOption, getDisplayBySelectionIcon, handleDisplayOptionToggle]);
-
-
-
-    
-    const displayByFieldButtons = useMemo(() => {
-        const options = ["branches", "areas", "committees"];
-        const optionLabels = {
-            branches: "العوائل",
-            areas: "المناطق",
-            committees: "اللجان"
-        };
-
-        return options.map(option => ({
-            text: optionLabels[option],
-            icon: getDisplayBySelectionIcon(option),
-            isActive: displayByOption ? displayWithOption.includes(option) : displayWithoutOption === option,
-            onClick: handleDisplayOptionToggle(option),
-        }));
-    }, [displayByOption, displayWithOption, displayWithoutOption, getDisplayBySelectionIcon, handleDisplayOptionToggle]);
-    
     const displayChartButtons = useMemo(() => [
 
         {
@@ -211,18 +175,26 @@ const ChartSideBar = ({
         },
 
     ], [handleDisplayChartToggle]);
-    
-    const renderButtonGroup = (buttonConfigs) => (
-        <ButtonGroup vertical className="w-100 pb-1">
+
+    const renderButtonGroup = (buttonConfigs, color) => (
+        <ButtonGroup className="w-100 pb-1">
             {buttonConfigs.map((btn, index) => (
                 <Button
                     key={index}
-                    className={`w-100 btn-label btn-sm material-shadow-none ${btn.isActive ? "bg-primary " : "bg-light text-primary"}`}
+                    className={`${btn.text ? "btn-label" : "btn-icon"} btn-sm material-shadow-none ${btn.isActive ? `bg-${color} ` : `bg-light text-${color}`}`}
                     onClick={btn.onClick}
                     active={btn.isActive}
                 >
-                    <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
-                    {btn.text}
+
+                    {btn.text ?
+                        <>
+                            <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
+                            {btn.text}
+                        </>
+                        :
+                        <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
+
+                    }
                 </Button>
             ))}
         </ButtonGroup>
@@ -237,13 +209,13 @@ const ChartSideBar = ({
                     onClick={btn.onClick}
                     active={btn.isActive}
                 >
-                            <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
-                            {btn.text}
+                    <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
+                    {btn.text}
                 </Button>
 
             ))}
         </ButtonGroup>
-    
+
     );
     return (
         <div className="chat-leftsidebar bg-light">
@@ -252,76 +224,37 @@ const ChartSideBar = ({
                     <ChartSideBarFamilyView
                         viewState={viewState}
                         setViewState={setViewState}
-                        viewDetails={viewDetails}
-                        selectionFilters={selectionFilters}
                         handleFamilyAreaChange={handleFamilyAreaChange}
                     />
                 }
                 <div className="view-settings">
-                    {renderButtonGroup(displayByGenderButtons)}
-                    {renderButtonGroup(displayBySelectionButtons)}
-               {/* <div className="d-flex"> */}
-               <Row>
-                <Col lg={9}>
-                {renderButtonGroup(displayByFieldButtons)}
+                    <p>All / With Selection</p>
+                    <p>Family & Branches</p>
+                    <p>areas & Committees</p>
 
-                </Col>
-                <Col lg={3}>
-                <Button color="warning" outline className="w-100 btn-sm custom-toggle active"
-                    // onClick={(e) => favouriteBtn(e.target)}
-                    >
-                    <span className="icon-on"><i className="mdi mdi-swap-horizontal align-bottom"></i></span>
-                    <span className="icon-off"><i className="mdi mdi-swap-horizontal align-bottom"></i></span>
-                </Button>
-                </Col>
-               </Row>
+                    <p>gender / no gender</p>
+                    {/* Add success color */}
+                    {renderButtonGroup(displayBySelectionButtons, 'danger')}
 
-                    {/* <Button color="warning" outline className="btn-sm custom-toggle active"
-                    // onClick={(e) => favouriteBtn(e.target)}
-                    >
-                    <span className="icon-on"><i className="mdi mdi-swap-horizontal align-bottom"></i></span>
-                    <span className="icon-off"><i className="mdi mdi-swap-horizontal align-bottom"></i></span>
-                </Button> */}
-               {/* </div> */}
-               {renderChartButtonGroup(displayChartButtons)}
+                    {/* Add primary color */}
+                    {/* {renderButtonGroup(displayByFieldButtons, 'primary')} */}
+                    {/* <div className="d-flex"> */}
+                    {/* <Row className="d-flex"> */}
+
+                    {displayBySelectedOptions.map((optionGroup, index) => (
+                        <div key={index}>
+                            {/* <h3>{optionGroup.title}</h3> */}
+                            {renderButtonGroup(optionGroup.items, optionGroup.color)}
+                        </div>
+                    ))}
+
+                    {/* {renderButtonGroup(displayByAreaCommitteeButtons, 'primary')} */}
+
+                    {renderChartButtonGroup(displayChartButtons)}
 
 
 
-</div>
-                {/* <div>
-                    <h5><b>تصنيف</b></h5>
-                    <Label for="genderSwitch">ذكور \ إناث</Label>
-                    <Input
-                        id="genderSwitch"
-                        type="checkbox"
-                        checked={viewSettings.filterByGender}
-                        onChange={(e) => setViewState(prev => ({
-                            ...prev,
-                            viewSettings: {
-                                ...prev.viewSettings,
-                                filterByGender: e.target.checked
-                            }
-                        }))}
-                        switch
-                    />
                 </div>
-                <div>
-                    <Label for="resultCount">عرض النتائج</Label>
-                    <Input
-                        id="resultCount"
-                        type="select"
-                        value={viewSettings.resultsToShow}
-                        onChange={(e) => setViewState(prev => ({
-                            ...prev,
-                            viewSettings: {
-                                ...prev.viewSettings,
-                                resultsToShow: e.target.value
-                            }
-                        }))}
-                    >
-                        {["5", "10", "15", "20", "25"].map(count => <option key={count} value={count}>{count}</option>)}
-                    </Input>
-                </div> */}
                 {viewSettings.activeView === "detailedFamilyChart" &&
                     <Button
                         color="primary"
@@ -341,222 +274,4 @@ const ChartSideBar = ({
 export default ChartSideBar;
 
 // Render Button Groups as a component or within existing component
-
-
-
-const ChartSideBarAreaView = () => { }
-const ChartSideBarCommitteeView = () => { }
-
-
-// import React, { useState, useEffect, useMemo, useCallback } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { electionSelector, electorSelector } from 'selectors';
-
-// import { ButtonGroup, Button, Label, Input } from "reactstrap";
-// import Select from "react-select";
-
-// const ChartSideBar = ({
-//     handleFamilyAreaChange,
-//     setViewState,
-//     viewState
-// }) => {
-//     const { electorsByFamily, electorsByArea } = useSelector(electorSelector);
-
-//     const [selectedFamilyView, setSelectedFamilyView] = useState('قبائل');
-//     const familyOptions = useMemo(() => (
-//         electorsByFamily && electorsByFamily.categories.map(category => ({ label: `${category} - ${category} ناخب`, value: category })) || []
-//     ), [electorsByFamily]);
-
-//     const areaOptions = useMemo(() => (
-//         electorsByArea?.categories.map(category => ({ label: `${category} - ${category} ناخب`, value: category }))
-//     ), [electorsByArea]);
-
-//     return (
-//         <div className="chat-leftsidebar bg-light">
-//             <div className="px-2 pt-2 mb-2">
-//                 {viewState.selected.activeView === "electorsByFamily" &&
-//                     <div className="mb-3 gy-4">
-//                         <h5><b>الناخبين حسب القبائل \ العوائل</b></h5>
-//                         <div className="selectFamilyView">
-//                             <ButtonGroup className="mt-2 material-shadow w-100">
-//                                 <Button
-//                                     color="soft-danger"
-//                                     className={`material-shadow-none ${selectedFamilyView === 'قبائل' ? 'active' : ''}`}
-//                                     onClick={() => setSelectedFamilyView('قبائل')}
-//                                 >
-//                                     قبائل
-//                                 </Button>
-//                                 <Button
-//                                     color="soft-danger"
-//                                     className={`material-shadow-none ${selectedFamilyView === 'أفخاذ' ? 'active' : ''}`}
-//                                     onClick={() => setSelectedFamilyView('أفخاذ')}
-//                                 >
-//                                     أفخاذ
-//                                 </Button>
-//                             </ButtonGroup>
-//                         </div>
-//                         {selectedFamilyView !== "قبائل" &&
-//                             <>
-//                                 <div>
-//                                     <Label for="familySelect">إختر القبيلة</Label>
-//                                     <Select
-//                                         id="familySelect"
-//                                         value={viewState.selected.family}
-//                                         onChange={(value) => handleFamilyAreaChange('family', value)}
-//                                         viewState={familyOptions}
-//                                         classNamePrefix="select"
-//                                     />
-//                                 </div>
-
-//                                 <div>
-//                                     <Label for="familySelect">إختر الأفخاذ</Label>
-//                                     <Select
-//                                         id="familySelect"
-//                                         value={viewState.selected.family_divition}
-//                                         onChange={(value) => handleFamilyAreaChange('family_divition', value)}
-//                                         viewState={familyOptions}
-//                                         classNamePrefix="select"
-//                                     />
-//                                 </div>
-//                             </>
-//                         }
-//                         {selectedFamilyView === "قبائل" &&
-//                             <div>
-//                                 <Label for="familySelect">إختر القبائل</Label>
-//                                 <Select
-//                                     id="familySelect"
-//                                     value={viewState.selected.families}
-//                                     isMulti
-//                                     onChange={selectedOptionArray => handleFamilyAreaChange('families', selectedOptionArray)}
-//                                     viewState={familyOptions}
-//                                     classNamePrefix="select"
-//                                 />
-//                             </div>
-//                         }
-
-//                         <div className="mt-3 mt-sm-0">
-//                             <Label for="areaSelect">المناطق</Label>
-//                             <Select
-//                                 id="areaSelect"
-//                                 value={viewState.selected.areas}
-//                                 isMulti
-//                                 onChange={selectedOptionArray => handleFamilyAreaChange('areas', selectedOptionArray)}
-//                                 viewState={areaOptions}
-//                                 classNamePrefix="select"
-//                             />
-//                         </div>
-//                     </div>
-//                 }
-
-//                 <div className="mb-3">
-//                     <h5><b>تصنيف</b></h5>
-//                     <div className="form-check form-switch form-check-right form-switch-sm">
-//                         <Label for="genderSwitch">ذكور \ إناث</Label>
-//                         <Input
-//                             id="genderSwitch"
-//                             type="checkbox"
-//                             checked={viewState.selected.resultByGender}
-//                             onChange={(e) => setViewState(prev => ({
-//                                 ...prev,
-//                                 selected: {
-//                                     ...prev.selected,
-//                                     resultByGender: e.target.checked
-//                                 }
-//                             }))}
-//                             switch
-//                         />
-//                     </div>
-//                 </div>
-//                 <div>
-//                     <Label for="resultCount">عرض النتائج</Label>
-//                     <Input
-//                         id="resultCount"
-//                         type="select"
-//                         value={viewState.selected.resultsToDisplay}
-//                         onChange={(e) => setViewState(prev => ({
-//                             ...prev,
-//                             selected: {
-//                                 ...prev.selected,
-//                                 resultsToDisplay: e.target.value
-//                             }
-//                         }))}
-//                     >
-//                         <option value="5">5</option>
-//                         <option value="10">10</option>
-//                         <option value="15">15</option>
-//                         <option value="20">20</option>
-//                         <option value="25">25</option>
-//                     </Input>
-//                 </div>
-//                 <div className="hstack gap-2 mt-4 mt-sm-0">
-//                     {viewState.detailedChart.familyChart &&
-//                         <Button
-//                             color="primary"
-//                             className="btn-icon material-shadow-none"
-//                             title="إعادة تعيين القبائل"
-//                             outline
-//                             onClick={() => setViewState(prev => ({ ...prev, detailedChart: { ...prev.detailedChart, familyChart: false } }))}
-//                         >
-//                             <i className="ri-refresh-line" />
-//                         </Button>
-//                     }
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default ChartSideBar;
-
-
-//                         {/* mdi-bookmark-remove mdi-bookmark-outline mdi-bookmark-plus-outline
-//                         mdi-bookmark-check mdi-bookmark mdi-bookmark-minus mdi-bookmark-plus
-//                         mdi-checkbox-blank-circle mdi-checkbox-marked-circle
-
-
-//                         mdi-plus-circle
-
-                        
-//                         mdi-layers-off mdi-layers
-//  mdi-layers-outline mdi-layers-plus mdi-layers-minus
-//  mdi-clipboard-flow
-// mdi-clipboard-flow-outline
-
-//  mdi-sticker
-// mdi-sticker-alert
-// mdi-sticker-alert-outline
-// mdi-sticker-check
-// mdi-sticker-check-outline
-// mdi-sticker-circle-outline
-// mdi-sticker-emoji
-// mdi-sticker-minus
-// mdi-sticker-minus-outline
-// mdi-sticker-outline
-// mdi-sticker-plus
-// mdi-sticker-plus-outline
-// mdi-sticker-remove
-// mdi-sticker-remove-outline
-// mdi-sticker-text
-// mdi-sticker-text-outline
-
-
-// mdi-filter
-// mdi-filter-check
-// mdi-filter-check-outline
-// mdi-filter-menu
-// mdi-filter-menu-outline
-// mdi-filter-minus
-// mdi-filter-minus-outline
-// mdi-filter-off
-// mdi-filter-off-outline
-// mdi-filter-outline
-// mdi-filter-plus
-// mdi-filter-plus-outline
-// mdi-filter-remove
-// mdi-filter-remove-outline
-//  */}
-
-
-
-
 

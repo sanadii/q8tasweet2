@@ -19,81 +19,82 @@ def restructure_electors_by_family(request):
     committees = extract_query_params(request, "committees")
 
     instances = {
-        "electorsByFamilyAllBranches": {
-            "primary_data": "family_data",
-            "secondary_data": "branch_data",
-            "filter_fields": {"family"},
-            "data_fields": {"family", "branch"},
-        },
+        # No filtering except family
         "electorsByFamilyAllAreas": {
-            "primary_data": "family_data",
-            "secondary_data": "area_data",
             "filter_fields": {"family"},
             "data_fields": {"family", "area"},
         },
+        "electorsByFamilyAllBranches": {
+            "filter_fields": {"family"},
+            "data_fields": {"branch", "family"},
+        },
         "electorsByFamilyAllCommittees": {
-            "primary_data": "family_data",
-            "secondary_data": "committee_data",
             "filter_fields": {"family"},
             "data_fields": {"family", "committee_area"},
         },
-        "electorsByFamilyBranch": {
-            "primary_data": "family_data",
-            "secondary_data": "branch_data",
-            "filter_fields": {"family", "branches"},
-            "data_fields": {"family", "branch"},
-        },
+        
+        # Filter with family and 1 attr
         "electorsByFamilyArea": {
-            "primary_data": "family_data",
-            "secondary_data": "area_data",
             "filter_fields": {"family", "areas"},
             "data_fields": {"family", "area"},
         },
+        "electorsByFamilyBranch": {
+            "filter_fields": {"family", "branches"},
+            "data_fields": {"family", "branch"},
+        },
         "electorsByFamilyCommittee": {
-            "primary_data": "family_data",
-            "secondary_data": "committee_data",
             "filter_fields": {"family", "committees"},
             "data_fields": {"family", "committee_area"},
         },
         "electorsByFamilyBranchArea": {
-            "primary_data": "area_branch_data",
-            "secondary_data": "branch_area_data",
-            "filter_fields": {"family", "branches", "areas"},
-            "data_fields": {"family", "branch", "area"},
+            "filter_fields": {
+                "branches",
+                "areas",
+                "family",
+            },
+            "data_fields": {"branch", "area"},
         },
         "electorsByFamilyAreaBranch": {
-            "primary_data": "branch_area_data",
-            "secondary_data": "area_branch_data",
-            "filter_fields": {"family", "branches", "areas"},
-            "data_fields": {"family", "branch", "area"},
+            "filter_fields": {
+                "family",
+                "branches",
+                "areas",
+                "family",
+            },
+            "data_fields": {"branch", "area"},
         },
-        # Committees
-        "electorsByFamilyBranchCommittee": {
-            "primary_data": "committee_branch_data",
-            "secondary_data": "branch_committee_data",
-            "filter_fields": {"family", "branches", "committees"},
-            "data_fields": {"family", "branch", "committee_area"},
-        },
-        "electorsByFamilyCommitteeBranch": {
-            "primary_data": "branch_committee_data",
-            "secondary_data": "committee_branch_data",
-            "filter_fields": {"family", "branches", "committees"},
-            "data_fields": {"family", "branch", "committee_area"},
-        },
+        # # Committees
+        # "electorsByFamilyBranchCommittee": {
+        #     "filter_fields": {"family", "branches", "committees"},
+        #     "data_fields": {
+        #         "branch",
+        #         "committee_area",
+        #         "family",
+        #     },
+        # },
+        # "electorsByFamilyCommitteeBranch": {
+        #     "filter_fields": {"family", "branches", "committees"},
+        #     "data_fields": {
+        #         "branch",
+        #         "committee_area",
+        #         "family",
+        #     },
+        # },
     }
     results = {}
+
+    # Elector Data
     for key, params in instances.items():
         results[key] = process_elector_data(
             family,
             branches,
             areas,
             committees,
-            params["primary_data"],
-            params["secondary_data"],
             params["filter_fields"],
             params["data_fields"],
         )
 
+    # Field Options
     results.update(
         {
             "familyBranches": fetch_selection_options(family, "branch"),
@@ -117,9 +118,7 @@ def process_elector_data(
     branches,
     areas,
     committees,
-    primary_data,
-    secondary_data,
-    filter,
+    filter_fields,
     data_fields,
 ):
     """Helper function to create a serializer instance and retrieve data."""
@@ -129,9 +128,7 @@ def process_elector_data(
             branches,
             areas,
             committees,
-            primary_data,
-            secondary_data,
-            filter,
+            filter_fields,
             data_fields,
         )
     }
@@ -170,26 +167,6 @@ def prepare_parameters(request, filter_fields):
     if "committees" in filter_fields:
         params["committees"] = extract_query_params(request, "committees")
     return params
-
-
-# def process_elector_data(
-#     params, primary_data, secondary_data, filter_fields, data_fields
-# ):
-#     """Helper function to create a serializer instance and retrieve data."""
-#     instance = {
-#         "instance": (
-#             params.get("family"),
-#             params.get("branches"),
-#             params.get("areas"),
-#             params.get("committees"),
-#             primary_data,
-#             secondary_data,
-#             filter_fields,
-#             data_fields,
-#         )
-#     }
-#     serializer = ElectorDataByCategory(instance)
-#     return serializer.to_representation(instance)
 
 
 class ElectorDataSeriesByGenderSerializer(serializers.BaseSerializer):
