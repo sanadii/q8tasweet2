@@ -33,7 +33,7 @@ from .requests import (
     # Elector Family Division
 )
 
-from apps.electors.electorsByFamily import restructure_electors_by_family
+from apps.electors.electorsByCategory import restructure_electors_by_category
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -133,7 +133,7 @@ class GetElectorsByCategory(APIView):
 
 
 # The code that isworking
-class GetElectorBySelection(APIView):
+class GetElectorByCategory(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -142,7 +142,7 @@ class GetElectorBySelection(APIView):
             if hasattr(request, "response"):
                 return request.response
 
-            electors_by_family = restructure_electors_by_family(request)
+            electors_by_family = restructure_electors_by_category(request)
             if "error" in electors_by_family:
                 return Response({"error": electors_by_family["error"]}, status=400)
 

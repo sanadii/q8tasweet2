@@ -134,34 +134,24 @@ export const deleteElectionSchema = (electionSlug) => api.delete(url.DELETE_ELEC
 export const getElectors = (electionSlug) => api.get(url.GET_ELECTORS + "/" + electionSlug);
 // export const getElectorsByCategory = (electorCategories) => api.get(url.GET_ELECTORS_BY_CATEGORY + "/" + electorCategories);
 
-export const getElectorsByCategory = ({ slug, families, areas }) => {
-  let queryString = `?`;
+// export const getElectorsByCategory = ({ slug, families, areas }) => {
+//   let queryString = `?`;
 
-  if (families.length > 0) {
-    queryString += `families=${families.join(',')}`;
-  }
-  // if (family !=="") {
-  //   queryString += `family=${family.join(',')}`;
-  // }
-  if (areas.length > 0) {
-    if (families.length > 0) queryString += '&';
-    queryString += `areas=${areas.join(',')}`;
-  }
+//   if (families.length > 0) {
+//     queryString += `families=${families.join(',')}`;
+//   }
+//   // if (family !=="") {
+//   //   queryString += `family=${family.join(',')}`;
+//   // }
+//   if (areas.length > 0) {
+//     if (families.length > 0) queryString += '&';
+//     queryString += `areas=${areas.join(',')}`;
+//   }
 
-  return api.get(`${url.GET_ELECTORS_BY_CATEGORY}/${slug}/${queryString}`);
-};
+//   return api.get(`${url.GET_ELECTORS_BY_CATEGORY}/${slug}/${queryString}`);
+// };
 
-
-
-
-//   // Adjust the action to fetch data with family and area parameters
-//   export const getElectorsByCategory = (families, areas) => {
-//     const params = new URLSearchParams();
-//     if (families.length > 0) params.append('families', families.join(','));
-//     if (areas.length > 0) params.append('areas', areas.join(','));
-//     return api.get(`${url.GET_ELECTORS_BY_CATEGORY}?${params.toString()}`);
-//   };
-
+export const getElectorsByCategory = (electorData) => api.get(url.GET_ELECTORS_BY_CATEGORY, electorData);
 export const getElectorFamilyDivisions = (electorData) => api.get(url.GET_ELECTOR_FAMILY_DIVISIONS, electorData);
 
 export const getElectorStatistics = (electionSlug) => api.get(url.GET_ELECTOR_STATISTICS + "/" + electionSlug);

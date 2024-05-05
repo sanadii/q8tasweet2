@@ -9,7 +9,7 @@ from rest_framework import serializers
 # #
 # Elector Family Branches
 # #
-def restructure_electors_by_family(family, branches, areas, committees):
+def restructure_electors_by_category(family, branches, areas, committees):
     """Restructures elector data into a nested dictionary format."""
 
     # instance_family_all_committees = {"instance": (family, None, None, None, "familyAllCommittees")}

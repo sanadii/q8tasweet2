@@ -10,7 +10,7 @@ from rest_framework import serializers
 # #
 # Elector Family Branches
 # #
-def restructure_electors_by_family(request):
+def restructure_electors_by_category(request):
     """Restructures elector data into a nested dictionary format using a DRY approach."""
 
     family = request.GET.get("family")
@@ -32,11 +32,10 @@ def restructure_electors_by_family(request):
             "filter_fields": {"family"},
             "data_fields": {"family", "committee_area"},
         },
-        
         # Filter with family and 1 attr
         "electorsByFamilyArea": {
             "filter_fields": {"family", "areas"},
-            "data_fields": {"family", "area"},
+            "data_fields": ["family", "area"],
         },
         "electorsByFamilyBranch": {
             "filter_fields": {"family", "branches"},
@@ -46,40 +45,24 @@ def restructure_electors_by_family(request):
             "filter_fields": {"family", "committees"},
             "data_fields": {"family", "committee_area"},
         },
+        # Combined Filter
         "electorsByFamilyBranchArea": {
-            "filter_fields": {
-                "branches",
-                "areas",
-                "family",
-            },
-            "data_fields": {"branch", "area"},
+            "filter_fields": {"branches", "areas", "family"},
+            "data_fields": ["branch", "area", "family"],
         },
         "electorsByFamilyAreaBranch": {
-            "filter_fields": {
-                "family",
-                "branches",
-                "areas",
-                "family",
-            },
-            "data_fields": {"branch", "area"},
+            "filter_fields": ["branches", "areas", "family"],
+            "data_fields": ["area", "branch", "family"],
         },
         # # Committees
-        # "electorsByFamilyBranchCommittee": {
-        #     "filter_fields": {"family", "branches", "committees"},
-        #     "data_fields": {
-        #         "branch",
-        #         "committee_area",
-        #         "family",
-        #     },
-        # },
-        # "electorsByFamilyCommitteeBranch": {
-        #     "filter_fields": {"family", "branches", "committees"},
-        #     "data_fields": {
-        #         "branch",
-        #         "committee_area",
-        #         "family",
-        #     },
-        # },
+        "electorsByFamilyBranchCommittee": {
+            "filter_fields": {"family", "branches", "committees"},
+            "data_fields": ["branch", "committee_area", "family"],
+        },
+        "electorsByFamilyCommitteeBranch": {
+            "filter_fields": {"family", "branches", "committees"},
+            "data_fields": ["committee_area", "branch", "family"],
+        },
     }
     results = {}
 

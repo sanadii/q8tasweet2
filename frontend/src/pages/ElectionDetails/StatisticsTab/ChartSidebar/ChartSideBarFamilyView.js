@@ -6,7 +6,7 @@ import { ButtonGroup, Button, Label, Input } from "reactstrap";
 import Select from "react-select";
 
 
-import { getElectorsByCategory, getElectorFamilyDivisions } from "store/actions";
+import { getElectorsByCategory } from "store/actions";
 
 
 const ChartSideBarFamilyView = ({
@@ -96,7 +96,7 @@ const ChartSideBarFamilyView = ({
         if (selectedFamily || (selectedFamilyBranches.length > 0) || (selectedFamilyBranches.length > 0)) {
             console.log('newState safe for dispatch');
 
-            dispatch(getElectorFamilyDivisions({
+            dispatch(getElectorsByCategory({
                 schema: electionSlug,
                 family: newState.selectionFilters.selectedFamily?.value,
                 branches: newState.selectionFilters.selectedFamilyBranches.map(option => option.value),

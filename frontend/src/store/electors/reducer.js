@@ -25,7 +25,7 @@ const IntialState = {
   electorsByCategories: [],
 
   // 
-  electorsByFamilyDivision: [],
+  electorsByCategory: [],
 
 };
 
@@ -47,7 +47,7 @@ const Electors = (state = IntialState, action) => {
         case GET_ELECTORS_BY_CATEGORY:
           return {
             ...state,
-            electorsByCategories: action.payload.data,
+            electorsByCategory: action.payload.data,
             isElectionSCategoryCreated: false,
             isElectionCategorySuccess: true,
           };
@@ -63,7 +63,7 @@ const Electors = (state = IntialState, action) => {
         case GET_ELECTOR_FAMILY_DIVISIONS:
           return {
             ...state,
-            electorsByFamilyDivision: action.payload.data,
+            electorsByCategory: action.payload.data,
             isElectorFamilyDivisionCreated: false,
             isElectorFamilyDivisionSuccess: true,
           }
