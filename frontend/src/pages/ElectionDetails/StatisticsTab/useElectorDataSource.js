@@ -20,7 +20,7 @@ const useElectorDataSource = (viewState) => {
 
 
 
-    const { electorsByFamilyAllBranches, electorsByFamilyAllAreas, electorsByFamilyAllCommittees,
+    const { electorsByAllFamilies, electorsByAllBranches, electorsByAllAreas, electorsByAllCommittees,
         electorsByFamilyBranch, electorsByFamilyArea, electorsByFamilyCommittee,
         electorsByFamilyBranchArea, electorsByFamilyAreaBranch,
         electorsByFamilyBranchCommittee, electorsByFamilyCommitteeBranch
@@ -36,30 +36,30 @@ const useElectorDataSource = (viewState) => {
             // Handle combinations of familyBranchOption and areaCommitteeOption
             if (familyBranchOption === "") {
                 if (areaCommitteeOption === "") {
-                    return electorsByFamilyAllBranches;
+                    return electorsByAllFamilies;
                 }
                 if (areaCommitteeOption === "area") {
-                    return electorsByFamilyAllAreas;
+                    return electorsByAllAreas;
                 }
                 if (areaCommitteeOption === "committee") {
-                    return electorsByFamilyAllCommittees;
+                    return electorsByAllCommittees;
                 }
 
             }
             if (familyBranchOption === "family") {
                 if (areaCommitteeOption === "") {
-                    return electorsByFamilyAllBranches;
+                    return electorsByAllBranches;
                 }
                 if (areaCommitteeOption === "area") {
-                    return electorsByFamilyAllAreas;
+                    return electorsByAllAreas;
                 }
                 if (areaCommitteeOption === "committee") {
-                    return electorsByFamilyAllCommittees;
+                    return electorsByAllCommittees;
                 }
             }
             if (familyBranchOption === "branch") {
                 if (areaCommitteeOption === "") {
-                    return electorsByFamilyAllBranches;
+                    return electorsByAllBranches;
                 }
                 if (areaCommitteeOption === "committee") {
                     return swapView ? electorsByFamilyBranchCommittee : electorsByFamilyCommitteeBranch;
@@ -90,19 +90,19 @@ const useElectorDataSource = (viewState) => {
             // Handle combinations of familyBranchOption and areaCommitteeOption
             if (familyBranchOption === "") {
                 if (areaCommitteeOption === "") {
-                    return electorsByFamily;
+                    return electorsByAllFamilies;
                 }
                 if (areaCommitteeOption === "area") {
-                    return electorsByFamilyArea;
+                    return electorsByAllAreas;
                 }
                 if (areaCommitteeOption === "committee") {
-                    return electorsByFamilyCommittee;
+                    return electorsByAllCommittees;
                 }
 
             }
             if (familyBranchOption === "family") {
                 if (areaCommitteeOption === "") {
-                    return electorsByFamily;
+                    return electorsByAllFamilies;
                 }
                 if (areaCommitteeOption === "area") {
                     return electorsByFamilyArea;
@@ -113,7 +113,7 @@ const useElectorDataSource = (viewState) => {
             }
             if (familyBranchOption === "branch") {
                 if (areaCommitteeOption === "") {
-                    return electorsByFamilyBranch;
+                    return electorsByAllBranches;
                 }
 
                 if (areaCommitteeOption === "area") {

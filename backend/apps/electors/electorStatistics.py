@@ -10,72 +10,26 @@ from rest_framework import serializers
 # #
 # Elector Family Branches
 # #
-def restructure_electors_by_category(request):
+def restructure_elector_statistics(request):
     """Restructures elector data into a nested dictionary format using a DRY approach."""
 
-    families = extract_query_params(request, "families")
-    branches = extract_query_params(request, "branches")
-    areas = extract_query_params(request, "areas")
-    committees = extract_query_params(request, "committees")
+    filter_fields: {""}
 
     instances = {
         # No Filter
-        "electorsByAllFamilies": {
-            "filter_fields": {""},
+        "electorsByFamily": {
             "data_fields": {"family"},
         },
-        "electorsByAllBranches": {
-            "filter_fields": {"families"},
+        "electorsByBranch": {
             "data_fields": {"branch", "family"},
         },
-        "electorsByAllAreas": {
-            "filter_fields": {"families"},
+        "electorsByArea": {
             "data_fields": {"family", "area"},
         },
-        "electorsByAllCommittees": {
-            "filter_fields": {"families"},
+        "electorsByCommittee": {
             "data_fields": {"family", "committee_area"},
         },
         
-        # Filter By Family
-        # 
-        
-        # 
-        "electorsByFamily": {
-            "filter_fields": {"families"},
-            "data_fields": ["family"],
-        },
-        # Filter with family and 1 attr
-        "electorsByFamilyArea": {
-            "filter_fields": {"families", "areas"},
-            "data_fields": ["family", "area"],
-        },
-        "electorsByFamilyBranch": {
-            "filter_fields": {"families", "branches"},
-            "data_fields": {"family", "branch"},
-        },
-        "electorsByFamilyCommittee": {
-            "filter_fields": {"families", "committees"},
-            "data_fields": {"family", "committee_area"},
-        },
-        # Combined Filter
-        "electorsByFamilyBranchArea": {
-            "filter_fields": {"branches", "areas", "families"},
-            "data_fields": ["branch", "area", "family"],
-        },
-        "electorsByFamilyAreaBranch": {
-            "filter_fields": ["branches", "areas", "families"],
-            "data_fields": ["area", "branch", "family"],
-        },
-        # Committees
-        "electorsByFamilyBranchCommittee": {
-            "filter_fields": {"families", "branches", "committees"},
-            "data_fields": ["branch", "committee_area", "family"],
-        },
-        "electorsByFamilyCommitteeBranch": {
-            "filter_fields": {"families", "branches", "committees"},
-            "data_fields": ["committee_area", "branch", "family"],
-        },
     }
     results = {}
 

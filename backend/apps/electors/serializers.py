@@ -19,7 +19,7 @@ class ElectorSerializer(serializers.ModelSerializer):
 class ElectorDataByCategory(serializers.BaseSerializer):
     """
     Custom serializer to represent elector data categorized by various fields such as family,
-    branches, areas, and committees.
+    branches, area, and committees.
 
     This serializer aggregates and annotates data based on dynamic input fields, allowing
     for flexible and efficient data retrieval and representation for reporting or analysis purposes.
@@ -32,7 +32,7 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         Args:
             instance (dict): A dictionary containing key elements needed to drive the query and processing.
                 Expected keys are:
-                - instance: tuple containing (family, branches, areas, committees, filter_fields, data_fields)
+                - instance: tuple containing (families, branches, area, committees, filter_fields, data_fields)
 
         Returns:
             dict: A dictionary representing the structured data after processing and aggregation,
@@ -43,61 +43,67 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         """
 
         # Extract necessary fields from the instance dictionary with validation
-        (family, branches, areas, committees, filter_fields, data_fields) = instance[
+        (families, branches, area, committees, filter_fields, data_fields) = instance[
             "instance"
         ]
 
         # Ensure data_fields is a tuple, which is hashable and can be used safely
         data_fields = tuple(data_fields)
-        
+
         # Fetch aggregated data based on the filters and fields specified
         query_set = self.get_aggregated_elector_data(
-            family, branches, areas, committees, filter_fields
+            families, branches, area, committees, filter_fields, data_fields
         )
         elector_data = self.get_annotated_elector_data(query_set, data_fields)
 
-        # Prepare data mappings for categorized data representation and create dictionary  
+        # Prepare data mappings for categorized data representation and create dictionary
         data_mappings = self.initialize_data_mappings()
         self.update_data_mapping(elector_data, data_mappings, data_fields)
         primary_data_dict = data_mappings["primary_data"]
 
         # Prepare data for response including aggregated counters and categorized series
         count_aggregated_electors = self.prepare_elector_data_counter(elector_data)
-        categories = self.prepare_elector_data_categories(primary_data_dict)
-        data_series = self.prepare_elector_data_series(primary_data_dict, data_fields)
-        data_series_by_gender = self.prepare_elector_data_gender_series(
-            primary_data_dict, data_fields
-        )
+        # categories = self.prepare_elector_data_categories(primary_data_dict)
+        # data_series = self.prepare_elector_data_series(primary_data_dict, data_fields)
+        # data_series_by_gender = self.prepare_elector_data_gender_series(
+        #     primary_data_dict, data_fields
+        # )
 
         return {
             # "query_set": query_set,
-            "elector_data": elector_data,
+            # "elector_data": elector_data,
             "data_mappings": data_mappings,
             "primary_data_dict": primary_data_dict,
             "counter": count_aggregated_electors,
-            "categories": categories[:20],
-            "dataSeries": data_series[:20],
-            "dataSeriesByGender": data_series_by_gender[:20],
+            # "categories": categories[:20],
+            # "dataSeries": data_series[:20],
+            # "dataSeriesByGender": data_series_by_gender[:20],
         }
 
     def get_aggregated_elector_data(
         self,
-        family=None,
+        families=None,
         branches=None,
-        areas=None,
+        area=None,
         committees=None,
         filter_fields=set(),
+        data_fields=set(),
     ):
         """Fetch and aggregate elector data based on dynamic filters."""
         queryset = Elector.objects.all()
 
+        if "" in filter_fields and families:
+            queryset = queryset.filter(family__in=families)
+
+
         # Apply filters dynamically based on data_fields
-        if "family" in filter_fields and family:
-            queryset = queryset.filter(family__icontains=family)
+        if "" in filter_fields:
+            queryset = queryset
+            
         if "branches" in filter_fields and branches:
             queryset = queryset.filter(branch__in=branches)
-        if "areas" in filter_fields and areas:
-            queryset = queryset.filter(area__in=areas)
+        if "area" in filter_fields and area:
+            queryset = queryset.filter(area__in=area)
         if "committees" in filter_fields and committees:
             queryset = queryset.filter(committee_area__in=committees)
         return queryset
@@ -127,19 +133,40 @@ class ElectorDataByCategory(serializers.BaseSerializer):
 
     def update_data_mapping(self, elector_data, data_mappings, data_fields):
         for item in elector_data:
-            for field in data_fields:
-                key = "primary_data"
-                if key in data_mappings:
-                    self.update_data_with_related_fields(
-                        data_mappings[key],
-                        item.get(data_fields[0], ""),  # Assuming first field as parent
-                        item.get(data_fields[1], ""),  # Assuming second field as child
+            key = "primary_data"
+            if key in data_mappings:
+                if len(data_fields) == 1:
+                    # Handling single field data
+                    self.update_data_with_single_field(
+                        data_mappings[key],  # Accessing the correct dictionary
+                        item.get(
+                            data_fields[0], ""
+                        ),  # Getting the value for the single field
                         item,
                     )
-                else:
-                    print(
-                        f"Warning: {key} not found in data_mappings. Check initialization."
+
+                if len(data_fields) > 1:
+                    self.update_data_with_related_fields(
+                        data_mappings[key],
+                        item.get(data_fields[0], ""),
+                        item.get(data_fields[1], ""),
+                        item,
                     )
+            else:
+                print(
+                    f"Warning: {key} not found in data_mappings. Check initialization."
+                )
+
+    def update_data_with_single_field(self, data_dict, key, item):
+        # Initialize the entry list if key does not exist
+        if key not in data_dict:
+            data_dict[key] = {"total": 0, "female": 0, "male": 0}
+        
+        # Update counts for the single entry
+        data_dict[key]["total"] += item.get("total", 0)
+        data_dict[key]["female"] += item.get("female", 0)
+        data_dict[key]["male"] += item.get("male", 0)
+
 
     def update_data_with_related_fields(self, data_dict, parent_key, child_key, item):
         if parent_key not in data_dict:
@@ -209,7 +236,7 @@ class ElectorDataByCategory(serializers.BaseSerializer):
                 )
 
         if len(data_fields) == 3:
-            # Iterate through each area in the secondary data, assuming it's structured with areas as keys
+            # Iterate through each area in the secondary data, assuming it's structured with area as keys
             for area, families_data in primary_data_dict.items():
                 area_series = {"name": area, "data": []}
 

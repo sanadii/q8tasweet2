@@ -5,7 +5,6 @@ import {
 
   // Database
   GET_ELECTORS,
-  GET_ELECTORS_BY_CATEGORY,
   ADD_ELECTOR,
   ADD_ELECTOR_SUCCESS,
   ADD_ELECTOR_FAIL,
@@ -13,6 +12,7 @@ import {
 
   // ElectionStatistics
   GET_ELECTOR_STATISTICS,
+  GET_ELECTORS_BY_CATEGORY,
   GET_ELECTORS_BY_FAMILY,
 
   // Specifications

@@ -15,9 +15,6 @@ const ChartSideBar = ({
     const { resultsToShow, displayByGender, displayByOption, displayAllOption, displayWithOption,
         displayAllElectors, familyBranchOption, areaCommitteeOption, swapView } = viewSettings
 
-    console.log("familyBranchOption: ", familyBranchOption)
-    console.log("areaCommitteeOption: ", areaCommitteeOption)
-
     const handleDisplayAllToggle = useCallback((option) => () => {
         setViewState(prevState => ({
             ...prevState,
@@ -35,7 +32,6 @@ const ChartSideBar = ({
             viewSettings: {
                 ...prevState.viewSettings,
                 [optionType]: option,
-                displayAllElectors: false,
             }
         }));
     }, [setViewState]);
@@ -50,9 +46,6 @@ const ChartSideBar = ({
             }
         }));
     }, [setViewState]);
-
-
-    console.log("displayAllElectors: ", displayAllElectors)
 
     // Constants for button configurations
     const displayBySelectionButtons = useMemo(() => [

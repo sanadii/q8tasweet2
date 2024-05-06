@@ -34,7 +34,7 @@ from .requests import (
 )
 
 from apps.electors.electorsByCategory import restructure_electors_by_category
-
+from apps.electors.electorStatistics import restructure_elector_statistics
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 100  # default number of items per page
@@ -94,46 +94,50 @@ class GetElectorStatistics(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        slug = kwargs.get("slug")
-
-        with schema_context(request, slug) as election:
+        schema = request.GET.get("schema")
+        with schema_context(request, schema):
             if hasattr(request, "response"):
                 return request.response
 
-            election_statistics = count_election_statistics()
-            electors_by_family = count_electors_by_family()
-            electors_by_area = count_electors_by_area()
-            electors_by_committee = count_electors_by_committee()
+            electors_by_category = restructure_elector_statistics(request)
+            if "error" in electors_by_category:
+                return Response({"error": electors_by_category["error"]}, status=400)
 
-        response_data = {
-            "electionStatistics": election_statistics,
-            "electorsByFamily": electors_by_family,
-            "electorsByArea": electors_by_area,
-            "electorsByCommittee": electors_by_committee,
-        }
+        return Response({"data": electors_by_category}, status=200)
+    
+# class GetElectorStatistics(APIView):
+#     permission_classes = [IsAuthenticated]
 
-        return Response({"data": response_data}, status=200)
+#     def get(self, request, *args, **kwargs):
+#         slug = kwargs.get("slug")
 
+#         with schema_context(request, slug) as election:
+#             if hasattr(request, "response"):
+#                 return request.response
 
-class GetElectorsByCategory(APIView):
-    permission_classes = [IsAuthenticated]
+#             election_statistics = count_election_statistics()
+#             electors_by_family = count_electors_by_family()
+#             electors_by_area = count_electors_by_area()
+#             electors_by_committee = count_electors_by_committee()
 
-    def get(self, request, *args, **kwargs):
-        slug = kwargs.get("slug")
+#         response_data = {
+#             "electionStatistics": election_statistics,
+#             "electorsByFamily": electors_by_family,
+#             # "electorsBYBranch": electors_by_branch,
+#             "electorsByArea": electors_by_area,
+#             "electorsByCommittee": electors_by_committee,
+#             # "electors_by_family_area": eelectors_by_family_area,
+#             # "electors_by_family_committee": electors_by_family_committee,
+#             # "electors_by_branch_area": electors_by_branch_area,
+#             # "electors_by_branch_committee": electors_by_branch_committee,
+#         }
 
-        with schema_context(request, slug):
-            if hasattr(request, "response"):
-                return request.response
+#         return Response({"data": response_data}, status=200)
 
-            elector_by_category = count_electors_by_category(request)
-
-            response_data = elector_by_category
-
-        return Response({"data": response_data}, status=200)
 
 
 # The code that isworking
-class GetElectorByCategory(APIView):
+class GetElectorsByCategory(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -142,8 +146,26 @@ class GetElectorByCategory(APIView):
             if hasattr(request, "response"):
                 return request.response
 
-            electors_by_family = restructure_electors_by_category(request)
-            if "error" in electors_by_family:
-                return Response({"error": electors_by_family["error"]}, status=400)
+            electors_by_category = restructure_electors_by_category(request)
+            if "error" in electors_by_category:
+                return Response({"error": electors_by_category["error"]}, status=400)
 
-        return Response({"data": electors_by_family}, status=200)
+        return Response({"data": electors_by_category}, status=200)
+
+
+
+# class GetElectorsByCategory(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request, *args, **kwargs):
+#         slug = kwargs.get("slug")
+
+#         with schema_context(request, slug):
+#             if hasattr(request, "response"):
+#                 return request.response
+
+#             elector_by_category = count_electors_by_category(request)
+
+#             response_data = elector_by_category
+
+#         return Response({"data": response_data}, status=200)

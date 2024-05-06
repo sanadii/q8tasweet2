@@ -24,14 +24,11 @@ const StatisticsTab = () => {
 
     const [viewState, setViewState] = useState({
         selectionFilters: {
-            selectedFamilies: [],
-            selectedAreas: [],
-
             // for dispatching
-            selectedFamily: null,
-            selectedFamilyBranches: [],
-            selectedFamilyBranchesAreas: [],
-            selectedFamilyBranchesCommittees: [],
+            selectedFamilies:  [],
+            selectedBranches: [],
+            selectedAreas: [],
+            selectedCommittees: [],
         },
         viewSettings: {
             resultsToShow: "10",

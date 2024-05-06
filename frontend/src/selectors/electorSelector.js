@@ -20,9 +20,10 @@ export const electorSelector = createSelector(
     electorsByCategory: electorsState.electorsByCategory,
     electorsByBranchFamilies: electorsState.electorsByCategory?.electorFamilyDivisionFamilies || [],
 
-    electorsByFamilyAllBranches: electorsState.electorsByCategory?.electorsByFamilyAllBranches || [],
-    electorsByFamilyAllAreas: electorsState.electorsByCategory?.electorsByFamilyAllAreas || [],
-    electorsByFamilyAllCommittees: electorsState.electorsByCategory?.electorsByFamilyAllCommittees || [],
+    electorsByAllFamilies: electorsState.electorsByCategory?.electorsByAllFamilies || [],
+    electorsByAllBranches: electorsState.electorsByCategory?.electorsByAllBranches || [],
+    electorsByAllAreas: electorsState.electorsByCategory?.electorsByAllAreas || [],
+    electorsByAllCommittees: electorsState.electorsByCategory?.electorsByAllCommittees || [],
 
     electorsByFamilyBranch: electorsState.electorsByCategory?.electorsByFamilyBranch || [],
     electorsByFamilyArea: electorsState.electorsByCategory?.electorsByFamilyArea || [],

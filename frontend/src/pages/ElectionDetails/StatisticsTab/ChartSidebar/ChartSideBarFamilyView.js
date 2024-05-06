@@ -87,21 +87,21 @@ const ChartSideBarFamilyView = ({
                 ...viewState.viewSettings,
                 displayAllElectors: false,  // Correctly set displayAllElectors to false
             }
-    
+
         };
 
-        const { selectedFamily, selectedFamilyBranches, selectedFamilyBranchesAreas } = newState.selectionFilters;
+        const { selectedFamilies, selectedBranches, selectedAreas } = newState.selectionFilters;
 
         // Assuming you want to dispatch an action if there is a valid family or family division selected
-        if (selectedFamily || (selectedFamilyBranches.length > 0) || (selectedFamilyBranches.length > 0)) {
+        if (selectedFamilies.length > 0 || (selectedBranches.length > 0) || (selectedAreas.length > 0)) {
             console.log('newState safe for dispatch');
 
             dispatch(getElectorsByCategory({
                 schema: electionSlug,
-                family: newState.selectionFilters.selectedFamily?.value,
-                branches: newState.selectionFilters.selectedFamilyBranches.map(option => option.value),
-                areas: newState.selectionFilters.selectedFamilyBranchesAreas.map(option => option.value),
-                committees: newState.selectionFilters.selectedFamilyBranchesCommittees.map(option => option.value),
+                families: newState.selectionFilters.selectedFamilies.map(option => option.value),
+                branches: newState.selectionFilters.selectedBranches.map(option => option.value),
+                areas: newState.selectionFilters.selectedAreas.map(option => option.value),
+                committees: newState.selectionFilters.selectedCommittees.map(option => option.value),
             }));
         }
 
@@ -135,9 +135,9 @@ const ChartSideBarFamilyView = ({
                     <div className="pb-3">
                         <Label for="familySelect">إختر القبيلة \ القبائل</Label>
                         <Select
-                            id="familySelect"
-                            value={selectionFilters.family}
-                            onChange={(value) => handleFamilyBranchChange('selectedFamily', value)}
+                            value={selectionFilters.selectedFamilies}
+                            isMulti={true}
+                            onChange={(value) => handleFamilyBranchChange('selectedFamilies', value)}
                             options={familyOptions}
                             classNamePrefix="select"
                         />
@@ -147,7 +147,7 @@ const ChartSideBarFamilyView = ({
                         <Select
                             id="familySelect"
                             value={selectionFilters.familyBranches}
-                            onChange={(value) => handleFamilyBranchChange('selectedFamilyBranches', value)}
+                            onChange={(value) => handleFamilyBranchChange('selectedBranches', value)}
                             isMulti
                             options={familyBranchOptions}
                             classNamePrefix="select"
@@ -160,7 +160,7 @@ const ChartSideBarFamilyView = ({
                                 id="areaSelect"
                                 value={selectionFilters.familyDivisionsAreas}
                                 isMulti
-                                onChange={(value) => handleFamilyBranchChange('selectedFamilyBranchesAreas', value)}
+                                onChange={(value) => handleFamilyBranchChange('selectedAreas', value)}
                                 options={familyAreaOptions}
                                 classNamePrefix="select"
                             />
@@ -174,7 +174,7 @@ const ChartSideBarFamilyView = ({
                                 id="areaSelect"
                                 value={selectionFilters.familyDivisionsAreas}
                                 isMulti
-                                onChange={(value) => handleFamilyBranchChange('selectedFamilyBranchesCommittees', value)}
+                                onChange={(value) => handleFamilyBranchChange('selectedCommittees', value)}
                                 options={familyCommitteeOptions}
                                 classNamePrefix="select"
                             />
