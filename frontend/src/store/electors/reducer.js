@@ -9,7 +9,7 @@ import {
 
   // ElectionStatistics
   GET_ELECTORS_BY_CATEGORY,
-  GET_ELECTOR_STATISTICS,
+  GET_ELECTOR_BY_ALL,
   GET_ELECTORS_BY_FAMILY,
 
 
@@ -34,7 +34,7 @@ const Electors = (state = IntialState, action) => {
 
     case API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
-        case GET_ELECTOR_STATISTICS:
+        case GET_ELECTOR_BY_ALL:
           return {
             ...state,
             electionStatistics: action.payload.data.electionStatistics,
@@ -74,7 +74,7 @@ const Electors = (state = IntialState, action) => {
 
     case API_RESPONSE_ERROR:
       switch (action.payload.actionType) {
-        case GET_ELECTOR_STATISTICS:
+        case GET_ELECTOR_BY_ALL:
           return {
             ...state,
             error: action.payload.error,
@@ -128,7 +128,7 @@ const Electors = (state = IntialState, action) => {
       };
 
     // Election Statistics
-    case GET_ELECTOR_STATISTICS: {
+    case GET_ELECTOR_BY_ALL: {
       return {
         ...state,
         isElectionStatisticCreated: false,

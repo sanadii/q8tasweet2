@@ -11,7 +11,7 @@ import {
 
 
   // ElectionStatistics
-  GET_ELECTOR_STATISTICS,
+  GET_ELECTOR_BY_ALL,
   GET_ELECTORS_BY_CATEGORY,
   GET_ELECTORS_BY_FAMILY,
 
@@ -59,8 +59,8 @@ export const ElectorApiResponseError = (actionType, error) => ({
 });
 
 // Get ElectionStatistics
-export const getElectorStatistics = (election) => ({
-  type: GET_ELECTOR_STATISTICS,
+export const getElectorsByAll = (election) => ({
+  type: GET_ELECTOR_BY_ALL,
   payload: election
 });
 

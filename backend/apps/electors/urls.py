@@ -8,6 +8,7 @@ app_name = "electors"
 urlpatterns = [
     # path("getAllElectors", GetAllElectors.as_view(), name="GetAllElectors"),
     path("getElectorStatistics/<slug:slug>", GetElectorStatistics.as_view(), name="GetElectorStatistics"),
+    path("getElectorsByAll", GetElectorStatistics.as_view(), name="GetElectorStatistics"),
     path("getElectorsByCategory", GetElectorsByCategory.as_view(), name="GetElectorsByCategory")
 
     # path("getElectorsByCategoryOld/<slug:slug>/", GetElectorsByCategory.as_view(), name="getElectorsByCategory"),

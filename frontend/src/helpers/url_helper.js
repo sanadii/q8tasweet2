@@ -82,12 +82,12 @@ export const DELETE_ELECTION_SCHEMA = "/electionSchemas/deleteElectionSchema";
 
 // Election Data
 export const GET_ELECTORS = "/electors/getElectors";
-export const GET_ELECTORS_BY_CATEGORY = "/electors/getElectorsByCategory";
-export const GET_ELECTOR_FAMILY_DIVISIONS = "/electors/getElectorFamilyDivisions";
-export const GET_ELECTOR_STATISTICS = "/electors/getElectorStatistics";
 export const ADD_ELECTOR = "/electors/addElector";
 export const UPDATE_ELECTOR = "/electors/updateElector";
 export const DELETE_ELECTOR = "/electors/deleteElector";
+export const GET_ELECTORS_BY_CATEGORY = "/electors/getElectorsByCategory";
+export const GET_ELECTOR_BY_ALL = "/electors/getElectorsByAll";
+export const GET_ELECTOR_FAMILY_DIVISIONS = "/electors/getElectorFamilyDivisions";
 
 
 // Candidates

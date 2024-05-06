@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 // ElectionStatistic Redux States
 import {
   ADD_ELECTOR,
-  GET_ELECTOR_STATISTICS,
+  GET_ELECTOR_BY_ALL,
   GET_ELECTORS_BY_CATEGORY,
 
   GET_ELECTOR_FAMILY_DIVISIONS,
@@ -26,7 +26,7 @@ import {
 import {
   addElector as AddElectorApi,
   getElectorsByCategory as getElectorsByCategoryApi,
-  getElectorStatistics as getElectorStatisticsApi,
+  getElectorsByAll as getElectorStatisticsApi,
 
   // 
   getElectorFamilyDivisions as getElectorFamilyDivisionsApi,
@@ -40,12 +40,12 @@ import {
 // Elections
 
 
-function* getElectorStatistics({ payload: election }) {
+function* getElectorsByAll({ payload: election }) {
   try {
     const response = yield call(getElectorStatisticsApi, election);
-    yield put(ElectorApiResponseSuccess(GET_ELECTOR_STATISTICS, response.data));
+    yield put(ElectorApiResponseSuccess(GET_ELECTOR_BY_ALL, response.data));
   } catch (error) {
-    yield put(ElectorApiResponseError(GET_ELECTOR_STATISTICS, error));
+    yield put(ElectorApiResponseError(GET_ELECTOR_BY_ALL, error));
   }
 }
 
@@ -82,7 +82,7 @@ function* addElector({ payload: elector }) {
 
 // Election Database
 export function* watchGetElectionStatistics() {
-  yield takeEvery(GET_ELECTOR_STATISTICS, getElectorStatistics);
+  yield takeEvery(GET_ELECTOR_BY_ALL, getElectorsByAll);
 }
 
 export function* watchGetElectorsByCategory() {

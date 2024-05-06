@@ -34,7 +34,7 @@ from .requests import (
 )
 
 from apps.electors.electorsByCategory import restructure_electors_by_category
-from apps.electors.electorStatistics import restructure_elector_statistics
+from apps.electors.electorsByAll import restructure_elector_by_all
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 100  # default number of items per page
@@ -99,7 +99,7 @@ class GetElectorStatistics(APIView):
             if hasattr(request, "response"):
                 return request.response
 
-            electors_by_category = restructure_elector_statistics(request)
+            electors_by_category = restructure_elector_by_all(request)
             if "error" in electors_by_category:
                 return Response({"error": electors_by_category["error"]}, status=400)
 

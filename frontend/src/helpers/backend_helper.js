@@ -151,13 +151,12 @@ export const getElectors = (electionSlug) => api.get(url.GET_ELECTORS + "/" + el
 //   return api.get(`${url.GET_ELECTORS_BY_CATEGORY}/${slug}/${queryString}`);
 // };
 
-export const getElectorsByCategory = (electorData) => api.get(url.GET_ELECTORS_BY_CATEGORY, electorData);
-export const getElectorFamilyDivisions = (electorData) => api.get(url.GET_ELECTOR_FAMILY_DIVISIONS, electorData);
-
-export const getElectorStatistics = (electionSlug) => api.get(url.GET_ELECTOR_STATISTICS + "/" + electionSlug);
 export const addElector = (electionSlug) => api.get(url.ADD_ELECTOR + "/" + electionSlug);
 export const updateElector = (electionSlug) => api.update(url.UPDATE_ELECTOR + "/" + electionSlug);
 export const deleteElector = (electionSlug) => api.delete(url.DELETE_ELECTOR + "/" + electionSlug);
+export const getElectorsByCategory = (electorData) => api.get(url.GET_ELECTORS_BY_CATEGORY, electorData);
+export const getElectorsByAll = (electionSlug) => api.get(url.GET_ELECTOR_BY_ALL, electionSlug);
+export const getElectorFamilyDivisions = (electorData) => api.get(url.GET_ELECTOR_FAMILY_DIVISIONS, electorData);
 
 
 // // Voter
