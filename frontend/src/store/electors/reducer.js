@@ -23,6 +23,7 @@ const IntialState = {
   electorsByCommittee: [],
   electionDataCategories: [],
   electorsByCategories: [],
+  electorsByAll: [],
 
   // 
   electorsByCategory: [],
@@ -37,10 +38,10 @@ const Electors = (state = IntialState, action) => {
         case GET_ELECTOR_BY_ALL:
           return {
             ...state,
-            electionStatistics: action.payload.data.electionStatistics,
-            electorsByFamily: action.payload.data.electorsByFamily,
-            electorsByArea: action.payload.data.electorsByArea,
-            electorsByCommittee: action.payload.data.electorsByCommittee,
+            // electionStatistics: action.payload.data.electionStatistics,
+            electorsByAll: action.payload.data,
+            // electorsByArea: action.payload.data.electorsByArea,
+            // electorsByCommittee: action.payload.data.electorsByCommittee,
             isElectionStatisticCreated: false,
             isElectionStatisticsuccess: true,
           };

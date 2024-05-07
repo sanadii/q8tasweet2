@@ -23,9 +23,9 @@ const ChartSideBarFamilyView = ({
 
     const { displayAllElectors } = viewDetails
 
-    const familyOptions = useMemo(() => (
-        electorsByFamily.categories.map(category => ({ label: category, value: category })) || []
-    ), [electorsByFamily]);
+    // const familyOptions = useMemo(() => (
+    //     electorsByFamily.categories.map(category => ({ label: category, value: category })) || []
+    // ), [electorsByFamily]);
 
 
     const familyBranchOptions = useMemo(() => (
@@ -138,7 +138,7 @@ const ChartSideBarFamilyView = ({
                             value={selectionFilters.selectedFamilies}
                             isMulti={true}
                             onChange={(value) => handleFamilyBranchChange('selectedFamilies', value)}
-                            options={familyOptions}
+                            options={familyBranchOptions}
                             classNamePrefix="select"
                         />
                     </div>

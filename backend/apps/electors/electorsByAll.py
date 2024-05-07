@@ -5,37 +5,52 @@ from rest_framework import serializers
 
 def restructure_elector_by_all(request):
     """Restructures elector data into a nested dictionary format without applying filters."""
+    
+    # families = extract_query_params(request, "families")
+
     instances = {
-        "electorsByFamily": {
+        # Single Field
+        "electorsByAllFamilies": {
             "data_fields": ["family"],
         },
-        "electorsByBranch": {
-            "data_fields": ["branch", "family"],
+        "electorsByAllBranches": {
+            "data_fields": ["branch"],
         },
-        "electorsByArea": {
+        "electorsByAllAreas": {
+            "data_fields": ["area"],
+        },
+        "electorsByAllCommittees": {
+            "data_fields": ["committee_area"],
+        },
+        # Two Fields
+        "electorsByAllFamilyAreas": {
             "data_fields": ["family", "area"],
         },
-        "electorsByCommittee": {
+        "electorsByAllFamilyCommittees": {
             "data_fields": ["family", "committee_area"],
         },
-        "electorsByAllFamilyArea": {
-            "data_fields": ["family", "area"],
+        "electorsByAllBranchAreas": {
+            "data_fields": ["branch", "area"],
         },
-        "electorsByAllFamilyCommittee": {
-            "data_fields": ["family", "committee_area"],
+        "electorsByAllBranchCommittees": {
+            "data_fields": ["branch", "committee_area"],
         },
-        "electorsByAllBranchArea": {
-            "data_fields": ["family", "area"],
-        },
-        "electorsByAllBranchCommittee": {
-            "data_fields": ["family", "committee_area"],
-        },
+        # Test
+        # "electorsByAllBranchCommittees": {
+        #     "primary_data_fields": {"branch", "committee_area" },
+        #     "secondary_data_fields": {"committee_area", "branch"},
+        # },
     }
     results = {}
 
     # Processing elector data
-    for key, params in instances.items():
-        results[key] = process_elector_data(params["data_fields"])
+    # for key, params in instances.items():
+    #     results[key] = process_elector_data(params["data_fields"])
+
+    # results.update(
+    #     {
+    #         "families": fetch_selection_options(families, "branch"),
+    #     }
 
     return results
 

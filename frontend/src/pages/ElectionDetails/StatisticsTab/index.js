@@ -101,10 +101,10 @@ const StatisticsTab = () => {
                                 viewState={viewState}
                             />
                             <div className="file-manager-content w-100 p-4 pb-0">
-                                <ElectorStatisticCounter
+                                {/* <ElectorStatisticCounter
                                     dataSource={dataSource[viewSettings.activeView]}
                                     electionStatistics={electionStatistics}
-                                />
+                                /> */}
 
                                 {viewSettings.displayChartType === "bar" && <ElectorSimpleBarChart
                                     dataSource={dataSource[viewSettings.activeView]}

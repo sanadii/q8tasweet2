@@ -28,21 +28,25 @@ class ElectorDataByCategory(serializers.BaseSerializer):
     def to_representation(self, instance):
         """
         Converts the query set provided by `instance` into a Python dictionary of data ready for serialization.
+
+        Args:
+            instance (dict): A dictionary containing key elements needed to drive the query and processing.
+                Expected keys are:
+                - instance: tuple containing (families, branches, area, committees, filter_fields, data_fields)
+
+        Returns:
+            dict: A dictionary representing the structured data after processing and aggregation,
+                  suitable for JSON serialization and further frontend utilization.
+
+        Raises:
+            ValueError: If required keys are missing from the instance dictionary.
         """
 
         # Extract necessary fields from the instance dictionary with validation
         (families, branches, area, committees, filter_fields, data_fields) = instance[
             "instance"
         ]
-        
-        # 
-        # The next update
-        # (kwargs_data, filter_fields, data_fields) = instance[
-        #     "instance"
-        # ]
-        # families, branches, area, committees = kwargs_data
-        # 
-        
+
         # Ensure data_fields is a tuple, which is hashable and can be used safely
         data_fields = tuple(data_fields)
 
@@ -50,21 +54,27 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         query_set = self.get_aggregated_elector_data(
             families, branches, area, committees, filter_fields, data_fields
         )
-        
-        # Create elector_data from query set
         elector_data = self.get_annotated_elector_data(query_set, data_fields)
 
-        # Prepare data mappings for categorized data representation and update it
+        # Prepare data mappings for categorized data representation and create dictionary
         data_mappings = self.initialize_data_mappings(data_fields)
         self.update_data_mapping(elector_data, data_mappings, data_fields)
 
-        # Create Dictionary from the data mapping
+        # # for data_field in data_fields:
+        # #     f{field("_data_dict")} = data_mappings[f"{data_field}_data]
+        # primary_data_dict, secondary_data_dictor, teriary_data_dictor = data_mappings["primary_data"]
+        # if data_fields == 2:
+        #     secondary_data_dictor = data_mappings["primary_data"]
+
+        # if data_fields == 3:
+        #     teriary_data_dictor = data_mappings["primary_data"]
+
         data_dicts = {}
         for index, field in enumerate(data_fields, start=1):
             dict_name = f"{field}_data"
             data_dicts[f"{index}ary_data_dict"] = data_mappings[dict_name]
 
-        # Prepare data for response including aggregated counters, categories, dataSeries and dataSeriesByGender
+        # Prepare data for response including aggregated counters and categorized series
         count_aggregated_electors = self.prepare_elector_data_counter(elector_data)
         categories = self.prepare_elector_data_categories(
             data_dicts["1ary_data_dict"], data_fields
@@ -88,23 +98,23 @@ class ElectorDataByCategory(serializers.BaseSerializer):
             # "dataSeriesByGender": data_series_by_gender[:20],
         }
         
-        if len(data_fields) == 2:
-            secondary_categories = self.prepare_elector_data_categories(data_dicts['2ary_data_dict'], data_fields)
-            secondary_data_series = self.prepare_elector_data_series(data_dicts['2ary_data_dict'], data_fields)
+        # if len(data_fields) >= 2:
+        #     # secondary_categories = self.prepare_elector_data_categories(data_dicts['2ary_data_dict'], data_fields)
+        #     # secondary_data_series = self.prepare_elector_data_series(data_dicts['2ary_data_dict'], data_fields)
 
-            # Append or merge secondary data
-            serializer_result['secondary_categories'] = secondary_categories[:20]
-            serializer_result['secondary_dataSeries'] = secondary_data_series[:20]
-            serializer_result['secondary_data_dict'] = data_dicts["2ary_data_dict"]
+        #     # Append or merge secondary data
+        #     # serializer_result['secondary_categories'] = secondary_categories[:20]
+        #     # serializer_result['secondary_dataSeries'] = secondary_data_series[:20]
+        #     serializer_result['secondary_data_dict'] = data_dicts["2ary_data_dict"]
 
         # Handle tertiary data if applicable
-        if len(data_fields) == 3:
-            tertiary_categories = self.prepare_elector_data_categories(data_dicts['3ary_data_dict'], data_fields)
-            tertiary_data_series = self.prepare_elector_data_series(data_dicts['3ary_data_dict'], data_fields)
+        # if len(data_fields) == 3:
+        #     tertiary_categories = self.prepare_elector_data_categories(data_dicts['3ary_data_dict'], data_fields)
+        #     tertiary_data_series = self.prepare_elector_data_series(data_dicts['3ary_data_dict'], data_fields)
 
-            # Append or merge tertiary data
-            serializer_result['tertiary_categories'] = tertiary_categories[:20]
-            serializer_result['tertiary_dataSeries'] = tertiary_data_series[:20]
+        #     # Append or merge tertiary data
+        #     serializer_result['tertiary_categories'] = tertiary_categories[:20]
+        #     serializer_result['tertiary_dataSeries'] = tertiary_data_series[:20]
 
         return serializer_result
 
@@ -115,6 +125,7 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         area=None,
         committees=None,
         filter_fields=set(),
+        data_fields=set(),
     ):
         """Fetch and aggregate elector data based on dynamic filters."""
         queryset = Elector.objects.all()
@@ -223,27 +234,18 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         data_dict[key]["female"] += item.get("female", 0)
         data_dict[key]["male"] += item.get("male", 0)
 
-    # def update_data_with_two_fields(self, data_dict, primary_key, secondary_key, item):
-    def update_data_with_two_fields(self, data_dict, parent_key, child_key, item):
-        if parent_key not in data_dict:
-            data_dict[parent_key] = []
+    def update_data_with_two_fields(self, data_dict, primary_key, secondary_key, item):
+        if primary_key not in data_dict:
+            data_dict[primary_key] = {}
 
-        # Find or create the child entry
-        child_entry = next(
-            (entry for entry in data_dict[parent_key] if entry["name"] == child_key),
-            None,
-        )
-        if not child_entry:
-            child_entry = {"name": child_key, "total": 0, "female": 0, "male": 0}
-            data_dict[parent_key].append(child_entry)
+        if secondary_key not in data_dict[primary_key]:
+            data_dict[primary_key][secondary_key] = {"total": 0, "female": 0, "male": 0}
 
-        # Update counts for the specific child entry
-        child_entry["total"] += item.get("total", 0)
-        child_entry["female"] += item.get("female", 0)
-        child_entry["male"] += item.get("male", 0)
+        data_dict[primary_key][secondary_key]["total"] += item.get("total", 0)
+        data_dict[primary_key][secondary_key]["female"] += item.get("female", 0)
+        data_dict[primary_key][secondary_key]["male"] += item.get("male", 0)
 
 
-    # not yet working
     def update_data_with_three_fields(self, data_dict, parent_key, child_key, item):
         if parent_key not in data_dict:
             data_dict[parent_key] = []
@@ -286,16 +288,8 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         is a category name.
         """
         # Directly return the list of keys, which are the category names
-        if len(data_fields) == 1:
-            category_list = list(primary_data_dict.keys())
+        category_list = list(primary_data_dict.keys())
 
-        # Initialize an empty set to store unique category names
-        if len(data_fields) > 1:
-            category_names = set()
-            for entry_list in primary_data_dict.values():
-                category_names.update(entry["name"] for entry in entry_list)
-
-            category_list = list(category_names)
 
         return category_list
 
@@ -306,12 +300,16 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         if len(data_fields) == 1:
             # The field specifies which data to extract (e.g., 'total', 'female', 'male')
             data_series_name = data_fields[0]
-            series_data = []
+            series_data = []  # To hold all data points for the series
 
             for key, data in primary_data_dict.items():
                 # Extract the specific data based on the field from each entry
-                data_point = data.get("total", 0)
-                series_data.append(data_point)
+                data_point = data.get(
+                    "total", 0
+                )  # Default to 0 if field is not present
+                series_data.append(
+                    data_point
+                )  # Append data point to the series data list
 
             # Append the constructed series data to data_series
             data_series.append(

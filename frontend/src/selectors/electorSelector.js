@@ -10,30 +10,47 @@ export const electorSelector = createSelector(
     electionStatistics: electorsState.electionStatistics,
 
     // Election Selectors
-    electorsByFamily: electorsState.electorsByFamily,
-    electorsByArea: electorsState.electorsByArea,
-    electorsByCommittee: electorsState.electorsByCommittee,
-    electorsByCategories: electorsState.electorsByCategories,
-    electorsByFamiliesArea: electorsState.electorsByCategories?.electorsByFamily || [],
+    // electorsByFamily: electorsState.electorsByFamily,
+    // electorsByArea: electorsState.electorsByArea,
+    // electorsByCommittee: electorsState.electorsByCommittee,
+    // electorsByCategories: electorsState.electorsByCategories,
+    // electorsByFamiliesArea: electorsState.electorsByCategories?.electorsByFamily || [],
 
     // electorsByCategory
     electorsByCategory: electorsState.electorsByCategory,
     electorsByBranchFamilies: electorsState.electorsByCategory?.electorFamilyDivisionFamilies || [],
 
-    electorsByAllFamilies: electorsState.electorsByCategory?.electorsByAllFamilies || [],
-    electorsByAllBranches: electorsState.electorsByCategory?.electorsByAllBranches || [],
-    electorsByAllAreas: electorsState.electorsByCategory?.electorsByAllAreas || [],
-    electorsByAllCommittees: electorsState.electorsByCategory?.electorsByAllCommittees || [],
 
-    electorsByFamilyBranch: electorsState.electorsByCategory?.electorsByFamilyBranch || [],
-    electorsByFamilyArea: electorsState.electorsByCategory?.electorsByFamilyArea || [],
+    // electorsByAll
+    // 1 field
+    electorsByAll: electorsState.electorsByAll || [],
+    electorsByAllFamilies: electorsState.electorsByAll?.electorsByAllFamilies || [],
+    electorsByAllBranches: electorsState.electorsByAll?.electorsByAllBranches || [],
+    electorsByAllAreas: electorsState.electorsByAll?.electorsByAllAreas || [],
+    electorsByAllCommittees: electorsState.electorsByAll?.electorsByAllCommittees || [],
 
-    electorsByFamilyBranchArea: electorsState.electorsByCategory?.electorsByFamilyBranchArea || [],
+
+    // 2 fields
+    electorsByAllFamilyAreas: electorsState.electorsByAll?.electorsByAllFamilyAreas || [],
+    electorsByAllFamilyCommittees: electorsState.electorsByAll?.electorsByAllFamilyCommittees || [],
+    electorsByAllBranchAreas: electorsState.electorsByAll?.electorsByAllBranchAreas || [],
+    electorsByAllBranchCommittees: electorsState.electorsByAll?.electorsByAllBranchCommittees || [],
+
+
+    electorsByAllAreas: electorsState.electorsByAll?.electorsByAllAreas || [],
+    electorsByAllCommittees: electorsState.electorsByAll?.electorsByAllCommittees || [],
+
+    // 2 fields
+    electorsByBranch: electorsState.electorsByCategory?.electorsByBranch || [],
+    electorsByFamily: electorsState.electorsByCategory?.electorsByFamily || [],
+    electorsByyArea: electorsState.electorsByCategory?.electorsByArea || [],
+
+    electorsByBranchArea: electorsState.electorsByCategory?.electorsByBranchArea || [],
     electorsByAreaBranch: electorsState.electorsByCategory?.electorsByAreaBranch || [],
 
-    electorsByFamilyBranchCommittee: electorsState.electorsByCategory?.electorsByFamilyBranchCommittee || [],
-    electorsByFamilyCommitteeBranch: electorsState.electorsByCategory?.electorsByFamilyCommitteeBranch || [],
-    
+    electorsByBranchCommittee: electorsState.electorsByCategory?.electorsByBranchCommittee || [],
+    electorsByCommitteeBranch: electorsState.electorsByCategory?.electorsByCommitteeBranch || [],
+
     familyBranches: electorsState.electorsByCategory?.familyBranches || [],
     familyAreas: electorsState.electorsByCategory?.familyAreas || [],
     familyCommittees: electorsState.electorsByCategory?.familyCommittees || [],
