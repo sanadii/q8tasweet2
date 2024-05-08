@@ -1,6 +1,9 @@
 from apps.electors.models import Elector
 from apps.electors.serializers import ElectorDataByCategory
 from rest_framework import serializers
+from django.db import models
+from django.db.models import F, Value, Count
+from django.db.models.functions import Concat
 
 
 def restructure_elector_by_all(request):
@@ -44,15 +47,34 @@ def restructure_elector_by_all(request):
     results = {}
 
     # Processing elector data
-    # for key, params in instances.items():
-    #     results[key] = process_elector_data(params["data_fields"])
+    for key, params in instances.items():
+        results[key] = process_elector_data(params["data_fields"])
 
-    # results.update(
-    #     {
-    #         "families": fetch_selection_options(families, "branch"),
-    #     }
+    all_families = fetch_all_families()
+    results["family_options"] = all_families  # Add family names to the results
 
     return results
+
+def fetch_all_families():
+    """
+    Fetches all unique family names from the Elector model along with their counts,
+    ordered by the count in descending order.
+    Returns each family as a dictionary with 'label' as 'familyName - count'
+    and 'value' as just the 'familyName'.
+    """
+    queryset = Elector.objects.values('family').annotate(
+        count=Count('family')  # Count the occurrences of each family
+    ).order_by('-count')  # Order by count in descending order
+
+    # Format the label to include both the family name and the count
+    result = [
+        {'label': f"{family['family']} - {family['count']}", 'value': family['family']}
+        for family in queryset
+    ]
+
+    return result
+
+
 
 
 def process_elector_data(data_fields):

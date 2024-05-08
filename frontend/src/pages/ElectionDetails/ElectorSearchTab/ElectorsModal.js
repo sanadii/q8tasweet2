@@ -1,0 +1,119 @@
+import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { campaignSelector } from 'selectors';
+import "react-toastify/dist/ReactToastify.css";
+
+import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { GuaranteeStatusOptions } from "shared/constants";
+
+const ElectorsModal = ({ modal, toggle, modalMode, voter }) => {
+
+  const { campaignMembers } = useSelector(campaignSelector);
+
+  const [onModalSubmit, setOnModalSubmit] = useState(null);
+
+  let ModalTitle;
+  let ModalContent;
+  let ModalButtonText;
+
+  switch (modalMode) {
+    case "CampaignElectorViewModal":
+      ModalTitle = "Campaign Elector View";
+      ModalContent = CampaignElectorViewModal;
+      ModalButtonText = "Add to Guarantees";
+      break;
+
+    default:
+      ModalTitle = "Default Modal"; // A default title for other cases
+      ModalContent = DefaultModalContent;
+      ModalButtonText = "Close"; // A default button text
+  }
+
+
+  return (
+    <Modal isOpen={modal} toggle={toggle} centered className="border-0" size="xs">
+      <ModalHeader className="p-3 ps-4 bg-soft-success">
+        {ModalTitle}
+      </ModalHeader>
+      <ModalBody className="p-4">
+
+        <ModalContent
+          voter={voter}
+          setOnModalSubmit={setOnModalSubmit}
+          campaignMembers={campaignMembers}
+        />
+
+      </ModalBody>
+      <ModalFooter>
+        <div className="hstack gap-2 justify-content-end">
+          <Button color="light" onClick={() => toggle(false)}>Close</Button>
+
+          {/* if ModalButtonText and ModalButtonText is not empty */}
+          {ModalButtonText && ModalButtonText.length > 0 &&
+            <Button
+              color="success"
+              id="add-btn"
+              onClick={() => {
+                if (onModalSubmit) onModalSubmit();
+                toggle(false);
+              }}
+            >
+              {ModalButtonText}
+            </Button>
+          }
+
+        </div>
+      </ModalFooter>
+    </Modal>
+  );
+};
+
+export const CampaignElectorViewModal = ({
+  voter,
+  toggle,
+  setOnModalSubmit,
+  campaignMembers,
+}) => {
+  // const dispatch = useDispatch();
+
+  return (
+    <React.Fragment>
+      <Row>
+        <Table size="sm"> {/* Using reactstrap's Table */}
+          <thead className="bg-primary text-white">
+            <tr>
+              <th colSpan="2" className="text-center">Elector Info</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="fw-medium">Name / Gender</td> {/* Added text-muted */}
+              <td>{voter.full_name} {voter.gender}</td>
+            </tr>
+            <tr>
+              <td className="fw-medium">CID</td>
+              <td>{voter.civil}</td>
+            </tr>
+            <tr>
+              <td className="fw-medium">Box Number</td>
+              <td>{voter.box_no}</td>
+            </tr>
+            <tr>
+              <td className="fw-medium">Member Number</td>
+              <td>{voter.membership_no}</td>
+            </tr>
+            <tr>
+              <td className="fw-medium">Enrolment Date</td>
+              <td>{voter.enrollment_date}</td>
+            </tr>
+          </tbody>
+        </Table>
+      </Row>
+    </React.Fragment>
+
+  );
+};
+
+const DefaultModalContent = () => null; // Defining a named component for the default case
+
+export default ElectorsModal;

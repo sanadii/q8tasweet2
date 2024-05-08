@@ -22,31 +22,27 @@ const ElectionDetails = () => {
   const { slug } = useParams();
   const { election } = useSelector(electionSelector);
 
+  const electionSlug = election?.slug
+  const electionHasSchema = election?.hasSchema
+
   const {
     isStaff,
-   } = usePermission();
+  } = usePermission();
 
-  const hasElectionHasSchema = election?.hasSchema
   useEffect(() => {
-    // Set the document title
     document.title = "الانتخابات | كويت تصويت";
-
-    // Fetch election details if the slug is available and candidate is empty
-    if (slug && (isEmpty(election) || election.slug !== slug)) {
+    if (slug && (electionSlug !== slug)) {
       dispatch(getElectionDetails(slug));
     }
-
-  }, [dispatch, election, slug]);
+  }, [dispatch, electionSlug, slug]);
 
   useEffect(() => {
-
-    // Fetch election details if the slug is available and candidate is empty
-    if (election && hasElectionHasSchema) {
-      dispatch(getElectionSchemaDetails(slug))
-      dispatch(getElectorsByAll({schema: slug}));
-      // dispatch(getElectionDataDetails(slug));
+    if (election && electionSlug && electionHasSchema) {
+      dispatch(getElectionSchemaDetails(electionSlug));
+      dispatch(getElectorsByAll({ schema: electionSlug }));
     }
-  }, [dispatch, election, slug, hasElectionHasSchema]);
+  }, [election, electionSlug, electionHasSchema]);
+
 
 
   return (

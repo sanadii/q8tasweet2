@@ -53,7 +53,7 @@ class GetAllElectors(APIView):
         )
 
 
-class GetElectors(APIView):
+class GetElectorsBySearch(APIView):
     def get(self, request):
         query = request.GET.get("searchInput", "").strip()
         # return Response({
