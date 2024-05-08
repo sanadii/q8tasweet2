@@ -81,7 +81,7 @@ function* addElector({ payload: elector }) {
 // 
 
 // Election Database
-export function* watchGetElectionStatistics() {
+export function* watchGetElectorsByAll() {
   yield takeEvery(GET_ELECTOR_BY_ALL, getElectorsByAll);
 }
 
@@ -106,7 +106,7 @@ function* electionStatisticSaga() {
     // Election Dtabase
     fork(watchAddElector),
     // ElectionStatistics
-    fork(watchGetElectionStatistics),
+    fork(watchGetElectorsByAll),
     fork(watchGetElectorsByCategory),
 
     // 

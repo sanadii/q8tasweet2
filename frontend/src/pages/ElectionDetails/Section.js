@@ -11,6 +11,7 @@ import { usePermission } from "shared/hooks"
 import SectionHeader from "./SectionHeader";
 import OverviewTab from "./OverviewTab";
 import StatisticsTab from "./StatisticsTab";
+import ElectorSearchTab from "./ElectorSearchTab";
 
 import ElectionDetailsWidget from "./OverviewTab/ElectionDetailsWidget";
 import CandidatesTab from "./CandidatesTab";
@@ -93,8 +94,15 @@ const Section = ({ viewType }) => {
           id: "2",
           href: '#electionStatistics',
           icon: 'ri-activity-line',
-          title: "احصائيات",
+          title: "الناخبين - احصائيات",
           component: <StatisticsTab />
+        },
+        {
+          id: "3",
+          href: '#electionSearchTab',
+          icon: 'ri-activity-line',
+          title: "الناخبين - بحث",
+          component: <ElectorSearchTab />
         },
 
         // ...(viewType !== 'public' ? [
@@ -106,7 +114,7 @@ const Section = ({ viewType }) => {
         //   },
         ...(election.electionResultView !== "total" ? [
           {
-            id: "3",
+            id: "5",
             title: "اللجان",
             icon: 'ri-activity-line',
             component: <CommitteesTab />,

@@ -1,16 +1,23 @@
 // React & Redux
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
-// Import Actions
+// Redux and Selector
+import { useSelector, useDispatch } from "react-redux";
 import { addNewUser, updateUser } from "store/actions";
-import * as Yup from "yup";
-import { useFormik } from "formik";
+
+
+
 import "react-toastify/dist/ReactToastify.css";
 import { GenderOptions } from "shared/constants"
-import { FieldComponent } from "shared/components";
+
 import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+
+
+// Form
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { FieldComponent } from "shared/components";
 
 const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
   const dispatch = useDispatch();

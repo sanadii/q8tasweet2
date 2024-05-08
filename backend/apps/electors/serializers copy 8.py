@@ -205,7 +205,11 @@ class ElectorDataByCategory(serializers.BaseSerializer):
                     if len(data_fields) == 1:
                         # Handling single field data
                         self.update_data_with_single_field(
-                            data_mappings[key], item.get(data_fields[0], ""), item
+                            data_mappings[key],  # Accessing the correct dictionary
+                            item.get(
+                                data_fields[0], ""
+                            ),  # Getting the value for the single field
+                            item,
                         )
 
                     # Handling single field data
@@ -300,55 +304,54 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         data_dict[key]["male"] += data["male"]
 
     def prepare_elector_data_counter(self, queryset, elector_data):
-        # Existing summary logic...
+        """
+        Returns the counts of unique areas and unique committee areas from the provided queryset,
+        including gender-specific counts for the committee areas.
+        """
+
+        """Summarizes elector counts."""
+        total = sum(item["total"] for item in elector_data)
+        female = sum(item["female"] for item in elector_data)
+        male = sum(item["male"] for item in elector_data)
         gender_counter = {
-            "total": sum(item["total"] for item in elector_data),
-            "female": sum(item["female"] for item in elector_data),
-            "male": sum(item["male"] for item in elector_data),
+            "total": total,
+            "female": female,
+            "male": male,
         }
 
-        # Ensure proper filtering for areas and committees
-        filtered_queryset = queryset.exclude(area__isnull=True, area__exact="")
+        # Filter out any null or blank entries for 'area' and 'committee_area'
+        queryset = (
+            queryset.exclude(area__isnull=True)
+            .exclude(area__exact="")
+            .exclude(committee_area__isnull=True)
+            .exclude(committee_area__exact="")
+        )
 
-        # Count distinct areas
-        area_count = filtered_queryset.values("area").distinct().count()
+        # Count the distinct areas and committee areas
+        area_count = queryset.values("area").distinct().count()
+        committee_area_count = queryset.values("committee_area").distinct().count()
+        committee_count = queryset.values("committee").distinct().count()
 
-        # You need to adjust these lines to correctly reference the gender from the related model
-        # Assuming CommitteeSite is the correct model where gender is defined and related through 'committee'
-        # Make sure the 'committee__committee_site' chain accurately reflects your model relationships
+        # Count the distinct committee areas filtered by gender
         male_committee_area_count = (
-            queryset.filter(committee__committee_site__gender=1)
-            .values("committee_area")
-            .distinct()
-            .count()
+            queryset.filter(gender="1").values("committee_area").distinct().count()
         )
         female_committee_area_count = (
-            queryset.filter(committee__committee_site__gender=2)
-            .values("committee_area")
-            .distinct()
-            .count()
+            queryset.filter(gender="2").values("committee_area").distinct().count()
         )
 
-        # Assuming 'committee' field in your queryset correctly points to the Committee model
-        committee_count = filtered_queryset.values("committee_id").distinct().count()
         male_committee_count = (
-            filtered_queryset.filter(committee__committee_site__gender=1)
-            .values("committee_id")
-            .distinct()
-            .count()
+            queryset.filter(gender="1").values("committee").distinct().count()
         )
         female_committee_count = (
-            filtered_queryset.filter(committee__committee_site__gender=2)
-            .values("committee_id")
-            .distinct()
-            .count()
+            queryset.filter(gender="2").values("committee").distinct().count()
         )
 
         return {
             "gender_count": gender_counter,
             "area_count": area_count,
             "committee_site_count": {
-                "total": area_count,  # Assuming you mean the number of committee sites here
+                "total": committee_area_count,
                 "male": male_committee_area_count,
                 "female": female_committee_area_count,
             },
@@ -381,21 +384,35 @@ class ElectorDataByCategory(serializers.BaseSerializer):
     def prepare_elector_data_series(self, primary_data_dict, data_fields):
         data_series = []
 
+        # For single field data
         if len(data_fields) == 1:
-            # Use list comprehension for more concise code
-            for field in data_fields:
-                series_data = [
-                    data.get("total", 0) for key, data in primary_data_dict.items()
-                ]
-                data_series.append({"name": field, "data": series_data})
+            # The field specifies which data to extract (e.g., 'total', 'female', 'male')
+            data_series_name = data_fields[0]
+            series_data = []
+
+            for key, data in primary_data_dict.items():
+                # Extract the specific data based on the field from each entry
+                data_point = data.get("total", 0)
+                series_data.append(data_point)
+
+            # Append the constructed series data to data_series
+            data_series.append(
+                {
+                    "name": data_series_name,  # Name the series based on the field
+                    "data": series_data,  # The compiled list of data points
+                }
+            )
 
         elif len(data_fields) == 2:
-            # Iterate through each primary key and aggregate sub-keys
+            # Iterate through each area in the secondary data, assuming it's structured with area as keys
             for key, sub_key_data in primary_data_dict.items():
-                sub_series = {
-                    "name": key,
-                    "data": [sub_key.get("total", 0) for sub_key in sub_key_data],
-                }
+                sub_series = {"name": key, "data": []}
+
+                # Assuming families_data is a list of dictionaries with each family's data
+                for sub_key in sub_key_data:
+                    # Append each family's data as a separate dictionary within the 'data' list
+                    sub_series["data"].append(sub_key["total"])
+
                 data_series.append(sub_series)
 
         return data_series
@@ -419,15 +436,9 @@ class ElectorDataByCategory(serializers.BaseSerializer):
             # Aggregate counts by sub-category names
             for key, sub_key_data in primary_data_dict.items():
                 for sub_key in sub_key_data:
-                    sub_category_name = sub_key["name"]
-                    sub_category_female_totals[sub_category_name] = (
-                        sub_category_female_totals.get(sub_category_name, 0)
-                        + sub_key["female"]
-                    )
-                    sub_category_male_totals[sub_category_name] = (
-                        sub_category_male_totals.get(sub_category_name, 0)
-                        + sub_key["male"]
-                    )
+                    sub_category_name = sub_key['name']
+                    sub_category_female_totals[sub_category_name] = sub_category_female_totals.get(sub_category_name, 0) + sub_key["female"]
+                    sub_category_male_totals[sub_category_name] = sub_category_male_totals.get(sub_category_name, 0) + sub_key["male"]
 
             # Convert dictionaries to lists after summing is complete
             series_female = list(sub_category_female_totals.values())
@@ -436,6 +447,6 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         # Prepare the final data series structure for gender data
         data_series_by_gender = [
             {"name": "إناث", "data": series_female},
-            {"name": "ذكور", "data": series_male},
+            {"name": "ذكور", "data": series_male}
         ]
         return data_series_by_gender

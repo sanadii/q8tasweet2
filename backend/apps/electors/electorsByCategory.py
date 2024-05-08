@@ -1,6 +1,9 @@
 from apps.electors.models import Elector
 from apps.electors.serializers import ElectorDataByCategory
 from rest_framework import serializers
+from django.db import models
+from django.db.models import F, Value
+from django.db.models.functions import Concat
 
 # Things to do
 # 5. Optimize Database Queries
@@ -19,63 +22,65 @@ def restructure_electors_by_category(request):
     committees = extract_query_params(request, "committees")
 
     instances = {
-        # No Filter
-        "electorsByAllFamilies": {
-            "filter_fields": {""},
-            "data_fields": {"family"},
-        },
-        "electorsByAllBranches": {
-            "filter_fields": {"families"},
-            "data_fields": {"branch", "family"},
-        },
-        "electorsByAllAreas": {
-            "filter_fields": {"families"},
-            "data_fields": {"family", "area"},
-        },
-        "electorsByAllCommittees": {
-            "filter_fields": {"families"},
-            "data_fields": {"family", "committee_area"},
-        },
-        
+        # 
         # Filter By Family
-        # 
-        
-        # 
+        #
+        # Filter By One Field
         "electorsByFamily": {
             "filter_fields": {"families"},
             "data_fields": ["family"],
         },
-        # Filter with family and 1 attr
+        "electorsByArea": {
+            "filter_fields": {"areas"},
+            "data_fields": ["area"],
+        },
+        "electorsByBranch": {
+            "filter_fields": {"branches"},
+            "data_fields": {"branch"},
+        },
+        "electorsByCommittee": {
+            "filter_fields": {"committees"},
+            "data_fields": {"committee_area"},
+        },
+        # 
+        # Filter By Two Field
         "electorsByFamilyArea": {
             "filter_fields": {"families", "areas"},
             "data_fields": ["family", "area"],
         },
-        "electorsByFamilyBranch": {
-            "filter_fields": {"families", "branches"},
-            "data_fields": {"family", "branch"},
-        },
         "electorsByFamilyCommittee": {
             "filter_fields": {"families", "committees"},
-            "data_fields": {"family", "committee_area"},
+            "data_fields": ["family", "committee_area"],
         },
+        "electorsByBranchArea": {
+            "filter_fields": {"branches", "areas"},
+            "data_fields": {"branch", "area"},
+        },
+        "electorsByBranchCommittee": {
+            "filter_fields": {"branches", "committees"},
+            "data_fields": {"branch", "committee_area"},
+        },
+        
+        
+        
         # Combined Filter
-        "electorsByFamilyBranchArea": {
-            "filter_fields": {"branches", "areas", "families"},
-            "data_fields": ["branch", "area", "family"],
-        },
-        "electorsByFamilyAreaBranch": {
-            "filter_fields": ["branches", "areas", "families"],
-            "data_fields": ["area", "branch", "family"],
-        },
-        # Committees
-        "electorsByFamilyBranchCommittee": {
-            "filter_fields": {"families", "branches", "committees"},
-            "data_fields": ["branch", "committee_area", "family"],
-        },
-        "electorsByFamilyCommitteeBranch": {
-            "filter_fields": {"families", "branches", "committees"},
-            "data_fields": ["committee_area", "branch", "family"],
-        },
+        # "electorsByBranchArea": {
+        #     "filter_fields": {"branches", "areas", "families"},
+        #     "data_fields": ["branch", "area", "family"],
+        # },
+        # "electorsByAreaBranch": {
+        #     "filter_fields": ["branches", "areas", "families"],
+        #     "data_fields": ["area", "branch", "family"],
+        # },
+        # # Committees
+        # "electorsByBranchCommittee": {
+        #     "filter_fields": {"families", "branches", "committees"},
+        #     "data_fields": ["branch", "committee_area", "family"],
+        # },
+        # "electorsByCommitteeBranch": {
+        #     "filter_fields": {"families", "branches", "committees"},
+        #     "data_fields": ["committee_area", "branch", "family"],
+        # },
     }
     results = {}
 
@@ -93,9 +98,11 @@ def restructure_electors_by_category(request):
     # Field Options
     results.update(
         {
-            "familyBranches": fetch_selection_options(families, "branch"),
-            "familyAreas": fetch_selection_options(families, "area", branches=branches),
-            "familyCommittees": fetch_selection_options(
+            "branch_options": fetch_selection_options(families, "branch"),
+            "area_options": fetch_selection_options(
+                families, "area", branches=branches
+            ),
+            "committee_options": fetch_selection_options(
                 families, "committee_area", committees=committees
             ),
         }
@@ -137,17 +144,64 @@ def extract_query_params(request, param):
     return value.split(",") if value else None
 
 
+# def fetch_selection_options(families, field, branches=None, committees=None):
+#     """Fetch options for dropdowns based on context (family, branches, or committees)."""
+#     queryset = Elector.objects.all()
+#     if field == "branch" and families:
+#         queryset = queryset.filter(family__in=families)
+#     elif field == "area" and branches:
+#         queryset = queryset.filter(branch__in=branches)
+#     elif field == "committee_area" and branches:
+#         queryset = queryset.filter(committee_area__in=committees)
+
+#     return list(queryset.values_list(field, flat=True).distinct())
+
+
 def fetch_selection_options(families, field, branches=None, committees=None):
     """Fetch options for dropdowns based on context (family, branches, or committees)."""
     queryset = Elector.objects.all()
+
     if field == "branch" and families:
         queryset = queryset.filter(family__in=families)
+        queryset = (
+            queryset.annotate(
+                label=Concat(
+                    F("branch"),
+                    Value(" - "),
+                    F("family"),
+                    output_field=models.CharField(),
+                ),
+                value=F("branch"),
+            )
+            .values("label", "value")
+            .distinct()
+        )
+        return list(queryset)
+
     elif field == "area" and branches:
         queryset = queryset.filter(branch__in=branches)
+        queryset = (
+            queryset.annotate(label=F("area"), value=F("area"))
+            .values("label", "value")
+            .distinct()
+        )
+        return list(queryset)
+
     elif field == "committee_area" and branches:
         queryset = queryset.filter(committee_area__in=committees)
+        queryset = (
+            queryset.annotate(label=F("committee_area"), value=F("committee_area"))
+            .values("label", "value")
+            .distinct()
+        )
+        return list(queryset)
 
-    return list(queryset.values_list(field, flat=True).distinct())
+    elif field == "family":
+        queryset = queryset.values_list("family", flat=True).distinct()
+        return [{"label": family, "value": family} for family in queryset]
+
+    # Add a fallback to ensure no non-serializable data is returned
+    return []
 
 
 def prepare_parameters(request, filter_fields):
