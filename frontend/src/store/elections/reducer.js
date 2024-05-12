@@ -85,15 +85,18 @@ const IntialState = {
   electionParties: [],
   electionPartyCandidates: [],
   electionCampaigns: [],
-  electionCommitteeSites: [],
   electionResults: [],
   electionSorters: [],
+
+  // Schema
+  electionCommitteeSites: [],
+  electionAreas: [],
 };
 
 const Elections = (state = IntialState, action) => {
   switch (action.type) {
 
-    
+
     case API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
         case GET_ELECTIONS: {
@@ -125,10 +128,14 @@ const Elections = (state = IntialState, action) => {
             electionParties: action.payload.data.electionParties,
             electionPartyCandidates: action.payload.data.electionPartyCandidates,
             electionCandidates: action.payload.data.electionCandidates,
-            electionCampaigns: action.payload.data.electionCampaigns,
-            electionCommitteeSites: action.payload.data.electionCommitteeSites,
+            electionCampaigns: action.payload.data.electionCampaigns,         
             electionResults: action.payload.data.electionResults,
             electionSorters: action.payload.data.electionSorters,
+            
+            // Schema
+            electionCommitteeSites: action.payload.data.electionCommitteeSites,
+            electionAreas: action.payload.data.electionAreas,
+
             isElectionCreated: false,
             isElectionSuccess: true,
           };

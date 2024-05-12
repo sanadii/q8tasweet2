@@ -13,7 +13,9 @@ import {
   // ElectionStatistics
   GET_ELECTOR_BY_ALL,
   GET_ELECTORS_BY_CATEGORY,
-  GET_ELECTORS_BY_FAMILY,
+  GET_ELECTORS_BY_SEARCH,
+  GET_ELECTORS_BY_SEARCH_SUCCESS,
+  GET_ELECTORS_BY_SEARCH_FAIL,
 
   // Specifications
   GET_ELECTOR_FAMILY_DIVISIONS,
@@ -25,11 +27,6 @@ import {
 // Election Committee Results
 export const getElectors = (elector) => ({
   type: GET_ELECTORS,
-  payload: elector,
-});
-
-export const getElectorsByCategory = (elector) => ({
-  type: GET_ELECTORS_BY_CATEGORY,
   payload: elector,
 });
 
@@ -64,11 +61,26 @@ export const getElectorsByAll = (election) => ({
   payload: election
 });
 
-export const getElectorsByFamily = (electors) => ({
-  type: GET_ELECTORS_BY_FAMILY,
-  payload: electors
+export const getElectorsByCategory = (elector) => ({
+  type: GET_ELECTORS_BY_CATEGORY,
+  payload: elector,
 });
 
+
+export const getElectorsBySearch = (elector) => ({
+  type: GET_ELECTORS_BY_SEARCH,
+  payload: elector
+});
+
+export const getElectorsBySearchSuccess = (elector) => ({
+  type: GET_ELECTORS_BY_SEARCH_SUCCESS,
+  payload: elector,
+});
+
+export const getElectorsBySearchFail = (error) => ({
+  type: GET_ELECTORS_BY_SEARCH_FAIL,
+  payload: error,
+});
 
 export const getElectorFamilyDivisions = (electorData) => ({
   type: GET_ELECTOR_FAMILY_DIVISIONS,

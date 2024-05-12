@@ -9,6 +9,7 @@ from utils.models import GENDER_CHOICES
 
 
 from apps.committees.models import CommitteeSite, Committee
+from apps.areas.models import Area
 
 
 class Elector(models.Model):
@@ -41,7 +42,8 @@ class Elector(models.Model):
 
     # Elector Address
     address = models.TextField(blank=True, null=True)
-    area = models.TextField(blank=True, null=True)
+    area = models.ForeignKey(Area, on_delete=models.CASCADE, db_column='area', related_name='elector_areas')
+    area_name = models.TextField(blank=True, null=True)
     block = models.TextField(blank=True, null=True)
     street = models.TextField(blank=True, null=True)
     lane = models.TextField(blank=True, null=True)

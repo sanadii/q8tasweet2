@@ -12,7 +12,7 @@ from decouple import config
 # from .adminReorder import ADMIN_REORDER
 
 dotenv.load_dotenv()
-  
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,48 +26,24 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "q8tasweet",
         "USER": "postgres",
-        # "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "PASSWORD": "I4ksb@11782",
-        # "PASSWORD": "KWT11782",
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        # "PASSWORD": "I4ksb@11782",
+        "PASSWORD": "KWT11782",
         "HOST": "localhost",
         "PORT": "5432",
     },
 }
 
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY="apuvicmef^(!j8gx&clu0u(!8m0r^etok^l0)kc!---#(i5=dt"
+# JWT_SECRET_KEY="a23b8ac92bba1d38510e45332780f4a65ac33f4a5a6efa17ecd38330e9a3e29f"
+# DB_NAME=q8tasweet
+# DB_USER=postgres
+# DB_PASSWORD="KWT11782"
+# DB_HOST=localhost
+# DB_PORT=5432
 
-
-# DATABASE_ROUTERS = ['middleware.SchemaDatabaseRouter']
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.environ.get("DB_NAME"),
-#         "USER": os.environ.get("DB_USER"),
-#         "PASSWORD": os.environ.get("DB_PASSWORD"),
-#         "HOST": os.environ.get("DB_HOST"),
-#         "PORT": os.environ.get("DB_PORT"),
-#     },
-# }
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 
@@ -105,45 +81,37 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "django_extensions",
-    # 'admin_reorder',
-    # 
+    #
     # Q8 Tasweet Apps
     "core",
-    # 'management',
+    "management",
     # 'apps.media',
     "apps.auths",
     "apps.settings",
-    "apps.areas",
     "apps.elections",
     "apps.categories",
     "apps.candidates",
     # "apps.notifications",
-
     # ElectionSchemas and related Apps
-    'apps.electionSchemas',
+    "apps.electionSchemas",
+    "apps.areas",
     "apps.committees",
     "apps.electors",
     # "apps.campaigns",
-
     # "apps.electionData",
-
 ]
 
 # Order is important TODO: for more info to be written
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware', #was disabled by backend
-
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-# >>>>>>> origin/main
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",  # was disabled by backend
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # >>>>>>> origin/main
     # 'django_hosts.middleware.HostsRequestMiddleware',
 ]
 
@@ -159,14 +127,13 @@ TEMPLATES = [
             os.path.join(BASE_DIR, '../frontend/build'),  # Frontend templates directory
             os.path.join(BASE_DIR, 'templates'),       # Email templates directory
         ],
-       
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 # 'apps.configs.configs.context_processors.site_configs',
             ],
         },

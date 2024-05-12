@@ -14,20 +14,24 @@ GOVERNORATE_CHOICES = [
 # Areas model
 class Area(models.Model):
     name = models.CharField(max_length=50)
-    code = models.CharField(max_length=30)
+    code = models.CharField(max_length=50)
     governorate = models.IntegerField(choices=GOVERNORATE_CHOICES)
+    tags = models.CharField(max_length=250, null=True, blank=True)
 
     class Meta:
+        managed = False
         db_table = "area"
         verbose_name = "Area"
         verbose_name_plural = "Areas"
         default_permissions = []
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)  # Ensures base class initialization
+        schema_name = kwargs.get("schema_name", "public")
+        self.set_schema(schema_name)  # Dynamically sets the schema if provided
+
     def __str__(self):
         return self.name
 
-
-# class AreaBlock(models.Model):
-#     name = models.CharField(max_length=50)
-#     code = models.CharField(max_length=30)
-#     area = models.FKey(area)
+    def set_schema(self, schema):
+        self._schema = schema

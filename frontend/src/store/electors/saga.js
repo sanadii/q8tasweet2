@@ -7,6 +7,7 @@ import {
   ADD_ELECTOR,
   GET_ELECTOR_BY_ALL,
   GET_ELECTORS_BY_CATEGORY,
+  GET_ELECTORS_BY_SEARCH,
 
   GET_ELECTOR_FAMILY_DIVISIONS,
 } from "./actionType";
@@ -19,6 +20,9 @@ import {
   addElectorSuccess,
   addElectorFail,
 
+  getElectorsBySearchSuccess,
+  getElectorsBySearchFail,
+
 } from "./actions";
 
 
@@ -26,8 +30,9 @@ import {
 import {
   addElector as AddElectorApi,
   getElectorsByCategory as getElectorsByCategoryApi,
-  getElectorsByAll as getElectorStatisticsApi,
-
+  getElectorsByAll as getElectorByAllApi,
+  // getElectorsBySearch as getElectorsBySearchApi,
+  getElectorsBySearch,
   // 
   getElectorFamilyDivisions as getElectorFamilyDivisionsApi,
 } from "../../helpers/backend_helper";
@@ -40,23 +45,44 @@ import {
 // Elections
 
 
-function* getElectorsByAll({ payload: election }) {
+function* getElectorsByAll({ payload: elector }) {
   try {
-    const response = yield call(getElectorStatisticsApi, election);
+    const response = yield call(getElectorByAllApi, elector);
     yield put(ElectorApiResponseSuccess(GET_ELECTOR_BY_ALL, response.data));
   } catch (error) {
     yield put(ElectorApiResponseError(GET_ELECTOR_BY_ALL, error));
   }
 }
 
-function* getElectorsByCategory({ payload: electorCategory }) {
+function* getElectorsByCategory({ payload: elector }) {
   try {
-    const response = yield call(getElectorsByCategoryApi, electorCategory);
+    const response = yield call(getElectorsByCategoryApi, elector);
     yield put(ElectorApiResponseSuccess(GET_ELECTORS_BY_CATEGORY, response.data));
   } catch (error) {
     yield put(ElectorApiResponseError(GET_ELECTORS_BY_CATEGORY, error));
   }
 }
+
+// function* getElectorsBySearch({ payload: elector }) {
+//   try {
+//     const response = yield call(getElectorsBySearchApi, elector);
+//     yield put(ElectorApiResponseSuccess(GET_ELECTORS_BY_SEARCH, response.data));
+//   } catch (error) {
+//     yield put(ElectorApiResponseError(GET_ELECTORS_BY_SEARCH, error));
+//   }
+// }
+
+function* onGetElectorsBySearch({ payload: elector }) {
+  try {
+    const response = yield call(getElectorsBySearch, elector);
+    yield put(getElectorsBySearchSuccess(response));
+    toast.success("تم البحث بنجاح", { autoClose: 2000 });
+  } catch (error) {
+    yield put(getElectorsBySearchFail(error));
+    toast.error("خطأ في البحث", { autoClose: 2000 });
+  }
+}
+
 
 function* getElectorFamilyDivisions({ payload: electorData }) {
   try {
@@ -89,6 +115,10 @@ export function* watchGetElectorsByCategory() {
   yield takeEvery(GET_ELECTORS_BY_CATEGORY, getElectorsByCategory);
 }
 
+export function* watchGetElectorsBySearch() {
+  yield takeEvery(GET_ELECTORS_BY_SEARCH, onGetElectorsBySearch);
+}
+
 
 export function* watchGetElectorFamilyDivisions() {
   yield takeEvery(GET_ELECTOR_FAMILY_DIVISIONS, getElectorFamilyDivisions);
@@ -108,7 +138,7 @@ function* electionStatisticSaga() {
     // ElectionStatistics
     fork(watchGetElectorsByAll),
     fork(watchGetElectorsByCategory),
-
+    fork(watchGetElectorsBySearch),
     // 
     fork(watchGetElectorFamilyDivisions),
   ]);

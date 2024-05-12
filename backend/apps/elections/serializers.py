@@ -15,13 +15,6 @@ from apps.elections.models import (
 )
 
 from apps.committees.models import Committee
-from apps.committees.models import (
-    Committee,
-    # CommitteeResult,
-    # PartyCandidateCommitteeResult,
-    # PartyCommitteeResult,
-)
-# from apps.campaigns.models import CampaignSorting
 from apps.auths.serializers import UserSerializer
 
 

@@ -21,6 +21,8 @@ from utils.models_helper import ElectionTypeOptions, ElectionResultsOptions, Gen
 from utils.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 from django.db import models
 from apps.areas.models import Area
+from apps.elections.models import Election
+
 # from django.contrib.postgres.fields import ArrayField
 
 User = get_user_model()
@@ -54,17 +56,19 @@ class CommitteeSite(models.Model):
     serial = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     circle = models.CharField(max_length=255, blank=True, null=True)
-    area = models.CharField(max_length=255, blank=True, null=True)
+    
+    
+    # Change the next 2 fields to areas
+    area = models.ForeignKey(Area, on_delete=models.CASCADE, db_column='area', related_name='committee_site_areas')
     area_name = models.CharField(max_length=255, blank=True, null=True)
+    # 
     gender = models.IntegerField(choices=GENDER_CHOICES, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     voter_count = models.IntegerField(blank=True, null=True)
     committee_count = models.IntegerField(blank=True, null=True)
-    tag = models.TextField(blank=True, null=True)
-    election = models.IntegerField(
-        null=True, blank=True
-    )  # ID of the Election in the default database
+    tags = models.TextField(blank=True, null=True)
+    election = models.IntegerField(null=True, blank=True)
 
     class Meta:
         managed = False
@@ -73,25 +77,33 @@ class CommitteeSite(models.Model):
         verbose_name_plural = "Committee Locations"
         default_permissions = []
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)  # Ensures base class initialization
+        schema_name = kwargs.get("schema_name", "public")
+        self.set_schema(schema_name)  # Dynamically sets the schema if provided
+
+
     def __str__(self):
         return self.name
 
-    def get_election(self):
-        from apps.elections.models import Election
+    def set_schema(self, schema):
+        self._schema = schema
+  
+    # def get_election(self):
+    #     from apps.elections.models import Election
 
-        try:
-            if self.election:
-                return Election.objects.using("default").get(id=self.election)
-        except Election.DoesNotExist:
-            return None
-        return None
+    #     try:
+    #         if self.election:
+    #             return Election.objects.using("default").get(id=self.election)
+    #     except Election.DoesNotExist:
+    #         return None
+    #     return None
 
 
 class Committee(models.Model):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
-    committee_site = models.ForeignKey(CommitteeSite, on_delete=models.CASCADE, related_name='committees')
-
+    committee_site = models.ForeignKey(CommitteeSite, on_delete=models.CASCADE, related_name='committee_site_committees')
     type = models.TextField(max_length=25, blank=True, null=True)
     main = models.BooleanField(default=False)
 

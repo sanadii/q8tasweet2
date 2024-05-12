@@ -39,14 +39,16 @@ urlpatterns = [
     path('categories/', include('apps.categories.urls')),
     path('elections/', include('apps.elections.urls')),
     
-    path('electionSchemas/', include('apps.electionSchemas.urls')),
     # path('electionData/', include('apps.electionData.urls')),
-    path('electors/', include('apps.electors.urls')),
     path('auth/', include('apps.auths.urls')),
 
     # Schema & Documentation
     path("docs/", include_docs_urls(title="WorkspaceAPI")),
     path("schema", get_schema_view(title="WorkspaceAPI", description="API for the WorkspaceAPI", version="1.0.0"), name="openapi-schema"),
+    
+    path('electors/', include('apps.electors.urls')),
+    path('electionSchemas/', include('apps.electionSchemas.urls')),
+
 ]
 
 # Serve media files in development

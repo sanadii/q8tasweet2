@@ -5,12 +5,40 @@ from apps.electors.models import Elector
 from apps.committees.serializers import CommitteeSerializer
 from django.db.models import Count, Case, When, IntegerField, Subquery, OuterRef
 
-from apps.electors.models import Elector
+# from apps.electors.models import Elector
 from apps.committees.models import Committee, CommitteeSite
 from collections import defaultdict, Counter, OrderedDict
 
 
 class ElectorSerializer(serializers.ModelSerializer):
+    area_name = serializers.SerializerMethodField()
+    committee_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Elector
+        fields = [
+            "full_name",
+            "family",
+            "branch",
+            "sect",
+            "gender",
+            "birth_date",
+            "area",
+            "area_name",
+            "committee",
+            "committee_name",
+            "code_number",
+        ]
+
+    def get_area_name(self, obj):
+        return obj.area.name if obj.area else None
+
+    def get_committee_name(self, obj):
+        return obj.committee.name if obj.committee else None
+
+
+
+class ElectorFullSerializer(serializers.ModelSerializer):
     committee = serializers.PrimaryKeyRelatedField(read_only=True, allow_null=True)
 
     class Meta:
@@ -308,7 +336,7 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         }
 
         # Ensure proper filtering for areas and committees
-        filtered_queryset = queryset.exclude(area__isnull=True, area__exact="")
+        filtered_queryset = queryset.exclude(area__isnull=True)
 
         # Count distinct areas
         area_count = filtered_queryset.values("area").distinct().count()

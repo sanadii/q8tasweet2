@@ -7,7 +7,9 @@ from django.http import JsonResponse
 from apps.elections.models import Election
 from apps.committees.models import Committee, CommitteeSite
 from apps.electors.models import Elector
+from apps.areas.models import Area
 from utils.schema import schema_context
+
 
 class AddElectionSchema(APIView):
     permission_classes = [IsAuthenticated]
@@ -19,18 +21,22 @@ class AddElectionSchema(APIView):
         try:
             with connection.cursor() as cursor:
                 # Check if schema already exists
-                cursor.execute("SELECT schema_name FROM information_schema.schemata WHERE schema_name = %s", [schema_name])
+                cursor.execute(
+                    "SELECT schema_name FROM information_schema.schemata WHERE schema_name = %s",
+                    [schema_name],
+                )
                 if cursor.fetchone():
                     return Response({"message": "Schema already exists"}, status=200)
 
                 # Create new schema
-                cursor.execute(f"CREATE SCHEMA \"{schema_name}\"")
+                cursor.execute(f'CREATE SCHEMA "{schema_name}"')
             return Response({"message": "Schema created successfully"}, status=201)
         except Exception as e:
             return Response({"error": str(e)}, status=500)
 
 
 from django.db import IntegrityError
+
 
 class AddElectionSchemaTables(APIView):
     permission_classes = [IsAuthenticated]
@@ -39,12 +45,12 @@ class AddElectionSchemaTables(APIView):
         slug = kwargs.get("slug")
 
         with schema_context(request, slug) as election:
-            if hasattr(request, 'response'):
+            if hasattr(request, "response"):
                 return request.response  # Return the early response if set
 
             results = {}
             with connection.schema_editor() as schema_editor:
-                models = [Committee, CommitteeSite, Elector]
+                models = [Area, Committee, CommitteeSite, Elector]
                 for Model in models:
                     try:
                         table_name = Model._meta.db_table
@@ -59,10 +65,91 @@ class AddElectionSchemaTables(APIView):
             return Response({"results": results}, status=200)
 
     def table_exists(self, table_name):
-        """ Check if a table exists in the current schema. """
+        """Check if a table exists in the current schema."""
         with connection.cursor() as cursor:
             cursor.execute(f"SELECT to_regclass('{table_name}');")
             return cursor.fetchone()[0] is not None
+
+
+
+# class AddElectionSchemaTables(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request, *args, **kwargs):
+#         slug = kwargs.get("slug")
+
+#         with schema_context(request, slug) as election:
+#             if hasattr(request, "response"):
+#                 return request.response  # Return the early response if set
+
+#             results = {}
+#             try:
+#                 with transaction.atomic(), connection.schema_editor() as schema_editor:
+#                     models = [Committee, CommitteeSite, Elector]  # Make sure these models are imported
+#                     for Model in models:
+#                         table_name = Model._meta.db_table
+#                         if not self.table_exists(table_name):
+#                             schema_editor.create_model(Model)
+#                             results[table_name] = "Created successfully"
+#                         else:
+#                             aligned, details = self.check_table_schema(Model, table_name, schema_editor)
+#                             if aligned:
+#                                 results[table_name] = "Table already exists and is up-to-date"
+#                             else:
+#                                 results[table_name] = f"Table schema mismatch: {details}"
+#             except Exception as e:
+#                 # Log error, Django will handle the transaction rollback
+#                 results['error'] = str(e)
+
+#             return Response({"results": results}, status=200)
+
+#     def table_exists(self, table_name):
+#         with connection.cursor() as cursor:
+#             cursor.execute(f"SELECT to_regclass('{table_name}');")
+#             return cursor.fetchone()[0] is not None
+
+#     def check_table_schema(self, model, table_name, schema_editor):
+#         """Check and update the table schema to match the model definition."""
+#         ignored_columns = ['committee_site_id']  # List of columns to ignore for schema comparison
+
+#         columns = self.get_table_columns(table_name)
+#         model_fields = {field.name: (field, field.db_type(connection)) for field in model._meta.fields}
+#         mismatches = {'missing_in_db': [], 'extra_in_db': [], 'type_mismatch': [], 'already_exists': []}
+
+#         model_field_names = set(model_fields.keys()) - set(ignored_columns)
+#         column_names = set(columns.keys()) - set(ignored_columns)
+
+#         # Check for missing columns and add them
+#         for field_name in model_field_names - column_names:
+#             field = model_fields[field_name][0]
+#             schema_editor.add_field(model, field)
+#             mismatches['missing_in_db'].append(field_name)
+
+#         # Check for columns that shouldn't be added again
+#         for field_name in model_field_names & column_names:
+#             field, expected_type = model_fields[field_name]
+#             if columns[field_name] != expected_type:
+#                 mismatches['type_mismatch'].append(field_name)
+#             else:
+#                 mismatches['already_exists'].append(field_name)
+
+#         return False if mismatches['missing_in_db'] or mismatches['type_mismatch'] else True, mismatches
+
+#     def get_table_columns(self, table_name):
+#         """Retrieve column info from the table schema."""
+#         with connection.cursor() as cursor:
+#             cursor.execute("""
+#                 SELECT column_name, data_type
+#                 FROM information_schema.columns
+#                 WHERE table_name = %s;
+#             """, [table_name])
+#             return {row[0]: row[1] for row in cursor.fetchall()}
+
+#     def compare_field_type(self, field, column_type):
+#         if isinstance(field, ForeignKey):
+#             return column_type in ['integer', 'bigint']
+#         return field.db_type(connection) in column_type
+
 
 
 class GetElectionSchemaDetails(APIView):
@@ -73,11 +160,12 @@ class GetElectionSchemaDetails(APIView):
         with schema_context(request, schema_name):
             try:
                 tables = connection.introspection.table_names()
-                return JsonResponse({"data": {"schemaName": schema_name, "schemaTables": tables}}, status=200)
+                return JsonResponse(
+                    {"data": {"schemaName": schema_name, "schemaTables": tables}},
+                    status=200,
+                )
             except Exception as e:
                 return JsonResponse({"error": str(e)}, status=500)
-
-
 
 
 # import os
@@ -167,8 +255,8 @@ class GetElectionSchemaDetails(APIView):
 #             with connection.cursor() as cursor:
 #                 cursor.execute(
 #                     """
-#                     SELECT table_name 
-#                     FROM information_schema.tables 
+#                     SELECT table_name
+#                     FROM information_schema.tables
 #                     WHERE table_schema = %s
 #                 """,
 #                     [schema_name],

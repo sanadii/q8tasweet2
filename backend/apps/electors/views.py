@@ -35,6 +35,58 @@ from .requests import (
 
 from apps.electors.electorsByCategory import restructure_electors_by_category
 from apps.electors.electorsByAll import restructure_elector_by_all
+from apps.electors.electorsBySearch import restructure_electors_by_search
+
+class GetElectorsByAll(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        schema = request.GET.get("schema")
+        with schema_context(request, schema):
+            if hasattr(request, "response"):
+                return request.response
+
+            electors_by_category = restructure_elector_by_all(request)
+            if "error" in electors_by_category:
+                return Response({"error": electors_by_category["error"]}, status=400)
+
+        return Response({"data": electors_by_category}, status=200)
+
+
+class GetElectorsByCategory(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        schema = request.GET.get("schema")
+        with schema_context(request, schema):
+            if hasattr(request, "response"):
+                return request.response
+
+            electors_by_category = restructure_electors_by_category(request)
+            if "error" in electors_by_category:
+                return Response({"error": electors_by_category["error"]}, status=400)
+
+        return Response({"data": electors_by_category}, status=200)
+
+
+
+class GetElectorsBySearch(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        schema = request.data.get("schema")
+
+        with schema_context(request, schema):
+            electors = restructure_electors_by_search(request)
+            serializer = ElectorSerializer(electors, many=True)
+            
+            return Response({"data": serializer.data}, status=200)
+
+
+
+
+
+
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 100  # default number of items per page
@@ -53,58 +105,6 @@ class GetAllElectors(APIView):
         )
 
 
-class GetElectorsBySearch(APIView):
-    def get(self, request):
-        query = request.GET.get("searchInput", "").strip()
-        # return Response({
-        #     'msg':"Api Called...",
-        #     "data":query
-        # })
-        if query.isdigit():
-            electors = Elector.objects.filter(civil=query)
-            if not electors.exists():
-                raise Http404({"detail": "Name was not found.", "code": 404})
-        else:
-            all_Electors = Elector.objects.all()
-            if len(query) >= 3:
-                electors = [
-                    elector
-                    for elector in all_electors
-                    if query.lower() in elector.full_name.lower()
-                ]
-            else:
-                electors = all_electors
-
-        paginator = StandardResultsSetPagination()
-        result_page = paginator.paginate_queryset(electors, request)
-        serialized = ElectorsSerializer(result_page, many=True)
-        response_data = {
-            "data": {
-                "electors": serialized.data,
-                "count": paginator.page.paginator.count,
-                "nextPageUrl": paginator.get_next_link(),
-                "previousPageUrl": paginator.get_previous_link(),
-            }
-        }
-
-        return Response(response_data)
-
-
-class GetElectorStatistics(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        schema = request.GET.get("schema")
-        with schema_context(request, schema):
-            if hasattr(request, "response"):
-                return request.response
-
-            electors_by_category = restructure_elector_by_all(request)
-            if "error" in electors_by_category:
-                return Response({"error": electors_by_category["error"]}, status=400)
-
-        return Response({"data": electors_by_category}, status=200)
-    
 # class GetElectorStatistics(APIView):
 #     permission_classes = [IsAuthenticated]
 
@@ -135,25 +135,7 @@ class GetElectorStatistics(APIView):
 #         return Response({"data": response_data}, status=200)
 
 
-
 # The code that isworking
-class GetElectorsByCategory(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        schema = request.GET.get("schema")
-        with schema_context(request, schema):
-            if hasattr(request, "response"):
-                return request.response
-
-            electors_by_category = restructure_electors_by_category(request)
-            if "error" in electors_by_category:
-                return Response({"error": electors_by_category["error"]}, status=400)
-
-        return Response({"data": electors_by_category}, status=200)
-
-
-
 # class GetElectorsByCategory(APIView):
 #     permission_classes = [IsAuthenticated]
 

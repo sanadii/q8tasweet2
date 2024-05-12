@@ -2,6 +2,7 @@ import pandas as pd
 from django.core.management.base import BaseCommand
 from django.db import connection
 from apps.electors.models import Elector
+from apps.areas.models import Area
 from apps.committees.models import Committee
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import ProgrammingError
@@ -14,7 +15,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         schema_name = 'national_assembly_5_2024'  # Add spaces around the schema name
-        file_path = "core/management/data/na_5_2024_committees.xlsx"
+        file_path = 'core/management/data/na_5_2024_committees.xlsx'
+        sheet_tab = "eles"
 
         # Set the database schema
         with connection.cursor() as cursor:
@@ -22,7 +24,7 @@ class Command(BaseCommand):
 
         # Read data from Excel file
         try:
-            df = pd.read_excel(file_path, sheet_name="electors")
+            df = pd.read_excel(file_path, sheet_name=sheet_tab)
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Failed to read Excel file: {e}"))
             return  # Exit command if file reading fails
@@ -32,11 +34,14 @@ class Command(BaseCommand):
             'fifth_name', 'sixth_name', 'seventh_name', 'eighth_name', 'ninth_name', 'tenth_name',
             'eleventh_name', 'twelveth_name', 'last_name',
             'family', 'branch', 'sect', 'gender',
-            'circle', 'job', 'address', 'area', 'block', 'street', 'lane', 'house',
+            'circle', 'job', 'area', 'block', 'street', 'lane', 'house',
             'committee', 
             'committee_area', 'committee_name', 
             'letter',
-            'code_number'
+            'code_number',
+            
+            # to remove later
+            # 'area_name' 
         ]
         if not set(required_columns).issubset(df.columns):
             missing_columns = set(required_columns) - set(df.columns)
@@ -47,15 +52,24 @@ class Command(BaseCommand):
         updated_count = 0
 
         for index, row in df.iterrows():
+            area_id = row.get('area')
             committee_id = row.get('committee')
+
+            try:
+                area_instance = Area.objects.get(id=area_id)
+            except Area.DoesNotExist:
+                self.stdout.write(self.style.WARNING(f"Area with ID {area_id} does not exist. Skipping elector."))
+                continue
+                        
             try:
                 committee_instance = Committee.objects.get(id=committee_id)
             except Committee.DoesNotExist:
                 self.stdout.write(self.style.WARNING(f"Committee with ID {committee_id} does not exist. Skipping elector."))
-                continue  # Skip this elector
+                continue
 
-            defaults = {col: row[col] for col in required_columns if col != 'id' and col != 'committee'}
+            defaults = {col: row[col] for col in required_columns if col != 'id' and col != 'committee' and col != 'area'}
             defaults['committee'] = committee_instance
+            defaults['area'] = area_instance
 
             elector_obj, created = Elector.objects.update_or_create(
                 id=row['id'], defaults=defaults
