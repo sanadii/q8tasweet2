@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Label, Input, FormFeedback } from "reactstrap";
-import Select from "react-select";
-
-import Dropzone from "react-dropzone";
+import { Col, Label, Input, FormFeedback } from "reactstrap";
 import Flatpickr from "react-flatpickr";
 import defaultAvatar from 'assets/images/users/default.jpg';
 import { api } from "config";
+
+
+// 
+import SearchDropDown from "./SearchDropDown";
+import FormStructureRenderer from "./FormStructureRenderer";
+
 const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
 
+const FormFields = ({ field, validation, formStructure }) => {
+    const { id, label, name, type, colSize, icon, iconBg, onChange,
+        prefix,
+        suffix,
 
 
-const FormFields = ({ field, validation, formStyle }) => {
-
-    const { id, label, name, type, colSize, icon, iconBg } = field;
-    const imageValue = validation?.values.image;
+    } = field;
+    const imageValue = validation.values.image;
     const [imageSrc, setImageSrc] = useState(defaultAvatar);
-    const [passwordShow, setPasswordShow] = useState(false);
 
-    // 
-    // Select Multi
-    // 
 
-    // 
-    // Image
-    // 
+    const onChangeHandler = (onChange && onChange) || validation.handleChange;
+
+
     useEffect(() => {
         if (imageValue) {
             if (typeof imageValue === 'string') {
@@ -51,10 +52,6 @@ const FormFields = ({ field, validation, formStyle }) => {
         }
     };
 
-    // 
-    // DataTime Selection
-    // 
-
     const dateformate = (e) => {
         const selectedDate = new Date(e);
         const formattedDate = `${selectedDate.getFullYear()}-${(
@@ -66,39 +63,9 @@ const FormFields = ({ field, validation, formStyle }) => {
         validation.setFieldValue(name, formattedDate);
     };
 
-    //Dropzone file upload
-    const [selectedFiles, setselectedFiles] = useState([]);
-    const [files, setFiles] = useState([]);
 
-    const handleAcceptedFiles = (files) => {
-        files.map((file) =>
-            Object.assign(file, {
-                preview: URL.createObjectURL(file),
-                formattedSize: formatBytes(file.size),
-            })
-        );
-        setselectedFiles(files);
-    };
-
-    // Formats the size
-    const formatBytes = (bytes, decimals = 2) => {
-        if (bytes === 0) return "0 Bytes";
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-    };
-
-
-    const renderInput = () => {
+    const renderInputFields = () => {
         switch (type) {
-            case 'seperator':
-                return <hr />;
-            case 'title':
-                return <h4>{label}</h4>;
-
             case 'text':
             case 'tel':
             case 'email':
@@ -116,7 +83,6 @@ const FormFields = ({ field, validation, formStyle }) => {
                             type={type !== 'social' ? type : 'text'}
                             name={name}
                             id={id}
-                            className="form-control"
                             placeholder={`ادخل ${label}`}
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
@@ -131,18 +97,41 @@ const FormFields = ({ field, validation, formStyle }) => {
                         type="number"
                         id={id}
                         name={name}
-                        placeholder={`اكتب ${label}`}
+                        placeholder={label}
                         value={validation.values[name] || 0}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
+                        invalid={validation.touched[name] && validation.errors[name]}
                     ></Input>
                 )
+            case 'checkBox':
+                return (
+                    <div className="form-check form-check-success mb-3">
+
+                        <Input
+                            className="form-check-input"
+                            type="checkbox"
+                            id={id}
+                            name={name}
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={validation.values[name] || ""}
+                            invalid={validation.touched[name] && validation.errors[name]}
+                        />
+                        <Label className="form-check-label" for="formCheck8">
+                            {label}
+                        </Label>
+                    </div>
+
+
+                );
+
             case 'textarea':
                 return (
                     <Input
                         type="textarea"
-                        id={id}
                         name={name}
+                        id={id}
                         placeholder={`اكتب ${label}`}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
@@ -150,45 +139,17 @@ const FormFields = ({ field, validation, formStyle }) => {
                         invalid={validation.touched[name] && validation.errors[name]}
                     />
                 );
-
-            case 'selectMulti': {
-                const handleMulti = (selectedOptions) => {
-                    validation.setFieldValue(name, selectedOptions.map(option => option.value));
-                };
-
-                const selectedValues = validation.values[name]
-                    ? validation.values[name].map(guaranteeGroupId => ({
-                        value: guaranteeGroupId,
-                        label: field.options.find(option => option.value === guaranteeGroupId)?.label || ''
-                    }))
-                    : [];
-
-                return (
-                    <Select
-                        id={id}
-                        placeholder={`اكتب ${label}`}
-                        onBlur={validation.handleBlur}
-                        invalid={validation.touched[name] && validation.errors[name]}
-                        value={selectedValues}
-                        isMulti={true}
-                        onChange={handleMulti}
-                        options={field.options}
-                    />
-                );
-            }
-
             case 'select':
                 return (
                     <Input
                         type="select"
-                        className="form-control"
+                        className="form-select"
                         name={name}
                         id={id}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values[name] || ""}
                         invalid={validation.touched[name] && validation.errors[name]}
-
                     >
                         {/* <option value="">-- اختر --</option> */}
                         {field.options &&
@@ -198,29 +159,6 @@ const FormFields = ({ field, validation, formStyle }) => {
                                 </option>
                             ))}
                     </Input>
-                );
-
-            case "file":
-                return (
-                    <Dropzone
-                        onDrop={acceptedFiles => {
-                            handleAcceptedFiles(acceptedFiles);
-                        }}
-                    >
-                        {({ getRootProps, getInputProps }) => (
-                            <div className="dropzone dz-clickable">
-                                <div
-                                    className="dz-message needsclick"
-                                    {...getRootProps()}
-                                >
-                                    <div className="mb-3">
-                                        <i className="display-4 text-muted ri-upload-cloud-2-fill" />
-                                    </div>
-                                    <h4>Drop files here or click to upload.</h4>
-                                </div>
-                            </div>
-                        )}
-                    </Dropzone>
                 );
             case "image":
                 return (
@@ -256,108 +194,80 @@ const FormFields = ({ field, validation, formStyle }) => {
                 );
             case 'password':
                 return (
-                    <div className="position-relative auth-pass-inputgroup mb-3">
-
-                        <Input
-                            type={passwordShow ? "text" : "password"}
-                            name={name}
-                            className="form-control pe-5"
-
-                            id={id}
-                            placeholder={`ادخل ${label}`}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values[name] || ""}
-                            invalid={validation.touched[name] && validation.errors[name]}
-                        />
-                        <button
-                            className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
-                            type="button"
-                            id="password-addon"
-                            onClick={() => setPasswordShow(!passwordShow)}
-                        >
-                            {" "}
-                            <i className="ri-eye-fill align-middle"></i>{" "}
-                        </button>
-
-                    </div>
-                );
-            case 'date':
-                return (
-                    <Flatpickr
+                    <Input
+                        type="password"
                         name={name}
                         id={id}
-                        className="form-control"
-                        placeholder={`اختر ${label}`}
-                        options={{
-                            altInput: true,
-                            altFormat: "Y-m-d",
-                            dateFormat: "Y-m-d",
-                        }}
-                        onChange={(e) => dateformate(e)}
-                        value={validation.values.dueDate || ""}
+                        placeholder={`ادخل ${label}`}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values[name] || ""}
+                        invalid={validation.touched[name] && validation.errors[name]}
                     />
                 );
             // ... other cases
+
+
+            case "searchDropdown":
+                return <SearchDropDown validation={validation} field={field} onChangeHandler={onChangeHandler} />;
+
+
             default:
                 return null;
         }
     };
     return (
-        <FormFieldLayout formStyle={formStyle} label={label} id={id} colSize={colSize} type={type}>
-            {renderInput()}
-            {type !== 'separator' && type !== 'title' && validation?.touched[name] && validation?.errors[name] && (
-                <FormFeedback type="invalid" style={{ display: 'block' }}>
-                    {validation?.errors?.[name]}
-                </FormFeedback>
-            )}
-        </FormFieldLayout>
-    );
+        <React.Fragment>
+            {/* <Col lg={colSize} className="input-group input-group-sm"> */}
+            <Col lg={colSize}>
+                {generatePrefixSuffix(prefix)}
 
-};
-const FormFieldLayout = ({ formStyle, label, id, children, colSize, type }) => {
-    // For separator or title types, just render the children directly
-    if (type === 'separator' || type === 'title') {
-        return <>{children}</>;
-    }
+                <FormStructureRenderer
+                    formStructure={formStructure} // Pass the formStructure prop
+                    renderInputFields={renderInputFields} // Pass the renderInputFields function
+                    validation={validation} // Pass the validation prop
+                    // colSize={colSize} // Pass any other props you need
+                    type={type}
+                    icon={icon}
+                    id={id}
+                    label={label}
+                    name={name}
+                />
+                {suffix && <span className="input-group-text">{suffix.text}</span>}
+            </Col>
+        </React.Fragment>
 
-    // For inline style
-    if (formStyle === "inLineStyle") {
-        return (
-            <Row key={id} className="mb-3">
-                <Col lg={3} className="align-self-center">
-                    <Label htmlFor={id} className="form-label">{label}</Label>
-                </Col>
-                <Col lg={9}>
-                    {children}
-                </Col>
-            </Row>
-        );
-    }
 
-    // For table style
-    if (formStyle === "tableStyle") {
-        return (
-            <tr key={id} >
-                <td className="align-self-center">
-                    <Label htmlFor={id} className="form-label">{label}</Label>
-                </td>
-                <td>
-                    {children}
-                </td>
-            </tr>
-        );
-    }
-
-    // Fallback layout
-    return (
-        <Col lg={colSize} className="mb-3">
-            <Label htmlFor={id} className="form-label">{label}</Label>
-            {children}
-        </Col>
+        // <Col lg={colSize} className="mb-3">
+        //     {!icon &&
+        //         <Label htmlFor={id} className="form-label">{label}</Label>
+        //     }
+        //     {renderInputFields()}
+        //     {validation.touched[name] && validation.errors[name] && (
+        //         <FormFeedback type="invalid">
+        //             {validation.errors[name]}
+        //         </FormFeedback>
+        //     )}
+        // </Col>
     );
 };
 
+const generatePrefixSuffix = (prefix) => {
+    if (!prefix) return null;
 
+    if (prefix.type === "icon") {
+        return (
+            <div className="avatar-xs d-block flex-shrink-0 me-3">
+                <span className={`avatar-title rounded-circle fs-16 ${prefix.iconBg}`}>
+                    <i className={prefix.icon}></i>
+                </span>
+            </div>
+        );
+    } else if (prefix.type === "text") {
+        return <span className="input-group-text">{prefix.text}</span>;
+    }
+
+    return null;
+};
 
 export default FormFields;

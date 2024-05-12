@@ -57,7 +57,6 @@ class CommitteeSite(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     circle = models.CharField(max_length=255, blank=True, null=True)
     
-    
     # Change the next 2 fields to areas
     area = models.ForeignKey(Area, on_delete=models.CASCADE, db_column='area', related_name='committee_site_areas')
     area_name = models.CharField(max_length=255, blank=True, null=True)

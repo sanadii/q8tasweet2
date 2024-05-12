@@ -6,7 +6,7 @@ import { electionSelector } from 'selectors';
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
-import { FieldComponent } from "shared/components";
+import { FormFields } from "shared/components";
 
 // UI & Utilities Components
 import { Col, Row, Form } from "reactstrap";
@@ -81,7 +81,7 @@ const AddNewParty = () => {
             <Row>
                 {fields.map((field, fieldIndex) => (
                     <Col md={field.colSize} key={field.id + fieldIndex}>
-                        <FieldComponent field={field} validation={validation} />
+                        <FormFields field={field} validation={validation} />
                     </Col>
                 ))}
             </Row>

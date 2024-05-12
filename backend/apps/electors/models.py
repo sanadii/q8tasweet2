@@ -42,7 +42,7 @@ class Elector(models.Model):
 
     # Elector Address
     address = models.TextField(blank=True, null=True)
-    area = models.ForeignKey(Area, on_delete=models.CASCADE, db_column='area', related_name='elector_areas')
+    area = models.ForeignKey(Area, on_delete=models.CASCADE, related_name='elector_areas')
     area_name = models.TextField(blank=True, null=True)
     block = models.TextField(blank=True, null=True)
     street = models.TextField(blank=True, null=True)
@@ -64,5 +64,14 @@ class Elector(models.Model):
         verbose_name_plural = "Electorss"
         default_permissions = []
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)  # Ensures base class initialization
+        schema_name = kwargs.get("schema_name", "public")
+        self.set_schema(schema_name)  # Dynamically sets the schema if provided
+
+
     def __str__(self):
         return self.full_name
+
+    def set_schema(self, schema):
+        self._schema = schema

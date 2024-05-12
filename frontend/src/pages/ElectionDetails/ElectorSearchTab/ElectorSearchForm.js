@@ -17,7 +17,7 @@ import { Col, Row, Button, ButtonGroup, Form } from "reactstrap";
 // Form
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { FieldComponent } from "shared/components";
+import { FormFields } from "shared/components";
 import { getSelectionOptions } from "shared/hooks";
 
 const ElectorSearchForm = () => {
@@ -25,10 +25,9 @@ const ElectorSearchForm = () => {
 
     const { electionSlug, electionAreas, electionCommitteeSites } = useSelector(electionSelector)
     const [searchElectorInput, setSearchElectorInput] = useState("");
-    const [isAdvancedSearch, setIsAdvancedSearch] = useState(false);
+    const [searchType, setSearchType] = useState("simple");
     const [isAdvancedCommitteeSearch, setIsAdvancedCommitteeSearch] = useState(false);
 
-    console.log("isAdvancedSearch: ", isAdvancedSearch)
     const handleSearch = (event) => {
         event.preventDefault();
         const searchParameters = {
@@ -44,7 +43,7 @@ const ElectorSearchForm = () => {
         initialValues: {
 
             // Simple Search
-            // (isAdvancedSearch)
+            // (searchType)
             firstName: "",
             lastName: "",
             phone: "",
@@ -58,11 +57,29 @@ const ElectorSearchForm = () => {
             const newElectorSearch = {
                 // id: user ? user.id : 0,  // Uncommented, adjust based on necessity
                 schema: electionSlug,
-                simpleSearch: {  // Corrected typo
-                    name: values.name || "",
+                searchType: searchType,
+                ...((searchType === "advanced") ? {
+                    firstName: values.firstName || "",
+                    secondName: values.secondName || "",
+                    thirdName: values.thirdName || "",
+                    lastName: values.lastName || "",
+                    branch: values.branch || "",
+                    family: values.family || "",
                     area: values.area || "",
-                }
+                    block: values.block || "",
+                    street: values.street || "",
+                    house: values.house || "",
+                    age: values.age || "",
+                    votted22: values.votted22 || "",
+                    votted23: values.votted23 || "",
+                    votted24: values.votted24 || "",
+                } : {
+                    fullName: values.name || "",
+                    family: values.family || "",
+                    area: values.area || "",  // Convert area to string
+                })
             };
+
             // Dispatch the search action with the updated user info
             dispatch(getElectorsBySearch(newElectorSearch));
         },
@@ -77,14 +94,14 @@ const ElectorSearchForm = () => {
             placeholder: "ادخل الاسم",
             colSize: "4",
         },
-        // {
-        //     id: "gender-field",
-        //     name: "gender",
-        //     label: "النوع",
-        //     type: "select",
-        //     options: getGenderOptions(),
-        //     colSize: "4",
-        // },
+        {
+            id: "family-field",
+            name: "family",
+            label: "العائلة ",
+            type: "text",
+            placeholder: "العائلة",
+            colSize: "4",
+        },
         {
             id: "area-field",
             name: "area",
@@ -141,6 +158,7 @@ const ElectorSearchForm = () => {
             name: "area",
             label: "المنطقة",
             type: "select",
+            options: getSelectionOptions(electionAreas),
             colSize: "2",
         },
         {
@@ -164,7 +182,7 @@ const ElectorSearchForm = () => {
             name: "house",
             label: "المنزل",
             type: "text",
-            placeholder: "رقم المنزل",
+            placeholder: "المنزل",
             colSize: "2",
         },
         {
@@ -175,26 +193,33 @@ const ElectorSearchForm = () => {
             placeholder: "العمر",
             colSize: "2",
         },
+    ];
+
+    const vottingStatusFields = [
         {
-            id: "previously-voted-field",
-            name: "previouslyVoted",
-            label: "صوت من قبل؟",
-            type: "select",
-            options: [{ value: "yes", label: "نعم" }, { value: "no", label: "لا" }],
+            id: "voted22-field",
+            name: "voted22",
+            label: "صوت 2023؟",
+            type: "checkBox",
             colSize: "2",
         },
         {
-            id: "currently-voted-field",
-            name: "currentlyVoted",
-            label: "صوت حاليًا؟",
-            type: "select",
-            options: [{ value: "yes", label: "نعم" }, { value: "no", label: "لا" }],
+            id: "voted23-field",
+            name: "voted23",
+            label: "صوت 2023؟",
+            type: "checkBox",
+            colSize: "2",
+        },
+        {
+            id: "voted24-field",
+            name: "voted24",
+            label: "صوت 2024؟",
+            type: "checkBox",
             colSize: "2",
         },
     ];
-
     const renderButtonGroup = (buttonConfigs, color) => (
-        <ButtonGroup className="w-100 pb-1">
+        <ButtonGroup className="pb-1 pe-2">
             {buttonConfigs.map((btn, index) => (
                 <Button
                     key={index}
@@ -221,17 +246,17 @@ const ElectorSearchForm = () => {
             icon: "mdi mdi-account-search",
             color: "soft-danger",
             text: "بحث سريع",
-            isActive: !isAdvancedSearch,
-            onClick: () => setIsAdvancedSearch(false), // Change to a function that sets the state
+            isActive: searchType === "simple",
+            onClick: () => setSearchType("simple"), // Change to a function that sets the state
         },
         {
             icon: "mdi mdi-account-search",
             color: "soft-secondary",
             text: "بحث متقدم",
-            isActive: isAdvancedSearch,
-            onClick: () => setIsAdvancedSearch(true) // Change to a function that sets the state
+            isActive: searchType === "advanced",
+            onClick: () => setSearchType("advanced") // Change to a function that sets the state
         },
-    ], [isAdvancedSearch]);
+    ], [searchType]);
 
     const advancedCommitteeSearchButtons = useMemo(() => [
         {
@@ -251,20 +276,17 @@ const ElectorSearchForm = () => {
     ], [isAdvancedCommitteeSearch]);
 
 
-    const fieldsToDisplay = (isAdvancedSearch ? advancedFields : fields)
+    const fieldsToDisplay = (searchType === "advanced" ? advancedFields : fields)
     return (
         <React.Fragment>
-            <Row className="mb-2 d-flex g-2">
-                <Col lg={6}>
-                    {renderButtonGroup(advancedSearchButtons, 'danger')}
+            <div className="mb-2 d-flex g-2">
+                {renderButtonGroup(advancedSearchButtons, 'danger')}
 
-                </Col>
-                <Col lg={6}>
-                    {isAdvancedSearch &&
-                        renderButtonGroup(advancedCommitteeSearchButtons, 'info')
-                    }
-                </Col>
-            </Row>
+                {searchType &&
+                    renderButtonGroup(advancedCommitteeSearchButtons, 'info')
+                }
+
+            </div>
             <div className="mb-2">
                 <Form
                     className="tablelist-form"
@@ -274,15 +296,26 @@ const ElectorSearchForm = () => {
                         return false;
                     }}
                 >
-                    <div className="mb-2">
+                    <div className="mb-2 bg-light p-2">
                         <Row>
                             {fieldsToDisplay.map((field) => (
                                 // Render all fields except the password field
 
-                                <FieldComponent
+                                <FormFields
                                     key={field.id}
                                     field={field}
                                     validation={validation}
+                                />
+
+                            ))}
+                        </Row>
+                        <Row>
+                            {vottingStatusFields.map((field) => (
+                                <FormFields
+                                    key={field.id}
+                                    field={field}
+                                    validation={validation}
+                                    formStructure="inline"
                                 />
 
                             ))}

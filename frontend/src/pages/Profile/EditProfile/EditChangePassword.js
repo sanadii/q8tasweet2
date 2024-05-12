@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { Button, Col, Form, Row } from 'reactstrap';
 import { userSelector } from 'selectors';
-import { FieldComponent } from "shared/components";
+import { FormFields } from "shared/components";
 import { changeUserPassword } from "store/actions";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -73,7 +73,7 @@ const EditChangePassword = () => {
             >
                 <Row className="mb-3">
                     {passwordFields.map(field => (
-                        <FieldComponent
+                        <FormFields
                             key={field.id}
                             field={field}
                             validation={validation}

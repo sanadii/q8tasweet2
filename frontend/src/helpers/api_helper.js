@@ -154,7 +154,7 @@ const getLoggedinUser = () => {
 // Utility function to get the access token
 const getToken = () => {
   const authUser = localStorage.getItem("authUser");
-  return authUser ? JSON.parse(authUser).accessToken : null;
+  return authUser ? JSON.parse(authUser).refreshToken : null;
 };
 
 export { APIClient, setAuthorization, getLoggedinUser, getToken, getCookie };

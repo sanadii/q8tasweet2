@@ -115,7 +115,7 @@ class UpdateElectionResults(APIView):
         # For all other ids, perform the usual update_or_create operation
         for candidate_id, votes in request.data.get("data", {}).items():
             kwargs = {
-                "election_committee_id": id,
+                "election_committee": id,
                 item_id: candidate_id,  # Use the dynamic item_id
             }
             defaults = {
@@ -125,14 +125,14 @@ class UpdateElectionResults(APIView):
             obj, created = committeeResultModel.objects.update_or_create(**kwargs, defaults=defaults)
 
             # Add the candidate's votes to the output
-            committee_id_str = str(obj.election_committee_id)
+            committee_id_str = str(obj.election_committee)
             if committee_id_str not in output:
                 output[committee_id_str] = {}
             output[committee_id_str][str(candidate_id)] = votes
 
         # Once the patch operation is done, fetch all relevant results if not id == 0
         if id != 0:
-            results = committeeResultModel.objects.filter(election_committee_id=id)
+            results = committeeResultModel.objects.filter(election_committee=id)
             # Update the output with the actual results
             for result in results:
                 committee_id_str = str(result.election_committee.id)

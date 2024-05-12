@@ -1,9 +1,9 @@
 // React, Redux & Store imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getElectors } from "store/actions";
+import { getElectors, getElectorRelatedElectors } from "store/actions";
 import { Loader, TableContainer } from "shared/components";
-import { campaignSelector, electorSelector } from 'selectors';
+import { electionSelector, campaignSelector, electorSelector } from 'selectors';
 
 // Component imports
 import ElectorsModal from "./ElectorsModal";
@@ -17,10 +17,22 @@ import ElectorSearchForm from "./ElectorSearchForm";
 import ElectorSearchDisplay from "./ElectorSearchDisplay";
 
 export const ElectorSearchTab = () => {
+  const dispatch = useDispatch();
+
+  // Modal Constants
+  const [modal, setModal] = useState(false);
+  const [modalMode, setModalMode] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
 
   const { voters } = useSelector(electorSelector);
-  const [voter, setElector] = useState(null);
+  const { electionSlug } = useSelector(electionSelector);
+  const [elector, setElector] = useState(null);
 
+
+  const toggle = useCallback(() => {
+    setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
+  }, []);
 
   const {
     currentCampaignMember,
@@ -42,6 +54,25 @@ export const ElectorSearchTab = () => {
     setCampaignAttendeeList(campaignAttendees);
   }, [campaignAttendees]);
 
+  const handleElectorClick = useCallback(
+    (selectedElector, modalMode) => {
+      setElector(selectedElector);
+      // Set the modalMode state here
+      setModalMode(modalMode);
+      handleElectorRelatedElectors(selectedElector)
+      toggle();
+    },
+    [toggle, setModalMode]
+  );
+
+  const handleElectorRelatedElectors = (selectedElector) => {
+    const relatedElectors = {
+      schema: electionSlug,
+      elector: selectedElector?.id,
+    }
+    dispatch(getElectorRelatedElectors(relatedElectors))
+
+  }
 
   // const [campaignGuarantee, setCampaignGuarantee] = useState(null); // initialized to null
 
@@ -49,14 +80,7 @@ export const ElectorSearchTab = () => {
   //   (member) => member.role === 3 || member.role === 4 || []
   // );
 
-  // Modal Constants
-  const [modal, setModal] = useState(false);
-  const [modalMode, setModalMode] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const toggle = useCallback(() => {
-    setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
-  }, []);
 
 
   return (
@@ -65,7 +89,7 @@ export const ElectorSearchTab = () => {
         modal={isModalVisible}
         modalMode={modalMode}
         toggle={toggle}
-        voter={voter}
+        elector={elector}
       />
       <Row>
         <Col lg={12}>
@@ -80,6 +104,7 @@ export const ElectorSearchTab = () => {
             <CardBody className="border border-dashed border-end-0 border-start-0">
               <ElectorSearchForm />
               <ElectorSearchDisplay
+                handleElectorClick={handleElectorClick}
                 setModalMode={setModalMode}
                 toggle={toggle} />
             </CardBody>

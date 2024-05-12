@@ -11,9 +11,7 @@ import {
   GET_ELECTORS_BY_CATEGORY,
   GET_ELECTOR_BY_ALL,
   GET_ELECTORS_BY_SEARCH,
-
-
-  GET_ELECTOR_FAMILY_DIVISIONS,
+  GET_ELECTOR_RELATED_ELECTORS,
 } from "./actionType";
 
 const IntialState = {
@@ -24,9 +22,8 @@ const IntialState = {
   electionDataCategories: [],
   electorsByCategories: [],
   electorsByAll: [],
-
-  // 
-  electorsByCategory: [],
+  electorsBySearch: [],
+  electorRelatedElectors: [],
 
 };
 
@@ -38,10 +35,7 @@ const Electors = (state = IntialState, action) => {
         case GET_ELECTOR_BY_ALL:
           return {
             ...state,
-            // electionStatistics: action.payload.data.electionStatistics,
             electorsByAll: action.payload.data,
-            // electorsByArea: action.payload.data.electorsByArea,
-            // electorsByCommittee: action.payload.data.electorsByCommittee,
             isElectionStatisticCreated: false,
             isElectionStatisticsuccess: true,
           };
@@ -56,18 +50,18 @@ const Electors = (state = IntialState, action) => {
         case GET_ELECTORS_BY_SEARCH:
           return {
             ...state,
-            electorsByFamily: action.payload.data,
+            electorsBySearch: action.payload.data,
+            isElectionStatisticCreated: false,
+            isElectionStatisticsuccess: true,
+          };
+        case GET_ELECTOR_RELATED_ELECTORS:
+          return {
+            ...state,
+            electorRelatedElectors: action.payload.data,
             isElectionStatisticCreated: false,
             isElectionStatisticsuccess: true,
           };
 
-        case GET_ELECTOR_FAMILY_DIVISIONS:
-          return {
-            ...state,
-            electorsByCategory: action.payload.data,
-            isElectorFamilyDivisionCreated: false,
-            isElectorFamilyDivisionSuccess: true,
-          }
 
         default:
           return { ...state };
@@ -79,8 +73,8 @@ const Electors = (state = IntialState, action) => {
           return {
             ...state,
             error: action.payload.error,
-            isElectionStatisticCreated: false,
-            isElectionStatisticsuccess: true,
+            isElectorByAllCreated: false,
+            isElectorByAllSuccess: true,
           };
 
         case GET_ELECTORS_BY_CATEGORY:
@@ -91,7 +85,6 @@ const Electors = (state = IntialState, action) => {
             isElectorsByCategorySuccess: true,
           };
 
-
         case GET_ELECTORS_BY_SEARCH:
           return {
             ...state,
@@ -99,12 +92,13 @@ const Electors = (state = IntialState, action) => {
             isElectorsByFamilyCreated: false,
             isElectorsByFamilySuccess: true,
           };
-        case GET_ELECTOR_FAMILY_DIVISIONS:
+
+        case GET_ELECTOR_RELATED_ELECTORS:
           return {
             ...state,
             error: action.payload.error,
-            isElectorFamilyDivisionCreated: false,
-            isElectorsFamilyDivisionSuccess: true,
+            isElectorRelatedElectorsCreated: false,
+            isElectorRelatedElectorsSuccess: true,
           };
         default:
           return { ...state };

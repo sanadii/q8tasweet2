@@ -88,9 +88,7 @@ export const DELETE_ELECTOR = "/electors/deleteElector";
 export const GET_ELECTOR_BY_ALL = "/electors/getElectorsByAll";
 export const GET_ELECTORS_BY_CATEGORY = "/electors/getElectorsByCategory";
 export const GET_ELECTORS_BY_SEARCH = "/electors/getElectorsBySearch";
-
-export const GET_ELECTOR_FAMILY_DIVISIONS = "/electors/getElectorFamilyDivisions";
-
+export const GET_ELECTOR_RELATED_ELECTORS = "/electors/getElectorRelatedElectors";
 
 // Candidates
 export const GET_CANDIDATES = "/candidates/getCandidates";

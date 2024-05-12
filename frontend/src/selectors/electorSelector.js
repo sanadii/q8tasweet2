@@ -62,6 +62,9 @@ export const electorSelector = createSelector(
     areaOptions: electorsState.electorsByCategory?.areaOptions || [],
     committeeOptions: electorsState.electorsByCategory?.committeeOptions || [],
 
+
+    // electorsBySearch
+    electorsBySearch: electorsState.electorsBySearch || [],
     // electorFamilyBranches: electorsState.electorsByCategory?.electorFamilyBranches || [],
 
     // // Elections

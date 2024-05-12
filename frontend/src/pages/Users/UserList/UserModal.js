@@ -17,7 +17,7 @@ import { Col, Row, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBo
 // Form
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { FieldComponent } from "shared/components";
+import { FormFields } from "shared/components";
 
 const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
   const dispatch = useDispatch();
@@ -154,7 +154,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user }) => {
             {fields.map((field) => (
               // Render all fields except the password field
               (field.name !== "password" || showPassword) && (
-                <FieldComponent
+                <FormFields
                   key={field.id}
                   field={field}
                   validation={validation}

@@ -5,7 +5,7 @@ import { addParty, updateParty } from "store/actions";
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
-import { FieldComponent } from "shared/components";
+import { FormFields } from "shared/components";
 
 // UI & Utilities Components
 import { Col, Row, Form, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
@@ -161,7 +161,7 @@ const PartyModal = ({ isEdit, setModal, modal, toggle, party }) => {
                   {row.cols.map((col, colIndex) => (
                     <Col md={col.colSize} key={colIndex}>
                       {col.fields.map(field => (
-                        <FieldComponent field={field} validation={validation} key={field.id} />
+                        <FormFields field={field} validation={validation} key={field.id} />
                       ))}
                     </Col>
                   ))}

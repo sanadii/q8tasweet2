@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Form, Row, Button } from 'reactstrap';
-import { FieldComponent } from "shared/components";
+import { FormFields } from "shared/components";
 
 const EditSocialMedia = ({ validation }) => {
 
@@ -34,7 +34,7 @@ const EditSocialMedia = ({ validation }) => {
                     <h5 className="card-title mb-4">التواصل الاجتماعي</h5>
                     <div className="mb-3">
                         {socialMediaFields.map(field => (
-                            <FieldComponent
+                            <FormFields
                                 key={field.id}
                                 field={field}
                                 validation={validation}

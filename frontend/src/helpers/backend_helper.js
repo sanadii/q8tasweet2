@@ -157,9 +157,8 @@ export const deleteElector = (electionSlug) => api.delete(url.DELETE_ELECTOR + "
 export const getElectorsByCategory = (electorData) => api.get(url.GET_ELECTORS_BY_CATEGORY, electorData);
 export const getElectorsByAll = (electionSlug) => api.get(url.GET_ELECTOR_BY_ALL, electionSlug);
 export const getElectorsBySearch = (elector) => api.create(url.GET_ELECTORS_BY_SEARCH, elector);
+export const getElectorRelatedElectors = (elector) => api.create(url.GET_ELECTOR_RELATED_ELECTORS, elector);
 // export const addElection = (election) => api.create(url.ADD_ELECTION, election);
-
-export const getElectorFamilyDivisions = (electorData) => api.get(url.GET_ELECTOR_FAMILY_DIVISIONS, electorData);
 
 
 // // Voter

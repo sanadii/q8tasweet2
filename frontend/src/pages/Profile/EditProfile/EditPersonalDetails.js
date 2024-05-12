@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 
 // Shared
-import { FieldComponent } from "shared/components";
+import { FormFields } from "shared/components";
 import { GenderOptions } from "shared/constants"
 
 // Form validation imports
@@ -115,7 +115,7 @@ const EditPersonalDetails = ({ validation }) => {
                         </h4>
                         <Row>
                             {group.fields.map(field => (
-                                <FieldComponent
+                                <FormFields
                                     key={field.id}
                                     field={field}
                                     validation={validation}

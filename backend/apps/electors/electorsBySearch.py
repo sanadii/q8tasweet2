@@ -14,18 +14,64 @@ from .serializers import ElectorSerializer  # Assuming you have an ElectorSerial
 from django.shortcuts import get_object_or_404
 
 def restructure_electors_by_search(request):
-    simple_search = request.data.get("simple_search", {})
-
+    search_type = request.data.get("search_type", "")
     query = Q()
-    if 'name' in simple_search:
-        query &= Q(full_name__icontains=simple_search['name'])
-    # if 'gender' in simple_search:
-    #     query &= Q(gender=simple_search['gender'])
-    # if 'area' in simple_search:
-    #     query &= Q(area=simple_search['area'])
+
+    if search_type == "simple":
+        fields = ["full_name", "family"]
+        foriegn_fields = ["area"]
+    elif search_type == "advanced":
+        fields = [
+            "first_name", "second_name", "third_name", 
+            # "fourth_name",
+            # "branch", "family",
+            # "block", "street", "house", "age", 
+            # "previously_voted", "currently_votted"
+            ]
+        foriegn_fields = ["area"]
+
+    else:
+        fields = []
+
+    for field in fields:
+        value = str(request.data.get(field, ""))
+        if value:
+            query &= Q(**{f"{field}__icontains": value})
+
+    for field in foriegn_fields:
+        value = str(request.data.get(field, ""))
+        if value:
+            query &= Q(**{f"{field}": value})
+
 
     electors = Elector.objects.filter(query)
     return electors
+
+
+
+
+
+
+# def restructure_electors_by_search(request):
+#     simple_search = request.data.get("simple_search", {})
+    
+#     query = Q()
+
+#     if 'name' in simple_search and simple_search['name']:
+#         query &= Q(full_name__icontains=simple_search['name'])
+
+#     if 'family' in simple_search and simple_search['family']:
+#         query &= Q(family__icontains=simple_search['family'])
+
+#     if 'area' in simple_search and simple_search['area']:
+#         area_value = str(simple_search['area'])  # Convert area to string
+#         query &= Q(area=area_value)  # Filter directly on the area field
+
+
+#     electors = Elector.objects.filter(query)
+#     return electors
+
+
 
 
 

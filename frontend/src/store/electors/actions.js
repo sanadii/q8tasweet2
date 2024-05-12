@@ -14,12 +14,8 @@ import {
   GET_ELECTOR_BY_ALL,
   GET_ELECTORS_BY_CATEGORY,
   GET_ELECTORS_BY_SEARCH,
-  GET_ELECTORS_BY_SEARCH_SUCCESS,
-  GET_ELECTORS_BY_SEARCH_FAIL,
-
-  // Specifications
-  GET_ELECTOR_FAMILY_DIVISIONS,
-
+  GET_ELECTOR_RELATED_ELECTORS,
+  
 } from "./actionType";
 
 
@@ -67,22 +63,13 @@ export const getElectorsByCategory = (elector) => ({
 });
 
 
-export const getElectorsBySearch = (elector) => ({
+export const getElectorsBySearch = elector => ({
   type: GET_ELECTORS_BY_SEARCH,
   payload: elector
 });
 
-export const getElectorsBySearchSuccess = (elector) => ({
-  type: GET_ELECTORS_BY_SEARCH_SUCCESS,
+
+export const getElectorRelatedElectors = (elector) => ({
+  type: GET_ELECTOR_RELATED_ELECTORS,
   payload: elector,
 });
-
-export const getElectorsBySearchFail = (error) => ({
-  type: GET_ELECTORS_BY_SEARCH_FAIL,
-  payload: error,
-});
-
-export const getElectorFamilyDivisions = (electorData) => ({
-  type: GET_ELECTOR_FAMILY_DIVISIONS,
-  payload: electorData
-})

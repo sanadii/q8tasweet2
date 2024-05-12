@@ -36,7 +36,7 @@ from .requests import (
 from apps.electors.electorsByCategory import restructure_electors_by_category
 from apps.electors.electorsByAll import restructure_elector_by_all
 from apps.electors.electorsBySearch import restructure_electors_by_search
-
+from apps.electors.electorRelatedElectors import restructure_elector_related_electors
 class GetElectorsByAll(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -78,6 +78,19 @@ class GetElectorsBySearch(APIView):
 
         with schema_context(request, schema):
             electors = restructure_electors_by_search(request)
+            serializer = ElectorSerializer(electors, many=True)
+            
+            return Response({"data": serializer.data}, status=200)
+
+
+class GetElectorRelatedElectors(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        schema = request.data.get("schema")
+
+        with schema_context(request, schema):
+            electors = restructure_elector_related_electors(request)
             serializer = ElectorSerializer(electors, many=True)
             
             return Response({"data": serializer.data}, status=200)

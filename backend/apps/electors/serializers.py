@@ -2,21 +2,23 @@
 from rest_framework import serializers
 from apps.electors.models import Elector
 
-from apps.committees.serializers import CommitteeSerializer
 from django.db.models import Count, Case, When, IntegerField, Subquery, OuterRef
+from collections import defaultdict, Counter, OrderedDict
 
 # from apps.electors.models import Elector
+from apps.areas.models import Area
 from apps.committees.models import Committee, CommitteeSite
-from collections import defaultdict, Counter, OrderedDict
+from apps.committees.serializers import CommitteeSerializer
 
 
 class ElectorSerializer(serializers.ModelSerializer):
     area_name = serializers.SerializerMethodField()
-    committee_name = serializers.SerializerMethodField()
+    committee_site_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Elector
         fields = [
+            "id",
             "full_name",
             "family",
             "branch",
@@ -24,26 +26,33 @@ class ElectorSerializer(serializers.ModelSerializer):
             "gender",
             "birth_date",
             "area",
+            "block",
+            "street",
+            "lane",
+            "house",
             "area_name",
-            "committee",
-            "committee_name",
+            # "committee",
+            "committee_site_name",
             "code_number",
         ]
 
     def get_area_name(self, obj):
         return obj.area.name if obj.area else None
 
-    def get_committee_name(self, obj):
-        return obj.committee.name if obj.committee else None
+    def get_committee_site_name(self, obj):
+        if obj.committee:
+            if obj.committee.committee_site:
+                return obj.committee.committee_site.name
+        return None
 
 
 
-class ElectorFullSerializer(serializers.ModelSerializer):
-    committee = serializers.PrimaryKeyRelatedField(read_only=True, allow_null=True)
+# class ElectorFullSerializer(serializers.ModelSerializer):
+#     committee = serializers.PrimaryKeyRelatedField(read_only=True, allow_null=True)
 
-    class Meta:
-        model = Elector
-        fields = "__all__"
+#     class Meta:
+#         model = Elector
+#         fields = "__all__"
 
 
 class ElectorDataByCategory(serializers.BaseSerializer):
@@ -176,17 +185,20 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         if "branches" in filter_fields and branches:
             queryset = queryset.filter(branch__in=branches)
         if "areas" in filter_fields and area:
-            queryset = queryset.filter(area__in=area)
+            queryset = queryset.filter(area__in=area)  # Change here to fetch area name instead of ID
         if "committees" in filter_fields and committees:
             queryset = queryset.filter(committee_area__in=committees)
         return queryset
+
 
     def get_annotated_elector_data(self, queryset, data_fields=set()):
         """Annotate and aggregate data based on the dynamic fields."""
         grouping_fields = list(data_fields)
 
+        # Perform aggregation
         aggregated_data = (
-            queryset.values(*grouping_fields)
+            queryset
+            .values(*grouping_fields)
             .annotate(
                 total=Count("id"),
                 female=Count(
@@ -197,7 +209,36 @@ class ElectorDataByCategory(serializers.BaseSerializer):
             .order_by("-total")[:20]  # Adjust the slice as necessary
         )
 
+        # Include 'area__name' in the values if 'area' is in data_fields
+        if "area" in data_fields:
+            # Extract area IDs
+            area_ids = [entry["area"] for entry in aggregated_data]
+            # Fetch area names corresponding to IDs
+            area_names = {area.id: area.name for area in Area.objects.filter(id__in=area_ids)}
+            # Replace area IDs with names in the result
+            for entry in aggregated_data:
+                entry["area"] = area_names.get(entry["area"], None)
         return aggregated_data
+
+
+    # def get_annotated_elector_data(self, queryset, data_fields=set()):
+    #     """Annotate and aggregate data based on the dynamic fields."""
+    #     grouping_fields = list(data_fields)
+
+    #     aggregated_data = (
+    #         queryset.values(*grouping_fields)
+    #         .annotate(
+    #             total=Count("id"),
+    #             female=Count(
+    #                 Case(When(gender="2", then=1), output_field=IntegerField())
+    #             ),
+    #             male=Count(Case(When(gender="1", then=1), output_field=IntegerField())),
+    #         )
+    #         .order_by("-total")[:20]  # Adjust the slice as necessary
+    #     )
+    #     print("aggregated_data: ", aggregated_data)
+
+    #     return aggregated_data
 
     # def get_annotated_committee_data(self, queryset, data_fields):
     #     """Annotate and aggregate data based on the dynamic fields."""
@@ -358,16 +399,16 @@ class ElectorDataByCategory(serializers.BaseSerializer):
         )
 
         # Assuming 'committee' field in your queryset correctly points to the Committee model
-        committee_count = filtered_queryset.values("committee_id").distinct().count()
+        committee_count = filtered_queryset.values("committee").distinct().count()
         male_committee_count = (
             filtered_queryset.filter(committee__committee_site__gender=1)
-            .values("committee_id")
+            .values("committee")
             .distinct()
             .count()
         )
         female_committee_count = (
             filtered_queryset.filter(committee__committee_site__gender=2)
-            .values("committee_id")
+            .values("committee")
             .distinct()
             .count()
         )

@@ -28,7 +28,31 @@ const Name = (cellProps) => {
             {getGenderIcon(cellProps.row.original.gender)}
             <b>{cellProps.row.original.fullName}</b>
             <br />
-            {cellProps.row.original.civil}
+            {cellProps.row.original.id}
+        </div>
+    );
+};
+
+const Area = (cellProps) => {
+    return (
+        <div>
+            <b>{cellProps.row.original.areaName}</b>
+            <br />
+            ق{cellProps.row.original.block},
+            ش{cellProps.row.original.street},
+            ج{cellProps.row.original.lane},
+            م{cellProps.row.original.house}
+
+        </div>
+    );
+};
+
+const Committee = (cellProps) => {
+    return (
+        <div>
+            <b>{cellProps.row.original.committee}</b>
+            <br />
+            {cellProps.row.original.committeeSiteName}
         </div>
     );
 };
@@ -116,8 +140,8 @@ const Actions = (props) => {
                     to="#"
                     className="btn btn-sm btn-soft-warning edit-list"
                     onClick={() => {
-                        const voter = cellProps.row.original;
-                        handleElectorClick(voter, "CampaignElectorViewModal");
+                        const selectedElector = cellProps.row.original;
+                        handleElectorClick(selectedElector, "CampaignElectorViewModal");
                     }}
                 >
                     <i className="ri-eye-fill align-bottom" />
@@ -142,5 +166,7 @@ const Actions = (props) => {
 export {
     Id,
     Name,
+    Area,
+    Committee,
     Actions,
 };

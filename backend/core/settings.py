@@ -28,7 +28,7 @@ DATABASES = {
         "USER": "postgres",
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         # "PASSWORD": "I4ksb@11782",
-        "PASSWORD": "KWT11782",
+        # "PASSWORD": "KWT11782",
         "HOST": "localhost",
         "PORT": "5432",
     },
@@ -84,7 +84,7 @@ INSTALLED_APPS = [
     #
     # Q8 Tasweet Apps
     "core",
-    "management",
+    # "management",
     # 'apps.media',
     "apps.auths",
     "apps.settings",
@@ -107,7 +107,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",  # was disabled by backend
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -203,7 +203,7 @@ AUTH_USER_MODEL = "auths.User"
 
 # JWT settings
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,

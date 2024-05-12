@@ -5,7 +5,7 @@ import { Card, CardBody, Form } from 'reactstrap';
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
-import { FieldComponent } from "shared/components";
+import { FormFields } from "shared/components";
 
 const EditProfileImage = ({ user, validation }) => {
 
@@ -29,7 +29,7 @@ const EditProfileImage = ({ user, validation }) => {
                                 className="tablelist-form"
                             >
                                 {fields.map(field => (
-                                    <FieldComponent field={field} validation={validation} key={field.id} />
+                                    <FormFields field={field} validation={validation} key={field.id} />
                                 ))}
                             </Form>
                         </div>

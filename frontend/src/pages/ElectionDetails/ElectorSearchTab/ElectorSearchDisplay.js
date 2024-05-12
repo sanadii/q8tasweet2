@@ -7,12 +7,13 @@ import { campaignSelector, electorSelector } from 'selectors';
 
 // Component imports
 import ElectorsModal from "./ElectorsModal";
-import { Id, Name, Actions } from "./ElectorsCol";
+import { Id, Name, Area, Committee, Actions } from "./ElectorsCol";
 
 // Reactstrap (UI) imports
 import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 
 const ElectorSearchDisplay = ({
+    handleElectorClick,
     setModalMode,
     toggle
 }) => {
@@ -25,36 +26,19 @@ const ElectorSearchDisplay = ({
         campaignAttendees,
     } = useSelector(campaignSelector);
 
-    const { voters } = useSelector(electorSelector);
+    const { electorsBySearch } = useSelector(electorSelector);
 
-    const [electorList, setElectorList] = useState(voters);
+    const [electorList, setElectorList] = useState(electorsBySearch);
     useEffect(() => {
-        setElectorList(voters);
-    }, [voters]);
+        setElectorList(electorsBySearch);
+    }, [electorsBySearch]);
 
 
 
     // View Elector Info
     const [voter, setElector] = useState(null);
 
-    const handleElectorClick = useCallback(
-        (arg, modalMode) => {
-            const voter = arg;
-            setElector({
-                // Elector Fields
-                civil: voter.civil,
-                campaignId: campaignDetails.id,
-                gender: voter.gender,
-                fullName: voter.fullName,
-                status: voter.status,
-                notes: voter.notes,
-            });
-            // Set the modalMode state here
-            setModalMode(modalMode);
-            toggle();
-        },
-        [toggle, setModalMode, campaignDetails.id]
-    );
+
 
     const columns = useMemo(
         () => [
@@ -62,6 +46,14 @@ const ElectorSearchDisplay = ({
                 Header: "الاسم",
                 accessor: row => ({ fullName: row.fullName, gender: row.gender }),
                 Cell: (cellProps) => <Name {...cellProps} />
+            },
+            {
+                Header: "المنطقة",
+                Cell: (cellProps) => <Area {...cellProps} />
+            },
+            {
+                Header: "اللجنة",
+                Cell: (cellProps) => <Committee {...cellProps} />
             },
             {
                 Header: "اجراءات",
@@ -72,14 +64,14 @@ const ElectorSearchDisplay = ({
                     campaignGuarantees={campaignGuarantees}
                     campaignAttendees={campaignAttendees}
                     campaignDetails={campaignDetails}
-                    voters={voters} />
+                    electorsBySearch={electorsBySearch} />
             },
         ],
         [
             handleElectorClick,
             campaignGuarantees,
             campaignAttendees,
-            voters,
+            electorsBySearch,
             campaignDetails,
             currentCampaignMember
         ]);
@@ -99,6 +91,13 @@ const ElectorSearchDisplay = ({
             ) : (
                 <p>لا شيء لعرضه، ابدأ أو قم بتحسين بحثك</p>
             )}
+
+            <div className="form-check form-check-info mb-3">
+                <Input className="form-check-input" type="checkbox" id="formCheck11" defaultChecked />
+                <Label className="form-check-label" for="formCheck11">
+                    Checkbox Info
+                </Label>
+            </div>
         </React.Fragment>
     )
 }

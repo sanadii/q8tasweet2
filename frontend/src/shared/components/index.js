@@ -34,7 +34,6 @@ export { default as SearchOption } from "./Filters/SearchOption";
 
 
 // Table use
-export { default as FieldComponent } from "./Tables/FieldComponent";
 export { ExportCSVModal } from "./Tables/ExportCSVModal";
 export { default as TableContainer } from "./Tables/TableContainer";
 export { default as TableFilters } from "./Tables/TableFilters";
