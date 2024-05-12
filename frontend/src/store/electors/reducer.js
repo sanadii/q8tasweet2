@@ -10,7 +10,7 @@ import {
   // ElectionStatistics
   GET_ELECTORS_BY_CATEGORY,
   GET_ELECTOR_BY_ALL,
-  GET_ELECTORS_BY_FAMILY,
+  GET_ELECTORS_BY_SEARCH,
 
 
   GET_ELECTOR_FAMILY_DIVISIONS,
@@ -53,7 +53,7 @@ const Electors = (state = IntialState, action) => {
             isElectionCategorySuccess: true,
           };
 
-        case GET_ELECTORS_BY_FAMILY:
+        case GET_ELECTORS_BY_SEARCH:
           return {
             ...state,
             electorsByFamily: action.payload.data,
@@ -92,7 +92,7 @@ const Electors = (state = IntialState, action) => {
           };
 
 
-        case GET_ELECTORS_BY_FAMILY:
+        case GET_ELECTORS_BY_SEARCH:
           return {
             ...state,
             error: action.payload.error,
@@ -143,7 +143,7 @@ const Electors = (state = IntialState, action) => {
       };
     }
 
-    case GET_ELECTORS_BY_FAMILY: {
+    case GET_ELECTORS_BY_SEARCH: {
       return {
         ...state,
         isElectorsByFamilyCreated: false,

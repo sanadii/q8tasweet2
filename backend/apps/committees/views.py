@@ -67,7 +67,7 @@ from apps.elections.serializers import (
 
 # Utils
 from utils.views_helper import CustomPagination
-from apps.elections.utils import get_election_committee_results
+# from apps.elections.utils import get_election_committee_results
 
 # Election Committees
 class GetCommittees(APIView):

@@ -5,15 +5,16 @@ from rest_framework.response import Response
 
 
 @contextmanager
-def schema_context(request, slug):
+def schema_context(request, schema):
     """
     3 main steps in the schema context
     if election exist: to check if election exist to fetch for the schema
     if schema existL to check if the schema exist to fetch for the tables
     if table exist: to check if the table exist to get the data from the tables
     """
+    print("schema:: ", schema)
     cursor = connection.cursor()
-    schema_name = slug.replace(
+    schema_name = schema.replace(
         "-", "_"
     )  # Convert the slug to a valid schema name format using underscores.
     try:
@@ -34,7 +35,7 @@ def schema_context(request, slug):
 
         # Check if the election exists within the context of the current schema
         try:
-            election = Election.objects.get(slug=slug)
+            election = Election.objects.get(slug=schema)
             yield election  # Yielding election object if it exists
         except Election.DoesNotExist:
             yield Response({"error": "Election not found"}, status=404)

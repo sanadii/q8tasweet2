@@ -18,7 +18,7 @@ export const electionSelector = createSelector(
     electionDetails: electionsState.electionDetails,
     previousElection: electionsState.electionDetails.previousElection,
     electionId: electionsState.electionDetails.id,
-    electionCommitteeSites: electionsState.electionCommitteeSites,
+
 
     electionCandidates: electionsState.electionCandidates,
     electionParties: electionsState.electionParties,
@@ -36,6 +36,13 @@ export const electionSelector = createSelector(
 
 
     electionSorters: electionsState.electionSorters,
+
+
+    // From Schema
+    electionAreas: electionsState.electionAreas,
+    electionCommitteeSites: electionsState.electionCommitteeSites,
+    
+    // Success / Error
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,
 

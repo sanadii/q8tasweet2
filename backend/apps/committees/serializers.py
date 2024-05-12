@@ -24,11 +24,11 @@ class CommitteeSerializer(serializers.ModelSerializer):
         fields = ["id", "type", "letters", "area_name", "committee_site"]
 
 
-class CommitteeSiteSerializer(serializers.ModelSerializer):
-    """Serializer for the Committee model."""
+from rest_framework import serializers
 
+class CommitteeSiteSerializer(serializers.ModelSerializer):
     committees = CommitteeSerializer(many=True, read_only=True)
-    # area = AreaSerializer(read_only=True)
+    area_name = serializers.SerializerMethodField()
 
     class Meta:
         model = CommitteeSite
@@ -37,27 +37,41 @@ class CommitteeSiteSerializer(serializers.ModelSerializer):
             "serial",
             "name",
             "circle",
-            # "area",
+            "area",
             "area_name",
             "gender",
             "description",
             "address",
             "voter_count",
             "committee_count",
-            "tag",
+            "tags",
             "election",
             "committees",
         ]
 
+    def get_area_name(self, obj):
+        # Assuming 'area' is a ForeignKey to an Area model which has a 'name' field
+        if obj.area:
+            return obj.area.name
+        return None
+
     def create(self, validated_data):
-        """Customize creation (POST) of an instance"""
-        return super().create(validated_data)
+        committees_data = validated_data.pop('committees', None)  # Example of extracting related data
+        instance = super().create(validated_data)
+        if committees_data:
+            for committee_data in committees_data:
+                Committee.objects.create(committee_site=instance, **committee_data)
+        return instance
 
     def update(self, instance, validated_data):
-        """Customize update (PUT, PATCH) of an instance"""
-        # Additional logic to customize instance updating
-        return super().update(instance, validated_data)
-
+        committees_data = validated_data.pop('committees', None)
+        instance = super().update(instance, validated_data)
+        if committees_data:
+            # Example: Clear old data and replace with new
+            instance.committees.all().delete()
+            for committee_data in committees_data:
+                Committee.objects.create(committee_site=instance, **committee_data)
+        return instance
 
 # # Votting and Sorting
 # class CommitteeResultSerializer(serializers.ModelSerializer):

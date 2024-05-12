@@ -30,3 +30,6 @@ export { calculatePercentage, calculateCampaignData, getAggregatedGuarantorData,
 // Global
 export { useDelete } from "./useDelete";
 export { useFetchDataIfNeeded } from "./useFetchDataIfNeeded";
+
+// Forms
+export { getSelectionOptions } from "./getSelectionOptions";

@@ -21,12 +21,14 @@ urlpatterns = [
     #path('update-profile',UpdateProfile.as_view(),name="update-profile"),
     # path('uploadImage',UpdateProfileImage.as_view(),name="uploadImage"),
     # path("user/", UserCreate.as_view(), name="listpost"),
-    path("auth/", include("rest_framework.urls", namespace="rest_framework")),
+    # path("auths/", include("auths.urls", namespace="rest_framework")),
 
     # path("user/", include("users.urls", namespace="users")),
     # path("create/", UserCreate.as_view(), name="create_user"),
     # path("logout/blacklist/", BlacklistTokenUpdateView.as_view(), name="blacklist"),
     path('updateUserProfile', UpdateUserProfile.as_view(), name="UpdateUser"),
+    
+    #------ Forgot password ------
     path('forgotPassword',ForgotPassword.as_view(),name="ForgotPassword"),
     path('resetPassword',ResetPassword.as_view(),name="ResetPassword"),
 
@@ -69,9 +71,6 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
 
-    #------ Forgot password------
-    path('forgot-password',ForgotPassword.as_view(),name="forgot-password"),
-    path('reset-password',ResetPassword.as_view(),name="reset-password"),
 
 
 ]

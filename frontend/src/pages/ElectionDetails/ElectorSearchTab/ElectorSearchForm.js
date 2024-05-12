@@ -1,24 +1,29 @@
 // React, Redux & Store imports
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getElectors } from "store/actions";
+import { getElectorsBySearch } from "store/actions";
 import { Loader, TableContainer } from "shared/components";
-import { campaignSelector, electorSelector } from 'selectors';
+import { electionSelector, campaignSelector, electorSelector } from 'selectors';
+import { getGenderOptions, } from "shared/constants";
+import { getAreaOptions, getCommitteeSitesOptions } from "shared/constants";
 
 // Component imports
 import ElectorsModal from "./ElectorsModal";
 import { Id, Name, Actions } from "./ElectorsCol";
 
 // Reactstrap (UI) imports
-import { Col, Row, Button, ButtonGroup, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
+import { Col, Row, Button, ButtonGroup, Form } from "reactstrap";
 
 // Form
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { FieldComponent } from "shared/components";
+import { getSelectionOptions } from "shared/hooks";
 
 const ElectorSearchForm = () => {
     const dispatch = useDispatch();
+
+    const { electionSlug, electionAreas, electionCommitteeSites } = useSelector(electionSelector)
     const [searchElectorInput, setSearchElectorInput] = useState("");
     const [isAdvancedSearch, setIsAdvancedSearch] = useState(false);
     const [isAdvancedCommitteeSearch, setIsAdvancedCommitteeSearch] = useState(false);
@@ -29,7 +34,7 @@ const ElectorSearchForm = () => {
         const searchParameters = {
             searchInput: searchElectorInput,
         };
-        dispatch(getElectors(searchParameters));
+        dispatch(getElectorsBySearch(searchParameters));
     };
 
 
@@ -37,25 +42,29 @@ const ElectorSearchForm = () => {
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
         initialValues: {
+
+            // Simple Search
+            // (isAdvancedSearch)
             firstName: "",
             lastName: "",
-
             phone: "",
+
+            // Advance Search
         },
         validationSchema: Yup.object({
-            firstName: Yup.string().required("Please Enter First Name"),
+            // firstName: Yup.string().required("Please Enter First Name"),
         }),
         onSubmit: (values) => {
-            const newSearch = {
-                // id: user ? user.id : 0,
-                firstName: values.firstName,
-                lastName: values.lastName,
+            const newElectorSearch = {
+                // id: user ? user.id : 0,  // Uncommented, adjust based on necessity
+                schema: electionSlug,
+                simpleSearch: {  // Corrected typo
+                    name: values.name || "",
+                    area: values.area || "",
+                }
             };
-
-            // Update user
-            dispatch(getElectors(newSearch));
-
-            validation.resetForm();
+            // Dispatch the search action with the updated user info
+            dispatch(getElectorsBySearch(newElectorSearch));
         },
     });
 
@@ -68,18 +77,20 @@ const ElectorSearchForm = () => {
             placeholder: "ادخل الاسم",
             colSize: "4",
         },
-        {
-            id: "gender-field",
-            name: "gender",
-            label: "النوع",
-            type: "select",
-            colSize: "4",
-        },
+        // {
+        //     id: "gender-field",
+        //     name: "gender",
+        //     label: "النوع",
+        //     type: "select",
+        //     options: getGenderOptions(),
+        //     colSize: "4",
+        // },
         {
             id: "area-field",
             name: "area",
             label: "المنطقة",
             type: "select",
+            options: getSelectionOptions(electionAreas),
             colSize: "4",
         },
     ];
@@ -255,7 +266,14 @@ const ElectorSearchForm = () => {
                 </Col>
             </Row>
             <div className="mb-2">
-                <form onSubmit={handleSearch}>
+                <Form
+                    className="tablelist-form"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        validation.handleSubmit();
+                        return false;
+                    }}
+                >
                     <div className="mb-2">
                         <Row>
                             {fieldsToDisplay.map((field) => (
@@ -294,7 +312,7 @@ const ElectorSearchForm = () => {
                         </div>
                     </div>
                 </Row> */}
-                </form>
+                </Form>
 
             </div>
 
