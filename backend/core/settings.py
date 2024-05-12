@@ -131,19 +131,6 @@ INSTALLED_APPS = [
 
 # Order is important TODO: for more info to be written
 MIDDLEWARE = [
-# <<<<<<< HEAD
-#     "corsheaders.middleware.CorsMiddleware",
-#     "django.middleware.security.SecurityMiddleware",
-#     "django.contrib.sessions.middleware.SessionMiddleware",
-#     "django.middleware.common.CommonMiddleware",
-#     "django.middleware.csrf.CsrfViewMiddleware",
-#     "django.contrib.auth.middleware.AuthenticationMiddleware",
-#     "django.contrib.messages.middleware.MessageMiddleware",
-#     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-#     # "core.middleware.SchemaMiddleware",
-#     # Uncomment if these are used:
-#     # 'backend.core.middleware.DatabaseSwitchMiddleware',
-# =======
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     
@@ -158,7 +145,6 @@ MIDDLEWARE = [
 
 # >>>>>>> origin/main
     # 'django_hosts.middleware.HostsRequestMiddleware',
-    # 'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 
@@ -168,18 +154,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 TEMPLATES = [
     {
-# <<<<<<< HEAD
-#         "BACKEND": "django.template.backends.django.DjangoTemplates",
-#         "DIRS": [os.path.join(BASE_DIR, "../frontend/build")],
-#         "APP_DIRS": True,
-#         "OPTIONS": {
-#             "context_processors": [
-#                 "django.template.context_processors.debug",
-#                 "django.template.context_processors.request",
-#                 "django.contrib.auth.context_processors.auth",
-#                 "django.contrib.messages.context_processors.messages",
-#                 # 'apps.settings.configs.context_processors.site_configs',
-# =======
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, '../frontend/build'),  # Frontend templates directory
@@ -194,7 +168,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 # 'apps.configs.configs.context_processors.site_configs',
-# >>>>>>> origin/main
             ],
         },
     },
@@ -263,8 +236,7 @@ AUTH_USER_MODEL = "auths.User"
 
 # JWT settings
 SIMPLE_JWT = {
-# <<<<<<< HEAD
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60000),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -274,20 +246,6 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": (
         "Bearer",
         "JWT",
-# =======
-#     'ACCESS_TOKEN_LIFETIME': timedelta(days=60),
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
-#     # 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60000),
-#     # 'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
-#     'ROTATE_REFRESH_TOKENS': True,
-#     'BLACKLIST_AFTER_ROTATION': True,
-#     'ALGORITHM': 'HS256',
-#     'SIGNING_KEY': SECRET_KEY,
-#     'VERIFYING_KEY': None,
-#     'AUTH_HEADER_TYPES': (
-#         'Bearer',
-#         'JWT',
-# >>>>>>> origin/main
     ),
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",

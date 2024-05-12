@@ -50,15 +50,12 @@ const ProfileDropdown = () => {
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-end">
             {/* <h6 className="dropdown-header">Welcome {userName}!</h6> */}
-{/* <<<<<<< HEAD */}
             <DropdownItem href={"/dashboard"}>
               <i className="mdi mdi mdi-monitor-dashboard text-muted fs-16 align-middle me-1"></i>
               <span className="align-middle">لوحة التحكم</span>
             </DropdownItem>
             <DropdownItem href={"dashboard/profile"}>
-{/* =======
-            <DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "profile"}>
->>>>>>> origin/main */}
+
               <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
               <span className="align-middle">الملف الشخصي</span>
             </DropdownItem>
@@ -116,12 +113,15 @@ const ProfileDropdown = () => {
             </DropdownItem>
 
             {
-              user?.id && (<DropdownItem href={process.env.REACT_APP_PUBLIC_URL + "/logout"} onClick={() => dispatch(logoutUser())}>
-                <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
-                <span className="align-middle" data-key="t-logout">
-                  تسجيل خروج
-                </span>
-              </DropdownItem>)
+              user?.id && (
+                <DropdownItem
+                  href={process.env.REACT_APP_PUBLIC_URL + "/logout"}
+                >
+                  <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
+                  <span className="align-middle" data-key="t-logout">
+                    تسجيل خروج
+                  </span>
+                </DropdownItem>)
             }
 
           </DropdownMenu>

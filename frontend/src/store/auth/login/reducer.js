@@ -30,10 +30,14 @@ const login = (state = initialState, action) => {
       };
       break;
     case LOGOUT_USER:
-      state = { ...state, isUserLogout: true };
+      state = {
+        ...state,
+        loading: true,
+        error: false,
+      };
       break;
     case LOGOUT_USER_SUCCESS:
-      state = { ...state, isUserLogout: true };
+      state = { ...state, isUserLogout: false };
       break;
     case API_ERROR:
       state = {

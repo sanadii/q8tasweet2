@@ -77,18 +77,6 @@ class UserLogin(APIView):
             "data": user_data,
         }
 
-# <<<<<<< HEAD
-#         return Response(
-#             {
-#                 "status": "success",
-#                 "refresh_token": str(refresh),
-#                 "access_token": access_token,
-#                 "data": user_data,
-#             }
-#         )
-
-
-# =======
         response = Response(response_data)
         # response_data_json = json.dumps(response_data)
         # set_cookie(response, 'user_data_cookie', response_data_json)
@@ -105,19 +93,13 @@ class UserRegister(APIView):
         username = self.generate_username(email)
         request.data["username"] = username
 
-# <<<<<<< HEAD
-#         serializer = UserSerializer(data=request.data, context={"request": request})
-#         if serializer.is_valid():
-#             # Pass 'created_by' as an argument to the save method
-#             new_user = serializer.save(created_by=None)
-#             return Response(
-#                 {
-#                     "data": UserSerializer(new_user, context={"request": request}).data,
-#                     "count": 1,
-#                     "code": 200,
-#                 },
-#                 status=status.HTTP_201_CREATED,
-#             )
+# <<<<<<< TODO
+# Registration
+# received email from the server
+# 
+# - put the email in the settings
+# - make html content in the frontend
+# - 
 # =======
         serializer = UserSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(): 
@@ -287,7 +269,8 @@ class UpdateUserProfile(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def put(self, request):
-# <<<<<<< HEAD
+# <<<<<<< TODO
+# the image is a part of the userUpdate profile so this code should stay
 #         user = (
 #             request.user
 #         )  # Get the authenticated user directly from the request due to the middleware
@@ -323,7 +306,8 @@ class UpdateUserProfile(APIView):
             serializer.save()
             return Response({"success": True, "message": "User profile updated successfully"})
         return Response({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-    
+
+# <<<<<<< TODO, this part is not needed
 # class UpdateProfileImage(APIView):
 #     parser_classes = (MultiPartParser,)
 #     def post(self, request, *args, **kwargs):
@@ -362,9 +346,8 @@ class GetUsers(APIView):
 
         return paginator.get_paginated_response(data_serializer.data)
 
-# <<<<<<< HEAD
-
-# =======
+# <<<<<<< TODO:
+# To be changed later for get Favourite // GetRelated Election / Campaigns
 class GetCurrentUser(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -422,8 +405,6 @@ class GetCampaignSorters(APIView):
             return Response({"data": [], "code": 200, "message": "No moderators found."})
         
 
-    
-# >>>>>>> origin/main
 class AddNewUser(APIView):
     permission_classes = [IsAuthenticated]
 
