@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from core.management.data import groups_data
+from backend.core.management.startup import groups_data
 
 class Command(BaseCommand):
     help = 'Set Group Data'

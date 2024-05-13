@@ -24,11 +24,11 @@ JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "q8tasweet",
+        "NAME": "q8tasweet2",
         "USER": "postgres",
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        # "PASSWORD": os.environ.get("DB_PASSWORD"),
         # "PASSWORD": "I4ksb@11782",
-        # "PASSWORD": "KWT11782",
+        "PASSWORD": "KWT11782",
         "HOST": "localhost",
         "PORT": "5432",
     },

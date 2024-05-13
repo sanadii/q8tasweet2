@@ -13,7 +13,7 @@ import uuid
 
 from apps.settings.models import TrackModel, TaskModel
 
-from utils.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions
+from utils.models_helper import ElectionMethodOptions, ElectionResultsOptions, GenderOptions
 from utils.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 from django.db import models
 from apps.areas.models import Area
@@ -30,7 +30,7 @@ class Election(TrackModel, TaskModel):
 
     election_method = models.CharField(
         max_length=50,
-        choices=ElectionTypeOptions.choices,
+        choices=ElectionMethodOptions.choices,
         blank=True,
         null=True,
         verbose_name="Election Type"
@@ -43,14 +43,12 @@ class Election(TrackModel, TaskModel):
         null=True,
         verbose_name="Election Result Type"
     )
-
-
     elect_votes = models.PositiveIntegerField(blank=True, null=True)
     elect_seats = models.PositiveIntegerField(blank=True, null=True)
 
-    # Calculations // TODO: Can be calculated on campaign creation
-    first_winner_votes = models.PositiveIntegerField(blank=True, null=True)
-    last_winner_votes = models.PositiveIntegerField(blank=True, null=True)
+    # # Calculations // TODO: Can be calculated on campaign creation
+    # first_winner_votes = models.PositiveIntegerField(blank=True, null=True)
+    # last_winner_votes = models.PositiveIntegerField(blank=True, null=True)
 
     # TODO: create ElectionSummary Model for both voters & attendees
     # Voter // This can go to another table TODO: Move to another table called ElectionVoters or ElectionNumbers

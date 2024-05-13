@@ -17,8 +17,6 @@ import uuid
 
 from apps.settings.models import TrackModel, TaskModel
 
-from utils.models_helper import ElectionTypeOptions, ElectionResultsOptions, GenderOptions
-from utils.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 from django.db import models
 from apps.areas.models import Area
 from apps.elections.models import Election

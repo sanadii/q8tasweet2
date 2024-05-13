@@ -18,6 +18,7 @@ class StatusOptions(models.IntegerChoices):
     MISSING_DATA = 4, 'يفتقد للبيانات'
     IN_PROGRESS = 5, 'جاري العمل عليه'
     NEW = 6, 'جديد'
+    DEMO = 7, 'تجريبي'
     DELETED = 9, 'محذوف'
 
 class PriorityOptions(models.IntegerChoices):

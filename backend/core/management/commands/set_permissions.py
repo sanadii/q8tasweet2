@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from core.management.data import permissions_data
+from backend.core.management.startup import permissions_data
 from django.contrib.auth.models import Permission
 from django.db import connection
 

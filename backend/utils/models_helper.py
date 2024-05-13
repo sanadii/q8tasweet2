@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 
-class ElectionTypeOptions(models.TextChoices):
+class ElectionMethodOptions(models.TextChoices):
     CANDIDATE_ONLY_SYSTEM = 'candidateOnly', _('Candidate Only System')
     PARTY_ONLY_SYSTEM = 'partyOnly', _('Party Only System')
     PARTY_CANDIDATE_ONLY_SYSTEM = 'partyCandidateOnly', _('Party Candidate Only System')
