@@ -26,7 +26,7 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
     # admin_serializer_classes = (TrackMixin, TaskMixin)
     name = serializers.SerializerMethodField("get_election_name")
     image = serializers.SerializerMethodField("get_election_image")
-    previous_election = serializers.SerializerMethodField()
+    # previous_election = serializers.SerializerMethodField()
     due_date = serializers.DateField(
         format="%Y-%m-%d",
         input_formats=[
@@ -57,13 +57,13 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "election_method",
             "elect_votes",
             "elect_seats",
-            "voters",
-            "voters_males",
-            "voters_females",
-            "attendees",
-            "attendees_males",
-            "attendees_females",
-            "previous_election",
+            "elector_count",
+            "elector_male_count",
+            "elector_female_count",
+            "attendee_count",
+            "attendee_male_count",
+            "attendee_female_count",
+            # "previous_election",
             
             
             # "election_result",
@@ -145,58 +145,58 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
                 )
         return None
 
-    def get_previous_election(self, obj):
-        previous_election = (
-            Election.objects.filter(
-                sub_category=obj.sub_category, due_date__lt=obj.due_date
-            )
-            .order_by("-due_date")
-            .first()
-        )
+    # def get_previous_election(self, obj):
+    #     previous_election = (
+    #         Election.objects.filter(
+    #             sub_category=obj.sub_category, due_date__lt=obj.due_date
+    #         )
+    #         .order_by("-due_date")
+    #         .first()
+    #     )
 
-        if previous_election:
-            data = {
-                "seats": previous_election.elect_seats,
-                # ... other fields you want to include ...
-            }
+    #     if previous_election:
+    #         data = {
+    #             "seats": previous_election.elect_seats,
+    #             # ... other fields you want to include ...
+    #         }
 
-            # Get election candidates
-            election_candidates = ElectionCandidate.objects.filter(
-                election=previous_election
-            ).order_by("-votes")
+    #         # Get election candidates
+    #         election_candidates = ElectionCandidate.objects.filter(
+    #             election=previous_election
+    #         ).order_by("-votes")
 
-            if election_candidates.exists():
-                first_winner = election_candidates.first()
-                last_winner = (
-                    election_candidates[previous_election.elect_seats - 1]
-                    if previous_election.elect_seats > 0
-                    else None
-                )
+    #         if election_candidates.exists():
+    #             first_winner = election_candidates.first()
+    #             last_winner = (
+    #                 election_candidates[previous_election.elect_seats - 1]
+    #                 if previous_election.elect_seats > 0
+    #                 else None
+    #             )
 
-                data.update(
-                    {
-                        "first_winner": ElectionCandidateSerializer(first_winner).data,
-                        "last_winner": (
-                            ElectionCandidateSerializer(last_winner).data
-                            if last_winner
-                            else None
-                        ),
-                        "median_winner": (
-                            sum(
-                                candidate.votes
-                                for candidate in election_candidates[
-                                    : previous_election.elect_seats
-                                ]
-                            )
-                            // previous_election.elect_seats
-                            if previous_election.elect_seats > 0
-                            else None
-                        ),
-                    }
-                )
+    #             data.update(
+    #                 {
+    #                     "first_winner": ElectionCandidateSerializer(first_winner).data,
+    #                     "last_winner": (
+    #                         ElectionCandidateSerializer(last_winner).data
+    #                         if last_winner
+    #                         else None
+    #                     ),
+    #                     "median_winner": (
+    #                         sum(
+    #                             candidate.votes
+    #                             for candidate in election_candidates[
+    #                                 : previous_election.elect_seats
+    #                             ]
+    #                         )
+    #                         // previous_election.elect_seats
+    #                         if previous_election.elect_seats > 0
+    #                         else None
+    #                     ),
+    #                 }
+    #             )
 
-            return data
-        return None
+    #         return data
+    #     return None
 
     def create(self, validated_data):
         # Extract task-related data if present
@@ -271,7 +271,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "gender",
             "image",
             "votes",
-            "notes",
+            "note",
             # "committee_votes",
             # "committee_sorting",
             "result",
@@ -339,7 +339,7 @@ class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
             "name",
             "image",
             "votes",
-            "notes",
+            "note",
             # "committee_votes",
             # "committee_sorting"
         ]
@@ -382,7 +382,7 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
             "gender",
             "image",
             "votes",
-            "notes",
+            "note",
             # "committee_votes",
             # "committee_sorting"
         ]

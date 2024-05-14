@@ -54,11 +54,13 @@ class CommitteeSite(models.Model):
     serial = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     circle = models.CharField(max_length=255, blank=True, null=True)
-    
-    # Change the next 2 fields to areas
-    area = models.ForeignKey(Area, on_delete=models.CASCADE, db_column='area', related_name='committee_site_areas')
+
+    area = models.ForeignKey(
+        Area,
+        on_delete=models.CASCADE,
+        related_name="committee_site_areas",
+    )
     area_name = models.CharField(max_length=255, blank=True, null=True)
-    # 
     gender = models.IntegerField(choices=GENDER_CHOICES, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
@@ -79,13 +81,12 @@ class CommitteeSite(models.Model):
         schema_name = kwargs.get("schema_name", "public")
         self.set_schema(schema_name)  # Dynamically sets the schema if provided
 
-
     def __str__(self):
         return self.name
 
     def set_schema(self, schema):
         self._schema = schema
-  
+
     # def get_election(self):
     #     from apps.elections.models import Election
 
@@ -100,7 +101,12 @@ class CommitteeSite(models.Model):
 class Committee(models.Model):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
-    committee_site = models.ForeignKey(CommitteeSite, on_delete=models.CASCADE, related_name='committee_site_committees')
+    committee_site = models.ForeignKey(
+        CommitteeSite,
+        on_delete=models.CASCADE,
+        related_name="committee_site_committees",
+        blank=True, null=True
+    )
     type = models.TextField(max_length=25, blank=True, null=True)
     main = models.BooleanField(default=False)
 
@@ -193,7 +199,6 @@ class Committee(models.Model):
 #         db_table = "election_party_candidate_committee_result"
 #         verbose_name = "Election Party Candidate Committee Result"
 #         verbose_name_plural = "Election Party Candidate Committee Results"
-
 
 
 # class BaseElectionSorting(models.Model):

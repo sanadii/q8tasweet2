@@ -11,28 +11,10 @@ from django.db.models import Count
 from apps.electors.models import Elector
 
 # Serializers
-from apps.electors.serializers import (
-    ElectorSerializer,
-)
-
-from django.db.models import Count, Case, When, IntegerField, Sum, Q
-from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models.query import QuerySet
-
+from apps.electors.serializers import ElectorSerializer
 
 # Utils
 from utils.schema import schema_context
-from .requests import (
-    count_election_statistics,
-    count_electors_by_family,
-    count_electors_by_area,
-    count_electors_by_committee,
-    # Categories
-    count_electors_by_family,
-    count_electors_by_category,
-    # Elector Family Division
-)
-
 from apps.electors.electorsByCategory import restructure_electors_by_category
 from apps.electors.electorsByAll import restructure_elector_by_all
 from apps.electors.electorsBySearch import restructure_electors_by_search
@@ -79,7 +61,8 @@ class GetElectorsBySearch(APIView):
         with schema_context(request, schema):
             electors = restructure_electors_by_search(request)
             serializer = ElectorSerializer(electors, many=True)
-            
+            print("electors: ", electors)
+
             return Response({"data": serializer.data}, status=200)
 
 
@@ -91,9 +74,7 @@ class GetElectorRelatedElectors(APIView):
 
         with schema_context(request, schema):
             electors = restructure_elector_related_electors(request)
-            serializer = ElectorSerializer(electors, many=True)
-            
-            return Response({"data": serializer.data}, status=200)
+            return Response({"data": electors}, status=200)
 
 
 

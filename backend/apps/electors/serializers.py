@@ -31,6 +31,7 @@ class ElectorSerializer(serializers.ModelSerializer):
             "lane",
             "house",
             "area_name",
+            "area",
             # "committee",
             "committee_site_name",
             "code_number",

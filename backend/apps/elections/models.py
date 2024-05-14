@@ -58,8 +58,8 @@ class Election(TrackModel, TaskModel):
 
     # Attendees
     attendee_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
-    attendees_male_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
-    attendees_female_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
+    attendee_male_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
+    attendee_female_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
     
     # Database
     has_schema = models.BooleanField(default=False, verbose_name="Has Specific Database")
@@ -140,13 +140,13 @@ class ElectionCandidate(TrackModel):
     position = models.IntegerField(null=True, blank=True)
     result = models.CharField(max_length=25, null=True, blank=True)
     votes = models.PositiveIntegerField(default=0, null=True, blank=True)
-    notes = models.TextField(blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
 
     #  Saving sum of votes from ElectionCommitteeResult for each candidate
-    def update_votes(self):
-        total_votes = ElectionCommitteeResult.objects.filter(election_candidate=self).aggregate(total_votes=Sum('votes'))['total_votes']
-        self.votes = total_votes if total_votes is not None else 0
-        self.save()
+    # def update_votes(self):
+    #     total_votes = ElectionCommitteeResult.objects.filter(election_candidate=self).aggregate(total_votes=Sum('votes'))['total_votes']
+    #     self.votes = total_votes if total_votes is not None else 0
+    #     self.save()
 
     class Meta:
         db_table = "election_candidate"
@@ -170,10 +170,10 @@ class ElectionParty(TrackModel):
     notes = models.TextField(blank=True, null=True)
 
     #  Saving sum of votes from ElectionCommitteeResult for each party
-    def update_votes(self):
-        total_votes = ElectionCommitteeResult.objects.filter(election_party=self).aggregate(total_votes=Sum('votes'))['total_votes']
-        self.votes = total_votes if total_votes is not None else 0
-        self.save()
+    # def update_votes(self):
+    #     total_votes = ElectionCommitteeResult.objects.filter(election_party=self).aggregate(total_votes=Sum('votes'))['total_votes']
+    #     self.votes = total_votes if total_votes is not None else 0
+    #     self.save()
 
     class Meta:
         db_table = "election_party"

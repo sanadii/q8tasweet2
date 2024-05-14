@@ -19,7 +19,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         # Define the file path
-        file_path = "core/management/startup/settings.xlsx"
+        file_path = "core/management/data/settings.xlsx"
         work_sheet = "groups"
         required_data = [
             "id",

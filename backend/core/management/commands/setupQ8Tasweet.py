@@ -10,4 +10,10 @@ class Command(BaseCommand):
         call_command('importUsers')
         call_command('importGroups')
         call_command('setPermissions')
-        self.stdout.write(self.style.SUCCESS("importUsers command called successfully."))
+        call_command('importElectionCandidates')
+        
+        
+        # setup Schemas
+        call_command('createElectionSchemas')
+
+        self.stdout.write(self.style.SUCCESS("setup Q8tasweet command called successfully."))
