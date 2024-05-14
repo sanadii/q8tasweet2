@@ -8,4 +8,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Call the importUsers command directly
         call_command('importUsers')
+        call_command('importGroups')
+        call_command('setPermissions')
         self.stdout.write(self.style.SUCCESS("importUsers command called successfully."))

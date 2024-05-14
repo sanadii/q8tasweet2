@@ -26,9 +26,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "q8tasweet2",
         "USER": "postgres",
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        # "PASSWORD": os.environ.get("DB_PASSWORD"),
         # "PASSWORD": "I4ksb@11782",
-        # "PASSWORD": "KWT11782",
+        "PASSWORD": "KWT11782",
         "HOST": "localhost",
         "PORT": "5432",
     },
@@ -198,7 +198,7 @@ CORS_ALLOW_ALL_ORIGINS = True  # For Development only
 CSRF_COOKIE_SECURE = True  # Set to True in production with HTTPS
 CSRF_COOKIE_SAMESITE = "Lax"  # Adjust based on your security needs
 
-# Custom user model
+# Custom group model
 AUTH_USER_MODEL = "auths.User"
 
 # JWT settings
@@ -215,7 +215,7 @@ SIMPLE_JWT = {
         "JWT",
     ),
     "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
+    "USER_ID_CLAIM": "group_id",
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
 }

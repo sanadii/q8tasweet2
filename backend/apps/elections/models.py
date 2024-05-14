@@ -52,14 +52,14 @@ class Election(TrackModel, TaskModel):
 
     # TODO: create ElectionSummary Model for both voters & attendees
     # Voter // This can go to another table TODO: Move to another table called ElectionVoters or ElectionNumbers
-    voters = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
-    voters_males = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
-    voters_females = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
+    elector_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
+    elector_male_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
+    elector_female_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
 
     # Attendees
-    attendees = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
-    attendees_males = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
-    attendees_females = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
+    attendee_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
+    attendees_male_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
+    attendees_female_count = models.PositiveIntegerField(default=0)  # Always set a value, no nulls
     
     # Database
     has_schema = models.BooleanField(default=False, verbose_name="Has Specific Database")
