@@ -17,7 +17,7 @@ import Groups from "pages/Admin/Groups";
 import GroupPermissions from "pages/Admin/GroupPermissions";
 
 // Election Pages
-import ElectionList from "pages/Elections/ElectionList";
+import Elections from "pages/Elections";
 import ElectionDetails from "pages/ElectionDetails";
 
 // Candidates Pages
@@ -48,7 +48,7 @@ const DashboardRoutes = [
     // Admin Lists -------
 
     // Elections
-    { path: "/dashboard/elections/", component: <ElectionList /> },
+    { path: "/dashboard/elections/", component: <Elections /> },
     { path: "/dashboard/elections/:slug", component: <ElectionDetails /> },
 
     // Candidates

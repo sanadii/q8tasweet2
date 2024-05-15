@@ -196,7 +196,7 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     class Meta:
         model = ElectionCandidate
-        fields = ["id", "votes", "deleted", "election", "candidate"]
+        fields = ["id", "votes", "is_deleted", "election", "candidate"]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -206,7 +206,7 @@ class CampaignDetailsSerializer(AdminFieldMixin, serializers.ModelSerializer):
             instance.candidate.image.url if instance.candidate.image else None
         )
         representation["gender"] = instance.candidate.gender
-        representation["Candidate_deleted"] = instance.candidate.deleted
+        representation["Candidate_is_deleted"] = instance.candidate.is_deleted
         return representation
 
 

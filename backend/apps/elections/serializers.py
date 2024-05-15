@@ -54,7 +54,6 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "sub_category",
             "category_name",
             "sub_category_name",
-            "election_method",
             "elect_votes",
             "elect_seats",
             "elector_count",
@@ -65,8 +64,9 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "attendee_female_count",
             # "previous_election",
             
-            
-            # "election_result",
+            # # Settings
+            "election_method",
+            "election_result",
             # "election_result_view",
             # "election_result_party",
             # "election_result_sorting",
@@ -78,9 +78,11 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             # "created_at",
             # "updated_at",
             # "deleted_at",
-            # "deleted",
+            # "is_deleted",
             # "priority",
             # "status",
+            "is_detailed_results",
+            "is_sorting_results",
             "has_schema",
         ]
 

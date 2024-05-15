@@ -47,7 +47,7 @@ class Command(BaseCommand):
                 # Create or update Candidate object
                 candidate, created = Candidate.objects.update_or_create(
                     defaults={
-                        "deleted": row["deleted"],
+                        "is_deleted": row["is_deleted"],
                         "status": row["status"],
                         "priority": row["priority"],
                         "moderators": row["moderators"],

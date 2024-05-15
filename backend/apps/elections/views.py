@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
+from django.db import connection
 
 # Campaign App
 # from apps.campaigns.models import Campaign, CampaignMember
@@ -38,11 +39,6 @@ from apps.committees.models import (
 )
 
 # Schema Models
-from apps.areas.models import Area
-from apps.committees.models import CommitteeSite
-# Schema Serializers
-from apps.areas.serializers import AreaSerializer
-from apps.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
 
 # from apps.committees.models import Committee, CommitteeGroup
 
@@ -62,7 +58,7 @@ from apps.elections.serializers import (
 
 # Utils
 from utils.views_helper import CustomPagination
-from utils.schema import schema_context
+from utils.schema import get_schema_details_and_content
 
 # from apps.elections.utils import get_election_committee_results
 
@@ -96,11 +92,11 @@ class GetElections(APIView):
 
         try:
             if view == "index":
-                elections_data = Election.objects.filter(status=6, deleted=0)
+                elections_data = Election.objects.filter(status=6, is_deleted=0)
                 response_data = self.handle_index_view(elections_data, now)
 
             elif view == "public":
-                elections_data = Election.objects.filter(status=6, deleted=0).order_by(
+                elections_data = Election.objects.filter(status=6, is_deleted=0).order_by(
                     "-due_date"
                 )
                 response_data = self.handle_public_view(elections_data)
@@ -160,6 +156,7 @@ class GetElectionDetails(APIView):
 
     def get(self, request, slug):
         election = get_object_or_404(Election, slug=slug)
+        
         context = {"request": request}
 
         # Optimize queries by prefetching and selecting necessary fields
@@ -169,6 +166,7 @@ class GetElectionDetails(APIView):
             election_party__in=election_parties).select_related('candidate', 'election_party')
 
         response_data = {
+            # "electionSchema": ElectionSchemaSerializer(election, context=context).data,
             "electionDetails": ElectionSerializer(election, context=context).data,
             "electionCandidates": ElectionCandidateSerializer(
                 election_candidates, many=True, context=context
@@ -181,36 +179,12 @@ class GetElectionDetails(APIView):
             ).data,
         }
 
-        with schema_context(request, slug):
-            try:
-                election_committee_sites = CommitteeSite.objects.all()
-                
-                if election_committee_sites.exists():
-                    committees_data = CommitteeSiteSerializer(
-                        election_committee_sites, many=True, context=context
-                    ).data
-                    response_data["election_committee_sites"] = committees_data
-                                        
-            except Exception:
-                # Add a note or error message indicating the absence of committee data
-                response_data["committeeDataError"] = "Failed to fetch committee data"
-
-            try:
-                election_committee_areas = Area.objects.all()
-                                    
-                if election_committee_areas.exists():
-                    areas_data = AreaSerializer(
-                        election_committee_areas, many=True, context=context
-                    ).data
-                    response_data["election_areas"] = areas_data
-                    
-            except Exception:
-                # Add a note or error message indicating the absence of committee data
-                response_data["areaDataError"] = "Failed to fetch area data"
-
-
+        if election.has_schema:
+            get_schema_details_and_content(context, request, slug, response_data)
 
         return Response({"data": response_data, "code": 200})
+
+
 
 
 # class GetElectionDetails(APIView):
@@ -333,7 +307,7 @@ class DeleteElection(APIView):
             election = Election.objects.get(id=id)
             election.delete()
             return JsonResponse(
-                {"data": "Election deleted successfully", "count": 1, "code": 200},
+                {"data": "Election is_deleted successfully", "count": 1, "code": 200},
                 safe=False,
             )
         except Election.DoesNotExist:
@@ -414,7 +388,7 @@ class DeleteElectionCandidate(APIView):
             election_candidate.delete()
             return Response(
                 {
-                    "data": "Election candidate deleted successfully",
+                    "data": "Election candidate is_deleted successfully",
                     "count": 1,
                     "code": 200,
                 },
@@ -533,7 +507,7 @@ class DeleteElectionParty(APIView):
             election_party.delete()
             return Response(
                 {
-                    "data": "Election party deleted successfully",
+                    "data": "Election party is_deleted successfully",
                     "count": 1,
                     "code": 200,
                 },
@@ -652,7 +626,7 @@ class DeleteElectionPartyCandidate(APIView):
             election_party.delete()
             return Response(
                 {
-                    "data": "Election party deleted successfully",
+                    "data": "Election party is_deleted successfully",
                     "count": 1,
                     "code": 200,
                 },

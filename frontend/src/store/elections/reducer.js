@@ -89,6 +89,7 @@ const IntialState = {
   electionSorters: [],
 
   // Schema
+  schemaDetails: [],
   electionCommitteeSites: [],
   electionAreas: [],
 };
@@ -135,7 +136,8 @@ const Elections = (state = IntialState, action) => {
             // Schema
             electionCommitteeSites: action.payload.data.electionCommitteeSites,
             electionAreas: action.payload.data.electionAreas,
-
+            schemaDetails: action.payload.data.schemaDetails,
+            
             isElectionCreated: false,
             isElectionSuccess: true,
           };

@@ -3,7 +3,7 @@ import React from "react";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { addElectionSchema, updateElection } from "store/actions";
-import { electionSchemaSelector } from 'selectors';
+import { electionSelector } from 'selectors';
 
 // Form
 import * as Yup from "yup";
@@ -13,10 +13,9 @@ import { FormFields } from "shared/components";
 // UX
 import { Button, Table, Card, CardHeader, CardBody } from "reactstrap";
 
-const ElectionDataBase = ({ election }) => {
+const ElectionSchema = ({ election }) => {
     const dispatch = useDispatch();
-    const { electionSchemaName, electionSchemaTables } = useSelector(electionSchemaSelector);
-
+    const { schemaDetails } = useSelector(electionSelector);
     const electionHasSchema = election?.hasSchema;
 
     const handleAddElectionSchema = () => {
@@ -56,12 +55,33 @@ const ElectionDataBase = ({ election }) => {
     return (
         <Card>
             <CardHeader>
-                <h4>قاعدة البيانات</h4>
+            <h4 className="card-title mb-0 flex-grow-1">قاعدة البيانات</h4>
+            <h4 className="card-title mb-0 flex-grow-1">{schemaDetails.schemaName}</h4>
+                
             </CardHeader>
             <CardBody>
                 {electionHasSchema ? (
-                    <>
-                        <Table>
+                    <ul className="list-group list-group-flush border-dashed mb-0 mt-3 pt-2">
+                        {schemaDetails?.schemaTables && schemaDetails?.schemaTables.map((table, index) => (
+                            <li className="list-group-item px-0" key={index}>
+                                <div className="d-flex">
+                                    <div className="flex-grow-1 ms-2">
+                                        <h6 className="mb-1">{table.name}</h6>
+                                        <p className="fs-12 mb-0 text-muted">
+                                            <i className="mdi mdi-circle fs-10 align-middle text-primary me-1"></i>
+                                            {table.table}
+                                        </p>
+                                    </div>
+                                    <div className="flex-shrink-0 text-end">
+                                        <Button className="btn-sm fs-12 mb-0">Add</Button>
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+
+
+
+                        {/* <Table>
                             <tbody>
                                 <tr>
                                     <th>قاعدة البيانات</th>
@@ -82,7 +102,7 @@ const ElectionDataBase = ({ election }) => {
                                     <td></td>
                                 </tr>
                             </tbody>
-                        </Table>
+                        </Table> */}
 
                         <h5>تحميل الملفات</h5>
                         {fields.map((field) => (
@@ -96,7 +116,8 @@ const ElectionDataBase = ({ election }) => {
                         ))}
                         <Button onClick={handleAddElectionSchema}>إضافة قاعدة بيانات للإنتخابات</Button>
 
-                    </>
+                    </ul>
+
                 ) : (
                     <Button onClick={handleAddElectionSchema}>إضافة قاعدة بيانات للإنتخابات</Button>
                 )}
@@ -105,4 +126,4 @@ const ElectionDataBase = ({ election }) => {
     );
 };
 
-export default ElectionDataBase;
+export default ElectionSchema;

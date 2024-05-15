@@ -72,7 +72,7 @@ import { useFormik } from "formik";
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-const ElectionList = () => {
+const Elections = () => {
   const dispatch = useDispatch();
 
   // User Data
@@ -1207,4 +1207,4 @@ const ElectionList = () => {
   );
 };
 
-export default ElectionList;
+export default Elections;

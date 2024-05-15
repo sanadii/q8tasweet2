@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUser
 from django.core.validators import MaxValueValidator
 
 from apps.settings.models import TrackModel
-from utils.models_helper import GenderOptions
+from utils.model_options import GenderOptions
 from utils.validators import today, civil_validator, phone_validator  
 
 class CustomAccountManager(BaseUserManager):

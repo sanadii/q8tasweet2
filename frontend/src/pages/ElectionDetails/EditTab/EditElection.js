@@ -17,7 +17,8 @@ import { StatusOptions, PriorityOptions, RoleOptions, ElectionMethodOptions, Ele
 
 
 // Components
-import ElectionDataBase from "./ElectionDataBase";
+import ElectionSchema from "./ElectionSchema";
+import { getOptionOptions } from "shared/utils";
 
 const EditElection = () => {
   const dispatch = useDispatch();
@@ -36,21 +37,22 @@ const EditElection = () => {
 
       // Settings
       electionMethod: (election && election.electionMethod) || "candidateOnly",
-      electionResultView: (election && election.electionResultView) || "total",
-      electionResultParty: (election && election.electionResultParty) || "candidateOnly",
-      electionResultSorting: (election && election.electionResultSorting) || false,
+      electionResult: (election && election.electionResult) || "candidateOnly",
+      electionDetailedResult: (election && election.electionDetailedResult) || false,
+      electionSortingResult: (election && election.electionSortingResult) || false,
+      
       electSeats: (election && election.electSeats) || 0,
       electVotes: (election && election.electVotes) || 0,
 
       // Voters
-      voters: (election && election.voters) || 0,
-      votersMales: (election && election.votersMales) || 0,
-      votersFemales: (election && election.votersFemales) || 0,
+      electorCount: (election && election.electorCount) || 0,
+      electorMaleCount: (election && election.electorMaleCount) || 0,
+      electorFemaleCount: (election && election.electorFemaleCount) || 0,
 
       // Attendees
-      attendees: (election && election.attendees) || 0,
-      attendeesMales: (election && election.attendeesMales) || 0,
-      attendeesFemales: (election && election.attendeesFemales) || 0,
+      attendeeCount: (election && election.attendeeCount) || 0,
+      attendeeMaleCount: (election && election.attendeeMaleCount) || 0,
+      attendeeFemaleCount: (election && election.attendeeFemaleCount) || 0,
 
       // System
       status: (election && election.status) || 0,
@@ -86,16 +88,19 @@ const EditElection = () => {
 
         // Election Spesifications
         electionMethod: values.electionMethod,
-        electionResult: JSON.stringify(electionResultJson), // Convert the object to a JSON string
+        electionResult: values.electionResult,
+        electionDetailedResult: values.electionDetailedResult,
+        electionSortingResult: values.electionSortingResult,
         electSeats: values.electSeats,
         electVotes: values.electVotes,
-        voters: values.voters,
-        votersMales: values.votersMales,
-        votersFemales: values.votersFemales,
 
-        attendees: values.attendees,
-        attendeesMales: values.attendeesMales,
-        attendeesFemales: values.attendeesFemales,
+        electorCount: values.electorCount,
+        electorMaleCount: values.electorMaleCount,
+        electorFemaleCount: values.electorFemaleCount,
+
+        attendeeCount: values.attendeeCount,
+        attendeeMaleCount: values.attendeeMaleCount,
+        attendeeFemaleCount: values.attendeeFemaleCount,
 
         // Admin
         status: values.status,
@@ -166,14 +171,31 @@ const EditElection = () => {
               name: "electionMethod",
               label: "نوع الإنتخابات",
               type: "select",
-              options: ElectionMethodOptions.map(option => ({
-                id: option.id,
-                label: option.name,
-                value: option.value
-              })),
+              options: getOptionOptions("electionMethod"),
               colSize: 6,
             },
-            // Add more fields as needed...
+            {
+              id: "electionResult-field",
+              name: "electionresult",
+              label: "عرض النتائج",
+              type: "select",
+              options: getOptionOptions("electionResult"),
+              colSize: 6,
+            },
+            {
+              id: "electionResult-field",
+              name: "electionresult",
+              label: "نتائج تفصيلية؟",
+              type: "checkBox",
+              colSize: 6,
+            },
+            {
+              id: "electionResult-field",
+              name: "electionresult",
+              label: "نتائج الفرز؟",
+              type: "checkBox",
+              colSize: 6,
+            },
           ]
         }
       ]
@@ -185,44 +207,44 @@ const EditElection = () => {
           section: "الناخبين والحضور",
           fields: [
             {
-              id: "voters-input",
-              name: "voters",
+              id: "electorCount-input",
+              name: "electorCount",
               label: "الناخبين",
               type: "number",
               colSize: 4,
             },
             {
-              id: "votersMales-input",
-              name: "votersMales",
+              id: "electorMaleCount-input",
+              name: "electorMaleCount",
               label: "الرجال",
               type: "number",
               colSize: 4,
             },
             {
-              id: "votersFemales-input",
-              name: "votersFemales",
+              id: "electorFemaleCount-input",
+              name: "electorFemaleCount",
               label: "النساء",
               type: "number",
               colSize: 4,
             },
 
             {
-              id: "attendees-input",
-              name: "attendees",
+              id: "attendeeCount-input",
+              name: "attendeeCount",
               label: "الحضور",
               type: "number",
               colSize: 4,
             },
             {
-              id: "attendeesMales-input",
-              name: "attendeesMales",
+              id: "attendeeMaleCount-input",
+              name: "attendeeMaleCount",
               label: "الرجال",
               type: "number",
               colSize: 4,
             },
             {
-              id: "attendeesFemales-input",
-              name: "attendeesFemales",
+              id: "attendeeFemaleCount-input",
+              name: "attendeeFemaleCount",
               label: "النساء",
               type: "number",
               colSize: 4,
@@ -238,24 +260,16 @@ const EditElection = () => {
               name: "priority",
               label: "الأولية",
               type: "select",
-              options: PriorityOptions.map(priority => ({
-                id: priority.id,
-                label: priority.name,
-                value: priority.id
-              })),
-              colSize: 12,
+              options: getOptionOptions("priority"),
+              colSize: 6,
             },
             {
               id: "status-field",
               name: "status",
               label: "الحالة",
               type: "select",
-              options: StatusOptions.map(status => ({
-                id: status.id,
-                label: status.name,
-                value: status.id
-              })),
-              colSize: 12,
+              options: getOptionOptions("status"),
+              colSize: 6,
             },
           ]
         },
@@ -302,7 +316,7 @@ const EditElection = () => {
             </Col>
           ))}
           <Col lg={4}>
-            <ElectionDataBase election={election} />
+            <ElectionSchema election={election} />
 
           </Col>
         </Row>

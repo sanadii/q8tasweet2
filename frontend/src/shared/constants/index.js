@@ -2,14 +2,14 @@
 export * from "./layout";
 
 // Options
-export { StatusOptions, StatusBadge } from "./StatusOptions";
+export { StatusOptions, getStatusBadge } from "./StatusOptions";
 export { PriorityOptions, PriorityBadge } from "./PriorityOptions";
 export { GenderOptions, getGenderOptions } from "./GenderOptions";
 export { dataGroup, messageTypes, socketChannels, dataTypes, userGroups } from "./webSocketOptions"
 // Member Options
 
-export { ElectionMethodOptions, electionMethodBadge } from "./ElectionMethodOptions";
-export * from "./ElectionResults";
+// export { ElectionMethodOptions, electionMethodBadge } from "./ElectionMethodOptions";
+export * from "./ElectionOptions";
 export { TagOptions } from "./Tags";
 
 // Campaigns

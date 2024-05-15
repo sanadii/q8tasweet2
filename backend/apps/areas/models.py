@@ -21,8 +21,8 @@ class Area(models.Model):
     class Meta:
         managed = False
         db_table = "area"
-        verbose_name = "Area"
-        verbose_name_plural = "Areas"
+        verbose_name = "المنطقة"
+        verbose_name_plural = "المناطق"
         default_permissions = []
 
     def __init__(self, *args, **kwargs):

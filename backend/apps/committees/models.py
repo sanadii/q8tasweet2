@@ -19,7 +19,7 @@ from apps.settings.models import TrackModel, TaskModel
 
 from django.db import models
 from apps.areas.models import Area
-from apps.elections.models import Election
+from apps.elections.models import Election, ElectionCandidate
 
 # from django.contrib.postgres.fields import ArrayField
 
@@ -72,8 +72,8 @@ class CommitteeSite(models.Model):
     class Meta:
         managed = False
         db_table = "committee_site"
-        verbose_name = "Committee Location"
-        verbose_name_plural = "Committee Locations"
+        verbose_name = "موقع اللجنة"
+        verbose_name_plural = "مواقع اللجان"
         default_permissions = []
 
     def __init__(self, *args, **kwargs):
@@ -113,8 +113,8 @@ class Committee(models.Model):
     class Meta:
         managed = False
         db_table = "committee"
-        verbose_name = "Committee"
-        verbose_name_plural = "Committes"
+        verbose_name = "اللجنة"
+        verbose_name_plural = "اللجان"
         default_permissions = []
 
     def __init__(self, *args, **kwargs):
@@ -129,46 +129,47 @@ class Committee(models.Model):
         self._schema = schema
 
 
-# class BaseElectionCommitteeResult(models.Model):
-#     election_committee = models.ForeignKey(
-#         ElectionCommittee,
-#         on_delete=models.SET_NULL,
-#         null=True,
-#         blank=True,
-#         related_name="%(class)s_election_committees",
-#     )
-#     votes = models.PositiveIntegerField(default=0)
-#     notes = models.TextField(blank=True, null=True)
+class BaseElectionCommitteeResult(models.Model):
+    committee = models.ForeignKey(
+        Committee,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="%(class)s_committees",
+    )
+    votes = models.PositiveIntegerField(default=0)
+    notes = models.TextField(blank=True, null=True)
 
-#     class Meta:
-#         abstract = True  # Prevents direct model creation
-#         permissions = [
-#             ("canViewElectionCommitteeResult", "Can View Election Committee Result"),
-#             ("canAddElectionCommitteeResult", "Can Add Election Committee Result"),
-#             (
-#                 "canChangeElectionCommitteeResult",
-#                 "Can Change Election Committee Result",
-#             ),
-#             (
-#                 "canDeleteElectionCommitteeResult",
-#                 "Can Delete Election Committee Result",
-#             ),
-#         ]
+    class Meta:
+        abstract = True
+        permissions = [
+            ("canViewElectionCommitteeResult", "Can View Election Committee Result"),
+            ("canAddElectionCommitteeResult", "Can Add Election Committee Result"),
+            (
+                "canChangeElectionCommitteeResult",
+                "Can Change Election Committee Result",
+            ),
+            (
+                "canDeleteElectionCommitteeResult",
+                "Can Delete Election Committee Result",
+            ),
+        ]
 
 
-# class ElectionCommitteeResult(BaseElectionCommitteeResult, TrackModel):
-#     election_candidate = models.ForeignKey(
-#         "ElectionCandidate",
-#         on_delete=models.SET_NULL,
-#         null=True,
-#         blank=True,
-#         related_name="committee_result_candidates",
-#     )
+class CommitteeCandidateResult(BaseElectionCommitteeResult, TrackModel):
+    election_candidate = models.ForeignKey(
+        ElectionCandidate,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="committee_candidate_result_candidates",
+    )
 
-#     class Meta:
-#         db_table = "election_committee_result"
-#         verbose_name = "Election Committee Result"
-#         verbose_name_plural = "Election Committee Results"
+    class Meta:
+        managed = False
+        db_table = "committee_candidate_result"
+        verbose_name = "Committee Candidate Result"
+        verbose_name_plural = "Committee Candidate Results"
 
 
 # class ElectionPartyCommitteeResult(BaseElectionCommitteeResult, TrackModel):

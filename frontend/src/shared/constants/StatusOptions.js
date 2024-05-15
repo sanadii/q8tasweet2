@@ -48,9 +48,17 @@ const StatusOptions = [
     role: "Admin",
   },
   {
+    id: 7,
+    name: "تجريبي",
+    value: "demo",
+    badgeClass: "badge bg-pink",
+    description: "منشور تجريبي.",
+    role: "Admin",
+  },
+  {
     id: 9,
     name: "محذوف",
-    value: "deleted",
+    value: "is_deleted",
     badgeClass: "badge bg-dark",
     description: "المنشور في سلة المحذوفات ولا يمكن مشاهدته للعامة.",
     role: "Admin, Moderator",
@@ -58,55 +66,28 @@ const StatusOptions = [
 ];
 
 
-const StatusBadge = ({ status }) => {
+const getStatusOptions = () => {
+  return StatusOptions.map(item => ({
+    id: item.id,
+    label: item.name,
+    value: item.id
+  }));
+}
+
+const getStatusBadge = (status) => {
   const entryStatus = StatusOptions.find(option => option.id === status);
   if (!entryStatus) return null;
 
   return (
-    <div className={`${entryStatus.badgeClass} fs-12`}>
+    <div className={`${entryStatus.badgeClass} fs-10`}>
       {entryStatus.name}
     </div>
-
   );
 };
 
-// switch (status) {
-//   case 1:
-//     statusName = "Published";
-//     badgeClass = "badge-soft-success";
-//     break;
-//   case 2:
-//     statusName = "Private";
-//     badgeClass = "badge-soft-secondary";
-//     break;
-//   case 3:
-//     statusName = "Pending Approval";
-//     badgeClass = "badge-soft-warning";
-//     break;
-//   case 4:
-//     statusName = "Missing Data";
-//     badgeClass = "badge-soft-warning";
-//     break;
-//   case 5:
-//     statusName = "Inprogress";
-//     statusName = "Inprogress";
-//     break;
-//   case 6:
-//     statusName = "New";
-//     badgeClass = "badge-soft-info";
-//     break;
-//   case 9:
-//     statusName = "Deleted";
-//     badgeClass = "badge-soft-secondary";
-//     break;
-//   default:
-//     statusName = "Unknown";
-//     badgeClass = "badge-soft-primary";
-//     break;
-// }
 
 export {
-  StatusBadge,
+  getStatusBadge,
   StatusOptions,
-
+  getStatusOptions,
 };

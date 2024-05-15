@@ -35,9 +35,11 @@ class Command(BaseCommand):
                     "priority",
                     "slug",
                     "election_method",
-                    "election_result",
+                    "is_detailed_results",
+                    "is_sorting_results",
+                    "is_deleted",
                     "has_schema",
-                    "deleted",
+
                     # #Number Fields
                     "elect_votes",
                     "elect_seats",
@@ -77,7 +79,7 @@ class Command(BaseCommand):
                     "denomination",
                     "family",
                     "tribe",
-                    "deleted",
+                    "is_deleted",
                     #
                     # ForeignKeys
                     "created_by_id",

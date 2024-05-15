@@ -461,10 +461,10 @@ class DeleteUser(APIView):
     def delete(self, request, id):
         try:
             user = User.objects.get(id=id)
-            # user.delete(user=request.user) #This to use deleted by in TrackModel
+            # user.delete(user=request.user) #This to use is_deleted by in TrackModel
             user.delete()
             return JsonResponse(
-                {"data": "User deleted successfully", "count": 1, "code": 200},
+                {"data": "User is_deleted successfully", "count": 1, "code": 200},
                 safe=False,
             )
         except User.DoesNotExist:
@@ -595,7 +595,7 @@ class DeleteGroup(APIView):
             group = Group.objects.get(id=id)
             group.delete()
             return JsonResponse(
-                {"data": "Group deleted successfully", "count": 1, "code": 200},
+                {"data": "Group is_deleted successfully", "count": 1, "code": 200},
                 safe=False,
             )
         except Group.DoesNotExist:

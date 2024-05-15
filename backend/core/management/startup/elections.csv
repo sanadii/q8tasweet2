@@ -1,4 +1,4 @@
-id,created_at,updated_at,deleted_at,deleted,status,priority,slug,due_date,elect_votes,elect_seats,voters,voters_males,voters_females,attendees,attendees_males,attendees_females,category_id,created_by_id,deleted_by_id,sub_category_id,updated_by_id,election_method,election_result,has_schema
+id,created_at,updated_at,deleted_at,is_deleted,status,priority,slug,due_date,elect_votes,elect_seats,voters,voters_males,voters_females,attendees,attendees_males,attendees_females,category_id,created_by_id,deleted_by_id,sub_category_id,updated_by_id,election_method,election_result,has_schema
 64,2024-04-16 19:41:05.179121+03,2024-04-17 16:09:08.986278+03,,f,6,1,coop-kaifan-2019,4/18/2024,1,9,6562,4790,1772,3240,434,232,3000,1,,3116,1,candidateOnly,detailedCandidateOnly,f
 111,2024-04-16 19:41:05.201846+03,2024-04-17 16:09:08.996868+03,,f,6,1,sport-club-qadsia-2024,4/18/2024,11,11,8400,7560,840,333,12,11,4000,1,,4005,1,candidateOnly,detailedPartyOnly,f
 117,2024-04-16 19:41:05.208108+03,2024-04-17 16:09:08.996868+03,,f,6,1,unions-kuwait-oil-company-2019,4/18/2024,9,9,15420,10794,4626,250,0,0,5000,1,,5010,1,partyCandidateCombined,detailedCandidateOnly,f

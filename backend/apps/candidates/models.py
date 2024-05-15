@@ -6,7 +6,7 @@ import secrets
 import string
 
 from apps.settings.models import TrackModel, TaskModel
-from utils.models_helper import GenderOptions
+from utils.model_options import GenderOptions
 
 def generate_random_slug(length=6):
     characters = string.ascii_letters + string.digits  # Letters and digits

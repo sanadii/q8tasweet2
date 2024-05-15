@@ -2,6 +2,15 @@ from contextlib import contextmanager
 from django.db import connection
 from apps.elections.models import Election
 from rest_framework.response import Response
+from psycopg2 import OperationalError, ProgrammingError
+
+from apps.areas.models import Area
+from apps.committees.models import CommitteeSite
+# Schema Serializers
+from apps.areas.serializers import AreaSerializer
+from apps.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
+
+from django.apps import apps
 
 
 @contextmanager
@@ -45,6 +54,68 @@ def schema_context(request, schema):
         # Restore the original search path
         cursor.execute(f"SET search_path TO {old_schema};")
 
+
+# Fetching model verbose_name_plural
+model_verbose_names = {
+    model._meta.db_table: model._meta.verbose_name_plural
+    for model in apps.get_models()
+}
+
+
+def get_schema_details_and_content(context, request, slug, response_data):
+    with schema_context(request, slug):
+        try:
+            schema_name = slug.replace("-", "_")
+            # Fetch tables belonging to the schema
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT schemaname, tablename
+                    FROM pg_catalog.pg_tables
+                    WHERE schemaname = %s
+                """,
+                    [schema_name],
+                )
+                schema_tables = [
+                    {
+                        "schema": row[0],
+                        "table": row[1],
+                        "name": model_verbose_names.get(row[1], None),
+                    }
+                    for row in cursor.fetchall()
+                ]
+
+
+            response_data["schemaDetails"] = {
+                "schemaName": schema_name,
+                "schemaTables": schema_tables
+            }
+
+        except OperationalError as e:
+            response_data["schemaDetailsError"] = str(e)
+        except ProgrammingError as e:
+            response_data["schemaDetailsError"] = str(e)
+
+        # Handle other operations specific to the schema
+        try:
+            election_committee_sites = CommitteeSite.objects.all()
+            if election_committee_sites.exists():
+                committees_data = CommitteeSiteSerializer(
+                    election_committee_sites, many=True, context=context
+                ).data
+                response_data["election_committee_sites"] = committees_data
+        except Exception as e:
+            response_data["committeeDataError"] = str(e)
+
+        try:
+            election_committee_areas = Area.objects.all()
+            if election_committee_areas.exists():
+                areas_data = AreaSerializer(
+                    election_committee_areas, many=True, context=context
+                ).data
+                response_data["election_areas"] = areas_data
+        except Exception as e:
+            response_data["areaDataError"] = str(e)
 
 # from contextlib import contextmanager
 # from django.db import connection

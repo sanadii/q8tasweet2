@@ -1,10 +1,10 @@
 import React from "react";
 import { Container, Row } from "reactstrap";
 import { BreadCrumb } from "shared/components";
-import AllElections from "./AllElections";
+import ElectionList from "./ElectionList";
 import Widgets from "./Widgets";
 
-const ElectionList = () => {
+const Elections = () => {
   document.title = "Elections List | Q8Tasweet - React Admin & Dashboard Template";
   return (
     <React.Fragment>
@@ -12,11 +12,11 @@ const ElectionList = () => {
         <Container fluid>
           <BreadCrumb title="Elections List" pageTitle="Elections" />
           {/* <Widgets /> */}
-          <AllElections />
+          <ElectionList />
         </Container>
       </div>
     </React.Fragment>
   );
 };
 
-export default ElectionList;
+export default Elections;

@@ -4,7 +4,8 @@ import { categorySelector } from 'selectors';
 import { Link } from "react-router-dom";
 
 // Component, Constants & Hooks
-import { StatusOptions, PriorityOptions } from "shared/constants/";
+import { StatusOptions, getStatusBadge, PriorityOptions } from "shared/constants/";
+import { getOptionOptions, getOptionBadge } from "shared/utils"
 import { AvatarList } from "shared/components";
 import { handleValidDate } from "shared/utils";
 
@@ -66,33 +67,12 @@ const Category = ({ category }) => {
 };
 
 const Status = (cellProps) => {
-  const statusMapping = StatusOptions.reduce((acc, curr) => {
-    acc[curr.id] = curr;
-    return acc;
-  }, {});
-
-  const { name, badgeClass } = statusMapping[cellProps.row.original.task.status] || {
-    name: "غير معرف",
-    badgeClass: "badge bg-primary",
-  };
-
-  return <span className={`${badgeClass} text-uppercase`}>{name}</span>;
-
+  return getOptionBadge("status", cellProps.row.original.task.status)
 };
 
 
 const Priority = (cellProps) => {
-  const priorityMapping = PriorityOptions.reduce((acc, curr) => {
-    acc[curr.id] = curr;
-    return acc;
-  }, {});
-
-  const { name, badgeClass } = priorityMapping[cellProps.row.original.task.priority] || {
-    name: "غير معرف",
-    badgeClass: "badge bg-primary",
-  };
-
-  return <span className={`${badgeClass} text-uppercase`}>{name}</span>;
+  return getOptionBadge("priority", cellProps.row.original.task.priority)
 };
 
 

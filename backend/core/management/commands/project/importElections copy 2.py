@@ -58,7 +58,7 @@ class Command(BaseCommand):
                          'election_method': row['election_method'],
                         'election_result': row['election_result'],
                         'has_database': row['has_database'],
-                        # 'deleted': row['deleted'],
+                        # 'is_deleted': row['is_deleted'],
                     },
                     id=election_id,
                 )

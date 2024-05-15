@@ -3,29 +3,14 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
-
 from utils.html import TagCloser
 from utils.models import base_concrete_model, get_user_model_name, get_current_user
+from utils.model_options import StatusOptions, PriorityOptions
+
 # from apps.auths.models import User
 # from utils.sites import current_request, current_site_id
 # from utils.urls import admin_url, slugify, unique_slug
 
-
-class StatusOptions(models.IntegerChoices):
-    PUBLISHED = 1, 'منشور'
-    PRIVATE = 2, 'خاص'
-    PENDING_APPROVAL = 3, 'في أنتظار الموافقة'
-    MISSING_DATA = 4, 'يفتقد للبيانات'
-    IN_PROGRESS = 5, 'جاري العمل عليه'
-    NEW = 6, 'جديد'
-    DEMO = 7, 'تجريبي'
-    DELETED = 9, 'محذوف'
-
-class PriorityOptions(models.IntegerChoices):
-    HIGH = 3, 'عالي'
-    MEDIUM = 2, 'متوسط'
-    LOW = 1, 'منخفض'
-    
 
 class Setting(models.Model):
     key = models.CharField(max_length=255, unique=True, null=True)
@@ -79,15 +64,15 @@ class TrackModel(models.Model):
         get_user_model_name(),
         on_delete=models.SET_NULL,
         null=True, blank=True,
-        related_name='%(class)s_deleted',
+        related_name='%(class)s_is_deleted',
         verbose_name='Deleted by',
-        help_text='The user who deleted this object.'
+        help_text='The user who is_deleted this object.'
         )
 
     created_at = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
-    deleted = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -104,7 +89,7 @@ class TrackModel(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.deleted = False
+            self.is_deleted = False
             if 'user' in kwargs:
                 self.created_by = kwargs.pop('user')
         else:
@@ -119,10 +104,10 @@ class TrackModel(models.Model):
 
     # def delete(self, user=None, *args, **kwargs):
     #     """
-    #     Marks the instance as deleted by setting the 'deleted' flag to True, updating the 'deleted_at' timestamp,
+    #     Marks the instance as is_deleted by setting the 'is_deleted' flag to True, updating the 'deleted_at' timestamp,
     #     and setting the 'deleted_by' field to the current user.
     #     """
-    #     self.deleted = True
+    #     self.is_deleted = True
     #     self.deleted_at = timezone.now()
     #     self.deleted_by = user
     #     self.save()
@@ -135,9 +120,9 @@ class TrackModel(models.Model):
 
     def restore(self, *args, **kwargs):
         """
-        Reverts the deletion of an instance by resetting the 'deleted' flag, 'deleted_at' timestamp, and 'deleted_by' field.
+        Reverts the deletion of an instance by resetting the 'is_deleted' flag, 'deleted_at' timestamp, and 'deleted_by' field.
         """
-        self.deleted = False
+        self.is_deleted = False
         self.deleted_at = None
         self.deleted_by = None
         self.save()

@@ -7,8 +7,8 @@ import { electionSelector, categorySelector } from 'selectors';
 // Components & Hooks
 import { ImageMedium } from "shared/components";
 import { SectionBackagroundImage } from "shared/components";
-import { StatusBadge, PriorityBadge } from "shared/constants";
-
+import { getStatusBadge, PriorityBadge } from "shared/constants";
+import { getOptionBadge } from "shared/utils";
 // UI & Utilities
 import { Col, Row } from "reactstrap";
 
@@ -55,9 +55,9 @@ const SectionHeader = () => {
                         {/* For Admin Only */}
                         <div className="col-md-auto p-2">
                             <div className="hstack gap-3 flex-wrap">
-                                <StatusBadge status={electionStatus} />
-                                <PriorityBadge priority={electionPriority} />
-                                <div className="badge bg-black fs-12">
+                                {getOptionBadge("status", electionStatus)}
+                                {getOptionBadge("priority", electionPriority)}
+                                <div className="badge bg-black fs-10">
                                     الرمز:  {election.id}
                                 </div>
                             </div>

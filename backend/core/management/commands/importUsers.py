@@ -33,7 +33,7 @@ class Command(BaseCommand):
             "description",
             "twitter",
             "instagram",
-            "deleted",
+            "is_deleted",
             "token",
             ## Images
             "image",

@@ -2,7 +2,7 @@
 import * as moment from "moment";
 
 
-// Used for ElectionList, 
+// Used for Elections, 
 export const defaultDate = () => {
     let d = new Date();
     const year = d.getFullYear();

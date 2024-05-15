@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from apps.elections.models import Election
-from apps.committees.models import Committee, CommitteeSite
+from apps.committees.models import Committee, CommitteeSite, CommitteeCandidateResult
 from apps.electors.models import Elector
 from apps.areas.models import Area
 from utils.schema import schema_context
@@ -35,14 +35,41 @@ class AddElectionSchema(APIView):
             return Response({"error": str(e)}, status=500)
 
 
-from django.db import IntegrityError
-
-
+# depends on ElectionMethod, ElectionResult
+# Election Metho
 class AddElectionSchemaTables(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         slug = kwargs.get("slug")
+        models = [Area, Committee, CommitteeSite, Elector]  # Initialize with common models
+
+        try:
+            # Get the election instance using the slug
+            election = Election.objects.get(slug=slug)
+
+            # Extract electionMethod and resultMethod
+            election_method = election.election_method
+            is_detailed_results = election.is_detailed_results
+            
+            print(is_detailed_results, election_method)
+            if is_detailed_results == True:
+                if election_method == "candidateOnly":
+                    models.append(CommitteeCandidateResult)
+
+                # if election_method == "partyOnly":
+                # if election_method == "partyCandidateOnly":
+                # if election_method == "partyCandidateCombined":
+
+            
+            
+            print("election_result: ", is_detailed_results, "election_method: ", election_method )
+
+        except Election.DoesNotExist:
+            print("Election not found")
+        except Exception as e:
+            print("An error occurred:", e)
+
 
         with schema_context(request, slug) as election:
             if hasattr(request, "response"):
@@ -50,7 +77,6 @@ class AddElectionSchemaTables(APIView):
 
             results = {}
             with connection.schema_editor() as schema_editor:
-                models = [Area, Committee, CommitteeSite, Elector]
                 for Model in models:
                     try:
                         table_name = Model._meta.db_table
@@ -69,7 +95,6 @@ class AddElectionSchemaTables(APIView):
         with connection.cursor() as cursor:
             cursor.execute(f"SELECT to_regclass('{table_name}');")
             return cursor.fetchone()[0] is not None
-
 
 
 # class AddElectionSchemaTables(APIView):
@@ -149,7 +174,6 @@ class AddElectionSchemaTables(APIView):
 #         if isinstance(field, ForeignKey):
 #             return column_type in ['integer', 'bigint']
 #         return field.db_type(connection) in column_type
-
 
 
 class GetElectionSchemaDetails(APIView):

@@ -27,8 +27,8 @@ def create_random_campaign_members(number_of_entries=100):
             created_by=random.choice(users),
             updated_by=random.choice(users),
             deleted_by=random.choice(users),
-            deleted_date=timezone.now() if random.choice([True, False]) else None,
-            deleted=random.choice([True, False])
+            is_deleted_date=timezone.now() if random.choice([True, False]) else None,
+            is_deleted=random.choice([True, False])
         )
 
 create_random_campaign_members(50)  # Creates 50 random entries

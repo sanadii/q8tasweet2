@@ -6,7 +6,20 @@ from django.utils.translation import gettext_lazy as _
 
 # TODO: make sure dictionaries are all changed to id and name and any otherthing if needed
 
+class StatusOptions(models.IntegerChoices):
+    PUBLISHED = 1, 'منشور'
+    PRIVATE = 2, 'خاص'
+    PENDING_APPROVAL = 3, 'في أنتظار الموافقة'
+    MISSING_DATA = 4, 'يفتقد للبيانات'
+    IN_PROGRESS = 5, 'جاري العمل عليه'
+    NEW = 6, 'جديد'
+    DEMO = 7, 'تجريبي'
+    DELETED = 9, 'محذوف'
 
+class PriorityOptions(models.IntegerChoices):
+    LOW = 1, 'منخفض'
+    MEDIUM = 2, 'متوسط'
+    HIGH = 3, 'عالي'
 
 class ElectionMethodOptions(models.TextChoices):
     CANDIDATE_ONLY_SYSTEM = 'candidateOnly', _('Candidate Only System')
@@ -17,11 +30,10 @@ class ElectionMethodOptions(models.TextChoices):
     MIXED_ELECTORAL_SYSTEM = 'mixedVoteralSystem', _('Mixed Voteral System')
 
 class ElectionResultsOptions(models.TextChoices):
-    TOTAL = 'total', _('Total')
-    DETAILED = 'detailed', _('Detailed')
-    PARTY_VOTING_RESULTS = 'PVR', _('Party Voting Results')
-    INDIVIDUAL_ONLY = 'IO', _('Individual Only')
-    # Add other options as needed
+    CANDIDATE_ONLY = 'candidateOnly', _('Candidate Only')
+    PARTY_ONLY = 'partyOnly', _('Party Only')
+    PARTY_CANDIDATE_COMBINED = 'partyCandidateCombined', _('Party Candidate Combined')
+    
 
 class GenderOptions(models.IntegerChoices):
     UNDEFINED = 0, 'Undefined'

@@ -65,7 +65,7 @@ class Command(BaseCommand):
                         'has_database': row['has_database'],
                         
 
-                        'deleted': row['deleted'],
+                        'is_deleted': row['is_deleted'],
                         
                         
                         # DateTime Validations

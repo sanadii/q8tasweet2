@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.core.validators import RegexValidator
 
 from apps.settings.models import TrackModel
-from utils.models_helper import GenderOptions
+from utils.model_options import GenderOptions
 from utils.models import GENDER_CHOICES
 
 
@@ -60,9 +60,9 @@ class Elector(models.Model):
     
     class Meta:
         managed = False
-        db_table = "electors"
-        verbose_name = "Electors"
-        verbose_name_plural = "Electorss"
+        db_table = "elector"
+        verbose_name = "الناخب"
+        verbose_name_plural = "الناخبين"
         default_permissions = []
 
     def __init__(self, *args, **kwargs):

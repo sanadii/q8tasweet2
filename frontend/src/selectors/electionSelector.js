@@ -41,6 +41,7 @@ export const electionSelector = createSelector(
     // From Schema
     electionAreas: electionsState.electionAreas,
     electionCommitteeSites: electionsState.electionCommitteeSites,
+    schemaDetails: electionsState.schemaDetails,
     
     // Success / Error
     isElectionSuccess: electionsState.isElectionSuccess,

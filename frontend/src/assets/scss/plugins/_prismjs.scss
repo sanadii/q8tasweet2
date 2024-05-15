@@ -91,7 +91,7 @@ pre[class*="language-"] {
 .token.number,
 .token.constant,
 .token.symbol,
-.token.deleted {
+.token.is_deleted {
     color: $danger;
 }
 

@@ -13,7 +13,7 @@ import uuid
 
 from apps.settings.models import TrackModel, TaskModel
 
-from utils.models_helper import ElectionMethodOptions, ElectionResultsOptions, GenderOptions
+from utils.model_options import ElectionMethodOptions, ElectionResultsOptions, GenderOptions
 from utils.models_permission_manager import ModelsPermissionManager, CustomPermissionManager
 from django.db import models
 from apps.areas.models import Area
@@ -36,13 +36,16 @@ class Election(TrackModel, TaskModel):
         verbose_name="Election Type"
     )
     
-    election_result = models.TextField(
-        max_length=150,
-        # choices=ElectionResultsOptions.choices,
-        blank=True,
-        null=True,
-        verbose_name="Election Result Type"
-    )
+    # election_result = models.TextField(
+    #     max_length=150,
+    #     choices=ElectionResultsOptions.choices,
+    #     blank=True,
+    #     null=True,
+    #     verbose_name="Election Result Type"
+    # )
+    is_detailed_results = models.BooleanField(default=False, verbose_name="Is result in details (with committees)")
+    is_sorting_results = models.BooleanField(default=False, verbose_name="Is Sorting Results?")
+
     elect_votes = models.PositiveIntegerField(blank=True, null=True)
     elect_seats = models.PositiveIntegerField(blank=True, null=True)
 

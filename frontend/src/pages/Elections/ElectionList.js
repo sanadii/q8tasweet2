@@ -19,7 +19,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const AllElections = () => {
+const ElectionList = () => {
   const dispatch = useDispatch();
 
   // State Management
@@ -272,4 +272,4 @@ const AllElections = () => {
   );
 };
 
-export default AllElections;
+export default ElectionList;

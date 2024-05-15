@@ -236,7 +236,7 @@ class DeleteCampaign(APIView):
         try:
             campaign = Campaign.objects.get(id=id)
             campaign.delete()
-            return JsonResponse({"data": "Campaign deleted successfully", "count": 1, "code": 200}, safe=False)
+            return JsonResponse({"data": "Campaign is_deleted successfully", "count": 1, "code": 200}, safe=False)
         except Campaign.DoesNotExist:
             return JsonResponse({"data": "Campaign not found", "count": 0, "code": 404}, safe=False)
 
@@ -276,7 +276,7 @@ class DeleteCampaignMember(APIView):
             campaign_member = CampaignMember.objects.get(id=id)
             campaign_member.delete()
             return JsonResponse(
-                {"data": "campaign member deleted successfully", "count": 1, "code": 200},
+                {"data": "campaign member is_deleted successfully", "count": 1, "code": 200},
                 safe=False,
             )
         except Election.DoesNotExist:
@@ -321,7 +321,7 @@ class DeleteCampaignGuarantee(APIView):
         try:
             campaign_guarantee = CampaignGuarantee.objects.get(id=id)
             campaign_guarantee.delete()
-            return JsonResponse({"data": "Campaign Guarantee deleted successfully", "count": 1, "code": 200}, safe=False)
+            return JsonResponse({"data": "Campaign Guarantee is_deleted successfully", "count": 1, "code": 200}, safe=False)
         except CampaignGuarantee.DoesNotExist:
             return JsonResponse({"data": "Campaign Guarantee not found", "count": 0, "code": 404}, safe=False)
 
@@ -363,7 +363,7 @@ class DeleteCampaignAttendee(APIView):
         try:
             campaign_attendee = CampaignAttendee.objects.get(id=id)
             campaign_attendee.delete()
-            return Response({"data": "Campaign Attendee deleted successfully", "count": 1, "code": 200}, status=200)
+            return Response({"data": "Campaign Attendee is_deleted successfully", "count": 1, "code": 200}, status=200)
         except CampaignAttendee.DoesNotExist:
             return Response({"data": "Campaign Attendee not found", "count": 0, "code": 404}, status=404)
       
