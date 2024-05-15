@@ -127,6 +127,7 @@ class Command(BaseCommand):
                     "branch",
                     "sect",
                     "gender",
+                    "age",
                     "circle",
                     "job",
                     "block",
@@ -137,6 +138,7 @@ class Command(BaseCommand):
                     "committee_name",
                     "letter",
                     "code_number",
+                    "status_code",
                     
                     # #
                     # ForiegnKey

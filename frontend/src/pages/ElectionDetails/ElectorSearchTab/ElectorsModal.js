@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { campaignSelector } from 'selectors';
+import { campaignSelector, electorSelector } from 'selectors';
 import "react-toastify/dist/ReactToastify.css";
-import { getElectorRelatedElectors } from "store/actions"
-import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { Row, Col, Table, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { GuaranteeStatusOptions } from "shared/constants";
 
 const ElectorsModal = ({ modal, toggle, modalMode, elector }) => {
@@ -61,12 +60,59 @@ const ElectorsModal = ({ modal, toggle, modalMode, elector }) => {
               {ModalButtonText}
             </Button>
           }
-
         </div>
       </ModalFooter>
     </Modal>
   );
 };
+
+const ElectorRelatedElectors = ({ electorRelatedElectors }) => {
+  // Check if electorRelatedElectors is defined and is an array
+  if (!electorRelatedElectors || !Array.isArray(electorRelatedElectors)) {
+    return <div>No related electors available.</div>;
+  }
+
+  return (
+    <div>
+      <h5><strong>الأقارب</strong></h5>
+      <Table size="md">
+        <thead className="bg-primary text-white">
+          <th className="p-1">الاسم</th>
+          <th className="p-1">القرابة</th>
+          <th className="p-1">العنوان</th>
+          <th className="p-1">إجراءات</th>
+        </thead>
+        <tbody>
+          {electorRelatedElectors.length > 0 ? (
+            electorRelatedElectors.map((elector) => (
+              <tr key={elector.id}>
+                <td>
+                  {elector.fullName}
+                </td>
+                <td>
+                  {elector.relationship}
+                </td>
+                <td>
+                  <strong>{elector.areaName} </strong> ق {elector.block} ش {elector.street} ج {elector.lane} م {elector.house}
+                </td>
+                <td>1 , 2 , 3</td>
+              </tr>
+            ))
+          ) : (
+            <p>لم يتم العثور على نتائج.</p>
+          )}
+        </tbody>
+      </Table>
+
+
+    </div >
+  );
+};
+
+
+
+
+
 
 export const CampaignElectorViewModal = ({
   elector,
@@ -75,10 +121,11 @@ export const CampaignElectorViewModal = ({
   campaignMembers,
 }) => {
   const dispatch = useDispatch();
+  const { electorRelatedElectors } = useSelector(electorSelector);
 
-  const { fullName, gender, birthDate,
+  const { id, fullName, gender, age,
     areaName, block, street, lane, house,
-    committeeSiteName, committee
+    committeeSiteName, committee, committeeType, letter, statusCode, codeNumber 
   } = elector
 
 
@@ -88,38 +135,21 @@ export const CampaignElectorViewModal = ({
   // });
 
   const electorInfoData = [
+    { label: "الاسم", value: fullName },
+    { label: "النوع", value: gender === "1" ? "ذكر" : "انثى" },
+    { label: "العمر", value: `${age} سنة` },
+    { label: "العنوان", value: `${areaName}، ق ${block}، ش ${street}، ج ${lane}، م ${house}` }
+  ]
 
-    // Name & Details
-    {
-      title: "معلومات الناخب",
-      group: "info",
-      items: [
-        { label: "الاسم", value: fullName },
-        { label: "النوع", value: gender },
-        { label: "العمر", value: birthDate },
-      ]
-    },
-    {
-      title: "العنوان",
-      group: "address",
-      items: [
-        { label: "المنطقة", value: areaName },
-        { label: "قطعة", value: block },
-        { label: "شارع", value: street },
-        { label: "جادة", value: lane },
-        { label: "منزل", value: house },
-      ],
-    },
+  const electorElectionInfo = [
+    { label: "القيد", value: `${id}` },
 
-    {
-      title: "اللجنة",
-      group: "committee",
-      items: [
-        { label: "المدرسة", value: committeeSiteName },
-        { label: "اللجنة", value: committee },
+    { label: "اللجنة", value: committeeSiteName },
+    { label: "اللجنة", value: `لجنة (${committeeType}) رقم (${committee}) حرف (${letter}) الرقم (${codeNumber})` },
+    { label: "تصويت 2022", value: "تم التصويت" },
+    { label: "تصويت 2023", value: "التصويت" },
+    { label: "تصويت 2024", value: "التصويت" },
 
-      ]
-    },
   ];
 
   // { label: "CID", value: "elector.civil" },
@@ -141,36 +171,45 @@ export const CampaignElectorViewModal = ({
   return (
     <React.Fragment>
       <Row>
-        {electorInfoData.map((group) => (
-          <>
-            <h5 className="fw-bold">{group.title}</h5>
-            <Table size="lg">
-              <thead className="bg-soft-primary text-primary">
-                {group.items.map((item, idx) => (
-                  <td key={idx} className="fw-medium">{item.label}</td>
-                ))}
-              </thead>
-              <tbody>
-                <React.Fragment key={group.group}>
-                  <tr>
-                    {group.items.map((item, idx) => (
-                      <td key={idx} className="fw-medium">{item.value}</td>
-                    ))}
-                  </tr>
-                </React.Fragment>
-              </tbody>
-            </Table>
-          </>
-        ))}
+        <Col lg={6} >
+          <Table size="sm">
+            <thead className="bg-primary text-white text-align-center">
+              <th colSpan="2" className="p-1 text-center">
+                معلومات الناخب
+              </th>
 
+            </thead>
+            <tbody>
+              {electorInfoData.map((item, key) => (
+                <tr key={key}>
+                  <th>{item.label}</th>
+                  <td className="fw-medium">{item.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Col>
+        <Col lg={6} >
+          <Table size="sm">
+            <thead className="bg-primary text-white text-align-center">
+              <th colSpan="2" className="p-1 text-center">
+                التصويت
+              </th>
+            </thead>
+            {electorElectionInfo.map((item, key) => (
+              <tr key={key}>
+                <th>{item.label}</th>
+                <td className="fw-medium">{item.value}</td>
+              </tr>
+            ))}
+          </Table>
+        </Col>
+      </Row>
+      <Row>
+        <ElectorRelatedElectors electorRelatedElectors={electorRelatedElectors} />
       </Row>
     </React.Fragment >
   );
-
-
-
-
-
 };
 
 const DefaultModalContent = () => null; // Defining a named component for the default case

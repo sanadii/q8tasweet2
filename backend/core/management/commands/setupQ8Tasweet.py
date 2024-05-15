@@ -7,13 +7,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Call the importUsers command directly
-        call_command('importUsers')
-        call_command('importGroups')
-        call_command('setPermissions')
-        call_command('importElectionCandidates')
+        # call_command('importUsers')
+        # call_command('importGroups')
+        # call_command('setPermissions')
+        # call_command('importElectionCandidates')
         
         
         # setup Schemas
-        call_command('createElectionSchemas')
+        call_command('setupElectionSchemas')
+        call_command('importSchemaData --schema na_5_2024')
 
         self.stdout.write(self.style.SUCCESS("setup Q8tasweet command called successfully."))

@@ -50,9 +50,9 @@ const Area = (cellProps) => {
 const Committee = (cellProps) => {
     return (
         <div>
-            <b>{cellProps.row.original.committee}</b>
-            <br />
             {cellProps.row.original.committeeSiteName}
+            <br />
+            <b>{cellProps.row.original.committee}</b>
         </div>
     );
 };

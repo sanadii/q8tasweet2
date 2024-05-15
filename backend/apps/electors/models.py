@@ -38,7 +38,7 @@ class Elector(models.Model):
         max_length=1, choices=GENDER_CHOICES, blank=True, null=True
     )
     job = models.TextField(blank=True, null=True)
-    birth_date = models.DateField(blank=True, null=True)  # Age
+    age = models.PositiveIntegerField(blank=True, null=True)
 
     # Elector Address
     address = models.TextField(blank=True, null=True)
@@ -56,7 +56,8 @@ class Elector(models.Model):
     committee_name = models.TextField(blank=True, null=True)
     letter = models.TextField(blank=True, null=True)
     code_number = models.TextField(blank=True, null=True)
-
+    status_code = models.TextField(blank=True, null=True)
+    
     class Meta:
         managed = False
         db_table = "electors"

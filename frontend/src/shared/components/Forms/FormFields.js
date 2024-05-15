@@ -8,6 +8,7 @@ import { api } from "config";
 // 
 import SearchDropDown from "./SearchDropDown";
 import FormStructureRenderer from "./FormStructureRenderer";
+import { FormTextField } from "./FormTextField"
 
 const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
 
@@ -70,27 +71,7 @@ const FormFields = ({ field, validation, formStructure }) => {
             case 'tel':
             case 'email':
             case 'social':
-                return (
-                    <div className="d-flex">
-                        {icon && (
-                            <div className="avatar-xs d-block flex-shrink-0 me-3">
-                                <span className={`avatar-title rounded-circle fs-16 ${iconBg}`}>
-                                    <i className={icon}></i>
-                                </span>
-                            </div>
-                        )}
-                        <Input
-                            type={type !== 'social' ? type : 'text'}
-                            name={name}
-                            id={id}
-                            placeholder={`ادخل ${label}`}
-                            onChange={validation.handleChange}
-                            onBlur={validation.handleBlur}
-                            value={validation.values[name] || ""}
-                            invalid={validation.touched[name] && validation.errors[name]}
-                        />
-                    </div>
-                );
+                return (<FormTextField field={field} validation={validation} />);
             case 'number':
                 return (
                     <Input
@@ -132,7 +113,7 @@ const FormFields = ({ field, validation, formStructure }) => {
                         type="textarea"
                         name={name}
                         id={id}
-                        placeholder={`اكتب ${label}`}
+                        placeholder={label}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values[name] || ""}
@@ -219,7 +200,7 @@ const FormFields = ({ field, validation, formStructure }) => {
     return (
         <React.Fragment>
             {/* <Col lg={colSize} className="input-group input-group-sm"> */}
-            <Col lg={colSize}>
+            <Col lg={colSize} >
                 {generatePrefixSuffix(prefix)}
 
                 <FormStructureRenderer

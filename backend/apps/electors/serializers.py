@@ -1,19 +1,16 @@
 # Campaign Serializers
 from rest_framework import serializers
+
+from django.db.models import Count, Case, When, IntegerField
+from collections import defaultdict
+
 from apps.electors.models import Elector
-
-from django.db.models import Count, Case, When, IntegerField, Subquery, OuterRef
-from collections import defaultdict, Counter, OrderedDict
-
-# from apps.electors.models import Elector
 from apps.areas.models import Area
-from apps.committees.models import Committee, CommitteeSite
-from apps.committees.serializers import CommitteeSerializer
-
 
 class ElectorSerializer(serializers.ModelSerializer):
     area_name = serializers.SerializerMethodField()
     committee_site_name = serializers.SerializerMethodField()
+    committee_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Elector
@@ -24,7 +21,7 @@ class ElectorSerializer(serializers.ModelSerializer):
             "branch",
             "sect",
             "gender",
-            "birth_date",
+            "age",
             "area",
             "block",
             "street",
@@ -32,7 +29,10 @@ class ElectorSerializer(serializers.ModelSerializer):
             "house",
             "area_name",
             "area",
-            # "committee",
+            
+            "letter",
+            "committee",
+            "committee_type",
             "committee_site_name",
             "code_number",
         ]
@@ -46,16 +46,11 @@ class ElectorSerializer(serializers.ModelSerializer):
                 return obj.committee.committee_site.name
         return None
 
-
-
-# class ElectorFullSerializer(serializers.ModelSerializer):
-#     committee = serializers.PrimaryKeyRelatedField(read_only=True, allow_null=True)
-
-#     class Meta:
-#         model = Elector
-#         fields = "__all__"
-
-
+    def get_committee_type(self, obj):
+        if obj.committee:
+            return obj.committee.type
+        return None
+    
 class ElectorDataByCategory(serializers.BaseSerializer):
     """
     Custom serializer to represent elector data categorized by various fields such as family,

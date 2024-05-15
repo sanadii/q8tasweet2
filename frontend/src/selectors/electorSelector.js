@@ -65,6 +65,7 @@ export const electorSelector = createSelector(
 
     // electorsBySearch
     electorsBySearch: electorsState.electorsBySearch || [],
+    electorRelatedElectors: electorsState.electorRelatedElectors || [],
     // electorFamilyBranches: electorsState.electorsByCategory?.electorFamilyBranches || [],
 
     // // Elections
