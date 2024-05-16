@@ -66,7 +66,7 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             
             # # Settings
             "election_method",
-            "election_result",
+            # "election_result",
             # "election_result_view",
             # "election_result_party",
             # "election_result_sorting",

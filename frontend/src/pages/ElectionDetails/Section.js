@@ -122,13 +122,12 @@ const Section = ({ viewType }) => {
         ] : []),
         //   ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line' }] : [])
         // ] : []),
-        // {
-        // id: "5",
-        // title: "النتائج التفصيلية",
-        // icon: 'ri-activity-line', 
-        // component: <ResultsTab/>
-
-        //   },
+        {
+          id: "6",
+          title: "النتائج التفصيلية",
+          icon: 'ri-activity-line',
+          component: <ResultsTab />
+        },
         // { 
         //   id: "6",
         //    title: "عمليات المستخدم", 

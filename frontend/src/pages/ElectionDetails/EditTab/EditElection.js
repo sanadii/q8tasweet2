@@ -13,7 +13,6 @@ import { useFormik } from "formik";
 import { Button, Col, Row, Form, Card, CardHeader, CardBody } from "reactstrap";
 
 //Import Flatepicker
-import { StatusOptions, PriorityOptions, RoleOptions, ElectionMethodOptions, ElectionResultOptions, PartyResultOptions, SortingResultOptions, TagOptions } from "shared/constants";
 
 
 // Components
@@ -38,8 +37,8 @@ const EditElection = () => {
       // Settings
       electionMethod: (election && election.electionMethod) || "candidateOnly",
       electionResult: (election && election.electionResult) || "candidateOnly",
-      electionDetailedResult: (election && election.electionDetailedResult) || false,
-      electionSortingResult: (election && election.electionSortingResult) || false,
+      isDetailedResults: (election && election.isDetailedResults) || false,
+      isSortingResults: (election && election.isSortingResults) || false,
       
       electSeats: (election && election.electSeats) || 0,
       electVotes: (election && election.electVotes) || 0,
@@ -88,9 +87,8 @@ const EditElection = () => {
 
         // Election Spesifications
         electionMethod: values.electionMethod,
-        electionResult: values.electionResult,
-        electionDetailedResult: values.electionDetailedResult,
-        electionSortingResult: values.electionSortingResult,
+        isDetailedResults: values.isDetailedResults || false,
+        isSortingResults: values.isSortingResults || false,
         electSeats: values.electSeats,
         electVotes: values.electVotes,
 
@@ -111,6 +109,9 @@ const EditElection = () => {
 
     },
   });
+
+  console.log("electionelection: ", election)
+
 
   // Categories
   const { categoryOptions, subCategoryOptions, changeSubCategoriesOptions, activeParentCategoryId } = useCategoryManager(categories, subCategories, validation);
@@ -172,26 +173,26 @@ const EditElection = () => {
               label: "نوع الإنتخابات",
               type: "select",
               options: getOptionOptions("electionMethod"),
-              colSize: 6,
+              colSize: 12,
             },
+            // {
+            //   id: "electionResult-field",
+            //   name: "electionresult",
+            //   label: "عرض النتائج",
+            //   type: "select",
+            //   options: getOptionOptions("electionResult"),
+            //   colSize: 12,
+            // },
             {
-              id: "electionResult-field",
-              name: "electionresult",
-              label: "عرض النتائج",
-              type: "select",
-              options: getOptionOptions("electionResult"),
-              colSize: 6,
-            },
-            {
-              id: "electionResult-field",
-              name: "electionresult",
+              id: "isDetailedResults-field",
+              name: "isDetailedResults",
               label: "نتائج تفصيلية؟",
               type: "checkBox",
               colSize: 6,
             },
             {
-              id: "electionResult-field",
-              name: "electionresult",
+              id: "isSortingResults-field",
+              name: "isSortingResults",
               label: "نتائج الفرز؟",
               type: "checkBox",
               colSize: 6,

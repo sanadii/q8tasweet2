@@ -12,7 +12,7 @@ urlpatterns = [
     path("updateCommittee/<int:id>", UpdateCommittee.as_view(), name="UpdateCommittee"),
 
     #  Results
-    path("updateResults/<int:id>", UpdateResults.as_view(), name="UpdateResults"),
+    path("updateElectionResults/<int:id>", UpdateElectionResults.as_view(), name="UpdateElectionResults"),
 
 
 ]

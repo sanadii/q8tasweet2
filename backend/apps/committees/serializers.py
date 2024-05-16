@@ -9,7 +9,7 @@ from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # Models
 from apps.areas.models import Area
-from apps.committees.models import CommitteeSite, Committee
+from apps.committees.models import CommitteeSite, Committee, CommitteeCandidateResult
 
 # ,CommitteResult
 from apps.areas.serializers import AreaSerializer
@@ -74,13 +74,13 @@ class CommitteeSiteSerializer(serializers.ModelSerializer):
         return instance
 
 # # Votting and Sorting
-# class CommitteeResultSerializer(serializers.ModelSerializer):
-#     admin_serializer_classes = (TrackMixin,)
+class CommitteeCandidateResultSerializer(serializers.ModelSerializer):
+    admin_serializer_classes = (TrackMixin,)
 
-#     class Meta:
-#         model = CommitteResult
-#         # fields = "__all__"
-#         fields = ["election_committee", "votes"]
+    class Meta:
+        model = CommitteeCandidateResult
+        # fields = "__all__"
+        fields = ["election_committee", "votes"]
 
 
 # class ElectionPartyCommitteeResultSerializer(

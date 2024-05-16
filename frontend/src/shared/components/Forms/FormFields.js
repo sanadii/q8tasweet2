@@ -88,7 +88,6 @@ const FormFields = ({ field, validation, formStructure }) => {
             case 'checkBox':
                 return (
                     <div className="form-check form-check-success mb-3">
-
                         <Input
                             className="form-check-input"
                             type="checkbox"
@@ -96,15 +95,13 @@ const FormFields = ({ field, validation, formStructure }) => {
                             name={name}
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
-                            value={validation.values[name] || ""}
+                            checked={validation.values[name] || false}
                             invalid={validation.touched[name] && validation.errors[name]}
                         />
-                        <Label className="form-check-label" for="formCheck8">
+                        <Label className="form-check-label" for={id}>
                             {label}
                         </Label>
                     </div>
-
-
                 );
 
             case 'textarea':

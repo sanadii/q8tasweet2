@@ -9,15 +9,19 @@ import { updateElectionResults, updateElectionPartyResults, updateElectionPartyC
 
 const HeaderVoteButton = ({
   committee,
-  committeeId,
   isColumnInEditMode,
   isEditField,
   handleSaveResults,
   toggleColumnEditMode,
 }) => {
 
+  const committeeId = committee?.id;
+
   // Determine the button text and class based on the editing state
-  const buttonText = isColumnInEditMode[committeeId] ? (isEditField[committeeId] ? 'حفظ' : 'اغلاق') : (committee ? committee.name : `تعديل`);
+  const buttonText = isColumnInEditMode[committeeId] ?
+    (isEditField[committeeId] ? 'حفظ' : 'اغلاق')
+    :
+    (committee ? committee.name : `تعديل`);
   const buttonClass = isColumnInEditMode[committeeId] ? (isEditField[committeeId] ? 'btn-success' : 'btn-danger') : 'btn-info';
 
   const handleClick = () => {
@@ -140,7 +144,8 @@ const transformResultData = (
   onVoteFieldChange,
   election,
   partyCommitteeVoteList,
-  resultsDisplayType,
+  electionMethod,
+  isDetailedResults,
 ) => {
   if (!electionContestants || !electionCommittees || !election) return [];
 
@@ -168,7 +173,7 @@ const transformResultData = (
       gender: contestant.gender,
       image: contestant.imagePath,
       isWinner: contestant.isWinner,
-      total: resultsDisplayType === "candidateOriented" ? total : sumPartyCandidateVote,
+      total: isDetailedResults && (electionMethod === "partyCandidateOnly") ? total : sumPartyCandidateVote,
       sumVote: total,
       sumPartyVote: sumPartyVote,
       sumPartyCandidateVote: sumPartyCandidateVote,
@@ -222,7 +227,7 @@ const useCommitteeResultSaver = (
   setVoteFieldEditedData,
   toggleColumnEditMode,
   electionMethod,
-  resultsDisplayType,
+  isDetailedResults,
 ) => {
   const dispatch = useDispatch();
 
@@ -232,9 +237,9 @@ const useCommitteeResultSaver = (
     if (electionMethod === "candidateOnly") {
       resultType = "candidates";
     } else {
-      if (resultsDisplayType === "partyOriented") {
+      if (isDetailedResults && (electionMethod === "partyOnly")) {
         resultType = "parties";
-      } else if (resultsDisplayType === "candidateOriented" || resultsDisplayType === "partyCandidateOriented") {
+      } else if (isDetailedResults && (electionMethod === ("partyCandidateOnly" || "partyCandidateCombined"))) {
         resultType = "partyCandidates";
       }
     }

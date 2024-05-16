@@ -24,7 +24,7 @@ const getOptionOptions = (optionCategory) => {
     return selectedOption.map(item => ({
         id: item.id,
         label: item.name,
-        value: item.id
+        value: item.value
     }));
 };
 

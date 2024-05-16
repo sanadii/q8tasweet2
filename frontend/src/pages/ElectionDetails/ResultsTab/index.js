@@ -11,21 +11,23 @@ import Parties from "./Parties";
 import Candidates from "./Candidates";
 
 const ResultsTab = () => {
-  const { election, electionMethod, electionResultView, electionCandidates, electionParties, electionPartyCandidates, electionCommittees } = useSelector(electionSelector);
+  const { election, electionCandidates, electionParties, electionPartyCandidates, electionCommitteeSites } = useSelector(electionSelector);
+  const { electionMethod, isDetailedResults, isSortingResults } = election
 
-  // candidates based on election Type
-  const candidates = electionMethod !== "candidateOnly" ? electionPartyCandidates : electionCandidates;
+  // Based on electionMethod we will decide candidates vs parties
+  const candidates = electionMethod === "candidateOnly" ? electionCandidates : electionPartyCandidates;
   const parties = electionMethod !== "candidateOnly" ? electionParties : electionParties;
   const partyCommitteeVoteList = usePartyCommitteeVotes(electionParties);
 
-  // Parties
+  // For the use of Party Only
+  // Showing Candaites/Party results in different views
   const [resultsDisplayType, setResultsDisplayType] = useState("partyCandidateOriented");
   const [isColumnInEditMode, SetIsColumnInEditMode] = useState({});
   const [isEditField, setIsEditField] = useState(false);
   const [editedVoteFieldsData, setVoteFieldEditedData] = useState({});
 
 
-  // Toggle Vote Column To Edit / Save / Close Mode
+  // Toggle Vote Column To Name / Edit / Save / Close Mode
   const toggleColumnEditMode = (committeeId) => {
     SetIsColumnInEditMode(prev => ({
       ...prev,
@@ -36,7 +38,6 @@ const ResultsTab = () => {
       ...prev,
       [committeeId]: false,
     }));
-
   };
 
   // Handle Editing Cells
@@ -50,7 +51,6 @@ const ResultsTab = () => {
       ...prev,
       [committeeId]: true,
     }));
-
   }, []);
 
 
@@ -58,24 +58,27 @@ const ResultsTab = () => {
   const transforedPartyData = useMemo(
     () => transformResultData(
       parties,
-      electionCommittees,
+      electionCommitteeSites,
       isColumnInEditMode,
       onVoteFieldChange,
-      election
-    ), [parties, electionCommittees, isColumnInEditMode, onVoteFieldChange, election]
+      election,
+      electionMethod,
+      isDetailedResults,
+    ), [parties, electionCommitteeSites, isColumnInEditMode, onVoteFieldChange, election, electionMethod,
+    isDetailedResults,]
   );
 
   // Transformed Data [candidates]
   const transformedCandidateData = useMemo(
     () => transformResultData(
       candidates,
-      electionCommittees,
+      electionCommitteeSites,
       isColumnInEditMode,
       onVoteFieldChange,
       election,
       partyCommitteeVoteList,
       resultsDisplayType,
-    ), [candidates, electionCommittees, isColumnInEditMode, onVoteFieldChange, election, resultsDisplayType]
+    ), [candidates, electionCommitteeSites, isColumnInEditMode, onVoteFieldChange, election, resultsDisplayType]
   );
 
 
@@ -91,13 +94,13 @@ const ResultsTab = () => {
   );
 
   // Creating the columns for both Final and Detailed Results
-  const generateResultColumns = (electionResultView) => {
-    const totalVoteHeader = resultsDisplayType !== "partyOriented" ? 'مفرق' : 'المجموع';
-    const isPartyOriented = resultsDisplayType === "partyOriented";
-    const isCandidateOriented = resultsDisplayType === "candidateOriented";
-    const isPartyCandidateOriented = resultsDisplayType === "partyCandidateOriented";
-    const isTotalViewCandidateOnly = electionResultView === "total" && electionMethod === "candidateOnly";
-    const isDetailedView = electionResultView === "detailed";
+  const generateResultColumns = (isDetailedResults) => {
+    const totalVoteHeader = electionMethod !== "partyOnly" ? 'مفرق' : 'المجموع';
+    const isPartyOriented = electionMethod === "partyOnly";
+    const isCandidateOriented = electionMethod === "candidateOnly";
+    const isPartyCandidateOriented = electionMethod === "partyCandidateCombined";
+    const isTotalViewCandidateOnly = !isDetailedResults && electionMethod === "candidateOnly";
+    const isDetailedView = isDetailedResults;
 
     // Base columns that are always present
     const baseColumns = [
@@ -106,17 +109,15 @@ const ResultsTab = () => {
     ];
 
     const totalVote = [{ Header: totalVoteHeader, accessor: 'sumVote' }];
-    const partyCandidateTotalColumn = [{ Header: 'المجموع', accessor: 'sumPartyCandidateVote' }]
+    const aggregatedCandidateVotes = [{ Header: 'المجموع', accessor: 'sumPartyCandidateVote' }]
     const sumPartysingleCommitteeColumn = [{ Header: 'الالتزام', accessor: 'sumPartyVote' }];
 
-    const committeeColumHeader = (committee = { id: '0', committee: 0 }) => {
-      const committeeId = committee.id;
-      const committeeValue = committee.committee;
 
+    // Generating Committee Column Table Header
+    const committeeColumHeader = (committee = { id: '0', committee: 0 }) => {
       return (
         <HeaderVoteButton
-          committeeId={committeeId}
-          committee={committeeValue}
+          committee={committee}
           isColumnInEditMode={isColumnInEditMode}
           isEditField={isEditField}
           handleSaveResults={handleSaveResults}
@@ -125,6 +126,8 @@ const ResultsTab = () => {
       );
     };
 
+
+    // Generating Column for single Committee
     const singleCommitteeColumn = [
       {
         Header: () => committeeColumHeader(),
@@ -132,7 +135,8 @@ const ResultsTab = () => {
       },
     ];
 
-    const multiCommitteeColumns = electionCommittees.map(committee => ({
+    // Generating Column for multiple Committee
+    const multiCommitteeColumns = electionCommitteeSites.map(committee => ({
       Header: () => committeeColumHeader(committee),
       accessor: `committee_${committee.id}`,
     }));
@@ -141,15 +145,14 @@ const ResultsTab = () => {
 
     // Check for electionResultView and resultsDisplayType to determine columns
     const determineColumns = () => {
-
       let additionalColumns = [];
-
       if (electionMethod === "candidateOnly") {
-        if (isTotalViewCandidateOnly) {
-          additionalColumns = [...singleCommitteeColumn];
-        } else if (isDetailedView) {
-          additionalColumns = [...multiCommitteeColumns, ...sumPartysingleCommitteeColumn];
-        }
+        additionalColumns = isDetailedResults ? [ ...aggregatedCandidateVotes, ...multiCommitteeColumns] : [...singleCommitteeColumn];
+        //   additionalColumns = ;
+        // } else if (isDetailedView) {
+        //   additionalColumns = [...multiCommitteeColumns, ...sumPartysingleCommitteeColumn];
+        // additionalColumns = [...multiCommitteeColumns, ...sumPartysingleCommitteeColumn];
+        // }
       } else {
         if (isPartyOriented) {
           additionalColumns = [...totalVote, ...multiCommitteeColumns];
@@ -160,14 +163,14 @@ const ResultsTab = () => {
           } else if (electionMethod === "partyCandidateOnly") {
             additionalColumns = [...totalVote];
           } else if (electionMethod === "partyCandidateCombined") {
-            additionalColumns = [...totalVote, ...partyCandidateTotalColumn];
+            additionalColumns = [...totalVote, ...aggregatedCandidateVotes];
           }
 
         } else if (isCandidateOriented) {
           if (electionMethod === "partyCandidateOnly") {
             additionalColumns = [...totalVote, ...multiCommitteeColumns];
           } else if (electionMethod === "partyCandidateCombined") {
-            additionalColumns = [...totalVote, ...partyCandidateTotalColumn, ...multiCommitteeColumns];
+            additionalColumns = [...totalVote, ...aggregatedCandidateVotes, ...multiCommitteeColumns];
           }
         }
       }
@@ -181,12 +184,12 @@ const ResultsTab = () => {
 
 
   const columns = useMemo(() => {
-    return generateResultColumns(electionResultView);
+    return generateResultColumns(isDetailedResults);
   }, [
     resultsDisplayType,
-    electionResultView,
+    isDetailedResults,
     candidates,
-    electionCommittees,
+    electionCommitteeSites,
     isColumnInEditMode,
     editedVoteFieldsData,
   ]);

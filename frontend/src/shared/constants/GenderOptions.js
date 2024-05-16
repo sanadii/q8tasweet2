@@ -2,6 +2,7 @@ const GenderOptions = [
   {
     id: 1,
     name: "ذكر",
+    value: 1,
     pleural: "ذكور",
     color: "info",
     borderColor: "#299cdb",
@@ -10,6 +11,7 @@ const GenderOptions = [
   {
     id: 2,
     name: "أنثى",
+    value: 2,
     pleural: "إناث",
     color: "pink",
     borderColor: "#f672a7",

@@ -46,8 +46,9 @@ urlpatterns = [
     path("docs/", include_docs_urls(title="WorkspaceAPI")),
     path("schema", get_schema_view(title="WorkspaceAPI", description="API for the WorkspaceAPI", version="1.0.0"), name="openapi-schema"),
     
-    path('electors/', include('apps.electors.urls')),
     path('electionSchemas/', include('apps.electionSchemas.urls')),
+    path('electors/', include('apps.electors.urls')),
+    path('committees/', include('apps.committees.urls')),
 
 ]
 

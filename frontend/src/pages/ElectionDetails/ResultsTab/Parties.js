@@ -13,7 +13,7 @@ const Parties = ({
     setResultsDisplayType,
     HeaderVoteButton
 }) => {
-    const { electionParties, electionCommittees, electionPartyCandidates, electionMethod, error } = useSelector(electionSelector);
+    const { electionParties, electionCommitteeSites, electionPartyCandidates, electionMethod, error } = useSelector(electionSelector);
     const [selectedCommittee, setSelectedCommittee] = useState(null);
 
     console.log("selectedCommittee: ", selectedCommittee)
@@ -63,14 +63,14 @@ const Parties = ({
         //     options: [
         //         // Add the "Select Committee" option with a null value
         //         { id: null, label: "اختر اللجنة", value: null },
-        //         ...electionCommittees.map(item => ({
+        //         ...electionCommitteeSites.map(item => ({
         //             id: item.id,
         //             label: item.name,
         //             value: item.id
         //         }))
         //     ],
         //     onChange: (e) => setSelectedCommittee(e.target.value),
-        //     condition: electionCommittees.length > 0,
+        //     condition: electionCommitteeSites.length > 0,
         //     colSize: 6,
         // },
     ];
