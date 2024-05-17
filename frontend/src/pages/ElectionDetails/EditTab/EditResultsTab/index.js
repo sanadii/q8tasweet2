@@ -3,12 +3,14 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { electionSelector } from 'selectors';
 import { TableContainerHeader } from "shared/components";
-import { HeaderVoteButton, transformResultData, usePartyCommitteeVotes, useCommitteeResultSaver } from './ResultHelper';
+import { HeaderVoteButton, usePartyCommitteeVotes, useCommitteeResultSaver } from './ResultHelper';
+import { transformResultData } from "./transformResultData"
 import { Col, Row, Card, CardBody } from "reactstrap";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Parties from "./Parties";
 import Candidates from "./Candidates";
+import TheTable from "./TheTable"
 
 const ResultsTab = () => {
   const { election, electionCandidates, electionParties, electionPartyCandidates, electionCommitteeSites } = useSelector(electionSelector);
@@ -82,6 +84,7 @@ const ResultsTab = () => {
     ), [candidates, electionCommitteeSites, isColumnInEditMode, onVoteFieldChange, election, resultsDisplayType, partyCommitteeVoteList]
   );
 
+  console.log("transformedCandidateData:: ", transformedCandidateData)
 
   // Handle Save Committee Results 
   const handleSaveResults = useCommitteeResultSaver(
@@ -136,11 +139,29 @@ const ResultsTab = () => {
 
     // 
     // Generating Columns for multiple Committee
-    // 
-    const multiCommitteeColumns = electionCommitteeSites.map(committee => ({
-      Header: () => committeeColumHeader(committee),
-      accessor: `committee_${committee.id}`,
-    }));
+
+    // Generating Columns for multiple Committees with unique headers and sorting_column
+    const multiCommitteeColumns = electionCommitteeSites.flatMap((site, siteIndex) =>
+      site.committees.flatMap((committee, committeeIndex) => [
+        {
+          Header: `Result ${siteIndex * site.committees.length + committeeIndex + 1}`,
+          accessor: `committee_${committee.id}`,
+        },
+      ])
+    );
+
+    // Generating Rows for multiple Committee
+    // const multiCommitteeColumns = electionCommitteeSites.map(site => ({
+    //   Header: site.name,
+    //   columns: site.committees.map(committee => ({
+    //     Header: () => committeeColumHeader(committee),
+    //     accessor: `committee_${committee.id}`,
+    //   }))
+    // }));
+
+
+    console.log("123 transformedCandidateData: ", transformedCandidateData)
+    console.log("multiCommitteeColumns: ", multiCommitteeColumns)
 
     // 
     // Check for electionResultView and resultsDisplayType to determine columns
@@ -214,8 +235,9 @@ const ResultsTab = () => {
   return (
     <React.Fragment>
       <Row>
+        <TheTable />
         <Col lg={12}>
-          <Card id="electionCommitteeList">
+          <Card id="committeeSiteList">
             <CardBody>
               <TableContainerHeader ContainerHeaderTitle="تعديل نتائج الإنتخابات" />
               {displayElectionResults()}

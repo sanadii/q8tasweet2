@@ -1,17 +1,14 @@
 # Committees & Committee Results
 # elections/serializers.py
-from rest_framework import serializers
+import json
 from datetime import datetime  # Importing datetime
 from django.db.models import F
-import json
-
+from rest_framework import serializers
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # Models
 from apps.areas.models import Area
 from apps.committees.models import CommitteeSite, Committee, CommitteeCandidateResult
-
-# ,CommitteResult
 from apps.areas.serializers import AreaSerializer
 
 
@@ -24,11 +21,8 @@ class CommitteeSerializer(serializers.ModelSerializer):
         fields = ["id", "type", "letters", "area_name", "committee_site"]
 
 
-from rest_framework import serializers
-
-
 class CommitteeSiteSerializer(serializers.ModelSerializer):
-    committees = CommitteeSerializer(many=True, read_only=True)
+    committees = CommitteeSerializer(many=True, read_only=True, source='committee_site_committees')
     area_name = serializers.SerializerMethodField()
 
     class Meta:

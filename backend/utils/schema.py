@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from psycopg2 import OperationalError, ProgrammingError
 
 from apps.areas.models import Area
-from apps.committees.models import CommitteeSite
+from apps.committees.models import CommitteeSite, Committee
+
 # Schema Serializers
 from apps.areas.serializers import AreaSerializer
 from apps.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
@@ -57,16 +58,17 @@ def schema_context(request, schema):
 
 # Fetching model verbose_name_plural
 model_verbose_names = {
-    model._meta.db_table: model._meta.verbose_name_plural
-    for model in apps.get_models()
+    model._meta.db_table: model._meta.verbose_name_plural for model in apps.get_models()
 }
 
 
 def get_schema_details_and_content(context, request, slug, response_data):
-    with schema_context(request, slug):
+    with schema_context(request, slug) as election:
+        if isinstance(election, Response):
+            return election
+
         try:
             schema_name = slug.replace("-", "_")
-            # Fetch tables belonging to the schema
             with connection.cursor() as cursor:
                 cursor.execute(
                     """
@@ -85,20 +87,16 @@ def get_schema_details_and_content(context, request, slug, response_data):
                     for row in cursor.fetchall()
                 ]
 
-
             response_data["schemaDetails"] = {
                 "schemaName": schema_name,
-                "schemaTables": schema_tables
+                "schemaTables": schema_tables,
             }
 
-        except OperationalError as e:
-            response_data["schemaDetailsError"] = str(e)
-        except ProgrammingError as e:
+        except (OperationalError, ProgrammingError) as e:
             response_data["schemaDetailsError"] = str(e)
 
-        # Handle other operations specific to the schema
         try:
-            election_committee_sites = CommitteeSite.objects.all()
+            election_committee_sites = CommitteeSite.objects.prefetch_related('committee_site_committees').all()
             if election_committee_sites.exists():
                 committees_data = CommitteeSiteSerializer(
                     election_committee_sites, many=True, context=context
@@ -117,32 +115,4 @@ def get_schema_details_and_content(context, request, slug, response_data):
         except Exception as e:
             response_data["areaDataError"] = str(e)
 
-# from contextlib import contextmanager
-# from django.db import connection
-# from django.http import Http404
-# from apps.elections.models import Election
-# from rest_framework.response import Response
-
-# @contextmanager
-# def schema_context(request, slug):
-#     cursor = connection.cursor()
-#     schema_name = f'"{slug.replace("-", "_")}"'  # Transform slug into a schema name and quote it
-#     try:
-#         # Set the schema
-#         cursor.execute("SHOW search_path;")
-#         old_schema = cursor.fetchone()[0]
-#         new_search_path = f'{schema_name}, public'
-#         cursor.execute(f"SET search_path TO {new_search_path};")
-
-#         # Check if the election exists
-#         try:
-#             election = Election.objects.get(slug=slug)
-#         except Election.DoesNotExist:
-#             request.response = Response({"error": "Election not found"}, status=404)
-#             return  # Stop the context manager from yielding
-
-#         yield election  # Optionally pass the election object to the caller
-
-#     finally:
-#         # Restore the original search path regardless of how the try block exits
-#         cursor.execute(f"SET search_path TO {old_schema};")
+    return Response(response_data)

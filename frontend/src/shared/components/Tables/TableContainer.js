@@ -149,7 +149,6 @@ const TableContainer = ({
   return (
     <Fragment>
       <CardBody>
-
         <div className={divClass}>
           <Table hover {...getTableProps()} className={tableClass}>
             <thead className={theadClass}>
@@ -166,7 +165,9 @@ const TableContainer = ({
                       {...(isSorting ? column.getSortByToggleProps() : {})}
                     >
 
-                      {column.render("Header")}
+                      {column.Header === "Name" && column.depth === 0
+                        ? data
+                        : column.render("Header")}
                       {isSorting && generateSortingIndicator(column)}
                       {/* <Filter column={column} /> */}
                     </th>
@@ -174,6 +175,8 @@ const TableContainer = ({
                 </tr>
               ))}
             </thead>
+
+
 
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
