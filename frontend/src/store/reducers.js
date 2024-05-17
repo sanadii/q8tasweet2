@@ -19,6 +19,7 @@ import Elections from "./elections/reducer";
 import ElectionSchema from "./electionSchema/reducer";
 import Electors from "./electors/reducer";
 
+
 import Candidates from "./candidates/reducer";
 import Parties from "./parties/reducer";
 import Campaigns from "./campaigns/reducer";

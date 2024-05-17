@@ -672,23 +672,23 @@ const Elections = (state = IntialState, action) => {
       };
 
 
-    // We need to update electionCandidates.candidate.committeeVotes with the new value
+    // We need to update electionCandidates.candidate.committeeResults with the new value
 
 
 
 
     // Election Party Results
     case UPDATE_ELECTION_RESULTS_SUCCESS: {
-      const { data, resultType } = action.payload;
+      const { data, electionMethod, isDetailedResults } = action.payload;
       const committeeIdStr = Object.keys(data)[0];
       const committeeId = parseInt(committeeIdStr, 10);
 
       let resultState;
-      if (resultType === "parties") {
+      if (electionMethod === "parties") {
         resultState = state.electionParties;
-      } else if (resultType === "candidates") {
+      } else if (electionMethod === "candidateOnly") {
         resultState = state.electionCandidates;
-      } else if (resultType === "partyCandidates") {
+      } else if (electionMethod === "partyCandidates") {
         resultState = state.electionPartyCandidates;
       }
 
@@ -707,11 +707,11 @@ const Elections = (state = IntialState, action) => {
           };
         }
 
-        // If candidate has committeeVotes and committeeId is not 0, update committeeVotes
-        if (candidate.committeeVotes) {
+        // If candidate has committeeResults and committeeId is not 0, update committeeResults
+        if (candidate.committeeResults) {
           console.log("committeeIdStr", committeeIdStr, "updating committee");
-          const updatedVotes = candidate.committeeVotes.map(committeeVote => {
-            if (committeeVote.electionCommittee === committeeId) {
+          const updatedVotes = candidate.committeeResults.map(committeeVote => {
+            if (committeeVote.committee === committeeId) {
               return {
                 ...committeeVote,
                 votes: data[committeeIdStr][candidate.id.toString()] || committeeVote.votes,
@@ -722,7 +722,7 @@ const Elections = (state = IntialState, action) => {
 
           return {
             ...candidate,
-            committeeVotes: updatedVotes,
+            committeeResults: updatedVotes,
           };
         }
 
@@ -731,11 +731,11 @@ const Elections = (state = IntialState, action) => {
 
       return {
         ...state,
-        ...(resultType === "parties"
+        ...(electionMethod === "parties"
           ? { electionParties: updatedCandidateResult }
-          : resultType === "candidates"
+          : electionMethod === "candidateOnly"
             ? { electionCandidates: updatedCandidateResult }
-            : resultType === "partyCandidates"
+            : electionMethod === "partyCandidates"
               ? { electionPartyCandidates: updatedCandidateResult }
               : {}),
         isElectionPartyCandidateResultUpdate: true,

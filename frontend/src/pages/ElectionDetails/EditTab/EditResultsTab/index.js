@@ -28,7 +28,7 @@ const ResultsTab = () => {
 
 
   // Toggle Vote Column To Name / Edit / Save / Close Mode
-  const toggleColumnEditMode = (committeeId) => {
+  const toggleColumnEditMode = useCallback((committeeId) => {
     SetIsColumnInEditMode(prev => ({
       ...prev,
       [committeeId]: !prev[committeeId],
@@ -38,7 +38,8 @@ const ResultsTab = () => {
       ...prev,
       [committeeId]: false,
     }));
-  };
+  }, []);
+
 
   // Handle Editing Cells
   const onVoteFieldChange = useCallback((committeeId, candidateId, newValue) => {
@@ -78,7 +79,7 @@ const ResultsTab = () => {
       election,
       partyCommitteeVoteList,
       resultsDisplayType,
-    ), [candidates, electionCommitteeSites, isColumnInEditMode, onVoteFieldChange, election, resultsDisplayType]
+    ), [candidates, electionCommitteeSites, isColumnInEditMode, onVoteFieldChange, election, resultsDisplayType, partyCommitteeVoteList]
   );
 
 
@@ -89,12 +90,12 @@ const ResultsTab = () => {
     SetIsColumnInEditMode,
     setVoteFieldEditedData,
     toggleColumnEditMode,
-    electionMethod,
-    resultsDisplayType,
+    election,
+
   );
 
-  // Creating the columns for both Final and Detailed Results
-  const generateResultColumns = (isDetailedResults) => {
+  // Function to generate result columns
+  const generateResultColumns = useCallback((isDetailedResults) => {
     const totalVoteHeader = electionMethod !== "partyOnly" ? 'مفرق' : 'المجموع';
     const isPartyOriented = electionMethod === "partyOnly";
     const isCandidateOriented = electionMethod === "candidateOnly";
@@ -112,7 +113,6 @@ const ResultsTab = () => {
     const aggregatedCandidateVotes = [{ Header: 'المجموع', accessor: 'sumPartyCandidateVote' }]
     const sumPartysingleCommitteeColumn = [{ Header: 'الالتزام', accessor: 'sumPartyVote' }];
 
-
     // Generating Committee Column Table Header
     const committeeColumHeader = (committee = { id: '0', committee: 0 }) => {
       return (
@@ -125,7 +125,6 @@ const ResultsTab = () => {
         />
       );
     };
-
 
     // Generating Column for single Committee
     const singleCommitteeColumn = [
@@ -141,22 +140,14 @@ const ResultsTab = () => {
       accessor: `committee_${committee.id}`,
     }));
 
-
-
     // Check for electionResultView and resultsDisplayType to determine columns
     const determineColumns = () => {
       let additionalColumns = [];
       if (electionMethod === "candidateOnly") {
-        additionalColumns = isDetailedResults ? [ ...aggregatedCandidateVotes, ...multiCommitteeColumns] : [...singleCommitteeColumn];
-        //   additionalColumns = ;
-        // } else if (isDetailedView) {
-        //   additionalColumns = [...multiCommitteeColumns, ...sumPartysingleCommitteeColumn];
-        // additionalColumns = [...multiCommitteeColumns, ...sumPartysingleCommitteeColumn];
-        // }
+        additionalColumns = isDetailedResults ? [...aggregatedCandidateVotes, ...multiCommitteeColumns] : [...singleCommitteeColumn];
       } else {
         if (isPartyOriented) {
           additionalColumns = [...totalVote, ...multiCommitteeColumns];
-
         } else if (isPartyCandidateOriented) {
           if (electionMethod === "partyOnly") {
             additionalColumns = [];
@@ -165,7 +156,6 @@ const ResultsTab = () => {
           } else if (electionMethod === "partyCandidateCombined") {
             additionalColumns = [...totalVote, ...aggregatedCandidateVotes];
           }
-
         } else if (isCandidateOriented) {
           if (electionMethod === "partyCandidateOnly") {
             additionalColumns = [...totalVote, ...multiCommitteeColumns];
@@ -174,25 +164,26 @@ const ResultsTab = () => {
           }
         }
       }
-
       return [...baseColumns, ...additionalColumns];
     };
 
     return determineColumns();
-
-  };
-
+  }, [
+    electionMethod,
+    electionCommitteeSites,
+    isColumnInEditMode,
+    isEditField,
+    handleSaveResults,
+    toggleColumnEditMode
+  ]);
 
   const columns = useMemo(() => {
     return generateResultColumns(isDetailedResults);
   }, [
-    resultsDisplayType,
     isDetailedResults,
-    candidates,
-    electionCommitteeSites,
-    isColumnInEditMode,
-    editedVoteFieldsData,
+    generateResultColumns,
   ]);
+
 
   const displayElectionResults = () => {
     if (electionMethod !== "candidateOnly") {

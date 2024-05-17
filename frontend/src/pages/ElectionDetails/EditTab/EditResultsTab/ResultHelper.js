@@ -72,27 +72,27 @@ const ResultInputField = ({ candidateId, committeeId, value, onChange }) => {
   );
 };
 
-const generateVoteFields = (contestant, electionCommittees, isColumnInEditMode, onVoteFieldChange) => {
+const generateVoteFields = (participant, electionCommittees, isColumnInEditMode, onVoteFieldChange) => {
   const voteFields = {};
   const noCommittee = "0";
   voteFields[`votes`] = isColumnInEditMode[0]
     ? <ResultInputField
       committeeId={noCommittee}
-      contestantId={contestant.id}
-      value={contestant.votes ?? 0}
-      onChange={(value) => onVoteFieldChange(noCommittee, contestant.id, value)}
+      participantId={participant.id}
+      value={participant.votes ?? 0}
+      onChange={(value) => onVoteFieldChange(noCommittee, participant.id, value)}
     />
-    : contestant.votes ?? 0;
+    : participant.votes ?? 0;
 
   electionCommittees.forEach(committee => {
-    const committeeVote = contestant.committeeVotes?.find(v => v.electionCommittee === committee.id);
-    const votes = isColumnInEditMode[committee.id]?.[contestant.id] ?? committeeVote?.votes ?? 0;
+    const committeeVote = participant.committeeResults?.find(committeeResult => committeeResult.committee === committee.id);
+    const votes = isColumnInEditMode[committee.id]?.[participant.id] ?? committeeVote?.votes ?? 0;
     voteFields[`committee_${committee.id}`] = isColumnInEditMode[committee.id]
       ? <ResultInputField
         committeeId={committee.id}
-        contestantId={contestant.id}
+        participantId={participant.id}
         value={votes}
-        onChange={(value) => onVoteFieldChange(committee.id, contestant.id, value)}
+        onChange={(value) => onVoteFieldChange(committee.id, participant.id, value)}
       />
       : votes;
   });
@@ -102,7 +102,7 @@ const generateVoteFields = (contestant, electionCommittees, isColumnInEditMode, 
 // calculateTotalVotes is a utility function to sum up the votes for a candidate across all committees.
 const calculateTotalVotes = (candidate, electionCommittees) => {
   return electionCommittees.reduce((total, committee) => {
-    const committeeVote = candidate.committeeVotes?.find(v => v.electionCommittee === committee.id);
+    const committeeVote = candidate.committeeResults?.find(committeeResult => committeeResult.committee === committee.id);
     return total + (committeeVote?.votes || 0);
   }, 0);
 };
@@ -114,15 +114,15 @@ const usePartyCommitteeVotes = (electionParties) => {
     if (!electionParties) return [];
 
     return electionParties.map(party => {
-      const committeeVotes = party.committeeVotes.map(committeeVote => ({
-        committeeId: committeeVote.electionCommittee,
+      const committeeResults = party.committeeResults.map(committeeVote => ({
+        committeeId: committeeVote.committee,
         votes: committeeVote.votes
       }));
 
       return {
         partyId: party.id,
         partyName: party.name,
-        committeeVotes: committeeVotes
+        committeeResults: committeeResults
       };
     });
   }, [electionParties]);
@@ -151,28 +151,28 @@ const transformResultData = (
 
   console.log("partyCommitteeVoteList: ", partyCommitteeVoteList);
 
-  let contestantIndex = 1; // Initialize contestant index
+  let participantIndex = 1; // Initialize participant index
 
-  const contestantTotalVoteUpdated = electionContestants.map((contestant) => {
-    const contestantVotes = contestant.votes ?? 0;
+  const participantTotalVoteUpdated = electionContestants.map((participant) => {
+    const participantVotes = participant.votes ?? 0;
 
-    const partyData = partyCommitteeVoteList?.find(party => party.partyId === contestant.electionParty);
+    const partyData = partyCommitteeVoteList?.find(party => party.partyId === participant.electionParty);
     const sumPartyVote = partyData
-      ? partyData.committeeVotes.reduce((total, committeeVote) => total + committeeVote.votes, 0)
+      ? partyData.committeeResults.reduce((total, committeeVote) => total + committeeVote.votes, 0)
       : 0;
 
-    const total = calculateTotalVotes(contestant, electionCommittees)
+    const total = calculateTotalVotes(participant, electionCommittees)
     const sumPartyCandidateVote = sumPartyVote + total;
 
     const transformedResultFieldsData = {
-      id: contestant.id,
-      position: contestant.position,
-      electionParty: contestant.electionParty,
-      name: contestant.name, // Use contestantIndex + 1 as the index number
-      nameIndex: contestantIndex + 1 + ". " + contestant.name, // Use contestantIndex + 1 as the index number
-      gender: contestant.gender,
-      image: contestant.imagePath,
-      isWinner: contestant.isWinner,
+      id: participant.id,
+      position: participant.position,
+      electionParty: participant.electionParty,
+      name: participant.name, // Use participantIndex + 1 as the index number
+      nameIndex: participantIndex + 1 + ". " + participant.name, // Use participantIndex + 1 as the index number
+      gender: participant.gender,
+      image: participant.imagePath,
+      isWinner: participant.isWinner,
       total: isDetailedResults && (electionMethod === "partyCandidateOnly") ? total : sumPartyCandidateVote,
       sumVote: total,
       sumPartyVote: sumPartyVote,
@@ -182,26 +182,26 @@ const transformResultData = (
 
     // Candidate Vote Field
     // Add vote fields to the transformed data
-    const voteFields = generateVoteFields(contestant, electionCommittees, isColumnInEditMode, onVoteFieldChange);
+    const voteFields = generateVoteFields(participant, electionCommittees, isColumnInEditMode, onVoteFieldChange);
     Object.assign(transformedResultFieldsData, voteFields);
 
     // Committee Contestant Vote Field
     if (electionCommittees.length > 0) {
       electionCommittees.forEach(committee => {
-        const committeeVote = contestant.committeeVotes?.find(v => v.electionCommittee === committee.id);
-        const votes = isColumnInEditMode[committee.id]?.[contestant.id] ?? committeeVote?.votes ?? 0;
+        const committeeVote = participant.committeeResults?.find(committeeResult => committeeResult.committee === committee.id);
+        const votes = isColumnInEditMode[committee.id]?.[participant.id] ?? committeeVote?.votes ?? 0;
         transformedResultFieldsData[`committee_${committee.id}`] = isColumnInEditMode[committee.id]
           ? <ResultInputField
             committeeId={committee.id}
-            candidateId={contestant.id}
+            candidateId={participant.id}
             value={votes}
-            onChange={(value) => onVoteFieldChange(committee.id, contestant.id, value)}
+            onChange={(value) => onVoteFieldChange(committee.id, participant.id, value)}
           />
           : votes;
       });
     }
 
-    contestantIndex++; // Increment candidate index for the next candidate
+    participantIndex++; // Increment candidate index for the next candidate
     return transformedResultFieldsData;
   });
 
@@ -215,7 +215,7 @@ const transformResultData = (
     return resultData; // Return the original list without sorting by position
   };
 
-  return calculateContestantPosition(contestantTotalVoteUpdated);
+  return calculateContestantPosition(participantTotalVoteUpdated);
 };
 
 
@@ -226,35 +226,34 @@ const useCommitteeResultSaver = (
   SetIsColumnInEditMode,
   setVoteFieldEditedData,
   toggleColumnEditMode,
-  electionMethod,
-  isDetailedResults,
+  election,
 ) => {
   const dispatch = useDispatch();
 
   return useCallback((committeeId) => {
-    let resultType;
+    // let resultType;
 
-    if (electionMethod === "candidateOnly") {
-      resultType = "candidates";
-    } else {
-      if (isDetailedResults && (electionMethod === "partyOnly")) {
-        resultType = "parties";
-      } else if (isDetailedResults && (electionMethod === ("partyCandidateOnly" || "partyCandidateCombined"))) {
-        resultType = "partyCandidates";
-      }
-    }
+    // if (electionMethod === "candidateOnly") {
+    //   resultType = "candidates";
+    // } else {
+    //   if (isDetailedResults && (electionMethod === "partyOnly")) {
+    //     resultType = "parties";
+    //   } else if (isDetailedResults && (electionMethod === ("partyCandidateOnly" || "partyCandidateCombined"))) {
+    //     resultType = "partyCandidates";
+    //   }
+    // }
 
     if (committeeId) {
       const updatedResults = {
         id: committeeId,
+        electionSlug: election.slug,
+        electionMethod: election.electionMethod,
+        isDetailedResults: election.isDetailedResults,
         data: voteFieldEditedData[committeeId],
-        resultType: resultType, // Fixed the typo in 'resultType'
+        // resultType: resultType, // Fixed the typo in 'resultType'
       };
 
-
-
       dispatch(updateElectionResults(updatedResults))
-
 
       // Reset edited data for this specific committee
       const updatededitedCommittee = { ...isColumnInEditMode };
@@ -278,7 +277,8 @@ const useCommitteeResultSaver = (
     isColumnInEditMode,
     SetIsColumnInEditMode,
     setVoteFieldEditedData,
-    toggleColumnEditMode
+    toggleColumnEditMode,
+    election,
   ]);
 };
 

@@ -20,9 +20,9 @@ import CommitteesTab from "./CommitteesTab";
 import GuaranteesTab from "./GuaranteesTab";
 import AttendeesTab from "./AttendeesTab";
 // import SortingTab from "./SortingTab";
-import ResultsTab from "./ResultsTab";
+import EditResultsTab from "./EditTab/EditResultsTab";
 import ActivitiesTab from "./ActivitiesTab";
-import EditTab from "./EditTab";
+import EditTab from "./EditTab/EditElectionTab";
 
 // UI & Utilities
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
@@ -110,24 +110,24 @@ const Section = ({ viewType }) => {
         //     id: "2",
         //     title: election.electionMethod !== "candidateOnly" ? "القوائم والمرشحين" : "المرشحين",
         //     icon: 'ri-activity-line'
-        // component: <CandidatesTab setActiveTab={setActiveTab} />
+        //     component: <CandidatesTab setActiveTab={setActiveTab} />
         //   },
         ...(election.electionResultView !== "total" ? [
           {
             id: "5",
-            title: "اللجان",
+            title: "اللجان الانتخابية",
             icon: 'ri-activity-line',
             component: <CommitteesTab />,
           }
         ] : []),
         //   ...(electionCampaigns.length !== 0 ? [{ id: "4", title: "الحملات الإنتخابية", icon: 'ri-activity-line' }] : [])
         // ] : []),
-        {
-          id: "6",
-          title: "النتائج التفصيلية",
-          icon: 'ri-activity-line',
-          component: <ResultsTab />
-        },
+        // {
+        //   id: "6",
+        //   title: "النتائج التفصيلية",
+        //   icon: 'ri-activity-line',
+        //   component: <EditResultsTab />
+        // },
         // { 
         //   id: "6",
         //    title: "عمليات المستخدم", 
@@ -165,12 +165,12 @@ const Section = ({ viewType }) => {
           icon: 'ri-activity-line',
           // component: <SortingTab electionCandidates={electionCandidates} />,
         },
-        {
-          id: "45",
-          title: "Sorting",
-          icon: 'ri-activity-line',
-          component: <ResultsTab />,
-        }
+        // {
+        //   id: "45",
+        //   title: "Sorting",
+        //   icon: 'ri-activity-line',
+        //   component: <EditResultsTab />,
+        // }
       ]
     },
     {
@@ -179,14 +179,14 @@ const Section = ({ viewType }) => {
         {
           id: "91",
           type: "button",
-          title: "تحديث النتائج",
+          title: "النتائج",
           color: "primary",
           icon: 'ri-activity-line',
-          component: <ResultsTab />,
+          component: <EditResultsTab />,
         },
         {
           id: "92",
-          title: "تعديل",
+          title: "الانتخابات",
           color: "info",
           icon: 'ri-activity-line',
           component: <EditTab />,
@@ -220,7 +220,7 @@ const Section = ({ viewType }) => {
                   className={`btn btn-${button.color} me-2 `}
                   onClick={() => toggleTab(button.id)}
                 >
-                  <i className="ri-edit-box-line align-bottom"></i>{button.title}
+                  <i className="ri-edit-box-line align-bottom pe-2"></i>{button.title}
                 </Link>
               ))}
             </div>

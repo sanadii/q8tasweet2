@@ -26,6 +26,7 @@ class CommitteeSerializer(serializers.ModelSerializer):
 
 from rest_framework import serializers
 
+
 class CommitteeSiteSerializer(serializers.ModelSerializer):
     committees = CommitteeSerializer(many=True, read_only=True)
     area_name = serializers.SerializerMethodField()
@@ -33,7 +34,7 @@ class CommitteeSiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommitteeSite
         fields = [
-            'id',
+            "id",
             "serial",
             "name",
             "circle",
@@ -56,7 +57,9 @@ class CommitteeSiteSerializer(serializers.ModelSerializer):
         return None
 
     def create(self, validated_data):
-        committees_data = validated_data.pop('committees', None)  # Example of extracting related data
+        committees_data = validated_data.pop(
+            "committees", None
+        )  # Example of extracting related data
         instance = super().create(validated_data)
         if committees_data:
             for committee_data in committees_data:
@@ -64,7 +67,7 @@ class CommitteeSiteSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
-        committees_data = validated_data.pop('committees', None)
+        committees_data = validated_data.pop("committees", None)
         instance = super().update(instance, validated_data)
         if committees_data:
             # Example: Clear old data and replace with new
@@ -73,14 +76,15 @@ class CommitteeSiteSerializer(serializers.ModelSerializer):
                 Committee.objects.create(committee_site=instance, **committee_data)
         return instance
 
+
 # # Votting and Sorting
 class CommitteeCandidateResultSerializer(serializers.ModelSerializer):
     admin_serializer_classes = (TrackMixin,)
 
     class Meta:
         model = CommitteeCandidateResult
-        # fields = "__all__"
-        fields = ["election_committee", "votes"]
+        fields = "__all__"
+        # fields = ["committee", "election_candidate", "votes"]
 
 
 # class ElectionPartyCommitteeResultSerializer(

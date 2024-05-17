@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
+from utils.schema import schema_context
 
 # Campaign App
 # from apps.campaigns.models import Campaign, CampaignMember
@@ -128,42 +129,42 @@ class DeleteCommittee(APIView):
 
 
 class UpdateElectionResults(APIView):
-    permission_classes = [
-        IsAuthenticated
-    ]  # Assuming only authenticated users can update
+    permission_classes = [IsAuthenticated]  # Assuming only authenticated users can update
 
     def patch(self, request, id):
         # Initialize the output dictionary
-        result_type = request.data.get("result_type", "")
-        if result_type == "candidates":
-            resultModel = ElectionCandidate
-            committeeResultModel = CommitteeCandidateResult
-            item_id = "election_candidate_id"
-
-        # elif result_type == "parties":
-        #     resultModel = ElectionParty
-        #     committeeResultModel = PartyCommitteeResult
-        #     item_id = "election_party_id"
-
-        # elif result_type == "partyCandidates":
-        #     resultModel = ElectionPartyCandidate
-        #     committeeResultModel = PartyCandidateCommitteeResult
-        #     item_id = "election_party_candidate_id"
-
+        schema = request.data.get("election_slug", "")
+        is_detailed_results = request.data.get("is_detailed_results", "")
+        election_method = request.data.get("election_method", "")
         output = {"0": {}} if id == 0 else {}
 
-        # If id is 0, update the ElectionCandidate votes
-        if id == 0:
+        if election_method == "candidateOnly":
+            participant_model = ElectionCandidate
+            committeeResultModel = CommitteeCandidateResult
+            participant_id = "election_candidate_id"
+
+        # # elif result_type == "parties":
+        # #     participant_model = ElectionParty
+        # #     committeeResultModel = PartyCommitteeResult
+        # #     participant_id = "election_party_id"
+
+        # # elif result_type == "partyCandidates":
+        # #     participant_model = ElectionPartyCandidate
+        # #     committeeResultModel = PartyCandidateCommitteeResult
+        # #     participant_id = "election_party_candidate_id"
+
+        if not is_detailed_results:
+            # If id is 0, update the ElectionCandidate votes
             for candidate_id, votes in request.data.get("data", {}).items():
                 try:
-                    candidate = resultModel.objects.get(id=candidate_id)
+                    candidate = participant_model.objects.get(id=candidate_id)
                     # Update the votes, ensuring that votes is an integer
                     candidate.votes = int(votes)
                     candidate.save()
                     # Add the candidate's votes to the output under committee "0"
                     output["0"][str(candidate_id)] = int(votes)
-                except resultModel.DoesNotExist:
-                    # Handle the case where the resultModel does not exist
+                except participant_model.DoesNotExist:
+                    # Handle the case where the participant_model does not exist
                     return Response(
                         {
                             "message": f"Candidate with id {candidate_id} does not exist.",
@@ -184,44 +185,49 @@ class UpdateElectionResults(APIView):
             return Response(
                 {
                     "data": output,
-                    "result_type": result_type,
+                    "election_method": election_method,
+                    "is_detailed_results": is_detailed_results,
                     "count": len(output["0"]),
                     "code": 200,
                 }
             )
 
-        # For all other ids, perform the usual update_or_create operation
-        for candidate_id, votes in request.data.get("data", {}).items():
-            kwargs = {
-                "election_committee_id": id,
-                item_id: candidate_id,  # Use the dynamic item_id
-            }
-            defaults = {"votes": votes, "updated_by": request.user}
-            obj, created = committeeResultModel.objects.update_or_create(
-                **kwargs, defaults=defaults
-            )
+        # For detailed results
+        if is_detailed_results:
+            with schema_context(request, schema):
+                # For all other ids, perform the usual update_or_create operation
+                for candidate_id, votes in request.data.get("data", {}).items():
+                    kwargs = {
+                        "committee_id": id,
+                        participant_id: candidate_id,  # Use the dynamic participant_id
+                    }
+                    defaults = {"votes": votes, "updated_by": request.user}
+                    obj, created = committeeResultModel.objects.update_or_create(
+                        **kwargs, defaults=defaults
+                    )
 
-            # Add the candidate's votes to the output
-            committee_id_str = str(obj.election_committee_id)
-            if committee_id_str not in output:
-                output[committee_id_str] = {}
-            output[committee_id_str][str(candidate_id)] = votes
+                    # Add the candidate's votes to the output
+                    committee_id_str = str(obj.committee_id)
+                    if committee_id_str not in output:
+                        output[committee_id_str] = {}
+                    output[committee_id_str][str(candidate_id)] = votes
 
-        # Once the patch operation is done, fetch all relevant results if not id == 0
-        if id != 0:
-            results = committeeResultModel.objects.filter(election_committee_id=id)
-            # Update the output with the actual results
-            for result in results:
-                committee_id_str = str(result.election_committee.id)
-                candidate_id_str = str(getattr(result, item_id))
-                output[committee_id_str][candidate_id_str] = result.votes
+                results = committeeResultModel.objects.filter(committee=id)
+                # Update the output with the actual results
+                for result in results:
+                    committee_id_str = str(result.committee_id)
+                    candidate_id_str = str(getattr(result, participant_id))
+                    if committee_id_str not in output:
+                        output[committee_id_str] = {}
+                    output[committee_id_str][candidate_id_str] = result.votes
 
-        # If "output" is the main key in the response
-        return Response(
-            {
-                "data": output,
-                "result_type": result_type,
-                "count": sum(len(candidates) for candidates in output.values()),
-                "code": 200,
-            }
-        )
+                # Return the response
+                return Response(
+                    {
+                        "data": output,
+                        "election_method": election_method,
+                        "is_detailed_results": is_detailed_results,
+                        "count": sum(len(candidates) for candidates in output.values()),
+                        "code": 200,
+                    }
+                )

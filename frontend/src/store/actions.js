@@ -18,6 +18,7 @@ export * from "./campaigns/action";
 // Schema & related Apps
 export * from "./electionSchema/actions";
 export * from "./electors/actions";
+// export * from "./committee/actions";
 
 // Voters
 // export * from "./voters/action";
