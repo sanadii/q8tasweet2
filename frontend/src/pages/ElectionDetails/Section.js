@@ -7,12 +7,11 @@ import { electionSelector, categorySelector } from 'selectors';
 // Shared hooks
 import { usePermission } from "shared/hooks"
 
-//import Tabs & Widges
+// Import Tabs & Widgets
 import SectionHeader from "./SectionHeader";
 import OverviewTab from "./OverviewTab";
 import StatisticsTab from "./StatisticsTab";
 import ElectorSearchTab from "./ElectorSearchTab";
-
 import ElectionDetailsWidget from "./OverviewTab/ElectionDetailsWidget";
 import CandidatesTab from "./CandidatesTab";
 import CampaignsTab from "./CampaignsTab";
@@ -25,7 +24,7 @@ import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab/EditElectionTab";
 
 // UI & Utilities
-import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
+import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane, UncontrolledDropdown, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from "reactstrap";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 
@@ -50,8 +49,45 @@ const NavTabs = ({ tabs, activeTab, toggleTab }) => (
   </Nav>
 );
 
+const EditDropDownMenu = ({ mainButtons, toggleTab }) => {
+
+  const [settings_Menu, setSettings_Menu] = useState(false);
+
+  const toggleSettings = () => {
+    setSettings_Menu(!settings_Menu);
+  };
+
+  return (
+    <UncontrolledDropdown>
+      <DropdownToggle
+        href="#"
+        className="btn btn-info btn-sm dropdown"
+        tag="button"
+      >
+        <i className="ri-edit-fill align-middle pe-2"></i>
+        تعديل
+
+      </DropdownToggle>
+      <DropdownMenu className="dropdown-menu-end">
+        {mainButtons.map((button) => (
+          <DropdownItem
+            href="#"
+            key={button.id}
+            onClick={() => toggleTab(button.id)}
+            className="dropdown-item"
+          >
+            <i className={`ri ${button.icon} align-bottom text-muted me-2`}></i>
+            {button.title}
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+
+    </UncontrolledDropdown>
+  );
+};
+
 const Section = ({ viewType }) => {
-  //state for collapsable menus
+  // State for collapsible menus
   const [isCurrentState, setIsCurrentState] = useState("Dashboard");
 
   const {
@@ -70,14 +106,6 @@ const Section = ({ viewType }) => {
   const electionMethod = election.electionMethod
 
   const electionCategoryName = category ? category.name : 'Category Not Found';
-
-
-  // get Election Statistics if isStaff
-  // useEffect () = {
-  //   if isStaff {
-  //     dispatchEvent(getElectionData)
-  //   }
-  // }
 
   const tabs = [
     {
@@ -105,13 +133,6 @@ const Section = ({ viewType }) => {
           component: <ElectorSearchTab />
         },
 
-        // ...(viewType !== 'public' ? [
-        //   {
-        //     id: "2",
-        //     title: election.electionMethod !== "candidateOnly" ? "القوائم والمرشحين" : "المرشحين",
-        //     icon: 'ri-activity-line'
-        //     component: <CandidatesTab setActiveTab={setActiveTab} />
-        //   },
         ...(election.electionResultView !== "total" ? [
           {
             id: "5",
@@ -157,13 +178,13 @@ const Section = ({ viewType }) => {
           title: "Attendees",
           icon: 'ri-activity-line',
           component: <AttendeesTab electionCandidates={electionCandidates} />,
-
         },
         {
           id: "44",
           title: "Sorting",
           icon: 'ri-activity-line',
           // component: <SortingTab electionCandidates={electionCandidates} />,
+
         },
         // {
         //   id: "45",
@@ -178,19 +199,28 @@ const Section = ({ viewType }) => {
       items: [
         {
           id: "91",
+          title: "الانتخابات",
+          color: "info",
+          icon: 'ri-activity-line',
+          component: <EditTab />,
+        },
+        {
+          id: "92",
+          type: "button",
+          title: election.electionMethod === "candidateOnly" ? "المرشحين" : "القوائم والمرشحين",
+          color: "primary",
+          icon: 'ri-activity-line',
+          component: <CandidatesTab />
+        },
+        {
+          id: "93",
           type: "button",
           title: "النتائج",
           color: "primary",
           icon: 'ri-activity-line',
           component: <EditResultsTab />,
         },
-        {
-          id: "92",
-          title: "الانتخابات",
-          color: "info",
-          icon: 'ri-activity-line',
-          component: <EditTab />,
-        },
+
       ]
     }
   ];
@@ -214,15 +244,7 @@ const Section = ({ viewType }) => {
           <div className="d-flex profile-wrapper">
             <NavTabs tabs={mainTabs} activeTab={activeTab} toggleTab={toggleTab} />
             <div className="flex-shrink-0">
-              {mainButtons.filter(Boolean).map((button) => (
-                <Link
-                  key={button.id}
-                  className={`btn btn-${button.color} me-2 `}
-                  onClick={() => toggleTab(button.id)}
-                >
-                  <i className="ri-edit-box-line align-bottom pe-2"></i>{button.title}
-                </Link>
-              ))}
+              <EditDropDownMenu mainButtons={mainButtons} toggleTab={toggleTab} />
             </div>
           </div>
 

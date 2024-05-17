@@ -1,25 +1,19 @@
 import os
-from django.db import models
-from contextlib import contextmanager
-from django.db import connection, connections
-
-
-# Election Model
-
-from django.db.models.signals import post_save, post_delete
-from django_extensions.db.fields import AutoSlugField, SlugField
-from django.dispatch import receiver
-from django.db.models import Sum
-from django.contrib.auth import get_user_model
-
-from django.utils.text import slugify
 import uuid
-
-from apps.settings.models import TrackModel, TaskModel
-
+from contextlib import contextmanager
 from django.db import models
+from django.db import connection, connections
+from django.db.models import Sum
+from django.db.models.signals import post_save, post_delete
+from django.contrib.auth import get_user_model
+from django.dispatch import receiver
+from django_extensions.db.fields import AutoSlugField, SlugField
+from django.utils.text import slugify
+
+# Models
+from apps.settings.models import TrackModel, TaskModel
 from apps.areas.models import Area
-from apps.elections.models import Election, ElectionCandidate
+from apps.elections.models import ElectionCandidate
 
 # from django.contrib.postgres.fields import ArrayField
 

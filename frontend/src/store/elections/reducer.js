@@ -129,15 +129,15 @@ const Elections = (state = IntialState, action) => {
             electionParties: action.payload.data.electionParties,
             electionPartyCandidates: action.payload.data.electionPartyCandidates,
             electionCandidates: action.payload.data.electionCandidates,
-            electionCampaigns: action.payload.data.electionCampaigns,         
+            electionCampaigns: action.payload.data.electionCampaigns,
             electionResults: action.payload.data.electionResults,
             electionSorters: action.payload.data.electionSorters,
-            
+
             // Schema
             electionCommitteeSites: action.payload.data.electionCommitteeSites,
             electionAreas: action.payload.data.electionAreas,
             schemaDetails: action.payload.data.schemaDetails,
-            
+
             isElectionCreated: false,
             isElectionSuccess: true,
           };
@@ -683,13 +683,13 @@ const Elections = (state = IntialState, action) => {
       const committeeIdStr = Object.keys(data)[0];
       const committeeId = parseInt(committeeIdStr, 10);
 
-      let resultState;
-      if (electionMethod === "parties") {
-        resultState = state.electionParties;
-      } else if (electionMethod === "candidateOnly") {
-        resultState = state.electionCandidates;
+      let participantState;
+      if (electionMethod === "candidateOnly") {
+        participantState = state.electionCandidates;
+      } else if (electionMethod === "parties") {
+        participantState = state.electionParties;
       } else if (electionMethod === "partyCandidates") {
-        resultState = state.electionPartyCandidates;
+        participantState = state.electionPartyCandidates;
       }
 
 
@@ -697,10 +697,10 @@ const Elections = (state = IntialState, action) => {
       // If committeeIdStr is not present, or it's not a number, or data[committeeIdStr] is not present, return the current state.
       if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
 
-      const updatedCandidateResult = resultState.map(candidate => {
+      const updatedCandidateResult = participantState.map(candidate => {
         // Update votes directly on the candidate if committeeId is 0
-        if (committeeId === 0) {
-          console.log("committeeIdStr", committeeIdStr, "updating candidate votes");
+        if (isDetailedResults === false) {
+          // console.log("committeeIdStr", committeeIdStr, "updating candidate votes");
           return {
             ...candidate,
             votes: data[committeeIdStr][candidate.id.toString()] || candidate.votes,
@@ -708,8 +708,9 @@ const Elections = (state = IntialState, action) => {
         }
 
         // If candidate has committeeResults and committeeId is not 0, update committeeResults
-        if (candidate.committeeResults) {
-          console.log("committeeIdStr", committeeIdStr, "updating committee");
+        if (isDetailedResults === true) {
+          // console.log("committeeIdStr", committeeIdStr, "updating committee", "Participant: ", candidate, "data: ", data);
+
           const updatedVotes = candidate.committeeResults.map(committeeVote => {
             if (committeeVote.committee === committeeId) {
               return {

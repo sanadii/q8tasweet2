@@ -16,13 +16,16 @@ const HeaderVoteButton = ({
 }) => {
 
   const committeeId = committee?.id;
-
   // Determine the button text and class based on the editing state
   const buttonText = isColumnInEditMode[committeeId] ?
     (isEditField[committeeId] ? 'حفظ' : 'اغلاق')
     :
-    (committee ? committee.name : `تعديل`);
-  const buttonClass = isColumnInEditMode[committeeId] ? (isEditField[committeeId] ? 'btn-success' : 'btn-danger') : 'btn-info';
+    (committee?.id === "0" ? `تعديل` :  committee.name);
+
+  const buttonClass = isColumnInEditMode[committeeId] ?
+    (isEditField[committeeId] ? 'btn-success' : 'btn-danger')
+    :
+    'btn-info';
 
   const handleClick = () => {
     if (isEditField[committeeId]) {
@@ -149,7 +152,7 @@ const transformResultData = (
 ) => {
   if (!electionContestants || !electionCommittees || !election) return [];
 
-  console.log("partyCommitteeVoteList: ", partyCommitteeVoteList);
+  // console.log("partyCommitteeVoteList: ", partyCommitteeVoteList);
 
   let participantIndex = 1; // Initialize participant index
 

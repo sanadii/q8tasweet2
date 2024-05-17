@@ -134,14 +134,18 @@ const ResultsTab = () => {
       },
     ];
 
-    // Generating Column for multiple Committee
+    // 
+    // Generating Columns for multiple Committee
+    // 
     const multiCommitteeColumns = electionCommitteeSites.map(committee => ({
       Header: () => committeeColumHeader(committee),
       accessor: `committee_${committee.id}`,
     }));
 
+    // 
     // Check for electionResultView and resultsDisplayType to determine columns
-    const determineColumns = () => {
+    // 
+    const determineColumnsBasedOnElectionMethod = () => {
       let additionalColumns = [];
       if (electionMethod === "candidateOnly") {
         additionalColumns = isDetailedResults ? [...aggregatedCandidateVotes, ...multiCommitteeColumns] : [...singleCommitteeColumn];
@@ -167,7 +171,7 @@ const ResultsTab = () => {
       return [...baseColumns, ...additionalColumns];
     };
 
-    return determineColumns();
+    return determineColumnsBasedOnElectionMethod();
   }, [
     electionMethod,
     electionCommitteeSites,
@@ -186,22 +190,23 @@ const ResultsTab = () => {
 
 
   const displayElectionResults = () => {
-    if (electionMethod !== "candidateOnly") {
+    if (electionMethod === "candidateOnly") {
       return (
-        < Parties
+        <Candidates
           columns={columns}
           transformedCandidateData={transformedCandidateData}
-          transforedPartyData={transforedPartyData}
-          HeaderVoteButton={HeaderVoteButton}
-          resultsDisplayType={resultsDisplayType}
-          setResultsDisplayType={setResultsDisplayType}
         />
       );
+
     }
     return (
-      <Candidates
+      < Parties
         columns={columns}
         transformedCandidateData={transformedCandidateData}
+        transforedPartyData={transforedPartyData}
+        HeaderVoteButton={HeaderVoteButton}
+        resultsDisplayType={resultsDisplayType}
+        setResultsDisplayType={setResultsDisplayType}
       />
     );
   };
