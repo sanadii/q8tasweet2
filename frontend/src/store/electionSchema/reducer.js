@@ -5,6 +5,7 @@ import {
 
   // ElectionSchema
   GET_ELECTION_SCHEMAS,
+  ADD_SCHEMA_TABLES,
   GET_ELECTION_SCHEMA_DETAILS,
   ADD_ELECTION_SCHEMA_SUCCESS,
   ADD_ELECTION_SCHEMA_FAIL,
@@ -33,6 +34,13 @@ const ElectionSchemas = (state = IntialState, action) => {
             isElectionSchemaCreated: false,
             isElectionSchemaSuccess: true,
           };
+        case ADD_SCHEMA_TABLES:
+          return {
+            ...state,
+            schemaTables: action.payload.data,
+            isSchemaTableCreated: false,
+            isSchemaTableSuccess: true,
+          };
         case GET_ELECTION_SCHEMA_DETAILS:
           return {
             ...state,
@@ -54,6 +62,13 @@ const ElectionSchemas = (state = IntialState, action) => {
             isElectionSchemaCreated: false,
             isElectionSchemaSuccess: true,
           };
+        case ADD_SCHEMA_TABLES:
+          return {
+            ...state,
+            error: action.payload.error,
+            isSchemaTableCreated: false,
+            isSchemaTableSuccess: true,
+          };
         case GET_ELECTION_SCHEMA_DETAILS:
           return {
             ...state,
@@ -69,6 +84,13 @@ const ElectionSchemas = (state = IntialState, action) => {
       return {
         ...state,
         isElectionSchemaCreated: false,
+      };
+    }
+
+    case ADD_SCHEMA_TABLES: {
+      return {
+        ...state,
+        isSchemaTableCreated: false,
       };
     }
 

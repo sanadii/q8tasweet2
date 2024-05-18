@@ -23,16 +23,16 @@ class PriorityOptions(models.IntegerChoices):
 
 class ElectionMethodOptions(models.TextChoices):
     CANDIDATE_ONLY_SYSTEM = 'candidateOnly', _('Candidate Only System')
-    PARTY_ONLY_SYSTEM = 'partyOnly', _('Party Only System')
-    PARTY_CANDIDATE_ONLY_SYSTEM = 'partyCandidateOnly', _('Party Candidate Only System')
+    PARTY_PARTY_ONLY_SYSTEM = 'partyPartyOriented', _('Party Only System')
+    PARTY_CANDIDATE_ONLY_SYSTEM = 'partyCandidateOriented', _('Party Candidate Only System')
     COMBINED_PARTY_CANDIDATE_SYSTEM = 'partyCandidateCombined', _('Combined Party Candidate System')
     PROPORTIONAL_REPRESENTATION_SYSTEM = 'proportionalRepresentationSystem', _('Proportional Representation System')
     MIXED_ELECTORAL_SYSTEM = 'mixedVoteralSystem', _('Mixed Voteral System')
 
-class ElectionResultsOptions(models.TextChoices):
-    CANDIDATE_ONLY = 'candidateOnly', _('Candidate Only')
-    PARTY_ONLY = 'partyOnly', _('Party Only')
-    PARTY_CANDIDATE_COMBINED = 'partyCandidateCombined', _('Party Candidate Combined')
+# class ElectionResultsOptions(models.TextChoices):
+#     CANDIDATE_ONLY = 'candidateOnly', _('Candidate Only')
+#     PARTY_ONLY = 'partyOnly', _('Party Only')
+#     PARTY_CANDIDATE_COMBINED = 'partyCandidateCombined', _('Party Candidate Combined')
     
 
 class GenderOptions(models.IntegerChoices):

@@ -20,7 +20,7 @@ import { isEmpty } from "lodash";
 const ElectionDetails = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
-  const { election } = useSelector(electionSelector);
+  const { election, schemaDetails } = useSelector(electionSelector);
 
   const electionSlug = election?.slug
   const electionHasSchema = election?.hasSchema
@@ -37,11 +37,11 @@ const ElectionDetails = () => {
   }, [dispatch, electionSlug, slug]);
 
   useEffect(() => {
-    if (election && electionSlug && electionHasSchema) {
+    if (election && electionSlug && schemaDetails) {
       dispatch(getElectionSchemaDetails(electionSlug));
       dispatch(getElectorsByAll({ schema: electionSlug }));
     }
-  }, [election, electionSlug, electionHasSchema]);
+  }, [election, electionSlug, schemaDetails]);
 
 
 

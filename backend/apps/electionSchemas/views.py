@@ -5,10 +5,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from apps.elections.models import Election
-from apps.committees.models import Committee, CommitteeSite, CommitteeCandidateResult
+from apps.committees.models import Committee, CommitteeSite, CommitteeCandidateResult, PartyResult, PartyCandidateResult
 from apps.electors.models import Elector
 from apps.areas.models import Area
-from utils.schema import schema_context
+from utils.schema import schema_context, table_exists
 
 
 class AddElectionSchema(APIView):
@@ -37,7 +37,7 @@ class AddElectionSchema(APIView):
 
 # depends on ElectionMethod, ElectionResult
 # Election Metho
-class AddElectionSchemaTables(APIView):
+class AddSchemaTables(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -57,12 +57,17 @@ class AddElectionSchemaTables(APIView):
                 if election_method == "candidateOnly":
                     models.append(CommitteeCandidateResult)
 
-                # if election_method == "partyOnly":
-                # if election_method == "partyCandidateOnly":
-                # if election_method == "partyCandidateCombined":
+                if election_method == "partyPartyOriented":
+                    models.append(PartyResult)
 
-            
-            
+                if election_method == "partyCandidateOriented":
+                    models.append(PartyResult)
+                    models.append(PartyCandidateResult)
+
+                if election_method == "partyCandidateCombined":
+                    models.append(PartyResult)
+                    models.append(PartyCandidateResult)
+
             print("election_result: ", is_detailed_results, "election_method: ", election_method )
 
         except Election.DoesNotExist:
@@ -80,7 +85,7 @@ class AddElectionSchemaTables(APIView):
                 for Model in models:
                     try:
                         table_name = Model._meta.db_table
-                        if not self.table_exists(table_name):
+                        if not table_exists(table_name):
                             schema_editor.create_model(Model)
                             results[table_name] = "Created successfully"
                         else:
@@ -89,12 +94,6 @@ class AddElectionSchemaTables(APIView):
                         results[table_name] = f"Failed to create table: {str(e)}"
 
             return Response({"results": results}, status=200)
-
-    def table_exists(self, table_name):
-        """Check if a table exists in the current schema."""
-        with connection.cursor() as cursor:
-            cursor.execute(f"SELECT to_regclass('{table_name}');")
-            return cursor.fetchone()[0] is not None
 
 
 # class AddElectionSchemaTables(APIView):

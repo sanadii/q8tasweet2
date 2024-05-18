@@ -5,9 +5,14 @@ import {
 
   // ElectionSchemas
   GET_ELECTION_SCHEMAS,
+  ADD_SCHEMA_TABLES,
+
+
   ADD_ELECTION_SCHEMA,
   ADD_ELECTION_SCHEMA_SUCCESS,
   ADD_ELECTION_SCHEMA_FAIL,
+
+
   UPDATE_ELECTION_SCHEMA,
   UPDATE_ELECTION_SCHEMA_SUCCESS,
   UPDATE_ELECTION_SCHEMA_FAIL,
@@ -34,6 +39,11 @@ export const ElectionSchemaApiResponseError = (actionType, error) => ({
 // Get ElectionSchemas
 export const getElectionSchemas = () => ({
   type: GET_ELECTION_SCHEMAS,
+});
+
+export const addSchemaTables = (electionSchema) => ({
+  type: ADD_SCHEMA_TABLES,
+  payload: electionSchema,
 });
 
 

@@ -73,6 +73,7 @@ export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
 
 // Election  Schema
 export const GET_ELECTION_SCHEMAS = "/electionSchemas/getElectionSchemas";
+export const ADD_SCHEMA_TABLES = "/electionSchemas/addSchemaTables";
 export const GET_ELECTION_SCHEMA_DETAILS = "/electionSchemas/getElectionSchemaDetails";
 export const ADD_ELECTION_SCHEMA = "/electionSchemas/addElectionSchema";
 // export const ADD_ELECTION_SCHEMA_TABLES = "/electors/addElectionSchemaTables";

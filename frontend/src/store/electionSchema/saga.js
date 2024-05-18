@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 // ElectionSchema Redux States
 import {
   GET_ELECTION_SCHEMAS,
+  ADD_SCHEMA_TABLES,
   GET_ELECTION_SCHEMA_DETAILS,
   ADD_ELECTION_SCHEMA,
   DELETE_ELECTION_SCHEMA,
@@ -35,6 +36,7 @@ import {
 //Include Both Helper File with needed methods
 import {
   getElectionSchemas as getElectionSchemasApi,
+  addSchemaTables,
   getElectionSchemaDetails as getElectionSchemaDetailsApi,
   addElectionSchema as onAddElectionSchema,
   updateElectionSchema,
@@ -50,6 +52,23 @@ function* getElectionSchemas() {
   }
 }
 
+// function* onAddSchemaTables() {
+//   try {
+//     const response = yield call(addSchemaTables);
+//     yield put(ElectionSchemaApiResponseSuccess(ADD_SCHEMA_TABLES, response.data));
+//   } catch (error) {
+//     yield put(ElectionSchemaApiResponseError(ADD_SCHEMA_TABLES, error));
+//   }
+// }
+
+function* onAddSchemaTables({ payload: electionDatabase }) {
+  try {
+    const response = yield call(addSchemaTables, electionDatabase);
+    yield put(addElectionSchemaSuccess(ADD_SCHEMA_TABLES, response.data));
+  } catch (error) {
+    yield put(addElectionSchemaFail(ADD_SCHEMA_TABLES, error));
+  }
+}
 
 function* getElectionSchemaDetails({ payload: electionSchema }) {
   try {
@@ -100,6 +119,10 @@ export function* watchGetElectionSchemas() {
   yield takeEvery(GET_ELECTION_SCHEMAS, getElectionSchemas);
 }
 
+export function* watchAddSchemaTables() {
+  yield takeEvery(ADD_SCHEMA_TABLES, onAddSchemaTables);
+}
+
 export function* watchAddElectionSchema() {
   yield takeEvery(ADD_ELECTION_SCHEMA, addElectionSchema);
 }
@@ -123,6 +146,7 @@ function* electionSchemaSaga() {
 
     // ElectionSchemas
     fork(watchGetElectionSchemas),
+    fork(watchAddSchemaTables),
     fork(watchAddElectionSchema),
     fork(watchUpdateElectionSchema),
     fork(watchDeleteElectionSchema),

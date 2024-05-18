@@ -36,7 +36,6 @@ const TableContainer = ({
   // Data & Columns----------
   columns,
   data,
-
   // Table Sorting ----------
   sortBy,
   sortAsc,
@@ -163,11 +162,10 @@ const TableContainer = ({
                       key={column.id}
                       className={thClass}
                       {...(isSorting ? column.getSortByToggleProps() : {})}
+                      {...column.getHeaderProps()}
                     >
 
-                      {column.Header === "Name" && column.depth === 0
-                        ? data
-                        : column.render("Header")}
+                      {column.render("Header")}
                       {isSorting && generateSortingIndicator(column)}
                       {/* <Filter column={column} /> */}
                     </th>

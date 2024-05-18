@@ -16,7 +16,7 @@ from apps.areas.models import Area
 
 from utils.model_options import (
     ElectionMethodOptions,
-    ElectionResultsOptions,
+    # ElectionResultsOptions,
     GenderOptions,
 )
 from utils.models_permission_manager import (

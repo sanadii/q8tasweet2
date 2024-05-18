@@ -5,7 +5,7 @@ import { electionSelector } from 'selectors';
 import { TableContainerHeader } from "shared/components";
 import { HeaderVoteButton, usePartyCommitteeVotes, useCommitteeResultSaver } from './ResultHelper';
 import { transformResultData } from "./transformResultData"
-import { Col, Row, Card, CardBody } from "reactstrap";
+import { Button, Col, Row, Card, CardBody } from "reactstrap";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Parties from "./Parties";
@@ -27,7 +27,7 @@ const ResultsTab = () => {
   const [isColumnInEditMode, SetIsColumnInEditMode] = useState({});
   const [isEditField, setIsEditField] = useState(false);
   const [editedVoteFieldsData, setVoteFieldEditedData] = useState({});
-
+  const [committeeSiteDisplay, setCommitteeSiteDisplay] = useState(electionCommitteeSites[0])
 
   // Toggle Vote Column To Name / Edit / Save / Close Mode
   const toggleColumnEditMode = useCallback((committeeId) => {
@@ -106,10 +106,26 @@ const ResultsTab = () => {
     const isTotalViewCandidateOnly = !isDetailedResults && electionMethod === "candidateOnly";
     const isDetailedView = isDetailedResults;
 
+
+    // Base column header
+    const baseColumnHeader = () => (
+      <div className="d-flex justify-content-between align-items-center">
+        <Button color="danger" className="btn-icon btn-sm material-shadow-none"> <i className="ri-arrow-right-s-line" /> </Button>
+        اللجان
+        <Button color="danger" className="btn-icon btn-sm material-shadow-none"> <i className="ri-arrow-left-s-line" /> </Button>
+      </div>
+    );
+
     // Base columns that are always present
     const baseColumns = [
-      { Header: 'المركز', accessor: 'position' },
-      { Header: 'المرشح', accessor: 'name' },
+      {
+        Header: () => baseColumnHeader(),
+        accessor: 'base', // Add a unique accessor
+        columns: [
+          { Header: 'المركز', accessor: 'position' },
+          { Header: 'المرشح', accessor: 'name' },
+        ]
+      }
     ];
 
     const totalVote = [{ Header: totalVoteHeader, accessor: 'sumVote' }];
@@ -117,7 +133,7 @@ const ResultsTab = () => {
     const sumPartysingleCommitteeColumn = [{ Header: 'الالتزام', accessor: 'sumPartyVote' }];
 
     // Generating Committee Column Table Header
-    const committeeColumHeader = (committee = { id: '0', committee: 0 }) => {
+    const committeeHeaderVoteButton = (committee = { id: '0', committee: 0 }) => {
       return (
         <HeaderVoteButton
           committee={committee}
@@ -132,37 +148,43 @@ const ResultsTab = () => {
     // Generating Column for single Committee
     const singleCommitteeColumn = [
       {
-        Header: () => committeeColumHeader(),
+        Header: () => committeeHeaderVoteButton(),
         accessor: 'votes',
       },
     ];
 
-    // 
-    // Generating Columns for multiple Committee
 
-    // Generating Columns for multiple Committees with unique headers and sorting_column
-    const multiCommitteeColumns = electionCommitteeSites.flatMap((site, siteIndex) =>
-      site.committees.flatMap((committee, committeeIndex) => [
-        {
-          Header: `Result ${siteIndex * site.committees.length + committeeIndex + 1}`,
-          accessor: `committee_${committee.id}`,
-        },
-      ])
+    // Function to determine the background color based on gender
+    const getBackgroundColor = (gender) => {
+      return gender === "1" ? 'bg-info' : 'bg-pink';
+    };
+
+    // Generating Columns for multiple Committees
+    const committeeColumnHeader = (committeeSite, index) => (
+      <div key={`header-${index}`} className="d-flex justify-content-between align-items-center">
+        {committeeSite.areaName}
+      </div>
     );
 
-    // Generating Rows for multiple Committee
-    // const multiCommitteeColumns = electionCommitteeSites.map(site => ({
-    //   Header: site.name,
-    //   columns: site.committees.map(committee => ({
-    //     Header: () => committeeColumHeader(committee),
-    //     accessor: `committee_${committee.id}`,
-    //   }))
-    // }));
+    // Generating Rows for multiple Committees
+    const multiCommitteeColumns = electionCommitteeSites.map((committeeSite, index) => ({
+      Header: () => committeeColumnHeader(committeeSiteDisplay, index),
+      accessor: `committeeSite_${committeeSite.id}`,
+
+      columns: committeeSite.committees.map((committee, subIndex) => ({
+        Header: (
+          <div key={`subheader-${subIndex}`}>
+            {committeeHeaderVoteButton(committee)}
+          </div>
+        ),
+        accessor: `committee_${committee.id}`, // Ensure unique accessor for each committee
+        id: `committee_${committee.id}`, // Add unique id
+      }))
+    }));
 
 
-    console.log("123 transformedCandidateData: ", transformedCandidateData)
-    console.log("multiCommitteeColumns: ", multiCommitteeColumns)
-
+    //  console.log("123 transformedCandidateData: ", transformedCandidateData)
+    //  console.log("multiCommitteeColumns: ", multiCommitteeColumns)
     // 
     // Check for electionResultView and resultsDisplayType to determine columns
     // 
@@ -235,7 +257,6 @@ const ResultsTab = () => {
   return (
     <React.Fragment>
       <Row>
-        <TheTable />
         <Col lg={12}>
           <Card id="committeeSiteList">
             <CardBody>

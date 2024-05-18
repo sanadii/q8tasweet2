@@ -1,13 +1,14 @@
 # from apps.elections.models import Election
+import json
+import csv
+from django.db import connection
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.http.response import JsonResponse
-from django.db.models import Sum
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-import json
-import csv
 from django.views import View
 
 from rest_framework import status
@@ -15,7 +16,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
-from django.db import connection
 
 # Campaign App
 # from apps.campaigns.models import Campaign, CampaignMember
@@ -30,13 +30,15 @@ from apps.elections.models import (
     ElectionPartyCandidate,
 )
 
-from apps.committees.models import (
-    Committee,
-    # CommitteeGroup,
-    # CommitteeResult,
-    # PartyCommitteeResult,
-    # PartyCandidateCommitteeResult,
-)
+from psycopg2 import OperationalError, ProgrammingError
+
+from apps.areas.models import Area
+from apps.committees.models import CommitteeSite, Committee
+
+# Schema Serializers
+from apps.areas.serializers import AreaSerializer
+from apps.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
+from django.apps import apps
 
 # Schema Models
 
@@ -52,13 +54,10 @@ from apps.elections.serializers import (
     # CommitteeResultSerializer,
 )
 
-# from apps.committees.serializers import (
-#     CommitteeResultSerializer,
-# )
 
 # Utils
 from utils.views_helper import CustomPagination
-from utils.schema import get_schema_details_and_content
+from utils.schema import schema_context, table_exists
 
 # from apps.elections.utils import get_election_committee_results
 
@@ -179,12 +178,72 @@ class GetElectionDetails(APIView):
             ).data,
         }
 
-        if election.has_schema:
-            get_schema_details_and_content(context, request, slug, response_data)
+        get_schema_details_and_content(context, request, slug, response_data)
 
         return Response({"data": response_data, "code": 200})
 
 
+# Fetching model verbose_name_plural
+model_verbose_names = {
+    model._meta.db_table: model._meta.verbose_name_plural for model in apps.get_models()
+}
+
+
+
+def get_schema_details_and_content(context, request, slug, response_data):
+    with schema_context(request, slug) as election:
+        if isinstance(election, Response):
+            return election
+
+        try:
+            schema_name = slug.replace("-", "_")
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT schemaname, tablename
+                    FROM pg_catalog.pg_tables
+                    WHERE schemaname = %s
+                """,
+                    [schema_name],
+                )
+                schema_tables = [
+                    {
+                        "schema": row[0],
+                        "table": row[1],
+                        "name": model_verbose_names.get(row[1], None),
+                    }
+                    for row in cursor.fetchall()
+                ]
+
+            response_data["schemaDetails"] = {
+                "schemaName": schema_name,
+                "schemaTables": schema_tables,
+            }
+
+        except (OperationalError, ProgrammingError) as e:
+            response_data["schemaDetailsError"] = str(e)
+
+        try:
+            election_committee_sites = CommitteeSite.objects.prefetch_related('committee_site_committees').all()
+            if election_committee_sites.exists():
+                committees_data = CommitteeSiteSerializer(
+                    election_committee_sites, many=True, context=context
+                ).data
+                response_data["election_committee_sites"] = committees_data
+        except Exception as e:
+            response_data["committeeDataError"] = str(e)
+
+        try:
+            election_committee_areas = Area.objects.all()
+            if election_committee_areas.exists():
+                areas_data = AreaSerializer(
+                    election_committee_areas, many=True, context=context
+                ).data
+                response_data["election_areas"] = areas_data
+        except Exception as e:
+            response_data["areaDataError"] = str(e)
+
+    return Response(response_data)
 
 
 # class GetElectionDetails(APIView):

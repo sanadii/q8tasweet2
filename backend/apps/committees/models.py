@@ -13,49 +13,54 @@ from django.utils.text import slugify
 # Models
 from apps.settings.models import TrackModel, TaskModel
 from apps.areas.models import Area
-from apps.elections.models import ElectionCandidate
+from apps.elections.models import (
+    ElectionCandidate,
+    ElectionParty,
+    ElectionPartyCandidate,
+)
 
-# from django.contrib.postgres.fields import ArrayField
+from utils.model_options import GenderOptions
 
 User = get_user_model()
 
+class DynamicSchemaModel(models.Model):
+    class Meta:
+        abstract = True
+        managed = False
 
-GENDER_CHOICES = [
-    ("1", "Male"),
-    ("2", "Female"),
-]
+    def save(self, *args, **kwargs):
+        with schema_context(self._schema):
+            super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        with schema_context(self._schema):
+            super().delete(*args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)  # Ensures base class initialization
+        self._schema = kwargs.get("schema_name", "public")
+
+    def set_schema(self, schema):
+        self._schema = schema
+
+    def __str__(self):
+        return self.name
+
+    def set_schema(self, schema):
+        self._schema = schema
 
 
-# class DynamicSchemaModel(models.Model):
-#     class Meta:
-#         abstract = True
-
-#     _schema = None
-
-#     def set_schema(self, schema):
-#         self._schema = schema
-
-#     def save(self, *args, **kwargs):
-#         # Set the schema to be used for saving this instance
-#         if self._schema:
-#             with schema_context(self._schema):
-#                 super().save(*args, **kwargs)
-#         else:
-#             super().save(*args, **kwargs)
-
-
-class CommitteeSite(models.Model):
+class CommitteeSite(DynamicSchemaModel):
     serial = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     circle = models.CharField(max_length=255, blank=True, null=True)
-
     area = models.ForeignKey(
         Area,
         on_delete=models.CASCADE,
         related_name="committee_site_areas",
     )
     area_name = models.CharField(max_length=255, blank=True, null=True)
-    gender = models.IntegerField(choices=GENDER_CHOICES, blank=True, null=True)
+    gender = models.IntegerField(choices=GenderOptions, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     voter_count = models.IntegerField(blank=True, null=True)
@@ -64,68 +69,31 @@ class CommitteeSite(models.Model):
     election = models.IntegerField(null=True, blank=True)
 
     class Meta:
-        managed = False
         db_table = "committee_site"
         verbose_name = "موقع اللجنة"
         verbose_name_plural = "مواقع اللجان"
         default_permissions = []
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)  # Ensures base class initialization
-        schema_name = kwargs.get("schema_name", "public")
-        self.set_schema(schema_name)  # Dynamically sets the schema if provided
 
-    def __str__(self):
-        return self.name
-
-    def set_schema(self, schema):
-        self._schema = schema
-
-    # def get_election(self):
-    #     from apps.elections.models import Election
-
-    #     try:
-    #         if self.election:
-    #             return Election.objects.using("default").get(id=self.election)
-    #     except Election.DoesNotExist:
-    #         return None
-    #     return None
-
-
-class Committee(models.Model):
+class Committee(DynamicSchemaModel):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
-    # committee_site = models.ForeignKey(
-    #     CommitteeSite,
-    #     on_delete=models.CASCADE,
-    #     related_name="committee_site_committees",
-    #     blank=True, null=True
-    # )
-    committee_site = models.ForeignKey(CommitteeSite, related_name='committee_site_committees', on_delete=models.CASCADE)
-
+    committee_site = models.ForeignKey(
+        CommitteeSite,
+        related_name="committee_site_committees",
+        on_delete=models.CASCADE,
+    )
     type = models.TextField(max_length=25, blank=True, null=True)
     main = models.BooleanField(default=False)
 
     class Meta:
-        managed = False
         db_table = "committee"
         verbose_name = "اللجنة"
         verbose_name_plural = "اللجان"
         default_permissions = []
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)  # Ensures base class initialization
-        schema_name = kwargs.get("schema_name", "public")
-        self.set_schema(schema_name)  # Dynamically sets the schema if provided
 
-    def __str__(self):
-        return self.name
-
-    def set_schema(self, schema):
-        self._schema = schema
-
-
-class BaseElectionCommitteeResult(models.Model):
+class BaseElectionCommitteeResult(DynamicSchemaModel):
     committee = models.ForeignKey(
         Committee,
         on_delete=models.SET_NULL,
@@ -162,40 +130,39 @@ class CommitteeCandidateResult(BaseElectionCommitteeResult, TrackModel):
     )
 
     class Meta:
-        managed = False
         db_table = "committee_candidate_result"
         verbose_name = "Committee Candidate Result"
         verbose_name_plural = "Committee Candidate Results"
 
 
-# class ElectionPartyCommitteeResult(BaseElectionCommitteeResult, TrackModel):
-#     election_party = models.ForeignKey(
-#         ElectionParty,
-#         on_delete=models.SET_NULL,
-#         null=True,
-#         blank=True,
-#         related_name="party_committee_result_candidates",
-#     )
+class PartyResult(BaseElectionCommitteeResult, TrackModel):
+    election_party = models.ForeignKey(
+        ElectionParty,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="party_result_parties",
+    )
 
-#     class Meta:
-#         db_table = "election_party_committee_result"
-#         verbose_name = "Election Party Committee Result"
-#         verbose_name_plural = "Election Party Committee Results"
+    class Meta:
+        db_table = "party_result"
+        verbose_name = "Party Result"
+        verbose_name_plural = "Party Results"
 
 
-# class ElectionPartyCandidateCommitteeResult(BaseElectionCommitteeResult, TrackModel):
-#     election_party_candidate = models.ForeignKey(
-#         ElectionPartyCandidate,
-#         on_delete=models.SET_NULL,
-#         null=True,
-#         blank=True,
-#         related_name="party_candidate_committee_result_candidates",
-#     )
+class PartyCandidateResult(BaseElectionCommitteeResult, TrackModel):
+    election_party_candidate = models.ForeignKey(
+        ElectionPartyCandidate,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="party_candidate_result_candidates",
+    )
 
-#     class Meta:
-#         db_table = "election_party_candidate_committee_result"
-#         verbose_name = "Election Party Candidate Committee Result"
-#         verbose_name_plural = "Election Party Candidate Committee Results"
+    class Meta:
+        db_table = "party_candidate_result"
+        verbose_name = "Party Candidate Result"
+        verbose_name_plural = "Party Candidate Results"
 
 
 # class BaseElectionSorting(models.Model):

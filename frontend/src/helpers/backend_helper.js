@@ -124,6 +124,7 @@ export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_E
 
 // ELECTION  SCHEMA
 export const getElectionSchemas = (electionSlug) => api.get(url.GET_ELECTION_SCHEMAS + "/" + electionSlug);
+export const addSchemaTables = (electionSlug) => api.get(url.ADD_SCHEMA_TABLES + "/" + electionSlug);
 export const getElectionSchemaDetails = (electionSlug) => api.get(url.GET_ELECTION_SCHEMA_DETAILS + "/" + electionSlug);
 export const addElectionSchema = (electionSlug) => api.get(url.ADD_ELECTION_SCHEMA + "/" + electionSlug);
 export const updateElectionSchema = (electionSlug) => api.update(url.UPDATE_ELECTION_SCHEMA + "/" + electionSlug);

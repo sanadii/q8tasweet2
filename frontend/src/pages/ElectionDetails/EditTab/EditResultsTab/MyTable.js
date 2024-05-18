@@ -53,9 +53,7 @@ function DataTable(props) {
               {headerGroup.headers.map((column) => {
                 return (
                   <th key={column.id} {...column.getHeaderProps()}>
-                    {column.Header === "Name" && column.depth === 0
-                      ? props.date
-                      : column.render("Header")}
+                    {column.render("Header")}
                   </th>
                 );
               })}

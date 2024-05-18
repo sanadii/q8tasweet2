@@ -1,23 +1,13 @@
 import React, { useMemo } from "react";
 import DataTable from "./MyTable";
 import "./styles.css";
+import { TableContainer } from "shared/components";
 
 export default function TheTable() {
   const data = [
-    {
-      date: "2021-01-01",
-      options: [
-        { isFirst: "y", name: "john" },
-        { isFirst: "n", name: "Sam" }
-      ]
-    },
-    {
-      date: "2021-11-01",
-      options: [
-        { isFirst: "n", name: "TY" },
-        { isFirst: "n", name: "joe" }
-      ]
-    }
+    { isFirst: "y", name: "john", age: 67, address: "SSC" },
+    { isFirst: "n", name: "Sam", age: 22, address: "ABC" },
+    { isFirst: "n", name: "xse", age: 42, address: "SEA" },
   ];
 
   const columns = useMemo(
@@ -34,6 +24,19 @@ export default function TheTable() {
             accessor: "isFirst"
           }
         ]
+      },
+      {
+        Header: "Info",
+        columns: [
+          {
+            Header: "Age",
+            accessor: "age"
+          },
+          {
+            Header: "Address",
+            accessor: "address"
+          }
+        ]
       }
     ],
     []
@@ -41,9 +44,19 @@ export default function TheTable() {
 
   return (
     <div className="App">
-      {data.map((d, index) => (
-        <DataTable key={index} date={d.date} data={d.options} columns={columns} />
-      ))}
+      <DataTable data={data} columns={columns} />
+
+      <TableContainer
+
+        // Data
+        columns={columns}
+        data={data}
+        customPageSize={50}
+        isTableFooter={false}
+
+      />
+
+
     </div>
   );
 }

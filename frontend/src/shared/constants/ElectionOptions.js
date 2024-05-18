@@ -8,13 +8,13 @@ export const ElectionMethodOptions = [
   {
     id: '2',
     name: "قوائم - قوائم فقط",
-    value: "partyOnly",
+    value: "partyPartyOriented",
     badgeClass: "badge bg-danger",
   },
   {
     id: '3',
     name: "قوائم - مرشحين فقط",
-    value: "partyCandidateOnly",
+    value: "partyCandidateOriented",
     badgeClass: "badge bg-danger",
   },
   {

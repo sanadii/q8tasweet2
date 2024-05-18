@@ -21,8 +21,10 @@ const HeaderVoteButton = ({
   const buttonText = isColumnInEditMode[committeeId] ?
     (isEditField[committeeId] ? 'حفظ' : 'اغلاق')
     :
-    (committee ? `${committee.id} - ${committee.type}` : `تعديل`);
-  const buttonClass = isColumnInEditMode[committeeId] ? (isEditField[committeeId] ? 'btn-success' : 'btn-danger') : 'btn-info';
+    (committee ? `${committee.id}` : `تعديل`);
+
+  const buttonClass = isColumnInEditMode[committeeId] ?
+    (isEditField[committeeId] ? 'btn-success' : 'btn-danger') : 'btn-info';
 
   const handleClick = () => {
     if (isEditField[committeeId]) {
@@ -35,7 +37,7 @@ const HeaderVoteButton = ({
   };
 
   return (
-    <button onClick={handleClick} className={`btn btn-sm ml-2 ${buttonClass}`}>
+    <button onClick={handleClick} className={`btn btn-sm ml-2 ${buttonClass}`} title={committee.type}>
       {buttonText}
     </button>
   );
