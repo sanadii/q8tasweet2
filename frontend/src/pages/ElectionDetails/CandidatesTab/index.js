@@ -57,7 +57,7 @@ const CandidatesTab = () => {
   const [isEditCampaign, setIsEditCampaign] = useState(false);
   const [isElectionPartyAction, setIsElectionPartyAction] = useState(false);
 
-  console.log("isElectionPartyAction: ", isElectionPartyAction )
+  console.log("isElectionPartyAction: ", isElectionPartyAction)
   let deleteAction;
 
   if (electionMethod !== "candidateOnly") {
@@ -74,21 +74,19 @@ const CandidatesTab = () => {
     // If electionMethod is 1
     deleteAction = deleteElectionCandidate;
   }
-  
-
 
   // Delete Hook
   const {
     handleDeleteItem,
-    onDeleteCheckBoxClick,
+    handleItemDeleteClick,
     deleteModal,
     setDeleteModal,
-    checkedAll,
-    deleteCheckbox,
+    handleCheckAllClick,
+    handleCheckCellClick,
     isMultiDeleteButton,
     deleteModalMulti,
     setDeleteModalMulti,
-    deleteMultiple,
+    handlehandleDeleteMultiple,
   } = useDelete(deleteAction);
 
   // Models
@@ -214,8 +212,8 @@ const CandidatesTab = () => {
   const columns = useMemo(
     () => [
       {
-        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
-        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
+        Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
+        Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
         id: "id",
       },
       {
@@ -231,12 +229,12 @@ const CandidatesTab = () => {
             setElectionCandidate={setElectionCandidate}
             handleElectionCandidateClick={handleElectionCandidateClick}
             setIsElectionPartyAction={setIsElectionPartyAction}
-            onDeleteCheckBoxClick={onDeleteCheckBoxClick}
+            handleItemDeleteClick={handleItemDeleteClick}
           />
         )
       },
     ],
-    [handleElectionCandidateClick, checkedAll]
+    [handleElectionCandidateClick, handleCheckAllClick]
   );
 
 
@@ -263,7 +261,7 @@ const CandidatesTab = () => {
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
               setIsElectionPartyAction(true);
-              onDeleteCheckBoxClick(electionParty);
+              handleItemDeleteClick(electionParty);
             }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />
@@ -300,7 +298,7 @@ const CandidatesTab = () => {
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          deleteMultiple();
+          handlehandleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
@@ -342,7 +340,7 @@ const CandidatesTab = () => {
 
                   // Buttons
                   {...(electionMethod !== "candidateOnly" && {
-                    HandlePrimaryButton: {handleElectionPartyClicks},
+                    HandlePrimaryButton: { handleElectionPartyClicks },
                     PrimaryButtonText: "إضافة قائمة"
                   })}
 

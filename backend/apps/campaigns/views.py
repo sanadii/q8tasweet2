@@ -176,26 +176,26 @@ class GetCampaignDetails(APIView):
             campaign=campaign
         ).select_related("campaign")
 
-        # Initialize dictionaries to store attendees and sorters for each committee
-        campaign_committee_attendees = {}
-        campaign_committee_sorters = {}
+        # # Initialize dictionaries to store attendees and sorters for each committee
+        # campaign_committee_attendees = {}
+        # campaign_committee_sorters = {}
 
-        # Iterate over each committee and fetch its attendees and sorters
-        for committee in election_committee_groups:
-            attendees = CampaignCommitteeAttendee.objects.filter(committee=committee)
-            sorters = CampaignCommitteeSorter.objects.filter(committee=committee)
+        # # Iterate over each committee and fetch its attendees and sorters
+        # for committee in election_committee_groups:
+        #     attendees = CampaignCommitteeAttendee.objects.filter(committee=committee)
+        #     sorters = CampaignCommitteeSorter.objects.filter(committee=committee)
 
-            # Serialize and store the data
-            campaign_committee_attendees[committee.id] = (
-                CampaignCommitteeAttendeeSerializer(
-                    attendees, many=True, context=context
-                ).data
-            )
-            campaign_committee_sorters[committee.id] = (
-                CampaignCommitteeSorterSerializer(
-                    sorters, many=True, context=context
-                ).data
-            )
+        #     # Serialize and store the data
+        #     campaign_committee_attendees[committee.id] = (
+        #         CampaignCommitteeAttendeeSerializer(
+        #             attendees, many=True, context=context
+        #         ).data
+        #     )
+        #     campaign_committee_sorters[committee.id] = (
+        #         CampaignCommitteeSorterSerializer(
+        #             sorters, many=True, context=context
+        #         ).data
+        #     )
 
         # ... rest of your view logic ...
 
@@ -243,8 +243,8 @@ class GetCampaignDetails(APIView):
                     #     election_committee_groups, many=True, context=context
                     # ).data,
                     # "campaignCommittees": CampaignCommitteeSerializer(campaign_committees, many=True, context=context).data,
-                    "campaignCommitteeAttendees": campaign_committee_attendees,
-                    "campaignCommitteeSorters": campaign_committee_sorters,
+                    # "campaignCommitteeAttendees": campaign_committee_attendees,
+                    # "campaignCommitteeSorters": campaign_committee_sorters,
                     "campaign_roles": get_campaign_roles(context),
                 },
                 "code": 200,

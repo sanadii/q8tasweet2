@@ -1,42 +1,6 @@
 from slugify import slugify
 from django.apps import apps
 
-# Campaign App
-# from apps.campaigns.models import Campaign, CampaignMember
-# from apps.campaigns.serializers import CampaignSerializer, CampaignMemberSerializer
-
-# Election App
-from apps.elections.models import (
-    ElectionCandidate,
-    ElectionParty,
-    ElectionPartyCandidate,
-)
-
-from apps.committees.models import (
-    Committee,
-    Committee,
-    # CommitteeResult,
-    # PartyCommitteeResult,
-    # PartyCandidateCommitteeResult,
-)
-
-from apps.elections.serializers import (
-    ElectionSerializer,
-    CategoriesSerializer,
-    SubCategoriesSerializer,
-    ElectionCandidateSerializer,
-    ElectionPartySerializer,
-    ElectionPartyCandidateSerializer,
-)
-
-from apps.committees.serializers import (
-    CommitteeSerializer,
-    CommitteSerializer,
-    # CommitteeResultSerializer,
-)
-
-
-
 def generate_slug(value):
     """
     Generate a unique slug for a given value.

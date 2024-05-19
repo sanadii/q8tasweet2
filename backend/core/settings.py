@@ -97,7 +97,7 @@ INSTALLED_APPS = [
     "apps.areas",
     "apps.committees",
     "apps.electors",
-    # "apps.campaigns",
+    "apps.campaigns",
     # "apps.electionData",
 ]
 

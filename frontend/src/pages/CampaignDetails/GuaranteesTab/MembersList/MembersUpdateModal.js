@@ -96,8 +96,8 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit, modalMode }) => 
       type: "select",
       options: filteredRoleOptions.map(role => ({
         id: role.id,
-        label: role.displayName,
-        role: role.name,
+        label: role.name,
+        role: role.codename,
         value: role.id
       })),
     },

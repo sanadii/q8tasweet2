@@ -57,7 +57,7 @@ from apps.elections.serializers import (
 
 # Utils
 from utils.views_helper import CustomPagination
-from utils.schema import schema_context, table_exists
+from utils.schema import schema_context
 
 # from apps.elections.utils import get_election_committee_results
 

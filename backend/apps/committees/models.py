@@ -20,35 +20,9 @@ from apps.elections.models import (
 )
 
 from utils.model_options import GenderOptions
+from utils.AbstractSchemaModels import DynamicSchemaModel
 
 User = get_user_model()
-
-class DynamicSchemaModel(models.Model):
-    class Meta:
-        abstract = True
-        managed = False
-
-    def save(self, *args, **kwargs):
-        with schema_context(self._schema):
-            super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        with schema_context(self._schema):
-            super().delete(*args, **kwargs)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)  # Ensures base class initialization
-        self._schema = kwargs.get("schema_name", "public")
-
-    def set_schema(self, schema):
-        self._schema = schema
-
-    def __str__(self):
-        return self.name
-
-    def set_schema(self, schema):
-        self._schema = schema
-
 
 class CommitteeSite(DynamicSchemaModel):
     serial = models.IntegerField(blank=True, null=True)
@@ -121,14 +95,7 @@ class BaseElectionCommitteeResult(DynamicSchemaModel):
 
 
 class CommitteeCandidateResult(BaseElectionCommitteeResult, TrackModel):
-    election_candidate = models.ForeignKey(
-        ElectionCandidate,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="committee_candidate_result_candidates",
-    )
-
+    election_candidate = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = "committee_candidate_result"
         verbose_name = "Committee Candidate Result"

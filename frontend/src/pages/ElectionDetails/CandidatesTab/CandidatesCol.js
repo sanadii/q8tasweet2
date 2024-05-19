@@ -10,21 +10,21 @@ const Id = (cellProps) => {
     );
 };
 
-const CheckboxHeader = ({ checkedAll }) => (
+const CheckboxHeader = ({ handleCheckAllClick }) => (
     <input
         type="checkbox"
         id="checkBoxAll"
         className="form-check-input"
-        onClick={checkedAll}
+        onClick={handleCheckAllClick}
     />
 );
 
-const CheckboxCell = ({ row, deleteCheckbox }) => (
+const CheckboxCell = ({ row, handleCheckCellClick }) => (
     <input
         type="checkbox"
         className="checkboxSelector form-check-input"
         value={row.original.id}
-        onChange={deleteCheckbox}
+        onChange={handleCheckCellClick}
     />
 );
 
@@ -49,7 +49,7 @@ const Votes = (cellProps) => {
 }
 
 const Actions = (cellProps) => {
-    const { setElectionCandidate, handleElectionCandidateClick, setIsElectionPartyAction, onDeleteCheckBoxClick } = cellProps;
+    const { setElectionCandidate, handleElectionCandidateClick, setIsElectionPartyAction, handleItemDeleteClick } = cellProps;
     const electionCandidate = cellProps.row.original;
 
     return (
@@ -95,7 +95,7 @@ const Actions = (cellProps) => {
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
                     setIsElectionPartyAction(false); // Set isPartyAction to true when this button is clicked
-                    onDeleteCheckBoxClick(electionCandidate);
+                    handleItemDeleteClick(electionCandidate);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />

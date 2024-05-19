@@ -146,7 +146,7 @@ group_category_field = models.IntegerField(choices=GroupCategories.choices, defa
 group_display_name_field = models.CharField(max_length=255, null=True, blank=True)
 
 Group.add_to_class('category', group_category_field)
-Group.add_to_class('display_name', group_display_name_field)
+Group.add_to_class('codename', group_display_name_field)
 
 
 

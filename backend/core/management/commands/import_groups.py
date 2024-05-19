@@ -25,7 +25,7 @@ class Command(BaseCommand):
             "id",
             "name",
             "category",
-            "display_name",
+            "codename",
         ]
 
         # Read data from Excel file

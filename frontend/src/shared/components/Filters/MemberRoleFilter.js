@@ -107,7 +107,7 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
                                     onClick={(e) => ChangeCampaignRole(e, role.name.toString(), role.id)}
                                     href="#"
                                 >
-                                    {role.displayName}
+                                    {role.name}
                                     <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
                                         {roleCounts[role.id]}
                                     </span>

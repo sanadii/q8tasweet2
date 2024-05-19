@@ -61,65 +61,46 @@ const ElectionSchema = ({ election }) => {
             </CardHeader>
             <CardBody>
                 {schemaDetails ? (
-                    <ul className="list-group list-group-flush border-dashed mb-0">
-                        {schemaDetails?.schemaTables && schemaDetails?.schemaTables.map((table, index) => (
-                            <li className="list-group-item px-0" key={index}>
-                                <div className="d-flex">
-                                    <div className="d-flex flex-grow-1 ms-2">
-                                        <i className="mdi mdi-database fs-16 align-middle text-primary me-1"></i>
-                                        {table.name}
+                    <div className="schema">
+                        <div className="mt-3 pt-2">
+                            {schemaDetails.schemaTables && schemaDetails.schemaTables.map((table, index) => (
+                                <li className="list-group-item px-0" key={index}>
+                                    <div className="d-flex mb-2">
+                                        <div className="flex-grow-1">
+                                            <p className="text-truncate text-muted fs-14 mb-0">
+                                                <i className="mdi mdi-database align-middle text-info me-2"></i>
+                                                {table.name}
+                                            </p>
+                                        </div>
+                                        <div className="flex-shrink-0">
+                                            <Button color="primary" className="btn-icon btn-sm material-shadow-none">
+                                                <i className="mdi mdi-database" />
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div className="flex-shrink-0 text-end">
-                                        <Button color="primary" className="btn-icon btn-sm material-shadow-none"> <i className="mdi mdi-database" /> </Button>
-                                    </div>
-                                </div>
-                            </li>
-                        ))}
-
-
-
-                        {/* <Table>
-                            <tbody>
-                                <tr>
-                                    <th>قاعدة البيانات</th>
-                                    <td>{electionSchemaName}</td>
-                                </tr>
-                                <tr>
-                                    <th>الانتخابات</th>
-                                    <td>
-                                        <ul>
-                                            {electionSchemaTables && electionSchemaTables.map((table, index) => (
-                                                <li key={index}>{table}</li>
-                                            ))}
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>الحملات</th>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </Table> */}
-
-                        <h5>تحميل الملفات</h5>
-                        {fields.map((field) => (
-                            (field.condition === undefined || field.condition) && (
-                                <FormFields
-                                    key={field.id}
-                                    field={field}
-                                    validation={validation}
-                                />
-                            )
-                        ))}
-                        <Button onClick={handleAddElectionSchema}>إضافة قاعدة بيانات للإنتخابات</Button>
-
-                    </ul>
-
+                                </li>
+                            ))}
+                        </div>
+                        <div>
+                            <h5>تحميل الملفات</h5>
+                            {fields.map((field) => (
+                                (field.condition === undefined || field.condition) && (
+                                    <FormFields
+                                        key={field.id}
+                                        field={field}
+                                        validation={validation}
+                                    />
+                                )
+                            ))}
+                            <Button onClick={handleAddElectionSchema}>إضافة قاعدة بيانات للإنتخابات</Button>
+                        </div>
+                    </div>
                 ) : (
                     <Button onClick={handleAddElectionSchema}>إضافة قاعدة بيانات للإنتخابات</Button>
                 )}
             </CardBody>
-        </Card>
+
+        </Card >
     );
 };
 

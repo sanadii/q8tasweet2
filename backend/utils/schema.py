@@ -1,8 +1,7 @@
 from contextlib import contextmanager
 from django.db import connection
-from apps.elections.models import Election
 from rest_framework.response import Response
-
+from django.apps import apps
 
 
 @contextmanager
@@ -13,11 +12,12 @@ def schema_context(request, schema):
     if schema existL to check if the schema exist to fetch for the tables
     if table exist: to check if the table exist to get the data from the tables
     """
-    print("schema:: ", schema)
     cursor = connection.cursor()
     schema_name = schema.replace(
         "-", "_"
     )  # Convert the slug to a valid schema name format using underscores.
+    print("schema:: ", schema_name)
+
     try:
         # Check and set the schema
         cursor.execute("SHOW search_path;")
@@ -36,9 +36,11 @@ def schema_context(request, schema):
 
         # Check if the election exists within the context of the current schema
         try:
-            election = Election.objects.get(slug=schema)
+            election = apps.get_model(
+                "elections", "Election"
+            )  # Dynamically get the Election model
             yield election  # Yielding election object if it exists
-        except Election.DoesNotExist:
+        except election.DoesNotExist:
             yield Response({"error": "Election not found"}, status=404)
             return
 
@@ -55,3 +57,5 @@ def table_exists(table_name):
     with connection.cursor() as cursor:
         cursor.execute(f"SELECT to_regclass('{table_name}');")
         return cursor.fetchone()[0] is not None
+    
+    

@@ -29,7 +29,7 @@ const Role = ({ cellProps, campaignRoles }) => {
 
     return (
         <p className="text-success">
-            <strong>{role ? role.displayName : "غير معرف"}</strong>
+            <strong>{role ? role.name : "غير معرف"}</strong>
         </p>
     );
 }

@@ -12,19 +12,18 @@ from django.utils.text import slugify
 
 from apps.settings.models import TrackModel, TaskModel
 from apps.areas.models import Area
-# from apps.committees.models import CommitteeCandidateResult
 
 from utils.model_options import (
     ElectionMethodOptions,
-    # ElectionResultsOptions,
     GenderOptions,
 )
 from utils.models_permission_manager import (
     ModelsPermissionManager,
     CustomPermissionManager,
 )
-
+from utils.schema import schema_context
 # from django.contrib.postgres.fields import ArrayField
+from django.db import transaction
 
 User = get_user_model()
 
@@ -206,14 +205,6 @@ class ElectionCandidate(TrackModel):
     votes = models.PositiveIntegerField(default=0, null=True, blank=True)
     note = models.TextField(blank=True, null=True)
 
-    #  Saving sum of votes from CommitteeCandidateResult for each candidate
-    # def update_votes(self):
-    #     total_votes = CommitteeCandidateResult.objects.filter(
-    #         election_candidate=self
-    #     ).aggregate(total_votes=Sum("votes"))["total_votes"]
-    #     self.votes = total_votes if total_votes is not None else 0
-    #     self.save()
-
     class Meta:
         db_table = "election_candidate"
         verbose_name = "Election Candidate"
@@ -228,8 +219,23 @@ class ElectionCandidate(TrackModel):
 
     def __str__(self):
         return str(self.candidate.name)
+    
+    # def delete(self, *args, **kwargs):
+    #     request = kwargs.pop('request', None)
+    #     if request:
+    #         slug = request.resolver_match.kwargs.get("slug")
+    #         if slug:
+    #             with schema_context(slug):
+    #                 with transaction.atomic():
+    #                     # Delete related CommitteeCandidateResult entries
+    #                     from apps.committees.models import CommitteeCandidateResult
+    #                     CommitteeCandidateResult.objects.filter(election_candidate=self).delete()
+    #             super(ElectionCandidate, self).delete(*args, **kwargs)
+    #             return
+    #     super(ElectionCandidate, self).delete(*args, **kwargs)
 
 
+     
 class ElectionParty(TrackModel):
     election = models.ForeignKey(
         "Election",
@@ -263,6 +269,19 @@ class ElectionParty(TrackModel):
 
     def __str__(self):
         return f"{self.party.name} in {self.election.title}"
+
+    def delete(self, *args, **kwargs):
+        request = kwargs.pop('request', None)
+        if request:
+            slug = request.resolver_match.kwargs.get("slug")
+            if slug:
+                with schema_context(request, slug):
+                    with transaction.atomic():
+                        # Delete related CommitteeCandidateResult entries
+                        self.committee_candidate_results.all().delete()
+                        super(ElectionCandidate, self).delete(*args, **kwargs)
+                        return
+        super(ElectionCandidate, self).delete(*args, **kwargs)
 
 
 class ElectionPartyCandidate(TrackModel):

@@ -14,6 +14,8 @@ from apps.elections.models import (
     ElectionPartyCandidate,
 )
 
+from apps.committees.models import CommitteeCandidateResult
+
 from apps.committees.models import Committee
 from apps.auths.serializers import UserSerializer
 from apps.committees.serializers import CommitteeCandidateResultSerializer
@@ -248,7 +250,6 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             election.status = task_data["status"]
         election.save()
 
-
 class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """Serializer for the ElectionCandidate model."""
 
@@ -257,8 +258,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     name = serializers.CharField(source="candidate.name", read_only=True)
     gender = serializers.IntegerField(source="candidate.gender", read_only=True)
     image = serializers.SerializerMethodField("get_candidate_image")
-    committee_results = serializers.SerializerMethodField("get_committee_votes")
-    #     # committee_sorting = serializers.SerializerMethodField()
+    committee_results = serializers.SerializerMethodField("get_committee_results")
 
     class Meta:
         model = ElectionCandidate
@@ -274,7 +274,6 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "result",
             "position",
             "committee_results",
-            # "committee_sorting",
         ]
 
     def get_candidate_image(self, obj):
@@ -282,26 +281,27 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             return obj.candidate.image.url
         return None
 
-    def get_committee_votes(self, obj):
+    def get_committee_results(self, obj):
         request = self.context.get("request")
-        slug = request.resolver_match.kwargs.get("slug") if request else None
+        schema = request.resolver_match.kwargs.get("slug") if request else None
 
-        print(f"The Request: {request}")
-        print(f"The Slug: {slug}")
-
-        if not slug:
-            print("Schema (slug) is None")
+        if not schema:
             return None
 
-        print("We have a slug, attempting to enter schema context")
-
         try:
-            with schema_context(request, slug):
-                print("Inside schema context")
-                committee_results = (
-                    obj.committee_candidate_result_candidates.all()
-                )  # Adjust this query as needed
-                print(f"Committee Votes: {committee_results}")
+            with schema_context(request, schema):
+                # Debug: Print schema context
+                print(f"Schema set to: {schema}")
+
+                # Fetch committee results from the custom schema
+                committee_results = CommitteeCandidateResult.objects.filter(election_candidate=obj.id)
+                
+                # Debug: Print requested table and column
+                print(f"Requested table: committee_candidate_result")
+                print(f"Requested column: election_candidate")
+                
+                if not committee_results.exists():
+                    print(f"No committee results found for election candidate {obj.id}")
                 return CommitteeCandidateResultSerializer(
                     committee_results, many=True
                 ).data
@@ -309,39 +309,6 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             print(f"Error: {str(e)}")
             return None
 
-    #     # def get_committee_sorting(self, obj):
-    #     #     # Access the request context from self.context
-    #     #     request = self.context.get("request") if self.context else None
-    #     #     source = (
-    #     #         "election_candidate_sortings"
-    #     #         if request and "GetElectionDetails" in request.resolver_match.url_name
-    #     #         else "campaign_candidate_sortings"
-    #     #     )
-    #     #     # Assuming you have a method to get the sorting data from the source
-    #     #     sorting_data = self.get_sorting_data_from_source(obj, source)
-    #     #     return CampaignSortingSerializer(sorting_data, many=True, read_only=True).data
-
-    #     # You might need to implement this method based on your logic
-    #     def get_sorting_data_from_source(self, obj, source):
-    #         if source == "election_candidate_sortings":
-    #             return (
-    #                 obj.election_candidate_sortings.all()
-    #             )  # Replace with appropriate query
-    #         elif source == "campaign_candidate_sortings":
-    #             return (
-    #                 obj.campaign_candidate_sortings.all()
-    #             )  # Replace with appropriate query
-    #         else:
-    #             raise ValueError(f"Invalid source: {source}")
-
-    def create(self, validated_data):
-        """Customize creation (POST) of an instance"""
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        """Customize update (PUT, PATCH) of an instance"""
-        # Additional logic to customize instance updating
-        return super().update(instance, validated_data)
 
 
 class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
