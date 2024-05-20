@@ -71,17 +71,17 @@ export const UPDATE_ELECTION_CAMPAIGN = "/elections/updateElectionCampaign";
 export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
 
 
-// Election  Schema
-export const GET_ELECTION_SCHEMAS = "/electionSchemas/getElectionSchemas";
-export const ADD_SCHEMA_TABLES = "/electionSchemas/addSchemaTables";
-export const GET_ELECTION_SCHEMA_DETAILS = "/electionSchemas/getElectionSchemaDetails";
-export const ADD_ELECTION_SCHEMA = "/electionSchemas/addElectionSchema";
+// Schema
+export const GET_ELECTION_SCHEMAS = "/schemas/getElectionSchemas";
+export const ADD_SCHEMA_TABLES = "/schemas/addSchemaTables";
+export const GET_ELECTION_SCHEMA_DETAILS = "/schemas/getElectionSchemaDetails";
+export const ADD_ELECTION_SCHEMA = "/schemas/addElectionSchema";
 // export const ADD_ELECTION_SCHEMA_TABLES = "/electors/addElectionSchemaTables";
-export const UPDATE_ELECTION_SCHEMA = "/electionSchemas/updateElectionSchema";
-export const DELETE_ELECTION_SCHEMA = "/electionSchemas/deleteElectionSchema";
+export const UPDATE_ELECTION_SCHEMA = "/schemas/updateElectionSchema";
+export const DELETE_ELECTION_SCHEMA = "/schemas/deleteElectionSchema";
 
 
-// Election Data
+// Electors
 export const GET_ELECTORS = "/electors/getElectors";
 export const ADD_ELECTOR = "/electors/addElector";
 export const UPDATE_ELECTOR = "/electors/updateElector";
@@ -108,7 +108,7 @@ export const DELETE_PARTY = "/candidates/deleteParty";
 // Campaigns
 export const GET_CAMPAIGNS = "/campaigns/getCampaigns";
 export const GET_CAMPAIGN_DETAILS = "/campaigns/getCampaignDetails";
-export const ADD_CAMPAIGN = "/campaigns/ADD_CAMPAIGN";
+export const ADD_CAMPAIGN = "/campaigns/addCampaign";
 export const UPDATE_CAMPAIGN = "/campaigns/updateCampaign";
 export const DELETE_CAMPAIGN = "/campaigns/deleteCampaign";
 // export const GET_CAMPAIGN_CANDIDATES = "/campaigns/getcampaignCandidates";

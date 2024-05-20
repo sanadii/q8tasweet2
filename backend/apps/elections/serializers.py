@@ -14,11 +14,11 @@ from apps.elections.models import (
     ElectionPartyCandidate,
 )
 
-from apps.committees.models import CommitteeCandidateResult
-
+from apps.committees.results.models import CommitteeResultCandidate
 from apps.committees.models import Committee
 from apps.auths.serializers import UserSerializer
-from apps.committees.serializers import CommitteeCandidateResultSerializer
+from apps.committees.serializers import CommitteeSerializer
+from apps.committees.results.serializers import CommitteeResultCandidateSerializer
 from utils.schema import schema_context
 
 
@@ -250,7 +250,12 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             election.status = task_data["status"]
         election.save()
 
-class ElectionCandidateSerializer(serializers.ModelSerializer):
+
+class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
+    """Serializer for the ElectionCandidate model."""
+
+    admin_serializer_classes = (TrackMixin,)
+
     name = serializers.CharField(source="candidate.name", read_only=True)
     gender = serializers.IntegerField(source="candidate.gender", read_only=True)
     image = serializers.SerializerMethodField("get_candidate_image")
@@ -286,8 +291,17 @@ class ElectionCandidateSerializer(serializers.ModelSerializer):
 
         try:
             with schema_context(schema):
-                committee_results = CommitteeCandidateResult.objects.filter(election_candidate=obj)
-                return CommitteeCandidateResultSerializer(committee_results, many=True).data
+                # Fetch all committee results from the custom schema
+                committee_result_candidate = CommitteeResultCandidate.objects.filter(
+                    election_candidate=obj.id
+                )
+                committee_result_candidate_serialized = (
+                    CommitteeResultCandidateSerializer(
+                        committee_result_candidate, many=True
+                    ).data
+                )
+
+                return committee_result_candidate_serialized
         except Exception as e:
             print(f"Error: {str(e)}")
             return None

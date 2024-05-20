@@ -24,19 +24,20 @@ from rest_framework.exceptions import AuthenticationFailed
 from apps.auths.models import User, Group
 from apps.campaigns.models import (
     Campaign,
-    CampaignCommittee,
-    CampaignCommitteeAttendee,
-    CampaignCommitteeSorter,
     CampaignMember,
-    CampaignGuarantee,
-    CampaignGuaranteeGroup,
-    CampaignPartyGuarantee,
-    CampaignAttendee,
-    CampaignSorting,
-    CampaignParty,
-    CampaignPartyMember,
-    CampaignPartyMember,
-    CampaignPartyGuarantee,
+    # CampaignGuarantee,
+    # CampaignGuaranteeGroup,
+    # CampaignAttendee,
+    # CampaignSorting,
+    # CampaignPartyMember,
+    # CampaignPartyMember,
+    
+    # CampaignCommittee,
+    # CampaignCommitteeAttendee,
+    # CampaignCommitteeSorter,
+    # CampaignPartyGuarantee,
+    # CampaignParty,
+    # CampaignPartyGuarantee,
 )
 
 from apps.elections.models import Election, ElectionCandidate, ElectionParty
@@ -48,27 +49,27 @@ from django.contrib.auth.models import Group
 # Serializers
 from apps.campaigns.serializers import (
     CampaignSerializer,
-    CampaignCommitteeSerializer,
-    CampaignCommitteeAttendeeSerializer,
-    CampaignCommitteeSorterSerializer,
+    # CampaignCommitteeSerializer,
+    # CampaignCommitteeAttendeeSerializer,
+    # CampaignCommitteeSorterSerializer,
     CampaignMemberSerializer,
-    CampaignGuaranteeSerializer,
-    CampaignGuaranteeGroupSerializer,
-    CampaignAttendeeSerializer,
-    CampaignSortingSerializer,
-    CampaignPartyMemberSerializer,
-    CampaignPartyGuaranteeSerializer,
+    # CampaignGuaranteeSerializer,
+    # CampaignGuaranteeGroupSerializer,
+    # CampaignAttendeeSerializer,
+    # CampaignSortingSerializer,
+    # CampaignPartyMemberSerializer,
+    # CampaignPartyGuaranteeSerializer,
     # CampaignCombinedSerializer,
     # CampaignPartySerializer,
 )
 
-from apps.notifications.models import CampaignNotification, CampaignPartyNotification
+# from apps.notifications.models import CampaignNotification, CampaignPartyNotification
 from apps.elections.serializers import (
     ElectionCandidateSerializer,
 )
 from apps.committees.serializers import CommitteeSerializer
 from apps.auths.serializers import GroupSerializer
-from apps.notifications.serializers import CampaignNotificationSerializer
+# from apps.notifications.serializers import CampaignNotificationSerializer
 
 from utils.views_helper import CustomPagination
 from utils.views import (
@@ -99,11 +100,12 @@ class GetCampaigns(APIView):
                     user=user
                 ).values_list(
                     "campaign_id", flat=True
-                ) | CampaignPartyMember.objects.filter(
-                    user=user
-                ).values_list(
-                    "campaign_party_id", flat=True
                 )
+                # | CampaignPartyMember.objects.filter(
+                #     user=user
+                # ).values_list(
+                #     "campaign_party_id", flat=True
+                # )
                 campaigns = campaigns.filter(id__in=accessible_campaign_ids)
                 # campaign_parties = campaign_parties.filter(id__in=accessible_campaign_ids)
 
@@ -169,12 +171,12 @@ class GetCampaignDetails(APIView):
         election_committee_groups = Committee.objects.filter(
             election=election
         ).select_related("election")
-        campaign_attendees = CampaignAttendee.objects.filter(
-            election=election
-        ).select_related("election")
-        campaign_notifications = CampaignNotification.objects.filter(
-            campaign=campaign
-        ).select_related("campaign")
+        # campaign_attendees = CampaignAttendee.objects.filter(
+        #     election=election
+        # ).select_related("election")
+        # campaign_notifications = CampaignNotification.objects.filter(
+        #     campaign=campaign
+        # ).select_related("campaign")
 
         # # Initialize dictionaries to store attendees and sorters for each committee
         # campaign_committee_attendees = {}

@@ -178,7 +178,7 @@ class GetElectionDetails(APIView):
             ).data,
         }
 
-        get_schema_details_and_content(context, request, slug, response_data)
+        get_schema_details_and_content(context, slug, response_data)
 
         return Response({"data": response_data, "code": 200})
 
@@ -190,7 +190,7 @@ model_verbose_names = {
 
 
 
-def get_schema_details_and_content(context, request, slug, response_data):
+def get_schema_details_and_content(context, slug, response_data):
     with schema_context(slug) as election:
         if isinstance(election, Response):
             return election
@@ -366,7 +366,7 @@ class DeleteElection(APIView):
             election = Election.objects.get(id=id)
             election.delete()
             return JsonResponse(
-                {"data": "Election is_deleted successfully", "count": 1, "code": 200},
+                {"data": "Election is deleted successfully", "count": 1, "code": 200},
                 safe=False,
             )
         except Election.DoesNotExist:
@@ -447,7 +447,7 @@ class DeleteElectionCandidate(APIView):
             election_candidate.delete()
             return Response(
                 {
-                    "data": "Election candidate is_deleted successfully",
+                    "data": "Election candidate is deleted successfully",
                     "count": 1,
                     "code": 200,
                 },
@@ -566,7 +566,7 @@ class DeleteElectionParty(APIView):
             election_party.delete()
             return Response(
                 {
-                    "data": "Election party is_deleted successfully",
+                    "data": "Election party is deleted successfully",
                     "count": 1,
                     "code": 200,
                 },
@@ -685,7 +685,7 @@ class DeleteElectionPartyCandidate(APIView):
             election_party.delete()
             return Response(
                 {
-                    "data": "Election party is_deleted successfully",
+                    "data": "Election party is deleted successfully",
                     "count": 1,
                     "code": 200,
                 },

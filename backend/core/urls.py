@@ -22,19 +22,13 @@ from rest_framework.documentation import include_docs_urls
 urlpatterns = [
     # Django Admin
     path("admin/", admin.site.urls),
-    # path('admin/elections/', election_admin_site.urls, name='election-admin'),
-    # path('admin/candidates/', candidate_admin_site.urls, name='candidate-admin'),
-    # path('admin/campaigns/', campaign_admin_site.urls, name='campaign-admin'),
-    # path('admin/voters/', voter_admin_site.urls, name='voter-admin'),
-    # path('admin/categories/', category_admin_site.urls, name='category-admin'),
-    # path('admin/users/', user_admin_site.urls, name='user-admin'),
 
     # Setting Apps
     path('Config/', include('apps.settings.urls')),
     # path('media/', include('apps.media.urls')),
 
     # Main Apps
-    # path('campaigns/', include('apps.campaigns.urls')),
+    path('campaigns/', include('apps.campaigns.urls')),
     path('candidates/', include('apps.candidates.urls')),
     path('categories/', include('apps.categories.urls')),
     path('elections/', include('apps.elections.urls')),
@@ -49,6 +43,14 @@ urlpatterns = [
     path('schemas/', include('apps.schemas.urls')),
     path('electors/', include('apps.electors.urls')),
     path('committees/', include('apps.committees.urls')),
+    
+    # path('admin/elections/', election_admin_site.urls, name='election-admin'),
+    # path('admin/candidates/', candidate_admin_site.urls, name='candidate-admin'),
+    # path('admin/campaigns/', campaign_admin_site.urls, name='campaign-admin'),
+    # path('admin/voters/', voter_admin_site.urls, name='voter-admin'),
+    # path('admin/categories/', category_admin_site.urls, name='category-admin'),
+    # path('admin/users/', user_admin_site.urls, name='user-admin'),
+
 
 ]
 

@@ -220,19 +220,27 @@ class ElectionCandidate(TrackModel):
     def __str__(self):
         return str(self.candidate.name)
     
-    # def delete(self, *args, **kwargs):
-    #     request = kwargs.pop('request', None)
-    #     if request:
-    #         slug = request.resolver_match.kwargs.get("slug")
-    #         if slug:
-    #             with schema_context(slug):
-    #                 with transaction.atomic():
-    #                     # Delete related CommitteeCandidateResult entries
-    #                     from apps.committees.models import CommitteeCandidateResult
-    #                     CommitteeCandidateResult.objects.filter(election_candidate=self).delete()
-    #             super(ElectionCandidate, self).delete(*args, **kwargs)
-    #             return
-    #     super(ElectionCandidate, self).delete(*args, **kwargs)
+    def delete(self, *args, **kwargs):
+        # from the election take the slug
+        election = self.election
+        if election and election.slug:
+            slug = election.slug
+            with schema_context(slug):
+                with transaction.atomic():
+                    # Delete related CommitteeResultCandidate entries
+                    from apps.committees.results.models import CommitteeResultCandidate
+                    related_entries = CommitteeResultCandidate.objects.filter(election_candidate=self.id)
+                    
+                    # Print related entries before deletion
+                    for entry in related_entries:
+                        print(f"Deleting CommitteeResultCandidate: {entry}")
+
+                    related_entries.delete()
+            super(ElectionCandidate, self).delete(*args, **kwargs)
+            return
+            
+        super(ElectionCandidate, self).delete(*args, **kwargs)
+
 
 
      
@@ -254,9 +262,9 @@ class ElectionParty(TrackModel):
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
 
-    #  Saving sum of votes from CommitteeCandidateResult for each party
+    #  Saving sum of votes from CommitteeResultCandidate for each party
     # def update_votes(self):
-    #     total_votes = CommitteeCandidateResult.objects.filter(election_party=self).aggregate(total_votes=Sum('votes'))['total_votes']
+    #     total_votes = CommitteeResultCandidate.objects.filter(election_party=self).aggregate(total_votes=Sum('votes'))['total_votes']
     #     self.votes = total_votes if total_votes is not None else 0
     #     self.save()
 
@@ -277,7 +285,7 @@ class ElectionParty(TrackModel):
             if slug:
                 with schema_context(slug):
                     with transaction.atomic():
-                        # Delete related CommitteeCandidateResult entries
+                        # Delete related CommitteeResultCandidate entries
                         self.committee_candidate_results.all().delete()
                         super(ElectionCandidate, self).delete(*args, **kwargs)
                         return
@@ -305,7 +313,7 @@ class ElectionPartyCandidate(TrackModel):
 
     #  Saving sum of votes from ElectionCommitteeResult for each candidate
     # def update_votes(self):
-    #     total_votes = CommitteeCandidateResult.objects.filter(
+    #     total_votes = CommitteeResultCandidate.objects.filter(
     #         election_party_candidate=self
     #     ).aggregate(total_votes=Sum("votes"))["total_votes"]
     #     self.votes = total_votes if total_votes is not None else 0

@@ -161,7 +161,7 @@ class DeleteCandidate(APIView):
         try:
             candidate = Candidate.objects.get(id=id)
             candidate.delete()
-            return JsonResponse({"data": "Candidate is_deleted successfully", "count": 1, "code": 200}, safe=False)
+            return JsonResponse({"data": "Candidate is deleted successfully", "count": 1, "code": 200}, safe=False)
         except Candidate.DoesNotExist:
             return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)
 
@@ -268,6 +268,6 @@ class DeleteParty(APIView):
         try:
             party = Party.objects.get(id=id)
             party.delete()
-            return JsonResponse({"data": "Party is_deleted successfully", "count": 1, "code": 200}, safe=False)
+            return JsonResponse({"data": "Party is deleted successfully", "count": 1, "code": 200}, safe=False)
         except Party.DoesNotExist:
             return JsonResponse({"data": "Party not found", "count": 0, "code": 404}, safe=False)

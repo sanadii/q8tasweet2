@@ -8,7 +8,9 @@ from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # Models
 from apps.areas.models import Area
-from apps.committees.models import CommitteeSite, Committee, CommitteeCandidateResult
+from apps.committees.models import CommitteeSite, Committee
+from apps.committees.results.models import CommitteeResultCandidate
+
 from apps.areas.serializers import AreaSerializer
 
 
@@ -70,39 +72,3 @@ class CommitteeSiteSerializer(serializers.ModelSerializer):
                 Committee.objects.create(committee_site=instance, **committee_data)
         return instance
 
-
-# # Votting and Sorting
-class CommitteeCandidateResultSerializer(serializers.ModelSerializer):
-    admin_serializer_classes = (TrackMixin,)
-
-    class Meta:
-        model = CommitteeCandidateResult
-        fields = "__all__"
-        # fields = ["committee", "election_candidate", "votes"]
-
-
-# class ElectionPartyCommitteeResultSerializer(
-#     AdminFieldMixin, serializers.ModelSerializer
-# ):
-#     admin_serializer_classes = (TrackMixin,)
-
-#     class Meta:
-#         model = PartyCommitteeResult
-#         fields = ["election_committee", "votes"]
-
-
-# class ElectionPartyCandidateCommitteeResultSerializer(
-#     AdminFieldMixin, serializers.ModelSerializer
-# ):
-#     admin_serializer_classes = (TrackMixin,)
-
-#     class Meta:
-#         model = PartyCandidateCommitteeResult
-#         fields = ["election_committee", "votes"]
-
-
-# class CampaignSortingSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = CampaignSorting
-#         fields = "__all__"

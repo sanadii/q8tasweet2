@@ -119,8 +119,8 @@ export const ElectionCampaignModal = ({ modal, toggle, setModal, isEdit, electio
 
 const AddElectionCampaignModal = ({ election_id, dispatch }) => {
   const { electionCandidates, electionCampaigns } = useSelector((state) => ({
-    electionCandidates: state.Elections.electionCandidates,
-    electionCampaigns: state.Elections.electionCampaigns,
+    electionCandidates: state.Elections.electionCandidates || [],
+    electionCampaigns: state.Elections.electionCampaigns || [],
   }));
 
   // States
@@ -167,7 +167,8 @@ const AddElectionCampaignModal = ({ election_id, dispatch }) => {
                 e.preventDefault();
                 const newElectionCampaign = {
                   id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-                  electionCandidate: electionCandidate.id,
+                  campaignerId: electionCandidate.id,
+                  campaignType: "candidate",
                 };
                 dispatch(addNewElectionCampaign(newElectionCampaign));
               }}

@@ -19,9 +19,12 @@ const ElectionSchema = ({ election }) => {
     const electionHasSchema = election?.schemaDetails;
 
     const handleAddElectionSchema = () => {
-        dispatch(addSchemaTables(election.slug));
+        dispatch(addElectionSchema(election.slug));
     };
 
+    const handleAddElectionSchemaTables = () => {
+        dispatch(addSchemaTables(election.slug));
+    };
     const validation = useFormik({
         enableReinitialize: true,
         initialValues: {
@@ -92,14 +95,18 @@ const ElectionSchema = ({ election }) => {
                                     />
                                 )
                             ))}
-                            <Button onClick={handleAddElectionSchema}>إضافة قاعدة بيانات للإنتخابات</Button>
+                            <Button onClick={handleAddElectionSchemaTables}>
+                                إضافة قاعدة بيانات للإنتخابات
+                            </Button>
                         </div>
                     </div>
                 ) : (
-                    <Button onClick={handleAddElectionSchema}>إضافة قاعدة بيانات للإنتخابات</Button>
+                    <Button onClick={handleAddElectionSchemaTables}>
+                        <i className="mdi mdi-database" />
+                        إضافة قاعدة بيانات
+                    </Button>
                 )}
             </CardBody>
-
         </Card >
     );
 };

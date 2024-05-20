@@ -9,20 +9,27 @@ class Command(BaseCommand):
         with connection.cursor() as cursor:
             for model in apps.get_models():
                 table_name = model._meta.db_table
-                cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table_name}' AND column_default LIKE 'nextval%'")
+                
+                # Find sequence columns
+                cursor.execute(f"""
+                    SELECT column_name 
+                    FROM information_schema.columns 
+                    WHERE table_name='{table_name}' 
+                    AND column_default LIKE 'nextval%'
+                """)
                 sequence_columns = cursor.fetchall()
                 
                 if sequence_columns:
                     for column in sequence_columns:
                         column_name = column[0]
-                        cursor.execute(f"SELECT MAX({column_name}) FROM {table_name}")
+                        cursor.execute(f'SELECT MAX("{column_name}") FROM "{table_name}"')
                         max_id = cursor.fetchone()[0]
                         
                         if max_id is not None:
                             sequence_name = f"{table_name}_{column_name}_seq"
-                            cursor.execute(f"SELECT setval(pg_get_serial_sequence('{table_name}', '{column_name}'), %s)", [max_id])
+                            cursor.execute(f"SELECT setval(pg_get_serial_sequence('{table_name}', '{column_name}'), %s)", [max_id + 1])
                             self.stdout.write(self.style.SUCCESS(
-                                f"Successfully reset the sequence {sequence_name} for {table_name} to {max_id}"
+                                f"Successfully reset the sequence {sequence_name} for {table_name} to {max_id + 1}"
                             ))
                         else:
                             self.stdout.write(self.style.WARNING(

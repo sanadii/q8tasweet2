@@ -64,7 +64,7 @@ class DeleteCommittee(APIView):
         try:
             committee = Committee.objects.get(id=id)
             committee.delete()
-            return Response({"data": "Committee is_deleted successfully", "count": 1, "code": status.HTTP_200_OK})
+            return Response({"data": "Committee is deleted successfully", "count": 1, "code": status.HTTP_200_OK})
         except Committee.DoesNotExist:
             return Response({"error": "Committee not found"}, status=status.HTTP_404_NOT_FOUND)
 

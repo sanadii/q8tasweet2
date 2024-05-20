@@ -33,8 +33,8 @@ class Campaign(TrackModel, TaskModel):
 
     # Relationships
     campaign_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    campaign_type_object = GenericForeignKey("campaign_type", "object_id")
+    campaigner_id = models.PositiveIntegerField()
+    campaign_type_object = GenericForeignKey("campaign_type", "campaigner_id")
 
     # Media Coverage
     twitter = models.CharField(max_length=120, blank=True, null=True)
@@ -53,11 +53,17 @@ class Campaign(TrackModel, TaskModel):
             ("canAddCampaign", "Can Add Campaign"),
             ("canChangeCampaign", "Can Change Campaign"),
             ("canDeleteCampaign", "Can Delete Campaign"),
+            # TODO:
             ("canChangeCampaignModerator", "can Change Campaign Moderator"),
             ("canChangeCampaignCandidate", "can Change Campaign Candidate"),
             ("canChangeCampaignManager", "can Change Campaign Manager"),
             ("canChangeCampaignAssistant", "can Change Campaign Assistant"),
         ]
+        unique_together = ["campaign_type", "campaigner_id"]
+        # indexes = [
+        #     models.Index(fields=["campaign_type", "campaign_type"]),
+        # ]
+
 
     def __str__(self):
         return f"{self.election_candidate.candidate.name} - Year"

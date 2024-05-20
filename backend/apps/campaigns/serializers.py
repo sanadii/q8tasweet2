@@ -7,16 +7,18 @@ from django.conf import settings  # Import Django settings to access MEDIA_URL
 from django.contrib.auth.models import Group, Permission
 from apps.campaigns.models import (
     Campaign,
-    CampaignCommittee,
-    CampaignCommitteeAttendee,
-    CampaignCommitteeSorter,
     CampaignMember,
-    CampaignPartyMember,
-    CampaignPartyGuarantee,
-    CampaignGuarantee,
-    CampaignGuaranteeGroup,
-    CampaignAttendee,
-    CampaignSorting,
+    # CampaignPartyMember,
+    
+    
+    # CampaignCommittee,
+    # CampaignCommitteeAttendee,
+    # CampaignCommitteeSorter,
+    # CampaignPartyGuarantee,
+    # CampaignGuarantee,
+    # CampaignGuaranteeGroup,
+    # CampaignAttendee,
+    # CampaignSorting,
 )
 
 from apps.elections.models import (
@@ -27,9 +29,9 @@ from apps.elections.models import (
 )
 
 from apps.committees.models import Committee
-
 from apps.candidates.models import Candidate, Party
-from apps.electors.models import Voter
+from apps.electors.models import Elector
+from django.contrib.contenttypes.models import ContentType
 
 # Serializers
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
@@ -37,20 +39,29 @@ from apps.elections.serializers import ElectionSerializer, ElectionCandidateSeri
 
 from apps.committees.serializers import CommitteeSerializer
 from apps.auths.serializers import UserSerializer
-from apps.electors.serializers import VotersSerializer
+from apps.electors.serializers import ElectorSerializer
 
+from rest_framework import serializers
+from django.contrib.contenttypes.models import ContentType
+from .models import Campaign
+from apps.elections.serializers import ElectionSerializer
+
+from rest_framework import serializers
+from django.contrib.contenttypes.models import ContentType
+from .models import Campaign
+from apps.elections.serializers import ElectionSerializer
 
 class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """Serializer for the Campaign model, using the generic foreign key."""
 
     admin_serializer_classes = (TrackMixin, TaskMixin)
-    campaign_type = serializers.SerializerMethodField()
-    # campaign = serializers.SerializerMethodField()
+    
+    election = ElectionSerializer(source="election_candidate.election", read_only=True)
+    campaign_type = serializers.CharField()
+    campaigner_id = serializers.IntegerField()
+
     name = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
-
-    election = ElectionSerializer(source="election_candidate.election", read_only=True)
-    campaign_type = serializers.SerializerMethodField()  # Use SerializerMethodField
 
     class Meta:
         model = Campaign
@@ -58,6 +69,7 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "id",
             "election_candidate",
             "campaign_type",
+            "campaigner_id",
             "election",
             "name",
             "image",
@@ -72,27 +84,15 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     def get_campaign_type(self, obj):
         """Customize the campaign_type representation."""
         model_name = obj.campaign_type.model
-        if model_name.startswith("election"):
-            model_name = model_name[8:]  # Remove 'election' prefix
         return model_name.lower()  # Convert to lowercase for consistency
-
-    # def get_campaign(self, obj):
-    #     print ("obj.campaign_type.model: ", obj.campaign_type.model)
-    #     if obj.campaign_type.model in ('electioncandidate'):
-    #         campaign_entity = obj.campaign_type_object.candidate  # Access the related object
-    #         return CandidateSerializer(campaign_entity).data  # Use CandidateSerializer for both
-    #     elif obj.campaign_type.model in ('electionparty'):
-    #         campaign_entity = obj.campaign_type_object.party  # Access the related object
-    #         return PartySerializer(campaign_entity).data  # Use CandidateSerializer for both
-    #     return None
 
     def get_name(self, obj):
         """Retrieve the name dynamically based on campaign_type."""
         try:
-            if obj.campaign_type.model == "electioncandidate":
-                return obj.campaign_type_object.candidate.name
-            elif obj.campaign_type.model == "electionparty":
-                return obj.campaign_type_object.party.name
+            if obj.campaign_type.model == "candidate":
+                return obj.campaign_type_object.name
+            elif obj.campaign_type.model == "party":
+                return obj.campaign_type_object.name
             else:
                 raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
         except AttributeError:
@@ -103,10 +103,10 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     def get_image(self, obj):
         """Retrieve the image URL, handling cases where images might be missing."""
         try:
-            if obj.campaign_type.model == "electioncandidate":
-                image = obj.campaign_type_object.candidate.image
-            elif obj.campaign_type.model == "electionparty":
-                image = obj.campaign_type_object.party.image
+            if obj.campaign_type.model == "candidate":
+                image = obj.campaign_type_object.image
+            elif obj.campaign_type.model == "party":
+                image = obj.campaign_type_object.image
             else:
                 raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
 
@@ -118,17 +118,116 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-
-        # Remove unwanted fields from nested serializers
-        # if "election" in rep:
-        #     rep["election"].pop("track", None)
-        #     rep["election"].pop("task", None)
-
-        # if "candidate" in rep:
-        #     rep["candidate"].pop("track", None)
-        #     rep["candidate"].pop("task", None)
-
         return rep
+    
+    def create(self, validated_data):
+        campaign_type_model = validated_data.pop('campaign_type')
+        campaigner_id = validated_data.pop('campaigner_id')
+        
+        campaign_type = ContentType.objects.get(model=campaign_type_model)
+        
+        # Add 'object_id' to validated_data
+        validated_data['campaign_type'] = campaign_type
+        validated_data['object_id'] = campaigner_id
+        
+        return super().create(validated_data)
+
+
+# class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
+#     """Serializer for the Campaign model, using the generic foreign key."""
+
+#     admin_serializer_classes = (TrackMixin, TaskMixin)
+
+#     election = ElectionSerializer(source="election_candidate.election", read_only=True)
+#     campaign_type = serializers.SerializerMethodField()  # Use SerializerMethodField
+#     campaigner_id = serializers.IntegerField()
+
+#     name = serializers.SerializerMethodField()
+#     image = serializers.SerializerMethodField()
+
+
+#     class Meta:
+#         model = Campaign
+#         fields = [
+#             "id",
+#             "election_candidate",
+#             "campaign_type",
+#             "campaigner_id",
+#             "election",
+#             "name",
+#             "image",
+#             "slug",
+#             "description",
+#             "target_votes",
+#             "twitter",
+#             "instagram",
+#             "website",
+#         ]
+
+#     def get_campaign_type(self, obj):
+#         """Customize the campaign_type representation."""
+#         model_name = obj.campaign_type.model
+#         if model_name.startswith("election"):
+#             model_name = model_name[8:]  # Remove 'election' prefix
+#         return model_name.lower()  # Convert to lowercase for consistency
+
+#     # def get_campaign(self, obj):
+#     #     print ("obj.campaign_type.model: ", obj.campaign_type.model)
+#     #     if obj.campaign_type.model in ('electioncandidate'):
+#     #         campaign_entity = obj.campaign_type_object.candidate  # Access the related object
+#     #         return CandidateSerializer(campaign_entity).data  # Use CandidateSerializer for both
+#     #     elif obj.campaign_type.model in ('electionparty'):
+#     #         campaign_entity = obj.campaign_type_object.party  # Access the related object
+#     #         return PartySerializer(campaign_entity).data  # Use CandidateSerializer for both
+#     #     return None
+
+#     def get_name(self, obj):
+#         """Retrieve the name dynamically based on campaign_type."""
+#         try:
+#             if obj.campaign_type.model == "candidate_only":
+#                 return obj.campaign_type_object.candidate.name
+#             else:
+#                 return obj.campaign_type_object.party.name
+#         except AttributeError:
+#             raise ValueError(
+#                 "Campaign object is missing campaign_type or campaign_type_object"
+#             )
+
+#     def get_image(self, obj):
+#         """Retrieve the image URL, handling cases where images might be missing."""
+#         try:
+#             if obj.campaign_type.model == "electioncandidate":
+#                 image = obj.campaign_type_object.candidate.image
+#             elif obj.campaign_type.model == "electionparty":
+#                 image = obj.campaign_type_object.party.image
+#             else:
+#                 raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
+
+#             return image.url if image else None  # Return None if image is missing
+#         except AttributeError:
+#             raise ValueError(
+#                 "Campaign object is missing campaign_type or campaign_type_object"
+#             )
+
+#     def to_representation(self, instance):
+#         rep = super().to_representation(instance)
+
+#         # Remove unwanted fields from nested serializers
+#         # if "election" in rep:
+#         #     rep["election"].pop("track", None)
+#         #     rep["election"].pop("task", None)
+
+#         # if "candidate" in rep:
+#         #     rep["candidate"].pop("track", None)
+#         #     rep["candidate"].pop("task", None)
+
+#         return rep
+    
+#     def create(self, validated_data):
+#         campaign_type_model = validated_data.pop('campaign_type')
+#         campaign_type = ContentType.objects.get(model=campaign_type_model)
+#         validated_data['campaign_type'] = campaign_type
+#         return super().create(validated_data)
 
 
 #
@@ -167,10 +266,10 @@ class CampaignMemberSerializer(BaseCampaignMemberSerializer):
         fields = "__all__"  # Or specify required fields
 
 
-class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
-    class Meta:
-        model = CampaignPartyMember
-        fields = "__all__"  # Or specify required fields
+# class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
+#     class Meta:
+#         model = CampaignPartyMember
+#         fields = "__all__"  # Or specify required fields
 
 
 # class CampaignCombinedSerializer(AdminFieldMixin, serializers.Serializer):
@@ -343,7 +442,7 @@ class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
 # #
 # class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 
-#     # get the data from Voter Model Directly
+#     # get the data from Elector Model Directly
 #     full_name = serializers.CharField(
 #         source="civil.full_name", default="Not Found", read_only=True
 #     )
@@ -398,7 +497,7 @@ class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
 # #
 # class CampaignPartyGuaranteeSerializer(serializers.ModelSerializer):
 
-#     # get the data from Voter Model Directly
+#     # get the data from Elector Model Directly
 #     full_name = serializers.CharField(
 #         source="civil.full_name", default="Not Found", read_only=True
 #     )
@@ -451,7 +550,7 @@ class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
 
 
 # class CampaignAttendeeSerializer(serializers.ModelSerializer):
-#     # Directly get the data from the Voter Model
+#     # Directly get the data from the Elector Model
 #     full_name = serializers.CharField(
 #         source="civil.full_name", default="Not Found", read_only=True
 #     )
@@ -514,7 +613,7 @@ class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
 # def get_field_or_not_found(self, obj, field_name):
 #     try:
 #         return getattr(obj, field_name) if obj else None
-#     except Voter.DoesNotExist:
+#     except Elector.DoesNotExist:
 #         return "Not Found"
 
 

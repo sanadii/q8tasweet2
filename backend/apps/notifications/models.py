@@ -1,6 +1,6 @@
 from django.db import models
 from apps.settings.models import TrackModel
-from apps.campaigns.models import Campaign, CampaignParty
+from apps.campaigns.models import Campaign
 from apps.elections.models import Election
 
 USER_GROUP_CHOICES = [

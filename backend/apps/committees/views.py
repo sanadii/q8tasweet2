@@ -33,17 +33,17 @@ from apps.elections.models import (
 )
 
 # Schema
-from apps.committees.models import (
-    Committee,
-    Committee,
-    CommitteeCandidateResult,
-    # PartyCommitteeResult,
-    # PartyCandidateCommitteeResult,
+from apps.committees.models import Committee
+from apps.committees.results.models import (
+    CommitteeResultCandidate,
+    CommitteePartyResult,
+    CommitteeResultPartyCandidate,
 )
+
 from apps.committees.serializers import (
     CommitteeSerializer,
     # CommitteSerializer,
-    CommitteeCandidateResultSerializer,
+    CommitteeResultCandidateSerializer,
 )
 
 # from apps.committees.models import Committee, CommitteeGroup
@@ -119,7 +119,7 @@ class DeleteCommittee(APIView):
             committee.delete()
             return Response(
                 {
-                    "data": "Committee is_deleted successfully",
+                    "data": "Committee is deleted successfully",
                     "count": 1,
                     "code": status.HTTP_200_OK,
                 }
@@ -145,7 +145,7 @@ class UpdateElectionResults(APIView):
 
         if election_method == "candidateOnly":
             participant_model = ElectionCandidate
-            committeeResultModel = CommitteeCandidateResult
+            committeeResultModel = CommitteeResultCandidate
             participant_id = "election_candidate_id"
 
         # # elif result_type == "parties":
@@ -270,18 +270,23 @@ def update_participant_committee_aggregated_votes(
         committee_results = committeeResultModel.objects.all()
 
         # Step 2: Aggregate the votes for each participant_id
-        aggregated_votes = committee_results.values(participant_id).annotate(total_votes=Sum('votes'))
+        aggregated_votes = committee_results.values(participant_id).annotate(
+            total_votes=Sum("votes")
+        )
 
         # Step 3: Update the corresponding participant_model instance with the aggregated vote count
         for result in aggregated_votes:
             try:
-                participant_instance = participant_model.objects.get(id=result[participant_id])
-                participant_instance.votes = result['total_votes']
+                participant_instance = participant_model.objects.get(
+                    id=result[participant_id]
+                )
+                participant_instance.votes = result["total_votes"]
                 participant_instance.save()
             except participant_model.DoesNotExist:
                 print(f"Participant with id {result[participant_id]} does not exist.")
             except Exception as e:
-                print(f"An error occurred while updating votes for participant {result[participant_id]}: {e}")
+                print(
+                    f"An error occurred while updating votes for participant {result[participant_id]}: {e}"
+                )
 
     print("update_participant_committee_aggregated_votes completed")
-
