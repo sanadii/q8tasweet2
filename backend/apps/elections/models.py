@@ -275,7 +275,7 @@ class ElectionParty(TrackModel):
         if request:
             slug = request.resolver_match.kwargs.get("slug")
             if slug:
-                with schema_context(request, slug):
+                with schema_context(slug):
                     with transaction.atomic():
                         # Delete related CommitteeCandidateResult entries
                         self.committee_candidate_results.all().delete()

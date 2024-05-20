@@ -11,7 +11,7 @@
 # from django.db import connections
 
 # from django.http import JsonResponse
-# from backend.utils.electionSchemas import setup_election_database_connection
+# from backend.utils.schemas import setup_election_database_connection
 # import psycopg2
 # from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 # from django.db import connection

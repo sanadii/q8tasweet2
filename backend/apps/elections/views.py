@@ -165,7 +165,7 @@ class GetElectionDetails(APIView):
             election_party__in=election_parties).select_related('candidate', 'election_party')
 
         response_data = {
-            # "electionSchema": ElectionSchemaSerializer(election, context=context).data,
+            # "electionSchema": schemaserializer(election, context=context).data,
             "electionDetails": ElectionSerializer(election, context=context).data,
             "electionCandidates": ElectionCandidateSerializer(
                 election_candidates, many=True, context=context
@@ -191,7 +191,7 @@ model_verbose_names = {
 
 
 def get_schema_details_and_content(context, request, slug, response_data):
-    with schema_context(request, slug) as election:
+    with schema_context(slug) as election:
         if isinstance(election, Response):
             return election
 
@@ -272,7 +272,7 @@ def get_schema_details_and_content(context, request, slug, response_data):
 #         ).select_related("candidate", "election_party", "election_party__election")
 
 #         # Use the schema context manager
-#         with schema_context(request, slug):
+#         with schema_context(slug):
 #             election_committees = Committee.objects.all()
 
 #             # Serialize data outside the context manager

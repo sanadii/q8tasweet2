@@ -19,6 +19,7 @@ from apps.elections.models import (
     ElectionPartyCandidate,
 )
 
+from utils.models import GENDER_CHOICES
 from utils.model_options import GenderOptions
 from utils.AbstractSchemaModels import DynamicSchemaModel
 
@@ -34,7 +35,8 @@ class CommitteeSite(DynamicSchemaModel):
         related_name="committee_site_areas",
     )
     area_name = models.CharField(max_length=255, blank=True, null=True)
-    gender = models.IntegerField(choices=GenderOptions, blank=True, null=True)
+    gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
+
     description = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     voter_count = models.IntegerField(blank=True, null=True)

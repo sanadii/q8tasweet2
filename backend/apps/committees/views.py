@@ -229,7 +229,7 @@ def update_participant_total_votes(request, participant_model, output):
 def update_committee_results(
     request, schema, committeeResultModel, participant_id, output, committee_id
 ):
-    with schema_context(request, schema):
+    with schema_context(schema):
         # For all other ids, perform the usual update_or_create operation
         for candidate_id, votes in request.data.get("data", {}).items():
             kwargs = {
@@ -265,7 +265,7 @@ def update_participant_committee_aggregated_votes(
     committee_id,
     participant_id,
 ):
-    with schema_context(request, schema):
+    with schema_context(schema):
         # Step 1: Retrieve all committeeResultModel instances
         committee_results = committeeResultModel.objects.all()
 

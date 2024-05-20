@@ -12,8 +12,8 @@ class SchemaMiddleware(MiddlewareMixin):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Only apply middleware to paths that start with /electionSchemas
-        if request.path.startswith('/electionSchemas'):
+        # Only apply middleware to paths that start with /schemas
+        if request.path.startswith('/schemas'):
             return self.process_request(request)
         # For other paths, do nothing and pass the request along the middleware chain
         return self.get_response(request)

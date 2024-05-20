@@ -15,7 +15,8 @@ def schema_context(schema):
     cursor = connection.cursor()
     schema_name = schema.replace(
         "-", "_"
-    )
+    )  # Convert the slug to a valid schema name format using underscores.
+    print("schema:: ", schema_name)
 
     try:
         # Check and set the schema

@@ -26,8 +26,8 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "q8tasweet2",
         "USER": "postgres",
-        # "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "PASSWORD": "I4ksb@11782",
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        # "PASSWORD": "I4ksb@11782",
         # "PASSWORD": "KWT11782",
         "HOST": "localhost",
         "PORT": "5432",
@@ -92,8 +92,8 @@ INSTALLED_APPS = [
     "apps.categories",
     "apps.candidates",
     # "apps.notifications",
-    # ElectionSchemas and related Apps
-    "apps.electionSchemas",
+    # schemas and related Apps
+    "apps.schemas",
     "apps.areas",
     "apps.committees",
     "apps.electors",

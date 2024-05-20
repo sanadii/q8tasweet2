@@ -1,14 +1,17 @@
 import warnings
+import secrets
+import string
+from slugify import slugify
 
+from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model as django_get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Field, Model
+from django.utils.text import slugify
 from django.utils.html import format_html
-from slugify import slugify
-
-from django.apps import apps
 from utils.importing import import_dotted_path
+
 
 
 GENDER_CHOICES = [
@@ -44,6 +47,11 @@ def generate_slug(value):
         new_slug = f"{slug}-{counter}"
 
     return new_slug
+
+def generate_random_slug(length=6):
+    characters = string.ascii_letters + string.digits  # Letters and digits
+    random_slug = ''.join(secrets.choice(characters) for _ in range(length))
+    return random_slug
 
 def get_user_model():
     warnings.warn(

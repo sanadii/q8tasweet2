@@ -24,7 +24,7 @@ class GetElectorsByAll(APIView):
 
     def get(self, request, *args, **kwargs):
         schema = request.GET.get("schema")
-        with schema_context(request, schema):
+        with schema_context(schema):
             if hasattr(request, "response"):
                 return request.response
 
@@ -40,7 +40,7 @@ class GetElectorsByCategory(APIView):
 
     def get(self, request, *args, **kwargs):
         schema = request.GET.get("schema")
-        with schema_context(request, schema):
+        with schema_context(schema):
             if hasattr(request, "response"):
                 return request.response
 
@@ -58,7 +58,7 @@ class GetElectorsBySearch(APIView):
     def post(self, request, *args, **kwargs):
         schema = request.data.get("schema")
 
-        with schema_context(request, schema):
+        with schema_context(schema):
             electors = restructure_electors_by_search(request)
             serializer = ElectorSerializer(electors, many=True)
             print("electors: ", electors)
@@ -72,7 +72,7 @@ class GetElectorRelatedElectors(APIView):
     def post(self, request, *args, **kwargs):
         schema = request.data.get("schema")
 
-        with schema_context(request, schema):
+        with schema_context(schema):
             electors = restructure_elector_related_electors(request)
             return Response({"data": electors}, status=200)
 
@@ -105,7 +105,7 @@ class GetAllElectors(APIView):
 #     def get(self, request, *args, **kwargs):
 #         slug = kwargs.get("slug")
 
-#         with schema_context(request, slug) as election:
+#         with schema_context(slug) as election:
 #             if hasattr(request, "response"):
 #                 return request.response
 
@@ -136,7 +136,7 @@ class GetAllElectors(APIView):
 #     def get(self, request, *args, **kwargs):
 #         slug = kwargs.get("slug")
 
-#         with schema_context(request, slug):
+#         with schema_context(slug):
 #             if hasattr(request, "response"):
 #                 return request.response
 

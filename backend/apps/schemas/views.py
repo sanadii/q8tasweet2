@@ -76,7 +76,7 @@ class AddSchemaTables(APIView):
             print("An error occurred:", e)
 
 
-        with schema_context(request, slug) as election:
+        with schema_context(slug) as election:
             if hasattr(request, "response"):
                 return request.response  # Return the early response if set
 
@@ -102,7 +102,7 @@ class AddSchemaTables(APIView):
 #     def get(self, request, *args, **kwargs):
 #         slug = kwargs.get("slug")
 
-#         with schema_context(request, slug) as election:
+#         with schema_context(slug) as election:
 #             if hasattr(request, "response"):
 #                 return request.response  # Return the early response if set
 
@@ -180,7 +180,7 @@ class GetElectionSchemaDetails(APIView):
         slug = kwargs.get("slug")
         schema_name = slug.replace("-", "_")
 
-        with schema_context(request, schema_name):
+        with schema_context(schema_name):
             try:
                 tables = connection.introspection.table_names()
                 return JsonResponse(

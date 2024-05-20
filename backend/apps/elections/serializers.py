@@ -250,11 +250,7 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             election.status = task_data["status"]
         election.save()
 
-class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
-    """Serializer for the ElectionCandidate model."""
-
-    admin_serializer_classes = (TrackMixin,)
-
+class ElectionCandidateSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source="candidate.name", read_only=True)
     gender = serializers.IntegerField(source="candidate.gender", read_only=True)
     image = serializers.SerializerMethodField("get_candidate_image")
@@ -289,26 +285,12 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             return None
 
         try:
-            with schema_context(request, schema):
-                # Debug: Print schema context
-                print(f"Schema set to: {schema}")
-
-                # Fetch committee results from the custom schema
-                committee_results = CommitteeCandidateResult.objects.filter(election_candidate=obj.id)
-                
-                # Debug: Print requested table and column
-                print(f"Requested table: committee_candidate_result")
-                print(f"Requested column: election_candidate")
-                
-                if not committee_results.exists():
-                    print(f"No committee results found for election candidate {obj.id}")
-                return CommitteeCandidateResultSerializer(
-                    committee_results, many=True
-                ).data
+            with schema_context(schema):
+                committee_results = CommitteeCandidateResult.objects.filter(election_candidate=obj)
+                return CommitteeCandidateResultSerializer(committee_results, many=True).data
         except Exception as e:
             print(f"Error: {str(e)}")
             return None
-
 
 
 class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):

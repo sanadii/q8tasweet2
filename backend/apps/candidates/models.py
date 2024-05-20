@@ -1,18 +1,9 @@
-from unidecode import unidecode
+#  Models
 from django.db import models
-from django.utils.text import slugify
-import uuid
-import secrets
-import string
-
 from apps.settings.models import TrackModel, TaskModel
 from utils.model_options import GenderOptions
 
-def generate_random_slug(length=6):
-    characters = string.ascii_letters + string.digits  # Letters and digits
-    random_slug = ''.join(secrets.choice(characters) for _ in range(length))
-    return random_slug
-
+from utils.models import generate_random_slug
 
 class Candidate(TrackModel, TaskModel):
     # Basic Information

@@ -39,7 +39,7 @@ class RelatedSchemaModel(models.Model):
         if request:
             slug = request.resolver_match.kwargs.get("slug")
             if slug:
-                with schema_context(request, slug):
+                with schema_context(slug):
                     super(RelatedSchemaModel, self).delete(*args, **kwargs)
                     return
         super(RelatedSchemaModel, self).delete(*args, **kwargs)
