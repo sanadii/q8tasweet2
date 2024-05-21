@@ -42,7 +42,7 @@ import {
 
   // Election Campaign
   GET_ELECTION_CAMPAIGNS,
-  ADD_NEW_ELECTION_CAMPAIGN,
+  ADD_CAMPAIGN,
   UPDATE_ELECTION_CAMPAIGN,
   DELETE_ELECTION_CAMPAIGN,
 } from "./actionType";
@@ -150,11 +150,6 @@ import {
   deleteElectionCommittee,
   updateElectionResults,
 
-  // Election Campaigns
-  getElectionCampaigns as getElectionCampaignsApi,
-  addNewElectionCampaign,
-  updateElectionCampaign,
-  deleteElectionCampaign,
 } from "../../helpers/backend_helper";
 
 // Elections
@@ -485,56 +480,6 @@ function* onUpdateElectionCommitteeResults({ payload: electionResult }) {
     toast.error("خطأ في تحديث النتائج", { autoClose: 2000 });
   }
 }
-
-// Election Campaigns
-function* getElectionCampaigns({ payload: election }) {
-  try {
-    const response = yield call(getElectionCampaignsApi, election);
-    yield put(
-      ElectionApiResponseSuccess(GET_ELECTION_CAMPAIGNS, response.data)
-    );
-  } catch (error) {
-    yield put(ElectionApiResponseError(GET_ELECTION_CAMPAIGNS, error));
-  }
-}
-
-function* onAddNewElectionCampaign({ payload: electionCampaign }) {
-  try {
-    const response = yield call(addNewElectionCampaign, electionCampaign);
-    yield put(addElectionCampaignSuccess(response));
-    toast.success("تم إضافة الحملة الإنتخابية بنجاح", { autoClose: 2000 });
-  } catch (error) {
-    yield put(addElectionCampaignFail(error));
-    toast.error("خطأ في إضافة الحملة الإنتخابية", { autoClose: 2000 });
-  }
-}
-
-function* onDeleteElectionCampaign({ payload: electionCampaign }) {
-  try {
-    const response = yield call(deleteElectionCampaign, electionCampaign);
-    yield put(deleteElectionCampaignSuccess({ electionCampaign, ...response }));
-    toast.success("تم حذف الحملة الإنتخابية بنجاح", { autoClose: 2000 });
-  } catch (error) {
-    yield put(deleteElectionCampaignFail(error));
-    toast.error("خطأ في حذف الحملة الإنتخابية", { autoClose: 2000 });
-  }
-}
-
-function* onUpdateElectionCampaign({ payload: electionCampaign }) {
-  try {
-    const response = yield call(updateElectionCampaign, electionCampaign);
-    yield put(updateElectionCampaignSuccess(response));
-    toast.success("تم تحديث الحملة الإنتخابية بنجاح", {
-      autoClose: 2000,
-    });
-  } catch (error) {
-    yield put(updateElectionCampaignFail(error));
-    toast.error("خطأ في تحديث الحملة الإنتخابية", { autoClose: 2000 });
-  }
-}
-
-
-
 // Watchers
 export function* watchGetElections() {
   yield takeEvery(GET_ELECTIONS, getElections);
@@ -642,24 +587,6 @@ export function* watchUpdateElectionCommitteeResults() {
   yield takeEvery(UPDATE_ELECTION_RESULTS, onUpdateElectionCommitteeResults);
 }
 
-// Election Campaigns Watchers
-export function* watchGetElectionCampaigns() {
-  yield takeEvery(GET_ELECTION_CAMPAIGNS, getElectionCampaigns);
-}
-
-export function* watchAddNewElectionCampaign() {
-  yield takeEvery(ADD_NEW_ELECTION_CAMPAIGN, onAddNewElectionCampaign);
-}
-
-export function* watchUpdateElectionCampaign() {
-  yield takeEvery(UPDATE_ELECTION_CAMPAIGN, onUpdateElectionCampaign);
-}
-
-export function* watchDeleteElectionCampaign() {
-  yield takeEvery(DELETE_ELECTION_CAMPAIGN, onDeleteElectionCampaign);
-}
-
-
 
 function* electionSaga() {
   yield all([
@@ -700,12 +627,6 @@ function* electionSaga() {
 
     // ElectionCommitteeResults
     fork(watchUpdateElectionCommitteeResults),
-
-    // ElectionCampiagns
-    fork(watchGetElectionCampaigns),
-    fork(watchAddNewElectionCampaign),
-    fork(watchUpdateElectionCampaign),
-    fork(watchDeleteElectionCampaign),
   ]);
 }
 

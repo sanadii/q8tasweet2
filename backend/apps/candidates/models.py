@@ -2,6 +2,7 @@
 from django.db import models
 from apps.settings.models import TrackModel, TaskModel
 from utils.model_options import GenderOptions
+from django.contrib.contenttypes.fields import GenericRelation
 
 from utils.models import generate_random_slug
 
@@ -15,6 +16,7 @@ class Candidate(TrackModel, TaskModel):
     family = models.CharField(max_length=25, blank=True, null=True)
     tribe = models.CharField(max_length=25, blank=True, null=True)
     denomination = models.CharField(max_length=25, blank=True, null=True)
+    campaigns = GenericRelation('campaigns.Campaign')  # Correct app label
 
     class Meta:
         db_table = "candidate"
@@ -42,6 +44,7 @@ class Party(TrackModel, TaskModel):
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     image = models.ImageField(upload_to="parties/", blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True, null=True)
+    campaigns = GenericRelation('campaigns.Campaign')  # Correct app label
 
     class Meta:
         db_table = "party"

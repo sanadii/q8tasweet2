@@ -9,10 +9,6 @@ from django.contrib.contenttypes.models import ContentType
 
 from apps.settings.models import TrackModel, TaskModel
 
-
-# from apps.campaigns.models import ElectionCandidate
-
-
 class Campaign(TrackModel, TaskModel):
     # Basic Information
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
@@ -22,14 +18,12 @@ class Campaign(TrackModel, TaskModel):
     # Relationships
     campaign_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     campaigner_id = models.PositiveIntegerField()
-    campaign_type_object = GenericForeignKey("campaign_type", "campaigner_id")
+    content_object = GenericForeignKey("campaign_type", "campaigner_id")
 
     # Media Coverage
     twitter = models.CharField(max_length=120, blank=True, null=True)
     instagram = models.CharField(max_length=120, blank=True, null=True)
     website = models.CharField(max_length=120, blank=True, null=True)
-
-    # Activities
 
     class Meta:
         db_table = "campaign"
@@ -48,20 +42,18 @@ class Campaign(TrackModel, TaskModel):
             ("canChangeCampaignAssistant", "can Change Campaign Assistant"),
         ]
         unique_together = ["campaign_type", "campaigner_id"]
-        # indexes = [
-        #     models.Index(fields=["campaign_type", "campaign_type"]),
-        # ]
-
-
-    # TODO: if content_type is candidata else if party
-    # def __str__(self):
-    #     return f"{self.election_candidate.candidate.name} - Year"
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = uuid.uuid4().hex[:8].upper()
 
+        # Debugging before saving
+        print(f"Before save: campaign_type={self.campaign_type}, campaigner_id={self.campaigner_id}, content_object={self.content_object}")
+
         super().save(*args, **kwargs)  # Call the "real" save() method
+
+        # Debugging after saving
+        print(f"After save: campaign_type={self.campaign_type}, campaigner_id={self.campaigner_id}, content_object={self.content_object}")
 
 
 

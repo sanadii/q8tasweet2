@@ -64,16 +64,6 @@ import {
   // Election Committee Results-
   UPDATE_ELECTION_RESULTS_SUCCESS,
   UPDATE_ELECTION_RESULTS_FAIL,
-
-
-  // Election Campaigns
-  GET_ELECTION_CAMPAIGNS,
-  ADD_ELECTION_CAMPAIGN_SUCCESS,
-  ADD_ELECTION_CAMPAIGN_FAIL,
-  UPDATE_ELECTION_CAMPAIGN_SUCCESS,
-  UPDATE_ELECTION_CAMPAIGN_FAIL,
-  DELETE_ELECTION_CAMPAIGN_SUCCESS,
-  DELETE_ELECTION_CAMPAIGN_FAIL,
 } from "./actionType";
 
 const IntialState = {
@@ -179,13 +169,6 @@ const Elections = (state = IntialState, action) => {
             isElectionCommitteeCreated: false,
             isElectionCommitteeSuccess: true,
           };
-        case GET_ELECTION_CAMPAIGNS:
-          return {
-            ...state,
-            electionCampaigns: action.payload.data,
-            isElectionCampaignCreated: false,
-            isElectionCampaignSuccess: true,
-          };
 
         default:
           return { ...state };
@@ -232,14 +215,6 @@ const Elections = (state = IntialState, action) => {
           };
         }
 
-        case GET_ELECTION_CAMPAIGNS: {
-          return {
-            ...state,
-            error: action.payload.error,
-            isElectionCampaignCreated: false,
-            isElectionCampaignSuccess: true,
-          };
-        }
         default:
           return { ...state };
       }
@@ -378,6 +353,7 @@ const Elections = (state = IntialState, action) => {
         isElectionCandidateUpdate: true,
         isElectionCandidateUpdateFail: false,
       };
+    
     case UPDATE_ELECTION_CANDIDATE_FAIL:
       return {
         ...state,
@@ -752,77 +728,6 @@ const Elections = (state = IntialState, action) => {
         isElectionCommitteeResultUpdated: false,
         isElectionCommitteeResultUpdatedFail: true,
       };
-
-
-    // Election Campaigns
-    case GET_ELECTION_CAMPAIGNS: {
-      return {
-        ...state,
-        error: action.payload.error,
-        isElectionCampaignCreated: false,
-        isElectionCampaignSuccess: true,
-      };
-    }
-
-    case ADD_ELECTION_CAMPAIGN_SUCCESS:
-      return {
-        ...state,
-        isElectionCampaignCreated: true,
-        electionCampaigns: [
-          ...state.electionCampaigns,
-          action.payload.data,
-        ],
-        isElectionCampaignAdd: true,
-        isElectionCampaignAddFail: false,
-      };
-
-    case ADD_ELECTION_CAMPAIGN_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isElectionCampaignAdd: false,
-        isElectionCampaignAddFail: true,
-      };
-    case UPDATE_ELECTION_CAMPAIGN_SUCCESS:
-      return {
-        ...state,
-        electionCampaigns: state.electionCampaigns.map(
-          (electionCampaign) =>
-            electionCampaign.id.toString() ===
-              action.payload.data.id.toString()
-              ? { ...electionCampaign, ...action.payload.data }
-              : electionCampaign
-        ),
-        isElectionCampaignUpdate: true,
-        isElectionCampaignUpdateFail: false,
-      };
-    case UPDATE_ELECTION_CAMPAIGN_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isElectionCampaignUpdate: false,
-        isElectionCampaignUpdateFail: true,
-      };
-    case DELETE_ELECTION_CAMPAIGN_SUCCESS:
-      return {
-        ...state,
-        electionCampaigns: state.electionCampaigns.filter(
-          (electionCampaign) =>
-            electionCampaign.id.toString() !==
-            action.payload.electionCampaign.toString()
-        ),
-        isElectionCampaignDelete: true,
-        isElectionCampaignDeleteFail: false,
-      };
-    case DELETE_ELECTION_CAMPAIGN_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isElectionCampaignDelete: false,
-        isElectionCampaignDeleteFail: true,
-      };
-
-
 
     default:
       return { ...state };

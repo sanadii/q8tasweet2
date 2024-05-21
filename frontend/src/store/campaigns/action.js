@@ -121,12 +121,12 @@ export const updateCampaignFail = (error) => ({
 });
 
 // Add Campaign
-export const addCampaign = (campaign) => ({
+export const addCampaign = campaign => ({
   type: ADD_CAMPAIGN,
   payload: campaign,
 });
 
-export const addCampaignSuccess = (campaign) => ({
+export const addCampaignSuccess = campaign => ({
   type: ADD_CAMPAIGN_SUCCESS,
   payload: campaign,
 });

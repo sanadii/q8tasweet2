@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteElectionCampaign } from "store/actions";
+import { deleteCampaign } from "store/actions";
 import { Link } from "react-router-dom";
 import { electionSelector } from 'selectors';
 
@@ -58,7 +58,7 @@ const CampaignsTab = () => {
   // Delete Data
   const handleDeleteElectionCampaign = () => {
     if (electionCampaign) {
-      dispatch(deleteElectionCampaign(electionCampaign.id));
+      dispatch(deleteCampaign(electionCampaign.id));
       setDeleteModal(false);
     }
   };

@@ -63,14 +63,6 @@ export const ADD_NEW_ELECTION_ATTENDEE = "/campaigns/addNewElectionAttendee";
 export const UPDATE_ELECTION_ATTENDEE = "/campaigns/updateElectionAttendee";
 
 
-// Election Campaign
-export const GET_ELECTION_CAMPAIGNS = "/elections/getElectionCampaigns";
-export const GET_ELECTION_CAMPAIGN_DETAILS = "/elections/getElectionCampaignDetails";
-export const ADD_NEW_ELECTION_CAMPAIGN = "/elections/addNewElectionCampaign";
-export const UPDATE_ELECTION_CAMPAIGN = "/elections/updateElectionCampaign";
-export const DELETE_ELECTION_CAMPAIGN = "/elections/deleteElectionCampaign";
-
-
 // Schema
 export const GET_ELECTION_SCHEMAS = "/schemas/getElectionSchemas";
 export const ADD_SCHEMA_TABLES = "/schemas/addSchemaTables";

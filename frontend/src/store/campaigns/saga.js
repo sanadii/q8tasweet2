@@ -10,7 +10,6 @@ import {
   ADD_CAMPAIGN,
   DELETE_CAMPAIGN,
   UPDATE_CAMPAIGN,
-
   // Campaign Members
   GET_ALL_CAMPAIGN_MEMBERS,
   ADD_CAMPAIGN_MEMBER,
@@ -44,6 +43,7 @@ import {
   GET_CAMPAIGN_COMMITTEE_SORTING,
 } from "./actionType";
 
+import { UPDATE_ELECTION_CANDIDATE_SUCCESS, UPDATE_ELECTION_CANDIDATE_FAIL } from "../elections/actionType";
 
 import {
   // getCampaigns, getCampaignDetails,
@@ -98,11 +98,16 @@ import {
   getCampaignCommitteeSortingFail,
 } from "./action";
 
+import {
+  updateElectionCandidateSuccess,
+  updateElectionCandidateFail
+} from "../elections/action"
+
 //Include Both Helper File with needed methods
 import {
   getCampaigns as getCampaignsApi,
   getCampaignDetails as getCampaignDetailsApi,
-  addCampaign,
+  addCampaign as addCampaignApi,
   updateCampaign,
   deleteCampaign,
 
@@ -168,16 +173,48 @@ function* getAllCampaignMembers({ payload: campaign }) {
   }
 }
 
+
 function* onAddCampaign({ payload: campaign }) {
   try {
-    const response = yield call(addCampaign, campaign);
-    yield put(addCampaignSuccess(response));
+    const response = yield call(addCampaignApi, campaign);
+    const electionCandidate = {
+      id: response.data.campaignerId,
+      data: response.data,
+    };
+    console.log("electionCandidateResponse", electionCandidate);
+
+    // Dispatch the campaign success action
+    yield put(CampaignApiResponseSuccess(ADD_CAMPAIGN, response.data));
+
+    // Dispatch the election candidate success action
+    yield put(updateElectionCandidateSuccess(electionCandidate));
+
     toast.success("تم إضافة الحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
-    yield put(addCampaignFail(error));
+    // Dispatch the campaign error action
+    yield put(CampaignApiResponseError(ADD_CAMPAIGN, error));
+
+    // Dispatch the election candidate error action
+    yield put(updateElectionCandidateFail(error));
+
     toast.error("خطأ في إضافة الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
+
+
+
+
+// function* onAddCampaign({ payload: campaign }) {
+//   console.log("campaign: ", campaign)
+//   try {
+//     const response = yield call(addCampaign, campaign);
+//     yield put(addCampaignSuccess(response));
+//     toast.success("تم إضافة الحملة الإنتخابية بنجاح", { autoClose: 2000 });
+//   } catch (error) {
+//     yield put(addCampaignFail(error));
+//     toast.error("خطأ في إضافة الحملة الإنتخابية", { autoClose: 2000 });
+//   }
+// }
 
 function* onDeleteCampaign({ payload: campaign }) {
   try {
@@ -541,7 +578,7 @@ function* campaignSaga() {
     fork(watchAddCampaignGuaranteeGroup),
     fork(watchUpdateCampaignGuaranteeGroup),
     fork(watchDeleteCampaignGuaranteeGroup),
-    
+
     // CampaignAttendees
     fork(watchGetAllCampaignAttendees),
     // fork(watchGetCampaignAttendeeDetails),

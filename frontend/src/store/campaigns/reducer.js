@@ -6,6 +6,7 @@ import {
   // Campaigns ------------
   GET_CAMPAIGNS,
   GET_CAMPAIGN_DETAILS,
+  ADD_CAMPAIGN,
   ADD_CAMPAIGN_SUCCESS,
   ADD_CAMPAIGN_FAIL,
   UPDATE_CAMPAIGN_SUCCESS,
@@ -86,7 +87,6 @@ const Campaigns = (state = IntialState, action) => {
           return {
             ...state,
             currentCampaignMember: action.payload.data.currentCampaignMember,
-
             campaignDetails: action.payload.data.campaignDetails,
             campaignRoles: action.payload.data.campaignRoles,
             campaignMembers: action.payload.data.campaignMembers,
@@ -96,7 +96,6 @@ const Campaigns = (state = IntialState, action) => {
             campaignNotifications: action.payload.data.campaignNotifications,
             campaignElectionCandidates: action.payload.data.campaignElectionCandidates,
             campaignElectionCommittees: action.payload.data.campaignElectionCommittees,
-
             isCampaignCreated: false,
             isCampaignSuccess: true,
           };
@@ -135,10 +134,22 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignCreated: false,
             isCampaignSuccess: true,
           };
-
+          
+        case ADD_CAMPAIGN:
+          return {
+            ...state,
+            isCampaignCreated: true,
+            campaigns: [...state.campaigns, action.payload.data],
+            isCampaignAdd: true,
+            isCampaignAddFail: false,
+          };
+          
         default:
           return { ...state };
       }
+
+
+    // API RESPONSE ERROR
 
     case API_RESPONSE_ERROR:
       switch (action.payload.actionType) {
@@ -197,7 +208,13 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignCreated: false,
             isCampaignSuccess: true,
           };
-
+        case ADD_CAMPAIGN:
+          return {
+            ...state,
+            error: action.payload,
+            isCampaignAdd: false,
+            isCampaignAddFail: true,
+          };
         default:
           return { ...state };
       }
@@ -216,21 +233,8 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignCreated: false,
       };
     }
-    case ADD_CAMPAIGN_SUCCESS:
-      return {
-        ...state,
-        isCampaignCreated: true,
-        campaigns: [...state.campaigns, action.payload.data],
-        isCampaignAdd: true,
-        isCampaignAddFail: false,
-      };
-    case ADD_CAMPAIGN_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isCampaignAdd: false,
-        isCampaignAddFail: true,
-      };
+
+
     case UPDATE_CAMPAIGN_SUCCESS:
       return {
         ...state,

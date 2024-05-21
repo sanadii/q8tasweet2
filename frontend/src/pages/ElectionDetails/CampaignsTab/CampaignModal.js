@@ -1,7 +1,7 @@
 // React core imports
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addNewElectionCampaign } from "store/actions";
+import { addCampaign } from "store/actions";
 import { Link } from "react-router-dom";
 import { ImageCircle } from "shared/components";
 import { Button, Input, Modal, ModalHeader, ModalBody, ModalFooter, Form } from "reactstrap";
@@ -73,7 +73,7 @@ const AddElectionCampaignModal = ({ toggle }) => {
       campaignerId: electionCandidate.id,
       campaignType: "candidate",
     };
-    dispatch(addNewElectionCampaign(newCampaign));
+    dispatch(addCampaign(newCampaign));
     toggle(); // Close the modal after submission
   };
 

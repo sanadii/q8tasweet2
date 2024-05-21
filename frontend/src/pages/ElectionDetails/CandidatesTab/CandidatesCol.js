@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ImageCandidateWinnerCircle } from "shared/components";
-import { addNewElectionCampaign } from "store/actions";
+import { addCampaign, deleteCampaign } from "store/actions";
 
 
 
@@ -64,7 +64,7 @@ const Actions = (cellProps) => {
             campaignerId: electionCandidateId,
             campaignType: "candidate",
         };
-        dispatch(addNewElectionCampaign(newCampaign));
+        dispatch(addCampaign(newCampaign));
     };
 
     const hasCampaign = electionCandidate.campaign
@@ -112,7 +112,7 @@ const Actions = (cellProps) => {
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
                     setIsElectionPartyAction(false); // Set isPartyAction to true when this button is clicked
-                    handleItemDeleteClick(electionCandidate);
+                    handleAddNewCampaign(electionCandidate?.id);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />
@@ -120,9 +120,9 @@ const Actions = (cellProps) => {
             <button
                 className={`btn btn-sm ${hasCampaign ? "btn-success" : "btn-soft-success"} remove-list`}
                 onClick={() => {
-                    if (!hasCampaign) {
+                    // if (!hasCampaign) {
                         handleAddNewCampaign(electionCandidate?.id);
-                    }
+                    // }
                 }}
             >
                 <i className="mdi mdi-police-badge align-bottom" />

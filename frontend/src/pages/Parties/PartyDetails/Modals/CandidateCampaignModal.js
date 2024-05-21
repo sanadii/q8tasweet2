@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getCandidates,
-  addNewElectionCampaign,
+  addCampaign,
   updateCandidateCampaign,
 } from "store/actions";
 
@@ -101,7 +101,7 @@ export const CandidateCampaignModal = ({
   //           id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
   //           candidate_id: values["candidate_id"],
   //         };
-  //         dispatch(addNewElectionCampaign(newElectionCampaign));
+  //         dispatch(addCampaign(newElectionCampaign));
   //       }
   //       validation.resetForm();
   //       toggle();
@@ -206,7 +206,7 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
                   id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
                   election_candidate: Candidate.id,
                 };
-                dispatch(addNewElectionCampaign(newElectionCampaign));
+                dispatch(addCampaign(newElectionCampaign));
               }}
             >
               <div className="d-flex align-items-center">

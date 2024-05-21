@@ -86,7 +86,7 @@ import {
 
   // Election Campaign
   GET_ELECTION_CAMPAIGNS,
-  ADD_NEW_ELECTION_CAMPAIGN,
+  ADD_CAMPAIGN,
   ADD_ELECTION_CAMPAIGN_SUCCESS,
   ADD_ELECTION_CAMPAIGN_FAIL,
   UPDATE_ELECTION_CAMPAIGN,
@@ -207,7 +207,7 @@ export const updateElectionCandidate = electionCandidate => ({
   type: UPDATE_ELECTION_CANDIDATE,
   payload: electionCandidate,
 });
-export const updateElectionCandidateSuccess = electionCandidate => ({
+export const updateElectionCandidateSuccess = (electionCandidate) => ({
   type: UPDATE_ELECTION_CANDIDATE_SUCCESS,
   payload: electionCandidate,
 });
@@ -451,54 +451,3 @@ export const updateElectionResultsFail = error => ({
   payload: error,
 });
 
-
-// Election Campaigns
-export const getElectionCampaigns = (election) => ({
-  type: GET_ELECTION_CAMPAIGNS,
-  payload: election,
-});
-
-export const updateElectionCampaign = electionCampaign => ({
-  type: UPDATE_ELECTION_CAMPAIGN,
-  payload: electionCampaign,
-});
-
-export const updateElectionCampaignSuccess = electionCampaign => ({
-  type: UPDATE_ELECTION_CAMPAIGN_SUCCESS,
-  payload: electionCampaign,
-});
-
-export const updateElectionCampaignFail = error => ({
-  type: UPDATE_ELECTION_CAMPAIGN_FAIL,
-  payload: error,
-});
-
-export const addNewElectionCampaign = electionCampaign => ({
-  type: ADD_NEW_ELECTION_CAMPAIGN,
-  payload: electionCampaign,
-});
-
-export const addElectionCampaignSuccess = electionCampaign => ({
-  type: ADD_ELECTION_CAMPAIGN_SUCCESS,
-  payload: electionCampaign,
-});
-
-export const addElectionCampaignFail = error => ({
-  type: ADD_ELECTION_CAMPAIGN_FAIL,
-  payload: error,
-});
-
-export const deleteElectionCampaign = electionCampaign => ({
-  type: DELETE_ELECTION_CAMPAIGN,
-  payload: electionCampaign,
-});
-
-export const deleteElectionCampaignSuccess = electionCampaign => ({
-  type: DELETE_ELECTION_CAMPAIGN_SUCCESS,
-  payload: electionCampaign,
-});
-
-export const deleteElectionCampaignFail = error => ({
-  type: DELETE_ELECTION_CAMPAIGN_FAIL,
-  payload: error,
-});

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  deleteElectionCampaign,
-  addNewElectionCampaign,
+  deleteCampaign,
+  addCampaign,
 } from "../../../store/actions";
 import { Link } from "react-router-dom";
 
@@ -72,7 +72,7 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
   // Delete Data
   const handleDeleteElectionCampaign = () => {
     if (electionCampaign) {
-      dispatch(deleteElectionCampaign(electionCampaign.id));
+      dispatch(deleteCampaign(electionCampaign.id));
       setDeleteModal(false);
     }
   };

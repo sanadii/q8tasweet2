@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getElectionDetails,
   // getUserElections,
-  getElectionCampaigns,
+  getCampaigns,
 } from "../../../store/actions";
 import { isEmpty } from "lodash";
 import Section from "./Section";
