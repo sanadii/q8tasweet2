@@ -1,6 +1,7 @@
 # Election Urls: elections/urls.py
 from django.urls import path
 from apps.elections.views import *
+from apps.elections.candidates.views import *
 
 # from .views.candidates import *
 from rest_framework.routers import DefaultRouter

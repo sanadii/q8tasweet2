@@ -22,6 +22,7 @@ export { campaignSelector } from './campaignSelector';
 // Authentications
 export { authSelector } from './authSelector';
 export { userSelector } from './userSelector';
+export { groupSelector } from './groupSelector';
 export { groupPermissionSelector } from './groupPermissionSelector';
 
 

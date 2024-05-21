@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from apps.elections.models import Election
 from apps.committees.models import Committee, CommitteeSite
-from apps.committees.results.models import CommitteeResultCandidate, CommitteePartyResult, CommitteeResultPartyCandidate
+from apps.committees.results.models import CommitteeResultCandidate, CommitteeResultParty, CommitteeResultPartyCandidate
 from apps.electors.models import Elector
 from apps.areas.models import Area
 from utils.schema import schema_context, table_exists
@@ -59,14 +59,14 @@ class AddSchemaTables(APIView):
                     models.append(CommitteeResultCandidate)
 
                 if election_method == "partyPartyOriented":
-                    models.append(CommitteePartyResult)
+                    models.append(CommitteeResultParty)
 
                 if election_method == "partyCandidateOriented":
-                    models.append(CommitteePartyResult)
+                    models.append(CommitteeResultParty)
                     models.append(CommitteeResultPartyCandidate)
 
                 if election_method == "partyCandidateCombined":
-                    models.append(CommitteePartyResult)
+                    models.append(CommitteeResultParty)
                     models.append(CommitteeResultPartyCandidate)
 
             print("election_result: ", is_detailed_results, "election_method: ", election_method )

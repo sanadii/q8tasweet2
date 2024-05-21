@@ -27,6 +27,9 @@ from utils.schema import schema_context
 from apps.elections.models import (
     Election,
     ElectionCategory,
+)
+
+from apps.elections.candidates.models import (
     ElectionCandidate,
     ElectionParty,
     ElectionPartyCandidate,
@@ -36,15 +39,12 @@ from apps.elections.models import (
 from apps.committees.models import Committee
 from apps.committees.results.models import (
     CommitteeResultCandidate,
-    CommitteePartyResult,
+    CommitteeResultParty,
     CommitteeResultPartyCandidate,
 )
 
-from apps.committees.serializers import (
-    CommitteeSerializer,
-    # CommitteSerializer,
-    CommitteeResultCandidateSerializer,
-)
+from apps.committees.serializers import CommitteeSerializer
+from apps.committees.results.serializers import CommitteeResultCandidateSerializer
 
 # from apps.committees.models import Committee, CommitteeGroup
 
@@ -52,10 +52,14 @@ from apps.elections.serializers import (
     ElectionSerializer,
     CategoriesSerializer,
     SubCategoriesSerializer,
+)
+
+from apps.elections.candidates.serializers import (
     ElectionCandidateSerializer,
     ElectionPartySerializer,
     ElectionPartyCandidateSerializer,
 )
+
 
 # Utils
 from utils.views_helper import CustomPagination

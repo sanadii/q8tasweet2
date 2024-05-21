@@ -54,7 +54,7 @@ class CommitteeResultCandidate(BaseCommitteeResult, TrackModel):
 # print_model_fields(CommitteeResultCandidate)
 
 
-class CommitteePartyResult(BaseCommitteeResult, TrackModel):
+class CommitteeResultParty(BaseCommitteeResult, TrackModel):
     # election_party = models.ForeignKey(
     #     ElectionParty,
     #     on_delete=models.SET_NULL,

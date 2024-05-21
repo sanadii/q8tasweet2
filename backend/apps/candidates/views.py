@@ -12,12 +12,12 @@ from rest_framework.views import APIView
 from apps.candidates.models import Candidate, Party
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
 
-from apps.elections.models import(
+from apps.elections.candidates.models import(
     ElectionCandidate,
     ElectionParty,
     ElectionPartyCandidate,
     )
-from apps.elections.serializers import (
+from apps.elections.candidates.serializers import (
     ElectionCandidateSerializer,
     ElectionPartySerializer,
     ElectionPartyCandidateSerializer,

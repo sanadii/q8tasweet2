@@ -5,12 +5,10 @@ from django.conf import settings  # Import Django settings to access MEDIA_URL
 
 # Models
 from django.contrib.auth.models import Group, Permission
+from apps.campaigns.members.models import CampaignMember
 from apps.campaigns.models import (
     Campaign,
-    CampaignMember,
     # CampaignPartyMember,
-    
-    
     # CampaignCommittee,
     # CampaignCommitteeAttendee,
     # CampaignCommitteeSorter,
@@ -24,10 +22,12 @@ from apps.campaigns.models import (
 from apps.elections.models import (
     Election,
     ElectionCategory,
+)
+
+from apps.elections.candidates.models import (
     ElectionCandidate,
     ElectionParty,
 )
-
 from apps.committees.models import Committee
 from apps.candidates.models import Candidate, Party
 from apps.electors.models import Elector
@@ -35,44 +35,43 @@ from django.contrib.contenttypes.models import ContentType
 
 # Serializers
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
-from apps.elections.serializers import ElectionSerializer, ElectionCandidateSerializer
+from apps.elections.serializers import ElectionSerializer
 
-from apps.committees.serializers import CommitteeSerializer
-from apps.auths.serializers import UserSerializer
-from apps.electors.serializers import ElectorSerializer
 
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
-from .models import Campaign
-from apps.elections.serializers import ElectionSerializer
+from apps.campaigns.models import Campaign
+from apps.elections.candidates.models import ElectionCandidate
 
-from rest_framework import serializers
-from django.contrib.contenttypes.models import ContentType
-from .models import Campaign
-from apps.elections.serializers import ElectionSerializer
+
+class ElectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ElectionCandidate
+        fields = ["id", "name"]
+
+
+from django.db.utils import IntegrityError
+
 
 class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """Serializer for the Campaign model, using the generic foreign key."""
 
     admin_serializer_classes = (TrackMixin, TaskMixin)
-    
-    election = ElectionSerializer(source="election_candidate.election", read_only=True)
-    campaign_type = serializers.CharField()
-    campaigner_id = serializers.IntegerField()
+
+    campaign_type = serializers.CharField(write_only=True)
+    campaigner_id = serializers.IntegerField(write_only=True)
 
     name = serializers.SerializerMethodField()
-    image = serializers.SerializerMethodField()
+    # image = serializers.SerializerMethodField()
 
     class Meta:
         model = Campaign
         fields = [
             "id",
-            "election_candidate",
             "campaign_type",
             "campaigner_id",
-            "election",
             "name",
-            "image",
+            # "image",
             "slug",
             "description",
             "target_votes",
@@ -86,51 +85,102 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
         model_name = obj.campaign_type.model
         return model_name.lower()  # Convert to lowercase for consistency
 
+    def get_campaign_related_object(self, obj):
+        """Helper function to retrieve the related ElectionCandidate or ElectionParty object based on campaign_type."""
+        if obj.campaign_type and obj.campaigner_id:
+            if obj.campaign_type.model == "candidate":
+                return ElectionCandidate.objects.get(id=getattr(obj, 'campaigner_id', None))
+            elif obj.campaign_type.model == "party":
+                return ElectionParty.objects.get(id=getattr(obj, 'campaigner_id', None))
+            else:
+                raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
+        else:
+            raise ValueError("Campaign object is missing campaign_type or campaign_type_object")
+
     def get_name(self, obj):
         """Retrieve the name dynamically based on campaign_type."""
         try:
+            related_object = self.get_campaign_related_object(obj)
             if obj.campaign_type.model == "candidate":
-                return obj.campaign_type_object.name
+                return related_object.candidate.name
             elif obj.campaign_type.model == "party":
-                return obj.campaign_type_object.name
-            else:
-                raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
+                return related_object.party.name
         except AttributeError:
-            raise ValueError(
-                "Campaign object is missing campaign_type or campaign_type_object"
-            )
+            raise ValueError("Campaign object is missing campaign_type or campaign_type_object")
 
     def get_image(self, obj):
         """Retrieve the image URL, handling cases where images might be missing."""
         try:
+            related_object = self.get_campaign_related_object(obj)
             if obj.campaign_type.model == "candidate":
-                image = obj.campaign_type_object.image
+                image = related_object.candidate.image
             elif obj.campaign_type.model == "party":
-                image = obj.campaign_type_object.image
-            else:
-                raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
+                image = related_object.party.image
 
             return image.url if image else None  # Return None if image is missing
-        except AttributeError:
-            raise ValueError(
-                "Campaign object is missing campaign_type or campaign_type_object"
-            )
+        except AttributeError as e:
+            print(f"AttributeError in get_image: {e}")
+            raise ValueError("Campaign object is missing campaign_type or campaign_type_object")
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
+        # Add election ID to the representation if available
+        rep["election_id"] = (
+            instance.campaign_type_object.election.id
+            if hasattr(instance.campaign_type_object, "election")
+            else None
+        )
         return rep
-    
+
     def create(self, validated_data):
-        campaign_type_model = validated_data.pop('campaign_type')
-        campaigner_id = validated_data.pop('campaigner_id')
-        
+        # Log validated_data to debug
+        print("Validated data:", validated_data)
+
+        # Ensure campaign_type and campaigner_id are in validated_data
+        campaign_type_model = validated_data.pop("campaign_type", None)
+        campaigner_id = validated_data.pop("campaigner_id", None)
+
+        # Debugging prints
+        print("Campaign type model:", campaign_type_model)
+        print("Campaigner ID:", campaigner_id)
+
+        if not campaign_type_model:
+            raise serializers.ValidationError(
+                {"campaign_type": "This field is required."}
+            )
+        if not campaigner_id:
+            raise serializers.ValidationError(
+                {"campaigner_id": "This field is required."}
+            )
+
         campaign_type = ContentType.objects.get(model=campaign_type_model)
-        
-        # Add 'object_id' to validated_data
-        validated_data['campaign_type'] = campaign_type
-        validated_data['object_id'] = campaigner_id
-        
-        return super().create(validated_data)
+
+        # Check if a campaign with the same campaign_type and campaigner_id already exists
+        existing_campaign = Campaign.objects.filter(
+            campaign_type=campaign_type, campaigner_id=campaigner_id
+        ).first()
+        if existing_campaign:
+            raise serializers.ValidationError(
+                "A campaign with this campaign_type and campaigner_id already exists."
+            )
+
+        # Remove 'campaign_type' and 'campaigner_id' from validated_data
+        campaign_data = validated_data.copy()
+        print("Campaign data before removing extra fields:", campaign_data)
+
+        # Create the campaign object first
+        # campaign = Campaign.objects.create(**campaign_data, campaign_type=campaign_type, campaigner_id=campaigner_id)
+        campaign = Campaign.objects.create(
+            **validated_data, campaign_type=campaign_type, campaigner_id=campaigner_id
+        )
+
+        # Fetch the full instance including related fields
+        campaign = Campaign.objects.select_related("campaign_type").get(id=campaign.id)
+        print(f"Created campaign: {campaign}")
+        print(f"campaign_type: {campaign.campaign_type}")
+        print(f"campaign_type_object: {campaign.campaign_type_object}")
+
+        return campaign
 
 
 # class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
@@ -222,54 +272,12 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
 #         #     rep["candidate"].pop("task", None)
 
 #         return rep
-    
+
 #     def create(self, validated_data):
 #         campaign_type_model = validated_data.pop('campaign_type')
 #         campaign_type = ContentType.objects.get(model=campaign_type_model)
 #         validated_data['campaign_type'] = campaign_type
 #         return super().create(validated_data)
-
-
-#
-# Campaign Members Serializers
-#
-class BaseCampaignMemberSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
-    permissions = serializers.SerializerMethodField()
-
-    class Meta:
-        abstract = True  # Mark as abstract to prevent direct usage
-
-    def get_name(self, obj):
-        if obj.user:
-            return f"{obj.user.first_name} {obj.user.last_name}"
-        return "User not found"
-
-    # def get_permissions(self, obj):
-    #     # Ensure that the campaign member has an associated role
-    #     if not obj.role:
-    #         return []
-
-    def get_permissions(self, obj):
-        if obj.role:
-            # Access permissions as a property, not as a method
-            campaign_member_permissions = list(
-                obj.role.permissions.values_list("codename", flat=True)
-            )
-            return campaign_member_permissions
-        return []
-
-
-class CampaignMemberSerializer(BaseCampaignMemberSerializer):
-    class Meta:
-        model = CampaignMember
-        fields = "__all__"  # Or specify required fields
-
-
-# class CampaignPartyMemberSerializer(BaseCampaignMemberSerializer):
-#     class Meta:
-#         model = CampaignPartyMember
-#         fields = "__all__"  # Or specify required fields
 
 
 # class CampaignCombinedSerializer(AdminFieldMixin, serializers.Serializer):
@@ -418,135 +426,6 @@ class CampaignMemberSerializer(BaseCampaignMemberSerializer):
 #         # Additional logic to customize instance updating
 #         return super().update(instance, validated_data)
 
-
-# #
-# # Campaign Guarantee Serializers
-# #
-# class CampaignGuaranteeGroupSerializer(serializers.ModelSerializer):
-#     # Ensure these fields exist on the CampaignGuaranteeGroup model or related models
-#     class Meta:
-#         model = CampaignGuaranteeGroup
-#         fields = ["id", "name", "member", "phone", "note"]
-
-#     def create(self, validated_data):
-#         # Custom creation logic here
-#         return super().create(validated_data)
-
-#     def update(self, instance, validated_data):
-#         # Custom update logic here
-#         return super().update(instance, validated_data)
-
-
-# #
-# # Campaign Guarantee Serializers
-# #
-# class CampaignGuaranteeSerializer(serializers.ModelSerializer):
-
-#     # get the data from Elector Model Directly
-#     full_name = serializers.CharField(
-#         source="civil.full_name", default="Not Found", read_only=True
-#     )
-#     gender = serializers.IntegerField(source="civil.gender", default=-1, read_only=True)
-#     membership_no = serializers.CharField(
-#         source="civil.membership_no", default="Not Found", read_only=True
-#     )
-#     box_no = serializers.CharField(
-#         source="civil.box_no", default="Not Found", read_only=True
-#     )
-#     enrollment_date = serializers.DateField(
-#         source="civil.enrollment_date", default=None, read_only=True
-#     )
-#     relationship = serializers.CharField(
-#         source="civil.relationship", default="Not Found", read_only=True
-#     )
-#     voter_notes = serializers.CharField(
-#         source="civil.notes", default="Not Found", read_only=True
-#     )
-#     attended = serializers.SerializerMethodField()
-#     guarantee_groups = serializers.PrimaryKeyRelatedField(
-#         many=True, queryset=CampaignGuaranteeGroup.objects.all(), required=False
-#     )
-
-#     class Meta:
-#         model = CampaignGuarantee
-#         fields = [
-#             "id",
-#             "campaign",
-#             "member",
-#             "civil",
-#             "full_name",
-#             "gender",
-#             "phone",
-#             "notes",
-#             "status",
-#             "attended",
-#             "membership_no",
-#             "box_no",
-#             "enrollment_date",
-#             "relationship",
-#             "voter_notes",
-#             "guarantee_groups",
-#         ]
-
-#     def get_attended(self, obj):
-#         return CampaignAttendee.objects.filter(civil=obj.civil).exists()
-
-
-# #
-# # Campaign Party Guarantee Serializer
-# #
-# class CampaignPartyGuaranteeSerializer(serializers.ModelSerializer):
-
-#     # get the data from Elector Model Directly
-#     full_name = serializers.CharField(
-#         source="civil.full_name", default="Not Found", read_only=True
-#     )
-#     gender = serializers.IntegerField(source="civil.gender", default=-1, read_only=True)
-#     membership_no = serializers.CharField(
-#         source="civil.membership_no", default="Not Found", read_only=True
-#     )
-#     box_no = serializers.CharField(
-#         source="civil.box_no", default="Not Found", read_only=True
-#     )
-#     enrollment_date = serializers.DateField(
-#         source="civil.enrollment_date", default=None, read_only=True
-#     )
-#     relationship = serializers.CharField(
-#         source="civil.relationship", default="Not Found", read_only=True
-#     )
-#     voter_notes = serializers.CharField(
-#         source="civil.notes", default="Not Found", read_only=True
-#     )
-#     attended = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = CampaignPartyGuarantee
-#         fields = [
-#             "id",
-#             "campaign",
-#             "member",
-#             "civil",
-#             "full_name",
-#             "gender",
-#             "phone",
-#             "notes",
-#             "status",
-#             "attended",
-#             "membership_no",
-#             "box_no",
-#             "enrollment_date",
-#             "relationship",
-#             "voter_notes",
-#         ]
-
-#     def get_attended(self, obj):
-#         return CampaignAttendee.objects.filter(civil=obj.civil).exists()
-
-#     def create(self, validated_data):
-#         return super().create(validated_data)
-
-#     def update(self, instance, validated_data):
-#         return super().update(instance, validated_data)
 
 
 # class CampaignAttendeeSerializer(serializers.ModelSerializer):

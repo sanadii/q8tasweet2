@@ -1,5 +1,10 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { ImageCandidateWinnerCircle } from "shared/components";
+import { addNewElectionCampaign } from "store/actions";
+
+
+
 
 
 const Id = (cellProps) => {
@@ -49,8 +54,20 @@ const Votes = (cellProps) => {
 }
 
 const Actions = (cellProps) => {
+    const dispatch = useDispatch();
+
     const { setElectionCandidate, handleElectionCandidateClick, setIsElectionPartyAction, handleItemDeleteClick } = cellProps;
     const electionCandidate = cellProps.row.original;
+
+    const handleAddNewCampaign = (electionCandidateId) => {
+        const newCampaign = {
+            campaignerId: electionCandidateId,
+            campaignType: "candidate",
+        };
+        dispatch(addNewElectionCampaign(newCampaign));
+    };
+
+    const hasCampaign = electionCandidate.campaign
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -100,6 +117,17 @@ const Actions = (cellProps) => {
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />
             </button>
+            <button
+                className={`btn btn-sm ${hasCampaign ? "btn-success" : "btn-soft-success"} remove-list`}
+                onClick={() => {
+                    if (!hasCampaign) {
+                        handleAddNewCampaign(electionCandidate?.id);
+                    }
+                }}
+            >
+                <i className="mdi mdi-police-badge align-bottom" />
+            </button>
+
         </div>
     );
 

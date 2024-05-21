@@ -3,8 +3,8 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
-import { getUsers, deleteUser } from "store/actions";
-import { userSelector } from 'selectors';
+import { getUsers, deleteUser, getGroups } from "store/actions";
+import { userSelector, groupSelector } from 'selectors';
 
 // Custom Components & ConstantsImports
 import UserModal from "./UserModal";
@@ -30,7 +30,25 @@ const AllUsers = () => {
 
   // State Management
   const { users, isUserSuccess, error } = useSelector(userSelector);
+  const { groups, categories } = useSelector(groupSelector);
+  console.log("groups: ", groups)
+  console.log("categories: ", categories)
 
+  const transformGroups = (categories, groups) => {
+    return categories.map(category => {
+      return {
+        label: category.name,
+        options: groups
+          .filter(group => group.category === category.id)
+          .map(group => ({
+            value: group.id,
+            label: group.name
+          }))
+      };
+    });
+  };
+
+  const userGroups = transformGroups(categories, groups);
 
   // Delete Hook
   const {
@@ -56,8 +74,10 @@ const AllUsers = () => {
   useEffect(() => {
     if (users && !users.length) {
       dispatch(getUsers());
+      dispatch(getGroups());
     }
   }, [dispatch, users]);
+
 
   const toggle = useCallback(() => {
     if (modal) {
@@ -70,18 +90,8 @@ const AllUsers = () => {
 
   // Update Data
   const handleUserClick = useCallback(
-    (arg) => {
-      const user = arg;
-
-      setUser({
-        id: user.id,
-        name: user.name,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        phone: user.phone,
-        email: user.email,
-      });
-
+    (selectedUser) => {
+      setUser(selectedUser);
       setIsEdit(true);
       toggle();
     },
@@ -141,7 +151,7 @@ const AllUsers = () => {
         },
       },
     ],
-    [handleUserClick, checkedAll]
+    [handleUserClick, checkedAll, deleteCheckbox, onDeleteCheckBoxClick]
   );
 
   // Filters----------
@@ -178,6 +188,7 @@ const AllUsers = () => {
         user={user}
         isEdit={isEdit}
         setModal={setModal}
+        userGroups={userGroups}
       />
       <Row>
         <Col lg={12}>

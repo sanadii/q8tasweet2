@@ -181,7 +181,7 @@ const CandidatesTab = () => {
   );
 
 
-  const handleElectionPartyClicks = (electionParty = null) => {
+  const handleAddElectionParty = (electionParty = null) => {
     setElectionParty(electionParty);
     setIsEditParty(!!electionParty);
     setPartyModal(true);
@@ -189,7 +189,7 @@ const CandidatesTab = () => {
     toggle();
   };
 
-  const handleElectionCandidateClicks = (candidate = null) => {
+  const handleAddElectionCandidate = (candidate = null) => {
     setElectionCandidate(candidate);
     setIsEditCandidate(!!candidate);
     setCandidateModal(true);
@@ -197,7 +197,7 @@ const CandidatesTab = () => {
     toggle();
   };
 
-  const handleElectionCampaignClicks = (campaign = null) => {
+  const handleAddElectionCampaign = (campaign = null) => {
     setElectionCampaign(campaign);
     setIsEditCampaign(!!campaign);
     setCampaignModal(true);
@@ -340,14 +340,14 @@ const CandidatesTab = () => {
 
                   // Buttons
                   {...(electionMethod !== "candidateOnly" && {
-                    HandlePrimaryButton: { handleElectionPartyClicks },
+                    HandlePrimaryButton: { handleAddElectionParty },
                     PrimaryButtonText: "إضافة قائمة"
                   })}
 
-                  HandleSecondaryButton={handleElectionCandidateClicks}
+                  HandleSecondaryButton={handleAddElectionCandidate}
                   SecondaryButtonText="إضافة مرشح"
 
-                  HandleTertiaryButton={handleElectionCampaignClicks}
+                  HandleTertiaryButton={handleAddElectionCampaign}
                   TertiaryButtonText="إضافة حملة"
 
                   toggle={toggle}

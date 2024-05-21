@@ -29,6 +29,7 @@ export const ElectionPartyModal = ({
   const dispatch = useDispatch();
   const { electionDetails } = useSelector(electionSelector);
   const election = electionDetails.id;
+  const [isAddParty, setIsAddParty] = useState(false);
 
 
   const openModal = () => {
@@ -39,7 +40,6 @@ export const ElectionPartyModal = ({
   const toggleModal = () => { setModal(!modal); };
 
   // Adding New Party From Scratch
-  const [isAddParty, setIsAddParty] = useState(false);
 
   const handleAddParty = useCallback(() => {
     setIsAddParty((prev) => !prev);

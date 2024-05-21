@@ -13,7 +13,7 @@ from django.utils.text import slugify
 # Models
 from apps.settings.models import TrackModel, TaskModel
 from apps.areas.models import Area
-from apps.elections.models import (
+from apps.elections.candidates.models import (
     ElectionCandidate,
     ElectionParty,
     ElectionPartyCandidate,

@@ -1,6 +1,7 @@
 # Campaign Urls: campaigns/urls.py
 from django.urls import path
 from .views import *
+from .members.views import *
 
 app_name = "campaigns"
 
