@@ -35,7 +35,7 @@ from django.contrib.contenttypes.models import ContentType
 
 # Serializers
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
-from apps.elections.serializers import ElectionSerializer
+# from apps.elections.serializers import ElectionSerializer
 
 
 from rest_framework import serializers
@@ -45,9 +45,20 @@ from apps.elections.candidates.models import ElectionCandidate
 
 
 class ElectionSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField("get_election_name")
+    image = serializers.SerializerMethodField("get_election_image")
+    due_date = serializers.DateField(
+        format="%Y-%m-%d",
+        input_formats=[
+            "%Y-%m-%d",
+        ],
+        allow_null=True,
+        required=False,
+    )
+
     class Meta:
-        model = ElectionCandidate
-        fields = ["id", "name"]
+        model = Election
+        fields = ['id', 'name', 'image', 'due_date']
 
 
 # from django.db.utils import IntegrityError
@@ -95,7 +106,9 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     campaigner_id = serializers.IntegerField()
 
     name = serializers.SerializerMethodField()
-    election_id = serializers.SerializerMethodField()
+    # election = ElectionSerializer(source='get_election', read_only=True)
+    # election = serializers.SerializerMethodField()
+
     campaign_type_display = serializers.SerializerMethodField()
 
     class Meta:
@@ -104,7 +117,7 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "id",
             "campaign_type",
             "campaigner_id",
-            "election_id",
+            # "election",
             "name",
             "campaign_type_display",
             "slug",
@@ -142,10 +155,16 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
         elif obj.campaign_type.model == "party":
             return related_object.party.name
 
-    def get_election_id(self, obj):
-        """Retrieve the election_id dynamically based on campaign_type."""
+    def get_election(self, obj):
+        """Retrieve the election object dynamically based on campaign_type."""
         related_object = self.get_campaign_related_object(obj)
-        return related_object.election.id
+        print("THE ELECTION: ", related_object)
+
+        if related_object:
+            return related_object.election
+        else:
+            return None
+
 
     def create(self, validated_data):
         print("Validated data:", validated_data)

@@ -19,8 +19,10 @@ from django.utils.translation import gettext as _
 from apps.auths.models import Group, User
 from django.db.models import Q
 
+from apps.campaigns.models import Campaign
+from apps.campaigns.members.models import CampaignMember
 # from apps.campaigns.models import Campaign, CampaignParty, CampaignMember, CampaignPartyMember
-# from apps.campaigns.serializers import CampaignMemberSerializer, CampaignPartyMemberSerializer
+from apps.campaigns.members.serializers import CampaignMemberSerializer
 from apps.auths.serializers import GroupSerializer
 
 
@@ -93,12 +95,14 @@ def determine_user_role(campaign_id, user_id, context):
     # Return None if user is neither admin nor part of the campaign
     return None
 
+
 def is_higher_privilege(user_id):
     """
     Checks if a user has higher privileges ("admin" or "superAdmin")
     It directly filters the User model and returns True if the user has higher privileges, otherwise False.
     """    
     return User.objects.filter(pk=user_id, groups__name__in=["admin", "superAdmin"]).exists()
+
 
 def get_current_campaign_member(campaign_id, user_id, context):
     """

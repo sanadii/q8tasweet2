@@ -32,6 +32,7 @@ const Section = () => {
 
   const {
     campaign,
+    electionDetails,
     campaignMembers,
     campaignRoles,
     campaignGuarantees,
@@ -59,7 +60,7 @@ const Section = () => {
   ];
 
   const tabComponents = {
-    1: <OverviewTab />,
+    // 1: <OverviewTab />,
     2: <MembersTab />,
     3: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />,
     4: <AttendeesTab />,
@@ -92,7 +93,7 @@ const Section = () => {
 
   return (
     <React.Fragment>
-      <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
+      <SectionHeader campaign={campaign} electionDetails={electionDetails} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
 
       <Row>
         <Col lg={12}>

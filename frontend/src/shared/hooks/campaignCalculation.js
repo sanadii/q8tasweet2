@@ -19,7 +19,7 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
     });
 
     let targetVotes = campaignDetails.targetVotes;
-    let totalGuarantees = campaignGuarantees.length;
+    let totalGuarantees = campaignGuarantees.length || 0;
     let totalContactedGuarantees = 0;
     let totalConfirmedGuarantees = 0; // Contacted + Confirmed
     let totalConfirmedAttendees = 0;

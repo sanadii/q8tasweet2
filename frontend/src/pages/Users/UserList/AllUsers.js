@@ -31,8 +31,6 @@ const AllUsers = () => {
   // State Management
   const { users, isUserSuccess, error } = useSelector(userSelector);
   const { groups, categories } = useSelector(groupSelector);
-  console.log("groups: ", groups)
-  console.log("categories: ", categories)
 
   const transformGroups = (categories, groups) => {
     return categories.map(category => {
@@ -64,7 +62,6 @@ const AllUsers = () => {
     deleteMultiple,
   } = useDelete(deleteUser);
 
-  console.log("checkedAll: ", checkedAll)
   // Model & Toggle Function
   const [user, setUser] = useState([]);
   const [modal, setModal] = useState(false);
@@ -167,6 +164,7 @@ const AllUsers = () => {
     }
     return isValid;
   });
+  
   return (
     <React.Fragment>
       <DeleteModal

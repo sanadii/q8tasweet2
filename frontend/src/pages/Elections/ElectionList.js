@@ -10,7 +10,7 @@ import { getElections, deleteElection, getCategories } from "store/actions";
 import ElectionModal from "./ElectionModal";
 import { Id, CheckboxHeader, CheckboxCell, Name, DueDate, Status, Priority, Category, CreateBy, Actions } from "./ElectionListCol";
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
-import { useDelete, useFilter, useFetchDataIfNeeded } from "shared/hooks"
+import { useDelete, useFilter } from "shared/hooks"
 import { defaultDate } from "shared/utils"
 
 // UI, Styles & Notifications
@@ -36,26 +36,34 @@ const ElectionList = () => {
 
   // Delete Hook
   const {
+    // Delete Modal
     handleDeleteItem,
-    handleItemDeleteClick,
     deleteModal,
     setDeleteModal,
+    deleteModalMulti,
+    handleDeleteMultiple,
+
+    // Table Header
+    isMultiDeleteButton,
+    setDeleteModalMulti,
+
+    // Column Actions
+    handleItemDeleteClick,
     handleCheckAllClick,
     handleCheckCellClick,
-    isMultiDeleteButton,
-    deleteModalMulti,
-    setDeleteModalMulti,
-    handleDeleteMultiple,
   } = useDelete(deleteElection);
 
   // Election Data
   useEffect(() => {
-    if (!isElectionSuccess) {
+    if (elections && elections.length === 0) {
       dispatch(getElections('admin'));
       dispatch(getCategories());
     }
-  }, [dispatch, isElectionSuccess]);
+  }, [dispatch, elections]);
 
+  // useEffect(() => {
+  //   dispatch(getElections());
+  // }, [dispatch]);
 
   const toggle = useCallback(() => {
     if (modal) {
@@ -66,41 +74,6 @@ const ElectionList = () => {
       setDate(defaultDate());
     }
   }, [modal]);
-
-
-  // Update Data
-  // const handleElectionClick = useCallback(
-  //   (arg) => {
-  //     const election = arg;
-
-  //     setElection({
-  //       id: election.id,
-  //       dueDate: election.dueDate,
-  //       candidateCount: election.candidateCount,
-
-  //       // Taxonomies
-  //       category: election.category,
-  //       subCategory: election.subCategory,
-  //       tags: election.tags,
-
-  //       // Election Spesifications
-  //       electionMethod: election.electionMethod,
-  //       electionResult: election.electionResult,
-  //       electVotes: election.electVotes,
-  //       electSeats: election.seats,
-  //       voters: election.voters,
-  //       attendees: election.attendees,
-
-  //       // Task
-  //       status: election.status,
-  //       priority: election.priority,
-  //     });
-
-  //     setIsEdit(true);
-  //     toggle();
-  //   },
-  //   [toggle]
-  // );
 
   const handleElectionClick = useCallback(
     (electionData) => {

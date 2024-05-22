@@ -13,7 +13,7 @@ import { WebSocketProvider } from 'shared/utils';
 const CampaignDetails = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
-  const { campaign } = useSelector(campaignSelector);
+  const { campaign, electionDetails } = useSelector(campaignSelector);
   const { canViewCampaign } = usePermission();
 
   useEffect(() => {

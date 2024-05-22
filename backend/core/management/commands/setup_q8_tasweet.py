@@ -9,7 +9,7 @@ class Command(BaseCommand):
         # Call the importUsers command directly
         # call_command('import_users')
         call_command('import_groups')
-        # call_command('set_permissions')
+        call_command('set_permissions')
         # call_command('import_election_candidates')
         
         

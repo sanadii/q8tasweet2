@@ -178,25 +178,18 @@ function* onAddCampaign({ payload: campaign }) {
   try {
     const response = yield call(addCampaignApi, campaign);
     const electionCandidate = {
-      id: response.data.campaignerId,
-      data: response.data,
+      data: {
+        id: response.data.campaignerId,
+        campaign: response.data,
+      }
     };
     console.log("electionCandidateResponse", electionCandidate);
-
-    // Dispatch the campaign success action
     yield put(CampaignApiResponseSuccess(ADD_CAMPAIGN, response.data));
-
-    // Dispatch the election candidate success action
     yield put(updateElectionCandidateSuccess(electionCandidate));
-
     toast.success("تم إضافة الحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
-    // Dispatch the campaign error action
     yield put(CampaignApiResponseError(ADD_CAMPAIGN, error));
-
-    // Dispatch the election candidate error action
     yield put(updateElectionCandidateFail(error));
-
     toast.error("خطأ في إضافة الحملة الإنتخابية", { autoClose: 2000 });
   }
 }

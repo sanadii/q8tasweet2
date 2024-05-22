@@ -7,7 +7,7 @@ import { usePermission } from 'shared/hooks';
 import { useSelector, useDispatch } from "react-redux";
 import { layoutSelector, userSelector, campaignSelector } from 'selectors';
 
-const SectionHeader = ({ campaign, campaignMembers, campaignGuarantees }) => {
+const SectionHeader = ({ campaign, electionDetails, campaignMembers, campaignGuarantees }) => {
     const { activeCampaign, userCampaigns } = useSelector(userSelector);
 
     const currentCampaign = campaign || activeCampaign;
@@ -29,8 +29,8 @@ const SectionHeader = ({ campaign, campaignMembers, campaignGuarantees }) => {
     const campaignId = currentCampaign?.id;
     const campaignName = currentCampaign.name;
     const campaignLogo = currentCampaign.logo;
-    const electionName = currentCampaign.election.name;
-    const electionDueDate = currentCampaign.election.dueDate;
+    const electionName = electionDetails.name;
+    const electionDueDate = electionDetails.dueDate;
 
     return (
         <React.Fragment>

@@ -42,6 +42,9 @@ class Campaign(TrackModel, TaskModel):
             ("canChangeCampaignAssistant", "can Change Campaign Assistant"),
         ]
         unique_together = ["campaign_type", "campaigner_id"]
+        indexes = [
+            models.Index(fields=["campaign_type", "campaigner_id"]),
+        ]
 
     def save(self, *args, **kwargs):
         if not self.slug:

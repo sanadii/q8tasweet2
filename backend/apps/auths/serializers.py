@@ -1,12 +1,12 @@
 # user/serializers.py
-from rest_framework import serializers
-from apps.auths.models import User
-from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
-from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
-from rest_framework.serializers import ModelSerializer
-from django.contrib.auth.hashers import make_password
 from django.conf import settings  # Import Django settings to access MEDIA_URL
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.hashers import make_password
+from django.contrib.contenttypes.models import ContentType
+from apps.auths.models import User
+from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+from utils.base_serializer import TrackMixin, AdminFieldMixin
 
 
 
@@ -29,7 +29,7 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
         model = User
         fields = ["id", "username", "email", "first_name", "last_name", 'phone',
                   "image", 'civil', 'gender', 'date_of_birth', 'description',
-                  "full_name", 'twitter', 'instagram','password',
+                  "full_name", 'twitter', 'instagram', 'password',
                   'is_staff', 'is_active', 'groups', 'permissions'
                   ]
 
@@ -39,10 +39,17 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
     def get_groups(self, obj):
         groups = obj.groups.all()
         if groups.exists():
-            formatted_groups = ["is" + name.replace(" ", "").capitalize() for name in groups.values_list('name', flat=True)]
+            formatted_groups = []
+            for group in groups:
+                formatted_groups.append({
+                    'id': group.id,
+                    'name': group.name,
+                    'codename': group.codename,  # Assuming 'code' exists in your Group model
+                })
             return formatted_groups
         else:
             return []
+
 
     def get_image(self, obj):
         # Check if the image field is not empty and generate the desired URL format
@@ -61,34 +68,38 @@ class UserSerializer(AdminFieldMixin, serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         password = validated_data.pop('password', None)
-        user = User(**validated_data)
-        # Set the password for the user
+        
+        # Explicitly set the password using make_password
         if password:
-            password = make_password(password)
-        user = request.user if request and hasattr(request, 'user') else None
+            validated_data['password'] = make_password(password) 
 
-        # Set created_by to None if user is not authenticated
-        created_by = None
-        if isinstance(user, User):
-            created_by = user
-        # Remove 'created_by' from validated_data to avoid passing it twice
-        validated_data.pop('created_by', None)
-        instance = User.objects.create(created_by=created_by,password=password, **validated_data)
-        return instance
-    
+        user = User.objects.create(**validated_data)
 
-    # def create(self, validated_data):
-    #     request = self.context.get('request')
-    #     user = request.user if request and hasattr(request, 'user') else None
-    #     instance = User.objects.create(**validated_data, created_by=user)
-     #   return instance
+        # Handle group assignment after user creation
+        group_ids = request.data.getlist('groups', [])
+        if group_ids:
+            groups = Group.objects.filter(pk__in=group_ids)
+            user.groups.set(groups)
 
+        return user
 
     def update(self, instance, validated_data):
         request = self.context.get('request')
-        user = request.user if request and hasattr(request, 'user') else None
-        if user:
-            instance.updated_by = user
+        password = validated_data.pop('password', None)
+
+        # Update password if provided in the request data
+        if password:
+            instance.set_password(password)
+            instance.save()
+
+        # Handle group assignment (or removal) after user update
+        group_ids = request.data.get('groups', [])  
+        if group_ids:
+            groups = Group.objects.filter(pk__in=group_ids)
+            instance.groups.set(groups)
+        else:
+            instance.groups.clear()  # Remove all existing groups
+
         return super().update(instance, validated_data)
 
 # Groups, Permissions

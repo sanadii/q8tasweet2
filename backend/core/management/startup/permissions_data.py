@@ -37,38 +37,38 @@ PERMISSIONS = {
         'canDeleteElectionCandidate': ['superAdmin', 'admin'],
     },
     # Campaigns
-    # 'Campaign': {
-    #     'canViewCampaign': [
-    #         'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
-    #         'campaignCoordinator', 'campaignSupervisor', 
-    #         'campaignGuarantor', 'campaignAttendant', 'campaignSorter'
-    #     ],
-    #     'canAddCampaign': ['superAdmin','admin'],
-    #     'canChangeCampaign': [
-    #         'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
-    #         'campaignCoordinator'
-    #     ],
-    #     'canDeleteCampaign': ['admin'],
-    # },
+    'Campaign': {
+        'canViewCampaign': [
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
+            'campaignCoordinator', 'campaignSupervisor', 
+            'campaignGuarantor', 'campaignAttendant', 'campaignSorter'
+        ],
+        'canAddCampaign': ['superAdmin','admin'],
+        'canChangeCampaign': [
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
+            'campaignCoordinator'
+        ],
+        'canDeleteCampaign': ['admin'],
+    },
 
-    # 'CampaignMember': {
-    #     'canViewCampaignMember': [
-    #         'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
-    #         'campaignCoordinator', 'campaignSupervisor'
-    #     ],
-    #     'canAddCampaignMember': ['superAdmin','admin'],
-    #     'canChangeCampaignMember': [
-    #         'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
-    #         'campaignCoordinator', 'campaignSupervisor'
-    #     ],
-    #     'canDeleteCampaignMember': ['superAdmin','admin'],
+    'CampaignMember': {
+        'canViewCampaignMember': [
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
+            'campaignCoordinator', 'campaignSupervisor'
+        ],
+        'canAddCampaignMember': ['superAdmin','admin'],
+        'canChangeCampaignMember': [
+            'superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 
+            'campaignCoordinator', 'campaignSupervisor'
+        ],
+        'canDeleteCampaignMember': ['superAdmin','admin'],
 
-    #     # Additional for campaignMembers
-    #     'canChangeCampaignModerator': ['superAdmin','admin'],
-    #     'canChangeCampaignCandidate': ['superAdmin', 'admin', 'campaignModerator'],
-    #     'canChangeCampaignCoordinator': ['superAdmin', 'admin', 'campaignModerator', 'campaignCandidate'], 
-    #     'canChangeCampaignSupervisor': ['superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator'], 
-    # },
+        # Additional for campaignMembers
+        'canChangeCampaignModerator': ['superAdmin','admin'],
+        'canChangeCampaignCandidate': ['superAdmin', 'admin', 'campaignModerator'],
+        'canChangeCampaignCoordinator': ['superAdmin', 'admin', 'campaignModerator', 'campaignCandidate'], 
+        'canChangeCampaignSupervisor': ['superAdmin', 'admin', 'campaignModerator', 'campaignCandidate', 'campaignCoordinator'], 
+    },
 
     # 'CampaignGuarantee': {
     #     'canViewCampaignGuarantee': [

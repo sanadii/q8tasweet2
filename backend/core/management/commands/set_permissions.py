@@ -9,8 +9,8 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         # Drop and recreate the auth_permission table
         # with connection.schema_editor() as schema_editor:
-        #     schema_editor.execute("DROP TABLE IF EXISTS auth_permission;")
-        #     schema_editor.create_model(Permission)
+            # schema_editor.execute("DROP TABLE IF EXISTS auth_permission;")
+            # schema_editor.create_model(Permission)
         
         # Set new permissions
         permissions_data.set_permissions()  # Assuming the function is named set_permissions
