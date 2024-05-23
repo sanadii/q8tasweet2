@@ -3,10 +3,8 @@ from django.db import models
 from django_extensions.db.fields import AutoSlugField
 from django.utils.text import slugify
 import uuid
-
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-
 from apps.settings.models import TrackModel, TaskModel
 
 class Campaign(TrackModel, TaskModel):

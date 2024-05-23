@@ -116,21 +116,21 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
       ],
       condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(selectedRoleString),
     },
-    {
-      id: "committee-field",
-      name: "committee",
-      label: "اللجنة",
-      type: "select",
-      options: [
-        { id: '', label: '- اختر اللجنة - ', value: '' }, // Add this default option
-        ...campaignCommitteeList.map(committee => ({
-          id: committee.id,
-          label: committee.name,
-          value: committee.id
-        }))
-      ],
-      condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
-    },
+    // {
+    //   id: "committee-field",
+    //   name: "committee",
+    //   label: "اللجنة",
+    //   type: "select",
+    //   options: [
+    //     { id: '', label: '- اختر اللجنة - ', value: '' }, // Add this default option
+    //     ...campaignCommitteeList.map(committee => ({
+    //       id: committee.id,
+    //       label: committee.name,
+    //       value: committee.id
+    //     }))
+    //   ],
+    //   condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
+    // },
     {
       id: "phone-field",
       name: "phone",

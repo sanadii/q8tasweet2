@@ -107,7 +107,7 @@ export const DELETE_CAMPAIGN = "/campaigns/deleteCampaign";
 
 // Campaign Members
 export const GET_ALL_CAMPAIGN_MEMBERS = "/campaigns/getElectionMembers";
-export const ADD_CAMPAIGN_MEMBER = "/campaigns/ADD_CAMPAIGNMember";
+export const ADD_CAMPAIGN_MEMBER = "/campaigns/addCampaignMember";
 export const UPDATE_CAMPAIGN_MEMBER = "/campaigns/updateCampaignMember";
 export const DELETE_CAMPAIGN_MEMBER = "/campaigns/deleteCampaignMember";
 export const GET_CAMPAIGN_MEMBER_DETAILS = "/campaigns/getCampaignMemberDetails";

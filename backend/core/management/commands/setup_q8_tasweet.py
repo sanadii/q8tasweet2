@@ -8,7 +8,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Call the importUsers command directly
         # call_command('import_users')
-        call_command('import_groups')
+        # call_command('import_groups')
         call_command('set_permissions')
         # call_command('import_election_candidates')
         

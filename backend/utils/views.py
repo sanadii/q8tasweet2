@@ -72,12 +72,14 @@ def get_campaign_roles(context):
 
 def determine_user_role(campaign_id, user_id, context):
     """
-    Determines the role of a user within a campaign. 
+    Determines the role of a user within a campaign or if has higher privilege. 
     Parameters: campaign_id (the identifier of the campaign), user_id (the identifier of the user), and context (for serialization).
     It first checks if the user has admin or superAdmin privileges.
     If not, it attempts to find the user's role within the campaign.
     It returns the user's role within the campaign, "admin" if they have higher privileges, or None otherwise.
     """
+    print("determine_user_role: ", "campaign_id: ", campaign_id, "user_id: ", user_id, "context: ", context)
+
     # Check if user is admin or superAdmin first
     if is_higher_privilege(user_id):
         return "admin"
@@ -101,7 +103,7 @@ def is_higher_privilege(user_id):
     Checks if a user has higher privileges ("admin" or "superAdmin")
     It directly filters the User model and returns True if the user has higher privileges, otherwise False.
     """    
-    return User.objects.filter(pk=user_id, groups__name__in=["admin", "superAdmin"]).exists()
+    return User.objects.filter(pk=user_id, groups__codename__in=["admin", "superAdmin"]).exists()
 
 
 def get_current_campaign_member(campaign_id, user_id, context):
@@ -124,8 +126,9 @@ def get_current_campaign_member(campaign_id, user_id, context):
 
 # CAMPAIGNS MEMBERS
 def get_campaign_members_by_role(campaign, user_role, current_campaign_member):
-    MANAGER_ROLES = {"admin", "campaignModerator", "campaignCandidate", "campaignCoordinator"}
-    SUPERVISOR_ROLES = {"campaignSupervisor"}
+    MANAGER_ROLES = {"superAdmin", "admin", "campaignModerator", "campaignCandidate", "partyAdmin", "CampaignAdmin"}
+    SUPERVISOR_ROLES = {"CampaignFieldAdmin", "CampaignDigitalAdmin", "CampaignFieldAgent", "CampaignDigitalAgent"}
+    print("get_campaign_members_by_role: ", "campaign: ", campaign, "user_role: ", user_role, "current_campaign_member: ", current_campaign_member)
 
     if user_role in MANAGER_ROLES:
         campaign_members = CampaignMember.objects.filter(campaign=campaign)
