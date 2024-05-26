@@ -6,7 +6,7 @@ from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from models import Campaign, CampaignMember, CampaignGuarantee, CampaignAttendee
 from apps.elections.models import Election, ElectionCandidate, ElectionCommittee
 from apps.candidates.models import Candidate
-from electors.models import Voter
+from electors.models import Elector
 from apps.categories.models import Category
 
 # Serializers
@@ -160,43 +160,43 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
     def get_full_name(self, obj):
         try:
             return obj.civil.full_name if obj.civil else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_gender(self, obj):
         try:
             return obj.civil.gender if obj.civil else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_membership_no(self, obj):
         try:
             return obj.civil.membership_no if obj.civil else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_box_no(self, obj):
         try:
             return obj.civil.box_no if obj.civil else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_enrollment_date(self, obj):
         try:
             return obj.civil.enrollment_date if obj.civil else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_relationship(self, obj):
         try:
             return obj.civil.relationship if obj.civil else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_voter_notes(self, obj):
         try:
             return obj.civil.notes if obj.civil else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
 
@@ -221,49 +221,49 @@ class CampaignAttendeeSerializer(TrackMixin, serializers.ModelSerializer):
     def get_full_name(self, obj):
         try:
             return obj.voter.full_name if obj.voter else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_gender(self, obj):
         try:
             return obj.voter.gender if obj.voter else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_membership_no(self, obj):
         try:
             return obj.voter.membership_no if obj.voter else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_box_no(self, obj):
         try:
             return obj.voter.box_no if obj.voter else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_enrollment_date(self, obj):
         try:
             return obj.voter.enrollment_date if obj.voter else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_relationship(self, obj):
         try:
             return obj.voter.relationship if obj.voter else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
     def get_voter_notes(self, obj):
         try:
             return obj.voter.notes if obj.voter else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
         
     def get_civil(self, obj):
         try:
             return obj.voter.civil if obj.voter else None
-        except Voter.DoesNotExist:
+        except Elector.DoesNotExist:
             return "Not Found"
 
 
@@ -272,5 +272,5 @@ class CampaignAttendeeSerializer(TrackMixin, serializers.ModelSerializer):
 def get_field_or_not_found(self, obj, field_name):
     try:
         return getattr(obj, field_name) if obj else None
-    except Voter.DoesNotExist:
+    except Elector.DoesNotExist:
         return "Not Found"

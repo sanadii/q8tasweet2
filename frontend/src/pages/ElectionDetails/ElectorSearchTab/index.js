@@ -16,17 +16,14 @@ import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 import ElectorSearchForm from "./ElectorSearchForm";
 import ElectorSearchDisplay from "./ElectorSearchDisplay";
 
-export const ElectorSearchTab = () => {
+export const ElectorSearchTab = ({ electionSchema }) => {
   const dispatch = useDispatch();
-
   // Modal Constants
   const [modal, setModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-
   const { voters } = useSelector(electorSelector);
-  const { electionSlug } = useSelector(electionSelector);
   const [elector, setElector] = useState(null);
 
 
@@ -67,7 +64,7 @@ export const ElectorSearchTab = () => {
 
   const handleElectorRelatedElectors = (selectedElector) => {
     const relatedElectors = {
-      schema: electionSlug,
+      schema: electionSchema,
       elector: selectedElector?.id,
     }
     dispatch(getElectorRelatedElectors(relatedElectors))
@@ -102,8 +99,9 @@ export const ElectorSearchTab = () => {
               </Row>
             </CardHeader>
             <CardBody className="border border-dashed border-end-0 border-start-0">
-              <ElectorSearchForm />
+              <ElectorSearchForm electionSchema={electionSchema} />
               <ElectorSearchDisplay
+                electionSchema={electionSchema}
                 handleElectorClick={handleElectorClick}
                 setModalMode={setModalMode}
                 toggle={toggle} />

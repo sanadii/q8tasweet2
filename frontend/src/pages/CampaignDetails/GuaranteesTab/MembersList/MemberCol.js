@@ -64,12 +64,12 @@ const Mobile = (cellProps) => {
     );
 };
 const Role = ({ cellProps, campaignRoles }) => {
-    const roleId = cellProps.row.original.role;
-    const role = campaignRoles.find((option) => option.id === roleId);
+    const roleName = cellProps.row.original.roleName;
+    // const role = campaignRoles.find((option) => option.id === roleId);
 
     return (
         <p className="text-success">
-            <strong>{role ? role.name : "غير معرف"}</strong>
+            <strong>{roleName}</strong>
         </p>
     );
 }

@@ -25,6 +25,7 @@ import SortingTab from "./SortingTab";
 import VotersTab from "./VotersTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
+import ElectorSearchTab from "../ElectionDetails/ElectorSearchTab";
 
 
 const Section = () => {
@@ -38,6 +39,8 @@ const Section = () => {
     campaignGuarantees,
     campaignAttendees,
   } = useSelector(campaignSelector);
+
+  const electionSchema = electionDetails?.slug
 
   // Permissions
   const {
@@ -54,7 +57,8 @@ const Section = () => {
     { tabId: 3, permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', title: 'الضمانات' },
     { tabId: 4, permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', title: 'الحضور' },
     { tabId: 5, permission: 'canViewCampaign', href: '#sorting', icon: 'ri-sort-line', title: 'الفرز' },
-    { tabId: 6, permission: 'canViewElector', href: '#voters', icon: 'ri-user-voice-line', title: 'الناخبين' },
+    { tabId: 6, permission: 'canViewElector', href: '#electors', icon: 'ri-user-voice-line', title: 'الناخبين' },
+    // { tabId: 6, permission: 'canViewElector', href: '#voters', icon: 'ri-user-voice-line', title: 'الناخبين' },
     { tabId: 7, permission: 'canViewActivitie', href: '#activities', icon: 'ri-activity-line', title: 'الأنشطة' },
     { tabId: 9, permission: 'canViewCampaign', href: '#edit', icon: 'ri-activity-line', title: 'تعديل' },
   ];
@@ -65,7 +69,8 @@ const Section = () => {
     3: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />,
     4: <AttendeesTab />,
     5: <SortingTab />,
-    6: <VotersTab />,
+    // 6: <VotersTab />,
+    6: <ElectorSearchTab electionSchema={electionSchema} />,
     7: <ActivitiesTab />,
     9: <EditTab />,
     // ... add other tabs similarly if they require props

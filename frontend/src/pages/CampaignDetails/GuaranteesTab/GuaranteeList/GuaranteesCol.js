@@ -111,11 +111,15 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
 }
 
 const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
-    const guaranteeGroupIds = cellProps.row.original.guaranteeGroups;
+    // Ensure guaranteeGroupId is defined
+    const guaranteeGroupId = cellProps.row.original.guaranteeGroup || null;
 
-    const guaranteeGroupNames = guaranteeGroupIds.map(groupId => {
-        const group = campaignGuaranteeGroups.find(g => g.id === groupId);
-        return group ? group.name : "-";
+    // Find the group name for the given guaranteeGroupId
+    const guaranteeGroupNames = campaignGuaranteeGroups.map(group => {
+        if (group.id === guaranteeGroupId) {
+            return group.name;
+        }
+        return "-";
     });
 
     const renderTooltip = (props) => (
@@ -139,11 +143,11 @@ const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
             >
                 <span>
                     {guaranteeGroupNames[0]}
-                    <span class="badge bg-success align-middle ms-1">
+                    <span className="badge bg-success align-middle ms-1">
                         +{guaranteeGroupNames.length - 1}
                     </span>
                 </span>
-            </OverlayTrigger >
+            </OverlayTrigger>
         );
     } else {
         return <span>{guaranteeGroupNames[0] || "-"}</span>;

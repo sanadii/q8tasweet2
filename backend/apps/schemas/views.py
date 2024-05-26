@@ -1,15 +1,17 @@
 from contextlib import contextmanager
+from django.http import JsonResponse
 from django.db import connection
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.http import JsonResponse
+
+# Apps
 from apps.elections.models import Election
 from apps.committees.models import Committee, CommitteeSite
 from apps.committees.results.models import CommitteeResultCandidate, CommitteeResultParty, CommitteeResultPartyCandidate
 from apps.electors.models import Elector
 from apps.areas.models import Area
-from apps.campaigns.guarantees.models import campaignGuarantee
+from apps.campaigns.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
 from utils.schema import schema_context, table_exists
 
 
@@ -55,37 +57,27 @@ class AddSchemaTables(APIView):
             is_detailed_results = election.is_detailed_results
             
             print(is_detailed_results, election_method)
-            if is_detailed_results == True:
+            if is_detailed_results:
                 if election_method == "candidateOnly":
                     models.append(CommitteeResultCandidate)
 
-                if election_method == "partyPartyOriented":
-                    models.append(CommitteeResultParty)
-
-                if election_method == "partyCandidateOriented":
+                if election_method in ["partyPartyOriented", "partyCandidateOriented", "partyCandidateCombined"]:
                     models.append(CommitteeResultParty)
                     models.append(CommitteeResultPartyCandidate)
 
-                if election_method == "partyCandidateCombined":
-                    models.append(CommitteeResultParty)
-                    models.append(CommitteeResultPartyCandidate)
-                    
                 # if has campaigns
-                models.append(campaignGuarantee)
+                models.append(CampaignGuarantee)
+                models.append(CampaignGuaranteeGroup)
 
             print("election_result: ", is_detailed_results, "election_method: ", election_method )
 
         except Election.DoesNotExist:
-            print("Election not found")
+            return Response({"error": "Election not found"}, status=404)
         except Exception as e:
-            print("An error occurred:", e)
+            return Response({"error": str(e)}, status=500)
 
-
-        with schema_context(slug) as election:
-            if hasattr(request, "response"):
-                return request.response  # Return the early response if set
-
-            results = {}
+        results = {}
+        with schema_context(slug):
             with connection.schema_editor() as schema_editor:
                 for Model in models:
                     try:
@@ -96,9 +88,9 @@ class AddSchemaTables(APIView):
                         else:
                             results[table_name] = "Table already exists"
                     except Exception as e:
-                        results[table_name] = f"Failed to create table: {str(e)}"
+                        results[Model._meta.model_name] = f"Failed to create table: {str(e)}"
 
-            return Response({"results": results}, status=200)
+        return Response({"results": results}, status=200)
 
 
 # class AddElectionSchemaTables(APIView):

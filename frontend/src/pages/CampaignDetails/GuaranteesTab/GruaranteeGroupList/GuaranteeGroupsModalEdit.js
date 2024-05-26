@@ -34,7 +34,7 @@ const GuaranteeGroupsModalEdit = ({
       value: guarantee.id
     }));
 
-    console.log("myCampaignGuarantees: ", myCampaignGuarantees)
+  console.log("campaignId: ", campaignId)
 
   // Validation
   const validation = useFormik({
@@ -60,8 +60,9 @@ const GuaranteeGroupsModalEdit = ({
           name: values.name || "",
           member: values.member || campaignGuaranteeGroup.member || currentCampaignMember?.id,
           phone: values.phone || "",
-          guarantees: values.guarantees || [],
           note: values.note || "",
+          guarantees: values.guarantees || [],
+          campaign: campaignId,
         };
 
         // Update election
@@ -72,8 +73,9 @@ const GuaranteeGroupsModalEdit = ({
           name: values.name || "",
           member: currentCampaignMember.id,
           phone: values.phone || "",
-          guarantees: values.guarantees || [],
           note: values.note || "",
+          guarantees: values.guarantees || [],
+          campaign: campaignId,
         };
         dispatch(addCampaignGuaranteeGroup(newCampaignGuaranteeGroup));
       }
@@ -98,19 +100,20 @@ const GuaranteeGroupsModalEdit = ({
       type: "number",
       colSize: 6,
     },
+
+    {
+      id: "note-field",
+      name: "note",
+      label: "ملاحظات",
+      type: "textarea",
+      colSize: 12,
+    },
     {
       id: "guarantees-field",
       name: "guarantees",
       label: "المضامين",
       type: "selectMulti",
       options: myCampaignGuarantees,
-      colSize: 12,
-    },
-    {
-      id: "note-field",
-      name: "note",
-      label: "ملاحظات",
-      type: "textarea",
       colSize: 12,
     },
   ]

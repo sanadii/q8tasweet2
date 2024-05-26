@@ -18,7 +18,9 @@ from .serializers import (
     GroupSerializer,
 )
 
-from utils.views import get_current_user_campaigns,set_cookie 
+from apps.auths.helper import get_current_user_campaigns
+from utils.views import set_cookie 
+
 # from utils.auths import generate_username
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils.crypto import get_random_string

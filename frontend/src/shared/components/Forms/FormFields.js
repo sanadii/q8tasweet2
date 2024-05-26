@@ -16,8 +16,6 @@ const FormFields = ({ field, validation, formStructure }) => {
     const { id, label, name, type, colSize, icon, iconBg, onChange,
         prefix,
         suffix,
-
-
     } = field;
     const imageValue = validation.values.image;
     const [imageSrc, setImageSrc] = useState(defaultAvatar);

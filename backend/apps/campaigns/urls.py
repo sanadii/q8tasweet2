@@ -2,6 +2,7 @@
 from django.urls import path
 from .views import *
 from .members.views import *
+from .guarantees.views import *
 
 app_name = "campaigns"
 

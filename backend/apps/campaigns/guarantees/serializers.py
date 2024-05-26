@@ -1,5 +1,4 @@
-# campaigns/serializers.py
-from rest_framework import serializers
+# campaigns/guarantees/serializers.py
 from django.conf import settings  # Import Django settings to access MEDIA_URL
 from django.contrib.auth.models import Group, Permission
 from rest_framework import serializers
@@ -8,7 +7,6 @@ from rest_framework import serializers
 from apps.campaigns.members.models import CampaignMember
 from apps.campaigns.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
-
 
 
 #
@@ -33,30 +31,38 @@ class CampaignGuaranteeGroupSerializer(serializers.ModelSerializer):
 # Campaign Guarantee Serializers
 #
 class CampaignGuaranteeSerializer(serializers.ModelSerializer):
-
-    # get the data from Elector Model Directly
     full_name = serializers.CharField(
-        source="civil.full_name", default="Not Found", read_only=True
+        source="elector.full_name", default="Not Found", read_only=True
     )
-    gender = serializers.IntegerField(source="civil.gender", default=-1, read_only=True)
-    membership_no = serializers.CharField(
-        source="civil.membership_no", default="Not Found", read_only=True
+    gender = serializers.CharField(
+        source="elector.gender", default="Not Found", read_only=True
     )
-    box_no = serializers.CharField(
-        source="civil.box_no", default="Not Found", read_only=True
+    job = serializers.CharField(
+        source="elector.job", default="Not Found", read_only=True
     )
-    enrollment_date = serializers.DateField(
-        source="civil.enrollment_date", default=None, read_only=True
+    age = serializers.IntegerField(
+        source="elector.age", default=None, read_only=True
     )
-    relationship = serializers.CharField(
-        source="civil.relationship", default="Not Found", read_only=True
+    committee = serializers.CharField(
+        source="elector.committee.name", default="Not Found", read_only=True
     )
-    voter_notes = serializers.CharField(
-        source="civil.notes", default="Not Found", read_only=True
+    committee_area = serializers.CharField(
+        source="elector.committee_area", default="Not Found", read_only=True
     )
-    # attended = serializers.SerializerMethodField()
-    guarantee_groups = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=CampaignGuaranteeGroup.objects.all(), required=False
+    committee_name = serializers.CharField(
+        source="elector.committee_name", default="Not Found", read_only=True
+    )
+    letter = serializers.CharField(
+        source="elector.letter", default="Not Found", read_only=True
+    )
+    code_number = serializers.CharField(
+        source="elector.code_number", default="Not Found", read_only=True
+    )
+    status_code = serializers.CharField(
+        source="elector.status_code", default="Not Found", read_only=True
+    )
+    address = serializers.CharField(
+        source="elector.address", default="Not Found", read_only=True
     )
 
     class Meta:
@@ -65,23 +71,24 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
             "id",
             "campaign",
             "member",
-            "civil",
+            "elector",
+            "guarantee_group",
             "full_name",
             "gender",
-            "phone",
-            "notes",
-            "status",
-            # "attended",
-            "membership_no",
-            "box_no",
-            "enrollment_date",
-            "relationship",
-            "voter_notes",
-            "guarantee_groups",
+            "job",
+            "age",
+            "committee",
+            "committee_area",
+            "committee_name",
+            "letter",
+            "code_number",
+            "status_code",
+            "address",
         ]
 
+
     # def get_attended(self, obj):
-    #     return CampaignAttendee.objects.filter(civil=obj.civil).exists()
+    #     return CampaignAttendee.objects.filter(elector=obj.elector).exists()
 
 
 #
@@ -91,23 +98,23 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 
 #     # get the data from Elector Model Directly
 #     full_name = serializers.CharField(
-#         source="civil.full_name", default="Not Found", read_only=True
+#         source="elector.full_name", default="Not Found", read_only=True
 #     )
-#     gender = serializers.IntegerField(source="civil.gender", default=-1, read_only=True)
+#     gender = serializers.IntegerField(source="elector.gender", default=-1, read_only=True)
 #     membership_no = serializers.CharField(
-#         source="civil.membership_no", default="Not Found", read_only=True
+#         source="elector.membership_no", default="Not Found", read_only=True
 #     )
 #     box_no = serializers.CharField(
-#         source="civil.box_no", default="Not Found", read_only=True
+#         source="elector.box_no", default="Not Found", read_only=True
 #     )
 #     enrollment_date = serializers.DateField(
-#         source="civil.enrollment_date", default=None, read_only=True
+#         source="elector.enrollment_date", default=None, read_only=True
 #     )
 #     relationship = serializers.CharField(
-#         source="civil.relationship", default="Not Found", read_only=True
+#         source="elector.relationship", default="Not Found", read_only=True
 #     )
 #     voter_notes = serializers.CharField(
-#         source="civil.notes", default="Not Found", read_only=True
+#         source="elector.notes", default="Not Found", read_only=True
 #     )
 #     attended = serializers.SerializerMethodField()
 
@@ -117,7 +124,7 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 #             "id",
 #             "campaign",
 #             "member",
-#             "civil",
+#             "elector",
 #             "full_name",
 #             "gender",
 #             "phone",
@@ -132,7 +139,7 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 #         ]
 
 #     def get_attended(self, obj):
-#         return CampaignAttendee.objects.filter(civil=obj.civil).exists()
+#         return CampaignAttendee.objects.filter(elector=obj.elector).exists()
 
 #     def create(self, validated_data):
 #         return super().create(validated_data)

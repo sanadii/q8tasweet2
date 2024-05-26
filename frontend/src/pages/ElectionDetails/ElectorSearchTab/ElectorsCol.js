@@ -61,26 +61,32 @@ const Actions = (props) => {
     const dispatch = useDispatch();
     const {
         canChangeConfig,
-        canaddCampaignGuarantee,
+        canAddCampaignGuarantee,
         canViewCampaignAttendee,
     } = usePermission();
 
     const {
         cellProps,
+        campaignGroup,
+        electionSchema,
         currentCampaignMember,
         handleElectorClick,
         campaignGuarantees,
         campaignAttendees,
         campaignDetails,
-        voters,
+        electors,
     } = props;
 
+    console.log("cellProps: ", cellProps.row.original)
     // if user is not a member (eg Admin, SuperAdmin), to open a model to assign the Guarantor / Attendand (+ Committee)
-    let campaignMember = currentCampaignMember ? currentCampaignMember.id : '';
-    let campaignUser = currentCampaignMember ? currentCampaignMember.user : '';
-    let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : '';
-    const isElectorInGuarantees = campaignGuarantees.some(item => item.civil === cellProps.row.original.civil);
-    const isElectorInAttendees = campaignAttendees.some(item => item.civil === cellProps.row.original.civil);
+    let campaignMember = currentCampaignMember ? currentCampaignMember.id : null;
+    let campaignUser = currentCampaignMember ? currentCampaignMember.user : null;
+    let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : null;
+    console.log("campaignGroup: ", campaignGroup,)
+    // console.log("campaignMember: ", campaignMember, "campaignUser: ", campaignUser, "campaignCommittee: ", campaignCommittee)
+    const isElectorInGuarantees = campaignGuarantees.some(item => item.elector === cellProps.row.original.id);
+    console.log("campaignGuaranteescampaignGuarantees: ", campaignGuarantees)
+    // const isElectorInAttendees = campaignAttendees.some(item => item.id === cellProps.row.original.id);
 
     const renderElectorGuaranteeButton = () => {
         if (isElectorInGuarantees) {
@@ -97,8 +103,11 @@ const Actions = (props) => {
                     const newCampaignGuarantee = {
                         campaign: campaignDetails.id,
                         member: campaignMember,
-                        civil: cellProps.row.original.civil,
+                        guaranteeGroup: campaignGroup,
+                        elector: cellProps.row.original.id,
                         status: 1,
+                        schema: electionSchema,
+
                     };
                     dispatch(addCampaignGuarantee(newCampaignGuarantee));
                 }}
@@ -108,31 +117,32 @@ const Actions = (props) => {
         );
     };
 
-    const renderElectorAttendeeButton = () => {
-        if (isElectorInAttendees) {
-            return <span className="text-success">تم التحضير</span>;
-        }
+    // const renderElectorAttendeeButton = () => {
+    //     if (isElectorInAttendees) {
+    //         return <span className="text-success">تم التحضير</span>;
+    //     }
 
-        return (
-            <button
-                type="button"
-                className="btn btn-success btn-sm"
-                onClick={(e) => {
-                    e.preventDefault();
-                    const newCampaignAttendee = {
-                        user: campaignUser,
-                        election: campaignDetails.election.id,
-                        committee: campaignCommittee,
-                        civil: cellProps.row.original.civil,
-                        status: 1,
-                    };
-                    dispatch(addCampaignAttendee(newCampaignAttendee));
-                }}
-            >
-                تسجيل حضور
-            </button>
-        );
-    };
+    //     return (
+    //         <button
+    //             type="button"
+    //             className="btn btn-success btn-sm"
+    //             onClick={(e) => {
+    //                 e.preventDefault();
+    //                 const newCampaignAttendee = {
+    //                     user: campaignUser,
+    //                     election: campaignDetails.election.id,
+    //                     committee: campaignCommittee,
+    //                     id: cellProps.row.original.id,
+    //                     status: 1,
+    //                 };
+    //                 dispatch(addCampaignAttendee(newCampaignAttendee));
+    //             }}
+    //         >
+    //             تسجيل حضور
+    //         </button>
+    //     );
+    // };
+
     return (
         <div className="list-inline hstack gap-2 mb-0">
             <div className="list-inline hstack gap-2 mb-0">
@@ -147,7 +157,7 @@ const Actions = (props) => {
                     <i className="ri-eye-fill align-bottom" />
                 </button>
             </div>
-            {canaddCampaignGuarantee &&
+            {canAddCampaignGuarantee &&
                 <div className="flex-shrink-0">
                     {renderElectorGuaranteeButton()}
                 </div>
@@ -155,7 +165,7 @@ const Actions = (props) => {
 
             {(canChangeConfig || canViewCampaignAttendee) &&
                 <div className="flex-shrink-0">
-                    {renderElectorAttendeeButton()}
+                    {/* {renderElectorAttendeeButton()} */}
                 </div>
             }
         </div>

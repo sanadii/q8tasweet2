@@ -20,10 +20,10 @@ import { useFormik } from "formik";
 import { FormFields } from "shared/components";
 import { getSelectionOptions } from "shared/hooks";
 
-const ElectorSearchForm = () => {
+const ElectorSearchForm = ({ electionSchema }) => {
     const dispatch = useDispatch();
 
-    const { electionSlug, electionAreas, electionCommitteeSites } = useSelector(electionSelector)
+    const { electionAreas, electionCommitteeSites } = useSelector(electionSelector)
     const [searchElectorInput, setSearchElectorInput] = useState("");
     const [searchType, setSearchType] = useState("simple");
     const [isAdvancedCommitteeSearch, setIsAdvancedCommitteeSearch] = useState(false);
@@ -56,7 +56,7 @@ const ElectorSearchForm = () => {
         onSubmit: (values) => {
             const newElectorSearch = {
                 // id: user ? user.id : 0,  // Uncommented, adjust based on necessity
-                schema: electionSlug,
+                schema: electionSchema,
                 searchType: searchType,
                 ...((searchType === "advanced") ? {
                     firstName: values.firstName || "",
@@ -195,6 +195,7 @@ const ElectorSearchForm = () => {
         },
     ];
 
+
     const vottingStatusFields = [
         {
             id: "voted22-field",
@@ -218,6 +219,8 @@ const ElectorSearchForm = () => {
             colSize: "2",
         },
     ];
+
+
     const renderButtonGroup = (buttonConfigs, color) => (
         <ButtonGroup className="pb-1 pe-2">
             {buttonConfigs.map((btn, index) => (
@@ -279,52 +282,55 @@ const ElectorSearchForm = () => {
     const fieldsToDisplay = (searchType === "advanced" ? advancedFields : fields)
     return (
         <React.Fragment>
-            <div className="mb-2 d-flex g-2">
-                {renderButtonGroup(advancedSearchButtons, 'danger')}
 
-                {searchType &&
-                    renderButtonGroup(advancedCommitteeSearchButtons, 'info')
-                }
+            <Form
+                className="tablelist-form"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    validation.handleSubmit();
+                    return false;
+                }}
+            >
+                <Row className="mb-2 bg-light p-2">
+                    <Col lg={10}>
+                        <div >
+                            <Row>
+                                {fieldsToDisplay.map((field) => (
+                                    // Render all fields except the password field
 
-            </div>
+                                    <FormFields
+                                        key={field.id}
+                                        field={field}
+                                        validation={validation}
+                                    />
+                                ))}
+                            </Row>
+                            <Row>
+                                {vottingStatusFields.map((field) => (
+                                    <FormFields
+                                        key={field.id}
+                                        field={field}
+                                        validation={validation}
+                                        formStructure="inline"
+                                    />
+                                ))}
+                            </Row>
+                        </div>
+                    </Col>
+                    <Col lg={2}>
+                        {renderButtonGroup(advancedSearchButtons, 'danger')}
+                        {searchType && renderButtonGroup(advancedCommitteeSearchButtons, 'info')}
+                        <button type="submit" className="btn btn-primary w-100">
+                            إبحث
+                        </button>
+                    </Col>
+                </Row>
+            </Form>
             <div className="mb-2">
-                <Form
-                    className="tablelist-form"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
-                    }}
-                >
-                    <div className="mb-2 bg-light p-2">
-                        <Row>
-                            {fieldsToDisplay.map((field) => (
-                                // Render all fields except the password field
 
-                                <FormFields
-                                    key={field.id}
-                                    field={field}
-                                    validation={validation}
-                                />
 
-                            ))}
-                        </Row>
-                        <Row>
-                            {vottingStatusFields.map((field) => (
-                                <FormFields
-                                    key={field.id}
-                                    field={field}
-                                    validation={validation}
-                                    formStructure="inline"
-                                />
 
-                            ))}
-                        </Row>
-                    </div>
-                    <button type="submit" className="btn btn-primary">
-                        إبحث
-                    </button>
-                    {/* <Row className="mb-3">
+                {/* <Row className="mb-3">
                     <div className="d-flex align-items-center ">
                         <div className="col d-flex g-2 row">
                             <Col xxl={3} md={6}>
@@ -345,7 +351,7 @@ const ElectorSearchForm = () => {
                         </div>
                     </div>
                 </Row> */}
-                </Form>
+
 
             </div>
 

@@ -12,26 +12,26 @@ class DynamicSchemaModel(models.Model):
         abstract = True
         managed = False
 
-    def save(self, *args, **kwargs):
-        with schema_context(self._schema):
-            super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     with schema_context(self._schema):
+    #         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        with schema_context(self._schema):
-            super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     with schema_context(self._schema):
+    #         super().delete(*args, **kwargs)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)  # Ensures base class initialization
-        self._schema = kwargs.get("schema_name", "public")
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)  # Ensures base class initialization
+    #     self._schema = kwargs.get("schema_name", "public")
 
-    def set_schema(self, schema):
-        self._schema = schema
+    # def set_schema(self, schema):
+    #     self._schema = schema
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
-    def set_schema(self, schema):
-        self._schema = schema
+    # def set_schema(self, schema):
+    #     self._schema = schema
 
 
 class RelatedSchemaModel(models.Model):

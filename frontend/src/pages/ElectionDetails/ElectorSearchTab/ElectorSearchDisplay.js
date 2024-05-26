@@ -9,10 +9,18 @@ import { campaignSelector, electorSelector } from 'selectors';
 import ElectorsModal from "./ElectorsModal";
 import { Id, Name, Area, Committee, Actions } from "./ElectorsCol";
 
+// Form
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { FormFields } from "shared/components";
+import { getSelectionOptions } from "shared/hooks";
+
+
 // Reactstrap (UI) imports
 import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
 
 const ElectorSearchDisplay = ({
+    electionSchema,
     handleElectorClick,
     setModalMode,
     toggle
@@ -24,21 +32,36 @@ const ElectorSearchDisplay = ({
         campaignMembers,
         campaignGuarantees,
         campaignAttendees,
+        campaignGuaranteeGroups,
     } = useSelector(campaignSelector);
 
     const { electorsBySearch } = useSelector(electorSelector);
-
     const [electorList, setElectorList] = useState(electorsBySearch);
     useEffect(() => {
         setElectorList(electorsBySearch);
     }, [electorsBySearch]);
 
 
-
     // View Elector Info
-    const [voter, setElector] = useState(null);
+    const [elector, setElector] = useState(null);
 
+    const validation = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            guaranteeGroup: 1,
+        },
+    });
 
+    const groupFields = [
+        {
+            id: "guaranteeGroup-field",
+            name: "guaranteeGroup",
+            label: "المجموعة",
+            type: "select",
+            options: getSelectionOptions(campaignGuaranteeGroups),
+            colSize: "2",
+        },
+    ]
 
     const columns = useMemo(
         () => [
@@ -59,6 +82,8 @@ const ElectorSearchDisplay = ({
                 Header: "اجراءات",
                 Cell: (cellProps) => <Actions
                     cellProps={cellProps}
+                    campaignGroup={validation.values.guaranteeGroup}
+                    electionSchema={electionSchema}
                     handleElectorClick={handleElectorClick}
                     currentCampaignMember={currentCampaignMember}
                     campaignGuarantees={campaignGuarantees}
@@ -73,11 +98,25 @@ const ElectorSearchDisplay = ({
             campaignAttendees,
             electorsBySearch,
             campaignDetails,
-            currentCampaignMember
+            currentCampaignMember,
+            electionSchema,
         ]);
+
+
 
     return (
         <React.Fragment>
+            <Row>
+                {groupFields.map((field) => (
+                    <FormFields
+                        key={field.id}
+                        field={field}
+                        validation={validation}
+                        formStructure="inline"
+                    />
+                ))}
+
+            </Row>
             {electorList && electorList.length ? (
                 <TableContainer
                     columns={columns}
