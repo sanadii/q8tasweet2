@@ -31,6 +31,7 @@ class CommitteeSite(DynamicSchemaModel):
     election = models.IntegerField(null=True, blank=True)
 
     class Meta:
+        managed = False
         db_table = "committee_site"
         verbose_name = "موقع اللجنة"
         verbose_name_plural = "مواقع اللجان"
@@ -53,6 +54,7 @@ class Committee(DynamicSchemaModel):
     main = models.BooleanField(default=False)
 
     class Meta:
+        managed = False
         db_table = "committee"
         verbose_name = "اللجنة"
         verbose_name_plural = "اللجان"

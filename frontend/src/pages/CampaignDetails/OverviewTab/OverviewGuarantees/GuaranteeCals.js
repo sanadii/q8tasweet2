@@ -4,7 +4,7 @@ import React from "react";
 
 
 // Components, Constants & Hooks
-import { GuaranteeStatusOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions } from "shared/constants";
 import { calculateCampaignData } from 'shared/hooks';
 
 // UI & Utilities

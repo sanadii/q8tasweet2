@@ -5,7 +5,7 @@ import { updateCampaignGuarantee } from "store/actions";
 import { campaignSelector } from 'selectors';
 
 // Component & Constants imports
-import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
 
 // Form & Validation imports
 import * as Yup from "yup";
@@ -150,7 +150,7 @@ const GuaranteesModalEdit = ({
       name: "status",
       label: "الحالة",
       type: "select",
-      options: GuaranteeStatusOptions.map(item => ({
+      options: CampaignGuaranteeStatusOptions.map(item => ({
         id: item.id,
         label: item.name,
         value: item.id

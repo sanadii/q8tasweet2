@@ -16,7 +16,9 @@ import { Button, Table, Card, CardHeader, CardBody } from "reactstrap";
 const ElectionSchema = ({ election }) => {
     const dispatch = useDispatch();
     const { schemaDetails } = useSelector(electionSelector);
-    const electionHasSchema = election?.schemaDetails;
+    const electionHasSchema = election?.schemaDetails ? true : false;
+
+    console.log("electionHasSchema: ", electionHasSchema)
 
     const handleAddElectionSchema = () => {
         dispatch(addElectionSchema(election.slug));
@@ -101,10 +103,19 @@ const ElectionSchema = ({ election }) => {
                         </div>
                     </div>
                 ) : (
-                    <Button onClick={handleAddElectionSchemaTables}>
-                        <i className="mdi mdi-database" />
-                        إضافة قاعدة بيانات
-                    </Button>
+
+                    electionHasSchema ?
+
+                        <Button onClick={handleAddElectionSchemaTables}>
+                            < i className="mdi mdi-database" />
+                            إضافة جداول البيانات
+                        </Button>
+                        :
+                        <Button onClick={handleAddElectionSchema}>
+                            < i className="mdi mdi-database" />
+                            إضافة قاعدة بيانات
+                        </Button>
+
                 )}
             </CardBody>
         </Card >

@@ -14,10 +14,6 @@ class DynamicSchemaModel(models.Model):
     def set_schema(self, schema):
         self._schema = schema
         
-    # def save(self, *args, **kwargs):
-    #     with schema_context(self._schema):
-    #         super().save(*args, **kwargs)
-
     def delete(self, *args, **kwargs):
         with schema_context(self._schema):
             super().delete(*args, **kwargs)

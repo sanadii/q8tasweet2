@@ -15,4 +15,4 @@ export { TagOptions } from "./Tags";
 // Campaigns
 export * from "./MemberRoleOptions";
 export * from "./MemberStatusOptions";
-export * from "./GuaranteeStatusOptions";
+export * from "./CampaignOptions";

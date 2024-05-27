@@ -61,11 +61,13 @@ def determine_user_role(campaign_id, user_id, campaign_roles, context):
     print("determine_user_role: ", "campaign_id: ", campaign_id, "user_id: ", user_id, "context: ", context)
 
     # Check if user is admin or superAdmin first
-    # if is_higher_privilege(user_id):
-    #     return "admin"
+    if is_higher_privilege(user_id):
+        return "higherPrivilage"
     print("campaign_rolescampaign_roles: ", campaign_roles)
     # Convert campaign_roles to a dictionary for faster lookup
-    # role_lookup = {id: role.codename for role in campaign_roles}
+    # role_lookup = {id: role.id for role in campaign_roles}
+    # print("role_lookup: ", role_lookup)
+
 
     # Get the current campaign member's role
     current_campaign_member = get_current_campaign_member(campaign_id, user_id, context)
@@ -102,12 +104,17 @@ def get_current_campaign_member(campaign_id, user_id, context):
 
 # CAMPAIGNS MEMBERS
 def get_campaign_members_by_role(campaign, user_role, current_campaign_member):
-    HIGHER_PRIVILAGE_ROLES = {"superAdmin", "admin"}
-    MANAGER_ROLES = {"superAdmin", "admin", "campaignModerator", "campaignCandidate", "partyAdmin", "CampaignAdmin"}
+    HIGHER_PRIVILAGE_ROLES = {"higherPrivilage"}
+    MANAGER_ROLES = {"campaignModerator", "campaignCandidate", "partyAdmin", "CampaignAdmin"}
     SUPERVISOR_ROLES = {"CampaignFieldAdmin", "CampaignDigitalAdmin", "CampaignFieldAgent", "CampaignDigitalAgent"}
     print("get_campaign_members_by_role: ", "campaign: ", campaign, "user_role: ", user_role, "current_campaign_member: ", current_campaign_member)
 
-    if user_role in MANAGER_ROLES:
+    if user_role in HIGHER_PRIVILAGE_ROLES:
+        campaign_members = CampaignMember.objects.filter(campaign=campaign)
+        campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
+        print("campaign_members XXX: ", campaign_members)
+
+    elif user_role in MANAGER_ROLES:
         campaign_members = CampaignMember.objects.filter(campaign=campaign)
         campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
         print("campaign_members XXX: ", campaign_members)

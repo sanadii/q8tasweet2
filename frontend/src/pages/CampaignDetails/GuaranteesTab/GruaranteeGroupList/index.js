@@ -21,6 +21,7 @@ const GuaranteesGroupList = ({
     handleSelectCampaignGuaranteeGroup,
 }) => {
 
+
     // States
     const {
         campaignGuarantees,
@@ -29,6 +30,8 @@ const GuaranteesGroupList = ({
         isCampaignGuaranteeSuccess,
         error
     } = useSelector(campaignSelector);
+
+    console.log("campaignGuaranteeGroups: ", campaignGuaranteeGroups)
 
     // Delete Hook
     const {

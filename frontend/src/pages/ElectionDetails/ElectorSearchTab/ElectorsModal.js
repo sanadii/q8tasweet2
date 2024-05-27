@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { campaignSelector, electorSelector } from 'selectors';
 import "react-toastify/dist/ReactToastify.css";
 import { Row, Col, Table, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
-import { GuaranteeStatusOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions } from "shared/constants";
 
 const ElectorsModal = ({ modal, toggle, modalMode, elector }) => {
 

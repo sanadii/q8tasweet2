@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { Col, Row, Table, Button, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
 
 const GuaranteeModalView = ({
   toggle,

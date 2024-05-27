@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GuaranteeStatusOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions } from "shared/constants";
 
 const GuaranteeStatusFilter = ({ filters, setFilters }) => {
 
@@ -26,7 +26,7 @@ const GuaranteeStatusFilter = ({ filters, setFilters }) => {
               value={filters.status || ''}
             >
               <option value="">- الكل - </option>
-              {GuaranteeStatusOptions.map((status) => (
+              {CampaignGuaranteeStatusOptions.map((status) => (
                 <option key={status.id} value={status.id}>
                   {status.name}
                 </option>

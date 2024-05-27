@@ -4,7 +4,7 @@ import React from 'react';
 import ReactApexChart from "react-apexcharts";
 import { Card, CardHeader, CardBody, Col, Row } from "reactstrap";
 import { getChartColorsArray } from "shared/components";
-import { GuaranteeStatusOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions } from "shared/constants";
 
 const OverViewChart = ({ results }) => {
 
@@ -13,8 +13,8 @@ const OverViewChart = ({ results }) => {
     const chartPieBasicColors = getChartColorsArray(dataColors);
 
     // Extract the counts from results for each status option
-    const series = GuaranteeStatusOptions.map(option => results.statusCounts[option.value]);
-    const labels = GuaranteeStatusOptions.map(option => option.name);
+    const series = CampaignGuaranteeStatusOptions.map(option => results.statusCounts[option.value]);
+    const labels = CampaignGuaranteeStatusOptions.map(option => option.name);
 
     const description = "هذا المكون يعرض مخططًا دائريًا يمثل توزيع حالات الضمان بناءً على الأوضاع المختلفة.";
 

@@ -5,7 +5,7 @@ import { updateCampaignGuarantee } from "store/actions";
 import { campaignSelector } from 'selectors';
 
 // Component & Constants imports
-import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
 
 // Form & Validation imports
 import * as Yup from "yup";
@@ -222,7 +222,7 @@ const GuaranteesModalUpdate = ({
                       onBlur={validation.handleBlur}
                       value={validation.values.status || ""}
                     >
-                      {GuaranteeStatusOptions.map((status) => (
+                      {CampaignGuaranteeStatusOptions.map((status) => (
                         <option key={status.id} value={status.id}>
                           {status.name}
                         </option>

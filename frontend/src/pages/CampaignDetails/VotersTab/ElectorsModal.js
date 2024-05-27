@@ -4,7 +4,7 @@ import { campaignSelector } from 'selectors';
 import "react-toastify/dist/ReactToastify.css";
 
 import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
-import { GuaranteeStatusOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions } from "shared/constants";
 
 const ElectorsModal = ({ modal, toggle, modalMode, voter }) => {
 

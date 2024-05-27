@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
 import { addCampaignGuarantee, addCampaignAttendee } from "store/actions";
 import { usePermission } from 'shared/hooks';
 

@@ -35,6 +35,12 @@ const ElectorSearchDisplay = ({
         campaignGuaranteeGroups,
     } = useSelector(campaignSelector);
 
+
+    const [selectedGuaranteeGroup, setSelectedGuaranteeGroup] = useState("")
+    const guaranteeGroupOptions = getSelectionOptions(campaignGuaranteeGroups)
+
+    console.log("campaignGuaranteeGroupscampaignGuaranteeGroups: ", campaignGuaranteeGroups)
+
     const { electorsBySearch } = useSelector(electorSelector);
     const [electorList, setElectorList] = useState(electorsBySearch);
     useEffect(() => {
@@ -48,20 +54,12 @@ const ElectorSearchDisplay = ({
     const validation = useFormik({
         enableReinitialize: true,
         initialValues: {
-            guaranteeGroup: 1,
+            guaranteeGroup: campaignGuaranteeGroups[1],
         },
+        // selectedGuaranteeGroup: 
     });
 
-    // const groupFields = [
-    //     {
-    //         id: "guaranteeGroup-field",
-    //         name: "guaranteeGroup",
-    //         label: "المجموعة",
-    //         type: "select",
-    //         options: getSelectionOptions(campaignGuaranteeGroups),
-    //         colSize: "2",
-    //     },
-    // ]
+
 
     const columns = useMemo(
         () => [
@@ -82,7 +80,7 @@ const ElectorSearchDisplay = ({
                 Header: "اجراءات",
                 Cell: (cellProps) => <Actions
                     cellProps={cellProps}
-                    campaignGroup={validation.values.guaranteeGroup}
+                    selectedGuaranteeGroup={selectedGuaranteeGroup}
                     electionSchema={electionSchema}
                     handleElectorClick={handleElectorClick}
                     currentCampaignMember={currentCampaignMember}
@@ -106,29 +104,39 @@ const ElectorSearchDisplay = ({
 
     return (
         <React.Fragment>
-            {/* <Row>
-                {groupFields.map((field) => (
-                    <FormFields
-                        key={field.id}
-                        field={field}
-                        validation={validation}
-                        formStructure="inline"
+            <Row>
+                <Input
+                    type="select"
+                    className="form-select"
+                    name="guaranteeGroup"
+                    id="guaranteeGroup-field"
+                    onChange={(e) => setSelectedGuaranteeGroup(e.target.value)}
+                    value={selectedGuaranteeGroup}
+                >
+                    {guaranteeGroupOptions.map(group => (
+                        <option key={group.id} value={group.value}>
+                            {group.label}
+                        </option>
+                    ))}
+
+                </Input>
+            </Row>
+
+            {
+                electorList && electorList.length ? (
+                    <TableContainer
+                        columns={columns}
+                        data={electorList || []}
+                        customPageSize={50}
+                        className="custom-header-css"
+                        divClass="table-responsive table-card mb-2"
+                        tableClass="align-middle table-nowrap"
+                        theadClass="table-light"
                     />
-                ))}
-            </Row> */}
-            {electorList && electorList.length ? (
-                <TableContainer
-                    columns={columns}
-                    data={electorList || []}
-                    customPageSize={50}
-                    className="custom-header-css"
-                    divClass="table-responsive table-card mb-2"
-                    tableClass="align-middle table-nowrap"
-                    theadClass="table-light"
-                />
-            ) : (
-                <p>لا شيء لعرضه، ابدأ أو قم بتحسين بحثك</p>
-            )}
+                ) : (
+                    <p>لا شيء لعرضه، ابدأ أو قم بتحسين بحثك</p>
+                )
+            }
 
             <div className="form-check form-check-info mb-3">
                 <Input className="form-check-input" type="checkbox" id="formCheck11" defaultChecked />
@@ -136,7 +144,7 @@ const ElectorSearchDisplay = ({
                     Checkbox Info
                 </Label>
             </div>
-        </React.Fragment>
+        </React.Fragment >
     )
 }
 

@@ -45,44 +45,6 @@ export const DELETE_ELECTION_PARTY_CANDIDATE = "/elections/deleteElectionPartyCa
 export const UPDATE_ELECTION_PARTY_CANDIDATE_VOTES = "/elections/updateElectionPartyCandidateVotes";
 
 
-// Election Committee
-export const GET_ELECTION_COMMITTEES = "/elections/getElectionCommittees";
-export const GET_ELECTION_COMMITTEE_DETAILS = "/elections/getElectionCommitteeDetails";
-export const ADD_NEW_ELECTION_COMMITTEE = "/elections/addNewElectionCommittee";
-export const UPDATE_ELECTION_COMMITTEE = "/elections/updateElectionCommittee";
-export const DELETE_ELECTION_COMMITTEE = "/elections/deleteElectionCommittee";
-
-// Election Committee Results
-export const UPDATE_ELECTION_RESULTS = "/committees/updateElectionResults";
-
-
-// ElectionAttendee
-export const GET_ELECTION_ATTENDEES = "/campaigns/getAllElectionAttendees";
-export const DELETE_ELECTION_ATTENDEE = "/campaigns/deleteElectionAttendee";
-export const ADD_NEW_ELECTION_ATTENDEE = "/campaigns/addNewElectionAttendee";
-export const UPDATE_ELECTION_ATTENDEE = "/campaigns/updateElectionAttendee";
-
-
-// Schema
-export const GET_ELECTION_SCHEMAS = "/schemas/getElectionSchemas";
-export const ADD_SCHEMA_TABLES = "/schemas/addSchemaTables";
-export const GET_ELECTION_SCHEMA_DETAILS = "/schemas/getElectionSchemaDetails";
-export const ADD_ELECTION_SCHEMA = "/schemas/addElectionSchema";
-// export const ADD_ELECTION_SCHEMA_TABLES = "/electors/addElectionSchemaTables";
-export const UPDATE_ELECTION_SCHEMA = "/schemas/updateElectionSchema";
-export const DELETE_ELECTION_SCHEMA = "/schemas/deleteElectionSchema";
-
-
-// Electors
-export const GET_ELECTORS = "/electors/getElectors";
-export const ADD_ELECTOR = "/electors/addElector";
-export const UPDATE_ELECTOR = "/electors/updateElector";
-export const DELETE_ELECTOR = "/electors/deleteElector";
-export const GET_ELECTOR_BY_ALL = "/electors/getElectorsByAll";
-export const GET_ELECTORS_BY_CATEGORY = "/electors/getElectorsByCategory";
-export const GET_ELECTORS_BY_SEARCH = "/electors/getElectorsBySearch";
-export const GET_ELECTOR_RELATED_ELECTORS = "/electors/getElectorRelatedElectors";
-
 // Candidates
 export const GET_CANDIDATES = "/candidates/getCandidates";
 export const GET_CANDIDATE_DETAILS = "/candidates/getCandidateDetails";
@@ -112,56 +74,6 @@ export const UPDATE_CAMPAIGN_MEMBER = "/campaigns/updateCampaignMember";
 export const DELETE_CAMPAIGN_MEMBER = "/campaigns/deleteCampaignMember";
 export const GET_CAMPAIGN_MEMBER_DETAILS = "/campaigns/getCampaignMemberDetails";
 
-// Campaign Guarantees
-export const GET_ALL_CAMPAIGN_GUARANTEES = "/campaigns/getAllCampaignGuarantees";
-export const DELETE_CAMPAIGN_GUARANTEE = "/campaigns/deleteCampaignGuarantee";
-export const ADD_CAMPAIGN_GUARANTEE = "/campaigns/addCampaignGuarantee";
-export const UPDATE_CAMPAIGN_GUARANTEE = "/campaigns/updateCampaignGuarantee";
-
-// Campaign GuaranteeGroups
-export const GET_ALL_CAMPAIGN_GUARANTEE_GROUPS = "/campaigns/getAllCampaignGuaranteeGroups";
-export const DELETE_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/deleteCampaignGuaranteeGroup";
-export const ADD_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/addCampaignGuaranteeGroup";
-export const UPDATE_CAMPAIGN_GUARANTEE_GROUP = "/campaigns/updateCampaignGuaranteeGroup";
-
-
-// CampaignAttendee
-export const GET_CAMPAIGN_ATTENDEES = "/campaigns/getAllCampaignAttendees";
-export const DELETE_CAMPAIGN_ATTENDEE = "/campaigns/deleteCampaignAttendee";
-export const ADD_CAMPAIGN_ATTENDEE = "/campaigns/addCampaignAttendee";
-export const UPDATE_CAMPAIGN_ATTENDEE = "/campaigns/updateCampaignAttendee";
-
-// CampaignSorting
-export const GET_ALL_CAMPAIGN_SORTING = "/campaigns/getAllCampaignSorting";
-export const GET_CAMPAIGN_COMMITTEE_SORTING = "/campaigns/getCampaignCommitteeSorting";
-// export const DELETE_CAMPAIGN_SORTING = "/campaigns/deleteCampaignSorting";
-// export const ADD_CAMPAIGN_SORTING = "/campaigns/ADD_CAMPAIGNSorting";
-// export const UPDATE_CAMPAIGN_SORTING = "/campaigns/updateCampaignSorting";
-
-
-// Notifications
-export const GET_USER_NOTIFICATIONS = "/campaigns/getUserNotifications";
-
-
-// Images
-// export const UPLOAD_IMAGE = "/media/uploadImage";
-export const UPLOAD_IMAGE = "/auth/uploadImage";
-export const GET_IMAGES = "/media/uploadImage";
-export const DELETE_IMAGE = "/media/uploadImage";
-export const UPDATE_IMAGE = "/media/uploadImage";
-
-// Category
-export const GET_CATEGORIES = "/elections/getCategories";
-export const DELETE_CATEGORY = "/elections/deleteCategory";
-export const ADD_NEW_CATEGORY = "/elections/addCategory";
-export const UPDATE_CATEGORY = "/elections/updateCategory";
-
-// Voter
-export const GET_ALL_VOTERS = "/voters/getAllvoters";
-export const GET_VOTERS = "/voters/getvoters";
-export const DELETE_VOTER = "/voters/deletevoter";
-export const ADD_NEW_VOTER = "/voters/addvoter";
-export const UPDATE_VOTER = "/voters/updatevoter";
 
 // USERS
 export const GET_USERS = "/auth/getUsers";
@@ -198,3 +110,93 @@ export const GET_GROUP_PERMISSIONS = "/auth/getGroupPermissions";
 export const ADD_NEW_GROUP_PERMISSION = "/auth/addNewPermission";
 export const UPDATE_GROUP_PERMISSION = "/auth/updatePermission";
 export const DELETE_GROUP_PERMISSION = "/auth/deletePermission";
+
+//////////////////////////////////////////
+// Schema ////////////////////////////////
+//////////////////////////////////////////
+export const GET_ELECTION_SCHEMAS = "/schemas/getElectionSchemas";
+export const ADD_SCHEMA_TABLES = "/schemas/addSchemaTables";
+export const GET_ELECTION_SCHEMA_DETAILS = "/schemas/getElectionSchemaDetails";
+export const ADD_ELECTION_SCHEMA = "/schemas/addElectionSchema";
+// export const ADD_ELECTION_SCHEMA_TABLES = "/electors/addElectionSchemaTables";
+export const UPDATE_ELECTION_SCHEMA = "/schemas/updateElectionSchema";
+export const DELETE_ELECTION_SCHEMA = "/schemas/deleteElectionSchema";
+
+
+// Election Committee
+export const GET_ELECTION_COMMITTEES = "/schemas/getElectionCommittees";
+export const GET_ELECTION_COMMITTEE_DETAILS = "/schemas/getElectionCommitteeDetails";
+export const ADD_NEW_ELECTION_COMMITTEE = "/schemas/addNewElectionCommittee";
+export const UPDATE_ELECTION_COMMITTEE = "/schemas/updateElectionCommittee";
+export const DELETE_ELECTION_COMMITTEE = "/schemas/deleteElectionCommittee";
+
+// ElectionAttendee
+export const GET_ELECTION_ATTENDEES = "/schemas/getAllElectionAttendees";
+export const DELETE_ELECTION_ATTENDEE = "/schemas/deleteElectionAttendee";
+export const ADD_NEW_ELECTION_ATTENDEE = "/schemas/addNewElectionAttendee";
+export const UPDATE_ELECTION_ATTENDEE = "/schemas/updateElectionAttendee";
+
+// Election Committee Results
+export const UPDATE_ELECTION_RESULTS = "/schemas/updateElectionResults";
+
+
+// Electors
+export const GET_ELECTORS = "/schemas/getElectors";
+export const ADD_ELECTOR = "/schemas/addElector";
+export const UPDATE_ELECTOR = "/schemas/updateElector";
+export const DELETE_ELECTOR = "/schemas/deleteElector";
+export const GET_ELECTOR_BY_ALL = "/schemas/getElectorsByAll";
+export const GET_ELECTORS_BY_CATEGORY = "/schemas/getElectorsByCategory";
+export const GET_ELECTORS_BY_SEARCH = "/schemas/getElectorsBySearch";
+export const GET_ELECTOR_RELATED_ELECTORS = "/schemas/getElectorRelatedElectors";
+
+// Campaign Guarantees
+export const GET_ALL_CAMPAIGN_GUARANTEES = "/schemas/getAllCampaignGuarantees";
+export const DELETE_CAMPAIGN_GUARANTEE = "/schemas/deleteCampaignGuarantee";
+export const ADD_CAMPAIGN_GUARANTEE = "/schemas/addCampaignGuarantee";
+export const UPDATE_CAMPAIGN_GUARANTEE = "/schemas/updateCampaignGuarantee";
+
+// Campaign GuaranteeGroups
+export const GET_ALL_CAMPAIGN_GUARANTEE_GROUPS = "/schemas/getAllCampaignGuaranteeGroups";
+export const DELETE_CAMPAIGN_GUARANTEE_GROUP = "/schemas/deleteCampaignGuaranteeGroup";
+export const ADD_CAMPAIGN_GUARANTEE_GROUP = "/schemas/addCampaignGuaranteeGroup";
+export const UPDATE_CAMPAIGN_GUARANTEE_GROUP = "/schemas/updateCampaignGuaranteeGroup";
+
+
+// CampaignAttendee
+export const GET_CAMPAIGN_ATTENDEES = "/schemas/getAllCampaignAttendees";
+export const DELETE_CAMPAIGN_ATTENDEE = "/schemas/deleteCampaignAttendee";
+export const ADD_CAMPAIGN_ATTENDEE = "/schemas/addCampaignAttendee";
+export const UPDATE_CAMPAIGN_ATTENDEE = "/schemas/updateCampaignAttendee";
+
+// CampaignSorting
+export const GET_ALL_CAMPAIGN_SORTING = "/schemas/getAllCampaignSorting";
+export const GET_CAMPAIGN_COMMITTEE_SORTING = "/schemas/getCampaignCommitteeSorting";
+// export const DELETE_CAMPAIGN_SORTING = "/campaigns/deleteCampaignSorting";
+// export const ADD_CAMPAIGN_SORTING = "/campaigns/ADD_CAMPAIGNSorting";
+// export const UPDATE_CAMPAIGN_SORTING = "/campaigns/updateCampaignSorting";
+
+
+// Notifications
+export const GET_USER_NOTIFICATIONS = "/campaigns/getUserNotifications";
+
+
+// Images
+// export const UPLOAD_IMAGE = "/media/uploadImage";
+export const UPLOAD_IMAGE = "/auth/uploadImage";
+export const GET_IMAGES = "/media/uploadImage";
+export const DELETE_IMAGE = "/media/uploadImage";
+export const UPDATE_IMAGE = "/media/uploadImage";
+
+// Category
+export const GET_CATEGORIES = "/elections/getCategories";
+export const DELETE_CATEGORY = "/elections/deleteCategory";
+export const ADD_NEW_CATEGORY = "/elections/addCategory";
+export const UPDATE_CATEGORY = "/elections/updateCategory";
+
+// Voter
+export const GET_ALL_VOTERS = "/schemas/getAllvoters";
+export const GET_VOTERS = "/schemas/getvoters";
+export const DELETE_VOTER = "/schemas/deletevoter";
+export const ADD_NEW_VOTER = "/schemas/addvoter";
+export const UPDATE_VOTER = "/schemas/updatevoter";

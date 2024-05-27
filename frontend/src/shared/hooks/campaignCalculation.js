@@ -1,6 +1,6 @@
 // campaignCalculation.js
 
-import { GuaranteeStatusOptions, STATUS_MAP } from "shared/constants";
+import { CampaignGuaranteeStatusOptions, STATUS_MAP } from "shared/constants";
 
 // Helper function to calculate percentage
 export const calculatePercentage = (count, total) => {
@@ -13,7 +13,7 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
     const statusCounts = {};
     const attendeesStatusCounts = {};
 
-    GuaranteeStatusOptions.forEach(option => {
+    CampaignGuaranteeStatusOptions.forEach(option => {
         statusCounts[option.value] = 0;
         attendeesStatusCounts[option.value] = 0;
     });
@@ -26,7 +26,7 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
     let totalAttendees = 0;
 
     campaignGuarantees.forEach(guarantee => {
-        const statusOption = GuaranteeStatusOptions.find(option => option.id === guarantee.status);
+        const statusOption = CampaignGuaranteeStatusOptions.find(option => option.id === guarantee.status);
         if (statusOption) {
             statusCounts[statusOption.value]++;
             if (guarantee.attended) {
@@ -117,7 +117,7 @@ export function getAggregatedGuarantorData(campaignGuarantees, campaignMembers) 
 
 // Function to construct status columns
 export function constructStatusColumns(campaignGuarantees) {
-    return GuaranteeStatusOptions.map(statusOption => ({
+    return CampaignGuaranteeStatusOptions.map(statusOption => ({
         Header: statusOption.name,
         accessor: (rowData) => {
             const memberId = rowData.id;
@@ -128,7 +128,7 @@ export function constructStatusColumns(campaignGuarantees) {
 
 // Table: Get background class based on status option
 export function getBgClassForStatus(columnIndex) {
-    const statusOption = GuaranteeStatusOptions.find(option => option.id === columnIndex - 2);
+    const statusOption = CampaignGuaranteeStatusOptions.find(option => option.id === columnIndex - 2);
     return statusOption ? statusOption.bgClass : '';
 }
 

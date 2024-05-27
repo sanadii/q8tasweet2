@@ -18,19 +18,7 @@ class BaseCommitteeResult(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     class Meta:
-        abstract = True
-        permissions = [
-            ("canViewElectionCommitteeResult", "Can View Election Committee Result"),
-            ("canAddElectionCommitteeResult", "Can Add Election Committee Result"),
-            (
-                "canChangeElectionCommitteeResult",
-                "Can Change Election Committee Result",
-            ),
-            (
-                "canDeleteElectionCommitteeResult",
-                "Can Delete Election Committee Result",
-            ),
-        ]
+        managed = False
 
 
 # Add this in the relevant view or serializer
@@ -41,6 +29,7 @@ class CommitteeResultCandidate(BaseCommitteeResult, TrackModel):
     election_candidate = models.IntegerField(null=True, blank=True)
 
     class Meta:
+        managed = False
         db_table = "committee_result_candidate"
         verbose_name = "Committee Result Candidate"
         verbose_name_plural = "Committee Result Candidates"
@@ -65,6 +54,7 @@ class CommitteeResultParty(BaseCommitteeResult, TrackModel):
     election_party = models.IntegerField(null=True, blank=True)
 
     class Meta:
+        managed = False
         db_table = "committee_result_party"
         verbose_name = "Committee Result Party"
         verbose_name_plural = "Committee Result Parties"
@@ -82,6 +72,7 @@ class CommitteeResultPartyCandidate(BaseCommitteeResult, TrackModel):
     election_party_candidate = models.IntegerField(null=True, blank=True)
 
     class Meta:
+        managed = False
         db_table = "committee_result_party_candidate"
         verbose_name = "Committee Result Party Candidate"
         verbose_name_plural = "Committee Result Party Candidates"

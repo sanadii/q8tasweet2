@@ -4,7 +4,7 @@ import React from 'react';
 import ReactApexChart from "react-apexcharts";
 import { Card, CardHeader, CardBody, Col, Row } from "reactstrap";
 import { getChartColorsArray } from "shared/components";
-import { GuaranteeStatusOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions } from "shared/constants";
 
 const GuaranteeRadialBar = ({ results }) => {
     const description = "عرض نسبي لوضع حالات المضامينن.";

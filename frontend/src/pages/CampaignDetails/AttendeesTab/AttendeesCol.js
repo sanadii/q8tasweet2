@@ -1,5 +1,5 @@
 import React from "react";
-import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
 import useUserRoles from "shared/hooks";
 
 
@@ -50,8 +50,8 @@ const Attended = (cellProps) => {
 const Status = (cellProps) => {
     const statusId = cellProps.row.original.status;
 
-    // Find the corresponding status object in the GuaranteeStatusOptions
-    const statusOption = GuaranteeStatusOptions.find(
+    // Find the corresponding status object in the CampaignGuaranteeStatusOptions
+    const statusOption = CampaignGuaranteeStatusOptions.find(
         (option) => option.id === statusId
     );
 

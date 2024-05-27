@@ -24,6 +24,7 @@ const ElectorSearchForm = ({ electionSchema }) => {
     const dispatch = useDispatch();
 
     const { electionAreas, electionCommitteeSites } = useSelector(electionSelector)
+
     const [searchElectorInput, setSearchElectorInput] = useState("");
     const [searchType, setSearchType] = useState("simple");
     const [isAdvancedCommitteeSearch, setIsAdvancedCommitteeSearch] = useState(false);
@@ -283,7 +284,7 @@ const ElectorSearchForm = ({ electionSchema }) => {
     return (
         <React.Fragment>
 
-            {/* <Form
+            <Form
                 className="tablelist-form"
                 onSubmit={(e) => {
                     e.preventDefault();
@@ -325,7 +326,7 @@ const ElectorSearchForm = ({ electionSchema }) => {
                         </button>
                     </Col>
                 </Row>
-            </Form> */}
+            </Form>
             <div className="mb-2">
 
 

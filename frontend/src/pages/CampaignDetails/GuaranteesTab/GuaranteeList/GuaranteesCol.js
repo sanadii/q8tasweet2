@@ -1,7 +1,8 @@
 import React from "react";
-import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
 import Tooltip from 'react-bootstrap/Tooltip';  // Import Tooltip from your UI library
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';  // Import OverlayTrigger
+import { getOptionOptions, getOptionBadge } from "shared/utils"
 
 const CheckboxHeader = ({ checkedAll }) => (
     <input
@@ -65,28 +66,32 @@ const Attended = (cellProps) => {
     }
 }
 
-
 const Status = (cellProps) => {
-    const statusId = cellProps.row.original.status;
+    return getOptionBadge("CampaignGuaranteeStatus", cellProps.row.original.status)
+  };
 
-    // Find the corresponding status object in the GuaranteeStatusOptions
-    const statusOption = GuaranteeStatusOptions.find(
-        (option) => option.id === statusId
-    );
 
-    if (statusOption) {
-        return (
-            <span className={`${statusOption.badgeClass} text-uppercase`}>
-                {statusOption.name}
-            </span>
-        );
-    } else {
-        // Fallback for unknown statuses
-        return (
-            <span className="badge bg-primary text-uppercase">Unknown</span>
-        );
-    }
-}
+// const Status = (cellProps) => {
+//     const statusId = cellProps.row.original.status;
+
+//     // Find the corresponding status object in the CampaignGuaranteeStatusOptions
+//     const statusOption = CampaignGuaranteeStatusOptions.find(
+//         (option) => option.id === statusId
+//     );
+
+//     if (statusOption) {
+//         return (
+//             <span className={`${statusOption.badgeClass} text-uppercase`}>
+//                 {statusOption.name}
+//             </span>
+//         );
+//     } else {
+//         // Fallback for unknown statuses
+//         return (
+//             <span className="badge bg-primary text-uppercase">Unknown</span>
+//         );
+//     }
+// }
 
 
 const Guarantor = ({ cellProps, campaignMembers }) => {
@@ -94,9 +99,9 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
 
     if (memberId === null) {
         return (
-            <p className="text-danger">
+            <span className="text-danger">
                 <strong>N/A</strong>
-            </p>
+            </span>
         );
     }
 
@@ -104,55 +109,61 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
         (member) => member.id === memberId
     );
     return (
-        <p className="text-success">
+        <span className="text-success">
             <strong>{member ? member.name : "Not Found"}</strong>
-        </p>
+        </span>
     );
 }
 
 const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
-    // Ensure guaranteeGroupId is defined
-    const guaranteeGroupId = cellProps.row.original.guaranteeGroup || null;
+    const guaranteeGroupId = cellProps.row.original.guaranteeGroup;
+    const guaranteeGroup = campaignGuaranteeGroups.find(campaignGuaranteeGroup => campaignGuaranteeGroup.id === guaranteeGroupId);
 
-    // Find the group name for the given guaranteeGroupId
-    const guaranteeGroupNames = campaignGuaranteeGroups.map(group => {
-        if (group.id === guaranteeGroupId) {
-            return group.name;
-        }
-        return "-";
-    });
-
-    const renderTooltip = (props) => (
-        <Tooltip id="button-tooltip" {...props}>
-            <ul>
-                {guaranteeGroupNames.map((name, index) => (
-                    <li key={index} onClick={() => {/* handle click event here */ }}>
-                        {name}
-                    </li>
-                ))}
-            </ul>
-        </Tooltip>
+    return (
+        <span className="text-primary">
+            <strong>{guaranteeGroup ? guaranteeGroup.name : "-"}</strong>
+        </span>
     );
-
-    if (guaranteeGroupNames.length > 1) {
-        return (
-            <OverlayTrigger
-                placement="top"
-                delay={{ show: 250, hide: 400 }}
-                overlay={renderTooltip}
-            >
-                <span>
-                    {guaranteeGroupNames[0]}
-                    <span className="badge bg-success align-middle ms-1">
-                        +{guaranteeGroupNames.length - 1}
-                    </span>
-                </span>
-            </OverlayTrigger>
-        );
-    } else {
-        return <span>{guaranteeGroupNames[0] || "-"}</span>;
-    }
 };
+
+
+
+// const guaranteeGroupNames = guaranteeGroupIds.map(groupId => {
+//     const group = campaignGuaranteeGroups.find(g => g.id === groupId);
+//     return group ? group.name : "-";
+// });
+
+// const renderTooltip = (props) => (
+//     <Tooltip id="button-tooltip" {...props}>
+//         <ul>
+//             {guaranteeGroupNames.map((name, index) => (
+//                 <li key={index} onClick={() => {/* handle click event here */ }}>
+//                     {name}
+//                 </li>
+//             ))}
+//         </ul>
+//     </Tooltip>
+// );
+
+// if (guaranteeGroupNames.length > 1) {
+//     return (
+//         <OverlayTrigger
+//             placement="top"
+//             delay={{ show: 250, hide: 400 }}
+//             overlay={renderTooltip}
+//         >
+//             <span>
+//                 {guaranteeGroupNames[0]}
+//                 <span class="badge bg-success align-middle ms-1">
+//                     +{guaranteeGroupNames.length - 1}
+//                 </span>
+//             </span>
+//         </OverlayTrigger >
+//     );
+// } else {
+//     return <span>{guaranteeGroupNames[0] || "-"}</span>;
+// }
+// };
 
 
 

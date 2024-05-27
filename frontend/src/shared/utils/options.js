@@ -2,7 +2,9 @@ import {
     // General
     GenderOptions, StatusOptions, PriorityOptions,
     // Election
-    ElectionMethodOptions, ElectionResultOptions, ElectionSortingResultOptions, ElectionDetailedResultOptions
+    ElectionMethodOptions, ElectionResultOptions, ElectionSortingResultOptions, ElectionDetailedResultOptions,
+    // Campaign
+    CampaignGuaranteeStatusOptions,
 } from "shared/constants";
 
 const allOptions = {
@@ -12,7 +14,8 @@ const allOptions = {
     electionMethod: ElectionMethodOptions,
     electionResult: ElectionResultOptions,
     electionSortingResult: ElectionSortingResultOptions,
-    electionDetailedResult: ElectionDetailedResultOptions
+    electionDetailedResult: ElectionDetailedResultOptions,
+    CampaignGuaranteeStatus: CampaignGuaranteeStatusOptions,
 };
 
 const getSelectedOptions = (optionCategory) => {
@@ -29,6 +32,9 @@ const getOptionOptions = (optionCategory) => {
 };
 
 const getOptionBadge = (optionCategory, status) => {
+    console.log("optionCategory: ", optionCategory)
+    console.log("optionCategory status: ", status)
+
     const selectedOption = getSelectedOptions(optionCategory);
     const entry = selectedOption.find(opt => opt.id === status);
     if (!entry) return null;

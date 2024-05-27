@@ -21,16 +21,10 @@ class CampaignGuaranteeGroup(DynamicSchemaModel):
     note = models.CharField(max_length=250, blank=True)
 
     class Meta:
+        managed = False
         db_table = "campaign_guarantee_group"
         verbose_name = "Campaign Guarantee Group"
         verbose_name_plural = "المجاميع"
-        default_permissions = []
-        permissions = [
-            ("canViewCampaignGuaranteeGroup", "Can View Campaign Guarantee Group"),
-            ("canAddCampaignGuaranteeGroup", "Can Add Campaign Guarantee Group"),
-            ("canChangeCampaignGuaranteeGroup", "Can Change Campaign Guarantee Group"),
-            ("canDeleteCampaignGuaranteeGroup", "Can Delete Campaign GuaranteeGroup"),
-        ]
 
 
 class CampaignGuarantee(DynamicSchemaModel):
@@ -74,10 +68,4 @@ class CampaignGuarantee(DynamicSchemaModel):
         db_table = "campaign_guarantee"
         verbose_name = "Campaign Guarantee"
         verbose_name_plural = "المضامين"
-        default_permissions = []
-        permissions = [
-            ("canViewCampaignGuarantee", "Can View Campaign Guarantee"),
-            ("canAddCampaignGuarantee", "Can Add Campaign Guarantee"),
-            ("canChangeCampaignGuarantee", "Can Change Campaign Guarantee"),
-            ("canDeleteCampaignGuarantee", "Can Delete Campaign Guarantee"),
-        ]
+

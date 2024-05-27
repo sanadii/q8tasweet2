@@ -84,6 +84,7 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
             "code_number",
             "status_code",
             "address",
+            "status",
         ]
 
 

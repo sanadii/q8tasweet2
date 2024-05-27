@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { GuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
 import { addCampaignGuarantee, addCampaignAttendee } from "store/actions";
 import { usePermission } from 'shared/hooks';
 
@@ -67,7 +67,7 @@ const Actions = (props) => {
 
     const {
         cellProps,
-        campaignGroup,
+        selectedGuaranteeGroup,
         electionSchema,
         currentCampaignMember,
         handleElectorClick,
@@ -82,7 +82,7 @@ const Actions = (props) => {
     let campaignMember = currentCampaignMember ? currentCampaignMember.id : null;
     let campaignUser = currentCampaignMember ? currentCampaignMember.user : null;
     let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : null;
-    console.log("campaignGroup: ", campaignGroup,)
+    console.log("campaignGroup: ", selectedGuaranteeGroup,)
     // console.log("campaignMember: ", campaignMember, "campaignUser: ", campaignUser, "campaignCommittee: ", campaignCommittee)
     const isElectorInGuarantees = campaignGuarantees.some(item => item.elector === cellProps.row.original.id);
     console.log("campaignGuaranteescampaignGuarantees: ", campaignGuarantees)
@@ -103,7 +103,7 @@ const Actions = (props) => {
                     const newCampaignGuarantee = {
                         campaign: campaignDetails.id,
                         member: campaignMember,
-                        guaranteeGroup: campaignGroup,
+                        guaranteeGroup: selectedGuaranteeGroup,
                         elector: cellProps.row.original.id,
                         status: 1,
                         schema: electionSchema,

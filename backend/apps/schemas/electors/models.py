@@ -52,6 +52,7 @@ class Elector(DynamicSchemaModel):
     status_code = models.TextField(blank=True, null=True)
     
     class Meta:
+        managed = False
         db_table = "elector"
         verbose_name = "الناخب"
         verbose_name_plural = "الناخبين"

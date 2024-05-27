@@ -4,7 +4,6 @@ import { deleteCampaignGuarantee } from "store/actions";
 import { campaignSelector } from 'selectors';
 
 // Shared imports
-import { Col, Row, Card, CardBody } from "reactstrap";
 import { Loader, DeleteModal, TableContainer, TableFilters } from "shared/components";
 import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, GuaranteeGroups, Actions } from "./GuaranteesCol";
 import { useDelete, useFilter } from "shared/hooks"
