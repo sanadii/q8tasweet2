@@ -50,7 +50,7 @@ class ElectionCandidate(TrackModel):
             with schema_context(slug):
                 with transaction.atomic():
                     # Delete related CommitteeResultCandidate entries
-                    from apps.committees.results.models import CommitteeResultCandidate
+                    from apps.schemas.committee_results.models import CommitteeResultCandidate
 
                     related_entries = CommitteeResultCandidate.objects.filter(
                         election_candidate=self.id

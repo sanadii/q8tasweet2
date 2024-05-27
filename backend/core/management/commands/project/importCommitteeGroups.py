@@ -2,7 +2,7 @@
 
 import pandas as pd
 from django.core.management.base import BaseCommand
-from apps.areas.models import Area
+from apps.schemas.areas.models import Area
 from apps.elections.models import Election, ElectionCommitteeGroup
 
 class Command(BaseCommand):

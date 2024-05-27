@@ -2,7 +2,7 @@ import pandas as pd
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db.utils import ProgrammingError
-from apps.committees.models import Committee, CommitteeSite
+from apps.schemas.committees.models import Committee, CommitteeSite
 from django.core.exceptions import ObjectDoesNotExist
 
 # For Management Commands

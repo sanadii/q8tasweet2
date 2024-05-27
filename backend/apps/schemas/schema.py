@@ -49,9 +49,6 @@ def schema_context(schema):
         cursor.execute(f"SET search_path TO {old_schema};")
 
 
-
-
-
 def table_exists(table_name):
     """Check if a table exists in the current schema."""
     with connection.cursor() as cursor:

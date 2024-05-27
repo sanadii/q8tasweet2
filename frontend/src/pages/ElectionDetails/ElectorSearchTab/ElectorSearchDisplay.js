@@ -52,16 +52,16 @@ const ElectorSearchDisplay = ({
         },
     });
 
-    const groupFields = [
-        {
-            id: "guaranteeGroup-field",
-            name: "guaranteeGroup",
-            label: "المجموعة",
-            type: "select",
-            options: getSelectionOptions(campaignGuaranteeGroups),
-            colSize: "2",
-        },
-    ]
+    // const groupFields = [
+    //     {
+    //         id: "guaranteeGroup-field",
+    //         name: "guaranteeGroup",
+    //         label: "المجموعة",
+    //         type: "select",
+    //         options: getSelectionOptions(campaignGuaranteeGroups),
+    //         colSize: "2",
+    //     },
+    // ]
 
     const columns = useMemo(
         () => [
@@ -106,7 +106,7 @@ const ElectorSearchDisplay = ({
 
     return (
         <React.Fragment>
-            <Row>
+            {/* <Row>
                 {groupFields.map((field) => (
                     <FormFields
                         key={field.id}
@@ -115,8 +115,7 @@ const ElectorSearchDisplay = ({
                         formStructure="inline"
                     />
                 ))}
-
-            </Row>
+            </Row> */}
             {electorList && electorList.length ? (
                 <TableContainer
                     columns={columns}

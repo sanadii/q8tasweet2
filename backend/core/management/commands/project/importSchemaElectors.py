@@ -1,9 +1,9 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
 from django.db import connection
-from apps.electors.models import Elector
-from apps.areas.models import Area
-from apps.committees.models import Committee
+from apps.schemas.electors.models import Elector
+from apps.schemas.areas.models import Area
+from apps.schemas.committees.models import Committee
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import ProgrammingError
 

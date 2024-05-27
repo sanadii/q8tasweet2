@@ -34,17 +34,17 @@ from apps.elections.candidates.models import (
 )
 from psycopg2 import OperationalError, ProgrammingError
 
-from apps.areas.models import Area
-from apps.committees.models import CommitteeSite, Committee
+from apps.schemas.areas.models import Area
+from apps.schemas.committees.models import CommitteeSite, Committee
 
 # Schema Serializers
-from apps.areas.serializers import AreaSerializer
-from apps.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
+from apps.schemas.areas.serializers import AreaSerializer
+from apps.schemas.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
 from django.apps import apps
 
 # Schema Models
 
-# from apps.committees.models import Committee, CommitteeGroup
+# from apps.schemas.committees.models import Committee, CommitteeGroup
 
 from apps.elections.serializers import (
     ElectionSerializer,

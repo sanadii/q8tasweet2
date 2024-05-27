@@ -37,9 +37,9 @@ from apps.campaigns.models import (
     # CampaignPartyGuarantee,
 )
 from apps.campaigns.members.models import CampaignMember
-from apps.campaigns.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
+from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
 from apps.elections.candidates.models import Election, ElectionCandidate, ElectionParty
-from apps.committees.models import Committee, Committee
+from apps.schemas.committees.models import Committee, Committee
 from django.contrib.auth.models import Group
 
 # Serializers
@@ -57,7 +57,7 @@ from apps.campaigns.serializers import (
     # CampaignCombinedSerializer,
     # CampaignPartySerializer,
 )
-from apps.campaigns.guarantees.serializers import (
+from apps.schemas.guarantees.serializers import (
     CampaignGuaranteeSerializer,
     CampaignGuaranteeGroupSerializer,
 )
@@ -65,7 +65,7 @@ from apps.campaigns.guarantees.serializers import (
 
 # from apps.notifications.models import CampaignNotification, CampaignPartyNotification
 from apps.elections.candidates.serializers import ElectionCandidateSerializer
-from apps.committees.serializers import CommitteeSerializer
+from apps.schemas.committees.serializers import CommitteeSerializer
 from apps.auths.serializers import GroupSerializer
 
 # from apps.notifications.serializers import CampaignNotificationSerializer

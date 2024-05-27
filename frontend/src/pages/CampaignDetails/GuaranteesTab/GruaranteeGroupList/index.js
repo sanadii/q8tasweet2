@@ -32,18 +32,22 @@ const GuaranteesGroupList = ({
 
     // Delete Hook
     const {
+        // Delete Modal
         handleDeleteItem,
-        onDeleteCheckBoxClick,
         deleteModal,
         setDeleteModal,
-        checkedAll,
-        deleteCheckbox,
-        isMultiDeleteButton,
         deleteModalMulti,
-        setDeleteModalMulti,
-        deleteMultiple,
-    } = useDelete(deleteCampaignGuaranteeGroup);
+        handleDeleteMultiple,
 
+        // Table Header
+        isMultiDeleteButton,
+        setDeleteModalMulti,
+
+        // Column Actions
+        handleItemDeleteClick,
+        handleCheckAllClick,
+        handleCheckCellClick,
+    } = useDelete(deleteCampaignGuaranteeGroup);
 
     const handleCampaignGuaranteeClick = useCallback(
         (arg, modalMode) => {
@@ -75,9 +79,9 @@ const GuaranteesGroupList = ({
     const columns = useMemo(
         () => [
             {
-                Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+                Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
                 accessor: "id",
-                Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
+                Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
             },
             {
                 Header: "م.",
@@ -112,7 +116,6 @@ const GuaranteesGroupList = ({
                 accessor: "guarantees",
                 Cell: (cellProps) => <Guarantees {...cellProps} />
             },
-
             {
                 Header: "الحضور",
                 accessor: "guaranteesAttended",
@@ -129,32 +132,24 @@ const GuaranteesGroupList = ({
                     <Actions
                         cellProps={cellProps}
                         handleCampaignGuaranteeClick={handleCampaignGuaranteeClick}
-                        onDeleteCheckBoxClick={onDeleteCheckBoxClick}
+                        handleItemDeleteClick={handleItemDeleteClick}
                     />
             },
-        ], [checkedAll, deleteCheckbox, onDeleteCheckBoxClick, handleCampaignGuaranteeClick, campaignMembers]);
+        ], [handleSelectCampaignGuaranteeGroup, handleCheckAllClick, handleCheckCellClick, handleItemDeleteClick, handleCampaignGuaranteeClick, campaignMembers]);
 
     // Assuming useFilter returns an object with a property named filteredData
     const filterResult = useFilter(campaignGuaranteeGroups);
+    console.log('111 filterResult:', filterResult);
 
     // Now, if campaignGuaranteeGroups is truthy, we destructure filteredData from it
     const campaignGuaranteeGroupList = campaignGuaranteeGroups ? filterResult.filteredData : [];
+    console.log('111 campaignGuaranteeGroupList:', campaignGuaranteeGroupList);
 
     // Destructuring other properties directly as they are not dependent on campaignGuaranteeGroups
-    const { filters, setFilters } = filterResult;
-
-    // useEffect(() => {
-    //     // Assuming setFilters is a function that updates something related to 'member' with the selectedCampaignMember
-    //     setFilters({ member: selectedCampaignMember.id });
-    //     console.log("filters: ", filters)
-    //     console.log("filterResult: ", filterResult)
-
-    // }, [selectedCampaignMember]); // Include setFilters in dependencies if it's a state setter or could change
+    const { filters, setFilters } = filterResult || [];
+    console.log('111 filters:', filters);
 
     useEffect(() => {
-        console.log("filters: ", filters)
-        console.log("filterResult: ", filterResult)
-
         // Check if selectedCampaignMember and its id exist
         if (selectedCampaignMember && selectedCampaignMember.id) {
             // Update the filters using setFilters function
@@ -176,7 +171,7 @@ const GuaranteesGroupList = ({
             <DeleteModal
                 show={deleteModalMulti}
                 onDeleteClick={() => {
-                    deleteMultiple();
+                    handleDeleteMultiple();
                     setDeleteModalMulti(false);
                 }}
                 onCloseClick={() => setDeleteModalMulti(false)}

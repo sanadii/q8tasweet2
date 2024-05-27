@@ -2,7 +2,7 @@
 
 import pandas as pd
 from django.core.management.base import BaseCommand
-from apps.areas.models import Area
+from apps.schemas.areas.models import Area
 
 class Command(BaseCommand):
     help = 'Imports areas from an Excel file into the database'

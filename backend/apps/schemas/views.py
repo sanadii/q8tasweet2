@@ -7,11 +7,11 @@ from rest_framework.permissions import IsAuthenticated
 
 # Apps
 from apps.elections.models import Election
-from apps.committees.models import Committee, CommitteeSite
-from apps.committees.results.models import CommitteeResultCandidate, CommitteeResultParty, CommitteeResultPartyCandidate
-from apps.electors.models import Elector
-from apps.areas.models import Area
-from apps.campaigns.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
+from apps.schemas.areas.models import Area
+from apps.schemas.committees.models import Committee, CommitteeSite
+from apps.schemas.committee_results.models import CommitteeResultCandidate, CommitteeResultParty, CommitteeResultPartyCandidate
+from apps.schemas.electors.models import Elector
+from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
 from utils.schema import schema_context, table_exists
 
 
@@ -204,8 +204,8 @@ class GetElectionSchemaDetails(APIView):
 # from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 # from apps.elections.models import Election
-# from apps.committees.models import Committee, Committee
-# from apps.electors.models import Elector
+# from apps.schemas.committees.models import Committee, Committee
+# from apps.schemas.electors.models import Elector
 
 
 # class AddElectionSchema(APIView):

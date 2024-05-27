@@ -28,9 +28,9 @@ from apps.elections.candidates.models import (
     ElectionCandidate,
     ElectionParty,
 )
-from apps.committees.models import Committee
+from apps.schemas.committees.models import Committee
 from apps.candidates.models import Candidate, Party
-from apps.electors.models import Elector
+from apps.schemas.electors.models import Elector
 from django.contrib.contenttypes.models import ContentType
 
 # Serializers

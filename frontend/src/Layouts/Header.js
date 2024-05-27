@@ -93,7 +93,7 @@ const Header = ({ onChangeLayoutMode, setCurrentCampaign, layoutModeType, header
                         </div>
 
                         <div className="d-flex align-items-center">
-                            <Dropdown isOpen={search} toggle={toogleSearch} className="d-md-none topbar-head-dropdown header-item">
+                            {/* <Dropdown isOpen={search} toggle={toogleSearch} className="d-md-none topbar-head-dropdown header-item">
                                 <DropdownToggle type="button" tag="button" className="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle">
                                     <i className="bx bx-search fs-22"></i>
                                 </DropdownToggle>
@@ -109,7 +109,7 @@ const Header = ({ onChangeLayoutMode, setCurrentCampaign, layoutModeType, header
                                         </div>
                                     </Form>
                                 </DropdownMenu>
-                            </Dropdown>
+                            </Dropdown> */}
 
                             {/* WebAppsDropdown */}
                             <WebAppsDropdown />

@@ -26,23 +26,22 @@ urlpatterns = [
     # Setting Apps
     path('Config/', include('apps.settings.urls')),
     # path('media/', include('apps.media.urls')),
+    path('auth/', include('apps.auths.urls')),
 
     # Main Apps
     path('campaigns/', include('apps.campaigns.urls')),
     path('candidates/', include('apps.candidates.urls')),
-    path('categories/', include('apps.categories.urls')),
+    path('tags/', include('apps.tags.urls')),
     path('elections/', include('apps.elections.urls')),
     
     # path('electionData/', include('apps.electionData.urls')),
-    path('auth/', include('apps.auths.urls')),
 
     # Schema & Documentation
     path("docs/", include_docs_urls(title="WorkspaceAPI")),
-    path("schema", get_schema_view(title="WorkspaceAPI", description="API for the WorkspaceAPI", version="1.0.0"), name="openapi-schema"),
     
     path('schemas/', include('apps.schemas.urls')),
-    path('electors/', include('apps.electors.urls')),
-    path('committees/', include('apps.committees.urls')),
+    # path('electors/', include('apps.schemas.electors.urls')),
+    # path('committees/', include('apps.schemas.committees.urls')),
     
     # path('admin/elections/', election_admin_site.urls, name='election-admin'),
     # path('admin/candidates/', candidate_admin_site.urls, name='candidate-admin'),

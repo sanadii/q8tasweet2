@@ -19,7 +19,7 @@ export const campaignSelector = createSelector(
     campaignMembers: campaignsState.campaignMembers,
 
     campaignGuarantees: campaignsState.campaignGuarantees || [],
-    campaignGuaranteeGroups: campaignsState.campaignGuaranteeGroups,
+    campaignGuaranteeGroups: campaignsState.campaignGuaranteeGroups || [],
     campaignAttendees: campaignsState.campaignAttendees,
     campaignNotifications: campaignsState.campaignNotifications,
 

@@ -143,7 +143,7 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
 
 
 const Actions = (props) => {
-    const { cellProps, handleCampaignGuaranteeClick, onDeleteCheckBoxClick, isAdmin } = props;
+    const { cellProps, handleElectionClick, handleItemDeleteClick, isAdmin } = props;
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -152,7 +152,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
                     const campaignGuaranteeGroup = cellProps.row.original;
-                    handleCampaignGuaranteeClick(
+                    handleElectionClick(
                         campaignGuaranteeGroup,
                         "viewGuaranteeGroup"
                     );
@@ -165,7 +165,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-info edit-list"
                 onClick={() => {
                     const campaignGuaranteeGroup = cellProps.row.original;
-                    handleCampaignGuaranteeClick(
+                    handleElectionClick(
                         campaignGuaranteeGroup,
                         "updateGuaranteeGroup"
                     );
@@ -178,7 +178,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
                     const campaignGuaranteeGroup = cellProps.row.original;
-                    onDeleteCheckBoxClick(campaignGuaranteeGroup);
+                    handleItemDeleteClick(campaignGuaranteeGroup);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />

@@ -2,8 +2,8 @@ import pandas as pd
 from django.core.management.base import BaseCommand
 from django.db import connection
 from django.db.utils import ProgrammingError
-from apps.committees.models import CommitteeSite
-from apps.areas.models import Area
+from apps.schemas.committees.models import CommitteeSite
+from apps.schemas.areas.models import Area
 from django.core.exceptions import ObjectDoesNotExist
 
 class Command(BaseCommand):

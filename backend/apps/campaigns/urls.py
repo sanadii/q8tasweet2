@@ -2,7 +2,7 @@
 from django.urls import path
 from .views import *
 from .members.views import *
-from .guarantees.views import *
+# from .guarantees.views import *
 
 app_name = "campaigns"
 
@@ -22,23 +22,23 @@ urlpatterns = [
     path("deleteCampaignMember/<int:pk>", DeleteCampaignMember.as_view(), name="DeleteCampaignMember"),
     path("updateCampaignMember/<int:pk>", UpdateCampaignMember.as_view(), name="UpdateCampaignMember"),
 
-    # Guarantees
-    path("addCampaignGuarantee", AddCampaignGuarantee.as_view(), name="AddMemberGuarantee"),
-    path("updateCampaignGuarantee/<int:pk>", UpdateCampaignGuarantee.as_view(), name="UpdateCampaignGuarantee"),
-    path("deleteCampaignGuarantee/<int:pk>", DeleteCampaignGuarantee.as_view(), name="DeleteCampaignGuarantee"),
+    # # Guarantees
+    # path("addCampaignGuarantee", AddCampaignGuarantee.as_view(), name="AddMemberGuarantee"),
+    # path("updateCampaignGuarantee/<int:pk>", UpdateCampaignGuarantee.as_view(), name="UpdateCampaignGuarantee"),
+    # path("deleteCampaignGuarantee/<int:pk>", DeleteCampaignGuarantee.as_view(), name="DeleteCampaignGuarantee"),
 
-    # Guarantee Groups
-    path("addCampaignGuaranteeGroup", AddCampaignGuaranteeGroup.as_view(), name="AddMemberGuaranteeGroup"),
-    path("updateCampaignGuaranteeGroup/<int:pk>", UpdateCampaignGuaranteeGroup.as_view(), name="UpdateCampaignGuaranteeGroup"),
-    path("deleteCampaignGuaranteeGroup/<int:pk>", DeleteCampaignGuaranteeGroup.as_view(), name="DeleteCampaignGuaranteeGroup"),
+    # # Guarantee Groups
+    # path("addCampaignGuaranteeGroup", AddCampaignGuaranteeGroup.as_view(), name="AddMemberGuaranteeGroup"),
+    # path("updateCampaignGuaranteeGroup/<int:pk>", UpdateCampaignGuaranteeGroup.as_view(), name="UpdateCampaignGuaranteeGroup"),
+    # path("deleteCampaignGuaranteeGroup/<int:pk>", DeleteCampaignGuaranteeGroup.as_view(), name="DeleteCampaignGuaranteeGroup"),
 
-    # Attendees
-    path("addCampaignAttendee", AddCampaignAttendee.as_view(), name="AddCampaignAttendee"),
-    path("deleteCampaignAttendee/<int:id>", DeleteCampaignAttendee.as_view(), name="DeleteCampaignAttendee"),
-    path("updateCampaignAttendee/<int:id>", UpdateCampaignAttendee.as_view(), name="UpdateCampaignAttendee"),
+    # # Attendees
+    # path("addCampaignAttendee", AddCampaignAttendee.as_view(), name="AddCampaignAttendee"),
+    # path("deleteCampaignAttendee/<int:id>", DeleteCampaignAttendee.as_view(), name="DeleteCampaignAttendee"),
+    # path("updateCampaignAttendee/<int:id>", UpdateCampaignAttendee.as_view(), name="UpdateCampaignAttendee"),
 
-    # Sorting
-    path("getAllCampaignSorting", GetAllCampaignSorting.as_view(), name="GetAllCampaignSorting"),
-    path("GetCampaignCommitteeSorting/<int:id>", GetCampaignCommitteeSorting.as_view(), name="GetCampaignCommitteeSorting"),
+    # # Sorting
+    # path("getAllCampaignSorting", GetAllCampaignSorting.as_view(), name="GetAllCampaignSorting"),
+    # path("GetCampaignCommitteeSorting/<int:id>", GetCampaignCommitteeSorting.as_view(), name="GetCampaignCommitteeSorting"),
 
 ]

@@ -24,11 +24,11 @@ JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "q8tasweet2",
+        "NAME": "q8tasweet3",
         "USER": "postgres",
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        # "PASSWORD": os.environ.get("DB_PASSWORD"),
         "PASSWORD": "I4ksb@11782",
-        "PASSWORD": "KWT11782",
+        # "PASSWORD": "KWT11782",
         "HOST": "localhost",
         "PORT": "5432",
     },
@@ -88,16 +88,17 @@ INSTALLED_APPS = [
     # 'apps.media',
     "apps.auths",
     "apps.settings",
+    "apps.tags",
     "apps.elections",
-    "apps.categories",
     "apps.candidates",
     # "apps.notifications",
     # schemas and related Apps
     "apps.schemas",
-    "apps.areas",
-    "apps.committees",
-    "apps.electors",
+    # "apps.schemas.areas",
+    # "apps.schemas.committees",
+    # "apps.schemas.electors",
     "apps.campaigns",
+    # "apps.schema",
     # "apps.electionData",
 ]
 

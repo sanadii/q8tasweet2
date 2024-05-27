@@ -11,7 +11,7 @@ from django_extensions.db.fields import AutoSlugField, SlugField
 from django.utils.text import slugify
 
 from apps.settings.models import TrackModel, TaskModel
-from apps.areas.models import Area
+from apps.schemas.areas.models import Area
 
 from utils.model_options import (
     ElectionMethodOptions,

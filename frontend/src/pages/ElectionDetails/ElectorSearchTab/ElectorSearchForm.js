@@ -283,7 +283,7 @@ const ElectorSearchForm = ({ electionSchema }) => {
     return (
         <React.Fragment>
 
-            <Form
+            {/* <Form
                 className="tablelist-form"
                 onSubmit={(e) => {
                     e.preventDefault();
@@ -325,7 +325,7 @@ const ElectorSearchForm = ({ electionSchema }) => {
                         </button>
                     </Col>
                 </Row>
-            </Form>
+            </Form> */}
             <div className="mb-2">
 
 

@@ -16,9 +16,10 @@ setupListeners(listenerMiddleware);
 // Configure middlewares
 const middlewares = [
   sagaMiddleware,
-  listenerMiddleware.middleware,
   createStateSyncMiddleware()
 ];
+
+  // listenerMiddleware.middleware,
 
 export function configureAppStore(initialState) {
   // Create the Redux store with rootReducer, initial state, and middleware

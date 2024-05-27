@@ -6,7 +6,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
 
-from apps.categories.models import Areas
+from apps.tags.models import Areas
 
 def populate():
 

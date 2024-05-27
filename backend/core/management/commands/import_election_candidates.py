@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import datetime
-from apps.elections.models import ElectionCategory, Election, ElectionCandidate
+from apps.elections.models import ElectionCategory, Election
+from apps.elections.candidates.models import ElectionCandidate
 from apps.candidates.models import Candidate
 
 from .utils import read_excel_file, check_required_columns, import_objects_from_df

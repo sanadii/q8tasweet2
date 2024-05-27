@@ -17,11 +17,11 @@ from apps.elections.candidates.models import (
     ElectionParty,
     ElectionPartyCandidate,
 )
-from apps.committees.results.models import CommitteeResultCandidate
-from apps.committees.models import Committee
+from apps.schemas.committee_results.models import CommitteeResultCandidate
+from apps.schemas.committees.models import Committee
 from apps.auths.serializers import UserSerializer
-from apps.committees.serializers import CommitteeSerializer
-from apps.committees.results.serializers import CommitteeResultCandidateSerializer
+from apps.schemas.committees.serializers import CommitteeSerializer
+from apps.schemas.committee_results.serializers import CommitteeResultCandidateSerializer
 from utils.schema import schema_context
 
 

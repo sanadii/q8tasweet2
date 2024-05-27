@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import datetime
-from apps.areas.models import Area
-from apps.committees.models import CommitteeSite, Committee
-from apps.electors.models import Elector
+from apps.schemas.areas.models import Area
+from apps.schemas.committees.models import CommitteeSite, Committee
+from apps.schemas.electors.models import Elector
 from django.db import connection
 
 from .utils import read_excel_file, check_required_columns, import_objects_from_df
@@ -71,39 +71,40 @@ class Command(BaseCommand):
         file_path = "core/management/data/na_5_2024.xlsx"
 
         datas = {
-            "Area": {
-                "model": Area,
-                "work_sheet": "area",
-                "required_data": ["id", "name", "governorate", "code", "tags"],
-            },
-            "CommitteeSite": {
-                "model": CommitteeSite,
-                "work_sheet": "committee_site",
-                "required_data": [
-                    "id",
-                    "serial",
-                    "name",
-                    "circle",
-                    "area_name",
-                    "gender",
-                    "description",
-                    "address",
-                    "voter_count",
-                    "committee_count",
-                    "area_id",
-                ],
-            },
-            "Committee": {
-                "model": Committee,
-                "work_sheet": "committee",
-                "required_data": [
-                    "id",
-                    "area_name",
-                    "letters",
-                    "committee_site_id",
-                    "type",
-                ],
-            },
+            # "Area": {
+            #     "model": Area,
+            #     "work_sheet": "area",
+            #     "required_data": ["id", "name", "governorate", "code", "tags"],
+            # },
+            # "CommitteeSite": {
+            #     "model": CommitteeSite,
+            #     "work_sheet": "committee_site",
+            #     "required_data": [
+            #         "id",
+            #         "serial",
+            #         "name",
+            #         "circle",
+            #         "area_name",
+            #         "gender",
+            #         "description",
+            #         "address",
+            #         "voter_count",
+            #         "committee_count",
+            #         "area_id",
+            #     ],
+            # },
+            # "Committee": {
+            #     "model": Committee,
+            #     "work_sheet": "committee",
+            #     "required_data": [
+            #         "id",
+            #         "area_name",
+            #         "letters",
+            #         "committee_site_id",
+            #         "type",
+            #     ],
+            # },
+          
             "Elector": {
                 "model": Elector,
                 "work_sheet": "elector",
@@ -146,6 +147,7 @@ class Command(BaseCommand):
                     "committee_id",
                 ],
             },
+       
         }
 
         for key, data in datas.items():
