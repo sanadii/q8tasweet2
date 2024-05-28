@@ -169,7 +169,12 @@ const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
 
 
 const Actions = (props) => {
-    const { cellProps, handleCampaignGuaranteeClick, onDeleteCheckBoxClick, isAdmin } = props;
+    const { cellProps, electionSlug, handleCampaignGuaranteeClick, handleItemDeleteClick, isAdmin } = props;
+    const campaignGuarantee = cellProps.row.original;
+    const ItemToDelete = {
+        id: campaignGuarantee.id,
+        election: electionSlug,
+    }
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -177,11 +182,7 @@ const Actions = (props) => {
                 to="#"
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
-                    const campaignGuarantee = cellProps.row.original;
-                    handleCampaignGuaranteeClick(
-                        campaignGuarantee,
-                        "guaranteeView"
-                    );
+                    handleCampaignGuaranteeClick(campaignGuarantee, "guaranteeView");
                 }}
             >
                 <i className="ri-eye-fill align-bottom" />
@@ -191,10 +192,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-info edit-list"
                 onClick={() => {
                     const campaignGuarantee = cellProps.row.original;
-                    handleCampaignGuaranteeClick(
-                        campaignGuarantee,
-                        "guaranteeUpdate"
-                    );
+                    handleCampaignGuaranteeClick(campaignGuarantee, "guaranteeUpdate");
                 }}
             >
                 <i className="ri-pencil-fill align-bottom" />
@@ -203,8 +201,7 @@ const Actions = (props) => {
                 to="#"
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
-                    const campaignGuarantee = cellProps.row.original;
-                    onDeleteCheckBoxClick(campaignGuarantee);
+                    handleItemDeleteClick(ItemToDelete);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />

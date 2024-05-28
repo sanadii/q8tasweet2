@@ -143,7 +143,7 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
 
 
 const Actions = (props) => {
-    const { cellProps, handleElectionClick, handleItemDeleteClick, isAdmin } = props;
+    const { cellProps, handleCampaignGuaranteeGroupClick, handleItemDeleteClick, isAdmin } = props;
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -152,7 +152,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
                     const campaignGuaranteeGroup = cellProps.row.original;
-                    handleElectionClick(
+                    handleCampaignGuaranteeGroupClick(
                         campaignGuaranteeGroup,
                         "viewGuaranteeGroup"
                     );
@@ -165,7 +165,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-info edit-list"
                 onClick={() => {
                     const campaignGuaranteeGroup = cellProps.row.original;
-                    handleElectionClick(
+                    handleCampaignGuaranteeGroupClick(
                         campaignGuaranteeGroup,
                         "updateGuaranteeGroup"
                     );

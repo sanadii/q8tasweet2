@@ -58,15 +58,19 @@ class AccessElectionSchemaMixin:
         else:
             raise ValueError("Campaign object is missing campaign_type or campaigner_id")
 
+    def get_election_schema(self, request):
+        """Get the election schema slug for the campaign."""
+        schema_slug = self.kwargs.get("schema")
+        if not schema_slug:
+            raise ValueError("Schema slug is missing from URL")
+        return schema_slug
+
     def get_campaign_election_schema(self, request):
         """Get the election schema slug for the campaign."""
-        campaign_id = request.data.get("campaign")
-        try:
-            campaign = Campaign.objects.get(id=campaign_id)
-        except Campaign.DoesNotExist:
-            raise ValueError(f"Campaign with id {campaign_id} does not exist")
-        related_object = self.get_related_object(campaign)
-        return related_object.election.slug
+        schema_slug = self.kwargs.get("schema")
+        if not schema_slug:
+            raise ValueError("Schema slug is missing from URL")
+        return schema_slug
 
     def execute_with_schema(self, request, view_func, *args, **kwargs):
         """Execute the view function within the schema context."""
@@ -116,6 +120,7 @@ class UpdateCampaignGuarantee(AccessElectionSchemaMixin, CampaignGuaranteeViewMi
 
 class DeleteCampaignGuarantee(AccessElectionSchemaMixin, CampaignGuaranteeViewMixin, DestroyAPIView):
     """View for deleting campaign guarantees."""
+    
     def delete(self, request, *args, **kwargs):
         return self.execute_with_schema(request, self._delete, *args, **kwargs)
 
@@ -124,13 +129,29 @@ class DeleteCampaignGuarantee(AccessElectionSchemaMixin, CampaignGuaranteeViewMi
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(
-            {
-                "data": "Campaign guarantee deleted successfully",
-                "count": 1,
-                "code": 200,
-            },
-            status=status.HTTP_204_NO_CONTENT,
+            {"data": "Campaign guarantee deleted successfully", "count": 1,"code": 200},
+            status=status.HTTP_200_OK,
         )
+
+
+
+# class DeleteCampaignGuarantee(AccessElectionSchemaMixin, CampaignGuaranteeViewMixin, DestroyAPIView):
+#     """View for deleting campaign guarantees."""
+#     def delete(self, request, *args, **kwargs):
+#         return self.execute_with_schema(request, self._delete, *args, **kwargs)
+
+#     def _delete(self, request, *args, **kwargs):
+#         """Handle campaign guarantee deletion."""
+#         instance = self.get_object()
+#         self.perform_destroy(instance)
+#         return Response(
+#             {
+#                 "data": "Campaign guarantee deleted successfully",
+#                 "count": 1,
+#                 "code": 200,
+#             },
+#             status=status.HTTP_204_NO_CONTENT,
+#         )
 
 
 #

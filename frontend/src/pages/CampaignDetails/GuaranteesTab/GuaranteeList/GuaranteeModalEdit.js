@@ -23,7 +23,7 @@ const GuaranteesModalEdit = ({
 }) => {
   const dispatch = useDispatch();
 
-  const { campaignId, campaignMembers, campaignGuaranteeGroups, currentCampaignMember, campaignElectionCommittees } = useSelector(campaignSelector); // Directly use without redundant useState
+  const { electionSlug, campaignId, campaignMembers, campaignGuaranteeGroups, currentCampaignMember, campaignElectionCommittees } = useSelector(campaignSelector);
   const GurantorOptions = campaignMembers.filter(
     (member) => member.role === 31 || member.role === 32 || member.role === 33 || member.role === 34
   );
@@ -65,7 +65,7 @@ const GuaranteesModalEdit = ({
     onSubmit: (values) => {
       const updatedCampaignGuarantee = {
         id: campaignGuarantee ? campaignGuarantee.id : 0,
-        campaign: campaignId,
+        election: electionSlug,
         member: parseInt(values.member, 10),
         phone: values.phone,
         civil: values.civil,

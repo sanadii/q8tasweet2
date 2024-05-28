@@ -307,9 +307,7 @@ function* onUpdateCampaignGuarantee({ payload: campaignGuarantee }) {
 function* onDeleteCampaignGuarantee({ payload: campaignGuarantee }) {
   try {
     const response = yield call(deleteCampaignGuarantee, campaignGuarantee);
-    yield put(
-      deleteCampaignGuaranteeSuccess({ campaignGuarantee, ...response })
-    );
+    yield put(deleteCampaignGuaranteeSuccess({ campaignGuarantee, ...response }));
     toast.success("تم حذف المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteCampaignGuaranteeFail(error));

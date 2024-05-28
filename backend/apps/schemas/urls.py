@@ -14,7 +14,6 @@ urlpatterns = [
     # path("getDatabaseSchemaDetails/<slug:slug>", GetDatabaseSchemaDetails.as_view(), name="GetDatabaseSchemaDetails"),
     # path("uploadElectionData/<slug:slug>", UploadElectionData.as_view(), name="UploadElectionData"),
     
-    
     # Committees
     path("addNewCommittee", AddCommittee.as_view(), name="AddNewCommittee"),
     path("deleteCommittee/<int:id>", DeleteCommittee.as_view(), name="DeleteCommittee"),
@@ -33,9 +32,9 @@ urlpatterns = [
 
 
     # Guarantees
-    path("addCampaignGuarantee", AddCampaignGuarantee.as_view(), name="AddMemberGuarantee"),
-    path("updateCampaignGuarantee/<int:pk>", UpdateCampaignGuarantee.as_view(), name="UpdateCampaignGuarantee"),
-    path("deleteCampaignGuarantee/<int:pk>", DeleteCampaignGuarantee.as_view(), name="DeleteCampaignGuarantee"),
+    path("addCampaignGuarantee/<slug:schema>", AddCampaignGuarantee.as_view(), name="AddMemberGuarantee"),
+    path("updateCampaignGuarantee/<slug:schema>/<int:pk>", UpdateCampaignGuarantee.as_view(), name="UpdateCampaignGuarantee"),
+    path("deleteCampaignGuarantee/<slug:schema>/<int:pk>", DeleteCampaignGuarantee.as_view(), name="DeleteCampaignGuarantee"),
     
     # # Guarantee Groups
     path("addCampaignGuaranteeGroup", AddCampaignGuaranteeGroup.as_view(), name="AddMemberGuaranteeGroup"),

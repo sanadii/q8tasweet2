@@ -68,23 +68,12 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CampaignGuarantee
         fields = [
-            "id",
-            "campaign",
-            "member",
-            "elector",
-            "guarantee_group",
-            "full_name",
-            "gender",
-            "job",
-            "age",
-            "committee",
-            "committee_area",
-            "committee_name",
-            "letter",
-            "code_number",
-            "status_code",
-            "address",
-            "status",
+            # guarantee
+            "id", "member", "elector", "guarantee_group", "phone", "status",
+            # Elector
+            "full_name", "gender", "job", "age", "address",
+            # Election Details 
+            "committee", "committee_area",  "committee_name", "letter", "code_number", "status_code",
         ]
 
 

@@ -20,6 +20,7 @@ const GuaranteeList = ({
 
   // States
   const {
+    electionSlug,
     campaignGuarantees,
     campaignMembers,
     campaignGuaranteeGroups,
@@ -29,16 +30,21 @@ const GuaranteeList = ({
 
   // Delete Hook
   const {
+    // Delete Modal
     handleDeleteItem,
-    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
-    checkedAll,
-    deleteCheckbox,
-    isMultiDeleteButton,
     deleteModalMulti,
+    handleDeleteMultiple,
+
+    // Table Header
+    isMultiDeleteButton,
     setDeleteModalMulti,
-    deleteMultiple,
+
+    // Column Actions
+    handleItemDeleteClick,
+    handleCheckAllClick,
+    handleCheckCellClick,
   } = useDelete(deleteCampaignGuarantee);
 
 
@@ -57,12 +63,22 @@ const GuaranteeList = ({
     return acc;
   }, {});
 
+  const handleCampaignGuaranteeDelete = useCallback((CampaignGuarantee) => {
+    const itemToDelete = {
+      id: CampaignGuarantee.id,
+      election: electionSlug,
+    };
+    handleDeleteItem(itemToDelete);
+  }, [electionSlug, handleDeleteItem]);
+  
+
+
   const columns = useMemo(
     () => [
       {
-        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
         accessor: "id",
-        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
+        Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
       },
       {
         Header: "م.",
@@ -111,8 +127,9 @@ const GuaranteeList = ({
         Cell: (cellProps) =>
           <Actions
             cellProps={cellProps}
+            electionSlug={electionSlug}
             handleCampaignGuaranteeClick={handleCampaignGuaranteeClick}
-            onDeleteCheckBoxClick={onDeleteCheckBoxClick}
+            handleItemDeleteClick={handleItemDeleteClick}
           />
       },
       {
@@ -127,7 +144,7 @@ const GuaranteeList = ({
           ),
         accessor: "delete_action", // Unique accessor
       },
-    ], [checkedAll, isMultiDeleteButton, handleCampaignGuaranteeClick, campaignMembers]);
+    ], [handleCheckAllClick, isMultiDeleteButton, handleCampaignGuaranteeClick, campaignMembers]);
 
   // Table Filters
   const { filteredData: campaignGuaranteeList, filters, setFilters } = useFilter(campaignGuarantees);
@@ -136,13 +153,13 @@ const GuaranteeList = ({
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteItem}
+        onDeleteClick={handleCampaignGuaranteeDelete}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          deleteMultiple();
+          handleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}

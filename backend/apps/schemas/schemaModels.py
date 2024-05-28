@@ -15,7 +15,10 @@ class DynamicSchemaModel(models.Model):
         self._schema = schema
         
     def delete(self, *args, **kwargs):
-        with schema_context(self._schema):
+        if hasattr(self, '_schema') and self._schema:
+            with schema_context(self._schema):
+                super().delete(*args, **kwargs)
+        else:
             super().delete(*args, **kwargs)
 
 

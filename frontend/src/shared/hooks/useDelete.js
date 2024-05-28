@@ -49,15 +49,7 @@ const useDelete = (deleteAction) => {
     setDeleteModal(true);
   }, []);
 
-  // 
-  // on Delete single Item action
-  // 
-  const handleDeleteItem = () => {
-    if (itemToDelete) {
-      dispatch(deleteAction(itemToDelete.id));
-      setDeleteModal(false);
-    }
-  };
+
 
   // 
   // on Delete multiple action
@@ -73,11 +65,33 @@ const useDelete = (deleteAction) => {
     setSelectedCheckBoxDelete([]);
   };
 
+
+  // 
+  // on Delete single Item action
+  // 
+  const handleDeleteItem = () => {
+    if (itemToDelete) {
+      dispatch(deleteAction(itemToDelete));
+      setDeleteModal(false);
+    }
+  };
+
+  // 
+  // on Delete single Item action
+  // 
+  const handleSchemaDeleteItem = () => {
+    console.log("itemToDelete: ", itemToDelete)
+    if (itemToDelete) {
+      dispatch(deleteAction(itemToDelete));
+      setDeleteModal(false);
+    }
+  };
+
   return {
     // Basic delete actions
     handleDeleteItem,
+    handleSchemaDeleteItem,
     handleItemDeleteClick,
-
     // Modals
     setDeleteModal,
     deleteModal,
