@@ -40,14 +40,14 @@ const Id = (cell) => {
   );
 };
 
-const Name = (cell) => {
+const Name = ({ name, slug, urlDir, }) => {
   return (
     <React.Fragment>
       <Link
-        to={`/dashboard/campaigns/${cell.row.original.slug}`}
+        to={`/dashboard/${urlDir}/${slug}`}
         className="fw-medium link-primary"
       >
-        {cell.value}
+        {name}
       </Link>{" "}
     </React.Fragment>
   );
@@ -183,15 +183,29 @@ const Actions = (props) => {
       <div className="d-flex">
         <div className="flex-grow-1 campaigns_name">{cell.value}</div>
         <div className="hstack gap-2">
+
+          {/* View */}
           <button
             to="#"
             className="btn btn-sm btn-soft-info edit-list"
             onClick={() => {
-              handleCampaignClick(campaignData);
+              handleCampaignClick(campaignData, "viewGuaranteeGroup");
             }}
           >
             <i className="ri-pencil-fill align-bottom" />
           </button>
+
+          {/* Update */}
+          <button
+            to="#"
+            className="btn btn-sm btn-soft-info edit-list"
+            onClick={() => {
+              handleCampaignClick(campaignData, "updateGuaranteeGroup");
+            }}
+          >
+            <i className="ri-pencil-fill align-bottom" />
+          </button>
+          {/* Delete */}
           <button
             to="#"
             className="btn btn-sm btn-soft-danger remove-list"

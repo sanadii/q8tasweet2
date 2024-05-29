@@ -41,8 +41,6 @@ const GuaranteesGroupList = ({
         error
     } = useSelector(campaignSelector);
 
-    console.log("campaignGuaranteeGroups: ", campaignGuaranteeGroups)
-
     // Delete Hook
     const {
         // Delete Modal
@@ -67,11 +65,9 @@ const GuaranteesGroupList = ({
             setCampaignGuaranteeGroup(campaignGuaranteeGroup);
             setModalMode(modalMode);
             toggle();
-
         },
         [setCampaignGuaranteeGroup, setModalMode, toggle]
     );
-
 
 
     const memberName = (campaignMembers || []).reduce((acc, member) => {
@@ -94,7 +90,8 @@ const GuaranteesGroupList = ({
                 accessor: "name",
                 Cell: (cellProps) => (
                     <Name
-                        cellProps={cellProps}
+                        id={cellProps.row.original.id}
+                        name={cellProps.row.original.name}
                         handleClickedItem={handleSelectCampaignGuaranteeGroup}
                     />
                 )
@@ -132,9 +129,10 @@ const GuaranteesGroupList = ({
                 Header: "إجراءات",
                 Cell: (cellProps) =>
                     <Actions
-                        cellProps={cellProps}
-                        electionSlug={electionSlug}
-                        handleCampaignGuaranteeGroupClick={handleCampaignGuaranteeGroupClick}
+                        options={["view", "update", "delete"]}
+                        cell={cellProps}
+                        schema={electionSlug}
+                        handleItemClick={handleCampaignGuaranteeGroupClick}
                         handleItemDeleteClick={handleItemDeleteClick}
                     />
             },
@@ -142,15 +140,12 @@ const GuaranteesGroupList = ({
 
     // Assuming useFilter returns an object with a property named filteredData
     const filterResult = useFilter(campaignGuaranteeGroups);
-    console.log('111 filterResult:', filterResult);
 
     // Now, if campaignGuaranteeGroups is truthy, we destructure filteredData from it
     const campaignGuaranteeGroupList = campaignGuaranteeGroups ? filterResult.filteredData : [];
-    console.log('111 campaignGuaranteeGroupList:', campaignGuaranteeGroupList);
 
     // Destructuring other properties directly as they are not dependent on campaignGuaranteeGroups
     const { filters, setFilters } = filterResult || [];
-    console.log('111 filters:', filters);
 
     useEffect(() => {
         // Check if selectedCampaignMember and its id exist

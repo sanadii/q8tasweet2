@@ -9,6 +9,8 @@ import { getOptionOptions, getOptionBadge } from "shared/utils"
 import { AvatarList } from "shared/components";
 import { handleValidDate } from "shared/utils";
 
+import { usePermission } from "shared/hooks";
+
 const CheckboxHeader = ({ handleCheckAllClick }) => (
     <input
         type="checkbox"
@@ -45,23 +47,26 @@ const Id = (cellProps) => {
 const NameAvatar = (cellProps) => {
     const { cell, urlDir } = cellProps
     return (
-        < AvatarList {...cellProps} dirName={urlDir} />
+        < AvatarList
+            {...cellProps}
+            dirName={urlDir}
+        />
 
     );
 };
 
-const Name = (props) => {
-    const { cellProps, handleClickedItem } = props;
-    const campaignMember = cellProps.row.original;
+const Name = (cellProps) => {
+    const { id, name, gender, handleClickedItem } = cellProps;
+    // const campaignMember = cellProps.row.original;
 
     return (
         <div
             className="flex-grow-1 ms-2 name"
-            onClick={() => {
-                handleClickedItem(campaignMember);
-            }}
+        // onClick={() => {
+        //     handleClickedItem(campaignMember);
+        // }}
         >
-            <b>{campaignMember.name}</b>
+            <b>{name}</b>
         </div>
     );
 };
@@ -114,12 +119,12 @@ const Priority = ({ priority }) => {
 
 
 
-const Guarantees = (cellProps) => {
-    const numberOfVoters = cellProps.row.original.voters
-    return (
-        <p>{numberOfVoters ? numberOfVoters : '-'}</p>
-    );
-}
+// const Guarantees = (cellProps) => {
+//     const numberOfVoters = cellProps.row.original.voters
+//     return (
+//         <p>{numberOfVoters ? numberOfVoters : '-'}</p>
+//     );
+// }
 
 const Attended = (cellProps) => {
     const numberOfVoters = cellProps.row.original.voters
@@ -167,18 +172,48 @@ const CreateBy = (cell) => {
 const Phone = (cellProps) => {
     const phone = cellProps.row.original.phone;
     return (
-        <p>{phone ? phone : '-'}</p>
+        <span>{phone ? phone : '-'}</span>
     );
 }
+
+// const Attended = (cellProps) => {
+//     if (cellProps.row.original.attended) {
+//         return <i className="ri-checkbox-circle-fill text-success"></i>;
+//     } else {
+//         return <i className="ri-close-circle-fill text-danger"></i>;
+//     }
+// }
+
+
+// Campaign Teams
+const Role = ({ cellProps, campaignRoles }) => {
+    const roleName = cellProps.row.original.roleName;
+    // const role = campaignRoles.find((option) => option.id === roleId);
+
+    return (
+        <p className="text-success">
+            <strong>{roleName}</strong>
+        </p>
+    );
+}
+
+const Team = ({ cellProps, campaignMembers }) => {
+    const memberId = cellProps.row.original.id;
+    const teamCountForMember = campaignMembers.filter(member => member.supervisor === memberId).length;
+
+    return (
+        <p>{teamCountForMember}</p>
+    );
+};
 
 const Guarantor = ({ cellProps, campaignMembers }) => {
     const memberId = cellProps.row.original.member;
 
     if (memberId === null) {
         return (
-            <p className="text-danger">
+            <span className="text-danger">
                 <strong>N/A</strong>
-            </p>
+            </span>
         );
     }
 
@@ -186,44 +221,168 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
         (member) => member.id === memberId
     );
     return (
-        <p className="text-success">
+        <span className="text-success">
             <strong>{member ? member.name : "Not Found"}</strong>
-        </p>
+        </span>
     );
 }
 
-const Actions = (props) => {
-    const { cell, handleItemClick, handleItemDeleteClick } = props;
-    const itemData = cell.row.original;
+
+const Guarantees = (props) => {
+    const { cellProps, campaignGuarantees, campaignRoles } = props;
+
+    // Permission Hook
+    const {
+        canChangeCampaignModerator,
+        canChangeCampaignCoordinator,
+        canChangeCampaignSupervisor,
+        canChangeCampaignMember,
+        canChangeCampaign,
+    } = usePermission();
+
+    const memberId = cellProps.row.original.id;
+    const guaranteeCountForMember = campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
+    const campaignMemberId = cellProps.row.original.role;
+    const campaignRole = campaignRoles.find((option) => option.id === campaignMemberId);
+    const campaignMemberRole = campaignRole?.name;
+    return (
+        (!canChangeCampaignCoordinator &&
+            !["campaignModerator", "campaignCandidate", "campaignCoordinator"].includes(campaignMemberRole))
+            || canChangeCampaignSupervisor
+            ? <p>{guaranteeCountForMember}</p>
+            : <p>-</p>
+    );
+}
+
+const Attendees = ({ cellProps, campaignAttendees }) => {
+    const userId = cellProps.row.original.user;
+    const attendeeCountForMember = campaignAttendees.filter(attendee => attendee.member === userId).length;
+
+    return (
+        <p>{attendeeCountForMember}</p>
+    );
+};
+
+const Sorted = ({ cellProps, campaignMembers }) => {
+    return (
+        <p>Sorted</p>
+    );
+
+}
+
+const Committee = ({ cellProps, campaignElectionCommittees }) => {
+    const committeeId = cellProps.row.original.committee;
+
+    if (committeeId === null) {
+        return (
+            <p className="text-danger">
+                <strong>N/A</strong>
+            </p>
+        );
+    }
+
+    const committee = campaignElectionCommittees.find(
+        (committee) => committee.id === committeeId
+    );
+    return (
+        <p className="text-success">
+            <strong>{committee ? committee.name : "Not Found"}</strong>
+        </p>
+    );
+};
+
+const Supervisor = ({ cellProps, campaignMembers }) => {
+
+    const supervisorId = cellProps.row.original.supervisor;
+    if (supervisorId === null) {
+        return (
+            <p className="text-danger">
+                <strong>N/A</strong>
+            </p>
+        );
+    }
+
+    const supervisor = campaignMembers.find(
+        (member) => member.id === supervisorId
+    );
+    return (
+        <p className="text-success">
+            <strong>
+                {supervisor ? supervisor.name : "Not Found"}
+            </strong>
+        </p>
+    );
+};
+
+// Guarantees
+
+const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
+    const guaranteeGroupId = cellProps.row.original.guaranteeGroup;
+    const guaranteeGroup = campaignGuaranteeGroups.find(campaignGuaranteeGroup => campaignGuaranteeGroup.id === guaranteeGroupId);
+
+    return (
+        <span className="text-primary">
+            <strong>{guaranteeGroup ? guaranteeGroup.name : "-"}</strong>
+        </span>
+    );
+};
+
+const Actions = (cellProps) => {
+    const { cell, handleItemClick, handleItemDeleteClick, options, schema } = cellProps
+    let itemData
+    if (schema) {
+        itemData = {
+            ...(cell.row.original),
+            schema: schema,
+        }
+    }
+    else {
+        itemData = cell.row.original
+    }
+    console.log("itemDataitemData schema: ", schema)
+    console.log("itemDataitemData: ", itemData)
+    console.log("optionsoptionsoptions: ", options)
 
     return (
         <React.Fragment>
-            <div className="d-flex">
-                <div className="flex-grow-1 elections_name">{cell.value}</div>
-                <div className="hstack gap-2">
+            <div className="list-inline hstack gap-1 mb-0">
+                {/* View */}
+                {options.includes("view") && (
+                    <button
+                        to="#"
+                        className="btn btn-sm btn-soft-warning edit-list"
+                        onClick={() => { handleItemClick(itemData, "view"); }}
+                    >
+                        <i className="ri-eye-fill align-bottom" />
+                    </button>
+                )}
+                {/* Update */}
+                {options.includes("update") && (
+
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-info edit-list"
-                        onClick={() => {
-                            handleItemClick(itemData);
-                        }}
+                        onClick={() => { handleItemClick(itemData, "update"); }}
                     >
                         <i className="ri-pencil-fill align-bottom" />
                     </button>
+                )}
+                {/* Delete */}
+                {options.includes("delete") && (
+
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-danger remove-list"
-                        onClick={() => {
-                            handleItemDeleteClick(itemData);
-                        }}
+                        onClick={() => { handleItemDeleteClick(itemData); }}
                     >
                         <i className="ri-delete-bin-5-fill align-bottom" />
                     </button>
-                </div>
+                )}
             </div>
-        </React.Fragment>
+        </React.Fragment >
     );
 };
+
 export {
     Id,
     CheckboxHeader,
@@ -239,13 +398,17 @@ export {
     Category,
     Moderators,
     CreateBy,
-    Actions,
 
-
+    // Campaign Team
+    Role, Team, Guarantees, Attendees, Sorted, Committee, Supervisor,
     // Guarantees
+    GuaranteeGroups,
     Guarantor,
     Phone,
-    Guarantees,
     Attended,
     AttendedPercentage,
+
+    // Actions
+    Actions,
+
 };

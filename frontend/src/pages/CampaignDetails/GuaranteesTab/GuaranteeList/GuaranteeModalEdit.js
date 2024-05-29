@@ -28,16 +28,12 @@ const GuaranteesModalEdit = ({
     (member) => member.role === 31 || member.role === 32 || member.role === 33 || member.role === 34
   );
 
-  console.log("electionSlug: ", electionSlug)
   const myCampaignGuaranteeGroups = campaignGuaranteeGroups && campaignGuaranteeGroups
     .filter((guaranteeGroup) => guaranteeGroup.member === currentCampaignMember.id)
     .map((guaranteeGroup) => ({
       label: guaranteeGroup.name,
       value: guaranteeGroup.id
     }));
-
-  console.log("myCampaignGuaranteeGroups: ", myCampaignGuaranteeGroups)
-  console.log("campaignGuaranteeGroups: ", currentCampaignMember.id)
 
   const sortedGurantorOptions = GurantorOptions.sort((a, b) => a.role - b.role);
   const [isRelatedVoters, setToggleRelatedVoters] = useState(false);
@@ -51,8 +47,8 @@ const GuaranteesModalEdit = ({
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
+      schema: electionSlug,
       id: campaignGuarantee?.id || "",
-      election: electionSlug,
       guaranteeGroups: campaignGuarantee?.guaranteeGroups || [],
       member: campaignGuarantee?.member || "",
       phone: campaignGuarantee?.phone || "",
@@ -65,8 +61,8 @@ const GuaranteesModalEdit = ({
 
     onSubmit: (values) => {
       const updatedCampaignGuarantee = {
+        schema: electionSlug,
         id: campaignGuarantee ? campaignGuarantee.id : 0,
-        election: electionSlug,
         member: parseInt(values.member, 10),
         phone: values.phone,
         civil: values.civil,

@@ -15,7 +15,7 @@ const allOptions = {
     electionResult: ElectionResultOptions,
     electionSortingResult: ElectionSortingResultOptions,
     electionDetailedResult: ElectionDetailedResultOptions,
-    CampaignGuaranteeStatus: CampaignGuaranteeStatusOptions,
+    campaignGuaranteeStatus: CampaignGuaranteeStatusOptions,
 };
 
 const getSelectedOptions = (optionCategory) => {

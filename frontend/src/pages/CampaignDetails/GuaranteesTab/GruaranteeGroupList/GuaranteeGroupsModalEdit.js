@@ -54,10 +54,10 @@ const GuaranteeGroupsModalEdit = ({
     }),
 
     onSubmit: (values) => {
-      if (modalMode === "updateGuaranteeGroup") {
+      if (modalMode === "update") {
         const updatedCampaignGuaranteeGroup = {
+          schema: electionSlug,
           id: campaignGuaranteeGroup ? campaignGuaranteeGroup.id : 0,
-          election: electionSlug,
           name: values.name || "",
           member: values.member || campaignGuaranteeGroup.member || currentCampaignMember?.id,
           phone: values.phone || "",
@@ -70,12 +70,12 @@ const GuaranteeGroupsModalEdit = ({
 
       } else {
         const newCampaignGuaranteeGroup = {
+          schema: electionSlug,
           name: values.name || "",
           member: currentCampaignMember.id,
           phone: values.phone || "",
           note: values.note || "",
           guarantees: values.guarantees || [],
-          election: electionSlug,
         };
         dispatch(addCampaignGuaranteeGroup(newCampaignGuaranteeGroup));
       }

@@ -30,7 +30,7 @@ const GuaranteeGroupsModalUpdate = ({
     enableReinitialize: true,
     initialValues: {
       id: campaignGuaranteeGroup?.id || "",
-      election: electionSlug,
+      schema: electionSlug,
       member: campaignGuaranteeGroup?.member || "",
       phone: campaignGuaranteeGroup?.phone || "",
       status: campaignGuaranteeGroup?.status || 0,
@@ -44,8 +44,8 @@ const GuaranteeGroupsModalUpdate = ({
     onSubmit: (values) => {
       if (modalMode === "GuaranteeGroupUpdateModal") {
         const updatedCampaignGuaranteeGroup = {
+          schema: electionSlug,
           id: campaignGuaranteeGroup ? campaignGuaranteeGroup.id : 0,
-          election: electionSlug,
           name: values.name || "",
           phone: values.phone || "",
           voters: values.voters || "",
@@ -57,11 +57,11 @@ const GuaranteeGroupsModalUpdate = ({
         );
       } else {
         const updatedCampaignGuaranteeGroup = {
+          schema: electionSlug,
           name: values.name || "",
           phone: values.phone || "",
           voters: values.voters || "",
           note: values.note || "",
-          election: electionSlug,
         };
         dispatch(addCampaignGuaranteeGroup(updatedCampaignGuaranteeGroup));
       }

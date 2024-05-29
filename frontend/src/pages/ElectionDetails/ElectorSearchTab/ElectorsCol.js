@@ -101,12 +101,11 @@ const Actions = (props) => {
                 onClick={(e) => {
                     e.preventDefault();
                     const newCampaignGuarantee = {
+                        schema: electionSchema,
                         member: campaignMember,
                         guaranteeGroup: selectedGuaranteeGroup,
                         elector: cellProps.row.original.id,
                         status: 1,
-                        election: electionSchema,
-
                     };
                     dispatch(addCampaignGuarantee(newCampaignGuarantee));
                 }}

@@ -155,7 +155,7 @@ const Actions = (props) => {
                 to="#"
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
-                    handleCampaignGuaranteeGroupClick(campaignGuaranteeGroup, "viewGuaranteeGroup")
+                    handleCampaignGuaranteeGroupClick(campaignGuaranteeGroup, "view")
                 }}
             >
                 <i className="ri-eye-fill align-bottom" />
@@ -165,7 +165,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-info edit-list"
                 onClick={() => {
                     const campaignGuaranteeGroup = cellProps.row.original;
-                    handleCampaignGuaranteeGroupClick(campaignGuaranteeGroup, "updateGuaranteeGroup");
+                    handleCampaignGuaranteeGroupClick(campaignGuaranteeGroup, "update");
                 }}
             >
                 <i className="ri-pencil-fill align-bottom" />

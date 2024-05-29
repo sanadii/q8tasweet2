@@ -22,14 +22,14 @@ const GuaranteeGroupsModal = ({
       className="border-0"
       size="lg"
     >
-      {(modalMode === "updateGuaranteeGroup" || modalMode === "addGuaranteeGroup") &&
+      {(modalMode === "update" || modalMode === "addGuaranteeGroup") &&
         <GuaranteeGroupsModalEdit
           toggle={toggle}
           modalMode={modalMode}
           campaignGuaranteeGroup={campaignGuaranteeGroup} />
       }
 
-      {modalMode === "viewGuaranteeGroup" &&
+      {modalMode === "view" &&
         <GuaranteeGroupsModalView
           toggle={toggle}
           campaignGuaranteeGroup={campaignGuaranteeGroup}

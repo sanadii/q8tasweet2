@@ -15,13 +15,13 @@ const GuaranteesModal = ({ modal, toggle, modalMode, campaignGuarantee }) => {
       size="lg"
     >
 
-      {(modalMode === "guaranteeUpdate") &&
+      {(modalMode === "update") &&
         <GuaranteeModalEdit
           toggle={toggle}
           campaignGuarantee={campaignGuarantee} />
       }
 
-      {modalMode === "guaranteeView" &&
+      {modalMode === "view" &&
         <GuaranteeModalView
           toggle={toggle}
           campaignGuarantee={campaignGuarantee}

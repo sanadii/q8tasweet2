@@ -5,7 +5,19 @@ import { campaignSelector } from 'selectors';
 
 // Shared imports
 import { Loader, DeleteModal, TableContainer, TableFilters } from "shared/components";
-import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, GuaranteeGroups, Actions } from "./GuaranteesCol";
+import {
+  CheckboxHeader, CheckboxCell, Id, Name,
+  SimpleName, DueDate, Badge, CreateBy, Actions,
+  Phone,
+  GuaranteeGroups,
+  Guarantor,
+  Guarantees,
+  Attended,
+  AttendedPercentage,
+} from "shared/components"
+
+
+// import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Attended, Status, Guarantor, GuaranteeGroups, Actions } from "./GuaranteesCol";
 import { useDelete, useFilter } from "shared/hooks"
 
 // Utility imports
@@ -63,16 +75,6 @@ const GuaranteeList = ({
     return acc;
   }, {});
 
-  const handleCampaignGuaranteeDelete = useCallback((CampaignGuarantee) => {
-    const itemToDelete = {
-      id: CampaignGuarantee.id,
-      election: electionSlug,
-    };
-    handleDeleteItem(itemToDelete);
-  }, [electionSlug, handleDeleteItem]);
-  
-
-
   const columns = useMemo(
     () => [
       {
@@ -86,23 +88,18 @@ const GuaranteeList = ({
       },
       {
         Header: "الاسم",
-        accessor: row => ({ name: row.name, gender: row.gender }),
-        Cell: (cellProps) => <Name {...cellProps} />
+        Cell: (cellProps) =>
+          <Name
+            {...cellProps}
+            name={cellProps.row.original.fullName}
+            gender={cellProps.row.original.gender}
+          />
       },
       {
         Header: "التليفون",
         accessor: "phone",
-        Cell: (cellProps) => <Phone {...cellProps} />
-      },
-      {
-        Header: "الحضور",
-        accessor: "attended",
-        Cell: (cellProps) => <Attended {...cellProps} />
-      },
-      {
-        Header: "الحالة",
-        filterable: false,
-        Cell: (cellProps) => <Status {...cellProps} />
+        Cell: (cellProps) =>
+          <Phone {...cellProps} />
       },
       {
         Header: "الضامن",
@@ -123,12 +120,29 @@ const GuaranteeList = ({
           />
       },
       {
+        Header: "الحالة",
+        filterable: false,
+        Cell: (cellProps) =>
+          <Badge
+            option="campaignGuaranteeStatus"
+            value={cellProps.row.original.status}
+          />
+      },
+      {
+        Header: "الحضور",
+        accessor: "attended",
+        Cell: (cellProps) =>
+          <Attended {...cellProps} />
+      },
+
+      {
         Header: "إجراءات",
         Cell: (cellProps) =>
           <Actions
-            cellProps={cellProps}
-            electionSlug={electionSlug}
-            handleCampaignGuaranteeClick={handleCampaignGuaranteeClick}
+            options={["view", "update", "delete"]}
+            cell={cellProps}
+            schema={electionSlug}
+            handleItemClick={handleCampaignGuaranteeClick}
             handleItemDeleteClick={handleItemDeleteClick}
           />
       },
@@ -144,7 +158,7 @@ const GuaranteeList = ({
           ),
         accessor: "delete_action", // Unique accessor
       },
-    ], [handleCheckAllClick, isMultiDeleteButton, handleCampaignGuaranteeClick, campaignMembers]);
+    ], [electionSlug, handleCheckCellClick, handleItemDeleteClick, setDeleteModalMulti, handleCheckAllClick, isMultiDeleteButton, campaignGuaranteeGroups, handleCampaignGuaranteeClick, campaignMembers]);
 
   // Table Filters
   const { filteredData: campaignGuaranteeList, filters, setFilters } = useFilter(campaignGuarantees);
@@ -153,7 +167,7 @@ const GuaranteeList = ({
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleCampaignGuaranteeDelete}
+        onDeleteClick={() => handleDeleteItem()}
         onCloseClick={() => setDeleteModal(false)}
       />
       <DeleteModal
