@@ -28,6 +28,7 @@ const GuaranteesModalEdit = ({
     (member) => member.role === 31 || member.role === 32 || member.role === 33 || member.role === 34
   );
 
+  console.log("electionSlug: ", electionSlug)
   const myCampaignGuaranteeGroups = campaignGuaranteeGroups && campaignGuaranteeGroups
     .filter((guaranteeGroup) => guaranteeGroup.member === currentCampaignMember.id)
     .map((guaranteeGroup) => ({
@@ -51,7 +52,7 @@ const GuaranteesModalEdit = ({
     enableReinitialize: true,
     initialValues: {
       id: campaignGuarantee?.id || "",
-      campaign: campaignId,
+      election: electionSlug,
       guaranteeGroups: campaignGuarantee?.guaranteeGroups || [],
       member: campaignGuarantee?.member || "",
       phone: campaignGuarantee?.phone || "",

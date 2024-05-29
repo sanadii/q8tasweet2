@@ -24,7 +24,6 @@ const ElectionList = () => {
 
   // State Management
   const { elections, isElectionSuccess, error } = useSelector(electionSelector);
-  const { categories } = useSelector(categorySelector);
   const [dueDate, setDate] = useState(defaultDate());
 
   // Model & Toggle Function
@@ -53,6 +52,7 @@ const ElectionList = () => {
     handleCheckCellClick,
   } = useDelete(deleteElection);
 
+
   // Election Data
   useEffect(() => {
     if (elections && elections.length === 0) {
@@ -61,9 +61,6 @@ const ElectionList = () => {
     }
   }, [dispatch, elections]);
 
-  // useEffect(() => {
-  //   dispatch(getElections());
-  // }, [dispatch]);
 
   const toggle = useCallback(() => {
     if (modal) {

@@ -9,6 +9,24 @@ const handleValidDate = (duedate) => {
   return formattedDate;
 };
 
+const CheckboxHeader = ({ handleCheckAllClick }) => (
+  <input
+    type="checkbox"
+    id="checkBoxAll"
+    className="form-check-input"
+    onClick={handleCheckAllClick}
+  />
+);
+
+const CheckboxCell = ({ row, handleCheckCellClick }) => (
+  <input
+    type="checkbox"
+    className="checkboxSelector form-check-input"
+    value={row.original.id}
+    onChange={handleCheckCellClick}
+  />
+);
+
 const Id = (cell) => {
   return (
     <React.Fragment>
@@ -157,7 +175,9 @@ const CreateBy = (cell) => {
 };
 
 const Actions = (props) => {
-  const { cell, handleCampaignClick, onDeleteCheckBoxClick } = props;
+  const { cell, handleCampaignClick, handleItemDeleteClick } = props;
+  const campaignData = cell.row.original;
+
   return (
     <React.Fragment>
       <div className="d-flex">
@@ -167,7 +187,6 @@ const Actions = (props) => {
             to="#"
             className="btn btn-sm btn-soft-info edit-list"
             onClick={() => {
-              const campaignData = cell.row.original;
               handleCampaignClick(campaignData);
             }}
           >
@@ -177,8 +196,7 @@ const Actions = (props) => {
             to="#"
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
-              const campaignData = cell.row.original;
-              onDeleteCheckBoxClick(campaignData);
+              handleItemDeleteClick(campaignData);
             }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />
@@ -189,6 +207,8 @@ const Actions = (props) => {
   );
 };
 export {
+  CheckboxHeader,
+  CheckboxCell,
   Id,
   Name,
   CandidateCount,

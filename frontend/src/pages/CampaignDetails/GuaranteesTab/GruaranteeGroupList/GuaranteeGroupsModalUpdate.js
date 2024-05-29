@@ -23,14 +23,14 @@ const GuaranteeGroupsModalUpdate = ({
 }) => {
   const dispatch = useDispatch();
 
-  const { campaignId, campaignElectionCommittees } = useSelector(campaignSelector); // Directly use without redundant useState
+  const { electionSlug, campaignId, campaignElectionCommittees } = useSelector(campaignSelector); // Directly use without redundant useState
 
   // Validation
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
       id: campaignGuaranteeGroup?.id || "",
-      campaign: campaignId,
+      election: electionSlug,
       member: campaignGuaranteeGroup?.member || "",
       phone: campaignGuaranteeGroup?.phone || "",
       status: campaignGuaranteeGroup?.status || 0,
@@ -45,6 +45,7 @@ const GuaranteeGroupsModalUpdate = ({
       if (modalMode === "GuaranteeGroupUpdateModal") {
         const updatedCampaignGuaranteeGroup = {
           id: campaignGuaranteeGroup ? campaignGuaranteeGroup.id : 0,
+          election: electionSlug,
           name: values.name || "",
           phone: values.phone || "",
           voters: values.voters || "",
@@ -60,6 +61,7 @@ const GuaranteeGroupsModalUpdate = ({
           phone: values.phone || "",
           voters: values.voters || "",
           note: values.note || "",
+          election: electionSlug,
         };
         dispatch(addCampaignGuaranteeGroup(updatedCampaignGuaranteeGroup));
       }

@@ -30,18 +30,16 @@ urlpatterns = [
     path("getElectorsBySearch", GetElectorsBySearch.as_view(), name="GetElectorsBySearch"),
     path("getElectorRelatedElectors", GetElectorRelatedElectors.as_view(), name="GetElectorRelatedElectors"),
 
-
+    # # Guarantee Groups
+    path("addCampaignGuaranteeGroup/<slug:schema>", AddCampaignGuaranteeGroup.as_view(), name="AddMemberGuaranteeGroup"),
+    path("updateCampaignGuaranteeGroup/<slug:schema>/<int:pk>", UpdateCampaignGuaranteeGroup.as_view(), name="UpdateCampaignGuaranteeGroup"),
+    path("deleteCampaignGuaranteeGroup/<slug:schema>/<int:pk>", DeleteCampaignGuaranteeGroup.as_view(), name="DeleteCampaignGuaranteeGroup"),
+    
     # Guarantees
     path("addCampaignGuarantee/<slug:schema>", AddCampaignGuarantee.as_view(), name="AddMemberGuarantee"),
     path("updateCampaignGuarantee/<slug:schema>/<int:pk>", UpdateCampaignGuarantee.as_view(), name="UpdateCampaignGuarantee"),
     path("deleteCampaignGuarantee/<slug:schema>/<int:pk>", DeleteCampaignGuarantee.as_view(), name="DeleteCampaignGuarantee"),
     
-    # # Guarantee Groups
-    path("addCampaignGuaranteeGroup", AddCampaignGuaranteeGroup.as_view(), name="AddMemberGuaranteeGroup"),
-    path("updateCampaignGuaranteeGroup/<int:pk>", UpdateCampaignGuaranteeGroup.as_view(), name="UpdateCampaignGuaranteeGroup"),
-    path("deleteCampaignGuaranteeGroup/<int:pk>", DeleteCampaignGuaranteeGroup.as_view(), name="DeleteCampaignGuaranteeGroup"),
-    
-
     # path("getElectorsByCategoryOld/<slug:slug>/", GetElectorsByCategory.as_view(), name="getElectorsByCategory"),
     # path("getElectors", GetElectors.as_view(), name="GetElectors"),
 

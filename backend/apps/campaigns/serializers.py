@@ -35,6 +35,7 @@ from django.contrib.contenttypes.models import ContentType
 
 # Serializers
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
+
 # from apps.elections.serializers import ElectionSerializer
 
 
@@ -58,7 +59,7 @@ class ElectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Election
-        fields = ['id', 'name', 'image', 'due_date']
+        fields = ["id", "name", "image", "due_date"]
 
 
 # from django.db.utils import IntegrityError
@@ -106,8 +107,7 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     campaigner_id = serializers.IntegerField()
 
     name = serializers.SerializerMethodField()
-    # election = ElectionSerializer(source='get_election', read_only=True)
-    # election = serializers.SerializerMethodField()
+    election = serializers.SerializerMethodField()
 
     campaign_type_display = serializers.SerializerMethodField()
 
@@ -117,7 +117,6 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "id",
             "campaign_type",
             "campaigner_id",
-            # "election",
             "name",
             "campaign_type_display",
             "slug",
@@ -126,9 +125,11 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "twitter",
             "instagram",
             "website",
+            # Election
+            "election",
         ]
         extra_kwargs = {
-            'campaign_type': {'write_only': True},
+            "campaign_type": {"write_only": True},
         }
 
     def get_campaign_related_object(self, obj):
@@ -141,7 +142,9 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             else:
                 raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
         else:
-            raise ValueError("Campaign object is missing campaign_type or campaigner_id")
+            raise ValueError(
+                "Campaign object is missing campaign_type or campaigner_id"
+            )
 
     def get_campaign_type_display(self, obj):
         """Retrieve the model name for campaign_type."""
@@ -158,13 +161,13 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     def get_election(self, obj):
         """Retrieve the election object dynamically based on campaign_type."""
         related_object = self.get_campaign_related_object(obj)
-        print("THE ELECTION: ", related_object)
-
-        if related_object:
-            return related_object.election
-        else:
-            return None
-
+        election = {
+            "id": related_object.election.id,
+            "name": f"{related_object.election.sub_category.name} - {related_object.election.due_date.year}",
+            "slug": related_object.election.slug,
+            "due_date": related_object.election.due_date,
+        }
+        return election
 
     def create(self, validated_data):
         print("Validated data:", validated_data)
@@ -173,9 +176,13 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
         campaigner_id = validated_data.pop("campaigner_id", None)
 
         if not campaign_type_model:
-            raise serializers.ValidationError({"campaign_type": "This field is required."})
+            raise serializers.ValidationError(
+                {"campaign_type": "This field is required."}
+            )
         if not campaigner_id:
-            raise serializers.ValidationError({"campaigner_id": "This field is required."})
+            raise serializers.ValidationError(
+                {"campaigner_id": "This field is required."}
+            )
 
         campaign_type = ContentType.objects.get(model=campaign_type_model)
         print(f"ContentType: {campaign_type}")
@@ -189,9 +196,7 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             )
 
         campaign = Campaign.objects.create(
-            campaign_type=campaign_type,
-            campaigner_id=campaigner_id,
-            **validated_data
+            campaign_type=campaign_type, campaigner_id=campaigner_id, **validated_data
         )
 
         # Debugging after creation
@@ -448,7 +453,6 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
 #         """Customize update (PUT, PATCH) of an instance"""
 #         # Additional logic to customize instance updating
 #         return super().update(instance, validated_data)
-
 
 
 # class CampaignAttendeeSerializer(serializers.ModelSerializer):

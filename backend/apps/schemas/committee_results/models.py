@@ -1,12 +1,11 @@
 from django.db import models
 
-
 # Models
 from apps.settings.models import TrackModel, TaskModel
 from apps.schemas.committees.models import Committee
+from apps.schemas.schemaModels import DynamicSchemaModel
 
-
-class BaseCommitteeResult(models.Model):
+class BaseCommitteeResult(DynamicSchemaModel):
     committee = models.ForeignKey(
         Committee,
         on_delete=models.SET_NULL,
@@ -25,7 +24,7 @@ class BaseCommitteeResult(models.Model):
 from django.apps import apps
 
 
-class CommitteeResultCandidate(BaseCommitteeResult, TrackModel):
+class CommitteeResultCandidate(BaseCommitteeResult):
     election_candidate = models.IntegerField(null=True, blank=True)
 
     class Meta:
@@ -43,7 +42,7 @@ class CommitteeResultCandidate(BaseCommitteeResult, TrackModel):
 # print_model_fields(CommitteeResultCandidate)
 
 
-class CommitteeResultParty(BaseCommitteeResult, TrackModel):
+class CommitteeResultParty(BaseCommitteeResult):
     # election_party = models.ForeignKey(
     #     ElectionParty,
     #     on_delete=models.SET_NULL,
@@ -60,7 +59,7 @@ class CommitteeResultParty(BaseCommitteeResult, TrackModel):
         verbose_name_plural = "Committee Result Parties"
 
 
-class CommitteeResultPartyCandidate(BaseCommitteeResult, TrackModel):
+class CommitteeResultPartyCandidate(BaseCommitteeResult):
     # election_party_candidate = models.ForeignKey(
     #     ElectionPartyCandidate,
     #     on_delete=models.SET_NULL,

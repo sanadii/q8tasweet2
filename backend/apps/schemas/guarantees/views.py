@@ -218,10 +218,6 @@ class DeleteCampaignGuaranteeGroup(AccessElectionSchemaMixin, CampaignGuaranteeG
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(
-            {
-                "data": "campaign guarantee group deleted successfully",
-                "count": 1,
-                "code": 200,
-            },
-            status=status.HTTP_204_NO_CONTENT,
+            {"data": "Campaign guarantee group deleted successfully", "count": 1,"code": 200},
+            status=status.HTTP_200_OK,
         )

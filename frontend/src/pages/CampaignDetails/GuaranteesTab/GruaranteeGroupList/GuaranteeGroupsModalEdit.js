@@ -25,7 +25,7 @@ const GuaranteeGroupsModalEdit = ({
   const dispatch = useDispatch();
 
   const { campaignMembers } = useSelector(campaignSelector);
-  const { campaignId, campaignElectionCommittees, campaignGuarantees, currentCampaignMember } = useSelector(campaignSelector); // Directly use without redundant useState
+  const { electionSlug, campaignId, campaignElectionCommittees, campaignGuarantees, currentCampaignMember } = useSelector(campaignSelector); // Directly use without redundant useState
 
   const myCampaignGuarantees = campaignGuarantees && campaignGuarantees
     .filter((guarantee) => guarantee.member === currentCampaignMember.id)
@@ -34,7 +34,7 @@ const GuaranteeGroupsModalEdit = ({
       value: guarantee.id
     }));
 
-  console.log("campaignId: ", campaignId)
+  console.log("electionSlugelectionSlug: ", electionSlug)
 
   // Validation
   const validation = useFormik({
@@ -42,7 +42,7 @@ const GuaranteeGroupsModalEdit = ({
     initialValues: {
       // id: campaignGuaranteeGroup?.id || 0,
       name: campaignGuaranteeGroup?.name || "",
-      campaign: campaignId,
+      election: electionSlug,
       member: campaignMembers?.id,
       guarantees: campaignGuaranteeGroup?.guarantees || [],
       phone: campaignGuaranteeGroup?.phone || "",
@@ -57,12 +57,12 @@ const GuaranteeGroupsModalEdit = ({
       if (modalMode === "updateGuaranteeGroup") {
         const updatedCampaignGuaranteeGroup = {
           id: campaignGuaranteeGroup ? campaignGuaranteeGroup.id : 0,
+          election: electionSlug,
           name: values.name || "",
           member: values.member || campaignGuaranteeGroup.member || currentCampaignMember?.id,
           phone: values.phone || "",
           note: values.note || "",
           guarantees: values.guarantees || [],
-          campaign: campaignId,
         };
 
         // Update election
@@ -75,7 +75,7 @@ const GuaranteeGroupsModalEdit = ({
           phone: values.phone || "",
           note: values.note || "",
           guarantees: values.guarantees || [],
-          campaign: campaignId,
+          election: electionSlug,
         };
         dispatch(addCampaignGuaranteeGroup(newCampaignGuaranteeGroup));
       }

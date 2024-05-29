@@ -5,7 +5,16 @@ import { campaignSelector } from 'selectors';
 
 // Shared imports
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "shared/components";
-import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Guarantees, Attended, AttendedPercentage, Guarantor, Actions } from "./GuaranteeGroupsCol";
+import {
+    CheckboxHeader, CheckboxCell, Id, Name,
+    SimpleName, DueDate, Badge, CreateBy, Actions,
+    Phone, Guarantor,
+    Guarantees,
+    Attended,
+    AttendedPercentage,
+} from "shared/components"
+
+// import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Guarantees, Attended, AttendedPercentage, Guarantor, Actions } from "./GuaranteeGroupsCol";
 import { useDelete, useFilter } from "shared/hooks"
 
 // Utility imports
@@ -24,6 +33,7 @@ const GuaranteesGroupList = ({
 
     // States
     const {
+        electionSlug,
         campaignGuarantees,
         campaignGuaranteeGroups,
         campaignMembers,
@@ -52,20 +62,9 @@ const GuaranteesGroupList = ({
         handleCheckCellClick,
     } = useDelete(deleteCampaignGuaranteeGroup);
 
-    const handleCampaignGuaranteeClick = useCallback(
-        (arg, modalMode) => {
-            const campaignGuaranteeGroup = arg;
-            setCampaignGuaranteeGroup({
-                id: campaignGuaranteeGroup.id,
-                member: campaignGuaranteeGroup.member,
-                campaign: campaignGuaranteeGroup.campaign,
-                name: campaignGuaranteeGroup.name,
-                gender: campaignGuaranteeGroup.gender,
-                phone: campaignGuaranteeGroup.phone,
-                notes: campaignGuaranteeGroup.notes,
-            });
-
-            // Set the modalMode state here
+    const handleCampaignGuaranteeGroupClick = useCallback(
+        (campaignGuaranteeGroup, modalMode) => {
+            setCampaignGuaranteeGroup(campaignGuaranteeGroup);
             setModalMode(modalMode);
             toggle();
 
@@ -96,7 +95,7 @@ const GuaranteesGroupList = ({
                 Cell: (cellProps) => (
                     <Name
                         cellProps={cellProps}
-                        handleSelectCampaignGuaranteeGroup={handleSelectCampaignGuaranteeGroup}
+                        handleClickedItem={handleSelectCampaignGuaranteeGroup}
                     />
                 )
             },
@@ -134,11 +133,12 @@ const GuaranteesGroupList = ({
                 Cell: (cellProps) =>
                     <Actions
                         cellProps={cellProps}
-                        handleCampaignGuaranteeClick={handleCampaignGuaranteeClick}
+                        electionSlug={electionSlug}
+                        handleCampaignGuaranteeGroupClick={handleCampaignGuaranteeGroupClick}
                         handleItemDeleteClick={handleItemDeleteClick}
                     />
             },
-        ], [handleSelectCampaignGuaranteeGroup, handleCheckAllClick, handleCheckCellClick, handleItemDeleteClick, handleCampaignGuaranteeClick, campaignMembers]);
+        ], [handleSelectCampaignGuaranteeGroup, electionSlug, handleCheckAllClick, handleCheckCellClick, handleItemDeleteClick, handleCampaignGuaranteeGroupClick, campaignMembers]);
 
     // Assuming useFilter returns an object with a property named filteredData
     const filterResult = useFilter(campaignGuaranteeGroups);
@@ -168,9 +168,10 @@ const GuaranteesGroupList = ({
         <React.Fragment>
             <DeleteModal
                 show={deleteModal}
-                onDeleteClick={handleDeleteItem}
+                onDeleteClick={() => handleDeleteItem()}
                 onCloseClick={() => setDeleteModal(false)}
             />
+
             <DeleteModal
                 show={deleteModalMulti}
                 onDeleteClick={() => {

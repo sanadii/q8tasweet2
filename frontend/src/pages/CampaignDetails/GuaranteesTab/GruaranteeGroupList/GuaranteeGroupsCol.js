@@ -53,15 +53,14 @@ const Id = (cellProps) => {
 
 const Name = (props) => {
     const { cellProps, handleSelectCampaignGuaranteeGroup } = props;
-
     const campaignMember = cellProps.row.original;
 
     return (
         <div
+            className="flex-grow-1 ms-2 name"
             onClick={() => {
                 handleSelectCampaignGuaranteeGroup(campaignMember);
             }}
-            className="flex-grow-1 ms-2 name"
         >
             <b>{campaignMember.name}</b>
         </div>
@@ -143,7 +142,12 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
 
 
 const Actions = (props) => {
-    const { cellProps, handleCampaignGuaranteeGroupClick, handleItemDeleteClick, isAdmin } = props;
+    const { cellProps, electionSlug, handleCampaignGuaranteeGroupClick, handleItemDeleteClick, isAdmin } = props;
+    const campaignGuaranteeGroup = cellProps.row.original;
+    const ItemToDelete = {
+        id: campaignGuaranteeGroup.id,
+        election: electionSlug,
+    }
 
     return (
         <div className="list-inline hstack gap-2 mb-0">
@@ -151,11 +155,7 @@ const Actions = (props) => {
                 to="#"
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
-                    const campaignGuaranteeGroup = cellProps.row.original;
-                    handleCampaignGuaranteeGroupClick(
-                        campaignGuaranteeGroup,
-                        "viewGuaranteeGroup"
-                    );
+                    handleCampaignGuaranteeGroupClick(campaignGuaranteeGroup, "viewGuaranteeGroup")
                 }}
             >
                 <i className="ri-eye-fill align-bottom" />
@@ -165,10 +165,7 @@ const Actions = (props) => {
                 className="btn btn-sm btn-soft-info edit-list"
                 onClick={() => {
                     const campaignGuaranteeGroup = cellProps.row.original;
-                    handleCampaignGuaranteeGroupClick(
-                        campaignGuaranteeGroup,
-                        "updateGuaranteeGroup"
-                    );
+                    handleCampaignGuaranteeGroupClick(campaignGuaranteeGroup, "updateGuaranteeGroup");
                 }}
             >
                 <i className="ri-pencil-fill align-bottom" />
@@ -177,8 +174,7 @@ const Actions = (props) => {
                 to="#"
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
-                    const campaignGuaranteeGroup = cellProps.row.original;
-                    handleItemDeleteClick(campaignGuaranteeGroup);
+                    handleItemDeleteClick(ItemToDelete);
                 }}
             >
                 <i className="ri-delete-bin-5-fill align-bottom" />

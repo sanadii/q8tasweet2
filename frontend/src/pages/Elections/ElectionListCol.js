@@ -107,6 +107,8 @@ const CreateBy = (cell) => {
 
 const Actions = (props) => {
   const { cell, handleElectionClick, handleItemDeleteClick } = props;
+  const electionData = cell.row.original;
+
   return (
     <React.Fragment>
       <div className="d-flex">
@@ -116,7 +118,6 @@ const Actions = (props) => {
             to="#"
             className="btn btn-sm btn-soft-info edit-list"
             onClick={() => {
-              const electionData = cell.row.original;
               handleElectionClick(electionData);
             }}
           >
@@ -126,7 +127,6 @@ const Actions = (props) => {
             to="#"
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
-              const electionData = cell.row.original;
               handleItemDeleteClick(electionData);
             }}
           >

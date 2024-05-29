@@ -38,6 +38,7 @@ export { ExportCSVModal } from "./Tables/ExportCSVModal";
 export { default as TableContainer } from "./Tables/TableContainer";
 export { default as TableFilters } from "./Tables/TableFilters";
 export { default as TableHeaderContainer } from "./Tables/TableHeaderContainer";
+export * from "./Tables/TableColumns";
 export { default as TableContainerHeader } from "./Tables/TableContainerHeader";
 export { default as TableContainerFooter } from "./Tables/TableContainerFooter";
 export { default as TableContainerFilters } from "./Tables/TableContainerFilters";

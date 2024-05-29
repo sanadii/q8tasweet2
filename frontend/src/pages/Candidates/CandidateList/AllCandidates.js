@@ -8,8 +8,9 @@ import { candidateSelector } from 'selectors';
 
 // Custom Components, Constants & Hooks Imports
 import CandidateModal from "./CandidateModal"
-import { Id, CheckboxHeader, CheckboxCell, Name, Status, Priority, CreateBy, Actions } from "./CandidateListCol";
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
+import { CheckboxHeader, CheckboxCell, Id, Name, DueDate, Status, Priority, CreateBy, Actions } from "shared/components"
+
 import { useDelete, useFilter } from "shared/hooks"
 
 // Toast & Styles
@@ -22,19 +23,27 @@ const AllCandidates = () => {
 
   // State Management
   const { candidates, isCandidateSuccess, error } = useSelector(candidateSelector);
+  const [candidate, setCandidate] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   // Delete Hook
   const {
+    // Delete Modal
     handleDeleteItem,
-    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
-    checkedAll,
-    deleteCheckbox,
-    isMultiDeleteButton,
     deleteModalMulti,
+    handleDeleteMultiple,
+
+    // Table Header
+    isMultiDeleteButton,
     setDeleteModalMulti,
-    deleteMultiple,
+
+    // Column Actions
+    handleItemDeleteClick,
+    handleCheckAllClick,
+    handleCheckCellClick,
   } = useDelete(deleteCandidate);
 
   // Candidate Data
@@ -43,11 +52,6 @@ const AllCandidates = () => {
       dispatch(getCandidates());
     }
   }, [dispatch, candidates]);
-
-  // Model & Toggle Function
-  const [candidate, setCandidate] = useState([]);
-  const [modal, setModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
 
   const toggle = useCallback(() => {
     if (modal) {
@@ -92,9 +96,9 @@ const AllCandidates = () => {
   const columns = useMemo(
     () => [
       {
-        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
         accessor: "id",
-        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
+        Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
       },
       {
         Header: "م.",
@@ -125,33 +129,31 @@ const AllCandidates = () => {
           return (
             <Actions
               {...cellProps}
-              handleCandidateClick={handleCandidateClick}
-              onDeleteCheckBoxClick={onDeleteCheckBoxClick}
+              handleElectionClick={handleCandidateClick}
+              handleItemDeleteClick={handleItemDeleteClick}
             />
           );
         },
       },
     ],
-    [handleCandidateClick, checkedAll]
+    [handleCheckCellClick, handleCheckAllClick, handleCandidateClick, handleItemDeleteClick]
   );
 
   // Filters
   const { filteredData: candidateList, filters, setFilters } = useFilter(candidates);
 
-  console.log("filters: ", filters);
-  console.log("filters: candidateList: ", candidateList);
-
   return (
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteItem}
+        onDeleteClick={() => handleDeleteItem()}
         onCloseClick={() => setDeleteModal(false)}
       />
+
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          deleteMultiple();
+          handleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}

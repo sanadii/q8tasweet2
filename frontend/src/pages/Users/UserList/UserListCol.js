@@ -5,36 +5,29 @@ import { Link } from "react-router-dom";
 import * as moment from "moment";
 
 
+const CheckboxHeader = ({ handleCheckAllClick }) => (
+  <input
+    type="checkbox"
+    id="checkBoxAll"
+    className="form-check-input"
+    onClick={handleCheckAllClick}
+  />
+);
+
+const CheckboxCell = ({ row, handleCheckCellClick }) => (
+  <input
+    type="checkbox"
+    className="checkboxSelector form-check-input"
+    value={row.original.id}
+    onChange={handleCheckCellClick}
+  />
+);
+
 const Id = (cellProps) => {
   return (
     <React.Fragment>
       {cellProps.row.original.id}
     </React.Fragment>
-  );
-};
-
-const CheckboxHeader = ({ checkedAll }) => (
-  <input
-    type="checkbox"
-    id="checkBoxAll"
-    className="form-check-input"
-    onClick={checkedAll}
-  />
-);
-
-
-
-
-
-const CheckboxCell = (props) => {
-  const { cell, deleteCheckbox } = props;
-  return (
-    <input
-      type="checkbox"
-      className="checkboxSelector form-check-input"
-      value={cell.row.id}
-      onChange={deleteCheckbox}
-    />
   );
 };
 
@@ -71,7 +64,9 @@ const CreateBy = (cell) => {
 };
 
 const Actions = (props) => {
-  const { cell, handleUserClick, onDeleteCheckBoxClick } = props;
+  const { cell, handleUserClick, handleItemDeleteClick } = props;
+  const userData = cell.row.original;
+
   return (
     <React.Fragment>
       <div className="d-flex">
@@ -80,10 +75,7 @@ const Actions = (props) => {
           <button
             to="#"
             className="btn btn-sm btn-soft-info edit-list"
-            onClick={() => {
-              const userData = cell.row.original;
-              handleUserClick(userData);
-            }}
+            onClick={() => { handleUserClick(userData); }}
           >
             <i className="ri-pencil-fill align-bottom" />
           </button>
@@ -100,10 +92,7 @@ const Actions = (props) => {
           <button
             to="#"
             className="btn btn-sm btn-soft-danger remove-list"
-            onClick={() => {
-              const userData = cell.row.original;
-              onDeleteCheckBoxClick(userData);
-            }}
+            onClick={() => { handleItemDeleteClick(userData); }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />
           </button>

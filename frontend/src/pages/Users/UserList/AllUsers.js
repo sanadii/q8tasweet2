@@ -50,17 +50,23 @@ const AllUsers = () => {
 
   // Delete Hook
   const {
+    // Delete Modal
     handleDeleteItem,
-    onDeleteCheckBoxClick,
     deleteModal,
     setDeleteModal,
-    checkedAll,
-    deleteCheckbox,
-    isMultiDeleteButton,
     deleteModalMulti,
+    handleDeleteMultiple,
+
+    // Table Header
+    isMultiDeleteButton,
     setDeleteModalMulti,
-    deleteMultiple,
+
+    // Column Actions
+    handleItemDeleteClick,
+    handleCheckAllClick,
+    handleCheckCellClick,
   } = useDelete(deleteUser);
+
 
   // Model & Toggle Function
   const [user, setUser] = useState([]);
@@ -105,13 +111,9 @@ const AllUsers = () => {
   const columns = useMemo(
     () => [
       {
-        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
         accessor: "id",
-        Cell: (cellProps) =>
-          <CheckboxCell
-            {...cellProps}
-            deleteCheckbox={deleteCheckbox}
-          />,
+        Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
       },
       {
         Header: "م.",
@@ -135,20 +137,16 @@ const AllUsers = () => {
       },
       {
         Header: "إجراءات",
-        accessor: "user",
-        filterable: false,
-        Cell: (cellProps) => {
-          return (
-            <Actions
-              {...cellProps}
-              handleUserClick={handleUserClick}
-              onDeleteCheckBoxClick={onDeleteCheckBoxClick}
-            />
-          );
-        },
+        accessor: "election",
+        Cell: (cellProps) =>
+          <Actions
+            {...cellProps}
+            handleElectionClick={handleUserClick}
+            handleItemDeleteClick={handleItemDeleteClick}
+          />
       },
     ],
-    [handleUserClick, checkedAll, deleteCheckbox, onDeleteCheckBoxClick]
+    [handleCheckCellClick, handleCheckAllClick, handleUserClick, handleItemDeleteClick]
   );
 
   // Filters----------
@@ -164,18 +162,19 @@ const AllUsers = () => {
     }
     return isValid;
   });
-  
+
   return (
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={handleDeleteItem}
+        onDeleteClick={() => handleDeleteItem()}
         onCloseClick={() => setDeleteModal(false)}
       />
+
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          deleteMultiple();
+          handleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
