@@ -384,7 +384,7 @@ const Actions = (cellProps) => {
     let campaignMember = currentCampaignMember ? currentCampaignMember.id : null;
     let campaignUser = currentCampaignMember ? currentCampaignMember.user : null;
     let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : null;
-    const isElectorInGuarantees = campaignGuarantees.some(item => item.elector === cell.row.original.id);
+    const isElectorInGuarantees = campaignGuarantees && campaignGuarantees.some(item => item.elector === cell.row.original.id);
     // const isElectorInAttendees = campaignAttendees.some(item => item.id === cellProps.row.original.id);
 
     const renderElectorGuaranteeButton = () => {

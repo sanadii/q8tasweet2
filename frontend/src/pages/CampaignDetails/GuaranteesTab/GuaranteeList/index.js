@@ -96,7 +96,7 @@ const GuaranteeList = ({
           />
       },
       {
-        Header: "التليفون",
+        Header: "الهاتف",
         accessor: "phone",
         Cell: (cellProps) =>
           <Phone {...cellProps} />

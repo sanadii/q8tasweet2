@@ -89,10 +89,11 @@ const AllCampaigns = () => {
             handleCheckAllClick={handleCheckAllClick}
           />,
         accessor: "id",
-        Cell: (cellProps) => <CheckboxCell
-          {...cellProps}
-          handleCheckCellClick={handleCheckCellClick}
-        />,
+        Cell: (cellProps) =>
+          <CheckboxCell
+            {...cellProps}
+            handleCheckCellClick={handleCheckCellClick}
+          />,
       },
       {
         Header: "م.",

@@ -131,10 +131,15 @@ class Command(BaseCommand):
                     "age",
                     "circle",
                     "job",
+                    
+                    # Address Info
+                    "address",
                     "block",
                     "street",
                     "lane",
                     "house",
+                    
+                    # Election Info
                     "committee_area",
                     "committee_name",
                     "letter",

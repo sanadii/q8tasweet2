@@ -1,12 +1,8 @@
 # campaigns/guarantees/serializers.py
-from django.conf import settings  # Import Django settings to access MEDIA_URL
-from django.contrib.auth.models import Group, Permission
 from rest_framework import serializers
 
 # Apps
-from apps.campaigns.members.models import CampaignMember
 from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
-from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 
 #
@@ -32,37 +28,37 @@ class CampaignGuaranteeGroupSerializer(serializers.ModelSerializer):
 #
 class CampaignGuaranteeSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(
-        source="elector.full_name", default="Not Found", read_only=True
+        source="elector.full_name", default="Elector Full Name Not Found", read_only=True
     )
     gender = serializers.CharField(
-        source="elector.gender", default="Not Found", read_only=True
+        source="elector.gender", default="Elector Gender Not Found", read_only=True
     )
     job = serializers.CharField(
-        source="elector.job", default="Not Found", read_only=True
+        source="elector.job", default="Elector Job Not Found", read_only=True
     )
     age = serializers.IntegerField(
         source="elector.age", default=None, read_only=True
     )
     committee = serializers.CharField(
-        source="elector.committee.name", default="Not Found", read_only=True
+        source="elector.committee.name", default="Elector Committee Name Not Found", read_only=True
     )
     committee_area = serializers.CharField(
-        source="elector.committee_area", default="Not Found", read_only=True
+        source="elector.committee_area", default="Elector Committee Area Not Found", read_only=True
     )
     committee_name = serializers.CharField(
-        source="elector.committee_name", default="Not Found", read_only=True
+        source="elector.committee_name", default="Elector Committee Name Not Found", read_only=True
     )
     letter = serializers.CharField(
-        source="elector.letter", default="Not Found", read_only=True
+        source="elector.letter", default="Elector Letter Not Found", read_only=True
     )
     code_number = serializers.CharField(
-        source="elector.code_number", default="Not Found", read_only=True
+        source="elector.code_number", default="Elector Code Number Not Found", read_only=True
     )
     status_code = serializers.CharField(
-        source="elector.status_code", default="Not Found", read_only=True
+        source="elector.status_code", default="Elector Status Not Found", read_only=True
     )
     address = serializers.CharField(
-        source="elector.address", default="Not Found", read_only=True
+        source="elector.address", default="Elector Address Not Found", read_only=True
     )
 
     class Meta:
@@ -71,9 +67,12 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
             # guarantee
             "id", "member", "elector", "guarantee_group", "phone", "status",
             # Elector
-            "full_name", "gender", "job", "age", "address",
-            # Election Details 
-            "committee", "committee_area",  "committee_name", "letter", "code_number", "status_code",
+            "full_name", 
+            "gender", "job", "age",
+            "address",
+            # # Election Details 
+            "committee", "committee_area",  "committee_name",
+            "letter", "code_number", "status_code",
         ]
 
 

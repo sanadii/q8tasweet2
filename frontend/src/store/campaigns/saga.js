@@ -284,10 +284,10 @@ function* onAddCampaignGuarantee({ payload: campaignGuarantee }) {
   try {
     const response = yield call(addCampaignGuarantee, campaignGuarantee);
     yield put(addCampaignGuaranteeSuccess(response));
-    toast.success("تم إضافة المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
+    toast.success("تم إضافة الضمان للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addCampaignGuaranteeFail(error));
-    toast.error("خطأ في إضافة المضمون للحملة الإنتخابية", { autoClose: 2000 });
+    toast.error("خطأ في إضافة الضمان للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -295,12 +295,12 @@ function* onUpdateCampaignGuarantee({ payload: campaignGuarantee }) {
   try {
     const response = yield call(updateCampaignGuarantee, campaignGuarantee);
     yield put(updateCampaignGuaranteeSuccess(response));
-    toast.success("تم تحديث المضمون للحملة الإنتخابية بنجاح", {
+    toast.success("تم تحديث الضمان للحملة الإنتخابية بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     yield put(updateCampaignGuaranteeFail(error));
-    toast.error("خطأ في تحديث المضمون للحملة الإنتخابية", { autoClose: 2000 });
+    toast.error("خطأ في تحديث الضمان للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -308,10 +308,10 @@ function* onDeleteCampaignGuarantee({ payload: campaignGuarantee }) {
   try {
     const response = yield call(deleteCampaignGuarantee, campaignGuarantee);
     yield put(deleteCampaignGuaranteeSuccess({ campaignGuarantee, ...response }));
-    toast.success("تم حذف المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
+    toast.success("تم حذف الضمان للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteCampaignGuaranteeFail(error));
-    toast.error("خطأ في حذف المضمون للحملة الإنتخابية", { autoClose: 2000 });
+    toast.error("خطأ في حذف الضمان للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -332,10 +332,10 @@ function* onAddCampaignGuaranteeGroup({ payload: campaignGuaranteeGroup }) {
   try {
     const response = yield call(addCampaignGuaranteeGroup, campaignGuaranteeGroup);
     yield put(addCampaignGuaranteeGroupSuccess(response));
-    toast.success("تم إضافة المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
+    toast.success("تم إضافة الضمان للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addCampaignGuaranteeGroupFail(error));
-    toast.error("خطأ في إضافة المضمون للحملة الإنتخابية", { autoClose: 2000 });
+    toast.error("خطأ في إضافة الضمان للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -344,12 +344,12 @@ function* onUpdateCampaignGuaranteeGroup({ payload: campaignGuaranteeGroup }) {
   try {
     const response = yield call(updateCampaignGuaranteeGroup, campaignGuaranteeGroup);
     yield put(updateCampaignGuaranteeGroupSuccess(response));
-    toast.success("تم تحديث المضمون للحملة الإنتخابية بنجاح", {
+    toast.success("تم تحديث الضمان للحملة الإنتخابية بنجاح", {
       autoClose: 2000,
     });
   } catch (error) {
     yield put(updateCampaignGuaranteeGroupFail(error));
-    toast.error("خطأ في تحديث المضمون للحملة الإنتخابية", { autoClose: 2000 });
+    toast.error("خطأ في تحديث الضمان للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
@@ -359,10 +359,10 @@ function* onDeleteCampaignGuaranteeGroup({ payload: campaignGuaranteeGroup }) {
     yield put(
       deleteCampaignGuaranteeGroupSuccess({ campaignGuaranteeGroup, ...response })
     );
-    toast.success("تم حذف المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
+    toast.success("تم حذف الضمان للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(deleteCampaignGuaranteeGroupFail(error));
-    toast.error("خطأ في حذف المضمون للحملة الإنتخابية", { autoClose: 2000 });
+    toast.error("خطأ في حذف الضمان للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 

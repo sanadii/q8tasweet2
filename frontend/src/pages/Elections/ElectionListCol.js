@@ -41,7 +41,12 @@ const Id = (cellProps) => {
 };
 
 const Name = (cellProps) => (
-  <AvatarList {...cellProps} dirName="elections" />
+  <AvatarList
+    name={cellProps.row.original.name}
+    image={cellProps.row.original.image}
+    slug={cellProps.row.original.slug}
+    dirName="elections"
+  />
 );
 
 const CandidateCount = (cellProps) => {

@@ -107,7 +107,7 @@ const GuaranteesGroupList = ({
                     />
             },
             {
-                Header: "التليفون",
+                Header: "الهاتف",
                 accessor: "phone",
                 Cell: (cellProps) => <Phone {...cellProps} />
             },

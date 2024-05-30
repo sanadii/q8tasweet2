@@ -135,7 +135,7 @@ const GuaranteesModalUpdate = ({
               <thead className="bg-primary text-white">
                 <tr>
                   <th colSpan="2" className="text-center">
-                    متابعة المضمون
+                    متابعة الضمان
                   </th>
                 </tr>
               </thead>

@@ -31,12 +31,12 @@ const GuaranteesModal = ({ modal, toggle, modalMode, campaignGuarantee }) => {
       ModalButtonText = "Send Text";
       break;
     case "GuaranteeUpdateModal":
-      ModalTitle = "تعديل معلومات المضمون";
+      ModalTitle = "تعديل معلومات الضمان";
       ModalContent = GuaranteesModalUpdate;
       ModalButtonText = "تعديل";
       break;
     case "GuaranteeViewModal":
-      ModalTitle = "مشاهدة معلومات المضمون";
+      ModalTitle = "مشاهدة معلومات الضمان";
       ModalContent = GuaranteesModalView;
       ModalButtonText = "اغلق";
       break;
@@ -54,7 +54,7 @@ const GuaranteesModal = ({ modal, toggle, modalMode, campaignGuarantee }) => {
       size="lg"
     >
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        تعديل معلومات المضمون
+        تعديل معلومات الضمان
       </ModalHeader>
       <ModalBody className="p-4">
         <ModalContent

@@ -98,9 +98,7 @@ export const ResultCandidateName = ({ dirName, cellProps }) => {
 
 
 
-export const AvatarList = ({ dirName, row }) => {
-  const { id, name, image, slug } = row.original;
-
+export const AvatarList = ({ dirName, name, image, slug }) => {
   const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
   // For other dirName values, render the link

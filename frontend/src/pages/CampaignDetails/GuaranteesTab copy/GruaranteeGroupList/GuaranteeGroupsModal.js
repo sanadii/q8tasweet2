@@ -42,7 +42,7 @@ const GuaranteeGroupsModal = ({ modal, toggle, modalMode, campaignGuaranteeGroup
         ModalButtonText = "إضافة";
         break;
     case "GuaranteeGroupViewModal":
-      ModalTitle = "مشاهدة معلومات المضمون";
+      ModalTitle = "مشاهدة معلومات الضمان";
       ModalContent = GuaranteeGroupsModalView;
       ModalButtonText = "اغلق";
       break;
@@ -60,7 +60,7 @@ const GuaranteeGroupsModal = ({ modal, toggle, modalMode, campaignGuaranteeGroup
       size="lg"
     >
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        تعديل معلومات المضمون
+        تعديل معلومات الضمان
       </ModalHeader>
 
       <ModalBody className="p-4">
