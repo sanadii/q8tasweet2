@@ -9,7 +9,6 @@ import { getAreaOptions, getCommitteeSitesOptions } from "shared/constants";
 
 // Component imports
 import ElectorsModal from "./ElectorsModal";
-import { Id, Name, Actions } from "./ElectorsCol";
 
 // Reactstrap (UI) imports
 import { Col, Row, Button, ButtonGroup, Form } from "reactstrap";

@@ -134,8 +134,8 @@ const MembersList = ({
     {
       Header: "الفريق",
       TabsToShow: ["campaignSupervisor"],
-      Cell: (cellProps) => 
-      <Team cellProps={cellProps} campaignMembers={campaignMembers} />
+      Cell: (cellProps) =>
+        <Team cellProps={cellProps} campaignMembers={campaignMembers} />
     },
     {
       Header: "المضامين",
@@ -153,7 +153,8 @@ const MembersList = ({
       // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
       Cell: (cellProps) => (
         <Guarantees
-          cellProps={cellProps}
+          memberId={cellProps.row.original.id}
+          memberRole={cellProps.row.original.role}
           campaignGuarantees={campaignGuarantees}
           campaignRoles={campaignRoles}
         />

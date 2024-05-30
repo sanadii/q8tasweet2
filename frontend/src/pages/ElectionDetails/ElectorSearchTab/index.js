@@ -7,7 +7,6 @@ import { electionSelector, campaignSelector, electorSelector } from 'selectors';
 
 // Component imports
 import ElectorsModal from "./ElectorsModal";
-import { Id, Name, Actions } from "./ElectorsCol";
 
 // Reactstrap (UI) imports
 import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";

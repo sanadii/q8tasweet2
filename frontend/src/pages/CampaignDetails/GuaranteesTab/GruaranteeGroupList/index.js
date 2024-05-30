@@ -37,6 +37,7 @@ const GuaranteesGroupList = ({
         campaignGuarantees,
         campaignGuaranteeGroups,
         campaignMembers,
+        campaignRoles,
         isCampaignGuaranteeSuccess,
         error
     } = useSelector(campaignSelector);
@@ -110,11 +111,16 @@ const GuaranteesGroupList = ({
                 accessor: "phone",
                 Cell: (cellProps) => <Phone {...cellProps} />
             },
-            {
-                Header: "الناخبين",
-                accessor: "guarantees",
-                Cell: (cellProps) => <Guarantees {...cellProps} />
-            },
+            // {
+            //     Header: "الناخبين",
+            //     Cell: (cellProps) =>
+            //         <Guarantees
+            //             cell={cellProps}
+            //             memberId={cellProps.row.original.id}
+            //             campaignGuarantees={campaignGuarantees}
+            //             campaignRoles={campaignRoles}
+            //         />
+            // },
             {
                 Header: "الحضور",
                 accessor: "guaranteesAttended",

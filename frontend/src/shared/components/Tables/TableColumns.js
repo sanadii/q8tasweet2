@@ -1,15 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { categorySelector } from 'selectors';
 import { Link } from "react-router-dom";
 
 // Component, Constants & Hooks
-import { StatusOptions, getStatusBadge, PriorityOptions } from "shared/constants/";
+import { StatusOptions, getStatusBadge, PriorityOptions, GenderOptions } from "shared/constants/";
+
 import { getOptionOptions, getOptionBadge } from "shared/utils"
 import { AvatarList } from "shared/components";
 import { handleValidDate } from "shared/utils";
 
-import { usePermission } from "shared/hooks";
+import { addCampaignGuarantee, addCampaignAttendee } from "store/actions";
+import { usePermission } from 'shared/hooks';
 
 const CheckboxHeader = ({ handleCheckAllClick }) => (
     <input
@@ -81,6 +83,28 @@ const SimpleName = ({ name, slug, urlDir }) => {
                 {name}
             </Link>{" "}
         </React.Fragment>
+    );
+};
+
+
+const Title = (cellProps) => {
+    const { title, subTitle, gender } = cellProps
+    const getGenderIcon = (gender) => {
+        const genderOption = GenderOptions.find(g => g.id === gender);
+        if (genderOption) {
+            const genderColorClass = `text-${genderOption.color}`;
+            return <i className={`mdi mdi-circle align-middle ${genderColorClass} me-2`}></i>;
+        }
+        return null;
+    };
+
+    return (
+        <div>
+            {getGenderIcon(gender)}
+            <b>{title}</b>
+            <br />
+            {subTitle}
+        </div>
     );
 };
 const CandidateCount = (cellProps) => {
@@ -228,8 +252,9 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
 }
 
 
-const Guarantees = (props) => {
-    const { cellProps, campaignGuarantees, campaignRoles } = props;
+const Guarantees = (cellProps) => {
+    const { memberId, memberRole, campaignGuarantees, campaignRoles } = cellProps;
+    console.log("cellcellcell: ", cellProps)
 
     // Permission Hook
     const {
@@ -240,10 +265,10 @@ const Guarantees = (props) => {
         canChangeCampaign,
     } = usePermission();
 
-    const memberId = cellProps.row.original.id;
+    // const memberId = cell.row.original.id;
     const guaranteeCountForMember = campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
-    const campaignMemberId = cellProps.row.original.role;
-    const campaignRole = campaignRoles.find((option) => option.id === campaignMemberId);
+    // const campaignMemberId = cellProps.row.original.role;
+    const campaignRole = campaignRoles.find((option) => option.id === memberRole);
     const campaignMemberRole = campaignRole?.name;
     return (
         (!canChangeCampaignCoordinator &&
@@ -328,7 +353,22 @@ const GuaranteeGroups = ({ cellProps, campaignGuaranteeGroups }) => {
 };
 
 const Actions = (cellProps) => {
-    const { cell, handleItemClick, handleItemDeleteClick, options, schema } = cellProps
+    const dispatch = useDispatch();
+
+    const {
+        cell, handleItemClick, handleItemDeleteClick, options, schema,
+
+        // guarantee
+        selectedGuaranteeGroup,
+        currentCampaignMember,
+        campaignGuarantees,
+        // campaignAttendees,
+        // campaignDetails,
+        // electors,
+
+
+    } = cellProps
+
     let itemData
     if (schema) {
         itemData = {
@@ -339,9 +379,40 @@ const Actions = (cellProps) => {
     else {
         itemData = cell.row.original
     }
-    console.log("itemDataitemData schema: ", schema)
-    console.log("itemDataitemData: ", itemData)
-    console.log("optionsoptionsoptions: ", options)
+
+    // if user is not a member (eg Admin, SuperAdmin), to open a model to assign the Guarantor / Attendand (+ Committee)
+    let campaignMember = currentCampaignMember ? currentCampaignMember.id : null;
+    let campaignUser = currentCampaignMember ? currentCampaignMember.user : null;
+    let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : null;
+    const isElectorInGuarantees = campaignGuarantees.some(item => item.elector === cell.row.original.id);
+    // const isElectorInAttendees = campaignAttendees.some(item => item.id === cellProps.row.original.id);
+
+    const renderElectorGuaranteeButton = () => {
+        if (isElectorInGuarantees) {
+            return <span className="text-success">تمت الإضافة</span>;
+        }
+
+        return (
+            <button
+                type="button"
+                className="btn btn-success btn-sm"
+                id="add-btn"
+                onClick={(e) => {
+                    e.preventDefault();
+                    const newCampaignGuarantee = {
+                        schema: schema,
+                        member: campaignMember,
+                        guaranteeGroup: selectedGuaranteeGroup,
+                        elector: cell.row.original.id,
+                        status: 1,
+                    };
+                    dispatch(addCampaignGuarantee(newCampaignGuarantee));
+                }}
+            >
+                إضف للمضامين
+            </button>
+        );
+    };
 
     return (
         <React.Fragment>
@@ -378,6 +449,14 @@ const Actions = (cellProps) => {
                         <i className="ri-delete-bin-5-fill align-bottom" />
                     </button>
                 )}
+
+                {/* AddGuarantee */}
+                {options.includes("addGuarantee") && (
+                    <div className="flex-shrink-0">
+                        {renderElectorGuaranteeButton()}
+                    </div>
+                )}
+
             </div>
         </React.Fragment >
     );
@@ -387,6 +466,7 @@ export {
     Id,
     CheckboxHeader,
     CheckboxCell,
+    Title,
     NameAvatar,
     Name,
     SimpleName,

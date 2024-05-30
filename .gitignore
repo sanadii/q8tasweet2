@@ -35,3 +35,4 @@ backend/core/management/data/national_assembly_5_2024.xlsx
 backend/core/management/data/nationalAssembly5-2024 copy.xlsx
 backend/core/management/data/national_assembly_5_2024.xlsx
 backend/core/management/data/~$na_5_2024_electors.xlsx
+.env

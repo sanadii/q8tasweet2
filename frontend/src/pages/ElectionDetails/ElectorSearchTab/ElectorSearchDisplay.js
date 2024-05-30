@@ -7,7 +7,7 @@ import { campaignSelector, electorSelector } from 'selectors';
 
 // Component imports
 import ElectorsModal from "./ElectorsModal";
-import { Id, Name, Area, Committee, Actions } from "./ElectorsCol";
+import { Title, Actions } from "shared/components";
 
 // Form
 import * as Yup from "yup";
@@ -66,23 +66,54 @@ const ElectorSearchDisplay = ({
             {
                 Header: "الاسم",
                 accessor: row => ({ fullName: row.fullName, gender: row.gender }),
-                Cell: (cellProps) => <Name {...cellProps} />
+                Cell: (cellProps) =>
+                    <Title
+                        title={cellProps.row.original.fullName}
+                        subTitle={cellProps.row.original.id}
+                        gender={cellProps.row.original.gender}
+                    />
             },
             {
                 Header: "المنطقة",
-                Cell: (cellProps) => <Area {...cellProps} />
+                Cell: (cellProps) => {
+                    const address = {
+                        block: cellProps.row.original.block,
+                        street: cellProps.row.original.street,
+                        lane: cellProps.row.original.lane,
+                        house: cellProps.row.original.house,
+                    };
+
+                    return (
+                        <Title
+                            title={cellProps.row.original.areaName}
+                            subTitle={`ق${address.block}, ش${address.street}, ج${address.lane}, م${address.house}`}
+                        />
+                    );
+                }
             },
+
             {
                 Header: "اللجنة",
-                Cell: (cellProps) => <Committee {...cellProps} />
+                Cell: (cellProps) =>
+                    <Title
+                        title={cellProps.row.original.committeeSiteName}
+                        subTitle={`لجنة ${cellProps.row.original.committee} - ${cellProps.row.original.committeeType}`}
+                    />
             },
             {
                 Header: "اجراءات",
                 Cell: (cellProps) => <Actions
-                    cellProps={cellProps}
+                    options={["view", "addGuarantee"]}
+                    cell={cellProps}
+                    schema={electionSchema}
+                    handleItemClick={handleElectorClick}
+                    // handleItemDeleteClick={handleItemDeleteClick}
                     selectedGuaranteeGroup={selectedGuaranteeGroup}
-                    electionSchema={electionSchema}
-                    handleElectorClick={handleElectorClick}
+
+                    // cellProps={cellProps}
+                    // selectedGuaranteeGroup={selectedGuaranteeGroup}
+                    // electionSchema={electionSchema}
+                    // handleElectorClick={handleElectorClick}
                     currentCampaignMember={currentCampaignMember}
                     campaignGuarantees={campaignGuarantees}
                     campaignAttendees={campaignAttendees}
@@ -91,6 +122,7 @@ const ElectorSearchDisplay = ({
             },
         ],
         [
+            selectedGuaranteeGroup,
             handleElectorClick,
             campaignGuarantees,
             campaignAttendees,
