@@ -9,11 +9,13 @@ import MembersViewModal from "./MembersViewModal";
 // Reactstrap (UI) imports 
 import { ModalBody, Modal, ModalHeader, ModalFooter, Button } from "reactstrap";
 
-const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
+
+const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) => {
 
   // State Constants
   const [onModalSubmit, setOnModalSubmit] = useState(null);
-  const { modalTitle, ModalContent, modalButtonText } = getModalDetails(modalMode);
+  const { ModalTitle, ModalContent, ModalButtonText } = getModalDetails(modalMode);
+
 
   return (
     <Modal
@@ -24,7 +26,7 @@ const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
       size="xs"
     >
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        {modalTitle}
+        {campaignMember?.name}
       </ModalHeader>
 
       <ModalBody className="p-4">
@@ -32,7 +34,6 @@ const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
           campaignMember={campaignMember}
           setOnModalSubmit={setOnModalSubmit}
           toggle={toggle}
-          modalMode={modalMode}
         />
       </ModalBody>
 
@@ -40,14 +41,16 @@ const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
         <div className="hstack gap-2 justify-content-end">
           <Button
             color="light"
-            onClick={() => { toggle(); }}
+            onClick={() => {
+              setModal(false);
+            }}
             className="btn-light"
           >
             إغلاق
           </Button>
 
-          {/* if modalButtonText and modalButtonText is not empty */}
-          {modalButtonText && (
+          {/* if ModalButtonText and ModalButtonText is not empty */}
+          {ModalButtonText && (
             <Button
               color="success"
               id="add-btn"
@@ -56,7 +59,7 @@ const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
                 toggle(false);
               }}
             >
-              {modalButtonText}
+              {ModalButtonText}
             </Button>
           )}
         </div>
@@ -67,39 +70,39 @@ const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
 
 const getModalDetails = (modalMode) => {
   const modalName = "فريق الحملة";
-  let modalTitle, ModalContent, modalButtonText;
+  let ModalTitle, ModalContent, ModalButtonText;
 
   switch (modalMode) {
-    case "call":
-      modalTitle = modalName + "اتصال";
+    case "CallModal":
+      ModalTitle = modalName + "اتصال";
       ModalContent = CallModal;
-      modalButtonText = "اتصل";
+      ModalButtonText = "اتصل";
       break;
-    case "message":
-      modalTitle = modalName + "رسالة";
+    case "TextModal":
+      ModalTitle = modalName + "رسالة";
       ModalContent = TextModal;
-      modalButtonText = "ارسل";
+      ModalButtonText = "ارسل";
       break;
-    case "update":
-      modalTitle = "تعديل " + modalName;
+    case "UpdateModal":
+      ModalTitle = "تعديل " + modalName;
       ModalContent = MembersUpdateModal;
-      modalButtonText = "تعديل";
+      ModalButtonText = "تعديل";
       break;
-    case "add":
-      modalTitle = "إضافة " + modalName;
+    case "AddModal":
+      ModalTitle = "إضافة " + modalName;
       ModalContent = MembersAddModal;
       break;
-    case "view":
-      modalTitle = "مشاهدة " + modalName;
+    case "ViewModal":
+      ModalTitle = "مشاهدة " + modalName;
       ModalContent = MembersViewModal;
       break;
     default:
-      modalTitle = "Default Modal";
+      ModalTitle = "Default Modal"; // A default title for other cases
       ModalContent = DefaultModalContent;
-      modalButtonText = "Close";
+      ModalButtonText = "Close"; // A default button text
   }
 
-  return { modalTitle, ModalContent, modalButtonText };
+  return { ModalTitle, ModalContent, ModalButtonText };
 };
 
 

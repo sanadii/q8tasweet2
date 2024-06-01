@@ -231,6 +231,7 @@ def get_schema_details_and_content(context, slug, response_data):
         except (OperationalError, ProgrammingError) as e:
             response_data["schemaDetailsError"] = str(e)
 
+        # Fetch Election Committees
         try:
             election_committee_sites = CommitteeSite.objects.prefetch_related(
                 "committee_site_committees"

@@ -53,7 +53,7 @@ const Name = (cellProps) => (
 const CandidateCount = (cell) => { <b>{cell.value}</b> };
 
 
-const DueDate = (cellProps) => (handleValidDate(cellProps.row.original.dueDate));
+const DateTime = (cellProps) => (handleValidDate(cellProps.row.original.dueDate));
 
 const Category = ({ category }) => {
   const { categories } = useSelector(categorySelector);
@@ -169,7 +169,7 @@ export {
   CheckboxCell,
   Name,
   CandidateCount,
-  DueDate,
+  DateTime,
   Status,
   Priority,
   Category,

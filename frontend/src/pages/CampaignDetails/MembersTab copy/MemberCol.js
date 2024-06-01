@@ -1,5 +1,5 @@
 import React from "react";
-import { usePermission } from "shared/hooks";
+import { usePermission, useDelete } from "shared/hooks";
 
 const Id = (cellProps) => {
     return (
@@ -9,67 +9,27 @@ const Id = (cellProps) => {
     );
 };
 
-const CheckboxHeader = ({ checkedAll }) => (
-    <input
-        type="checkbox"
-        id="checkBoxAll"
-        className="form-check-input"
-        onClick={checkedAll}
-    />
-);
-
-
-const CheckboxCell = ({ row, deleteCheckbox }) => (
-    <input
-        type="checkbox"
-        className="checkboxSelector form-check-input"
-        value={row.original.id}
-        onChange={deleteCheckbox}
-    />
-);
-
-
-const Name = (props) => {
-    const { cellProps, handleSelectCampaignMember } = props;
-
-    const campaignMember = cellProps.row.original;
-
-    return (
-        <div className="d-flex align-items-center">
-            <div className="flex-shrink-0">
-            </div>
-            <div
-                onClick={() => {
-                    handleSelectCampaignMember(campaignMember);
-                }}
-                className="flex-grow-1 ms-2 name"
-            >
-                {campaignMember.name}
-                {campaignMember.status}
-            </div>
-        </div>
-    );
-};
-
-const Mobile = (cellProps) => {
+const Name = (cellProps) => {
     return (
         <div className="d-flex align-items-center">
             <div className="flex-shrink-0">
             </div>
             <div className="flex-grow-1 ms-2 name">
-                {cellProps.row.original.mobile}
+                {cellProps.row.original.name}{" "}
+                {cellProps.row.original.status}
             </div>
         </div>
 
     );
 };
+
 const Role = ({ cellProps, campaignRoles }) => {
-    const roleName = cellProps.row.original.roleName;
-    // const role = campaignRoles.find((option) => option.id === roleId);
+    const roleId = cellProps.row.original.role;
+    const role = campaignRoles.find((option) => option.id === roleId);
 
     return (
         <p className="text-success">
-            <strong>{roleName}</strong>
+            <strong>{role ? role.name : "غير معرف"}</strong>
         </p>
     );
 }
@@ -189,18 +149,6 @@ const Actions = (props) => {
         <div className="list-inline hstack gap-2 mb-0">
             <button
                 to="#"
-                title="مراسلة المتعهد"
-                className="btn btn-sm btn-soft-success edit-list"
-                onClick={() => {
-                    const campaignMember = cellProps.row.original;
-                    handleCampaignMemberClick(campaignMember, "MessageModal");
-                }}
-            >
-                <i class="ri-question-answer-line align-bottom"></i>
-            </button>
-
-            <button
-                to="#"
                 className="btn btn-sm btn-soft-warning edit-list"
                 onClick={() => {
                     const campaignMember = cellProps.row.original;
@@ -229,8 +177,6 @@ const Actions = (props) => {
                     </button>
                 )
             }
-
-
             {
                 (canChangeCampaignModerator
                     || (canChangeCampaignCandidate
@@ -258,10 +204,7 @@ const Actions = (props) => {
 
 export {
     Id,
-    CheckboxHeader,
-    CheckboxCell,
     Name,
-    Mobile,
     Role,
     Team,
     Guarantees,

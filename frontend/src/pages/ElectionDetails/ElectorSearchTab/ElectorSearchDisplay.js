@@ -106,7 +106,7 @@ const ElectorSearchDisplay = ({
                     options={["view", "addGuarantee"]}
                     cell={cellProps}
                     schema={electionSchema}
-                    handleItemClick={handleElectorClick}
+                    handleItemClicks={handleElectorClick}
                     // handleItemDeleteClick={handleItemDeleteClick}
                     selectedGuaranteeGroup={selectedGuaranteeGroup}
 

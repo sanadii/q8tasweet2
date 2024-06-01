@@ -54,9 +54,14 @@ const useDelete = (deleteAction) => {
   // 
   // on Delete multiple action
   // 
-  const handleDeleteMultiple = () => {
+  const handleDeleteMultiple = (schema) => {
     selectedCheckBoxDelete.forEach((element) => {
-      dispatch(deleteAction(element.value));
+      console.log("selectedCheckBoxDelete: ", selectedCheckBoxDelete)
+      const itemToDelete = {
+        id: element.value,
+        schema: schema || null
+      }
+      dispatch(deleteAction(itemToDelete));
       setTimeout(() => {
         toast.clearWaitingQueue();
       }, 3000);

@@ -8,7 +8,7 @@ import { getCampaigns, deleteCampaign } from "store/actions";
 
 // Constants & Component imports
 import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "shared/components";
-import { CheckboxHeader, CheckboxCell, Id, Name, NameAvatar, SimpleName, DueDate, Badge, CreateBy, Actions } from "shared/components"
+import { CheckboxHeader, CheckboxCell, Id, NameAvatar, SimpleName, DateTime, Badge, CreateBy, Actions } from "shared/components"
 
 import { useDelete, useFilter } from "shared/hooks"
 import CampaignModal from "./CampaignModal";
@@ -106,8 +106,10 @@ const AllCampaigns = () => {
         accessor: "name",
         Cell: (cellProps) =>
           <NameAvatar
-            {...cellProps}
-            urlDir="campaigns"
+            name={cellProps.row.original.name}
+            image={cellProps.row.original.image}
+            slug={cellProps.row.original.slug}
+            dirName="campaigns"
           />
       },
       {
@@ -126,7 +128,7 @@ const AllCampaigns = () => {
         accessor: "election.dueDate",
         filterable: false,
         Cell: (cellProps) => {
-          return <DueDate date={cellProps.row.original.election.dueDate} />;
+          return <DateTime date={cellProps.row.original.election.dueDate} />;
         },
       },
       {
@@ -169,7 +171,7 @@ const AllCampaigns = () => {
           <Actions
             options={["view", "update", "delete"]}
             cell={cellProps}
-            handleItemClick={handleCampaignClick}
+            handleItemClicks={handleCampaignClick}
             handleItemDeleteClick={handleItemDeleteClick}
           />
       },

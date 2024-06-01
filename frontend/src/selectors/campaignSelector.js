@@ -15,6 +15,9 @@ export const campaignSelector = createSelector(
     campaignType: campaignsState.campaignDetails.campaignType,
 
     electionDetails: campaignsState.electionDetails,
+    campaignElectionCommitteeSites: campaignsState.campaignElectionCommitteeSites,
+    campaignElectionCandidates: campaignsState.campaignElectionCandidates,
+
     electionSlug: campaignsState.electionDetails?.slug,
     campaignDetails: campaignsState.campaignDetails,
     campaignMembers: campaignsState.campaignMembers,
@@ -25,8 +28,7 @@ export const campaignSelector = createSelector(
     campaignNotifications: campaignsState.campaignNotifications,
 
     campaignSorting: campaignsState.campaignSorting,
-    campaignElectionCommittees: campaignsState.campaignElectionCommittees,
-    campaignElectionCandidates: campaignsState.campaignElectionCandidates,
+    electionCommitteeSites: campaignsState.electionCommitteeSites,
 
     isCampaignSuccess: campaignsState.isCampaignSuccess,
     campaignError: campaignsState.error,

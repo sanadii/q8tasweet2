@@ -3,22 +3,11 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 
 // Compontents, Constants, Hooks
-import { Loader, DeleteModal, TableContainer, TableFilters } from "shared/components";
+import MembersModal from "./MembersModal";
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
 import { usePermission, useFilter, useDelete } from "shared/hooks";
-// import { Id, CheckboxHeader, CheckboxCell, Name, Mobile, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
-import {
-  CheckboxHeader, CheckboxCell, Id, Name,
-  SimpleName, DateTime, Badge, CreateBy, Actions,
-  Phone,
-  GuaranteeGroups,
-  Guarantor,
-  Attended,
-  AttendedPercentage,
+import { Id, Name, Role, Team, Guarantees, Attendees, Committee, Sorted, Supervisor, Actions } from "./MemberCol";
 
-  // Campaign Teams
-  Role, Team, Guarantees, Attendees, Sorted, Committee, Supervisor,
-
-} from "shared/components"
 // Store & Selectors
 import { deleteCampaignMember } from "store/actions";
 import { campaignSelector } from 'selectors';
@@ -28,12 +17,7 @@ import { Card, CardBody } from "reactstrap";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MembersList = ({
-  toggle,
-  setModalMode,
-  setCampaignMember,
-  handleSelectCampaignMember,
-}) => {
+const MembersTab = () => {
 
   // State Management
   const {
@@ -47,6 +31,8 @@ const MembersList = ({
     error
   } = useSelector(campaignSelector);
 
+  console.log("campaignMembers: ", campaignMembers)
+
   // Permission Hook
   const {
     canChangeConfig,
@@ -55,27 +41,27 @@ const MembersList = ({
   } = usePermission();
 
   // Delete Hook
-  const {
-    // Delete Modal
-    handleDeleteItem,
-    deleteModal,
-    setDeleteModal,
-    deleteModalMulti,
-    handleDeleteMultiple,
-
-    // Table Header
-    isMultiDeleteButton,
-    setDeleteModalMulti,
-
-    // Column Actions
-    handleItemDeleteClick,
-    handleCheckAllClick,
-    handleCheckCellClick,
-  } = useDelete(deleteCampaignMember);
+  const { handleDeleteItem, onDeleteCheckBoxClick, setDeleteModal, deleteModal } = useDelete(deleteCampaignMember);
 
   // Finding Active Role to Show Different Table Columns
   const [activeTab, setActiveTab] = useState("all"); // Initialize with "campaignManagers"
   const activeRole = activeTab;
+  console.log("activte Tab: ", activeTab)
+  console.log("activte Tab: ", activeRole)
+  // Model & Toggle Function
+  const [campaignMember, setCampaignMember] = useState(null);
+  const [modal, setModal] = useState(false);
+  const [modalMode, setModalMode] = useState(null);
+
+
+  const toggle = useCallback(() => {
+    if (modal) {
+      setModal(false);
+      // setCampaignMember(null);
+    } else {
+      setModal(true);
+    }
+  }, [modal]);
 
   const handleCampaignMemberClick = useCallback(
     (arg, modalMode) => {
@@ -97,74 +83,48 @@ const MembersList = ({
       setModalMode(modalMode);
       toggle();
     },
-    [toggle, setCampaignMember, setModalMode]
+    [toggle]
   );
 
+  const handleCampaignMemberClicks = () => {
+    setCampaignMember("");
+    setModalMode("AddModal");
+    toggle();
+  };
 
-  // 
+
   // Table Columns
-  // 
   const columnsDefinition = useMemo(() => [
     {
-      Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
+      Header: "م.",
       accessor: "id",
-      Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
+      Cell: (cellProps) => <Id {...cellProps} />
     },
     {
       Header: "العضو",
       accessor: "fullName",
-      Cell: (cellProps) => (
-        <Name
-          name={cellProps.row.original.name}
-          handleSelectCampaignMember={handleSelectCampaignMember}
-        />
-      )
-    },
-    {
-      Header: "الهاتف",
-      accessor: "mobile",
-      Cell: (cellProps) => <Phone {...cellProps} />
+      Cell: (cellProps) => <Name {...cellProps} />
     },
     {
       Header: "الرتبة",
       accessor: "role",
-      // TabsToShow: ["campaignManagers", "all"],
+      TabsToShow: ["campaignManagers"],
       Cell: (cellProps) => <Role cellProps={cellProps} campaignRoles={campaignRoles} />
     },
     {
       Header: "الفريق",
       TabsToShow: ["campaignSupervisor"],
-      Cell: (cellProps) =>
-        <Team cellProps={cellProps} campaignMembers={campaignMembers} />
+      Cell: (cellProps) => <Team cellProps={cellProps} campaignMembers={campaignMembers} />
     },
     {
       Header: "المضامين",
-      // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
+      TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
       Cell: (cellProps) => (
         <Guarantees
           cellProps={cellProps}
           campaignGuarantees={campaignGuarantees}
           campaignRoles={campaignRoles}
         />
-      )
-    },
-    {
-      Header: "المصوتين",
-      // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
-      Cell: (cellProps) => (
-        <Guarantees
-          memberId={cellProps.row.original.id}
-          memberRole={cellProps.row.original.role}
-          campaignGuarantees={campaignGuarantees}
-          campaignRoles={campaignRoles}
-        />
-      )
-    },
-    {
-      Header: "نسبة التصويت",
-      // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
-      Cell: (cellProps) => (
-        <span>60 %</span>
       )
     },
     {
@@ -192,20 +152,16 @@ const MembersList = ({
       Header: "إجراءات",
       Cell: (cellProps) => (
         <Actions
-          options={["view", "update", "delete"]}
-          cell={cellProps}
-          handleItemClicks={handleCampaignMemberClick}
-          handleItemDeleteClick={handleItemDeleteClick}
+          cellProps={cellProps}
+          handleCampaignMemberClick={handleCampaignMemberClick}
+          onDeleteCheckBoxClick={onDeleteCheckBoxClick}
           canChangeConfig={canChangeConfig}
           campaignMembers={campaignMembers}
           campaignRoles={campaignRoles}
         />
       )
     }
-  ], [handleCheckCellClick, handleItemDeleteClick, handleCheckAllClick,
-    campaignAttendees, campaignElectionCommittees, campaignGuarantees, campaignMembers, campaignRoles, canChangeCampaignSupervisor, canChangeConfig, handleCampaignMemberClick, handleSelectCampaignMember
-
-  ]);
+  ], [handleCampaignMemberClick, onDeleteCheckBoxClick, campaignAttendees, campaignGuarantees, campaignElectionCommittees, canChangeConfig, canChangeCampaignSupervisor, campaignMembers, campaignRoles]);
 
   const columns = useMemo(() => {
     return columnsDefinition.filter(column => {
@@ -215,30 +171,43 @@ const MembersList = ({
     });
   }, [activeRole, columnsDefinition]);
 
-  // 
   // Table Filters
-  // 
   const { filteredData: campaignMemberList, filters, setFilters } = useFilter(campaignMembers);
+
+  // if (campaignMemberList.length === 0) {
+  //   return "waiting"
+  // }
 
   return (
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
-        onDeleteClick={() => handleDeleteItem()}
+        onDeleteClick={handleDeleteItem}
         onCloseClick={() => setDeleteModal(false)}
       />
-      <DeleteModal
-        show={deleteModalMulti}
-        onDeleteClick={() => {
-          handleDeleteMultiple();
-          setDeleteModalMulti(false);
-        }}
-        onCloseClick={() => setDeleteModalMulti(false)}
+
+      <MembersModal
+        modal={modal}
+        setModal={setModal}
+        modalMode={modalMode}
+        toggle={toggle}
+        campaignMember={campaignMember}
       />
 
       <Card id="memberList">
         <CardBody>
           <div>
+            <TableContainerHeader
+              // Title
+              ContainerHeaderTitle="فريق العمل"
+
+              // Add Button
+              isAddButton={true}
+              AddButtonText="اضافة عضو"
+              handleAddButtonClick={handleCampaignMemberClicks}
+              toggle={toggle}
+            />
+
             <TableFilters
               // Filters
               isMemberRoleFilter={true}
@@ -274,4 +243,4 @@ const MembersList = ({
   );
 };
 
-export default MembersList;
+export default MembersTab;

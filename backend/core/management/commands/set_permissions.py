@@ -88,25 +88,25 @@ PERMISSIONS = {
             'superAdmin', 'admin', 'campaignModerator',
             'partyAdmin', 'campaignCandidate', 'campaignAdmin',
             'campaignFieldAdmin', 'campaignFieldAgent', 'campaignFieldDelegate',
-            'campaignDigitalAdmin', 'campaignDigitalAgent', 'campaignDigitalDelegate'
+            'campaignDigitalAdmin', 'campaignDigitalAgent', 'campaignDigitalDelegate', 'campaignDelegate',
         ],
         'canAddCampaignGuarantee': [
             'superAdmin', 'admin', 'campaignModerator', 
             'partyAdmin', 'campaignCandidate', 'campaignAdmin',
             'campaignFieldAdmin', 'campaignFieldAgent', 'campaignFieldDelegate',
-            'campaignDigitalAdmin', 'campaignDigitalAgent', 'campaignDigitalDelegate'
+            'campaignDigitalAdmin', 'campaignDigitalAgent', 'campaignDigitalDelegate', 'campaignDelegate',
         ],
         'canChangeCampaignGuarantee': [
             'superAdmin', 'admin', 'campaignModerator',
             'partyAdmin', 'campaignCandidate', 'campaignAdmin',
             'campaignFieldAdmin', 'campaignFieldAgent', 'campaignFieldDelegate',
-            'campaignDigitalAdmin', 'campaignDigitalAgent', 'campaignDigitalDelegate'
+            'campaignDigitalAdmin', 'campaignDigitalAgent', 'campaignDigitalDelegate', 'campaignDelegate',
         ],
         'canDeleteCampaignGuarantee': [
             'superAdmin', 'admin', 'campaignModerator',
             'partyAdmin', 'campaignCandidate', 'campaignAdmin',
             'campaignFieldAdmin', 'campaignFieldAgent', 'campaignFieldDelegate',
-            'campaignDigitalAdmin', 'campaignDigitalAgent', 'campaignDigitalDelegate'
+            'campaignDigitalAdmin', 'campaignDigitalAgent', 'campaignDigitalDelegate', 'campaignDelegate',
         ],
     },
     #  'CampaignGuaranteeGroup': {

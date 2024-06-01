@@ -7,7 +7,7 @@ import { campaignSelector } from 'selectors';
 import { Loader, DeleteModal, TableContainer, TableFilters } from "shared/components";
 import {
   CheckboxHeader, CheckboxCell, Id, Name,
-  SimpleName, DueDate, Badge, CreateBy, Actions,
+  SimpleName, DateTime, Badge, CreateBy, Actions,
   Phone,
   GuaranteeGroups,
   Guarantor,
@@ -142,7 +142,7 @@ const GuaranteeList = ({
             options={["view", "update", "delete"]}
             cell={cellProps}
             schema={electionSlug}
-            handleItemClick={handleCampaignGuaranteeClick}
+            handleItemClicks={handleCampaignGuaranteeClick}
             handleItemDeleteClick={handleItemDeleteClick}
           />
       },

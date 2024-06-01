@@ -1,17 +1,27 @@
 import React from "react";
+import { api } from "config";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { categorySelector } from 'selectors';
-import { Link } from "react-router-dom";
 
 // Component, Constants & Hooks
-import { StatusOptions, getStatusBadge, PriorityOptions, GenderOptions } from "shared/constants/";
-
+import { getStatusBadge, GenderOptions } from "shared/constants/";
 import { getOptionOptions, getOptionBadge } from "shared/utils"
-import { AvatarList } from "shared/components";
 import { handleValidDate } from "shared/utils";
-
 import { addCampaignGuarantee, addCampaignAttendee } from "store/actions";
 import { usePermission } from 'shared/hooks';
+
+
+const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL.slice(0, -1) : api.MEDIA_URL;
+const defaultImagePath = '/media/candidates/default.jpg';
+
+const defaultCandidatePath = '/media/candidates/default.jpg';
+const defaultElectionPath = '/media/candidates/default.jpg';
+const defaultUserPath = '/media/candidates/default.jpg';
+const defaultCampaignBgPath = '/media/candidates/default.jpg';
+
+
+
 
 const CheckboxHeader = ({ handleCheckAllClick }) => (
     <input
@@ -45,15 +55,27 @@ const Id = (cellProps) => {
     );
 };
 
-
 const NameAvatar = (cellProps) => {
-    const { cell, urlDir } = cellProps
-    return (
-        < AvatarList
-            {...cellProps}
-            dirName={urlDir}
-        />
+    const { id, name, gender, image, slug, dirName, handleClickedItem } = cellProps
+    const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
+    // For other dirName values, render the link
+    return (
+        <Link to={`/dashboard/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
+            {image &&
+                <div className="avatar-sm">
+                    <img
+                        src={imageUrl}
+                        alt={name}
+                        className="img-thumbnail rounded-circle"
+                    />
+                </div>
+            }
+
+            <strong className="ps-2">
+                {name}
+            </strong>
+        </Link>
     );
 };
 
@@ -103,16 +125,17 @@ const Title = (cellProps) => {
             {getGenderIcon(gender)}
             <b>{title}</b>
             <br />
-            {subTitle}
+            {subTitle && subTitle}
         </div>
     );
 };
+
 const CandidateCount = (cellProps) => {
     <b>{cellProps.value}</b>
 };
 
 
-const DueDate = ({ date }) => (
+const DateTime = ({ date }) => (
     handleValidDate(date)
 );
 
@@ -356,7 +379,7 @@ const Actions = (cellProps) => {
     const dispatch = useDispatch();
 
     const {
-        cell, handleItemClick, handleItemDeleteClick, options, schema,
+        cell, handleItemClicks, handleItemDeleteClick, options, schema,
 
         // guarantee
         selectedGuaranteeGroup,
@@ -422,7 +445,7 @@ const Actions = (cellProps) => {
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-warning edit-list"
-                        onClick={() => { handleItemClick(itemData, "view"); }}
+                        onClick={() => { handleItemClicks(itemData, "view"); }}
                     >
                         <i className="ri-eye-fill align-bottom" />
                     </button>
@@ -433,7 +456,7 @@ const Actions = (cellProps) => {
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-info edit-list"
-                        onClick={() => { handleItemClick(itemData, "update"); }}
+                        onClick={() => { handleItemClicks(itemData, "update"); }}
                     >
                         <i className="ri-pencil-fill align-bottom" />
                     </button>
@@ -471,7 +494,7 @@ export {
     Name,
     SimpleName,
     CandidateCount,
-    DueDate,
+    DateTime,
     Badge,
     Status,
     Priority,

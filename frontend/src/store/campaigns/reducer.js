@@ -69,7 +69,7 @@ const IntialState = {
   campaignNotifications: [],
 
   campaignElectionCandidates: [],
-  campaignElectionCommittees: [],
+  electionCommitteeSites: [],
   campaignRoles: [],
 };
 
@@ -88,7 +88,6 @@ const Campaigns = (state = IntialState, action) => {
           return {
             ...state,
             currentCampaignMember: action.payload.data.currentCampaignMember,
-            electionDetails: action.payload.data.electionDetails,
             campaignDetails: action.payload.data.campaignDetails,
             campaignRoles: action.payload.data.campaignRoles,
             campaignMembers: action.payload.data.campaignMembers,
@@ -96,8 +95,11 @@ const Campaigns = (state = IntialState, action) => {
             campaignGuaranteeGroups: action.payload.data.campaignGuaranteeGroups,
             campaignAttendees: action.payload.data.campaignAttendees,
             campaignNotifications: action.payload.data.campaignNotifications,
+
+            electionDetails: action.payload.data.electionDetails,
             campaignElectionCandidates: action.payload.data.campaignElectionCandidates,
-            campaignElectionCommittees: action.payload.data.campaignElectionCommittees,
+            electionCommitteeSites: action.payload.data.electionCommitteeSites,
+
             isCampaignCreated: false,
             isCampaignSuccess: true,
           };

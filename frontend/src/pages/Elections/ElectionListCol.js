@@ -40,21 +40,25 @@ const Id = (cellProps) => {
   );
 };
 
-const Name = (cellProps) => (
-  <AvatarList
-    name={cellProps.row.original.name}
-    image={cellProps.row.original.image}
-    slug={cellProps.row.original.slug}
-    dirName="elections"
-  />
-);
+const Name = (cellProps) => {
+  const { name, image, slug, dirName } = cellProps
+  return (
+    < AvatarList
+      name={name}
+      image={image}
+      slug={slug}
+      dirName={dirName}
+    />
+  );
+};
+
 
 const CandidateCount = (cellProps) => {
   <b>{cellProps.value}</b>
 };
 
 
-const DueDate = (cellProps) => (
+const DateTime = (cellProps) => (
   handleValidDate(cellProps.row.original.dueDate)
 );
 
@@ -71,44 +75,6 @@ const Category = ({ category }) => {
   );
 };
 
-const Status = (cellProps) => {
-  return getOptionBadge("status", cellProps.row.original.task.status)
-};
-
-
-const Priority = (cellProps) => {
-  return getOptionBadge("priority", cellProps.row.original.task.priority)
-};
-
-
-const Moderators = (cell) => {
-  const moderators = Array.isArray(cell.value) ? cell.value : [];
-
-  return (
-    <React.Fragment>
-      <div className="avatar-group">
-        {moderators.map((moderator, index) => (
-          <Link key={index} to="#" className="avatar-group-item">
-            {moderator ? (
-              <img
-                src={process.env.REACT_APP_API_URL + moderator.img}
-                alt={moderator.name}
-                title={moderator.name} // Added title attribute for tooltip on hover
-                className="rounded-circle avatar-xxs"
-              />
-            ) : (
-              "No Moderator"
-            )}
-          </Link>
-        ))}
-      </div>
-    </React.Fragment>
-  );
-};
-
-const CreateBy = (cell) => {
-  return <React.Fragment>{cell.value}</React.Fragment>;
-};
 
 const Actions = (props) => {
   const { cell, handleElectionClick, handleItemDeleteClick } = props;
@@ -148,7 +114,7 @@ export {
   CheckboxCell,
   Name,
   CandidateCount,
-  DueDate,
+  DateTime,
   Status,
   Priority,
   Category,

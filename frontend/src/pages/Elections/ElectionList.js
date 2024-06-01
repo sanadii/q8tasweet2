@@ -8,7 +8,7 @@ import { getElections, deleteElection, getCategories } from "store/actions";
 
 // Components & Columns
 import ElectionModal from "./ElectionModal";
-import { Id, CheckboxHeader, CheckboxCell, Name, DueDate, Status, Priority, Category, CreateBy, Actions } from "./ElectionListCol";
+import { Id, CheckboxHeader, CheckboxCell, NameAvatar, DateTime, Badge, Category, CreateBy, Actions } from "shared/components";
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
 import { useDelete, useFilter } from "shared/hooks"
 import { defaultDate } from "shared/utils"
@@ -102,12 +102,21 @@ const ElectionList = () => {
       {
         Header: "الإنتخابات",
         accessor: "name",
-        Cell: (cellProps) => <Name {...cellProps} />
+        Cell: (cellProps) =>
+          <NameAvatar
+            name={cellProps.row.original.name}
+            image={cellProps.row.original.image}
+            slug={cellProps.row.original.slug}
+            dirName="elections"
+          />
       },
       {
         Header: "الموعد",
         accessor: "dueDate",
-        Cell: (cellProps) => <DueDate {...cellProps} />
+        Cell: (cellProps) =>
+          <DateTime
+            date={cellProps.row.original.dueDate}
+          />
       },
       {
         Header: "المجموعة",
@@ -120,12 +129,20 @@ const ElectionList = () => {
       },
       {
         Header: "الحالة",
-        Cell: (cellProps) => <Status {...cellProps} />
+        Cell: (cellProps) =>
+          <Badge
+            option="status"
+            value={cellProps.row.original.task.status}
+          />
       },
       {
         Header: "الأولية",
         accessor: "priority",
-        Cell: (cellProps) => <Priority {...cellProps} />
+        Cell: (cellProps) =>
+          <Badge
+            option="priority"
+            value={cellProps.row.original.task.priority}
+          />
       },
       {
         Header: "بواسطة",
@@ -137,8 +154,9 @@ const ElectionList = () => {
         accessor: "election",
         Cell: (cellProps) =>
           <Actions
-            {...cellProps}
-            handleElectionClick={handleElectionClick}
+            options={["view", "update", "delete"]}
+            cell={cellProps}
+            handleItemClicks={handleElectionClick}
             handleItemDeleteClick={handleItemDeleteClick}
           />
       },

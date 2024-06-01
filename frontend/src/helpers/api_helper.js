@@ -122,8 +122,8 @@ class APIClient {
     return axios.put(url, data);
   };
 
-  delete = (url, data, config) => {
-    return axios.delete(url, data, { ...config });
+  delete = (url, config) => {
+    return axios.delete(url, { ...config });
   };
 
   imageUpload = (url, data) => {

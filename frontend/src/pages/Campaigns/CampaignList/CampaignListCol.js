@@ -61,7 +61,7 @@ const CandidateCount = (cell) => {
   );
 };
 
-const DueDate = (cell) => {
+const DateTime = (cell) => {
   return <React.Fragment>{handleValidDate(cell.value)}</React.Fragment>;
 };
 
@@ -226,7 +226,7 @@ export {
   Id,
   Name,
   CandidateCount,
-  DueDate,
+  DateTime,
   Status,
   Priority,
   Category,

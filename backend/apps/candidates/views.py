@@ -1,14 +1,15 @@
 from django.http import JsonResponse
 from django.http.response import JsonResponse
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 
 from rest_framework import status
-from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # Tasweet Apps
+
 from apps.candidates.models import Candidate, Party
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
 
@@ -24,7 +25,6 @@ from apps.elections.candidates.serializers import (
 )
 from utils.views_helper import CustomPagination
 
-from rest_framework.parsers import MultiPartParser, FormParser
 
 
 def index(request):

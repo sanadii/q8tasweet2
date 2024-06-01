@@ -206,7 +206,6 @@ const GuaranteesTab = () => {
         <Col lg={12}>
           <Card id="memberList">
             <CardHeader>
-
               <TableContainerHeader
                 // Title
                 ContainerHeaderTitle={activeTab.title}

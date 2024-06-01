@@ -16,7 +16,7 @@ const MembersViewModal = ({ campaignMember }) => {
   } = useSelector(campaignSelector);
 
   const campaignSupervisors = useSupervisorMembers(campaignRoles, campaignMembers);
-  // const electionCommittees = useCampaignRoles(campaignElectionCommittees, campaignMembers);
+  const electionCommittees = useCampaignRoles(campaignElectionCommittees, campaignMembers);
 
   const displayField = (label, value) => {
     if (!value) return null;
@@ -43,7 +43,7 @@ const MembersViewModal = ({ campaignMember }) => {
         {displayField("الرتبة", campaignMember?.role)}
         {displayField("تليفون", campaignMember?.phone)}
         {displayField("الوكيل", campaignSupervisors.find(supervisor => supervisor.id === campaignMember.supervisor)?.name)}
-        {/* {displayField("اللجنة", electionCommittees.find(committee => committee.id === campaignMember.committee)?.name)} */}
+        {displayField("اللجنة", electionCommittees.find(committee => committee.id === campaignMember.committee)?.name)}
         {displayField("ملاحظات", campaignMember?.notes)}
       </ModalBody>
     </div>

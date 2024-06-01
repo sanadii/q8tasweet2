@@ -3,13 +3,13 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
-import { getCandidates, deleteCandidate, getModeratorUsers } from "store/actions";
+import { getCandidates, deleteCandidate } from "store/actions";
 import { candidateSelector } from 'selectors';
 
 // Custom Components, Constants & Hooks Imports
 import CandidateModal from "./CandidateModal"
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
-import { CheckboxHeader, CheckboxCell, Id, Name, DueDate, Status, Priority, CreateBy, Actions } from "shared/components"
+import { CheckboxHeader, CheckboxCell, Id, NameAvatar, Badge, CreateBy, Actions } from "shared/components"
 
 import { useDelete, useFilter } from "shared/hooks"
 
@@ -65,21 +65,8 @@ const AllCandidates = () => {
 
   // Update Data
   const handleCandidateClick = useCallback(
-    (arg) => {
-      const candidate = arg;
-
-      setCandidate({
-        id: candidate.id,
-        image: candidate.image,
-        name: candidate.name,
-        gender: candidate.gender,
-        description: candidate.description,
-
-        // Admin
-        status: candidate.task.status,
-        priority: candidate.task.priority,
-      });
-
+    (candidate) => {
+      setCandidate(candidate);
       setIsEdit(true);
       toggle();
     },
@@ -96,9 +83,16 @@ const AllCandidates = () => {
   const columns = useMemo(
     () => [
       {
-        Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
+        Header: () =>
+          <CheckboxHeader
+            handleCheckAllClick={handleCheckAllClick}
+          />,
         accessor: "id",
-        Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
+        Cell: (cellProps) =>
+          <CheckboxCell
+            {...cellProps}
+            handleCheckCellClick={handleCheckCellClick}
+          />,
       },
       {
         Header: "م.",
@@ -107,19 +101,34 @@ const AllCandidates = () => {
       {
         Header: "المرشح",
         accessor: "name",
-        Cell: Name,
+        Cell: (cellProps) =>
+          <NameAvatar
+            name={cellProps.row.original.name}
+            image={cellProps.row.original.image}
+            slug={cellProps.row.original.slug}
+            dirName="candidates"
+          />
       },
       {
         Header: "الحالة",
-        Cell: (cellProps) => <Status {...cellProps} />
+        Cell: (cellProps) =>
+          <Badge
+            option="status"
+            value={cellProps.row.original.task.status}
+          />
       },
       {
         Header: "الأولية",
-        Cell: (cellProps) => <Priority {...cellProps} />
+        Cell: (cellProps) =>
+          <Badge
+            option="priority"
+            value={cellProps.row.original.task.priority}
+          />
       },
       {
         Header: "بواسطة",
-        Cell: (cellProps) => <CreateBy {...cellProps} />
+        Cell: (cellProps) =>
+          <CreateBy {...cellProps} />
       },
       {
         Header: "إجراءات",
@@ -128,8 +137,9 @@ const AllCandidates = () => {
         Cell: (cellProps) => {
           return (
             <Actions
-              {...cellProps}
-              handleElectionClick={handleCandidateClick}
+              options={["view", "update", "delete"]}
+              cell={cellProps}
+              handleItemClicks={handleCandidateClick}
               handleItemDeleteClick={handleItemDeleteClick}
             />
           );

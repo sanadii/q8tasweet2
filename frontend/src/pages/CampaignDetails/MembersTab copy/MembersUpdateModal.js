@@ -15,9 +15,7 @@ import { useFormik } from "formik";
 // Reactstrap (UI) imports
 import { ModalBody, Form } from "reactstrap";
 
-const MembersUpdateModal = ({ campaignMember, setOnModalSubmit, modalMode }) => {
-  console.log("campaignMember: ", campaignMember)
-
+const MembersUpdateModal = ({ campaignMember, setOnModalSubmit }) => {
   const dispatch = useDispatch();
   // State Managemenet
   const { currentUser } = useSelector(userSelector);
@@ -26,59 +24,54 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit, modalMode }) => 
     campaignId,
     campaignMembers,
     campaignRoles,
-    electionCommitteeSites,
+    campaignElectionCommittees,
   } = useSelector(campaignSelector);
 
   // Campaign Supervisor Options
   const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
   const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
-  const [electionCommitteeSiteList, setCampaignCommitteeList] = useState(electionCommitteeSites);
+  const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
 
   useEffect(() => {
-    setCampaignCommitteeList(electionCommitteeSites);
-  }, [electionCommitteeSites]);
+    setCampaignCommitteeList(campaignElectionCommittees);
+  }, [campaignElectionCommittees]);
 
 
   // Form Validation
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      // id: (campaignMember && campaignMember.id) || null,
+      id: (campaignMember && campaignMember.id) || "",
       role: (campaignMember && campaignMember.role) || "",
       committee: (campaignMember && campaignMember.committee) || "",
       supervisor: (campaignMember && campaignMember.supervisor) || "",
       phone: (campaignMember && campaignMember.phone) || "",
       notes: (campaignMember && campaignMember.notes) || "",
     },
-    // validationSchema: Yup.object({
-    //   role: Yup.number().integer().required("role is required"),
-    //   supervisor: Yup.number().integer(),
-    //   committee: Yup.number().integer(),
-    // }),
+    validationSchema: Yup.object({
+      role: Yup.number().integer().required("role is required"),
+      supervisor: Yup.number().integer(),
+      committee: Yup.number().integer(),
+    }),
     onSubmit: (values) => {
 
-      const requiresSupervisor = ["campaignFieldDelegate", "campaignDigitalDelegate"].includes(getRoleString(values.role, campaignRoles));
-      const agentMembers = ["campaignFieldAgent", "campaignDigitalAgent"].includes(getRoleString(values.role, campaignRoles));
-      const delegateMembers = ["campaignFieldDelegate", "campaignDigitalDelegate"].includes(getRoleString(values.role, campaignRoles));
+      const requiresSupervisor = ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(getRoleString(values.role, campaignRoles));
       const requiresCommittee = ["campaignAttendant", "campaignSorter"].includes(getRoleString(values.role, campaignRoles));
 
       const updatedCampaignMember = {
-        id: campaignMember ? campaignMember.id : 7,
+        id: campaignMember ? campaignMember.id : 0,
         role: parseInt(values.role, 10),
         supervisor: requiresSupervisor ? parseInt(values.supervisor, 10) : '',
         committee: requiresCommittee ? parseInt(values.committee, 10) : '',
         phone: values.phone,
         notes: values.notes,
       };
-
-      console.log("campaignMember: ", updatedCampaignMember)
-
       dispatch(updateCampaignMember(updatedCampaignMember));
       validation.resetForm();
     },
   });
 
-  console.log("validation.initialValues: ", validation.initialValues)
+
   // Show formFields based on Selected Role String
   const getRoleString = useCallback((roleId, roles) => {
     const roleObj = roles.find(role => role.id.toString() === roleId.toString());
@@ -123,21 +116,21 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit, modalMode }) => 
       ],
       condition: ["campaignGuarantor", "campaignAttendant", "campaignSorter"].includes(selectedRoleString),
     },
-    {
-      id: "committee-field",
-      name: "committee",
-      label: "اللجنة",
-      type: "select",
-      options: [
-        { id: '', label: '- اختر اللجنة - ', value: '' }, // Add this default option
-        ...electionCommitteeSiteList.map(committee => ({
-          id: committee.id,
-          label: committee.name,
-          value: committee.id
-        }))
-      ],
-      condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
-    },
+    // {
+    //   id: "committee-field",
+    //   name: "committee",
+    //   label: "اللجنة",
+    //   type: "select",
+    //   options: [
+    //     { id: '', label: '- اختر اللجنة - ', value: '' }, // Add this default option
+    //     ...campaignCommitteeList.map(committee => ({
+    //       id: committee.id,
+    //       label: committee.name,
+    //       value: committee.id
+    //     }))
+    //   ],
+    //   condition: ["campaignAttendant", "campaignSorter"].includes(selectedRoleString),
+    // },
     {
       id: "phone-field",
       name: "phone",
