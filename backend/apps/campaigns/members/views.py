@@ -89,5 +89,23 @@ class DeleteCampaignMember(CampaignMemberViewMixin, DestroyAPIView):
                 "count": 1,
                 "code": 200,
             },
-            status=status.HTTP_204_NO_CONTENT,
+            status=status.HTTP_200_OK,
         )
+
+    # def delete(self, request, id):
+    #     try:
+    #         election_party = ElectionParty.objects.get(id=id)
+    #         election_party.delete()
+    #         return Response(
+    #             {
+    #                 "data": "Election party deleted successfully",
+    #                 "count": 1,
+    #                 "code": 200,
+    #             },
+    #             status=200,
+    #         )
+    #     except ElectionParty.DoesNotExist:
+    #         return Response(
+    #             {"data": "Election party not found", "count": 0, "code": 404},
+    #             status=404,
+    #         )

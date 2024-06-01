@@ -11,6 +11,7 @@ class DynamicSchemaModel(models.Model):
         schema_name = kwargs.get("schema_name")
         self.set_schema(schema_name)
 
+
     def set_schema(self, schema):
         self._schema = schema
         

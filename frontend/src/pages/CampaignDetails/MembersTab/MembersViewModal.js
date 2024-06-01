@@ -40,7 +40,7 @@ const MembersViewModal = ({ campaignMember }) => {
           </h4>
         </Row>
 
-        {displayField("الرتبة", campaignMember?.role)}
+        {displayField("الرتبة", campaignMember?.roleName)}
         {displayField("تليفون", campaignMember?.phone)}
         {displayField("الوكيل", campaignSupervisors.find(supervisor => supervisor.id === campaignMember.supervisor)?.name)}
         {/* {displayField("اللجنة", electionCommittees.find(committee => committee.id === campaignMember.committee)?.name)} */}

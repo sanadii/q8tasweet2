@@ -38,7 +38,7 @@ class CommitteeSite(DynamicSchemaModel):
         default_permissions = []
 
     def __str__(self):
-        return self.id
+        return f"CommitteeSite {self.id}"  # Ensure this returns a string
 
 class Committee(DynamicSchemaModel):
     area_name = models.TextField(blank=True, null=True)
@@ -61,7 +61,7 @@ class Committee(DynamicSchemaModel):
         default_permissions = []
 
     def __str__(self):
-        return self.id
+        return f"Committee {self.id}"  # Ensure this returns a string
 
 # class BaseElectionSorting(models.Model):
 #     user = models.ForeignKey(

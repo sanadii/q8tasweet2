@@ -22,17 +22,6 @@ import "react-toastify/dist/ReactToastify.css";
 const ElectionList = () => {
   const dispatch = useDispatch();
 
-  // State Management
-  const { elections, isElectionSuccess, error } = useSelector(electionSelector);
-  const [dueDate, setDate] = useState(defaultDate());
-
-  // Model & Toggle Function
-  const [election, setElection] = useState(null);
-  const [modal, setModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [activeTab, setActiveTab] = useState("0"); // Initialize with "campaignManagers"
-  const activeRole = activeTab;
-
   // Delete Hook
   const {
     // Delete Modal
@@ -51,6 +40,16 @@ const ElectionList = () => {
     handleCheckAllClick,
     handleCheckCellClick,
   } = useDelete(deleteElection);
+
+  
+  // State Management
+  const { elections, isElectionSuccess, error } = useSelector(electionSelector);
+  const [dueDate, setDate] = useState(defaultDate());
+  const [election, setElection] = useState(null);
+  const [modal, setModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [activeTab, setActiveTab] = useState("0"); // Initialize with "campaignManagers"
+  const activeRole = activeTab;
 
 
   // Election Data

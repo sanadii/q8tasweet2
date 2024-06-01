@@ -23,7 +23,6 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
     }, [campaignManagerRoles, campaignMembers]);
 
 
-    console.log("campaignManagerRoles: ", campaignManagerRoles)
     // Compute the count for each role
     const roleCounts = useMemo(() => {
         return campaignRoles.reduce((counts, role) => {
@@ -31,9 +30,6 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
             return counts;
         }, {});
     }, [campaignRoles, campaignMembers]);
-
-    console.log("All campaign roles:", campaignRoles);
-    console.log("Manager roles:", campaignManagerRoles);
 
     // Handle Change Campaign Tab Click
     const ChangeCampaignRole = (e, tab, roleIds) => {

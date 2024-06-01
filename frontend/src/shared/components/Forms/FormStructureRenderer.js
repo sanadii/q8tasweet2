@@ -25,7 +25,7 @@ const FormStructureRenderer = ({
       );
     default:
       return (
-        <Col lg={colSize} className="mb-3">
+        <Col lg={colSize} className="mb-2">
           {(!icon  && (type !== "checkBox")) &&(
             <Label htmlFor={id} className="form-label">
               {label}

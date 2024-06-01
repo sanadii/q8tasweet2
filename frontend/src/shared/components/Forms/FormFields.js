@@ -3,6 +3,8 @@ import { Col, Label, Input, FormFeedback } from "reactstrap";
 import Flatpickr from "react-flatpickr";
 import defaultAvatar from 'assets/images/users/default.jpg';
 import { api } from "config";
+import Select from "react-select";
+
 
 
 // 
@@ -12,11 +14,8 @@ import { FormTextField } from "./FormTextField"
 
 const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
 
-const FormFields = ({ field, validation, formStructure }) => {
-    const { id, label, name, type, colSize, icon, iconBg, onChange,
-        prefix,
-        suffix,
-    } = field;
+const FormFields = ({ field, validation, formStructure, formStyle }) => {
+    const { id, label, name, type, colSize, icon, iconBg, onChange, prefix, suffix } = field;
     const imageValue = validation.values.image;
     const [imageSrc, setImageSrc] = useState(defaultAvatar);
 
@@ -181,7 +180,32 @@ const FormFields = ({ field, validation, formStructure }) => {
                         invalid={validation.touched[name] && validation.errors[name]}
                     />
                 );
-            // ... other cases
+            case 'selectMulti': {
+                const handleMulti = (selectedOptions) => {
+                    validation.setFieldValue(name, selectedOptions.map(option => option.value));
+                };
+
+                const selectedValues = validation.values[name]
+                    ? validation.values[name].map(guaranteeGroupId => ({
+                        value: guaranteeGroupId,
+                        label: field.options.find(option => option.value === guaranteeGroupId)?.label || ''
+                    }))
+                    : [];
+
+                return (
+                    <Select
+                        id={id}
+                        placeholder={`اكتب ${label}`}
+                        onBlur={validation.handleBlur}
+                        invalid={validation.touched[name] && validation.errors[name]}
+                        value={selectedValues}
+                        isMulti={true}
+                        onChange={handleMulti}
+                        options={field.options}
+                    />
+                );
+            }
+
 
 
             case "searchDropdown":
@@ -192,6 +216,9 @@ const FormFields = ({ field, validation, formStructure }) => {
                 return null;
         }
     };
+
+
+
     return (
         <React.Fragment>
             {/* <Col lg={colSize} className="input-group input-group-sm"> */}
@@ -208,6 +235,7 @@ const FormFields = ({ field, validation, formStructure }) => {
                     id={id}
                     label={label}
                     name={name}
+                // formStyle={formStyle}
                 />
                 {suffix && <span className="input-group-text">{suffix.text}</span>}
             </Col>

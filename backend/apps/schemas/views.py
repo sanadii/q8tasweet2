@@ -10,6 +10,7 @@ from apps.elections.models import Election
 from apps.schemas.areas.models import Area
 from apps.schemas.committees.models import Committee, CommitteeSite
 from apps.schemas.committee_results.models import CommitteeResultCandidate, CommitteeResultParty, CommitteeResultPartyCandidate
+from apps.schemas.committee_members.models import CommitteeSiteMember, CommitteeMember
 from apps.schemas.electors.models import Elector
 from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
 from utils.schema import schema_context, table_exists
@@ -68,6 +69,8 @@ class AddSchemaTables(APIView):
                 # if has campaigns
                 models.append(CampaignGuarantee)
                 models.append(CampaignGuaranteeGroup)
+                models.append(CommitteeMember)
+                models.append(CommitteeSiteMember)
 
             print("election_result: ", is_detailed_results, "election_method: ", election_method )
 

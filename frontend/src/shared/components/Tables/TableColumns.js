@@ -277,7 +277,6 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
 
 const Guarantees = (cellProps) => {
     const { memberId, memberRole, campaignGuarantees, campaignRoles } = cellProps;
-    console.log("cellcellcell: ", cellProps)
 
     // Permission Hook
     const {

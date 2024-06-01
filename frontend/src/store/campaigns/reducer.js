@@ -265,7 +265,7 @@ const Campaigns = (state = IntialState, action) => {
         ...state,
         campaigns: state.campaigns.filter(
           (campaign) =>
-            campaign.id.toString() !== action.payload.campaign.toString()
+            campaign.id.toString() !== action.payload.campaign.id.toString()
         ),
         isCampaignDelete: true,
         isCampaignDeleteFail: false,
@@ -323,12 +323,13 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignMemberUpdateFail: true,
       };
     case DELETE_CAMPAIGN_MEMBER_SUCCESS:
+      console.log("action.payload.campaignMember: ", action.payload.campaignMember)
       return {
         ...state,
         campaignMembers: state.campaignMembers.filter(
           (campaignMember) =>
             campaignMember.id.toString() !==
-            action.payload.campaignMember.toString()
+            action.payload.campaignMember.id.toString()
         ),
         isCampaignMemberDelete: true,
         isCampaignMemberDeleteFail: false,
@@ -391,7 +392,7 @@ const Campaigns = (state = IntialState, action) => {
         campaignGuarantees: state.campaignGuarantees.filter(
           (campaignGuarantee) =>
             campaignGuarantee.id.toString() !==
-            action.payload.campaignGuarantee.toString()
+            action.payload.campaignGuarantee.id.toString()
         ),
         isCampaignGuaranteeDelete: true,
         isCampaignGuaranteeDeleteFail: false,
@@ -454,7 +455,7 @@ const Campaigns = (state = IntialState, action) => {
         campaignGuaranteeGroups: state.campaignGuaranteeGroups.filter(
           (campaignGuaranteeGroup) =>
             campaignGuaranteeGroup.id.toString() !==
-            action.payload.campaignGuaranteeGroup.toString()
+            action.payload.campaignGuaranteeGroup.id.toString()
         ),
         isCampaignGuaranteeGroupDelete: true,
         isCampaignGuaranteeGroupDeleteFail: false,
@@ -517,7 +518,7 @@ const Campaigns = (state = IntialState, action) => {
         campaignAttendees: state.campaignAttendees.filter(
           (campaignAttendee) =>
             campaignAttendee.id.toString() !==
-            action.payload.campaignAttendee.toString()
+            action.payload.campaignAttendee.id.toString()
         ),
         isCampaignAttendeeDelete: true,
         isCampaignAttendeeDeleteFail: false,

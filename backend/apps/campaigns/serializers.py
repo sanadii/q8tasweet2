@@ -24,10 +24,7 @@ from apps.elections.models import (
     ElectionCategory,
 )
 
-from apps.elections.candidates.models import (
-    ElectionCandidate,
-    ElectionParty,
-)
+from apps.elections.candidates.models import ElectionCandidate, ElectionParty
 from apps.schemas.committees.models import Committee
 from apps.candidates.models import Candidate, Party
 from apps.schemas.electors.models import Elector

@@ -64,3 +64,6 @@ class CampaignMember(TrackModel):
             ("canChangeCampaignMember", "Can Change Campaign Member"),
             ("canDeleteCampaignMember", "Can Delete Campaign Member"),
         ]
+
+    def __str__(self):
+        return f"CampaignMember {self.id}"  # Ensure this returns a string

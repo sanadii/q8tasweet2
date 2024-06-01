@@ -1,14 +1,20 @@
-# campaigns/serializers.py
 from rest_framework import serializers
 from apps.campaigns.members.models import CampaignMember
+from apps.elections.candidates.models import ElectionCandidate, ElectionParty
+from apps.schemas.committees.models import CommitteeSite
+from apps.schemas.committee_members.models import CommitteeSiteMember
+from utils.schema import schema_context
+from rest_framework.response import Response
+
+from apps.schemas.committees.serializers import CommitteeSiteSerializer
 
 class CampaignMemberSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     permissions = serializers.SerializerMethodField()
     role_id = serializers.SerializerMethodField()
     role_name = serializers.SerializerMethodField()
-    role_codename = serializers.SerializerMethodField()
-
+    committee_sites = serializers.SerializerMethodField()
+    
     class Meta:
         model = CampaignMember
         fields = "__all__"  # Or specify required fields
@@ -39,3 +45,68 @@ class CampaignMemberSerializer(serializers.ModelSerializer):
 
     def get_role_codename(self, obj):
         return self.get_role_attribute(obj, 'codename')
+    
+    def get_campaign_related_object(self, obj):
+        """Helper function to retrieve the related ElectionCandidate or ElectionParty object based on campaign_type."""
+        if obj.campaign_type and obj.campaigner_id:
+            if obj.campaign_type.model == "candidate":
+                return ElectionCandidate.objects.get(id=obj.campaigner_id)
+            elif obj.campaign_type.model == "party":
+                return ElectionParty.objects.get(id=obj.campaigner_id)
+            else:
+                raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
+        else:
+            raise ValueError(
+                "Campaign object is missing campaign_type or campaigner_id"
+            )
+
+    def get_election_slug(self, obj):
+        campaign = obj.campaign
+        related_object = self.get_campaign_related_object(campaign)
+        election_slug = related_object.election.slug
+        
+        return election_slug
+    
+    def get_committee_sites(self, obj):
+        election_slug = self.get_election_slug(obj)
+        with schema_context(election_slug):
+            try:
+                # Query CommitteeSiteMember to get related CommitteeSite objects
+                committee_site_ids = self.initial_data.get('committee_sites', [])
+                committee_sites = CommitteeSite.objects.filter(id__in=committee_site_ids)
+                serialized_committees = [CommitteeSiteSerializer(committee_site).data for committee_site in committee_sites]
+                return serialized_committees
+            except Exception as e:
+                print("Error:", e)
+                return []
+
+
+
+    def save(self, **kwargs):
+        # Call the original save method to save CampaignMember instance
+        super().save(**kwargs)
+
+        # Get the committee_site from the context or request data
+        committee_site_id = self.context['request'].data.get('committee_site')
+
+        if committee_site_id:
+            # Get the dynamic schema from the object or request
+            election_slug = self.get_election_slug(self.instance)
+
+            with schema_context(election_slug):
+                try:
+                    # Retrieve the CommitteeSite object
+                    committee_site = CommitteeSite.objects.get(id=committee_site_id)
+
+                    # Create or update CommitteeSiteMember with the CampaignMember instance's ID
+                    CommitteeSiteMember.objects.update_or_create(
+                        member=self.instance.id,
+                        defaults={'committee_site': committee_site}
+                    )
+                    print("CommitteeSiteMember created or updated successfully")
+                except CommitteeSite.DoesNotExist:
+                    print(f"CommitteeSite with id {committee_site_id} does not exist")
+                    raise serializers.ValidationError(f"CommitteeSite with id {committee_site_id} does not exist")
+                except Exception as e:
+                    print(f"Unexpected error occurred: {e}")
+                    raise serializers.ValidationError(f"Unexpected error: {e}")

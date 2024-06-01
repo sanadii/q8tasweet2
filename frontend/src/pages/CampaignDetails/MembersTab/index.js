@@ -63,9 +63,9 @@ const MembersList = () => {
   const [modal, setModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [isEdit, setIsEdit] = useState(false);
-
   const activeRole = activeTab;
 
+  
   const toggle = useCallback(() => {
     if (modal) {
       setModal(false);
@@ -82,7 +82,7 @@ const MembersList = () => {
       setIsEdit(true);
       toggle();
     },
-    [toggle, setCampaignMember]
+    [toggle]
   );
 
   // Add Data
