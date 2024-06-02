@@ -3,12 +3,10 @@ import { Col, Label, Input, FormFeedback } from "reactstrap";
 import Flatpickr from "react-flatpickr";
 import defaultAvatar from 'assets/images/users/default.jpg';
 import { api } from "config";
-import Select from "react-select";
 
-
-
-// 
 import SearchDropDown from "./SearchDropDown";
+import SelectField from "./SelectField";
+
 import FormStructureRenderer from "./FormStructureRenderer";
 import { FormTextField } from "./FormTextField"
 
@@ -114,27 +112,6 @@ const FormFields = ({ field, validation, formStructure, formStyle }) => {
                         invalid={validation.touched[name] && validation.errors[name]}
                     />
                 );
-            case 'select':
-                return (
-                    <Input
-                        type="select"
-                        className="form-select"
-                        name={name}
-                        id={id}
-                        onChange={validation.handleChange}
-                        onBlur={validation.handleBlur}
-                        value={validation.values[name] || ""}
-                        invalid={validation.touched[name] && validation.errors[name]}
-                    >
-                        {/* <option value="">-- اختر --</option> */}
-                        {field.options &&
-                            field.options.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                    </Input>
-                );
             case "image":
                 return (
                     <div className="profile-user position-relative d-inline-block mx-auto mb-4">
@@ -180,37 +157,34 @@ const FormFields = ({ field, validation, formStructure, formStyle }) => {
                         invalid={validation.touched[name] && validation.errors[name]}
                     />
                 );
-            case 'selectMulti': {
-                const handleMulti = (selectedOptions) => {
-                    validation.setFieldValue(name, selectedOptions.map(option => option.value));
-                };
-
-                const selectedValues = validation.values[name]
-                    ? validation.values[name].map(guaranteeGroupId => ({
-                        value: guaranteeGroupId,
-                        label: field.options.find(option => option.value === guaranteeGroupId)?.label || ''
-                    }))
-                    : [];
-
+            case 'select':
                 return (
-                    <Select
+                    <Input
+                        type="select"
+                        className="form-select"
+                        name={name}
                         id={id}
-                        placeholder={`اكتب ${label}`}
+                        onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
+                        value={validation.values[name] || ""}
                         invalid={validation.touched[name] && validation.errors[name]}
-                        value={selectedValues}
-                        isMulti={true}
-                        onChange={handleMulti}
-                        options={field.options}
-                    />
+                    >
+                        {/* <option value="">-- اختر --</option> */}
+                        {field.options &&
+                            field.options.map((option) => (
+                                <option key={option.id} value={option.value}>
+                                    {option.name}
+                                </option>
+                            ))}
+                    </Input>
                 );
-            }
 
-
+            case 'selectSingle':
+            case 'selectMulti':
+                return <SelectField validation={validation} field={field} onChangeHandler={onChangeHandler} />
 
             case "searchDropdown":
                 return <SearchDropDown validation={validation} field={field} onChangeHandler={onChangeHandler} />;
-
 
             default:
                 return null;

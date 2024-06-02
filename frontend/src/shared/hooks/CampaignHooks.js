@@ -17,7 +17,7 @@ const useMemberOptions = (campaignMembers, memberRole) => {
   return useMemo(() => {
     const options = memberGroup.map(item => ({
       id: item.id,
-      label: item.name,
+      name: item.name,
       value: parseInt(item.id, 10) // Ensure the value is an integer
     }));
 
@@ -50,7 +50,6 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
     canChangeCampaignMember,
   } = usePermission();
 
-
   return useMemo(() => {
     const currentRoleId = currentCampaignMember?.role;
     let excludedRoleStrings = ["campaignMember"]; // Excluded for all by default
@@ -77,16 +76,41 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
       return !isExcluded;
     });
 
-    return displayedRoles;
+    // Convert roles to options
+    const roleOptions = displayedRoles.map((role) => ({
+      id: role.id,
+      name: role.name,
+      value: role.id,
+    }));
+
+    return roleOptions;
   }, [campaignRoles, currentCampaignMember, canChangeConfig, canChangeCampaign, canChangeMember]);
 };
 
+const getCampaignAgentMembers = (campaignMemberRoleCodename, campaignFieldAgentOptions, campaignDigitalAgentOptions) => {
+  switch (campaignMemberRoleCodename) {
+    case "campaignFieldDelegate":
+      return {
+        options: campaignFieldAgentOptions,
+        label: "الوكلاء الميدانيين",
+      };
+    case "campaignDigitalDelegate":
+      return {
+        options: campaignDigitalAgentOptions,
+        label: "الوكلاء الرقميين",
+      };
+    default:
+      return {
+        options: [],
+        label: "",
+      };
+  }
+};
 
 
 // Committees
-const getListOptions = (list) => {
+const getCommitteeSiteOptions = (list) => {
   return [
-    { id: null, label: '- اختر - ', value: null }, // Add this default option
     ...list.map(item => ({
       id: item.id,
       label: item.name,
@@ -105,7 +129,7 @@ const getCampaignAgentCommittees = (campaignAgent, electionCommitteeSites) => {
 };
 
 
-const useCommitteeSiteCommittees = (committeeSites) => {
+const useCommitteeOptions = (committeeSites) => {
   const [groupedCommittees, setGroupedCommittees] = useState([]);
 
   useEffect(() => {
@@ -114,18 +138,17 @@ const useCommitteeSiteCommittees = (committeeSites) => {
       return;
     }
 
-    const newGroupedCommittees = committeeSites.reduce((acc, committeeSite) => {
+    const groupedCommitteeList = committeeSites.reduce((acc, committeeSite) => {
       const label = committeeSite.name; // Use committeeSite name as the label
 
       // Create the committee option
       const committeeOptions = committeeSite.committees.map(committee => ({
         id: committee.id,
-        label: `${committee.type} - ${committee.id}`,
+        label: `${committeeSite.name} - ${committee.type} - ${committee.id}`,
         value: parseInt(committee.id, 10)
       }));
 
-
-      // Otherwise, create a new category with the committee options
+      // Otherwise, create a SiteCommittees with the committee options
       acc.push({
         label: label,
         options: committeeOptions,
@@ -135,7 +158,7 @@ const useCommitteeSiteCommittees = (committeeSites) => {
       return acc;
     }, []);
 
-    setGroupedCommittees(newGroupedCommittees);
+    setGroupedCommittees(groupedCommitteeList);
   }, [committeeSites]);
 
   return groupedCommittees;
@@ -145,13 +168,14 @@ const useCommitteeSiteCommittees = (committeeSites) => {
 
 export {
   useSupervisorMembers,
+  getCampaignAgentMembers,
   useCampaignRoles,
   useMemberOptions,
 
   // Committees
-  getListOptions,
+  getCommitteeSiteOptions,
   getAllCommittees,
   getCampaignAgentCommittees,
-  useCommitteeSiteCommittees,
+  useCommitteeOptions,
 
 };

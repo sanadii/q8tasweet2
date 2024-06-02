@@ -58,7 +58,7 @@ def determine_user_role(campaign_id, user_id, campaign_roles, context):
     If not, it attempts to find the user's role within the campaign.
     It returns the user's role within the campaign, "admin" if they have higher privileges, or None otherwise.
     """
-    print("determine_user_role: ", "campaign_id: ", campaign_id, "user_id: ", user_id, "context: ", context)
+    # print("determine_user_role: ", "campaign_id: ", campaign_id, "user_id: ", user_id, "context: ", context)
 
     # Check if user is admin or superAdmin first
     if is_higher_privilege(user_id):
