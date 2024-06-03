@@ -102,23 +102,25 @@ const ElectorSearchDisplay = ({
             },
             {
                 Header: "اجراءات",
-                Cell: (cellProps) => <Actions
-                    options={["view", "addGuarantee"]}
-                    cell={cellProps}
-                    schema={electionSchema}
-                    handleItemClicks={handleElectorClick}
-                    // handleItemDeleteClick={handleItemDeleteClick}
-                    selectedGuaranteeGroup={selectedGuaranteeGroup}
+                Cell: (cellProps) =>
+                    <Actions
+                        options={["view", "addGuarantee", "addAttendee"]}
+                        cell={cellProps}
+                        schema={electionSchema}
+                        handleItemClicks={handleElectorClick}
+                        // handleItemDeleteClick={handleItemDeleteClick}
+                        selectedGuaranteeGroup={selectedGuaranteeGroup}
 
-                    // cellProps={cellProps}
-                    // selectedGuaranteeGroup={selectedGuaranteeGroup}
-                    // electionSchema={electionSchema}
-                    // handleElectorClick={handleElectorClick}
-                    currentCampaignMember={currentCampaignMember}
-                    campaignGuarantees={campaignGuarantees}
-                    campaignAttendees={campaignAttendees}
-                    campaignDetails={campaignDetails}
-                    electorsBySearch={electorsBySearch} />
+                        // cellProps={cellProps}
+                        // selectedGuaranteeGroup={selectedGuaranteeGroup}
+                        // electionSchema={electionSchema}
+                        // handleElectorClick={handleElectorClick}
+                        currentCampaignMember={currentCampaignMember}
+                        campaignGuarantees={campaignGuarantees}
+                        campaignAttendees={campaignAttendees}
+                        campaignDetails={campaignDetails}
+                        electorsBySearch={electorsBySearch}
+                    />
             },
         ],
         [

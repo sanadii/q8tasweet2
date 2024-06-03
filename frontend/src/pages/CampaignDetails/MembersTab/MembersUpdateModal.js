@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useMemo, useEffect } from "react";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -6,48 +6,41 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'selectors';
 
 // Components
-import { useMemberOptions, useCampaignRoles, getCommitteeSiteOptions, getAllCommittees, getCampaignAgentCommittees, useCommitteeOptions, getCampaignAgentMembers } from "shared/hooks";
+import { useMemberOptions, useCampaignRoles, getCommitteeSiteOptions, useAgentMemberCommitteeSites, useCommitteeOptions, getCampaignAgentMembers, useCampaignRoleString, isMemberRoleOption } from "shared/hooks";
 import { FormFields } from "shared/components";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 
 // Reactstrap (UI) imports
 import { Form, Button, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 const MembersUpdateModal = ({ campaignMember, toggle }) => {
   const dispatch = useDispatch();
-  // State Management
+
+  // Selectors
   const { currentUser } = useSelector(userSelector);
-  const { currentCampaignMember, campaignMembers, campaignRoles, electionCommitteeSites } = useSelector(campaignSelector);
+  const {
+    currentCampaignMember,
+    campaignMembers,
+    campaignRoles,
+    electionCommitteeSites,
+  } = useSelector(campaignSelector);
 
-  const campaignAgentMembers = ["campaignFieldAgent", "campaignDigitalAgent"]
-  const campaignDelegateMembers = ["campaignFieldDelegate", "campaignDigitalDelegate"]
-  const requiresCommittee = ["campaignFieldAgent", "campaignDigitalAgent", "campaignFieldDelegate", "campaignDigitalDelegate"].includes(campaignMember?.roleCodename);
+  // Campaign Role Dictionary
+  const campaignManagerRoles = ["campaignCandidate", "campaignAdmin", "campaignFieldAdmin", "CampainDigitalAdmin"];
+  const campaignAgentRoles = ["campaignFieldAgent", "campaignDigitalAgent"];
+  const campaignDelegateRoles = ["campaignFieldDelegate", "campaignDigitalDelegate"];
 
-  // const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
+  // Filtered Role Options based on Current Member Role
   const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
 
+  // Get campaign Agent Options for Field and Digital
+  const campaignFieldAgentOptions = useMemberOptions(campaignMembers, "campaignFieldAgent");
+  const campaignDigitalAgentOptions = useMemberOptions(campaignMembers, "campaignDigitalAgent");
 
-  // the options for both committeeSites and committees
+  // Get CommitteeSite and Committee Options
   const committeeSiteOptions = getCommitteeSiteOptions(electionCommitteeSites);
   const committeeOptions = useCommitteeOptions(electionCommitteeSites);
-
-  // the selected campaignMember committeeSiteIds and committeeId
-  const committeeSiteIds = campaignMember?.committeeSites?.map(committeeSite => committeeSite.id) || [];
-  const committeeId = campaignMember?.committee?.id || null;
-
-
-  // const userMemberHasRole = (MemberRoleCondition, roleId) => {
-  //   // for role id, check campaignRoles and return the codeName
-  //   // check against a given role condition
-  //   // if exist
-  //   // return true, else false
-  // }
-
-  const userMemberHasRole = (MemberRoleCondition, roleId) => {
-    const roleObj = campaignRoles.find(role => role.id.toString() === roleId.toString());
-    return roleObj ? MemberRoleCondition.includes(roleObj.codename) : false;
-  };
-
 
   // Form Validation
   const validation = useFormik({
@@ -55,29 +48,40 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
     initialValues: {
       id: campaignMember?.id || null,
       role: campaignMember?.role || null,
-      committeeSites: committeeSiteIds,
-      committee: committeeId,
+      committeeSites:
+        campaignMember?.committeeSites?.map((site) => site.id) || [],
+      committee: campaignMember?.committee?.id || null,
       supervisor: campaignMember?.supervisor || null,
       phone: campaignMember?.phone || "",
       notes: campaignMember?.notes || "",
     },
-    // validationSchema: Yup.object({
-    //   role: Yup.number().integer().required("role is required"),
-    //   supervisor: Yup.number().integer(),
-    //   committeeSites: Yup.number().integer(),
-    // }),
+    validationSchema: Yup.object({
+      role: Yup.number().integer().required("Role is required"),
+    }),
     onSubmit: (values) => {
       const updatedCampaignMember = {
-        id: campaignMember?.id || null,
+        id: values.id,
         role: parseInt(values.role, 10),
         phone: values.phone,
         notes: values.notes,
       };
-      if (userMemberHasRole(campaignAgentMembers, values.role)) {
-        updatedCampaignMember.supervisor = parseInt(values.supervisor, 10);
-        updatedCampaignMember.committeeSites = values.committeeSites || [];
+
+
+      if (isMemberRoleOption(campaignRoles, campaignManagerRoles, values.role)) {
+        updatedCampaignMember.supervisor = null;
+        updatedCampaignMember.committeeSites = [];
+        updatedCampaignMember.committee = null;
       }
-      if (userMemberHasRole(campaignDelegateMembers, values.role)) {
+
+      if (isMemberRoleOption(campaignRoles, campaignAgentRoles, values.role)) {
+        updatedCampaignMember.supervisor = null;
+        updatedCampaignMember.committeeSites = values.committeeSites || [];
+        updatedCampaignMember.committee = null;
+      }
+
+      if (isMemberRoleOption(campaignRoles, campaignDelegateRoles, values.role)) {
+        updatedCampaignMember.supervisor = values?.supervisor || null;
+        updatedCampaignMember.committeeSites = [];
         updatedCampaignMember.committee = values.committee || null;
       }
 
@@ -87,39 +91,31 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
     },
   });
 
-  console.log("validation: ", validation.values);
+  const isCurrentUserDifferentCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
+  const isAgentMember = campaignAgentRoles.includes(useCampaignRoleString(validation.values.role, campaignRoles));
+  const isDelegateMember = campaignDelegateRoles.includes(useCampaignRoleString(validation.values.role, campaignRoles));
+  const campaignMemberRoleCodename = useCampaignRoleString(validation.values.role, campaignRoles);
 
-  // Show formFields based on Selected Role String
-  const getRoleString = useCallback((roleId, roles) => {
-    if (roleId == null) return null;
-    const roleObj = roles.find(role => role.id.toString() === roleId.toString());
-    return roleObj ? roleObj.codename : null;
-  }, []);
+  const { options: campaignSupervisorOptions, label: campaignSupervisorLabel } =
+    getCampaignAgentMembers(
+      campaignMemberRoleCodename,
+      campaignFieldAgentOptions,
+      campaignDigitalAgentOptions
+    );
 
-  const agentMembers = ["campaignFieldAgent", "campaignDigitalAgent"].includes(getRoleString(validation.values.role, campaignRoles));
-  const delegateMembers = ["campaignFieldDelegate", "campaignDigitalDelegate", "campaignDelegate"].includes(getRoleString(validation.values.role, campaignRoles));
+  // Memoized value for campaignAgentCommittees
+  const campaignAgentCommittees = useAgentMemberCommitteeSites(validation?.values?.supervisor, campaignMembers);
+  const campaignAgentCommitteeOptions = useCommitteeOptions(campaignAgentCommittees);
 
-  const campaignFieldAgentOptions = useMemberOptions(campaignMembers, "campaignFieldAgent");
-  const campaignDigitalAgentOptions = useMemberOptions(campaignMembers, "campaignDigitalAgent");
-  const campaignMemberRoleCodename = getRoleString(validation.values.role, campaignRoles);
-
-  const { options: campaignSupervisorOptions, label: campaignSupervisorLabel } = getCampaignAgentMembers(
-    campaignMemberRoleCodename,
-    campaignFieldAgentOptions,
-    campaignDigitalAgentOptions
-  );
-
-  const isCurrentUserCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
-
-  const campaignAgentCommittees = getCampaignAgentCommittees(validation?.values?.supervisor, electionCommitteeSites);
-
+  // Form fields
   const fields = [
-    isCurrentUserCampaignMember && {
+    {
       id: "role-field",
       name: "role",
-      label: "العضوية",
+      label: "Role",
       type: "select",
       options: filteredRoleOptions,
+      condition: isCurrentUserDifferentCampaignMember,
     },
     {
       id: "supervisor-field",
@@ -127,34 +123,34 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
       label: campaignSupervisorLabel,
       type: "select",
       options: campaignSupervisorOptions,
-      condition: delegateMembers,
+      condition: isDelegateMember,
     },
     {
       id: "committeeSites-field",
       name: "committeeSites",
-      label: "اللجنة",
+      label: "Committee Sites",
       type: "selectMulti",
       options: committeeSiteOptions,
-      condition: agentMembers,
+      condition: isAgentMember,
     },
     {
       id: "committee-field",
       name: "committee",
-      label: "اللجنة",
+      label: "Committee",
       type: "selectSingle",
-      options: committeeOptions,
-      condition: delegateMembers,
+      options: campaignAgentCommitteeOptions,
+      condition: isDelegateMember,
     },
     {
       id: "phone-field",
       name: "phone",
-      label: "الهاتف",
+      label: "Phone",
       type: "text",
     },
     {
       id: "notes-field",
       name: "notes",
-      label: "ملاحظات",
+      label: "Notes",
       type: "textarea",
     },
   ].filter(Boolean);
@@ -168,7 +164,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
       }}
     >
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        تعديل {campaignMember?.name}
+        Update {campaignMember?.name}
       </ModalHeader>
       <ModalBody className="vstack gap-3">
         <input type="hidden" id="id-field" />
@@ -178,35 +174,26 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
           </strong>
           <span>- {campaignMember?.roleName}</span>
         </h5>
-        {
-          fields.map(field => (
+        {fields.map(
+          (field) =>
             (field.condition === undefined || field.condition) && (
-              <FormFields
-                key={field.id}
-                field={field}
-                validation={validation}
-              />
+              <FormFields key={field.id} field={field} validation={validation} />
             )
-          ))
-        }
+        )}
       </ModalBody>
       <ModalFooter>
         <div className="hstack gap-2 justify-content-end">
           <Button
             color="light"
-            onClick={() => { toggle(); }}
+            onClick={() => {
+              toggle();
+            }}
             className="btn-light"
           >
-            إغلاق
+            Close
           </Button>
-
-          {/* if modalButtonText and modalButtonText is not empty */}
-          <Button
-            color="success"
-            id="add-btn"
-            type="submit"
-          >
-            تعديل
+          <Button color="success" id="add-btn" type="submit">
+            Update
           </Button>
         </div>
       </ModalFooter>
@@ -215,3 +202,4 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
 };
 
 export default MembersUpdateModal;
+

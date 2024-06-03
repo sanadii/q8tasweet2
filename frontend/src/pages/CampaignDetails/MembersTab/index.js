@@ -65,7 +65,7 @@ const MembersList = () => {
   const [isEdit, setIsEdit] = useState(false);
   const activeRole = activeTab;
 
-  
+
   const toggle = useCallback(() => {
     if (modal) {
       setModal(false);
@@ -121,24 +121,42 @@ const MembersList = () => {
       Header: "الرتبة",
       accessor: "role",
       // TabsToShow: ["campaignManagers", "all"],
-      Cell: (cellProps) => <Role cellProps={cellProps} campaignRoles={campaignRoles} />
+      Cell: (cellProps) =>
+        <Role
+          cellProps={cellProps}
+          campaignRoles={campaignRoles}
+        />
     },
+    {
+      Header: "المسؤول",
+      accessor: "supervisor",
+      // TabsToShow: ["campaignManagers", "all"],
+      Cell: (cellProps) =>
+        <Supervisor
+          cellProps={cellProps}
+          campaignMembers={campaignMembers}
+        />
+    },
+
     {
       Header: "الفريق",
       TabsToShow: ["campaignSupervisor"],
       Cell: (cellProps) =>
-        <Team cellProps={cellProps} campaignMembers={campaignMembers} />
+        <Team
+          cellProps={cellProps}
+          campaignMembers={campaignMembers}
+        />
     },
     {
       Header: "المضامين",
       // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
       Cell: (cellProps) => (
         <Guarantees
-        memberId={cellProps.row.original.id}
-        memberRole={cellProps.row.original.role}
-        campaignGuarantees={campaignGuarantees}
-        campaignRoles={campaignRoles}
-      />
+          memberId={cellProps.row.original.id}
+          memberRole={cellProps.row.original.role}
+          campaignGuarantees={campaignGuarantees}
+          campaignRoles={campaignRoles}
+        />
       )
     },
     {

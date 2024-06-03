@@ -43,6 +43,14 @@ UNMANAGED_PERMISSIONS = {
         ('canChangeCampaignCommitteeSorter', 'Can Change Campaign Committee Sorter'),
         ('canDeleteCampaignCommitteeSorter', 'Can Delete Campaign Committee Sorter'),
     ],
+    
+        #     permissions = [
+        #     ("canViewCampaignAttendee", "Can View Election Attendee"),
+        #     ("canAddCampaignAttendee", "Can Add Election Attendee"),
+        #     ("canChangeCampaignAttendee", "Can Change Election Attendee"),
+        #     ("canDeleteCampaignAttendee", "Can Delete Election Attendee"),
+        # ]
+
 }
 
 class Command(BaseCommand):

@@ -238,7 +238,7 @@ export const deleteCampaignGuarantee = (campaignGuarantee) => api.delete(url.DEL
 export const getAllCampaignAttendees = (campaignAttendee) => api.get(url.GET_CAMPAIGN_ATTENDEES, campaignAttendee);
 export const addCampaignAttendee = (campaignAttendee) => api.create(url.ADD_CAMPAIGN_ATTENDEE + "/" + campaignAttendee.schema, campaignAttendee);
 export const updateCampaignAttendee = (campaignAttendee) => api.update(url.UPDATE_CAMPAIGN_ATTENDEE + "/" + campaignAttendee.schema + "/" + campaignAttendee.id, campaignAttendee);
-export const deleteCampaignAttendee = (campaignAttendee) => api.delete(url.DELETE_CAMPAIGN_ATTENDEE + "/" + campaignAttendee.schema + "/" + campaignAttendee);
+export const deleteCampaignAttendee = (campaignAttendee) => api.delete(url.DELETE_CAMPAIGN_ATTENDEE + "/" + campaignAttendee.schema + "/" + campaignAttendee.id);
 
 // CampaignSorting
 export const getAllCampaignSorting = () => api.get(url.GET_ALL_CAMPAIGN_SORTING);

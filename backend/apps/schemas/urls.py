@@ -4,6 +4,8 @@ from .views import *
 from apps.schemas.committees.views import *
 from apps.schemas.electors.views import *
 from apps.schemas.guarantees.views import *
+from apps.schemas.campaign_attendees.views import *
+# from apps.schemas.election_sorting.views import *
 
 app_name = "schema"
 
@@ -44,9 +46,9 @@ urlpatterns = [
     # path("getElectors", GetElectors.as_view(), name="GetElectors"),
 
     # # Attendees
-    # path("addCampaignAttendee", AddCampaignAttendee.as_view(), name="AddCampaignAttendee"),
-    # path("deleteCampaignAttendee/<int:id>", DeleteCampaignAttendee.as_view(), name="DeleteCampaignAttendee"),
-    # path("updateCampaignAttendee/<int:id>", UpdateCampaignAttendee.as_view(), name="UpdateCampaignAttendee"),
+    path("addCampaignAttendee/<slug:schema>", AddCampaignAttendee.as_view(), name="AddElectionAttendee"),
+    path("deleteCampaignAttendee/<slug:schema>/<int:pk>", DeleteCampaignAttendee.as_view(), name="DeleteElectionAttendee"),
+    path("updateCampaignAttendee/<slug:schema>/<int:pk>", UpdateCampaignAttendee.as_view(), name="UpdateElectionAttendee"),
     # # Sorting
     # path("getAllCampaignSorting", GetAllCampaignSorting.as_view(), name="GetAllCampaignSorting"),
     # path("GetCampaignCommitteeSorting/<int:id>", GetCampaignCommitteeSorting.as_view(), name="GetCampaignCommitteeSorting"),

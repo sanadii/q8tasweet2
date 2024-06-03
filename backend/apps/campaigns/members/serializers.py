@@ -1,15 +1,11 @@
 from rest_framework import serializers
-from rest_framework.response import Response
 
 # Apps
 from apps.campaigns.members.models import CampaignMember
 from apps.elections.candidates.models import ElectionCandidate, ElectionParty
 from apps.schemas.committees.models import CommitteeSite, Committee
-from apps.schemas.committee_members.models import CommitteeSiteMember, CommitteeMember
-from apps.schemas.committees.serializers import (
-    CommitteeSiteSerializer,
-    CommitteeSerializer,
-)
+from apps.schemas.committee_members.models import MemberCommitteeSite, MemberCommittee
+from apps.schemas.committees.serializers import CommitteeSiteSerializer, CommitteeSerializer
 from utils.schema import schema_context
 
 
@@ -78,8 +74,8 @@ class CampaignMemberSerializer(serializers.ModelSerializer):
         election_slug = self.get_election_slug(obj)
         with schema_context(election_slug):
             try:
-                # Query CommitteeSiteMember to get related CommitteeSite objects
-                committee_sites = CommitteeSiteMember.objects.filter(member=obj.id)
+                # Query MemberCommitteeSite to get related CommitteeSite objects
+                committee_sites = MemberCommitteeSite.objects.filter(member=obj.id)
                 serialized_committees = [
                     CommitteeSiteSerializer(committee_site.committee_site).data
                     for committee_site in committee_sites
@@ -93,13 +89,13 @@ class CampaignMemberSerializer(serializers.ModelSerializer):
         election_slug = self.get_election_slug(obj)
         with schema_context(election_slug):
             try:
-                # Query CommitteeMember to get the related CommitteeMember object
-                committee_member = CommitteeMember.objects.filter(member=obj.id).first()
+                # Query MemberCommittee to get the related MemberCommittee object
+                committee_member = MemberCommittee.objects.filter(member=obj.id).first()
                 if committee_member:
                     committee = committee_member.committee
                     return CommitteeSerializer(committee).data
                 return None
-            except CommitteeMember.DoesNotExist:
+            except MemberCommittee.DoesNotExist:
                 return None
             except Exception as e:
                 print("Error:", e)
@@ -113,45 +109,47 @@ class CampaignMemberSerializer(serializers.ModelSerializer):
         # Get the committee_site from the context or request data
         committee_site_ids = self.context['request'].data.get('committee_sites')
         committee_id = self.context["request"].data.get("committee")
-
-        if committee_site_ids:
-            # Get the dynamic schema from the object or request
-            election_slug = self.get_election_slug(self.instance)
-
-            with schema_context(election_slug):
+        
+        # Get the dynamic schema from the object or request
+        election_slug = self.get_election_slug(self.instance)
+        
+        with schema_context(election_slug):
+            # Handle committee_site_ids
+            if committee_site_ids:
                 try:
                     for site_id in committee_site_ids:
                         # Retrieve the CommitteeSite object
                         committee_site = CommitteeSite.objects.get(id=site_id)
 
-                        # Create or update CommitteeSiteMember with the CampaignMember instance's ID
-                        CommitteeSiteMember.objects.update_or_create(
+                        # Create or update MemberCommitteeSite with the CampaignMember instance's ID
+                        MemberCommitteeSite.objects.update_or_create(
                             member=self.instance.id,
                             committee_site=committee_site,
                             defaults={'committee_site': committee_site}
                         )
-                        print(f"CommitteeSiteMember for site {site_id} created or updated successfully")
+                        print(f"MemberCommitteeSite for site {site_id} created or updated successfully")
                 except CommitteeSite.DoesNotExist:
                     print(f"CommitteeSite with id {site_id} does not exist")
                     raise serializers.ValidationError(f"CommitteeSite with id {site_id} does not exist")
                 except Exception as e:
                     print(f"Unexpected error occurred: {e}")
                     raise serializers.ValidationError(f"Unexpected error: {e}")
+            else:
+                # If no committee_site_ids, remove all MemberCommitteeSite entries related to the member
+                MemberCommitteeSite.objects.filter(member=self.instance.id).delete()
+                print("All MemberCommitteeSite entries related to the member have been deleted")
 
-        if committee_id:
-            # Get the dynamic schema from the object or request
-            election_slug = self.get_election_slug(self.instance)
-
-            with schema_context(election_slug):
+            # Handle committee_id
+            if committee_id:
                 try:
                     # Retrieve the Committee object
                     committee = Committee.objects.get(id=committee_id)
 
-                    # Create or update CommitteeMember with the CampaignMember instance's ID
-                    CommitteeMember.objects.update_or_create(
+                    # Create or update MemberCommittee with the CampaignMember instance's ID
+                    MemberCommittee.objects.update_or_create(
                         member=self.instance.id, defaults={"committee": committee}
                     )
-                    print("CommitteeMember created or updated successfully")
+                    print("MemberCommittee created or updated successfully")
                 except Committee.DoesNotExist:
                     print(f"Committee with id {committee_id} does not exist")
                     raise serializers.ValidationError(
@@ -160,32 +158,7 @@ class CampaignMemberSerializer(serializers.ModelSerializer):
                 except Exception as e:
                     print(f"Unexpected error occurred: {e}")
                     raise serializers.ValidationError(f"Unexpected error: {e}")
-
-    # def save(self, **kwargs):
-    #     # Call the original save method to save CampaignMember instance
-    #     super().save(**kwargs)
-
-    #     # Get the committee_site from the context or request data
-    #     committee_site_id = self.context['request'].data.get('committee_site')
-
-    #     if committee_site_id:
-    #         # Get the dynamic schema from the object or request
-    #         election_slug = self.get_election_slug(self.instance)
-
-    #         with schema_context(election_slug):
-    #             try:
-    #                 # Retrieve the CommitteeSite object
-    #                 committee_site = CommitteeSite.objects.get(id=committee_site_id)
-
-    #                 # Create or update CommitteeSiteMember with the CampaignMember instance's ID
-    #                 CommitteeSiteMember.objects.update_or_create(
-    #                     member=self.instance.id,
-    #                     defaults={'committee_site': committee_site}
-    #                 )
-    #                 print("CommitteeSiteMember created or updated successfully")
-    #             except CommitteeSite.DoesNotExist:
-    #                 print(f"CommitteeSite with id {committee_site_id} does not exist")
-    #                 raise serializers.ValidationError(f"CommitteeSite with id {committee_site_id} does not exist")
-    #             except Exception as e:
-    #                 print(f"Unexpected error occurred: {e}")
-    #                 raise serializers.ValidationError(f"Unexpected error: {e}")
+            else:
+                # If no committee_id, remove the MemberCommittee entry related to the member
+                MemberCommittee.objects.filter(member=self.instance.id).delete()
+                print("MemberCommittee entry related to the member has been deleted")

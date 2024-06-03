@@ -152,21 +152,21 @@ export const GET_ELECTOR_RELATED_ELECTORS = "/schemas/getElectorRelatedElectors"
 
 // Campaign Guarantees
 export const GET_ALL_CAMPAIGN_GUARANTEES = "/schemas/getAllCampaignGuarantees";
-export const DELETE_CAMPAIGN_GUARANTEE = "/schemas/deleteCampaignGuarantee";
 export const ADD_CAMPAIGN_GUARANTEE = "/schemas/addCampaignGuarantee";
+export const DELETE_CAMPAIGN_GUARANTEE = "/schemas/deleteCampaignGuarantee";
 export const UPDATE_CAMPAIGN_GUARANTEE = "/schemas/updateCampaignGuarantee";
 
 // Campaign GuaranteeGroups
 export const GET_ALL_CAMPAIGN_GUARANTEE_GROUPS = "/schemas/getAllCampaignGuaranteeGroups";
-export const DELETE_CAMPAIGN_GUARANTEE_GROUP = "/schemas/deleteCampaignGuaranteeGroup";
 export const ADD_CAMPAIGN_GUARANTEE_GROUP = "/schemas/addCampaignGuaranteeGroup";
+export const DELETE_CAMPAIGN_GUARANTEE_GROUP = "/schemas/deleteCampaignGuaranteeGroup";
 export const UPDATE_CAMPAIGN_GUARANTEE_GROUP = "/schemas/updateCampaignGuaranteeGroup";
 
 
 // CampaignAttendee
 export const GET_CAMPAIGN_ATTENDEES = "/schemas/getAllCampaignAttendees";
-export const DELETE_CAMPAIGN_ATTENDEE = "/schemas/deleteCampaignAttendee";
 export const ADD_CAMPAIGN_ATTENDEE = "/schemas/addCampaignAttendee";
+export const DELETE_CAMPAIGN_ATTENDEE = "/schemas/deleteCampaignAttendee";
 export const UPDATE_CAMPAIGN_ATTENDEE = "/schemas/updateCampaignAttendee";
 
 // CampaignSorting

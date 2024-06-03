@@ -1,19 +1,13 @@
 // hooks/CampaignHooks.js
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState, useCallback } from 'react';
 import { usePermission } from 'shared/hooks';
-import { useEffect, useState } from "react";
 
-// Get Member Options
-const useMemberMembers = (campaignMembers, memberRole) => {
-  return useMemo(() => {
+// Custom Hook to get Member Options
+const useMemberOptions = (campaignMembers, memberRole) => {
+  const memberGroup = useMemo(() => {
     return campaignMembers.filter(member => member.roleCodename === memberRole);
   }, [campaignMembers, memberRole]);
-};
 
-// Custom Hook to get Selected Options
-const useMemberOptions = (campaignMembers, memberRole) => {
-  console.log("campaignMemberscampaignMembers: ", campaignMembers)
-  const memberGroup = useMemberMembers(campaignMembers, memberRole);
   return useMemo(() => {
     const options = memberGroup.map(item => ({
       id: item.id,
@@ -26,29 +20,9 @@ const useMemberOptions = (campaignMembers, memberRole) => {
   }, [memberGroup]);
 };
 
-
-// Old
-const useSupervisorMembers = (campaignRoles, campaignMembers) => {
-  const supervisorRoleId = useMemo(() => {
-    return campaignRoles.find(role => role.name === "campaignSupervisor")?.id;
-  }, [campaignRoles]);
-
-  const supervisorMembers = useMemo(() => {
-    return campaignMembers.filter(member => member.role === supervisorRoleId);
-  }, [campaignMembers, supervisorRoleId]);
-
-  return supervisorMembers;
-};
-
-
+// Hook to get Campaign Roles based on permissions
 const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
-  // Permissions
-  const {
-    canChangeConfig,
-    canChangeCampaign,
-    canChangeMember,
-    canChangeCampaignMember,
-  } = usePermission();
+  const { canChangeConfig, canChangeCampaign, canChangeCampaignMember } = usePermission();
 
   return useMemo(() => {
     const currentRoleId = currentCampaignMember?.role;
@@ -68,25 +42,20 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
         break;
     }
 
-    const displayedRoles = campaignRoles.filter((role) => {
-      const isExcluded = excludedRoleStrings.includes(role.name);
-      if (isExcluded) {
-        console.log("Excluding role:", role.name);
-      }
-      return !isExcluded;
-    });
+    const displayedRoles = campaignRoles.filter(role => !excludedRoleStrings.includes(role.name));
 
     // Convert roles to options
-    const roleOptions = displayedRoles.map((role) => ({
+    const roleOptions = displayedRoles.map(role => ({
       id: role.id,
       name: role.name,
       value: role.id,
     }));
 
     return roleOptions;
-  }, [campaignRoles, currentCampaignMember, canChangeConfig, canChangeCampaign, canChangeMember]);
+  }, [campaignRoles, currentCampaignMember, canChangeConfig, canChangeCampaign, canChangeCampaignMember]);
 };
 
+// Get Campaign Agent Members
 const getCampaignAgentMembers = (campaignMemberRoleCodename, campaignFieldAgentOptions, campaignDigitalAgentOptions) => {
   switch (campaignMemberRoleCodename) {
     case "campaignFieldDelegate":
@@ -107,28 +76,24 @@ const getCampaignAgentMembers = (campaignMemberRoleCodename, campaignFieldAgentO
   }
 };
 
-
-// Committees
+// Get Committee Site Options
 const getCommitteeSiteOptions = (list) => {
-  return [
-    ...list.map(item => ({
-      id: item.id,
-      label: item.name,
-      value: parseInt(item.id, 10)
-    }))
-  ];
+  return list.map(item => ({
+    id: item.id,
+    label: item.name,
+    value: parseInt(item.id, 10),
+  }));
 };
 
-
+// Get All Committees
 const getAllCommittees = (electionCommitteeSites) => {
   return electionCommitteeSites.flatMap(site => site.committees);
 };
 
-const getCampaignAgentCommittees = (campaignAgent, electionCommitteeSites) => {
-  return electionCommitteeSites.flatMap(site => site.committees);
-};
 
 
+
+// Hook to get Committee Options
 const useCommitteeOptions = (committeeSites) => {
   const [groupedCommittees, setGroupedCommittees] = useState([]);
 
@@ -145,15 +110,14 @@ const useCommitteeOptions = (committeeSites) => {
       const committeeOptions = committeeSite.committees.map(committee => ({
         id: committee.id,
         label: `${committeeSite.name} - ${committee.type} - ${committee.id}`,
-        value: parseInt(committee.id, 10)
+        value: parseInt(committee.id, 10),
       }));
 
-      // Otherwise, create a SiteCommittees with the committee options
+      // Add the committee options to the grouped list
       acc.push({
         label: label,
         options: committeeOptions,
       });
-
 
       return acc;
     }, []);
@@ -164,18 +128,55 @@ const useCommitteeOptions = (committeeSites) => {
   return groupedCommittees;
 };
 
+// Deprecated: Get Supervisor Members
+const useSupervisorMembers = (campaignRoles, campaignMembers) => {
+  const supervisorRoleId = useMemo(() => {
+    return campaignRoles.find(role => role.name === "campaignSupervisor")?.id;
+  }, [campaignRoles]);
+
+  const supervisorMembers = useMemo(() => {
+    return campaignMembers.filter(member => member.role === supervisorRoleId);
+  }, [campaignMembers, supervisorRoleId]);
+
+  return supervisorMembers;
+};
+
+// Helper function to Show form fields based on selected role
+const useCampaignRoleString = (roleId, roles) => {
+  if (roleId == null) return null;
+  const roleObj = roles.find((role) => role.id.toString() === roleId.toString());
+  return roleObj ? roleObj.codename : null;
+};
+
+// Helper function to check if a member has a specific role
+const isMemberRoleOption = (campaignRoles, roleCondition, roleId) => {
+  const roleObj = campaignRoles.find(
+    (role) => role.id.toString() === roleId.toString()
+  );
+  return roleObj ? roleCondition.includes(roleObj.codename) : false;
+};
+
+
+// Get Campaign Agent Committees
+// Function to get Agent Member Committee Sites
+const useAgentMemberCommitteeSites = (campaignAgentId, campaignMembers) => {
+  const campaignAgentMember = campaignMembers.find(member => member.id === parseInt(campaignAgentId, 10));
+  const agentMemberCommitteeSite = campaignAgentMember?.committeeSites || []
+  return agentMemberCommitteeSite;
+};
+
+
 
 
 export {
-  useSupervisorMembers,
-  getCampaignAgentMembers,
-  useCampaignRoles,
   useMemberOptions,
-
-  // Committees
+  useCampaignRoles,
+  getCampaignAgentMembers,
   getCommitteeSiteOptions,
   getAllCommittees,
-  getCampaignAgentCommittees,
+  useAgentMemberCommitteeSites,
   useCommitteeOptions,
-
+  useSupervisorMembers, // Deprecated: Keep for backward compatibility if needed
+  useCampaignRoleString,
+  isMemberRoleOption,
 };

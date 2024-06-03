@@ -233,14 +233,13 @@ const Phone = (cellProps) => {
 
 
 // Campaign Teams
-const Role = ({ cellProps, campaignRoles }) => {
+const Role = ({ cellProps }) => {
     const roleName = cellProps.row.original.roleName;
-    // const role = campaignRoles.find((option) => option.id === roleId);
 
     return (
-        <p className="text-success">
+        <span className="text-primary">
             <strong>{roleName}</strong>
-        </p>
+        </span>
     );
 }
 
@@ -249,7 +248,7 @@ const Team = ({ cellProps, campaignMembers }) => {
     const teamCountForMember = campaignMembers.filter(member => member.supervisor === memberId).length;
 
     return (
-        <p>{teamCountForMember}</p>
+        <span>{teamCountForMember}</span>
     );
 };
 
@@ -296,8 +295,8 @@ const Guarantees = (cellProps) => {
         (!canChangeCampaignCoordinator &&
             !["campaignModerator", "campaignCandidate", "campaignCoordinator"].includes(campaignMemberRole))
             || canChangeCampaignSupervisor
-            ? <p>{guaranteeCountForMember}</p>
-            : <p>-</p>
+            ? <span>{guaranteeCountForMember}</span>
+            : <span>-</span>
     );
 }
 
@@ -306,13 +305,13 @@ const Attendees = ({ cellProps, campaignAttendees }) => {
     const attendeeCountForMember = campaignAttendees.filter(attendee => attendee.member === userId).length;
 
     return (
-        <p>{attendeeCountForMember}</p>
+        <span>{attendeeCountForMember}</span>
     );
 };
 
 const Sorted = ({ cellProps, campaignMembers }) => {
     return (
-        <p>Sorted</p>
+        <span>Sorted</span>
     );
 
 }
@@ -343,9 +342,9 @@ const Supervisor = ({ cellProps, campaignMembers }) => {
     const supervisorId = cellProps.row.original.supervisor;
     if (supervisorId === null) {
         return (
-            <p className="text-danger">
+            <span className="text-danger">
                 <strong>N/A</strong>
-            </p>
+            </span>
         );
     }
 
@@ -353,11 +352,11 @@ const Supervisor = ({ cellProps, campaignMembers }) => {
         (member) => member.id === supervisorId
     );
     return (
-        <p className="text-success">
+        <span className="text-success">
             <strong>
                 {supervisor ? supervisor.name : "Not Found"}
             </strong>
-        </p>
+        </span>
     );
 };
 
@@ -384,7 +383,7 @@ const Actions = (cellProps) => {
         selectedGuaranteeGroup,
         currentCampaignMember,
         campaignGuarantees,
-        // campaignAttendees,
+        campaignAttendees,
         // campaignDetails,
         // electors,
 
@@ -407,7 +406,7 @@ const Actions = (cellProps) => {
     let campaignUser = currentCampaignMember ? currentCampaignMember.user : null;
     let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : null;
     const isElectorInGuarantees = campaignGuarantees && campaignGuarantees.some(item => item.elector === cell.row.original.id);
-    // const isElectorInAttendees = campaignAttendees.some(item => item.id === cellProps.row.original.id);
+    const isElectorInAttendees = campaignAttendees && campaignAttendees.some(item => item.id === cellProps.row.original.id);
 
     const renderElectorGuaranteeButton = () => {
         if (isElectorInGuarantees) {
@@ -432,6 +431,32 @@ const Actions = (cellProps) => {
                 }}
             >
                 إضف للمضامين
+            </button>
+        );
+    };
+
+    const renderElectorAttendeeButton = () => {
+        if (isElectorInAttendees) {
+            return <span className="text-success">تم التحضير</span>;
+        }
+
+        return (
+            <button
+                type="button"
+                className="btn btn-success btn-sm"
+                onClick={(e) => {
+                    e.preventDefault();
+                    const newCampaignAttendee = {
+                        schema: schema,
+                        member: campaignMember,
+                        committee: campaignCommittee.id,
+                        elector: cell.row.original.id,
+                        status: 1,
+                    };
+                    dispatch(addCampaignAttendee(newCampaignAttendee));
+                }}
+            >
+                تسجيل حضور
             </button>
         );
     };
@@ -478,7 +503,11 @@ const Actions = (cellProps) => {
                         {renderElectorGuaranteeButton()}
                     </div>
                 )}
-
+                {options.includes("addAttendee") && (
+                    <div className="flex-shrink-0">
+                        {renderElectorAttendeeButton()}
+                    </div>
+                )}
             </div>
         </React.Fragment >
     );

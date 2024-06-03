@@ -23,7 +23,19 @@ export { useElectorDataSource } from "./useElectorDataSource"
 // Candidates
 
 // Campaigns
-export { useMemberOptions, useSupervisorMembers, useCampaignRoles, getCommitteeSiteOptions, getAllCommittees, getCampaignAgentCommittees, useCommitteeOptions, getCampaignAgentMembers } from "./CampaignHooks";
+export {
+    useMemberOptions,
+    useSupervisorMembers,
+    useCampaignRoles,
+    getCommitteeSiteOptions,
+    getAllCommittees,
+    useAgentMemberCommitteeSites,
+    useCommitteeOptions,
+    getCampaignAgentMembers,
+    useCampaignRoleString,
+    isMemberRoleOption,
+} from "./CampaignHooks";
+
 export { useCurrentCampaignMemberRole, useCampaignMemberRoles } from "./useCampaignMemberRoles";
 export { calculatePercentage, calculateCampaignData, getAggregatedGuarantorData, constructStatusColumns, getStatusCountForMember, getBgClassForStatus } from "./campaignCalculation"
 

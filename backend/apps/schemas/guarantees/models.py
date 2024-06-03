@@ -1,14 +1,8 @@
-# campaigns/models
+# schema/guarantees/models
 from django.db import models
-from django_extensions.db.fields import AutoSlugField
-from django.utils.text import slugify
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
-
 
 # Apps
 from apps.schemas.schemaModels import DynamicSchemaModel
-from apps.settings.models import TrackModel, TaskModel
 from apps.schemas.electors.models import Elector
 from utils.model_options import GuaranteeStatusOptions
 

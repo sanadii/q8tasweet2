@@ -4,7 +4,7 @@ from django.db import models
 from apps.schemas.committees.models import Committee, CommitteeSite
 from apps.schemas.schemaModels import DynamicSchemaModel
 
-class CommitteeSiteMember(DynamicSchemaModel):
+class MemberCommitteeSite(DynamicSchemaModel):
     committee_site = models.ForeignKey(
         CommitteeSite,
         on_delete=models.SET_NULL,
@@ -17,29 +17,29 @@ class CommitteeSiteMember(DynamicSchemaModel):
 
     class Meta:
         managed = False
-        db_table = "committee_site_member"
-        verbose_name = "Committee Member"
-        verbose_name_plural = "Committee Members"
+        db_table = "member_committee_site"
+        verbose_name = "Member Committee Site"
+        verbose_name_plural = "Member Committee Sites"
 
     def __str__(self):
-        return f"CommitteeSiteMember {self.id}"  # Ensure this returns a string
+        return f"MemberCommitteeSite {self.id}"  # Ensure this returns a string
 
 
-class CommitteeMember(DynamicSchemaModel):
+class MemberCommittee(DynamicSchemaModel):
     committee = models.ForeignKey(
         Committee,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="committee_member_committees",
+        related_name="member_committees",
     )
     member = models.IntegerField(null=True, blank=True)
 
     class Meta:
         managed = False
-        db_table = "committee_member"
-        verbose_name = "Committee Member"
-        verbose_name_plural = "Committee Members"
+        db_table = "member_committee"
+        verbose_name = "Member Committee"
+        verbose_name_plural = "Member Committees"
 
     def __str__(self):
-        return f"CommitteeMember {self.id}"  # Ensure this returns a string
+        return f"MemberCommittee {self.id}"  # Ensure this returns a string
