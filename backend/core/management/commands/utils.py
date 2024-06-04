@@ -1,6 +1,14 @@
 import pandas as pd
 from django.db import models, connection
 from contextlib import contextmanager
+import random
+import string
+
+def generate_random_slug(length=6):
+    """Generate a random slug of specified length."""
+    chars = string.ascii_letters + string.digits
+    return ''.join(random.choice(chars) for _ in range(length))
+
 
 @contextmanager
 def set_search_path(schema_name):
@@ -95,6 +103,11 @@ def process_row_fields(row, model, stdout, schema_name):
                     # Handle the case where the value cannot be converted to a date
                     stdout.write(f"Invalid date format for field {field.name}: {field_value}\n")
                     defaults[field.name] = None  # Assign None if the value is invalid
+
+        if isinstance(field, models.SlugField):
+            field_value = defaults.get(field.name)
+            if pd.isna(field_value) or field_value == "":
+                defaults[field.name] = generate_random_slug()  # Generate a random slug if empty
 
     return object_id, defaults
 

@@ -12,7 +12,7 @@ import { TableContainerHeader, } from "shared/components";
 // Components
 import GuaranteeGroupList from "./GruaranteeGroupList"
 import GuaranteesList from "./GuaranteeList"
-import MembersList from "./MembersList"
+// import MembersList from "./MembersList"
 import MembersModal from "./MembersList/MembersModal";
 import GuaranteesModal from "./GuaranteeList/GuaranteesModal";
 import GuaranteeGroupsModal from "./GruaranteeGroupList/GuaranteeGroupsModal";
@@ -117,20 +117,20 @@ const GuaranteesTab = () => {
   // Tabs
   // 
   const tabs = [
+    // {
+    //   tabId: "1",
+    //   href: '#campaignGuarantor',
+    //   icon: 'ri ri-user-4-fill',
+    //   title: "فريق العمل",
+    //   component: <MembersList
+    //     toggle={toggleCampaignMember}
+    //     setCampaignMember={setCampaignMember}
+    //     setModalMode={setModalMode}
+    //     handleSelectCampaignMember={handleSelectCampaignMember}
+    //   />
+    // },
     {
       tabId: "1",
-      href: '#campaignGuarantor',
-      icon: 'ri ri-user-4-fill',
-      title: "فريق العمل",
-      component: <MembersList
-        toggle={toggleCampaignMember}
-        setCampaignMember={setCampaignMember}
-        setModalMode={setModalMode}
-        handleSelectCampaignMember={handleSelectCampaignMember}
-      />
-    },
-    {
-      tabId: "2",
       href: '#campaignGuaranteeGroups',
       icon: 'ri ri-user-2-fill',
       title: 'المجاميع الإنتخابية',
@@ -145,7 +145,7 @@ const GuaranteesTab = () => {
       />
     },
     {
-      tabId: "3",
+      tabId: "2",
       permission: 'guarantee',
       href: '#campaignGuarantees',
       icon: 'ri ri-user-3-fill',
@@ -215,8 +215,8 @@ const GuaranteesTab = () => {
                 HandlePrimaryButton={handleGuaranteeAddClick}
                 SecondaryButtonText="إضافة مجموعة"
                 HandleSecondaryButton={handleGuaranteeGroupAddClick}
-                TertiaryButtonText="إضافة عضو"
-                HandleTertiaryButton={handleMemberAddClick}
+                // TertiaryButtonText="إضافة عضو"
+                // HandleTertiaryButton={handleMemberAddClick}
                 isEdit={isEdit}
                 setIsEdit={setIsEdit}
                 toggle={toggleCampaignGuarantee}
@@ -232,7 +232,7 @@ const GuaranteesTab = () => {
               <Progress multi className='progress-step-arrow progress-info'>
                 {tabs.map((tab) => (
                   <Progress
-                    key={tab.tabId} bar value="35"
+                    key={tab.tabId} bar value="50"
                     href={tab.href}
                     className={classnames({ active: activeTab.tabId === tab.tabId })}
                     onClick={() => toggleTab(tab)}

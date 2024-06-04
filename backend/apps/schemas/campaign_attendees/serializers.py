@@ -5,8 +5,10 @@ from rest_framework import serializers
 from apps.schemas.campaign_attendees.models import CampaignAttendee
 
 class CampaignAttendeeSerializer(serializers.ModelSerializer):
+    class Meta:
         model = CampaignAttendee
         fields = '__all__'
+
 
 
 # class CampaignAttendeeSerializer(serializers.ModelSerializer):

@@ -4,6 +4,7 @@ from apps.settings.models import TrackModel, TaskModel
 from utils.schema import schema_context
 from django.db import transaction
 from apps.elections.models import Election
+from apps.candidates.models import Candidate, Party
 #
 # Election Participant (Candidate, Party, PartyCandidate) Model
 #
@@ -16,7 +17,7 @@ class ElectionCandidate(TrackModel):
         related_name="candidate_elections",
     )
     candidate = models.ForeignKey(
-        "candidates.Candidate",
+        Candidate,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -76,7 +77,7 @@ class ElectionParty(TrackModel):
         related_name="party_elections",
     )
     party = models.ForeignKey(
-        "candidates.Party",
+        Party,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -117,18 +118,18 @@ class ElectionParty(TrackModel):
 
 class ElectionPartyCandidate(TrackModel):
     election_party = models.ForeignKey(
-        "ElectionParty",
+        ElectionParty,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="party_candidate_elections",
+        related_name="election_party_elections",
     )
-    candidate = models.ForeignKey(
-        "candidates.Candidate",
+    election_candidate = models.ForeignKey(
+        ElectionCandidate,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="election_party_candidates",
+        related_name="election_candidate_elections",
     )
     votes = models.PositiveIntegerField(default=0)
     total_votes = models.PositiveIntegerField(default=0)

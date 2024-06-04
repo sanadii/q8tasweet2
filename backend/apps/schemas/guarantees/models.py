@@ -25,14 +25,6 @@ class CampaignGuarantee(DynamicSchemaModel):
     id = models.AutoField(primary_key=True)  # Explicitly add the id field
     campaign = models.IntegerField(null=True, blank=True)
     member = models.IntegerField(null=True, blank=True)
-    member2 = models.IntegerField(null=True, blank=True)
-    # elector = models.ForeignKey(
-    #     Elector,
-    #     on_delete=models.SET_NULL,
-    #     null=True,
-    #     blank=True,
-    #     related_name="campaign_guarantee_electors",
-    # )
     elector = models.ForeignKey(
         Elector,
         related_name="campaign_guarantee_electors",
@@ -60,6 +52,6 @@ class CampaignGuarantee(DynamicSchemaModel):
 
     class Meta:
         db_table = "campaign_guarantee"
-        verbose_name = "Campaign Guarantee"
+        verbose_name = "المضامين"
         verbose_name_plural = "المضامين"
 

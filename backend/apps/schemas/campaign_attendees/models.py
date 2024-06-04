@@ -31,8 +31,8 @@ class CampaignAttendee(DynamicSchemaModel):
     class Meta:
         managed = False
         db_table = "campaign_attendee"
-        verbose_name = "Election Attendee"
-        verbose_name_plural = "Election Attendees"
+        verbose_name = "الحضور"
+        verbose_name_plural = "الحضور"
 
 
 # class Attendee(DynamicSchemaModel):

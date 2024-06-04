@@ -173,12 +173,26 @@ const Priority = ({ priority }) => {
 //     );
 // }
 
-const Attended = (cellProps) => {
+const NumberOfAttenance = (cellProps) => {
     const numberOfVoters = cellProps.row.original.voters
     return (
         <p>{numberOfVoters ? numberOfVoters : '-'}</p>
     );
 }
+
+// const Attended = (cellProps) => {
+//     if (cellProps.row.original.attended) {
+//         return <i className="ri-checkbox-circle-fill text-success"> حضر</i>;
+//     } else {
+//         return <i className="ri-close-circle-fill text-danger"> لم يحضر</i>;
+//     }
+// }
+
+
+
+const Attended = ({ option, value }) => {
+    return getOptionBadge(option, value, true)
+};
 
 const AttendedPercentage = (cellProps) => {
     const numberOfVoters = cellProps.row.original.voters
@@ -223,13 +237,6 @@ const Phone = (cellProps) => {
     );
 }
 
-// const Attended = (cellProps) => {
-//     if (cellProps.row.original.attended) {
-//         return <i className="ri-checkbox-circle-fill text-success"></i>;
-//     } else {
-//         return <i className="ri-close-circle-fill text-danger"></i>;
-//     }
-// }
 
 
 // Campaign Teams
@@ -406,7 +413,7 @@ const Actions = (cellProps) => {
     let campaignUser = currentCampaignMember ? currentCampaignMember.user : null;
     let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : null;
     const isElectorInGuarantees = campaignGuarantees && campaignGuarantees.some(item => item.elector === cell.row.original.id);
-    const isElectorInAttendees = campaignAttendees && campaignAttendees.some(item => item.id === cellProps.row.original.id);
+    const isElectorInAttendees = campaignAttendees && campaignAttendees.some(item => item.elector === cell.row.original.id);
 
     const renderElectorGuaranteeButton = () => {
         if (isElectorInGuarantees) {
@@ -449,7 +456,7 @@ const Actions = (cellProps) => {
                     const newCampaignAttendee = {
                         schema: schema,
                         member: campaignMember,
-                        committee: campaignCommittee.id,
+                        // committee: campaignCommittee.id,
                         elector: cell.row.original.id,
                         status: 1,
                     };

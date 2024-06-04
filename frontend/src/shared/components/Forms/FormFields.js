@@ -172,8 +172,11 @@ const FormFields = ({ field, validation, formStructure, formStyle }) => {
                         {/* <option value="">-- اختر --</option> */}
                         {field.options &&
                             field.options.map((option) => (
-                                <option key={option.id} value={option.value}>
-                                    {option.name}
+                                <option
+                                    key={option.id}
+                                    value={option.value}
+                                >
+                                    {option.label}
                                 </option>
                             ))}
                     </Input>

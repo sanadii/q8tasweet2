@@ -132,7 +132,10 @@ const GuaranteeList = ({
         Header: "الحضور",
         accessor: "attended",
         Cell: (cellProps) =>
-          <Attended {...cellProps} />
+          <Attended
+            option="electorAttendanceOption"
+            value={cellProps.row.original.attended}
+          />
       },
 
       {

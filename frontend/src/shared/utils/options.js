@@ -5,6 +5,8 @@ import {
     ElectionMethodOptions, ElectionResultOptions, ElectionSortingResultOptions, ElectionDetailedResultOptions,
     // Campaign
     CampaignGuaranteeStatusOptions,
+    // Electors
+    ElectorAttendanceOption,
 } from "shared/constants";
 
 const allOptions = {
@@ -16,6 +18,7 @@ const allOptions = {
     electionSortingResult: ElectionSortingResultOptions,
     electionDetailedResult: ElectionDetailedResultOptions,
     campaignGuaranteeStatus: CampaignGuaranteeStatusOptions,
+    electorAttendanceOption: ElectorAttendanceOption,
 };
 
 const getSelectedOptions = (optionCategory) => {
@@ -31,19 +34,31 @@ const getOptionOptions = (optionCategory) => {
     }));
 };
 
-const getOptionBadge = (optionCategory, status) => {
-    console.log("optionCategory: ", optionCategory)
-    console.log("optionCategory status: ", status)
+const getOptionBadge = (optionCategory, status, checkValue) => {
+    console.log("optionCategory: ", optionCategory);
+    console.log("optionCategory status: ", status);
 
     const selectedOption = getSelectedOptions(optionCategory);
-    const entry = selectedOption.find(opt => opt.id === status);
+    let entry;
+    if (checkValue) {
+        entry = selectedOption.find(opt => opt.value === status);
+        return (
+            <div className={`${entry.badgeClass} fs-10`}>
+                {entry.name}
+            </div>
+        );
+    } else {
+        entry = selectedOption.find(opt => opt.id === status);
+        return (
+            <div className={`${entry.badgeClass} fs-10`}>
+                {entry.name}
+            </div>
+        );
+    }
     if (!entry) return null;
 
-    return (
-        <div className={`${entry.badgeClass} fs-10`}>
-            {entry.name}
-        </div>
-    );
+
 };
+
 
 export { getSelectedOptions, getOptionOptions, getOptionBadge };

@@ -3,7 +3,7 @@ import React from "react";
 import * as moment from "moment";
 
 import { useSelector, useDispatch } from "react-redux";
-import { electionSelector, categorySelector, userSelector } from 'selectors';
+import { categorySelector  } from 'selectors';
 
 // Import Actions
 import { addElection, updateElection } from "store/actions";
@@ -108,6 +108,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
     activeParentCategoryId
   } = useCategoryManager(categories, subCategories, validation);
 
+  console.log("categoryOptions: ", categoryOptions)
   const fields = [
     // Existing fields
     {

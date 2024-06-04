@@ -3,6 +3,9 @@ from rest_framework import serializers
 
 # Apps
 from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
+from apps.schemas.campaign_attendees.models import CampaignAttendee
+
+
 
 
 #
@@ -60,6 +63,7 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
     address = serializers.CharField(
         source="elector.address", default="Elector Address Not Found", read_only=True
     )
+    attended = serializers.SerializerMethodField()
 
     class Meta:
         model = CampaignGuarantee
@@ -67,17 +71,18 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
             # guarantee
             "id", "member", "elector", "guarantee_group", "phone", "status",
             # Elector
-            "full_name", 
-            "gender", "job", "age",
-            "address",
-            # # Election Details 
-            "committee", "committee_area",  "committee_name",
-            "letter", "code_number", "status_code",
+            "full_name", "gender", "job", "age", "address",
+            # Committee
+            "committee", "committee_area",  "committee_name", "letter", "code_number", "status_code",
+            # Attendeed?
+            'attended',
         ]
 
 
-    # def get_attended(self, obj):
-    #     return CampaignAttendee.objects.filter(elector=obj.elector).exists()
+    def get_attended(self, obj):
+        attended = CampaignAttendee.objects.filter(elector=obj.elector).exists()
+        print("attended???? ", attended)
+        return attended
 
 
 #

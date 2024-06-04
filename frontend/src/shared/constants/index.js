@@ -16,3 +16,7 @@ export { TagOptions } from "./Tags";
 export * from "./MemberRoleOptions";
 export * from "./MemberStatusOptions";
 export * from "./CampaignOptions";
+
+
+// Electors
+export * from "./ElectorOptions"

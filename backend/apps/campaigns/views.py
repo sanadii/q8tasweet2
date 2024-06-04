@@ -38,12 +38,17 @@ from apps.campaigns.models import (
 )
 from apps.campaigns.members.models import CampaignMember
 from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
+from apps.schemas.campaign_attendees.models import CampaignAttendee
+
+
 from apps.elections.candidates.models import Election, ElectionCandidate, ElectionParty
 from apps.schemas.committees.models import CommitteeSite, Committee
 from django.contrib.auth.models import Group
 
 # Serializers
 from apps.campaigns.members.serializers import CampaignMemberSerializer
+from apps.schemas.campaign_attendees.serializers import CampaignAttendeeSerializer
+
 from apps.elections.serializers import ElectionSerializer
 from apps.campaigns.serializers import (
     CampaignSerializer,
@@ -262,21 +267,7 @@ def get_campaign_schema_content(
 
         campaign_id = campaign.id if hasattr(campaign, "id") else campaign
 
-        # Fetch campaign guarantees
-        try:
-            campaign_guarantees = CampaignGuarantee.objects.filter(
-                member__in=campaign_managed_members.values_list("id", flat=True)
-            )
-
-            if campaign_guarantees.exists():
-                campaign_guarantee_data = CampaignGuaranteeSerializer(
-                    campaign_guarantees, many=True, context=context
-                ).data
-                response_data["campaign_guarantees"] = campaign_guarantee_data
-        except Exception as e:
-            response_data["campaignGuaranteeDataError"] = str(e)
-
-        # Fetch campaign guarantees
+        # Fetch Campaign Guarantee Groups
         try:
             campaign_guarantee_groups = CampaignGuaranteeGroup.objects.filter(
                 member__in=campaign_managed_members.values_list("id", flat=True)
@@ -290,6 +281,36 @@ def get_campaign_schema_content(
                 )
         except Exception as e:
             response_data["campaignGuaranteeGroupDataError"] = str(e)
+        
+        # Fetch Campaign Attendees
+        try:
+            campaign_attendees = CampaignAttendee.objects.filter(
+                member__in=campaign_managed_members.values_list("id", flat=True)
+            )
+
+            if campaign_attendees.exists():
+                campaign_attendee_data = CampaignAttendeeSerializer(
+                    campaign_attendees, many=True, context=context
+                ).data
+                response_data["campaign_attendees"] = campaign_attendee_data
+        except Exception as e:
+            response_data["campaignAttendeeDataError"] = str(e)
+
+        # Fetch Campaign Guarantees
+        try:
+            campaign_guarantees = CampaignGuarantee.objects.filter(
+                member__in=campaign_managed_members.values_list("id", flat=True)
+            )
+
+            if campaign_guarantees.exists():
+                campaign_guarantee_data = CampaignGuaranteeSerializer(
+                    campaign_guarantees, many=True, context=context
+                ).data
+                response_data["campaign_guarantees"] = campaign_guarantee_data
+        except Exception as e:
+            response_data["campaignGuaranteeDataError"] = str(e)
+
+
             
         # Fetch Campaign Election Committees
         try:
