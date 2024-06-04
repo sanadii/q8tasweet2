@@ -39,7 +39,10 @@ from apps.schemas.committees.models import CommitteeSite, Committee
 
 # Schema Serializers
 from apps.schemas.areas.serializers import AreaSerializer
-from apps.schemas.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
+from apps.schemas.committees.serializers import (
+    CommitteeSerializer,
+    CommitteeSiteSerializer,
+)
 from django.apps import apps
 
 # Schema Models
@@ -159,6 +162,8 @@ class GetElectionDetails(APIView):
 
     def get(self, request, slug):
         election = get_object_or_404(Election, slug=slug)
+        election_method = election.election_method
+        print("election_method: ", election_method)
 
         context = {"request": request}
 
@@ -168,10 +173,6 @@ class GetElectionDetails(APIView):
             .prefetch_related("candidate")
             .only("id")
         )
-        election_parties = ElectionParty.objects.filter(election=election)
-        election_party_candidates = ElectionPartyCandidate.objects.filter(
-            election_party__in=election_parties
-        ).select_related("candidate", "election_party")
 
         response_data = {
             # "electionSchema": schemaserializer(election, context=context).data,
@@ -179,24 +180,36 @@ class GetElectionDetails(APIView):
             "electionCandidates": ElectionCandidateSerializer(
                 election_candidates, many=True, context=context
             ).data,
-            "electionParties": ElectionPartySerializer(
-                election_parties, many=True, context=context
-            ).data,
-            "electionPartyCandidates": ElectionPartyCandidateSerializer(
-                election_party_candidates, many=True, context=context
-            ).data,
         }
 
+        # If electionMethod is PartyBased
+        if election_method != "candidateOnly":
+            get_election_party_candidate_date(context, election, response_data)
+
+        # If Election Has Schema
         get_schema_details_and_content(context, slug, response_data)
 
         return Response({"data": response_data, "code": 200})
+
+
+def get_election_party_candidate_date(context, election, response_data):
+    election_parties = ElectionParty.objects.filter(election=election)
+    election_party_candidates = ElectionPartyCandidate.objects.filter(
+        election_party__in=election_parties
+    ).select_related("election_candidate", "election_party")
+
+    response_data["electionParties"] = ElectionPartySerializer(
+        election_parties, many=True, context=context
+    ).data
+    response_data["electionPartyCandidates"] = ElectionPartyCandidateSerializer(
+        election_party_candidates, many=True, context=context
+    ).data
 
 
 # Fetching model verbose_name_plural
 model_verbose_names = {
     model._meta.db_table: model._meta.verbose_name_plural for model in apps.get_models()
 }
-
 
 def get_schema_details_and_content(context, slug, response_data):
     with schema_context(slug) as election:

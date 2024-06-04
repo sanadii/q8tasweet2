@@ -46,7 +46,7 @@ export { default as TableContainerFilters } from "./Tables/TableContainerFilters
 // Image Frames
 export { default as AvatarImage } from "./Images/AvatarImage";
 export {
-  ResultCandidateName,
+  // ResultCandidateName,
   ImageCircle,
   ImageGenderCircle,
   AvatarList,

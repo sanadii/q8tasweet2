@@ -12,7 +12,7 @@ import SectionHeader from "./SectionHeader";
 import OverviewTab from "./OverviewTab";
 import StatisticsTab from "./StatisticsTab";
 import ElectorSearchTab from "./ElectorSearchTab";
-import ElectionDetailsWidget from "./OverviewTab/ElectionDetailsWidget";
+import ElectionDetailsWidget from "./OverviewTab/Widgets";
 import CandidatesTab from "./CandidatesTab";
 import CampaignsTab from "./CampaignsTab";
 import CommitteesTab from "./CommitteesTab";

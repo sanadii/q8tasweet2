@@ -11,10 +11,14 @@ class Command(BaseCommand):
         # call_command('import_groups')
         # call_command('import_election_categories')
         # call_command('import_elections')
+
         # call_command('import_candidates')
         # call_command('import_parties')
-        call_command('import_election_party_candidates')
+
         # call_command('import_election_candidates')
+        # call_command('import_election_parties')
+        call_command('import_election_party_candidates')
+
         # call_command('set_permissions')
 
         # setup Schemas

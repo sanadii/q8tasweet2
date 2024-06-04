@@ -55,8 +55,8 @@ const SectionHeader = () => {
                         {/* For Admin Only */}
                         <div className="col-md-auto p-2">
                             <div className="hstack gap-3 flex-wrap">
-                                {getOptionBadge("status", electionStatus)}
-                                {getOptionBadge("priority", electionPriority)}
+                                {/* {getOptionBadge("status", electionStatus)}
+                                {getOptionBadge("priority", electionPriority)} */}
                                 <div className="badge bg-black fs-10">
                                     الرمز:  {election.id}
                                 </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardHeader, } from "reactstrap";
-import { ElectionCandidatesByGender, ElectionVotersByGender } from '../Charts/OverviewCharts'
+import { ElectionCandidatesByGender, ElectorsByGender } from './OverviewCharts'
 
 const ElectionDetailsWidget = ({ election, electionCandidates }) => {
 
@@ -52,17 +52,23 @@ const ElectionDetailsWidget = ({ election, electionCandidates }) => {
         </div>
       </Card>
 
-      <Card className="card-animate overflow-hidden">
-        <CardHeader className="align-items-center d-flex">
-          <h4 className="card-title mb-0 flex-grow-1">الناخبين</h4>
-          <span>{electionVoters} ناخب</span>
-        </CardHeader>
+      {/* Election Electors */}
+      {(electionMaleVoters > 0 || electionFemaleVoters > 0) &&
+        <Card className="card-animate overflow-hidden">
+          <CardHeader className="align-items-center d-flex">
+            <h4 className="card-title mb-0 flex-grow-1">الناخبين</h4>
+            <span>{electionVoters} ناخب</span>
+          </CardHeader>
 
-        <div className="card-body">
-          <ElectionVotersByGender electionMaleVoters={electionMaleVoters} electionFemaleVoters={electionFemaleVoters} />
-        </div>
-      </Card>
+          <div className="card-body">
+            < ElectorsByGender
+              electionMaleVoters={electionMaleVoters}
+              electionFemaleVoters={electionFemaleVoters}
+            />
 
+          </div>
+        </Card>
+      }
     </React.Fragment >
   );
 };

@@ -54,46 +54,46 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
 
 
 
-export const ResultCandidateName = ({ dirName, cellProps }) => {
-  const { id, name, image, gender, slug, imagePath, result } = cellProps.row.original;
+// export const ResultCandidateName = ({ dirName, cellProps }) => {
+//   const { id, name, image, gender, slug, imagePath, result } = cellProps.row.original;
 
-  // Define result statuses
-  const isWinner = result === "فاز";
-  const isEliminated = result === "مشطوب";
-  const isSteppedDown = result === "تنازل";
+//   // Define result statuses
+//   const isWinner = result === "فاز";
+//   const isEliminated = result === "مشطوب";
+//   const isSteppedDown = result === "تنازل";
 
-  const imageUrl = image ? `${process.env.REACT_APP_MEDIA_URL}${image}` : `${process.env.REACT_APP_MEDIA_URL}${defaultImagePath}`;
+//   const imageUrl = image ? `${process.env.REACT_APP_MEDIA_URL}${image}` : `${process.env.REACT_APP_MEDIA_URL}${defaultImagePath}`;
 
-  return (
-    <Link to={`/dashboard/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
-      <div className="avatar-sm">
-        <img
-          src={imageUrl}
-          alt={name}
-          className="img-thumbnail rounded-circle"
-        />
-      </div>
-      <div className="ms-2">
-        <strong>{name}</strong>
-        {isWinner && (
-          <Badge color="success" className="ms-2">
-            فائز
-          </Badge>
-        )}
-        {isEliminated && (
-          <Badge color="danger" className="ms-2">
-            مشطوب
-          </Badge>
-        )}
-        {isSteppedDown && (
-          <Badge color="warning" className="ms-2">
-            تنازل
-          </Badge>
-        )}
-      </div>
-    </Link>
-  );
-};
+//   return (
+//     <Link to={`/dashboard/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
+//       <div className="avatar-sm">
+//         <img
+//           src={imageUrl}
+//           alt={name}
+//           className="img-thumbnail rounded-circle"
+//         />
+//       </div>
+//       <div className="ms-2">
+//         <strong>{name}</strong>
+//         {isWinner && (
+//           <Badge color="success" className="ms-2">
+//             فائز
+//           </Badge>
+//         )}
+//         {isEliminated && (
+//           <Badge color="danger" className="ms-2">
+//             مشطوب
+//           </Badge>
+//         )}
+//         {isSteppedDown && (
+//           <Badge color="warning" className="ms-2">
+//             تنازل
+//           </Badge>
+//         )}
+//       </div>
+//     </Link>
+//   );
+// };
 
 
 

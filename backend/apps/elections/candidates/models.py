@@ -84,7 +84,7 @@ class ElectionParty(TrackModel):
         related_name="election_parties",
     )
     votes = models.PositiveIntegerField(default=0)
-    notes = models.TextField(blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
 
     #  Saving sum of votes from CommitteeResultCandidate for each party
     # def update_votes(self):
@@ -133,7 +133,7 @@ class ElectionPartyCandidate(TrackModel):
     )
     votes = models.PositiveIntegerField(default=0)
     total_votes = models.PositiveIntegerField(default=0)
-    notes = models.TextField(blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
 
     #  Saving sum of votes from ElectionCommitteeResult for each candidate
     # def update_votes(self):

@@ -9,7 +9,7 @@ import ElectionResultParties from "./ElectionResultParties";
 
 const ElectionResults = () => {
   const { electionMethod } = useSelector(electionSelector);
-  const [electionResultStatus, setElectionResultStatus] = useState(""); // Also appears to be unused, consider its purpose
+  const [electionResultStatus, setElectionResultStatus] = useState("");
 
   return (
     <React.Fragment>
@@ -20,7 +20,7 @@ const ElectionResults = () => {
           </h5>
         </CardHeader>
         <CardBody>
-          {electionMethod === "candidateOnly" ?
+          {electionMethod !== "partyPartyOriented" ?
             <ElectionResultCandidates />
             :
             <ElectionResultParties />

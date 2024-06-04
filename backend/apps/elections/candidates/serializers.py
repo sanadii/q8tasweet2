@@ -135,8 +135,8 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
 
     admin_serializer_classes = (TrackMixin,)
 
-    name = serializers.CharField(source="candidate.name", read_only=True)
-    gender = serializers.IntegerField(source="candidate.gender", read_only=True)
+    name = serializers.CharField(source="election_candidate.candidate.name", read_only=True)
+    gender = serializers.IntegerField(source="election_candidate.candidate.gender", read_only=True)
     image = serializers.SerializerMethodField("get_candidate_image")
     # committee_results = ElectionPartyCandidateCommitteeResultSerializer(
     #     source="party_candidate_committee_result_candidates", many=True, read_only=True
@@ -148,7 +148,7 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
         fields = [
             "id",
             "election_party",
-            "candidate",
+            "election_candidate",
             "name",
             "gender",
             "image",
@@ -159,8 +159,8 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
         ]
 
     def get_candidate_image(self, obj):
-        if obj.candidate and obj.candidate.image:
-            return obj.candidate.image.url
+        if obj.election_candidate and obj.election_candidate.candidate.image:
+            return obj.election_candidate.candidate.image.url
         return None
 
     def create(self, validated_data):

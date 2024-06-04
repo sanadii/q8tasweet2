@@ -37,7 +37,7 @@ const ElectionCandidatesByGender = ({ electionCandidates }) => {
   );
 };
 
-const ElectionVotersByGender = ({
+const ElectorsByGender = ({
   electionMaleVoters,
   electionFemaleVoters
 }) => {
@@ -82,7 +82,7 @@ const ElectionVotersByGender = ({
 
 export {
   ElectionCandidatesByGender,
-  ElectionVotersByGender,
+  ElectorsByGender,
 
-  // ElectionVotersByGender, AttendeesGroupes 
+  // ElectorsByGender, AttendeesGroupes 
 };

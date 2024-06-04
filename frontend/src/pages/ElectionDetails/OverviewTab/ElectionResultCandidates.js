@@ -4,10 +4,9 @@ import { Loader, TableContainer } from "shared/components";
 
 // Redux & Selector
 import { useSelector } from "react-redux";
-import { ImageCandidateWinnerCircle } from "shared/components";
 import { electionSelector } from 'selectors';
 
-import { Id, CandidateName, Position, Votes } from "./ElectionResultCol";
+import { ResultCandidateName, CandidatePosition, CandidateVotes } from "shared/components";
 
 const ElectionResultCandidates = () => {
   const { electionCandidates, error } = useSelector(electionSelector);
@@ -16,19 +15,30 @@ const ElectionResultCandidates = () => {
     {
       Header: "المركز",
       accessor: "position",
-      Cell: (cellProps) => <Position {...cellProps} />,
+      Cell: (cellProps) =>
+        <CandidatePosition
+          position={cellProps.row.original.position}
+        />,
       sortType: 'alphanumeric'
 
     },
     {
       Header: "المرشح",
       accessor: "candidate",
-      Cell: (cellProps) => <CandidateName {...cellProps} />,
+      Cell: (cellProps) =>
+        <ResultCandidateName
+          name={cellProps.row.original.name}
+          image={cellProps.row.original.image}
+          result={cellProps.row.original.result}
+        />
     },
     {
       Header: 'المجموع',
       accessor: "votes",
-      Cell: (cellProps) => <Votes {...cellProps} />,
+      Cell: (cellProps) =>
+        <CandidateVotes
+          candidateVotes={cellProps.row.original.votes}
+        />,
     },
   ], []);
   return (

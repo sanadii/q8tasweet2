@@ -5,7 +5,7 @@ import { electionSelector } from 'selectors';
 
 // Components
 import ElectionResults from "./ElectionResults"
-import ElectionDetailsWidget from "./ElectionDetailsWidget";
+import ElectionDetailsWidget from "./Widgets";
 import ElectionModerators from "./ElectionModerators";
 import ElectionCampaigns from "./ElectionCampaigns";
 import ElectionDatabase from "./ElectionDatabase";

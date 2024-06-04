@@ -9,6 +9,11 @@ from apps.schemas.schemaModels import DynamicSchemaModel
 
 User = get_user_model()
 
+from django.db import models
+
+      
+        
+
 class CommitteeSite(DynamicSchemaModel):
     serial = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -40,6 +45,7 @@ class CommitteeSite(DynamicSchemaModel):
     def __str__(self):
         return f"CommitteeSite {self.id}"  # Ensure this returns a string
 
+
 class Committee(DynamicSchemaModel):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
@@ -51,7 +57,6 @@ class Committee(DynamicSchemaModel):
         blank=True,
     )
     type = models.TextField(max_length=25, blank=True, null=True)
-    main = models.BooleanField(default=False)
 
     class Meta:
         managed = False
@@ -62,6 +67,12 @@ class Committee(DynamicSchemaModel):
 
     def __str__(self):
         return f"Committee {self.id}"  # Ensure this returns a string
+
+    def add_dynamic_fields(self):
+        election_category = getattr(self, 'election_category', None)
+        print("election_category:", election_category, "self:", self )
+        if election_category == 3000:
+            self._meta.add_field(models.IntegerField(blank=True, null=True), name='test')
 
 # class BaseElectionSorting(models.Model):
 #     user = models.ForeignKey(
@@ -115,47 +126,6 @@ class Committee(DynamicSchemaModel):
 #         verbose_name_plural = "Election Party Candidate  Sortings"
 
 
-# class ElectionCommitteeGroup(TrackModel):
-#     id = models.AutoField(primary_key=True)
-#     election = models.ForeignKey('Election', on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_group_elections')
-#     name = models.CharField(max_length=255)
-#     committee_no = models.IntegerField()
-#     circle = models.IntegerField()
-#     # Change area to a ForeignKey relation to the Area model
-#     area = models.ForeignKey(Area, on_delete=models.SET_NULL, null=True, blank=True, related_name='committee_areas')
-#     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
-#     description = models.CharField(max_length=255)
-#     address = models.CharField(max_length=255)
-#     voter_count = models.IntegerField()
-#     committee_count = models.IntegerField()
-#     total_voters = models.IntegerField()
-#     tags = models.CharField(max_length=255, blank=True)
-
-#     class Meta:
-#         db_table = "committee_group"
-#         verbose_name = "Committee Group"
-#         verbose_name_plural = "Committee Groups"
-#         default_permissions = []
-
-#     def __str__(self):
-#         return self.name
-
-# class ElectionCommittee(TrackModel):
-#     id = models.AutoField(primary_key=True)
-#     serial = models.IntegerField()
-#     letters = models.CharField(max_length=255)
-#     type = models.CharField(max_length=255)
-#     areas = models.CharField(max_length=255)
-#     committee_group = models.ForeignKey(ElectionCommitteeGroup, on_delete=models.SET_NULL, null=True, blank=True, related_name='committees')
-
-#     class Meta:
-#         db_table = "committee"
-#         verbose_name = "Committee Group"
-#         verbose_name_plural = "Committee Groups"
-#         default_permissions = []
-
-#     def __str__(self):
-#         return f"{self.areas} - {self.serial} - {self.letters}"
 
 # class ElectionCommitteeSorter(TrackModel, TaskModel):
 #     election_committee = models.ForeignKey('ElectionCommittee', on_delete=models.SET_NULL, null=True, blank=True, related_name='election_committee_sorter_committees')

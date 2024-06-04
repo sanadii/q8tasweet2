@@ -6,7 +6,7 @@ import { ImageGenderCircle, Loader, DeleteModal, ExportCSVModal, TableContainer,
 import { electionSelector } from 'selectors';
 
 // Components
-import ElectionDetailsWidget from "./ElectionDetailsWidget";
+import ElectionDetailsWidget from "./Widgets";
 //SimpleBar
 import SimpleBar from "simplebar-react";
 

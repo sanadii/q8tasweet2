@@ -34,7 +34,7 @@ const getOptionOptions = (optionCategory) => {
     }));
 };
 
-const getOptionBadge = (optionCategory, status, checkValue) => {
+const getOptionBadge = (optionCategory, status, checkValue = false) => {
     console.log("optionCategory: ", optionCategory);
     console.log("optionCategory status: ", status);
 

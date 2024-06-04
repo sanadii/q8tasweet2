@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         file_path = "core/management/data/electionCandidates.xlsx"
-        work_sheet = "candidate"
+        work_sheet = "candidates"
         required_data = [
             "id", "status", "priority", "name", "gender", "image", "tags", "slug", "denomination", 
             "family", "tribe", "is_deleted",

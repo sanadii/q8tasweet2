@@ -38,7 +38,7 @@ const ElectionCandidatesByGender = ({ electionCandidates }) => {
     )
 }
 
-const ElectionVotersByGender = ({ electionMaleVoters, electionFemaleVoters }) => {
+const ElectorsByGender = ({ electionMaleVoters, electionFemaleVoters }) => {
     // Convert values to numbers if they are not already numbers
     const maleVoters = isNaN(electionMaleVoters) ? 0 : Number(electionMaleVoters);
     const femaleVoters = isNaN(electionFemaleVoters) ? 0 : Number(electionFemaleVoters);
@@ -77,5 +77,5 @@ const ElectionVotersByGender = ({ electionMaleVoters, electionFemaleVoters }) =>
 export {
 
     ElectionCandidatesByGender,
-    ElectionVotersByGender,
+    ElectorsByGender,
 }

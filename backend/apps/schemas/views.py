@@ -9,7 +9,11 @@ from rest_framework.permissions import IsAuthenticated
 from apps.elections.models import Election
 from apps.schemas.areas.models import Area
 from apps.schemas.committees.models import Committee, CommitteeSite
-from apps.schemas.committee_results.models import CommitteeResultCandidate, CommitteeResultParty, CommitteeResultPartyCandidate
+from apps.schemas.committee_results.models import (
+    CommitteeResultCandidate,
+    CommitteeResultParty,
+    CommitteeResultPartyCandidate,
+)
 from apps.schemas.committee_members.models import MemberCommitteeSite, MemberCommittee
 from apps.schemas.electors.models import Elector
 from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
@@ -43,13 +47,18 @@ class AddElectionSchema(APIView):
 
 
 # depends on ElectionMethod, ElectionResult
-# Election Metho
+# Election Method
 class AddSchemaTables(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         slug = kwargs.get("slug")
-        models = [Area, Committee, CommitteeSite, Elector]  # Initialize with common models
+        models = [
+            Area,
+            Committee,
+            CommitteeSite,
+            Elector,
+        ]
 
         try:
             # Get the election instance using the slug
@@ -58,13 +67,17 @@ class AddSchemaTables(APIView):
             # Extract electionMethod and resultMethod
             election_method = election.election_method
             is_detailed_results = election.is_detailed_results
-            
+
             print(is_detailed_results, election_method)
             if is_detailed_results:
                 if election_method == "candidateOnly":
                     models.append(CommitteeResultCandidate)
 
-                if election_method in ["partyPartyOriented", "partyCandidateOriented", "partyCandidateCombined"]:
+                if election_method in [
+                    "partyPartyOriented",
+                    "partyCandidateOriented",
+                    "partyCandidateCombined",
+                ]:
                     models.append(CommitteeResultParty)
                     models.append(CommitteeResultPartyCandidate)
 
@@ -75,7 +88,12 @@ class AddSchemaTables(APIView):
                 models.append(MemberCommitteeSite)
                 models.append(CampaignAttendee)
 
-            print("election_result: ", is_detailed_results, "election_method: ", election_method )
+            print(
+                "election_result: ",
+                is_detailed_results,
+                "election_method: ",
+                election_method,
+            )
 
         except Election.DoesNotExist:
             return Response({"error": "Election not found"}, status=404)
@@ -94,7 +112,9 @@ class AddSchemaTables(APIView):
                         else:
                             results[table_name] = "Table already exists"
                     except Exception as e:
-                        results[Model._meta.model_name] = f"Failed to create table: {str(e)}"
+                        results[Model._meta.model_name] = (
+                            f"Failed to create table: {str(e)}"
+                        )
 
         return Response({"results": results}, status=200)
 
