@@ -40,23 +40,27 @@ from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 from apps.campaigns.models import Campaign
 from apps.elections.candidates.models import ElectionCandidate
+from apps.elections.serializers import ElectionSerializer
 
+# class ElectionSerializer(serializers.ModelSerializer):
+#     # name = serializers.SerializerMethodField("get_election_name")
+#     # image = serializers.SerializerMethodField("get_election_image")
+#     due_date = serializers.DateField(
+#         format="%Y-%m-%d",
+#         input_formats=[
+#             "%Y-%m-%d",
+#         ],
+#         allow_null=True,
+#         required=False,
+#     )
 
-class ElectionSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField("get_election_name")
-    image = serializers.SerializerMethodField("get_election_image")
-    due_date = serializers.DateField(
-        format="%Y-%m-%d",
-        input_formats=[
-            "%Y-%m-%d",
-        ],
-        allow_null=True,
-        required=False,
-    )
-
-    class Meta:
-        model = Election
-        fields = ["id", "name", "image", "due_date"]
+#     class Meta:
+#         model = Election
+#         fields = [
+#             "id",
+#             #   "name", "image",
+#             "due_date",
+#         ]
 
 
 # from django.db.utils import IntegrityError
@@ -100,22 +104,22 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     admin_serializer_classes = (TrackMixin, TaskMixin)
 
-    campaign_type = serializers.CharField(write_only=True)
-    campaigner_id = serializers.IntegerField()
-
-    name = serializers.SerializerMethodField()
-    election = serializers.SerializerMethodField()
-
-    campaign_type_display = serializers.SerializerMethodField()
+    # campaign_type = serializers.CharField(write_only=True)
+    # campaigner_id = serializers.IntegerField()
+    # name = serializers.SerializerMethodField()
+    # election = serializers.SerializerMethodField()
+    # election_candidate = serializers.SerializerMethodField()
+    election = ElectionSerializer(source="election_candidate.election", read_only=True)
+    candidate = CandidateSerializer(
+        source="election_candidate.candidate", read_only=True
+    )
 
     class Meta:
         model = Campaign
         fields = [
             "id",
-            "campaign_type",
-            "campaigner_id",
-            "name",
-            "campaign_type_display",
+            # "name",
+            # "campaign_type_display",
             "slug",
             "description",
             "target_votes",
@@ -124,88 +128,42 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "website",
             # Election
             "election",
+            "candidate",
+            "election_candidate",
         ]
-        extra_kwargs = {
-            "campaign_type": {"write_only": True},
-        }
 
-    def get_campaign_related_object(self, obj):
-        """Helper function to retrieve the related ElectionCandidate or ElectionParty object based on campaign_type."""
-        if obj.campaign_type and obj.campaigner_id:
-            if obj.campaign_type.model == "candidate":
-                return ElectionCandidate.objects.get(id=obj.campaigner_id)
-            elif obj.campaign_type.model == "party":
-                return ElectionParty.objects.get(id=obj.campaigner_id)
-            else:
-                raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
-        else:
-            raise ValueError(
-                "Campaign object is missing campaign_type or campaigner_id"
-            )
+    # def get_name(self, obj):
+    #     """Retrieve the name dynamically based on campaign_type."""
+    #     related_object = self.get_campaign_related_object(obj)
+    #     if obj.campaign_type.model == "candidate":
+    #         return related_object.candidate.name
+    #     elif obj.campaign_type.model == "party":
+    #         return related_object.party.name
 
-    def get_campaign_type_display(self, obj):
-        """Retrieve the model name for campaign_type."""
-        return obj.campaign_type.model.capitalize()
+    # def get_election(self, obj):
+    #     """Retrieve the election object dynamically based on campaign_type."""
+    #     related_object = self.get_campaign_related_object(obj)
+    #     election = {
+    #         "id": related_object.election.id,
+    #         "name": f"{related_object.election.sub_category.name} - {related_object.election.due_date.year}",
+    #         "slug": related_object.election.slug,
+    #         "due_date": related_object.election.due_date,
+    #     }
+    #     return election
 
-    def get_name(self, obj):
-        """Retrieve the name dynamically based on campaign_type."""
-        related_object = self.get_campaign_related_object(obj)
-        if obj.campaign_type.model == "candidate":
-            return related_object.candidate.name
-        elif obj.campaign_type.model == "party":
-            return related_object.party.name
+    # def create(self, validated_data):
 
-    def get_election(self, obj):
-        """Retrieve the election object dynamically based on campaign_type."""
-        related_object = self.get_campaign_related_object(obj)
-        election = {
-            "id": related_object.election.id,
-            "name": f"{related_object.election.sub_category.name} - {related_object.election.due_date.year}",
-            "slug": related_object.election.slug,
-            "due_date": related_object.election.due_date,
-        }
-        return election
+    #     campaign_type_model = validated_data.pop("campaign_type", None)
+    #     campaigner_id = validated_data.pop("campaigner_id", None)
 
-    def create(self, validated_data):
-        print("Validated data:", validated_data)
+    #     campaign = Campaign.objects.create(
+    #         campaign_type=campaign_type, campaigner_id=campaigner_id, **validated_data
+    #     )
 
-        campaign_type_model = validated_data.pop("campaign_type", None)
-        campaigner_id = validated_data.pop("campaigner_id", None)
+    #     # Ensure `content_object` is fetched
+    #     campaign = Campaign.objects.get(id=campaign.id)
 
-        if not campaign_type_model:
-            raise serializers.ValidationError(
-                {"campaign_type": "This field is required."}
-            )
-        if not campaigner_id:
-            raise serializers.ValidationError(
-                {"campaigner_id": "This field is required."}
-            )
-
-        campaign_type = ContentType.objects.get(model=campaign_type_model)
-        print(f"ContentType: {campaign_type}")
-
-        existing_campaign = Campaign.objects.filter(
-            campaign_type=campaign_type, campaigner_id=campaigner_id
-        ).first()
-        if existing_campaign:
-            raise serializers.ValidationError(
-                "A campaign with this campaign_type and campaigner_id already exists."
-            )
-
-        campaign = Campaign.objects.create(
-            campaign_type=campaign_type, campaigner_id=campaigner_id, **validated_data
-        )
-
-        # Debugging after creation
-        print(f"Created campaign: {campaign}")
-        print(f"campaign_type: {campaign.campaign_type}")
-        print(f"campaigner_id: {campaign.campaigner_id}")
-
-        # Ensure `content_object` is fetched
-        campaign = Campaign.objects.get(id=campaign.id)
-        print(f"After refresh: content_object={campaign.content_object}")
-
-        return campaign
+    #     return campaign
 
 
 # class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):

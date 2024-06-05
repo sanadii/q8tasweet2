@@ -106,8 +106,8 @@ const AllCampaigns = () => {
         accessor: "name",
         Cell: (cellProps) =>
           <NameAvatar
-            name={cellProps.row.original.name}
-            image={cellProps.row.original.image}
+            name={cellProps.row.original.candidate.name}
+            image={cellProps.row.original.candidate.image}
             slug={cellProps.row.original.slug}
             dirName="campaigns"
           />

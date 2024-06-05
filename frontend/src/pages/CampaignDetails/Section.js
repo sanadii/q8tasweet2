@@ -22,7 +22,6 @@ import MembersTab from "./MembersTab";
 import GuaranteesTab from "./GuaranteesTab";
 import AttendeesTab from "./AttendeesTab";
 import SortingTab from "./SortingTab";
-import VotersTab from "./VotersTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 import ElectorSearchTab from "../ElectionDetails/ElectorSearchTab";
@@ -68,8 +67,7 @@ const Section = () => {
     2: <MembersTab />,
     3: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />,
     4: <AttendeesTab />,
-    5: <SortingTab />,
-    // 6: <VotersTab />,
+    // 5: <SortingTab />,
     6: <ElectorSearchTab electionSchema={electionSchema} />,
     7: <ActivitiesTab />,
     9: <EditTab />,
@@ -92,7 +90,7 @@ const Section = () => {
     }
   };
 
-  if (!campaign.name) {
+  if (!campaign) {
     return <Loader />;
   }
 

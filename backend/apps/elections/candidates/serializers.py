@@ -1,23 +1,22 @@
 # elections/serializers.py
 from rest_framework import serializers
-from datetime import datetime  # Importing datetime
-from django.db.models import F
-import json
 
-from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
+# Apps Models
 from apps.elections.candidates.models import (
     ElectionCandidate,
     ElectionParty,
     ElectionPartyCandidate,
 )
 
-from django.contrib.contenttypes.models import ContentType
 from apps.campaigns.models import Campaign
-from apps.campaigns.serializers import CampaignSerializer
-
 from apps.schemas.committee_results.models import CommitteeResultCandidate
 from apps.schemas.committees.models import Committee
+
+
+# Apps Serializers
+from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+from apps.campaigns.serializers import CampaignSerializer
 from apps.auths.serializers import UserSerializer
 from apps.schemas.committees.serializers import CommitteeSerializer
 from apps.schemas.committee_results.serializers import CommitteeResultCandidateSerializer
@@ -83,7 +82,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
 
     def get_candidate_campaign(self, obj):
         try:
-            campaign = Campaign.objects.get(campaigner_id=obj.id)
+            campaign = Campaign.objects.get(election_candidate=obj.id)
             return CampaignSerializer(campaign).data
         except Exception as e:
             return None

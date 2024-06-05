@@ -70,8 +70,7 @@ const AddElectionCampaignModal = ({ toggle }) => {
     e.preventDefault();
     const newCampaign = {
       id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
-      campaignerId: electionCandidate.id,
-      campaignType: "candidate",
+      election_candidate: electionCandidate.id,
     };
     dispatch(addCampaign(newCampaign));
     toggle(); // Close the modal after submission

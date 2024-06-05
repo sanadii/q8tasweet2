@@ -62,3 +62,11 @@ class Elector(DynamicSchemaModel):
         return self.full_name
 
 
+# Note
+# fields to add for Coops
+# membership_number
+# box_number
+# enrolment_date
+# civil_id
+
+

@@ -15,8 +15,8 @@ class CampaignMemberSerializer(serializers.ModelSerializer):
     role_id = serializers.SerializerMethodField()
     role_name = serializers.SerializerMethodField()
     role_codename = serializers.SerializerMethodField()
-    committee_sites = serializers.SerializerMethodField()
-    committee = serializers.SerializerMethodField()
+    # committee_sites = serializers.SerializerMethodField()
+    # committee = serializers.SerializerMethodField()
 
     class Meta:
         model = CampaignMember
@@ -49,116 +49,116 @@ class CampaignMemberSerializer(serializers.ModelSerializer):
     def get_role_codename(self, obj):
         return self.get_role_attribute(obj, "codename")
 
-    def get_campaign_related_object(self, obj):
-        """Helper function to retrieve the related ElectionCandidate or ElectionParty object based on campaign_type."""
-        if obj.campaign_type and obj.campaigner_id:
-            if obj.campaign_type.model == "candidate":
-                return ElectionCandidate.objects.get(id=obj.campaigner_id)
-            elif obj.campaign_type.model == "party":
-                return ElectionParty.objects.get(id=obj.campaigner_id)
-            else:
-                raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
-        else:
-            raise ValueError(
-                "Campaign object is missing campaign_type or campaigner_id"
-            )
+    # def get_campaign_related_object(self, obj):
+    #     """Helper function to retrieve the related ElectionCandidate or ElectionParty object based on campaign_type."""
+    #     if obj.campaign_type and obj.campaigner_id:
+    #         if obj.campaign_type.model == "candidate":
+    #             return ElectionCandidate.objects.get(id=obj.campaigner_id)
+    #         elif obj.campaign_type.model == "party":
+    #             return ElectionParty.objects.get(id=obj.campaigner_id)
+    #         else:
+    #             raise ValueError(f"Invalid campaign_type: {obj.campaign_type.model}")
+    #     else:
+    #         raise ValueError(
+    #             "Campaign object is missing campaign_type or campaigner_id"
+    #         )
 
-    def get_election_slug(self, obj):
-        campaign = obj.campaign
-        related_object = self.get_campaign_related_object(campaign)
-        election_slug = related_object.election.slug
+    # def get_election_slug(self, obj):
+    #     campaign = obj.campaign
+    #     related_object = self.get_campaign_related_object(campaign)
+    #     election_slug = related_object.election.slug
 
-        return election_slug
+    #     return election_slug
 
-    def get_committee_sites(self, obj):
-        election_slug = self.get_election_slug(obj)
-        with schema_context(election_slug):
-            try:
-                # Query MemberCommitteeSite to get related CommitteeSite objects
-                committee_sites = MemberCommitteeSite.objects.filter(member=obj.id)
-                serialized_committees = [
-                    CommitteeSiteSerializer(committee_site.committee_site).data
-                    for committee_site in committee_sites
-                ]
-                return serialized_committees
-            except Exception as e:
-                print("Error:", e)
-                return []
+    # def get_committee_sites(self, obj):
+    #     election_slug = self.get_election_slug(obj)
+    #     with schema_context(election_slug):
+    #         try:
+    #             # Query MemberCommitteeSite to get related CommitteeSite objects
+    #             committee_sites = MemberCommitteeSite.objects.filter(member=obj.id)
+    #             serialized_committees = [
+    #                 CommitteeSiteSerializer(committee_site.committee_site).data
+    #                 for committee_site in committee_sites
+    #             ]
+    #             return serialized_committees
+    #         except Exception as e:
+    #             print("Error:", e)
+    #             return []
 
-    def get_committee(self, obj):
-        election_slug = self.get_election_slug(obj)
-        with schema_context(election_slug):
-            try:
-                # Query MemberCommittee to get the related MemberCommittee object
-                committee_member = MemberCommittee.objects.filter(member=obj.id).first()
-                if committee_member:
-                    committee = committee_member.committee
-                    return CommitteeSerializer(committee).data
-                return None
-            except MemberCommittee.DoesNotExist:
-                return None
-            except Exception as e:
-                print("Error:", e)
-                return None
+    # def get_committee(self, obj):
+    #     election_slug = self.get_election_slug(obj)
+    #     with schema_context(election_slug):
+    #         try:
+    #             # Query MemberCommittee to get the related MemberCommittee object
+    #             committee_member = MemberCommittee.objects.filter(member=obj.id).first()
+    #             if committee_member:
+    #                 committee = committee_member.committee
+    #                 return CommitteeSerializer(committee).data
+    #             return None
+    #         except MemberCommittee.DoesNotExist:
+    #             return None
+    #         except Exception as e:
+    #             print("Error:", e)
+    #             return None
 
 
-    def save(self, **kwargs):
-        # Call the original save method to save CampaignMember instance
-        super().save(**kwargs)
+    # def save(self, **kwargs):
+    #     # Call the original save method to save CampaignMember instance
+    #     super().save(**kwargs)
 
-        # Get the committee_site from the context or request data
-        committee_site_ids = self.context['request'].data.get('committee_sites')
-        committee_id = self.context["request"].data.get("committee")
+    #     # Get the committee_site from the context or request data
+    #     committee_site_ids = self.context['request'].data.get('committee_sites')
+    #     committee_id = self.context["request"].data.get("committee")
         
-        # Get the dynamic schema from the object or request
-        election_slug = self.get_election_slug(self.instance)
+    #     # Get the dynamic schema from the object or request
+    #     election_slug = self.get_election_slug(self.instance)
         
-        with schema_context(election_slug):
-            # Handle committee_site_ids
-            if committee_site_ids:
-                try:
-                    for site_id in committee_site_ids:
-                        # Retrieve the CommitteeSite object
-                        committee_site = CommitteeSite.objects.get(id=site_id)
+    #     with schema_context(election_slug):
+    #         # Handle committee_site_ids
+    #         if committee_site_ids:
+    #             try:
+    #                 for site_id in committee_site_ids:
+    #                     # Retrieve the CommitteeSite object
+    #                     committee_site = CommitteeSite.objects.get(id=site_id)
 
-                        # Create or update MemberCommitteeSite with the CampaignMember instance's ID
-                        MemberCommitteeSite.objects.update_or_create(
-                            member=self.instance.id,
-                            committee_site=committee_site,
-                            defaults={'committee_site': committee_site}
-                        )
-                        print(f"MemberCommitteeSite for site {site_id} created or updated successfully")
-                except CommitteeSite.DoesNotExist:
-                    print(f"CommitteeSite with id {site_id} does not exist")
-                    raise serializers.ValidationError(f"CommitteeSite with id {site_id} does not exist")
-                except Exception as e:
-                    print(f"Unexpected error occurred: {e}")
-                    raise serializers.ValidationError(f"Unexpected error: {e}")
-            else:
-                # If no committee_site_ids, remove all MemberCommitteeSite entries related to the member
-                MemberCommitteeSite.objects.filter(member=self.instance.id).delete()
-                print("All MemberCommitteeSite entries related to the member have been deleted")
+    #                     # Create or update MemberCommitteeSite with the CampaignMember instance's ID
+    #                     MemberCommitteeSite.objects.update_or_create(
+    #                         member=self.instance.id,
+    #                         committee_site=committee_site,
+    #                         defaults={'committee_site': committee_site}
+    #                     )
+    #                     print(f"MemberCommitteeSite for site {site_id} created or updated successfully")
+    #             except CommitteeSite.DoesNotExist:
+    #                 print(f"CommitteeSite with id {site_id} does not exist")
+    #                 raise serializers.ValidationError(f"CommitteeSite with id {site_id} does not exist")
+    #             except Exception as e:
+    #                 print(f"Unexpected error occurred: {e}")
+    #                 raise serializers.ValidationError(f"Unexpected error: {e}")
+    #         else:
+    #             # If no committee_site_ids, remove all MemberCommitteeSite entries related to the member
+    #             MemberCommitteeSite.objects.filter(member=self.instance.id).delete()
+    #             print("All MemberCommitteeSite entries related to the member have been deleted")
 
-            # Handle committee_id
-            if committee_id:
-                try:
-                    # Retrieve the Committee object
-                    committee = Committee.objects.get(id=committee_id)
+    #         # Handle committee_id
+    #         if committee_id:
+    #             try:
+    #                 # Retrieve the Committee object
+    #                 committee = Committee.objects.get(id=committee_id)
 
-                    # Create or update MemberCommittee with the CampaignMember instance's ID
-                    MemberCommittee.objects.update_or_create(
-                        member=self.instance.id, defaults={"committee": committee}
-                    )
-                    print("MemberCommittee created or updated successfully")
-                except Committee.DoesNotExist:
-                    print(f"Committee with id {committee_id} does not exist")
-                    raise serializers.ValidationError(
-                        f"Committee with id {committee_id} does not exist"
-                    )
-                except Exception as e:
-                    print(f"Unexpected error occurred: {e}")
-                    raise serializers.ValidationError(f"Unexpected error: {e}")
-            else:
-                # If no committee_id, remove the MemberCommittee entry related to the member
-                MemberCommittee.objects.filter(member=self.instance.id).delete()
-                print("MemberCommittee entry related to the member has been deleted")
+    #                 # Create or update MemberCommittee with the CampaignMember instance's ID
+    #                 MemberCommittee.objects.update_or_create(
+    #                     member=self.instance.id, defaults={"committee": committee}
+    #                 )
+    #                 print("MemberCommittee created or updated successfully")
+    #             except Committee.DoesNotExist:
+    #                 print(f"Committee with id {committee_id} does not exist")
+    #                 raise serializers.ValidationError(
+    #                     f"Committee with id {committee_id} does not exist"
+    #                 )
+    #             except Exception as e:
+    #                 print(f"Unexpected error occurred: {e}")
+    #                 raise serializers.ValidationError(f"Unexpected error: {e}")
+    #         else:
+    #             # If no committee_id, remove the MemberCommittee entry related to the member
+    #             MemberCommittee.objects.filter(member=self.instance.id).delete()
+    #             print("MemberCommittee entry related to the member has been deleted")

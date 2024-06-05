@@ -61,8 +61,7 @@ const Actions = (cellProps) => {
 
     const handleAddNewCampaign = (electionCandidateId) => {
         const newCampaign = {
-            campaignerId: electionCandidateId,
-            campaignType: "candidate",
+            election_candidate: electionCandidateId,
         };
         dispatch(addCampaign(newCampaign));
     };

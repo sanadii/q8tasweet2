@@ -162,8 +162,8 @@ class GetCampaignDetails(APIView):
         campaign = get_object_or_404(Campaign, slug=slug)
 
         # Election
-        related_object = get_campaign_related_object(campaign)
-        election = related_object.election
+        # related_object = get_campaign_related_object(campaign)
+        election = campaign.election_candidate.election
         election_slug = election.slug
 
         # Get Campaign Roles

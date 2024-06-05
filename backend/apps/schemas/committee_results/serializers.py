@@ -4,7 +4,7 @@ from rest_framework import serializers
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 
 # Models
-from apps.schemas.committee_results.models import CommitteeResultCandidate
+from apps.schemas.committee_results.models import CommitteeResultCandidate, CommitteeResultParty
 
 
 # # Votting and Sorting
@@ -17,6 +17,12 @@ class CommitteeResultCandidateSerializer(serializers.ModelSerializer):
         # fields = ["committee", "election_candidate", "votes"]
 
 
+class CommitteeResultPartySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CommitteeResultParty
+        fields = "__all__"
+        
 # class ElectionPartyCommitteeResultSerializer(
 #     AdminFieldMixin, serializers.ModelSerializer
 # ):

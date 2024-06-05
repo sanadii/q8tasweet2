@@ -27,23 +27,23 @@ const SectionHeader = ({ campaign, electionDetails, campaignMembers, campaignGua
     }
     
     const campaignId = currentCampaign?.id;
-    const campaignName = currentCampaign.name;
-    const campaignLogo = currentCampaign.logo;
+    const campaignName = currentCampaign?.candidate?.name;
+    const campaignImage = currentCampaign?.candidate?.image;
     const electionName = electionDetails.name;
     const electionDueDate = electionDetails.dueDate;
 
     return (
         <React.Fragment>
-            <SectionBackagroundImage imagePath={campaignLogo} />
+            <SectionBackagroundImage imagePath={campaignImage} />
             <div className="pt-4 mb-4 mb-lg-3 pb-lg-2 profile-wrapper">
                 <Row className="g-4">
                     <div className="col-auto">
-                        <ImageLarge imagePath={campaignLogo} />
+                        <ImageLarge imagePath={campaignImage} />
                     </div>
 
                     <Col>
                         <div className="p-2">
-                            <h3 className="text-white mb-1">-{campaignId}- {campaignName}</h3>
+                            <h3 className="text-white mb-1">{campaignName}</h3>
                             <p className="text-white-75">{electionName}</p>
                             <div className="hstack text-white gap-1">
                                 <div className="me-2">

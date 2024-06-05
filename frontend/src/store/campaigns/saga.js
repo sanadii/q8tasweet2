@@ -179,7 +179,7 @@ function* onAddCampaign({ payload: campaign }) {
     const response = yield call(addCampaignApi, campaign);
     const electionCandidate = {
       data: {
-        id: response.data.campaignerId,
+        id: response.data.electionCandidate,
         campaign: response.data,
       }
     };

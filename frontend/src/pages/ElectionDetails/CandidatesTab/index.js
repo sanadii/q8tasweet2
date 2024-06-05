@@ -86,7 +86,7 @@ const CandidatesTab = () => {
     isMultiDeleteButton,
     deleteModalMulti,
     setDeleteModalMulti,
-    handleDeleteMultiple ,
+    handleDeleteMultiple,
   } = useDelete(deleteAction);
 
   // Models
@@ -298,7 +298,7 @@ const CandidatesTab = () => {
       <DeleteModal
         show={deleteModalMulti}
         onDeleteClick={() => {
-          handleDeleteMultiple ();
+          handleDeleteMultiple();
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
@@ -357,7 +357,7 @@ const CandidatesTab = () => {
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
                 {
-                  electionMethod !== "candidateOnly" ?
+                  electionMethod !== "candidateOnly" && electionMethod !== "partyCandidateOriented" ?
                     <Parties
                       columns={PartyColumns}
                       electionPartyButtons={electionPartyButtons}

@@ -3,8 +3,8 @@ from django.db import models
 from django_extensions.db.fields import AutoSlugField
 from django.utils.text import slugify
 import uuid
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+# from django.contrib.contenttypes.fields import GenericForeignKey
+from apps.elections.candidates.models import ElectionCandidate
 from apps.settings.models import TrackModel, TaskModel
 
 class Campaign(TrackModel, TaskModel):
@@ -14,9 +14,10 @@ class Campaign(TrackModel, TaskModel):
     target_votes = models.PositiveIntegerField(blank=True, null=True)
 
     # Relationships
-    campaign_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    campaigner_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey("campaign_type", "campaigner_id")
+    election_candidate = models.ForeignKey(ElectionCandidate, on_delete=models.CASCADE)
+    # campaign_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    # campaigner_id = models.PositiveIntegerField()
+    # content_object = GenericForeignKey("campaign_type", "campaigner_id")
 
     # Media Coverage
     twitter = models.CharField(max_length=120, blank=True, null=True)
@@ -39,22 +40,22 @@ class Campaign(TrackModel, TaskModel):
             ("canChangeCampaignManager", "can Change Campaign Manager"),
             ("canChangeCampaignAssistant", "can Change Campaign Assistant"),
         ]
-        unique_together = ["campaign_type", "campaigner_id"]
-        indexes = [
-            models.Index(fields=["campaign_type", "campaigner_id"]),
-        ]
+        # unique_together = ["campaign_type", "campaigner_id"]
+        # indexes = [
+        #     models.Index(fields=["campaign_type", "campaigner_id"]),
+        # ]
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = uuid.uuid4().hex[:8].upper()
 
-        # Debugging before saving
-        print(f"Before save: campaign_type={self.campaign_type}, campaigner_id={self.campaigner_id}, content_object={self.content_object}")
+        # # Debugging before saving
+        # print(f"Before save: campaign_type={self.campaign_type}, campaigner_id={self.campaigner_id}, content_object={self.content_object}")
 
         super().save(*args, **kwargs)  # Call the "real" save() method
 
-        # Debugging after saving
-        print(f"After save: campaign_type={self.campaign_type}, campaigner_id={self.campaigner_id}, content_object={self.content_object}")
+        # # Debugging after saving
+        # print(f"After save: campaign_type={self.campaign_type}, campaigner_id={self.campaigner_id}, content_object={self.content_object}")
 
 
 

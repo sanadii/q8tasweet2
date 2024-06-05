@@ -40,23 +40,24 @@ const getOptionBadge = (optionCategory, status, checkValue = false) => {
 
     const selectedOption = getSelectedOptions(optionCategory);
     let entry;
+    const entryBadgeClass = entry?.badgeClass ? entry?.badgeClass : ''
+    const entryName = entry?.name ? entry?.name : ''
+
     if (checkValue) {
         entry = selectedOption.find(opt => opt.value === status);
         return (
-            <div className={`${entry.badgeClass} fs-10`}>
-                {entry.name}
+            <div className={`${entryBadgeClass} fs-10`}>
+                {entryName}
             </div>
         );
     } else {
         entry = selectedOption.find(opt => opt.id === status);
         return (
-            <div className={`${entry.badgeClass} fs-10`}>
-                {entry.name}
+            <div className={`${entryBadgeClass} fs-10`}>
+                {entryName}
             </div>
         );
     }
-    if (!entry) return null;
-
 
 };
 

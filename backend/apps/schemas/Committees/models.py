@@ -10,6 +10,7 @@ from apps.schemas.schemaModels import DynamicSchemaModel
 User = get_user_model()
 
 from django.db import models
+from django.utils.deconstruct import deconstructible
 
       
         
@@ -45,12 +46,40 @@ class CommitteeSite(DynamicSchemaModel):
     def __str__(self):
         return f"CommitteeSite {self.id}"  # Ensure this returns a string
 
+from django.core.exceptions import FieldDoesNotExist
 
-class Committee(DynamicSchemaModel):
+@deconstructible
+class DynamicFieldsMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.election_category = None
+
+    def add_dynamic_fields(self, election_category):
+        # Print the election category before adding fields
+        self.election_category = election_category
+        print(f"Election Category in Model: {self.election_category}")
+
+        # Check if the dynamic field already exists
+        try:
+            self._meta.get_field('test')
+            field_exists = True
+        except FieldDoesNotExist:
+            field_exists = False
+
+        if self.election_category == 3000 and not field_exists:
+            # Dynamically add the 'test' field
+            field = models.IntegerField(blank=True, null=True)
+            field.contribute_to_class(self.__class__, 'test')
+
+            # Print the added fields for debugging
+            fields = [f.name for f in self._meta.get_fields()]
+            print(f"Fields after dynamic addition: {fields}")
+
+class Committee(DynamicSchemaModel, DynamicFieldsMixin):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
     committee_site = models.ForeignKey(
-        CommitteeSite,
+        CommitteeSite,  # Use the actual app name
         related_name="committee_site_committees",
         on_delete=models.CASCADE,
         null=True,
@@ -68,11 +97,6 @@ class Committee(DynamicSchemaModel):
     def __str__(self):
         return f"Committee {self.id}"  # Ensure this returns a string
 
-    def add_dynamic_fields(self):
-        election_category = getattr(self, 'election_category', None)
-        print("election_category:", election_category, "self:", self )
-        if election_category == 3000:
-            self._meta.add_field(models.IntegerField(blank=True, null=True), name='test')
 
 # class BaseElectionSorting(models.Model):
 #     user = models.ForeignKey(

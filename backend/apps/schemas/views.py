@@ -63,21 +63,16 @@ class AddSchemaTables(APIView):
         try:
             # Get the election instance using the slug
             election = Election.objects.get(slug=slug)
-
-            # Extract electionMethod and resultMethod
             election_method = election.election_method
             is_detailed_results = election.is_detailed_results
+            election_category = election.category.id
 
-            print(is_detailed_results, election_method)
             if is_detailed_results:
-                if election_method == "candidateOnly":
+                if election_method in ["candidateOnly", "partyCandidateOriented"]:
                     models.append(CommitteeResultCandidate)
-
-                if election_method in [
-                    "partyPartyOriented",
-                    "partyCandidateOriented",
-                    "partyCandidateCombined",
-                ]:
+                if election_method == "partyPartyOriented":
+                    models.append(CommitteeResultParty)
+                if election_method == "partyCandidateCombined":
                     models.append(CommitteeResultParty)
                     models.append(CommitteeResultPartyCandidate)
 
@@ -87,13 +82,6 @@ class AddSchemaTables(APIView):
                 models.append(MemberCommittee)
                 models.append(MemberCommitteeSite)
                 models.append(CampaignAttendee)
-
-            print(
-                "election_result: ",
-                is_detailed_results,
-                "election_method: ",
-                election_method,
-            )
 
         except Election.DoesNotExist:
             return Response({"error": "Election not found"}, status=404)
@@ -115,6 +103,27 @@ class AddSchemaTables(APIView):
                         results[Model._meta.model_name] = (
                             f"Failed to create table: {str(e)}"
                         )
+
+                # Create Committee instance and add dynamic fields
+                committee = Committee()
+                committee.add_dynamic_fields(election_category)
+
+                # Ensure the dynamic fields are reflected in the database schema
+                column_exists = False
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        f"""
+                        SELECT column_name
+                        FROM information_schema.columns
+                        WHERE table_name = '{Committee._meta.db_table}'
+                          AND column_name = 'test';
+                    """
+                    )
+                    column_exists = cursor.fetchone() is not None
+
+                if not column_exists:
+                    dynamic_field = committee._meta.get_field("test")
+                    schema_editor.add_field(Committee, dynamic_field)
 
         return Response({"results": results}, status=200)
 
