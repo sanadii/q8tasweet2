@@ -1,6 +1,8 @@
 
-from django.db import models
+from django.db import models, connection
 from django.contrib.auth import get_user_model
+from django.core.exceptions import FieldDoesNotExist
+from django.utils.deconstruct import deconstructible
 
 # Models
 from apps.schemas.areas.models import Area
@@ -9,11 +11,16 @@ from apps.schemas.schemaModels import DynamicSchemaModel
 
 User = get_user_model()
 
-from django.db import models
-from django.utils.deconstruct import deconstructible
 
-      
-        
+     
+
+@deconstructible
+class DynamicFieldsMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.election_category = None
+
+
 
 class CommitteeSite(DynamicSchemaModel):
     serial = models.IntegerField(blank=True, null=True)
@@ -28,7 +35,6 @@ class CommitteeSite(DynamicSchemaModel):
     )
     area_name = models.CharField(max_length=255, blank=True, null=True)
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
-
     description = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     voter_count = models.IntegerField(blank=True, null=True)
@@ -44,42 +50,19 @@ class CommitteeSite(DynamicSchemaModel):
         default_permissions = []
 
     def __str__(self):
-        return f"CommitteeSite {self.id}"  # Ensure this returns a string
+        return f"CommitteeSite {self.id}"
 
-from django.core.exceptions import FieldDoesNotExist
+    def get_dynamic_fields(self):
+        return {
+            'test_site': self.election_category == 3000,
+        }
 
-@deconstructible
-class DynamicFieldsMixin:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.election_category = None
 
-    def add_dynamic_fields(self, election_category):
-        # Print the election category before adding fields
-        self.election_category = election_category
-        print(f"Election Category in Model: {self.election_category}")
-
-        # Check if the dynamic field already exists
-        try:
-            self._meta.get_field('test')
-            field_exists = True
-        except FieldDoesNotExist:
-            field_exists = False
-
-        if self.election_category == 3000 and not field_exists:
-            # Dynamically add the 'test' field
-            field = models.IntegerField(blank=True, null=True)
-            field.contribute_to_class(self.__class__, 'test')
-
-            # Print the added fields for debugging
-            fields = [f.name for f in self._meta.get_fields()]
-            print(f"Fields after dynamic addition: {fields}")
-
-class Committee(DynamicSchemaModel, DynamicFieldsMixin):
+class Committee(DynamicSchemaModel):
     area_name = models.TextField(blank=True, null=True)
     letters = models.TextField(blank=True, null=True)
     committee_site = models.ForeignKey(
-        CommitteeSite,  # Use the actual app name
+        CommitteeSite, 
         related_name="committee_site_committees",
         on_delete=models.CASCADE,
         null=True,
@@ -95,7 +78,20 @@ class Committee(DynamicSchemaModel, DynamicFieldsMixin):
         default_permissions = []
 
     def __str__(self):
-        return f"Committee {self.id}"  # Ensure this returns a string
+        return f"Committee {self.id}"
+
+    def get_dynamic_fields(self):
+        return {
+            'test': self.election_category == 3000,
+        }
+
+
+
+
+
+
+
+
 
 
 # class BaseElectionSorting(models.Model):

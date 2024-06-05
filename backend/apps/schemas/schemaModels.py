@@ -1,4 +1,6 @@
-from django.db import models
+
+from django.db import models, connection
+from django.core.exceptions import FieldDoesNotExist
 from utils.schema import schema_context
 
 class DynamicSchemaModel(models.Model):
@@ -10,10 +12,56 @@ class DynamicSchemaModel(models.Model):
         super().__init__(*args, **kwargs)
         schema_name = kwargs.get("schema_name")
         self.set_schema(schema_name)
+        
+        self.election_category = None
 
 
     def set_schema(self, schema):
         self._schema = schema
+
+    def add_dynamic_fields(self, election_category):
+        self.election_category = election_category
+        print(f"Election Category in Model: {self.election_category}")
+
+        dynamic_fields = self.get_dynamic_fields()
+
+        for field_name, field_type in dynamic_fields.items():
+            try:
+                self._meta.get_field(field_name)
+                field_exists = True
+            except FieldDoesNotExist:
+                field_exists = False
+
+            if not field_exists:
+                field = field_type(blank=True, null=True)
+                field.contribute_to_class(self.__class__, field_name)
+                print(f"Added dynamic field: {field_name}")
+
+        fields = [f.name for f in self._meta.get_fields()]
+        print(f"Fields after dynamic addition: {fields}")
+
+    def ensure_dynamic_fields_in_db(self, schema_editor):
+        dynamic_fields = self.get_dynamic_fields()
+
+        for field_name, field_type in dynamic_fields.items():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    f"""
+                    SELECT column_name
+                    FROM information_schema.columns
+                    WHERE table_name = '{self._meta.db_table}'
+                      AND column_name = '{field_name}';
+                """
+                )
+                column_exists = cursor.fetchone() is not None
+
+            if not column_exists:
+                dynamic_field = self._meta.get_field(field_name)
+                schema_editor.add_field(self.__class__, dynamic_field)
+
+    def get_dynamic_fields(self):
+        return {}
+
         
     def delete(self, *args, **kwargs):
         if hasattr(self, '_schema') and self._schema:

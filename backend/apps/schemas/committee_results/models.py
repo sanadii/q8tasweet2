@@ -11,10 +11,11 @@ class CommitteeResultCandidate(DynamicSchemaModel):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="%(class)s_committees",
+        related_name="committee_result_candidates",
     )
     votes = models.PositiveIntegerField(default=0)
     note = models.TextField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = "committee_result_candidate"
@@ -29,10 +30,11 @@ class CommitteeResultParty(DynamicSchemaModel):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="%(class)s_committees",
+        related_name="committee_result_parties",
     )
     votes = models.PositiveIntegerField(default=0)
     note = models.TextField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = "committee_result_party"
@@ -47,10 +49,11 @@ class CommitteeResultPartyCandidate(DynamicSchemaModel):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="%(class)s_committees",
+        related_name="committee_result_party_candidates",
     )
     votes = models.PositiveIntegerField(default=0)
     note = models.TextField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = "committee_result_party_candidate"

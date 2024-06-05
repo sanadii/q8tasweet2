@@ -1,22 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
 // Store & Selectors
-import { electionSelector, categorySelector } from 'selectors';
+import { electionSelector } from 'selectors';
 
 // Components & Hooks
 import { ImageMedium } from "shared/components";
 import { SectionBackagroundImage } from "shared/components";
-import { getStatusBadge, PriorityBadge } from "shared/constants";
 import { getOptionBadge } from "shared/utils";
+
 // UI & Utilities
 import { Col, Row } from "reactstrap";
 
 const SectionHeader = () => {
     const { election, electionCandidates } = useSelector(electionSelector);
-    const { categories } = useSelector(categorySelector);
-    const categoryId = election.category; // assuming election object has a categoryId property
-    const category = categories.find(cat => cat.id === categoryId);
 
     const electionCategoryName = election.categoryName;
     const electionSubCategoryName = election.subCategoryName;
@@ -55,8 +52,8 @@ const SectionHeader = () => {
                         {/* For Admin Only */}
                         <div className="col-md-auto p-2">
                             <div className="hstack gap-3 flex-wrap">
-                                {getOptionBadge("status", electionStatus)}
-                                {getOptionBadge("priority", electionPriority)}
+                                {getOptionBadge("StatusOptions", electionStatus)}
+                                {getOptionBadge("PriorityOptions", electionPriority)}
                                 <div className="badge bg-black fs-10">
                                     الرمز:  {election.id}
                                 </div>

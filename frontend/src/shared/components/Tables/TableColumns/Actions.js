@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addCampaignGuarantee, addCampaignAttendee } from "store/actions";
+import { addCampaign, addCampaignGuarantee, addCampaignAttendee } from "store/actions";
 
 
 const Actions = (cellProps) => {
@@ -38,10 +38,14 @@ const Actions = (cellProps) => {
     const isElectorInGuarantees = campaignGuarantees && campaignGuarantees.some(item => item.elector === cell.row.original.id);
     const isElectorInAttendees = campaignAttendees && campaignAttendees.some(item => item.elector === cell.row.original.id);
 
+    // const electionCandidateHasCampaign = 
+
+
     const renderElectorGuaranteeButton = () => {
         if (isElectorInGuarantees) {
             return <span className="text-success">تمت الإضافة</span>;
         }
+
 
         return (
             <button
@@ -91,10 +95,12 @@ const Actions = (cellProps) => {
         );
     };
 
+
     return (
         <React.Fragment>
             <div className="list-inline hstack gap-1 mb-0">
-                {/* View */}
+
+                {/* View Item*/}
                 {options.includes("view") && (
                     <button
                         to="#"
@@ -104,7 +110,8 @@ const Actions = (cellProps) => {
                         <i className="ri-eye-fill align-bottom" />
                     </button>
                 )}
-                {/* Update */}
+
+                {/* Update Item*/}
                 {options.includes("update") && (
 
                     <button
@@ -115,7 +122,8 @@ const Actions = (cellProps) => {
                         <i className="ri-pencil-fill align-bottom" />
                     </button>
                 )}
-                {/* Delete */}
+
+                {/* Delete Item */}
                 {options.includes("delete") && (
 
                     <button
@@ -127,12 +135,26 @@ const Actions = (cellProps) => {
                     </button>
                 )}
 
+
+                {options.includes("addCampaign") && (
+                    <button
+                        to="#"
+                        className={`btn btn-sm ${cell.row.original.campaign || null
+                            ? "btn-success" : "btn-soft-success"} remove-list`}
+                        onClick={() => { handleItemClicks(itemData, "addCampaign"); }}
+                    >
+                        <i className="mdi mdi-police-badge align-bottom" />
+                    </button>
+                )}
+
                 {/* AddGuarantee */}
                 {options.includes("addGuarantee") && (
                     <div className="flex-shrink-0">
                         {renderElectorGuaranteeButton()}
                     </div>
                 )}
+
+                {/* AddAttendee */}
                 {options.includes("addAttendee") && (
                     <div className="flex-shrink-0">
                         {renderElectorAttendeeButton()}

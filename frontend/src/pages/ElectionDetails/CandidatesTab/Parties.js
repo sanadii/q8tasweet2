@@ -8,12 +8,15 @@ import { Loader, TableContainer } from "shared/components";
 const Parties = ({ columns, electionPartyButtons }) => {
 
   // State Management
-  const { electionParties, electionPartyCandidates, error } = useSelector(electionSelector);
+  const { electionParties, electionCandidates, error } = useSelector(electionSelector);
 
   const getCandidatesForParty = (partyId) => {
-    if (!electionPartyCandidates) return [];
-    return electionPartyCandidates.filter(electionPartyCandidate => electionPartyCandidate.electionParty === partyId);
+    if (!electionCandidates) return [];
+    return electionCandidates.filter(candidate => candidate.party === partyId);
   };
+
+  // Get candidates without a party
+  const independentCandidates = electionCandidates ? electionCandidates.filter(candidate => !candidate.party) : [];
 
   return (
     <React.Fragment>
@@ -36,14 +39,11 @@ const Parties = ({ columns, electionPartyButtons }) => {
                       ))}
                     </div>
                   </CardHeader>
-
-
                   {partyCandidates && partyCandidates.length ? (
                     <TableContainer
                       columns={columns}
                       data={partyCandidates}
                       customPageSize={50}
-
                       // Styling
                       divClass="table-responsive table-card mb-3"
                       tableClass="align-middle table-nowrap mb-0"
@@ -57,9 +57,32 @@ const Parties = ({ columns, electionPartyButtons }) => {
               </Col>
             );
           })}
+
+          {/* Independent Candidates */}
+          {independentCandidates.length > 0 && (
+            <Col lg={4}>
+              <Card className="border card-border-secondary">
+                <CardHeader className="d-flex justify-content-between align-items-center">
+                  <h4>
+                    <strong>مستقلون</strong>
+                  </h4>
+                </CardHeader>
+                <TableContainer
+                  columns={columns}
+                  data={independentCandidates}
+                  customPageSize={50}
+                  // Styling
+                  divClass="table-responsive table-card mb-3"
+                  tableClass="align-middle table-nowrap mb-0"
+                  theadClass="table-light table-nowrap"
+                  thClass="table-light text-muted"
+                />
+              </Card>
+            </Col>
+          )}
         </Row>
       </div>
-    </React.Fragment >
+    </React.Fragment>
   );
 };
 

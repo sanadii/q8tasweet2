@@ -56,7 +56,7 @@ const Category = ({ category }) => {
 };
 
 const Status = ({ status }) => {
-    return getOptionBadge("status", status)
+    return getOptionBadge("StatusOptions", status)
 };
 
 const Badge = ({ option, value }) => {
@@ -64,7 +64,7 @@ const Badge = ({ option, value }) => {
 };
 
 const Priority = ({ priority }) => {
-    return getOptionBadge("priority", priority)
+    return getOptionBadge("PriorityOptions", priority)
 };
 
 

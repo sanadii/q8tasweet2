@@ -240,8 +240,9 @@ const TableContainer = ({
           </Table>
         </div>
 
-        {isTablePagination !== false &&
+        {/* {isTablePagination !== false && */}
 
+        {rows.length > customPageSize &&
           <Row className="justify-content-md-end justify-content-center align-items-center p-2">
             <Col className="col-md-auto">
               <div className="d-flex gap-1">

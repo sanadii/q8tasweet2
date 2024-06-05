@@ -5,6 +5,7 @@ from apps.schemas.committees.models import Committee
 from apps.schemas.areas.models import Area
 from utils.models import GENDER_CHOICES
 
+
 class Elector(DynamicSchemaModel):
 
     # Name Details
@@ -15,12 +16,6 @@ class Elector(DynamicSchemaModel):
     fourth_name = models.TextField(blank=True, null=True)
     fifth_name = models.TextField(blank=True, null=True)
     sixth_name = models.TextField(blank=True, null=True)
-    seventh_name = models.TextField(blank=True, null=True)
-    eighth_name = models.TextField(blank=True, null=True)
-    ninth_name = models.TextField(blank=True, null=True)
-    tenth_name = models.TextField(blank=True, null=True)
-    eleventh_name = models.TextField(blank=True, null=True)
-    twelveth_name = models.TextField(blank=True, null=True)
     last_name = models.TextField(blank=True, null=True)
     family = models.TextField(blank=True, null=True)
     branch = models.TextField(blank=True, null=True)
@@ -35,22 +30,29 @@ class Elector(DynamicSchemaModel):
 
     # Elector Address
     address = models.TextField(blank=True, null=True)
-    area = models.ForeignKey(Area, on_delete=models.CASCADE, related_name='elector_areas')
-    area_name = models.TextField(blank=True, null=True)
+    area = models.ForeignKey(
+        Area, on_delete=models.CASCADE, related_name="elector_areas"
+    )
     block = models.TextField(blank=True, null=True)
     street = models.TextField(blank=True, null=True)
     lane = models.TextField(blank=True, null=True)
     house = models.TextField(blank=True, null=True)
 
-    # Elector Election Details
-    circle = models.TextField(blank=True, null=True)
-    committee = models.ForeignKey(Committee, blank=True, null=True, on_delete=models.CASCADE, related_name='elector_committees')
-    committee_area = models.TextField(blank=True, null=True)
+    # Elector Committee Details,
+    committee = models.ForeignKey(
+        Committee,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="elector_committees",
+    )
     committee_name = models.TextField(blank=True, null=True)
     letter = models.TextField(blank=True, null=True)
-    code_number = models.TextField(blank=True, null=True)
-    status_code = models.TextField(blank=True, null=True)
-    
+
+    # to be removed later
+    area_name = models.TextField(blank=True, null=True)
+    committee_area = models.TextField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = "elector"
@@ -61,6 +63,23 @@ class Elector(DynamicSchemaModel):
     def __str__(self):
         return self.full_name
 
+    def get_dynamic_fields(self):
+        dynamic_fields = {}
+        if self.election_category == 1000:
+            dynamic_fields = {
+                "code_number": models.TextField(blank=True, null=True),
+                "status_code": models.TextField(blank=True, null=True),
+            }
+
+        if self.election_category == 3000:
+            dynamic_fields = {
+                "membership_number": models.IntegerField,
+                "box_number": models.IntegerField,
+                "civil_id": models.IntegerField,
+                "enrolment_date": models.DateField,
+            }
+        return dynamic_fields
+
 
 # Note
 # fields to add for Coops
@@ -68,5 +87,3 @@ class Elector(DynamicSchemaModel):
 # box_number
 # enrolment_date
 # civil_id
-
-

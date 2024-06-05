@@ -13,6 +13,7 @@ const Candidates = ({ columns }) => {
     return (
     <React.Fragment>
       <div>
+        <p>we are candidates</p>
         {electionCandidates && electionCandidates.length ? (
           <TableContainer
             // Data

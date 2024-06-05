@@ -84,7 +84,7 @@ from apps.campaigns.views_helper import (
 )
 
 from utils.schema import schema_context
-from django.db import connection
+# from django.db import ElectorsByGender
 
 
 class GetCampaigns(APIView):

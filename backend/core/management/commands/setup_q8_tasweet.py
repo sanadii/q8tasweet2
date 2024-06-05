@@ -9,17 +9,22 @@ class Command(BaseCommand):
         # Call the importUsers command directly
         # call_command('import_users')
         # call_command('import_groups')
-        call_command('import_election_categories')
-        call_command('import_elections')
-
-        call_command('import_candidates')
-        call_command('import_parties')
-
-        call_command('import_election_candidates')
-        call_command('import_election_parties')
-        call_command('import_election_party_candidates')
-
         # call_command('set_permissions')
+
+
+        # Elections
+        # call_command('import_election_categories')
+        # call_command('import_elections')
+
+        # Participants
+        call_command('import_candidates')
+        # call_command('import_parties')
+
+        # # ElectionParticipants
+        # call_command('import_election_candidates')
+        # call_command('import_election_parties')
+        # call_command('import_election_party_candidates')
+
 
         # setup Schemas
         # call_command('setup_election_schemas')

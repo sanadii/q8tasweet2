@@ -71,7 +71,7 @@ const ElectionList = () => {
     }
   }, [modal]);
 
-  const handleElectionClick = useCallback(
+  const handleElectionClicks = useCallback(
     (electionData) => {
       setElection(electionData);
       setIsEdit(true);
@@ -79,7 +79,7 @@ const ElectionList = () => {
     }, [toggle]);
 
   // Add Data
-  const handleElectionClicks = () => {
+  const handleAddElectionClick = () => {
     setElection("");
     setIsEdit(false);
     toggle();
@@ -155,12 +155,12 @@ const ElectionList = () => {
           <Actions
             options={["view", "update", "delete"]}
             cell={cellProps}
-            handleItemClicks={handleElectionClick}
+            handleItemClicks={handleElectionClicks}
             handleItemDeleteClick={handleItemDeleteClick}
           />
       },
     ],
-    [handleCheckCellClick, handleCheckAllClick, handleElectionClick, handleItemDeleteClick]
+    [handleCheckCellClick, handleCheckAllClick, handleElectionClicks, handleItemDeleteClick]
   );
 
   // Filters
@@ -201,7 +201,7 @@ const ElectionList = () => {
               isContainerAddButton={true}
               AddButtonText="إضافة إنتخابات"
               isEdit={isEdit}
-              handleEntryClick={handleElectionClicks}
+              handleEntryClick={handleAddElectionClick}
               toggle={toggle}
 
               // Delete Button

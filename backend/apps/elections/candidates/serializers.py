@@ -32,6 +32,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     gender = serializers.IntegerField(source="candidate.gender", read_only=True)
     image = serializers.SerializerMethodField("get_candidate_image")
     campaign = serializers.SerializerMethodField("get_candidate_campaign")
+    party = serializers.SerializerMethodField("get_candidate_party")
     # committee_results = serializers.SerializerMethodField("get_committee_results")
 
     class Meta:
@@ -48,6 +49,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "result",
             "position",
             "campaign",
+            "party",
             # "committee_results",
         ]
 
@@ -80,6 +82,12 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             print(f"Error: {str(e)}")
             return None
 
+    def get_candidate_party(self, obj):
+        try:
+            election_party = ElectionPartyCandidate.objects.get(election_candidate=obj.id)
+            return election_party.election_party.id  # Return only the party.id
+        except ElectionPartyCandidate.DoesNotExist:
+            return None
     def get_candidate_campaign(self, obj):
         try:
             campaign = Campaign.objects.get(election_candidate=obj.id)

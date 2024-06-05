@@ -51,79 +51,73 @@ class AddElectionSchema(APIView):
 class AddSchemaTables(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get_election(self, slug):
+        try:
+            return Election.objects.get(slug=slug)
+        except Election.DoesNotExist:
+            return None
+
+    def get_models_to_add(self, election):
+        models = [Area, Committee, CommitteeSite, Elector]
+        election_method = election.election_method
+        is_detailed_results = election.is_detailed_results
+
+        if is_detailed_results:
+            if election_method in ["candidateOnly", "partyCandidateOriented"]:
+                models.append(CommitteeResultCandidate)
+            if election_method == "partyPartyOriented":
+                models.append(CommitteeResultParty)
+            if election_method == "partyCandidateCombined":
+                models.append(CommitteeResultParty)
+                models.append(CommitteeResultPartyCandidate)
+
+            # if has campaigns
+            models.extend(
+                [
+                    CampaignGuarantee,
+                    CampaignGuaranteeGroup,
+                    MemberCommittee,
+                    MemberCommitteeSite,
+                    CampaignAttendee,
+                ]
+            )
+
+        return models
+
+    def create_tables(self, schema_editor, models):
+        results = {}
+        for Model in models:
+            try:
+                table_name = Model._meta.db_table
+                if not table_exists(table_name):
+                    schema_editor.create_model(Model)
+                    results[table_name] = "Created successfully"
+                else:
+                    results[table_name] = "Table already exists"
+            except Exception as e:
+                results[Model._meta.model_name] = f"Failed to create table: {str(e)}"
+        return results
+
     def get(self, request, *args, **kwargs):
         slug = kwargs.get("slug")
-        models = [
-            Area,
-            Committee,
-            CommitteeSite,
-            Elector,
-        ]
-
-        try:
-            # Get the election instance using the slug
-            election = Election.objects.get(slug=slug)
-            election_method = election.election_method
-            is_detailed_results = election.is_detailed_results
-            election_category = election.category.id
-
-            if is_detailed_results:
-                if election_method in ["candidateOnly", "partyCandidateOriented"]:
-                    models.append(CommitteeResultCandidate)
-                if election_method == "partyPartyOriented":
-                    models.append(CommitteeResultParty)
-                if election_method == "partyCandidateCombined":
-                    models.append(CommitteeResultParty)
-                    models.append(CommitteeResultPartyCandidate)
-
-                # if has campaigns
-                models.append(CampaignGuarantee)
-                models.append(CampaignGuaranteeGroup)
-                models.append(MemberCommittee)
-                models.append(MemberCommitteeSite)
-                models.append(CampaignAttendee)
-
-        except Election.DoesNotExist:
+        election = self.get_election(slug)
+        if not election:
             return Response({"error": "Election not found"}, status=404)
-        except Exception as e:
-            return Response({"error": str(e)}, status=500)
 
-        results = {}
+        models = self.get_models_to_add(election)
+        election_category = election.category.id
+
         with schema_context(slug):
             with connection.schema_editor() as schema_editor:
+                results = self.create_tables(schema_editor, models)
+                
+                
+                # create a function for each model in models
+                # Manage dynamic fields within the models themselves
                 for Model in models:
-                    try:
-                        table_name = Model._meta.db_table
-                        if not table_exists(table_name):
-                            schema_editor.create_model(Model)
-                            results[table_name] = "Created successfully"
-                        else:
-                            results[table_name] = "Table already exists"
-                    except Exception as e:
-                        results[Model._meta.model_name] = (
-                            f"Failed to create table: {str(e)}"
-                        )
-
-                # Create Committee instance and add dynamic fields
-                committee = Committee()
-                committee.add_dynamic_fields(election_category)
-
-                # Ensure the dynamic fields are reflected in the database schema
-                column_exists = False
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        f"""
-                        SELECT column_name
-                        FROM information_schema.columns
-                        WHERE table_name = '{Committee._meta.db_table}'
-                          AND column_name = 'test';
-                    """
-                    )
-                    column_exists = cursor.fetchone() is not None
-
-                if not column_exists:
-                    dynamic_field = committee._meta.get_field("test")
-                    schema_editor.add_field(Committee, dynamic_field)
+                    if hasattr(Model, 'manage_dynamic_fields'):
+                        instance = Model()
+                        instance.manage_dynamic_fields(election_category, schema_editor)
 
         return Response({"results": results}, status=200)
 

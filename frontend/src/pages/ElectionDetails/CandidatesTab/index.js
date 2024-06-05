@@ -3,27 +3,26 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
-import { deleteElectionCandidate, deleteElectionParty, deleteElectionPartyCandidate } from "store/actions";
+import { deleteElectionCandidate, deleteElectionParty, deleteElectionPartyCandidate, addCampaign } from "store/actions";
 import { electionSelector } from 'selectors';
-import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
+
+// import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
+import { CheckboxHeader, CheckboxCell, NameAvatar, Actions } from "shared/components";
 
 // Common Components
 import ElectionCandidateModal from "./ElectionCandidateModal";
 import ElectionPartyModal from "./ElectionPartyModal";
-import CampaignModal from "../CampaignsTab/CampaignModal";
 import Candidates from "./Candidates";
 import Parties from "./Parties";
 
-import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "shared/components";
-import { usePermission, useDelete } from "shared/hooks";
+import { DeleteModal, ExportCSVModal, TableContainerHeader } from "shared/components";
+import { useDelete } from "shared/hooks";
 
 // UI & Utilities
-import { Button, Col, Row, Card, CardBody, Nav, NavItem, NavLink } from "reactstrap";
-import { isEmpty } from "lodash";
-import { toast, ToastContainer } from "react-toastify";
-import classnames from "classnames";
+import { Col, Row, Card, CardBody } from "reactstrap";
 
 const CandidatesTab = () => {
+  const dispatch = useDispatch();
 
   const { election, electionMethod, electionCandidates, electionParties, error } = useSelector(electionSelector);
 
@@ -35,9 +34,17 @@ const CandidatesTab = () => {
   const [electionCandidate, setElectionCandidate] = useState([]);
   const [electionCandidateList, setElectionCandidateList] = useState(electionCandidates);
 
-  const [electionCampaign, setElectionCampaign] = useState([]);
-  const [electionCampaignList, setElectionCampaignList] = useState(electionCampaign);
+  const [partyCandidateView, setCandidatePartyView] = useState(
+    (electionMethod === "candidateOnly" || electionMethod === "partyCandidateOriented") ? false : true
+  )
 
+  const handleCandidatePartyViewSwitch = () => {
+    if (partyCandidateView === false) {
+      setCandidatePartyView(true)
+    } else {
+      setCandidatePartyView(false)
+    }
+  }
 
   // Function to close the candidate modal
   const closeCandidateModal = () => {
@@ -58,21 +65,12 @@ const CandidatesTab = () => {
   const [isElectionPartyAction, setIsElectionPartyAction] = useState(false);
 
   console.log("isElectionPartyAction: ", isElectionPartyAction)
+
   let deleteAction;
-
-  if (electionMethod !== "candidateOnly") {
-    if (isElectionPartyAction) {
-      // If the action is on electionParty
-      deleteAction = deleteElectionParty;
-      // setIsElectionPartyAction(false); // Set isElectionPartyAction to true when this button is clicked
-
-    } else {
-      // If the action is on electionPartyCandidate
-      deleteAction = deleteElectionPartyCandidate;
-    }
-  } else {
-    // If electionMethod is 1
+  if (partyCandidateView === false) {
     deleteAction = deleteElectionCandidate;
+  } else {
+    deleteAction = deleteElectionParty;
   }
 
   // Delete Hook
@@ -105,17 +103,8 @@ const CandidatesTab = () => {
 
   // Update Data
   const handleElectionPartyClick = useCallback(
-    (arg) => {
-      const electionParty = arg;
-
-      setElectionParty({
-        id: electionParty.id,
-        election: electionParty.election,
-        candidate: electionParty.candidate,
-        name: electionParty.name,
-        votes: electionParty.votes,
-        notes: electionParty.notes,
-      });
+    (electionParty) => {
+      setElectionParty(electionParty);
       // setCampaignModal(false);
       setPartyModal(true);
       setIsEdit(true);
@@ -125,17 +114,8 @@ const CandidatesTab = () => {
   );
 
   const handleElectionPartyCandidateClick = useCallback(
-    (arg) => {
-      const electionPartyCandidate = arg;
-
-      setElectionPartyCandidate({
-        id: electionPartyCandidate.id,
-        electionParty: electionPartyCandidate.electionParty,
-        candidate: electionPartyCandidate.candidate,
-        name: electionPartyCandidate.name,
-        votes: electionPartyCandidate.votes,
-        notes: electionPartyCandidate.notes,
-      });
+    (electionPartyCandidate) => {
+      setElectionPartyCandidate(electionPartyCandidate);
       // setCampaignModal(false);
       setCandidateModal(true);
       setIsEdit(true);
@@ -144,42 +124,32 @@ const CandidatesTab = () => {
     },
     [toggle]
   );
+
+
+
 
   const handleElectionCandidateClick = useCallback(
-    (arg) => {
-      const electionCandidate = arg;
+    (electionCandidate, modalMode) => {
+      if (modalMode === "addCampaign") {
+        handleAddNewCampaign(electionCandidate.id,)
+      } else {
+        // console.log("lets do something else")
+        setElectionCandidate(electionCandidate);
+        // setCampaignModal(false);
+        setCandidateModal(true);
+        setIsEdit(true);
+        toggle();
+      }
 
-      setElectionCandidate({
-        id: electionCandidate.id,
-        election: electionCandidate.election,
-        candidate: electionCandidate.candidate,
-        name: electionCandidate.name,
-        votes: electionCandidate.votes,
-        notes: electionCandidate.notes,
-      });
-      // setCampaignModal(false);
-      setCandidateModal(true);
-      setIsEdit(true);
-      toggle();
-    },
-    [toggle]
+    }, [toggle]
   );
 
-  const handleElectionCampaignClick = useCallback(
-    (arg) => {
-      const electionCampaign = arg;
-
-      setElectionCandidate({
-        id: electionCampaign.id,
-      });
-      // setCampaignModal(false);
-      setCampaignModal(true);
-      setIsEdit(true);
-      toggle();
-    },
-    [toggle]
-  );
-
+  const handleAddNewCampaign = (electionCandidateId) => {
+    const newCampaign = {
+      electionCandidate: electionCandidateId,
+    };
+    dispatch(addCampaign(newCampaign));
+  };
 
   const handleAddElectionParty = (electionParty = null) => {
     setElectionParty(electionParty);
@@ -197,14 +167,6 @@ const CandidatesTab = () => {
     toggle();
   };
 
-  const handleAddElectionCampaign = (campaign = null) => {
-    setElectionCampaign(campaign);
-    setIsEditCampaign(!!campaign);
-    setCampaignModal(true);
-    setIsEdit(false);
-    toggle();
-  };
-
 
   // Export Modal
   const [isExportCSV, setIsExportCSV] = useState(false);
@@ -213,28 +175,37 @@ const CandidatesTab = () => {
     () => [
       {
         Header: () => <CheckboxHeader handleCheckAllClick={handleCheckAllClick} />,
+        accessor: "id",
         Cell: (cellProps) => <CheckboxCell {...cellProps} handleCheckCellClick={handleCheckCellClick} />,
-        id: "id",
       },
       {
         Header: "المرشح",
         filterable: true,
-        Cell: (cellProps) => <Name {...cellProps} />
+        Cell: (cellProps) =>
+          <NameAvatar
+            name={cellProps.row.original.name}
+            image={cellProps.row.original.image}
+            slug={cellProps.row.original.slug}
+            dirName="elections"
+          />
       },
       {
         Header: "إجراءات",
-        Cell: (cellProps) => (
+        accessor: "election",
+        Cell: (cellProps) =>
           <Actions
-            {...cellProps}
-            setElectionCandidate={setElectionCandidate}
-            handleElectionCandidateClick={handleElectionCandidateClick}
-            setIsElectionPartyAction={setIsElectionPartyAction}
+            cell={cellProps}
+            options={["view", "update", "delete", "addCampaign"]}
+            handleItemClicks={handleElectionCandidateClick}
             handleItemDeleteClick={handleItemDeleteClick}
+
+          // setElectionCandidate={setElectionCandidate}
+          // setIsElectionPartyAction={setIsElectionPartyAction}
+
           />
-        )
       },
     ],
-    [handleElectionCandidateClick, handleCheckAllClick]
+    [handleElectionCandidateClick, handleCheckCellClick, handleCheckAllClick, handleItemDeleteClick]
   );
 
 
@@ -319,13 +290,7 @@ const CandidatesTab = () => {
         toggle={toggle}
         electionParty={electionParty}
       />
-      <CampaignModal
-        modal={campaignModal}
-        setModal={setCampaignModal}
-        isEdit={isEditCampaign}
-        toggle={toggle}
-        electionCampaign={electionCampaign}
-      />
+
       <Row>
         <Col lg={12}>
           <Card id="electionCandidateList">
@@ -347,8 +312,8 @@ const CandidatesTab = () => {
                   HandleSecondaryButton={handleAddElectionCandidate}
                   SecondaryButtonText="إضافة مرشح"
 
-                  HandleTertiaryButton={handleAddElectionCampaign}
-                  TertiaryButtonText="إضافة حملة"
+                  HandleTertiaryButton={handleCandidatePartyViewSwitch}
+                  TertiaryButtonText="قائمة"
 
                   toggle={toggle}
 
@@ -357,14 +322,14 @@ const CandidatesTab = () => {
                   setDeleteModalMulti={setDeleteModalMulti}
                 />
                 {
-                  electionMethod !== "candidateOnly" && electionMethod !== "partyCandidateOriented" ?
+                  partyCandidateView === false ?
+                    <Candidates
+                      columns={columns}
+                    />
+                    :
                     <Parties
                       columns={PartyColumns}
                       electionPartyButtons={electionPartyButtons}
-                    />
-                    :
-                    <Candidates
-                      columns={columns}
                     />
                 }
               </div>

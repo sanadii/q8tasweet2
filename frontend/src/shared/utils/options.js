@@ -9,19 +9,18 @@ import {
     ElectorAttendanceOption,
 } from "shared/constants";
 
-const allOptions = {
-    status: StatusOptions,
-    priority: PriorityOptions,
-    gender: GenderOptions,
-    electionMethod: ElectionMethodOptions,
-    electionResult: ElectionResultOptions,
-    electionSortingResult: ElectionSortingResultOptions,
-    electionDetailedResult: ElectionDetailedResultOptions,
-    campaignGuaranteeStatus: CampaignGuaranteeStatusOptions,
-    electorAttendanceOption: ElectorAttendanceOption,
-};
-
 const getSelectedOptions = (optionCategory) => {
+    const allOptions = {
+        StatusOptions: StatusOptions,
+        PriorityOptions: PriorityOptions,
+        gender: GenderOptions,
+        electionMethod: ElectionMethodOptions,
+        electionResult: ElectionResultOptions,
+        electionSortingResult: ElectionSortingResultOptions,
+        electionDetailedResult: ElectionDetailedResultOptions,
+        campaignGuaranteeStatus: CampaignGuaranteeStatusOptions,
+        electorAttendanceOption: ElectorAttendanceOption,
+    };
     return allOptions[optionCategory] || [];
 };
 
@@ -34,31 +33,23 @@ const getOptionOptions = (optionCategory) => {
     }));
 };
 
-const getOptionBadge = (optionCategory, status, checkValue = false) => {
-    console.log("optionCategory: ", optionCategory);
-    console.log("optionCategory status: ", status);
+const getOptionBadge = (optionCategory, optionValue, constantValue = false) => {
 
     const selectedOption = getSelectedOptions(optionCategory);
-    let entry;
+
+    const entry = constantValue ?
+        selectedOption.find(opt => opt.value === optionValue) :
+        selectedOption.find(opt => opt.id === optionValue);
+
+    // console.log("optionCategory: ", optionCategory, "optionValue: ", optionValue, "constantValue: ", constantValue, "entry: ", entry);
     const entryBadgeClass = entry?.badgeClass ? entry?.badgeClass : ''
     const entryName = entry?.name ? entry?.name : ''
 
-    if (checkValue) {
-        entry = selectedOption.find(opt => opt.value === status);
-        return (
-            <div className={`${entryBadgeClass} fs-10`}>
-                {entryName}
-            </div>
-        );
-    } else {
-        entry = selectedOption.find(opt => opt.id === status);
-        return (
-            <div className={`${entryBadgeClass} fs-10`}>
-                {entryName}
-            </div>
-        );
-    }
-
+    return (
+        <div className={`${entryBadgeClass} fs-10`}>
+            {entryName}
+        </div>
+    );
 };
 
 

@@ -14,28 +14,29 @@ class ElectorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Elector
-        fields = [
-            "id",
-            "full_name",
-            "family",
-            "branch",
-            "sect",
-            "gender",
-            "age",
-            "area",
-            "block",
-            "street",
-            "lane",
-            "house",
-            "area_name",
-            "area",
+        fields = '__all__'
+        # fields = [
+        #     "id",
+        #     "full_name",
+        #     "family",
+        #     "branch",
+        #     "sect",
+        #     "gender",
+        #     "age",
+        #     "area",
+        #     "block",
+        #     "street",
+        #     "lane",
+        #     "house",
+        #     "area_name",
+        #     "area",
             
-            "letter",
-            "committee",
-            "committee_type",
-            "committee_site_name",
-            "code_number",
-        ]
+        #     "letter",
+        #     "committee",
+        #     "committee_type",
+        #     "committee_site_name",
+        #     "code_number",
+        # ]
 
     def get_area_name(self, obj):
         return obj.area.name if obj.area else None
