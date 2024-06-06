@@ -7,7 +7,7 @@ import { electionSelector } from 'selectors';
 // Components & Hooks
 import { ImageMedium } from "shared/components";
 import { SectionBackagroundImage } from "shared/components";
-import { getOptionBadge } from "shared/utils";
+import { getOptionBadge } from "shared/hooks";
 
 // UI & Utilities
 import { Col, Row } from "reactstrap";

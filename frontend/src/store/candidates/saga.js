@@ -33,6 +33,10 @@ import {
 } from "./action";
 
 import {
+  addElectionCandidateSuccess,
+} from "../elections/action"
+
+import {
   // Election Candidates
   addToElectionAfterCandidateSuccess,
   addToElectionAfterPartyCandidateSuccess,
@@ -71,16 +75,13 @@ function* onAddCandidate({ payload: candidate }) {
     const response = yield call(addCandidate, candidate);
     yield put(addCandidateSuccess(response));
     toast.success("تم إضافة المرشح بنجاح", { autoClose: 2000 });
-    // if (response.electionCandidate) {
-    //   // Assuming that candidate.electionCandidate is the election object
-    //   // yield put(addToElectionAfterCandidateSuccess(response));
-    //   toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
-    // }
-    // if (response.electionPartyCandidate) {
-    //   // Assuming that candidate.electionCandidate is the election object
-    //   // yield put(addToElectionAfterPartyCandidateSuccess(response));
-    //   toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
-    // }
+    
+    if (response.electionCandidate) {
+      const electionCandidateResponse = {
+        data: response.electionCandidate
+      }
+      yield put(addElectionCandidateSuccess(electionCandidateResponse));
+    }
 
   } catch (error) {
     yield put(addCandidateFail(error));

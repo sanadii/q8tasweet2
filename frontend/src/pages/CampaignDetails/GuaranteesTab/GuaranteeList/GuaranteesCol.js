@@ -2,7 +2,7 @@ import React from "react";
 import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
 import Tooltip from 'react-bootstrap/Tooltip';  // Import Tooltip from your UI library
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';  // Import OverlayTrigger
-import { getOptionOptions, getOptionBadge } from "shared/utils"
+import { getFieldStaticOptions, getOptionBadge } from "shared/hooks"
 
 const CheckboxHeader = ({ checkedAll }) => (
     <input

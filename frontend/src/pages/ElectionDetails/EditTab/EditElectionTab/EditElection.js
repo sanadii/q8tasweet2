@@ -17,7 +17,7 @@ import { Button, Col, Row, Form, Card, CardHeader, CardBody } from "reactstrap";
 
 // Components
 import ElectionSchema from "./ElectionSchema";
-import { getOptionOptions } from "shared/utils";
+import { getFieldStaticOptions } from "shared/hooks";
 
 const EditElection = () => {
   const dispatch = useDispatch();
@@ -172,7 +172,7 @@ const EditElection = () => {
               name: "electionMethod",
               label: "نوع الإنتخابات",
               type: "select",
-              options: getOptionOptions("electionMethod"),
+              options: getFieldStaticOptions("electionMethod"),
               colSize: 12,
             },
             // {
@@ -180,7 +180,7 @@ const EditElection = () => {
             //   name: "electionresult",
             //   label: "عرض النتائج",
             //   type: "select",
-            //   options: getOptionOptions("electionResult"),
+            //   options: getFieldStaticOptions("electionResult"),
             //   colSize: 12,
             // },
             {
@@ -261,7 +261,7 @@ const EditElection = () => {
               name: "priority",
               label: "الأولية",
               type: "select",
-              options: getOptionOptions("priority"),
+              options: getFieldStaticOptions("priority"),
               colSize: 6,
             },
             {
@@ -269,7 +269,7 @@ const EditElection = () => {
               name: "status",
               label: "الحالة",
               type: "select",
-              options: getOptionOptions("status"),
+              options: getFieldStaticOptions("status"),
               colSize: 6,
             },
           ]

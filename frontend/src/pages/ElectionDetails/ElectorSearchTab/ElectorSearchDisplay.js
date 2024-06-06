@@ -13,7 +13,7 @@ import { Title, Actions } from "shared/components";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { FormFields } from "shared/components";
-import { getSelectionOptions } from "shared/hooks";
+import { getFieldDynamicOptions } from "shared/hooks";
 
 
 // Reactstrap (UI) imports
@@ -37,7 +37,7 @@ const ElectorSearchDisplay = ({
 
 
     const [selectedGuaranteeGroup, setSelectedGuaranteeGroup] = useState("")
-    const guaranteeGroupOptions = getSelectionOptions(campaignGuaranteeGroups)
+    const guaranteeGroupOptions = getFieldDynamicOptions(campaignGuaranteeGroups)
 
     console.log("campaignGuaranteeGroupscampaignGuaranteeGroups: ", campaignGuaranteeGroups)
 

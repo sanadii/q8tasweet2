@@ -8,7 +8,7 @@ import { electionSelector } from 'selectors';
 
 // Constants & Component imports
 import AddElectionCandidate from "./AddElectionCandidate";
-import AddNewCandidate from "./AddNewCandidate";
+import AddNewCandidate from "./AddCandidate";
 import EditElectionCandidate from "./EditElectionCandidate";
 
 // Form & validation imports

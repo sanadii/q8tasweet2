@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // Component, Constants & Hooks
 import { StatusOptions, getStatusBadge, PriorityOptions } from "shared/constants/";
-import { getOptionOptions, getOptionBadge } from "shared/utils"
+import { getFieldStaticOptions, getOptionBadge } from "shared/hooks"
 import { AvatarList } from "shared/components";
 import { handleValidDate } from "shared/utils";
 

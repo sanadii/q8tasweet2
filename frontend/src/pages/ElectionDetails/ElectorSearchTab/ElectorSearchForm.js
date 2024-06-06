@@ -17,7 +17,7 @@ import { Col, Row, Button, ButtonGroup, Form } from "reactstrap";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { FormFields } from "shared/components";
-import { getSelectionOptions } from "shared/hooks";
+import { getFieldDynamicOptions } from "shared/hooks";
 
 const ElectorSearchForm = ({ electionSchema }) => {
     const dispatch = useDispatch();
@@ -107,7 +107,7 @@ const ElectorSearchForm = ({ electionSchema }) => {
             name: "area",
             label: "المنطقة",
             type: "select",
-            options: getSelectionOptions(electionAreas),
+            options: getFieldDynamicOptions(electionAreas),
             colSize: "4",
         },
     ];
@@ -158,7 +158,7 @@ const ElectorSearchForm = ({ electionSchema }) => {
             name: "area",
             label: "المنطقة",
             type: "select",
-            options: getSelectionOptions(electionAreas),
+            options: getFieldDynamicOptions(electionAreas),
             colSize: "2",
         },
         {

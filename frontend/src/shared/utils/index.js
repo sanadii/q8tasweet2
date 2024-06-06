@@ -1,4 +1,5 @@
 export * from "./dataTime";
 export * from "./WebSocketContext";
 
-export { getOptionOptions, getOptionBadge } from "./options"
+export { getFieldStaticOptions, getOptionBadge } from "./options"
+export { getFieldDynamicOptions } from "./getFieldDynamicOptions"

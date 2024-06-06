@@ -4,44 +4,35 @@ import rootReducer from './reducers';
 import rootSaga from './sagas';
 import { createStateSyncMiddleware, initMessageListener, initStateWithPrevTab } from 'redux-state-sync';
 import { setupListeners } from './listeners'; // Import the listeners setup
-import { getElections, getCategories } from './actions'; // Import your action creators
-
-// Create middlewares
-const sagaMiddleware = createSagaMiddleware();
-const listenerMiddleware = createListenerMiddleware();
 
 // Set up additional listeners
-setupListeners(listenerMiddleware);
+const sagaMiddleware = createSagaMiddleware();
+const listenerMiddleware = createListenerMiddleware();
 
 // Configure middlewares
 const middlewares = [
   sagaMiddleware,
-  createStateSyncMiddleware()
+  // createStateSyncMiddleware()
 ];
 
-  // listenerMiddleware.middleware,
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export function configureAppStore(initialState) {
-  // Create the Redux store with rootReducer, initial state, and middleware
+
   const store = configureStore({
+    // initialState: initialState,
     reducer: rootReducer,
-    preloadedState: initialState,
     middleware: (getDefaultMiddleware) =>
       // getDefaultMiddleware().concat(middlewares)
-      getDefaultMiddleware(
-        {
-          ignoredActions: ['addCandidate'],
+      getDefaultMiddleware().prepend(middlewares)
 
-        }
-      ).prepend(middlewares)
 
-      
+
   });
-
-  // Run the root saga
   sagaMiddleware.run(rootSaga);
   initStateWithPrevTab(store);
-  initMessageListener(store);
 
+  // New
+  initMessageListener(store);
   return store;
 }

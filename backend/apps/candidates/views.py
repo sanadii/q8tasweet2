@@ -68,7 +68,7 @@ class AddCandidate(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request):
-        serializer = CandidateSerializer(data=request.data.dict(), context={'request': request})
+        serializer = CandidateSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             candidate = serializer.save()
             self._save_image_if_present(request, candidate)
@@ -107,17 +107,13 @@ class AddCandidate(APIView):
     def _handle_election_related_data(self, request, candidate, response_data):
         if 'election' in request.data:
             election_candidate = self._create_election_candidate(request, candidate)
-            response_data.update({
-                "electionCandidate": ElectionCandidateSerializer(election_candidate).data
-            })
-
+           
             if 'electionParty' in request.data:
-                election_party_candidate = self._create_election_party_candidate(request, election_candidate)
-                if election_party_candidate:
-                    response_data.update({
-                        "electionPartyCandidate": ElectionPartyCandidateSerializer(election_party_candidate).data
-                    })
-
+                self._create_election_party_candidate(request, election_candidate)
+           
+        response_data.update({
+            "electionCandidate": ElectionCandidateSerializer(election_candidate).data
+        })
         return response_data
 
 

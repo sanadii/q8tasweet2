@@ -44,4 +44,5 @@ export { useDelete } from "./useDelete";
 export { useFetchDataIfNeeded } from "./useFetchDataIfNeeded";
 
 // Forms
-export { getSelectionOptions } from "./getSelectionOptions";
+export { getFieldDynamicOptions } from "./FieldDynamicOptions";
+export { getSelectedOptions, getFieldStaticOptions, getOptionBadge } from "./FieldStaticOptions"

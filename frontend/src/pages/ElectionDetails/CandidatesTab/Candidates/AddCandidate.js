@@ -1,34 +1,30 @@
 // React & Redux core imports
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addCandidate } from "store/actions";
+import { addCandidate, updateCandidate } from "store/actions";
 import { electionSelector } from 'selectors';
 
 // Custom Components & ConstantsImports
-import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
 import { FormFields } from "shared/components";
-import { getOptionOptions } from "shared/utils";
+import { getFieldStaticOptions, getFieldDynamicOptions } from "shared/hooks";
 
 // UI & Utilities Components
 import { Col, Row, Form } from "reactstrap";
-
 
 // Form and Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddElectionPartyCandidate = () => {
+const AddNewCandidate = () => {
     const dispatch = useDispatch();
 
-    const { electionId } = useSelector(electionSelector);
+    const { election, electionId, electionParties } = useSelector(electionSelector);
 
     const initialValues = {
         name: "",
         image: null,
         gender: 1,
-        status: 1,
-        priority: 1,
     };
 
     const validation = useFormik({
@@ -39,16 +35,20 @@ const AddElectionPartyCandidate = () => {
         }),
         onSubmit: (values) => {
             const formData = new FormData();
-            formData.append('election', electionId);
             formData.append('name', values.name);
             formData.append('gender', values.gender);
-            formData.append('status', values.status);
-            formData.append('priority', values.priority);
 
             if (values.image instanceof File) {
                 formData.append("image", values.image);
             }
+            if (election.electionMethod !== "candidateOnly") {
+                formData.append('election', electionId);
 
+                // Conditionally append electionParty
+                if (values.electionParty) {
+                    formData.append('electionParty', values.electionParty);
+                }
+            }
             dispatch(addCandidate(formData));
 
             // Reset form and selected image after dispatch
@@ -73,19 +73,22 @@ const AddElectionPartyCandidate = () => {
             placeholder: "ادخل الاسم المرشح",
         },
         {
+            id: "party-field",
+            name: "electionParty",
+            type: "select",
+            placeholder: "اختر القائمة الإنتخابية",
+            options: getFieldDynamicOptions(electionParties, "القوائم الانتخابية"),
+            colSize: 12,
+        },
+        {
             id: "gender-field",
             name: "gender",
             label: "النوع",
             type: "select",
             placeholder: "اختر النوع",
-            // options: getOptionOptions("GenderOptions"),
-
-            // options: GenderOptions.map((gender) => ({
-            //     id: gender.id,
-            //     label: gender.name,
-            //     value: gender.id,
-            // })),
+            options: getFieldStaticOptions("GenderOptions"),
         },
+
     ];
 
     return (
@@ -109,4 +112,4 @@ const AddElectionPartyCandidate = () => {
     );
 };
 
-export default AddElectionPartyCandidate;
+export default AddNewCandidate;

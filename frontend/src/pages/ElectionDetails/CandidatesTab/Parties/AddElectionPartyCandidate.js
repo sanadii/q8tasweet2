@@ -1,26 +1,27 @@
 // React & Redux core imports
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addCandidate, updateCandidate } from "store/actions";
+import { addCandidate } from "store/actions";
 import { electionSelector } from 'selectors';
 
 // Custom Components & ConstantsImports
-import { GenderOptions } from "shared/constants";
+import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
 import { FormFields } from "shared/components";
-import { getOptionOptions } from "shared/utils";
+import { getFieldStaticOptions } from "shared/hooks";
 
 // UI & Utilities Components
 import { Col, Row, Form } from "reactstrap";
+
 
 // Form and Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddNewCandidate = () => {
+const AddElectionPartyCandidate = () => {
     const dispatch = useDispatch();
 
-    const { election, electionId, electionParties } = useSelector(electionSelector);
+    const { electionId } = useSelector(electionSelector);
 
     const initialValues = {
         name: "",
@@ -29,7 +30,6 @@ const AddNewCandidate = () => {
         status: 1,
         priority: 1,
     };
-    console.log("electionMethod: ", election.electionMethod)
 
     const validation = useFormik({
         enableReinitialize: true,
@@ -39,13 +39,7 @@ const AddNewCandidate = () => {
         }),
         onSubmit: (values) => {
             const formData = new FormData();
-            if (election.electionMethod !== "candidateOnly") {
-                formData.append('electionParty', values.electionParty);
-                formData.append('election', electionId);
-            } else {
-                formData.append('election', electionId);
-            }
-
+            formData.append('election', electionId);
             formData.append('name', values.name);
             formData.append('gender', values.gender);
             formData.append('status', values.status);
@@ -79,30 +73,12 @@ const AddNewCandidate = () => {
             placeholder: "ادخل الاسم المرشح",
         },
         {
-            id: "party-field",
-            name: "electionParty",
-            type: "select",
-            placeholder: "اختر القائمة الإنتخابية",
-            options: [
-                { id: "default", label: "-- اختر القائمة الانتخابية --", value: null },
-                ...(Array.isArray(electionParties) ? electionParties
-                    .filter(item => item && item.id) // Ensure that the item is defined and has an id property
-                    .map((item) => ({
-                        id: item.id,
-                        label: item.name,
-                        value: item.id,
-                    }))
-                    : [])
-            ],
-            colSize: 12,
-        },
-        {
             id: "gender-field",
             name: "gender",
             label: "النوع",
             type: "select",
             placeholder: "اختر النوع",
-            options: getOptionOptions("GenderOptions"),
+            // options: getFieldStaticOptions("GenderOptions"),
 
             // options: GenderOptions.map((gender) => ({
             //     id: gender.id,
@@ -110,7 +86,6 @@ const AddNewCandidate = () => {
             //     value: gender.id,
             // })),
         },
-
     ];
 
     return (
@@ -134,4 +109,4 @@ const AddNewCandidate = () => {
     );
 };
 
-export default AddNewCandidate;
+export default AddElectionPartyCandidate;
