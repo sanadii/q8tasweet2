@@ -40,7 +40,7 @@ urlpatterns = [
 
     # Users
     path("getUsers", GetUsers.as_view(), name="GetUsers"),
-    path('addNewUser', AddNewUser.as_view(), name="AddNewUser"),
+    path('addUser', AddUser.as_view(), name="AddUser"),
     path('updateUser/<int:id>', UpdateUser.as_view(), name="UpdateUser"),
     path('deleteUser/<int:id>', DeleteUser.as_view(), name="DeleteUser"),
 
@@ -54,14 +54,14 @@ urlpatterns = [
 
     # Groups
     path("getGroups", GetGroups.as_view(), name="GetGroups"),
-    path('addNewGroup', AddNewGroup.as_view(), name="AddNewGroup"),
+    path('addGroup', AddGroup.as_view(), name="AddGroup"),
     path('updateGroup', UpdateGroup.as_view(), name="UpdateGroup"),
     path('deleteGroup/<int:id>', DeleteGroup.as_view(), name="DeleteGroup"),
 
 
     # Permissions
     path("getGroupPermissions", GetGroupPermissions.as_view(), name="GetGroupPermissions"),
-    path('addNewGroup', AddNewGroup.as_view(), name="AddNewGroup"),
+    path('addGroup', AddGroup.as_view(), name="AddGroup"),
     path('updateGroup', UpdateGroup.as_view(), name="UpdateGroup"),
     path('deleteGroup/<int:id>', DeleteGroup.as_view(), name="DeleteGroup"),
 

@@ -1,12 +1,13 @@
 // React & Redux core imports
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addNewCandidate, updateCandidate } from "store/actions";
+import { addCandidate, updateCandidate } from "store/actions";
 import { electionSelector } from 'selectors';
 
 // Custom Components & ConstantsImports
 import { GenderOptions } from "shared/constants";
 import { FormFields } from "shared/components";
+import { getOptionOptions } from "shared/utils";
 
 // UI & Utilities Components
 import { Col, Row, Form } from "reactstrap";
@@ -40,6 +41,7 @@ const AddNewCandidate = () => {
             const formData = new FormData();
             if (election.electionMethod !== "candidateOnly") {
                 formData.append('electionParty', values.electionParty);
+                formData.append('election', electionId);
             } else {
                 formData.append('election', electionId);
             }
@@ -53,7 +55,7 @@ const AddNewCandidate = () => {
                 formData.append("image", values.image);
             }
 
-            dispatch(addNewCandidate(formData));
+            dispatch(addCandidate(formData));
 
             // Reset form and selected image after dispatch
             validation.resetForm();
@@ -93,7 +95,21 @@ const AddNewCandidate = () => {
                     : [])
             ],
             colSize: 12,
-        }
+        },
+        {
+            id: "gender-field",
+            name: "gender",
+            label: "النوع",
+            type: "select",
+            placeholder: "اختر النوع",
+            options: getOptionOptions("GenderOptions"),
+
+            // options: GenderOptions.map((gender) => ({
+            //     id: gender.id,
+            //     label: gender.name,
+            //     value: gender.id,
+            // })),
+        },
 
     ];
 

@@ -14,7 +14,7 @@ GOVERNORATE_CHOICES = [
 
 # Areas model
 class Area(DynamicSchemaModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=255)
     code = models.CharField(max_length=50)
     governorate = models.IntegerField(choices=GOVERNORATE_CHOICES)
     tags = models.CharField(max_length=250, null=True, blank=True)

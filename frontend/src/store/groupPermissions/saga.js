@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 // GroupPermission Redux States
 import {
   GET_GROUP_PERMISSIONS,
-  ADD_NEW_GROUP_PERMISSION,
+  ADD_GROUP_PERMISSION,
   DELETE_GROUP_PERMISSION,
   UPDATE_GROUP_PERMISSION,
 } from "./actionType";
@@ -22,8 +22,8 @@ import {
   GroupPermissionApiResponseError,
 
   // GroupPermissions
-  addNewGroupPermissionSuccess,
-  addNewGroupPermissionFail,
+  addGroupPermissionSuccess,
+  addGroupPermissionFail,
   updateGroupPermissionSuccess,
   updateGroupPermissionFail,
   deleteGroupPermissionSuccess,
@@ -36,7 +36,7 @@ import { uploadNewImage } from "../uploadImage/action";
 //Include Both Helper File with needed methods
 import {
   getGroupPermissions as getGroupPermissionsApi,
-  addNewGroupPermission,
+  addGroupPermission,
   updateGroupPermission,
   deleteGroupPermission,
 } from "helpers/backend_helper";
@@ -53,13 +53,13 @@ function* getGroupPermissions() {
 
 function* onAddNewGroupPermission({ payload: { groupPermission, formData } }) {
   try {
-    // Call the API function to add a new groupPermission & Dispatch the addNewGroupPermissionSuccess action with the received data
-    const addNewGroupPermissionResponse = yield call(addNewGroupPermission, formData);
-    yield put(addNewGroupPermissionSuccess(addNewGroupPermissionResponse));
+    // Call the API function to add a new groupPermission & Dispatch the addGroupPermissionSuccess action with the received data
+    const addGroupPermissionResponse = yield call(addGroupPermission, formData);
+    yield put(addGroupPermissionSuccess(addGroupPermissionResponse));
 
     toast.success("GroupPermission Added Successfully", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewGroupPermissionFail(error));
+    yield put(addGroupPermissionFail(error));
     toast.error("GroupPermission Added Failed", { autoClose: 2000 });
   }
 }
@@ -114,7 +114,7 @@ export function* watchGetGroupPermissions() {
   yield takeEvery(GET_GROUP_PERMISSIONS, getGroupPermissions);
 }
 export function* watchAddNewGroupPermission() {
-  yield takeEvery(ADD_NEW_GROUP_PERMISSION, onAddNewGroupPermission);
+  yield takeEvery(ADD_GROUP_PERMISSION, onAddNewGroupPermission);
 }
 export function* watchUpdateGroupPermission() {
   yield takeEvery(UPDATE_GROUP_PERMISSION, onUpdateGroupPermission);

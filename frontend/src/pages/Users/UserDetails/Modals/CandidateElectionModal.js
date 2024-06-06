@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getUsers,
-  addNewUserElection,
+  addUserElection,
   updateUserElection,
 } from "store/actions";
 
@@ -100,7 +100,7 @@ export const UserElectionModal = ({
           election_id: election_id,
           user_id: values["user_id"],
         };
-        dispatch(addNewUserElection(newUserElection));
+        dispatch(addUserElection(newUserElection));
       }
       validation.resetForm();
       toggle();
@@ -204,7 +204,7 @@ const AddNewUserElection = ({ election_id, dispatch }) => {
                   election_id: election_id,
                   user_id: user.id,
                 };
-                dispatch(addNewUserElection(newUserElection));
+                dispatch(addUserElection(newUserElection));
               }}
             >
               <div className="d-flex align-items-center">

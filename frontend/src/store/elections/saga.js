@@ -12,7 +12,7 @@ import {
 
   // Election Candidates
   GET_ELECTION_CANDIDATES,
-  ADD_NEW_ELECTION_CANDIDATE,
+  ADD_ELECTION_CANDIDATE,
   UPDATE_ELECTION_CANDIDATE,
   DELETE_ELECTION_CANDIDATE,
   UPDATE_ELECTION_CANDIDATE_VOTES,
@@ -33,7 +33,7 @@ import {
 
   // Election Committees
   GET_ELECTION_COMMITTEES,
-  ADD_NEW_ELECTION_COMMITTEE,
+  ADD_ELECTION_COMMITTEE,
   UPDATE_ELECTION_COMMITTEE,
   DELETE_ELECTION_COMMITTEE,
 
@@ -124,7 +124,7 @@ import {
 
   // Election Candidates
   getElectionCandidates as getElectionCandidatesApi,
-  addNewElectionCandidate,
+  addElectionCandidate,
   updateElectionCandidate,
   deleteElectionCandidate,
   updateElectionCandidateVotes,
@@ -145,7 +145,7 @@ import {
 
   // Election Committees
   getElectionCommittees as getElectionCommitteesApi,
-  addNewElectionCommittee,
+  addElectionCommittee,
   updateElectionCommittee,
   deleteElectionCommittee,
   updateElectionResults,
@@ -227,7 +227,7 @@ function* getElectionCandidates({ payload: election }) {
 
 function* onAddNewElectionCandidate({ payload: electionCandidate }) {
   try {
-    const response = yield call(addNewElectionCandidate, electionCandidate);
+    const response = yield call(addElectionCandidate, electionCandidate);
     yield put(addElectionCandidateSuccess(response));
     toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
@@ -250,6 +250,7 @@ function* onUpdateElectionCandidate({ payload: electionCandidate }) {
 }
 
 function* onDeleteElectionCandidate({ payload: electionCandidate }) {
+  console.log("electionCandidate: ", electionCandidate)
   try {
     const response = yield call(deleteElectionCandidate, electionCandidate);
     yield put(
@@ -431,7 +432,7 @@ function* getElectionCommittees({ payload: election }) {
 
 function* onAddNewElectionCommittee({ payload: electionCommittee }) {
   try {
-    const response = yield call(addNewElectionCommittee, electionCommittee);
+    const response = yield call(addElectionCommittee, electionCommittee);
     yield put(addElectionCommitteeSuccess(response));
     toast.success("تم إضافة لجنة الانتخابات بنجاح", { autoClose: 2000 });
   } catch (error) {
@@ -508,7 +509,7 @@ export function* watchGetElectionCandidates() {
 }
 
 export function* watchAddNewElectionCandidate() {
-  yield takeEvery(ADD_NEW_ELECTION_CANDIDATE, onAddNewElectionCandidate);
+  yield takeEvery(ADD_ELECTION_CANDIDATE, onAddNewElectionCandidate);
 }
 
 export function* watchUpdateElectionCandidate() {
@@ -571,7 +572,7 @@ export function* watchGetElectionCommittees() {
 }
 
 export function* watchAddNewElectionCommittee() {
-  yield takeEvery(ADD_NEW_ELECTION_COMMITTEE, onAddNewElectionCommittee);
+  yield takeEvery(ADD_ELECTION_COMMITTEE, onAddNewElectionCommittee);
 }
 
 export function* watchUpdateElectionCommittee() {

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
-import { addNewElectionCommittee, updateElectionCommittee, getCampaignSorters } from "store/actions";
+import { addElectionCommittee, updateElectionCommittee, getCampaignSorters } from "store/actions";
 import { electionSelector } from 'selectors';
 import { FormFields } from "shared/components";
 
@@ -72,7 +72,7 @@ export const CommitteeModal = ({ modal, toggle, setModal, isEdit, electionCommit
           name: values.name,
           gender: parseInt(values.gender, 10),
         };
-        dispatch(addNewElectionCommittee(newElectionCommittee));
+        dispatch(addElectionCommittee(newElectionCommittee));
       }
       validation.resetForm();
       toggle();

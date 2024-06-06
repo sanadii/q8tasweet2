@@ -5,7 +5,7 @@ import {
 
     // Election Committee
     GET_ELECTION_COMMITTEES,
-    ADD_NEW_ELECTION_COMMITTEE,
+    ADD_ELECTION_COMMITTEE,
     ADD_ELECTION_COMMITTEE_SUCCESS,
     ADD_ELECTION_COMMITTEE_FAIL,
     UPDATE_ELECTION_COMMITTEE,
@@ -52,8 +52,8 @@ export const updateElectionCommitteeFail = error => ({
     payload: error,
 });
 
-export const addNewElectionCommittee = electionCommittee => ({
-    type: ADD_NEW_ELECTION_COMMITTEE,
+export const addElectionCommittee = electionCommittee => ({
+    type: ADD_ELECTION_COMMITTEE,
     payload: electionCommittee,
 });
 

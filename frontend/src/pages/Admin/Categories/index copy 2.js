@@ -20,7 +20,7 @@ import {
   getCategories as onGetCategories,
   updateCategory as onUpdateCategory,
   deleteCategory as onDeleteCategory,
-  addNewCategory as onAddNewCategory,
+  addCategory as onAddNewCategory,
 } from "store/actions";
 
 const Categories = () => {
@@ -565,7 +565,7 @@ const Categories = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                id="addNewCategory"
+                id="addCategory"
               >
                 {!!isEdit ? "Save" : "Add Category"}
               </button>

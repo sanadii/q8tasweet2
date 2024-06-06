@@ -155,7 +155,7 @@ const Parties = (state = IntialState, action) => {
         ...state,
         parties: state.parties.filter(
           (party) =>
-            party.id.toString() !== action.payload.party.toString()
+            party.id.toString() !== action.payload.party.id.toString()
         ),
         isPartyDelete: true,
         isPartyDeleteFail: false,

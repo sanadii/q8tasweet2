@@ -37,12 +37,12 @@ const OverviewPersonalDetails = ({ user }) => {
                                 {renderRow("الاسم", user.fullName)}
                                 {renderRow("الهاتف", user.phone)}
                                 {renderRow("البريد", user.email)}
-                                {renderRow("الصلاحيات", user.groups.map((group, index) => (
+                                {/* {renderRow("الصلاحيات", user.groups.map((group, index) => (
                                     <span key={index}>
                                         {group}
                                         {index !== user.groups.length - 1 && <br />}
                                     </span>
-                                )))}
+                                )))} */}
                                 {renderRow("الإنتساب", /* user.track.createdAt */)}
                             </tbody>
                         </Table>
@@ -50,40 +50,40 @@ const OverviewPersonalDetails = ({ user }) => {
                 </CardBody>
             </Card>
             <Card>
-            <CardBody>
-                <h5 className="card-title mb-4">التواصل الإجتماعي</h5>
-                <div className="d-flex flex-wrap gap-2">
-                    <div>
-                        <Link to="#" className="avatar-xs d-block">
-                            <span className="avatar-title rounded-circle fs-16 bg-dark text-light">
-                                <i className="ri-github-fill"></i>
-                            </span>
-                        </Link>
+                <CardBody>
+                    <h5 className="card-title mb-4">التواصل الإجتماعي</h5>
+                    <div className="d-flex flex-wrap gap-2">
+                        <div>
+                            <Link to="#" className="avatar-xs d-block">
+                                <span className="avatar-title rounded-circle fs-16 bg-dark text-light">
+                                    <i className="ri-github-fill"></i>
+                                </span>
+                            </Link>
+                        </div>
+                        <div>
+                            <Link to="#" className="avatar-xs d-block">
+                                <span className="avatar-title rounded-circle fs-16 bg-primary">
+                                    <i className="ri-global-fill"></i>
+                                </span>
+                            </Link>
+                        </div>
+                        <div>
+                            <Link to="#" className="avatar-xs d-block">
+                                <span className="avatar-title rounded-circle fs-16 bg-success">
+                                    <i className="ri-dribbble-fill"></i>
+                                </span>
+                            </Link>
+                        </div>
+                        <div>
+                            <Link to="#" className="avatar-xs d-block">
+                                <span className="avatar-title rounded-circle fs-16 bg-danger">
+                                    <i className="ri-pinterest-fill"></i>
+                                </span>
+                            </Link>
+                        </div>
                     </div>
-                    <div>
-                        <Link to="#" className="avatar-xs d-block">
-                            <span className="avatar-title rounded-circle fs-16 bg-primary">
-                                <i className="ri-global-fill"></i>
-                            </span>
-                        </Link>
-                    </div>
-                    <div>
-                        <Link to="#" className="avatar-xs d-block">
-                            <span className="avatar-title rounded-circle fs-16 bg-success">
-                                <i className="ri-dribbble-fill"></i>
-                            </span>
-                        </Link>
-                    </div>
-                    <div>
-                        <Link to="#" className="avatar-xs d-block">
-                            <span className="avatar-title rounded-circle fs-16 bg-danger">
-                                <i className="ri-pinterest-fill"></i>
-                            </span>
-                        </Link>
-                    </div>
-                </div>
-            </CardBody>
-        </Card>
+                </CardBody>
+            </Card>
         </React.Fragment>
     );
 };

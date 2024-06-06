@@ -5,7 +5,7 @@ export const GET_ALL_VOTERS = "GET_ALL_VOTERS";
 export const GET_VOTERS = "GET_VOTERS";
 
 // Add Voter
-export const ADD_NEW_VOTER = "ADD_NEW_VOTER";
+export const ADD_VOTER = "ADD_VOTER";
 export const ADD_VOTER_SUCCESS = "ADD_VOTER_SUCCESS";
 export const ADD_VOTER_FAIL = "ADD_VOTER_FAIL";
 

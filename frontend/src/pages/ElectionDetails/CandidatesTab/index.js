@@ -7,13 +7,13 @@ import { deleteElectionCandidate, deleteElectionParty, deleteElectionPartyCandid
 import { electionSelector } from 'selectors';
 
 // import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
-import { CheckboxHeader, CheckboxCell, NameAvatar, Actions } from "shared/components";
+import { CheckboxHeader, CheckboxCell, NameAvatar, Name, Actions } from "shared/components";
 
 // Common Components
-import ElectionCandidateModal from "./ElectionCandidateModal";
-import ElectionPartyModal from "./ElectionPartyModal";
-import Candidates from "./Candidates";
-import Parties from "./Parties";
+import ElectionCandidateModal from "./Candidates/ElectionCandidateModal";
+import Candidates from "./Candidates/ElectionCandidates";
+import Parties from "./Parties/Parties";
+import ElectionPartyModal from "./Parties/ElectionPartyModal";
 
 import { DeleteModal, ExportCSVModal, TableContainerHeader } from "shared/components";
 import { useDelete } from "shared/hooks";
@@ -23,6 +23,20 @@ import { Col, Row, Card, CardBody } from "reactstrap";
 
 const CandidatesTab = () => {
   const dispatch = useDispatch();
+
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    handleItemDeleteClick,
+    deleteModal,
+    setDeleteModal,
+    handleCheckAllClick,
+    handleCheckCellClick,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    handleDeleteMultiple,
+  } = useDelete(deleteElectionCandidate);
 
   const { election, electionMethod, electionCandidates, electionParties, error } = useSelector(electionSelector);
 
@@ -66,26 +80,7 @@ const CandidatesTab = () => {
 
   console.log("isElectionPartyAction: ", isElectionPartyAction)
 
-  let deleteAction;
-  if (partyCandidateView === false) {
-    deleteAction = deleteElectionCandidate;
-  } else {
-    deleteAction = deleteElectionParty;
-  }
 
-  // Delete Hook
-  const {
-    handleDeleteItem,
-    handleItemDeleteClick,
-    deleteModal,
-    setDeleteModal,
-    handleCheckAllClick,
-    handleCheckCellClick,
-    isMultiDeleteButton,
-    deleteModalMulti,
-    setDeleteModalMulti,
-    handleDeleteMultiple,
-  } = useDelete(deleteAction);
 
   // Models
   const [modal, setModal] = useState(false);
@@ -124,8 +119,6 @@ const CandidatesTab = () => {
     },
     [toggle]
   );
-
-
 
 
   const handleElectionCandidateClick = useCallback(
@@ -190,6 +183,20 @@ const CandidatesTab = () => {
           />
       },
       {
+        Header: "القائمة",
+        filterable: true,
+        Cell: (cellProps) => {
+          const party = electionParties.find(party => party.id === cellProps.row.original.party);
+          const partyName = party ? party.name : "مرشح مستقل";
+
+          return (
+            <Name
+              name={partyName}
+            />
+          );
+        }
+      },
+      {
         Header: "إجراءات",
         accessor: "election",
         Cell: (cellProps) =>
@@ -205,7 +212,7 @@ const CandidatesTab = () => {
           />
       },
     ],
-    [handleElectionCandidateClick, handleCheckCellClick, handleCheckAllClick, handleItemDeleteClick]
+    [electionParties, handleElectionCandidateClick, handleCheckCellClick, handleCheckAllClick, handleItemDeleteClick]
   );
 
 

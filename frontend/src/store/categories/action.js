@@ -6,7 +6,7 @@ import {
   UPDATE_CATEGORY,
   UPDATE_CATEGORY_SUCCESS,
   UPDATE_CATEGORY_FAIL,
-  ADD_NEW_CATEGORY,
+  ADD_CATEGORY,
   ADD_CATEGORY_SUCCESS,
   ADD_CATEGORY_FAIL,
   DELETE_CATEGORY,
@@ -45,8 +45,8 @@ export const updateCategoryFail = error => ({
   payload: error,
 });
 
-export const addNewCategory = category => ({
-  type: ADD_NEW_CATEGORY,
+export const addCategory = category => ({
+  type: ADD_CATEGORY,
   payload: category,
 });
 

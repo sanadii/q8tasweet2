@@ -6,8 +6,8 @@ import {
   // Candidate
   GET_CANDIDATES,
   GET_CANDIDATE_DETAILS,
-  ADD_NEW_CANDIDATE_SUCCESS,
-  ADD_NEW_CANDIDATE_FAIL,
+  ADD_CANDIDATE_SUCCESS,
+  ADD_CANDIDATE_FAIL,
   UPDATE_CANDIDATE_SUCCESS,
   UPDATE_CANDIDATE_FAIL,
   DELETE_CANDIDATE_SUCCESS,
@@ -82,7 +82,7 @@ const Candidates = (state = IntialState, action) => {
       };
     }
 
-    case ADD_NEW_CANDIDATE_SUCCESS:
+    case ADD_CANDIDATE_SUCCESS:
       return {
         ...state,
         isCandidateCreated: true,
@@ -90,7 +90,7 @@ const Candidates = (state = IntialState, action) => {
         isCandidateAdd: true,
         isCandidateAddFail: false,
       };
-    case ADD_NEW_CANDIDATE_FAIL:
+    case ADD_CANDIDATE_FAIL:
       return {
         ...state,
         error: action.payload,

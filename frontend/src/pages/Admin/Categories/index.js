@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 // Store actions
-import { getCategories, addNewCategory, updateCategory, deleteCategory } from "store/actions";
+import { getCategories, addCategory, updateCategory, deleteCategory } from "store/actions";
 
 const Categories = () => {
   document.title = "المجموعات | Q8Tasweet - React Admin & Dashboard Template";
@@ -148,7 +148,7 @@ const Categories = () => {
           parent: values.parent,
         };
         // save new Folder
-        dispatch(addNewCategory(newCategory));
+        dispatch(addCategory(newCategory));
         validation.resetForm();
       }
       toggle();
@@ -518,7 +518,7 @@ const Categories = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                id="addNewCategory"
+                id="addCategory"
               >
                 {!!isEdit ? "Save" : "Add Category"}
               </button>

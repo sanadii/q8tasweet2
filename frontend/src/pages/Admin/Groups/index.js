@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Store Actions & Selectors
-import { getGroups, addNewGroup, updateGroup, deleteGroup } from "store/actions";
+import { getGroups, addGroup, updateGroup, deleteGroup } from "store/actions";
 import { authSelector } from 'selectors';
 
 // Components & Hooks
@@ -131,7 +131,7 @@ const GroupPermissions = () => {
           category: values.category,
         };
         // save new Folder
-        dispatch(addNewGroup(newCategory));
+        dispatch(addGroup(newCategory));
         validation.resetForm();
       }
       toggle();
@@ -409,7 +409,7 @@ const GroupPermissions = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                id="addNewCategory"
+                id="addCategory"
               >
                 {!!isEdit ? "Save" : "Add Category"}
               </button>

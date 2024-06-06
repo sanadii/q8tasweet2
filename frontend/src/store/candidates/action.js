@@ -5,9 +5,9 @@ import {
 
   // Candidates
   GET_CANDIDATES,
-  ADD_NEW_CANDIDATE,
-  ADD_NEW_CANDIDATE_SUCCESS,
-  ADD_NEW_CANDIDATE_FAIL,
+  ADD_CANDIDATE,
+  ADD_CANDIDATE_SUCCESS,
+  ADD_CANDIDATE_FAIL,
   UPDATE_CANDIDATE,
   UPDATE_CANDIDATE_SUCCESS,
   UPDATE_CANDIDATE_FAIL,
@@ -45,18 +45,18 @@ export const getCandidateDetails = (candidate) => ({
 
 
 // Add New Candidate
-export const addNewCandidate = (candidate) => ({
-  type: ADD_NEW_CANDIDATE,
+export const addCandidate = (candidate) => ({
+  type: ADD_CANDIDATE,
   payload: candidate,
 });
 
-export const addNewCandidateSuccess = (candidate) => ({
-  type: ADD_NEW_CANDIDATE_SUCCESS,
+export const addCandidateSuccess = (candidate) => ({
+  type: ADD_CANDIDATE_SUCCESS,
   payload: candidate,
 });
 
-export const addNewCandidateFail = (error) => ({
-  type: ADD_NEW_CANDIDATE_FAIL,
+export const addCandidateFail = (error) => ({
+  type: ADD_CANDIDATE_FAIL,
   payload: error,
 });
 

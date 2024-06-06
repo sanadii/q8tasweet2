@@ -20,7 +20,7 @@ import {
   getGroups as onGetGroups,
   updateGroup as onUpdateGroup,
   deleteGroup as onDeleteGroup,
-  addNewGroup as onAddNewGroup,
+  addGroup as onAddNewGroup,
 } from "../../../store/actions";
 
 const Categories = () => {
@@ -576,7 +576,7 @@ const Categories = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                id="addNewCategory"
+                id="addCategory"
               >
                 {!!isEdit ? "Save" : "Add Category"}
               </button>

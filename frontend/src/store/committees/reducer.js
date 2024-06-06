@@ -100,7 +100,7 @@ const Committees = (state = IntialState, action) => {
                 electionCommittees: state.electionCommittees.filter(
                     (electionCommittee) =>
                         electionCommittee.id.toString() !==
-                        action.payload.electionCommittee.toString()
+                        action.payload.electionCommittee.id.toString()
                 ),
                 isElectionCommitteeDelete: true,
                 isElectionCommitteeDeleteFail: false,

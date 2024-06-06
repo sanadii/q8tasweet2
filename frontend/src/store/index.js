@@ -28,8 +28,14 @@ export function configureAppStore(initialState) {
     preloadedState: initialState,
     middleware: (getDefaultMiddleware) =>
       // getDefaultMiddleware().concat(middlewares)
-      getDefaultMiddleware().prepend(middlewares)
+      getDefaultMiddleware(
+        {
+          ignoredActions: ['addCandidate'],
 
+        }
+      ).prepend(middlewares)
+
+      
   });
 
   // Run the root saga

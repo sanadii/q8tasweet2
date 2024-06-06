@@ -28,7 +28,7 @@ const ProfileContent = ({ user }) => {
             type: "tab",
             props: { user: user }
         },
-        { id: "2", title: "الحملات الإنتخابية", icon: "far fa-user", href: "Profile-activities", type: "tab", Component: ProfileCampaigns, props: { user: user } },
+        // { id: "2", title: "الحملات الإنتخابية", icon: "far fa-user", href: "Profile-activities", type: "tab", Component: ProfileCampaigns, props: { user: user } },
         // { id: "3", title: "المشاريع", icon: "far fa-envelope", href: "Profile-Member", type: "tab", Component: ProfileMember },
         // { id: "4", title: "مستندات", icon: "far fa-envelope", href: "Profile-documents", type: "tab", Component: ProfileDocuments },
         {

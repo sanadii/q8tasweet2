@@ -13,7 +13,7 @@ const getSelectedOptions = (optionCategory) => {
     const allOptions = {
         StatusOptions: StatusOptions,
         PriorityOptions: PriorityOptions,
-        gender: GenderOptions,
+        GenderOptions: GenderOptions,
         electionMethod: ElectionMethodOptions,
         electionResult: ElectionResultOptions,
         electionSortingResult: ElectionSortingResultOptions,

@@ -18,13 +18,14 @@ class Command(BaseCommand):
 
         # Participants
         call_command('import_candidates')
-        # call_command('import_parties')
+        call_command('import_parties')
 
         # # ElectionParticipants
-        # call_command('import_election_candidates')
-        # call_command('import_election_parties')
-        # call_command('import_election_party_candidates')
+        call_command('import_election_candidates')
+        call_command('import_election_parties')
+        call_command('import_election_party_candidates')
 
+        call_command('reset_all_sequences')
 
         # setup Schemas
         # call_command('setup_election_schemas')

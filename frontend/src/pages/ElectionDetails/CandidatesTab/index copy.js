@@ -8,7 +8,7 @@ import { electionSelector } from 'selectors';
 import { Id, CheckboxHeader, CheckboxCell, Name, Position, Votes, Actions } from "./CandidatesCol";
 
 // Common Components
-import ElectionCandidateModal from "./ElectionCandidateModal";
+import ElectionCandidateModal from "./Candidates/ElectionCandidateModal";
 import { Loader, DeleteModal, ExportCSVModal, TableContainer, TableContainerHeader } from "shared/components";
 // import { calculateCandidatePosition } from "./CandidateCalculations"
 import { usePermission, useDelete } from "shared/hooks";

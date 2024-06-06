@@ -28,7 +28,7 @@ from apps.elections.candidates.serializers import (
 from utils.views_helper import CustomPagination
 
 # Election Candidate
-class AddNewElectionCandidate(APIView):
+class AddElectionCandidate(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -37,7 +37,16 @@ class AddNewElectionCandidate(APIView):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            election_candidate = serializer.save()
+            
+            # Check for election_party in the payload and create ElectionPartyCandidate entry
+            election_party_id = request.data.get("election_party")
+            if election_party_id:
+                ElectionPartyCandidate.objects.create(
+                    election_party_id=election_party_id,
+                    election_candidate=election_candidate
+                )
+
             return Response(
                 {"data": serializer.data, "count": 1, "code": 200}, status=200
             )

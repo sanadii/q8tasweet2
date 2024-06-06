@@ -407,7 +407,7 @@ class GetCampaignSorters(APIView):
             return Response({"data": [], "code": 200, "message": "No moderators found."})
         
 
-class AddNewUser(APIView):
+class AddUser(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -565,7 +565,7 @@ class GetGroups(APIView):
         )
 
 
-class AddNewGroup(APIView):
+class AddGroup(APIView):
     def post(self, request):
         serializer = GroupSerializer(data=request.data)
         if serializer.is_valid():

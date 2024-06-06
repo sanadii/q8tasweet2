@@ -5,8 +5,8 @@ import {
 
   // GroupPermission s
   GET_GROUP_PERMISSIONS,
-  ADD_NEW_GROUP_PERMISSION_SUCCESS,
-  ADD_NEW_GROUP_PERMISSION_FAIL,
+  ADD_GROUP_PERMISSION_SUCCESS,
+  ADD_GROUP_PERMISSION_FAIL,
   UPDATE_GROUP_PERMISSION_SUCCESS,
   UPDATE_GROUP_PERMISSION_FAIL,
   DELETE_GROUP_PERMISSION_SUCCESS,
@@ -62,7 +62,7 @@ const GroupPermissions = (state = IntialState, action) => {
       };
     }
 
-    case ADD_NEW_GROUP_PERMISSION_SUCCESS:
+    case ADD_GROUP_PERMISSION_SUCCESS:
       return {
         ...state,
         isGroupPermissionCreated: true,
@@ -70,7 +70,7 @@ const GroupPermissions = (state = IntialState, action) => {
         isGroupPermissionAdd: true,
         isGroupPermissionAddFail: false,
       };
-    case ADD_NEW_GROUP_PERMISSION_FAIL:
+    case ADD_GROUP_PERMISSION_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -99,7 +99,8 @@ const GroupPermissions = (state = IntialState, action) => {
       return {
         ...state,
         groupGroupPermissions: state.groupGroupPermissions.filter(
-          (groupPermission) => groupPermission.id.toString() !== action.payload.groupPermission.toString()
+          (groupPermission) => groupPermission.id.toString() 
+          !== action.payload.groupPermission.id.toString()
         ),
         isGroupPermissionDelete: true,
         isGroupPermissionDeleteFail: false,

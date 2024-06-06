@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
 
   GET_ALL_ATTENDEES,
-  ADD_NEW_ATTENDEE,
+  ADD_ATTENDEE,
   DELETE_ATTENDEE,
   UPDATE_ATTENDEE,
 } from "./actionType";
@@ -26,7 +26,7 @@ import {
 //Include Both Helper Attendee with needed methods
 import {
   getAllAttendees as getAllAttendeesApi,
-  addNewAttendee,
+  addAttendee,
   updateAttendee,
   deleteAttendee,
 } from "../../helpers/backend_helper";
@@ -44,7 +44,7 @@ function* getAllAttendees() {
 function* onAddNewAttendee({ payload: attendee }) {
 
   try {
-    const response = yield call(addNewAttendee, attendee);
+    const response = yield call(addAttendee, attendee);
     yield put(addAttendeeSuccess(response));
     toast.success("Attendee Added Successfully", { autoClose: 3000 });
   } catch (error) {
@@ -91,7 +91,7 @@ export function* watchDeleteAttendee() {
 }
 
 export function* watchAddNewAttendee() {
-  yield takeEvery(ADD_NEW_ATTENDEE, onAddNewAttendee);
+  yield takeEvery(ADD_ATTENDEE, onAddNewAttendee);
 }
 
 function* AttendeeManager() {

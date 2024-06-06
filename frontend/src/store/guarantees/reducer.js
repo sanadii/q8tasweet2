@@ -12,7 +12,7 @@ import {
 } from "./actionType";
 
 const initialState = {
-  campaignCampaignGuarantees: [],
+  campaignGuarantees: [],
   subCampaignGuarantees: [],
   error: {},
 };
@@ -26,7 +26,7 @@ const CampaignGuarantees = (state = initialState, action) => {
         case GET_ALL_CAMPAIGN_GUARANTEES:
           return {
             ...state,
-            campaignCampaignGuarantees: action.payload.data.campaignCampaignGuarantees,
+            campaignGuarantees: action.payload.data.campaignGuarantees,
             subCampaignGuarantees: action.payload.data.subCampaignGuarantees,
           };
         default:
@@ -46,7 +46,7 @@ const CampaignGuarantees = (state = initialState, action) => {
     case ADD_CAMPAIGN_GUARANTEEN_SUCCESS:
       return {
         ...state,
-        campaignCampaignGuaranteeList: [...state.campaignCampaignGuaranteeList, action.payload],
+        campaignGuarantees: [...state.campaignGuarantees, action.payload],
       };
 
     case ADD_CAMPAIGN_GUARANTEEN_FAIL:
@@ -58,10 +58,10 @@ const CampaignGuarantees = (state = initialState, action) => {
     case UPDATE_CAMPAIGN_GUARANTEE_SUCCESS:
       return {
         ...state,
-        campaignCampaignGuaranteeList: state.campaignCampaignGuaranteeList.map(campaignCampaignGuarantee =>
-          campaignCampaignGuarantee.id.toString() === action.payload.id.toString()
-            ? { ...campaignCampaignGuarantee, ...action.payload }
-            : campaignCampaignGuarantee
+        campaignGuarantees: state.campaignGuarantees.map(campaignGuarantees =>
+          campaignGuarantees.id.toString() === action.payload.id.toString()
+            ? { ...campaignGuarantees, ...action.payload }
+            : campaignGuarantees
         ),
       };
 
@@ -74,8 +74,10 @@ const CampaignGuarantees = (state = initialState, action) => {
     case DELETE_CAMPAIGN_GUARANTEE_SUCCESS:
       return {
         ...state,
-        campaignCampaignGuaranteeList: state.campaignCampaignGuaranteeList.filter(
-          campaignCampaignGuarantee => campaignCampaignGuarantee.id.toString() !== action.payload.id.toString()
+        campaignGuarantees: state.campaignGuarantees.filter(
+          (campaignGuarantees) =>
+            campaignGuarantees.id.toString()
+          !== action.payload.campaignGuarantees.id.toString()
         ),
       };
 

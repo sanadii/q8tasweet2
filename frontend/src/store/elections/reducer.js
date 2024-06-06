@@ -21,10 +21,10 @@ import {
   ADD_ELECTION_CANDIDATE_FAIL,
   UPDATE_ELECTION_CANDIDATE_SUCCESS,
   UPDATE_ELECTION_CANDIDATE_FAIL,
-  DELETE_ELECTION_CANDIDATE_SUCCESS,
-  DELETE_ELECTION_CANDIDATE_FAIL,
   UPDATE_ELECTION_CANDIDATE_VOTES_SUCCESS,
   UPDATE_ELECTION_CANDIDATE_VOTES_FAIL,
+  DELETE_ELECTION_CANDIDATE_SUCCESS,
+  DELETE_ELECTION_CANDIDATE_FAIL,
 
 
   // Election Parties
@@ -293,7 +293,7 @@ const Elections = (state = IntialState, action) => {
         ...state,
         elections: state.elections.filter(
           (election) =>
-            election.id.toString() !== action.payload.election.toString()
+            election.id.toString() !== action.payload.election.id.toString()
         ),
         isElectionDelete: true,
         isElectionDeleteFail: false,
@@ -353,7 +353,7 @@ const Elections = (state = IntialState, action) => {
         isElectionCandidateUpdate: true,
         isElectionCandidateUpdateFail: false,
       };
-    
+
     case UPDATE_ELECTION_CANDIDATE_FAIL:
       return {
         ...state,
@@ -361,17 +361,32 @@ const Elections = (state = IntialState, action) => {
         isElectionCandidateUpdate: false,
         isElectionCandidateUpdateFail: true,
       };
+    // case DELETE_ELECTION_CANDIDATE_SUCCESS:
+    //   console.log("action.payload: ", action.payload)
+    //   return {
+    //     ...state,
+    //     electionCandidates: state.electionCandidates.filter(
+    //       (electionCandidate) =>
+    //         electionCandidate.id.toString() !== action.payload.electionCandidate.toString()
+    //     ),
+    //     isElectionCandidateDelete: true,
+    //     isElectionCandidateDeleteFail: false,
+    //   };
+
     case DELETE_ELECTION_CANDIDATE_SUCCESS:
+      console.log("action.payload: ", action.payload)
       return {
         ...state,
         electionCandidates: state.electionCandidates.filter(
           (electionCandidate) =>
-            electionCandidate.id.toString() !==
-            action.payload.electionCandidate.toString()
+            electionCandidate.id.toString() !== action.payload.electionCandidate.id.toString()
         ),
         isElectionCandidateDelete: true,
         isElectionCandidateDeleteFail: false,
       };
+
+
+
     case DELETE_ELECTION_CANDIDATE_FAIL:
       return {
         ...state,
@@ -472,7 +487,7 @@ const Elections = (state = IntialState, action) => {
         electionParties: state.electionParties.filter(
           (electionParty) =>
             electionParty.id.toString() !==
-            action.payload.electionParty.toString()
+            action.payload.electionParty.id.toString()
         ),
         isElectionPartyDelete: true,
         isElectionPartyDeleteFail: false,
@@ -549,7 +564,7 @@ const Elections = (state = IntialState, action) => {
         electionPartyCandidates: state.electionPartyCandidates.filter(
           (electionPartyCandidate) =>
             electionPartyCandidate.id.toString() !==
-            action.payload.electionPartyCandidate.toString()
+            action.payload.electionPartyCandidate.id.toString()
         ),
         isElectionPartyCandidateDelete: true,
         isElectionPartyCandidateDeleteFail: false,
@@ -634,7 +649,7 @@ const Elections = (state = IntialState, action) => {
         electionCommittees: state.electionCommittees.filter(
           (electionCommittee) =>
             electionCommittee.id.toString() !==
-            action.payload.electionCommittee.toString()
+            action.payload.electionCommittee.id.toString()
         ),
         isElectionCommitteeDelete: true,
         isElectionCommitteeDeleteFail: false,

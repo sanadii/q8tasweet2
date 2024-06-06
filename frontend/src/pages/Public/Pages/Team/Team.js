@@ -437,7 +437,7 @@ const Team = () => {
                                                         <Col lg={12}>
                                                             <div className="hstack gap-2 justify-content-end">
                                                                 <button type="button" className="btn btn-light" onClick={() => setModal(false)}>Close</button>
-                                                                <button type="submit" className="btn btn-success" id="addNewMember">{!isEdit ? "Add Member" : "Save"}</button>
+                                                                <button type="submit" className="btn btn-success" id="addMember">{!isEdit ? "Add Member" : "Save"}</button>
                                                             </div>
                                                         </Col>
                                                     </Row>

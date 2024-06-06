@@ -7,8 +7,8 @@ import {
   GET_USERS,
   GET_USER_DETAILS,
 
-  ADD_NEW_USER_SUCCESS,
-  ADD_NEW_USER_FAIL,
+  ADD_USER_SUCCESS,
+  ADD_USER_FAIL,
   UPDATE_USER_PROFILE_SUCCESS,
   UPDATE_USER_PROFILE_FAIL,
   CHANGE_USER_PASSWORD_SUCCESS,
@@ -147,7 +147,7 @@ const Users = (state = IntialState, action) => {
         isUserCreated: false,
       };
     }
-    case ADD_NEW_USER_SUCCESS:
+    case ADD_USER_SUCCESS:
       return {
         ...state,
         isUserCreated: true,
@@ -155,7 +155,7 @@ const Users = (state = IntialState, action) => {
         isUserAdd: true,
         isUserAddFail: false,
       };
-    case ADD_NEW_USER_FAIL:
+    case ADD_USER_FAIL:
       return {
         ...state,
         error: action.payload,
@@ -203,7 +203,7 @@ const Users = (state = IntialState, action) => {
       return {
         ...state,
         users: state.users.filter(
-          (user) => user.id.toString() !== action.payload.user.toString()
+          (user) => user.id.toString() !== action.payload.user.id.toString()
         ),
         isUserDelete: true,
         isUserDeleteFail: false,

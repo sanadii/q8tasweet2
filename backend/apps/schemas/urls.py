@@ -17,7 +17,7 @@ urlpatterns = [
     # path("uploadElectionData/<slug:slug>", UploadElectionData.as_view(), name="UploadElectionData"),
     
     # Committees
-    path("addNewCommittee", AddCommittee.as_view(), name="AddNewCommittee"),
+    path("addCommittee", AddCommittee.as_view(), name="AddCommittee"),
     path("deleteCommittee/<int:id>", DeleteCommittee.as_view(), name="DeleteCommittee"),
     path("updateCommittee/<int:id>", UpdateCommittee.as_view(), name="UpdateCommittee"),
     

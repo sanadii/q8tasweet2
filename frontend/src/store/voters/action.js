@@ -6,7 +6,7 @@ import {
   UPDATE_VOTER,
   UPDATE_VOTER_SUCCESS,
   UPDATE_VOTER_FAIL,
-  ADD_NEW_VOTER,
+  ADD_VOTER,
   ADD_VOTER_SUCCESS,
   ADD_VOTER_FAIL,
   DELETE_VOTER,
@@ -50,8 +50,8 @@ export const updateVoterFail = (error) => ({
   payload: error,
 });
 
-export const addNewVoter = (voter) => ({
-  type: ADD_NEW_VOTER,
+export const addVoter = (voter) => ({
+  type: ADD_VOTER,
   payload: voter,
 });
 

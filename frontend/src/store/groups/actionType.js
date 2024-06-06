@@ -7,9 +7,9 @@ export const GET_GROUPS = "GET_GROUPS";
 export const GET_MODERATOR_GROUPS = "GET_MODERATOR_GROUPS";
 
 // Add Group
-export const ADD_NEW_GROUP = "ADD_NEW_GROUP";
-export const ADD_NEW_GROUP_SUCCESS = "ADD_NEW_GROUP_SUCCESS";
-export const ADD_NEW_GROUP_FAIL = "ADD_NEW_GROUP_FAIL";
+export const ADD_GROUP = "ADD_GROUP";
+export const ADD_GROUP_SUCCESS = "ADD_GROUP_SUCCESS";
+export const ADD_GROUP_FAIL = "ADD_GROUP_FAIL";
 
 // Edit Group
 export const UPDATE_GROUP = "UPDATE_GROUP";

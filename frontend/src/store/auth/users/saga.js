@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   GET_USERS,
   GET_USER_DETAILS,
-  ADD_NEW_USER,
+  ADD_USER,
   DELETE_USER,
   UPDATE_USER_PROFILE,
   CHANGE_USER_PASSWORD,
@@ -32,8 +32,8 @@ import {
   UserApiResponseError,
 
   // Users
-  addNewUserSuccess,
-  addNewUserFail,
+  addUserSuccess,
+  addUserFail,
   updateUserSuccess,
   updateUserFail,
   changeUserPasswordSuccess,
@@ -53,7 +53,7 @@ import { uploadNewImage } from "../../uploadImage/action";
 import {
   getUsers as getUsersApi,
   getUserDetails as getUserDetailsApi,
-  addNewUser,
+  addUser,
   updateUser,
   changeUserPassword,
   deleteUser,
@@ -86,11 +86,11 @@ function* getUserDetails({ payload: user }) {
 
 function* onAddNewUser({ payload: user }) {
   try {
-    const response = yield call(addNewUser, user);
-    yield put(addNewUserSuccess(response));
+    const response = yield call(addUser, user);
+    yield put(addUserSuccess(response));
     toast.success("تم إضافة مستخدم بنجاح", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewUserFail(error));
+    yield put(addUserFail(error));
     toast.error("خطأ في إضافة مستخدم", { autoClose: 2000 });
   }
 }
@@ -179,7 +179,7 @@ export function* watchGetUserDetails() {
   yield takeEvery(GET_USER_DETAILS, getUserDetails);
 }
 export function* watchAddNewUser() {
-  yield takeEvery(ADD_NEW_USER, onAddNewUser);
+  yield takeEvery(ADD_USER, onAddNewUser);
 }
 export function* watchUpdateUser() {
   yield takeEvery(UPDATE_USER_PROFILE, onUpdateUser);

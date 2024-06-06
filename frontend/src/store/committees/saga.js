@@ -7,7 +7,7 @@ import {
 
     // Election Committees
     GET_ELECTION_COMMITTEES,
-    ADD_NEW_ELECTION_COMMITTEE,
+    ADD_ELECTION_COMMITTEE,
     UPDATE_ELECTION_COMMITTEE,
     DELETE_ELECTION_COMMITTEE,
 
@@ -35,7 +35,7 @@ import {
 import {
     // Election Committees
     getElectionCommittees as getElectionCommitteesApi,
-    addNewElectionCommittee,
+    addElectionCommittee,
     updateElectionCommittee,
     deleteElectionCommittee,
     updateElectionResults,
@@ -56,7 +56,7 @@ function* getElectionCommittees({ payload: election }) {
 
 function* onAddNewElectionCommittee({ payload: electionCommittee }) {
     try {
-        const response = yield call(addNewElectionCommittee, electionCommittee);
+        const response = yield call(addElectionCommittee, electionCommittee);
         yield put(addElectionCommitteeSuccess(response));
         toast.success("تم إضافة لجنة الانتخابات بنجاح", { autoClose: 2000 });
     } catch (error) {
@@ -114,7 +114,7 @@ export function* watchGetElectionCommittees() {
 }
 
 export function* watchAddNewElectionCommittee() {
-    yield takeEvery(ADD_NEW_ELECTION_COMMITTEE, onAddNewElectionCommittee);
+    yield takeEvery(ADD_ELECTION_COMMITTEE, onAddNewElectionCommittee);
 }
 
 export function* watchUpdateElectionCommittee() {

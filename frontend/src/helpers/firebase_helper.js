@@ -133,7 +133,7 @@ class FirebaseAuthBackend {
     }
   };
 
-  addNewUserToFirestore = (user) => {
+  addUserToFirestore = (user) => {
     const collection = firebase.firestore().collection("users");
     const { profile } = user.additionalUserInfo;
     const details = {

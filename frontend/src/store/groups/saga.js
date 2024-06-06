@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Group Redux States
 import {
   GET_GROUPS,
-  ADD_NEW_GROUP,
+  ADD_GROUP,
   DELETE_GROUP,
   UPDATE_GROUP,
 } from "./actionType";
@@ -22,8 +22,8 @@ import {
   GroupApiResponseError,
 
   // Groups
-  addNewGroupSuccess,
-  addNewGroupFail,
+  addGroupSuccess,
+  addGroupFail,
   updateGroupSuccess,
   updateGroupFail,
   deleteGroupSuccess,
@@ -36,7 +36,7 @@ import { uploadNewImage } from "../uploadImage/action";
 //Include Both Helper File with needed methods
 import {
   getGroups as getGroupsApi,
-  addNewGroup,
+  addGroup,
   updateGroup,
   deleteGroup,
 } from "../../helpers/backend_helper";
@@ -53,13 +53,13 @@ function* getGroups() {
 
 function* onAddNewGroup({ payload: { group, formData } }) {
   try {
-    // Call the API function to add a new group & Dispatch the addNewGroupSuccess action with the received data
-    const addNewGroupResponse = yield call(addNewGroup, formData);
-    yield put(addNewGroupSuccess(addNewGroupResponse));
+    // Call the API function to add a new group & Dispatch the addGroupSuccess action with the received data
+    const addGroupResponse = yield call(addGroup, formData);
+    yield put(addGroupSuccess(addGroupResponse));
 
     toast.success("Group Added Successfully", { autoClose: 2000 });
   } catch (error) {
-    yield put(addNewGroupFail(error));
+    yield put(addGroupFail(error));
     toast.error("Group Added Failed", { autoClose: 2000 });
   }
 }
@@ -115,7 +115,7 @@ export function* watchGetGroups() {
 }
 
 export function* watchAddNewGroup() {
-  yield takeEvery(ADD_NEW_GROUP, onAddNewGroup);
+  yield takeEvery(ADD_GROUP, onAddNewGroup);
 }
 export function* watchUpdateGroup() {
   yield takeEvery(UPDATE_GROUP, onUpdateGroup);

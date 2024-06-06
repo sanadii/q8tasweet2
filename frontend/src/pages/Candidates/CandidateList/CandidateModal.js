@@ -1,7 +1,7 @@
 // React & Redux
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addNewCandidate, updateCandidate } from "store/actions";
+import { addCandidate, updateCandidate } from "store/actions";
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
@@ -38,6 +38,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
     
     onSubmit: (values) => {
       const formData = new FormData();
+      
       formData.append('id', candidate ? candidate.id : 0);
       formData.append('name', values.name);
       formData.append('gender', values.gender);
@@ -51,7 +52,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
       if (isEdit) {
         dispatch(updateCandidate(formData));
       } else {
-        dispatch(addNewCandidate(formData));
+        dispatch(addCandidate(formData));
       }
 
       // Reset form and selected image after dispatch

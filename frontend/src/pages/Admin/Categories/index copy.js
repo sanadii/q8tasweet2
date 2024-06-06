@@ -18,7 +18,7 @@ import {
   getTerms as onGetTerms,
   updateTerm as onupdateTerm,
   deleteTerm as onDeleteTerm,
-  addNewTerm as onAddNewTerm
+  addTerm as onAddNewTerm
 } from "../../../store/actions";
 
 const Terms = () => {
@@ -454,7 +454,7 @@ const Terms = () => {
               >
                 <i className="ri-close-fill align-bottom"></i> Close
               </button>
-              <button type="submit" className="btn btn-primary" id="addNewTerm">
+              <button type="submit" className="btn btn-primary" id="addTerm">
                 {!!isEdit ? "Save" : "Add Term"}
               </button>
             </div>

@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   GET_ALL_VOTERS,
   GET_VOTERS,
-  ADD_NEW_VOTER,
+  ADD_VOTER,
   DELETE_VOTER,
   UPDATE_VOTER,
 } from "./actionType";
@@ -27,7 +27,7 @@ import {
 import {
   getAllVoters as getAllVotersApi,
   getElectors as getElectorsApi,
-  addNewVoter,
+  addVoter,
   updateVoter,
   deleteVoter,
 } from "../../helpers/backend_helper";
@@ -52,7 +52,7 @@ function* getElectors({ payload: voter }) {
 
 function* onAddNewVoter({ payload: voter }) {
   try {
-    const response = yield call(addNewVoter, voter);
+    const response = yield call(addVoter, voter);
     yield put(addVoterSuccess(response));
     toast.success("Voter Added Successfully", { autoClose: 3000 });
   } catch (error) {
@@ -101,7 +101,7 @@ export function* watchDeleteVoter() {
 }
 
 export function* watchAddNewVoter() {
-  yield takeEvery(ADD_NEW_VOTER, onAddNewVoter);
+  yield takeEvery(ADD_VOTER, onAddNewVoter);
 }
 
 function* VoterManager() {

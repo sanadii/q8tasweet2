@@ -1,38 +1,44 @@
 from django.core.management.base import BaseCommand
-from django.apps import apps
 from django.db import connection
+from django.apps import apps
 
 class Command(BaseCommand):
-    help = 'Resets the sequences for all tables'
+    help = 'Resets primary key sequences for all models'
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **kwargs):
         with connection.cursor() as cursor:
-            for model in apps.get_models():
-                table_name = model._meta.db_table
-                
-                # Find sequence columns
-                cursor.execute(f"""
-                    SELECT column_name 
-                    FROM information_schema.columns 
-                    WHERE table_name='{table_name}' 
-                    AND column_default LIKE 'nextval%'
-                """)
-                sequence_columns = cursor.fetchall()
-                
-                if sequence_columns:
-                    for column in sequence_columns:
-                        column_name = column[0]
-                        cursor.execute(f'SELECT MAX("{column_name}") FROM "{table_name}"')
-                        max_id = cursor.fetchone()[0]
-                        
-                        if max_id is not None:
-                            sequence_name = f"{table_name}_{column_name}_seq"
-                            cursor.execute(f"SELECT setval(pg_get_serial_sequence('{table_name}', '{column_name}'), %s)", [max_id + 1])
-                            self.stdout.write(self.style.SUCCESS(
-                                f"Successfully reset the sequence {sequence_name} for {table_name} to {max_id + 1}"
-                            ))
-                        else:
-                            self.stdout.write(self.style.WARNING(
-                                f"No data in {table_name} to reset the sequence {sequence_name}"
-                            ))
+            for app_config in apps.get_app_configs():
+                for model in app_config.get_models():
+                    if not model._meta.managed:
+                        self.stdout.write(self.style.WARNING(f"Skipping {model._meta.db_table}, managed is set to False"))
+                        continue
 
+                    table_name = model._meta.db_table
+                    sequence_name = f"{table_name}_id_seq"
+
+                    # Check if the table exists
+                    cursor.execute(f"""
+                        SELECT EXISTS (
+                            SELECT FROM information_schema.tables 
+                            WHERE table_name = '{table_name}'
+                        );
+                    """)
+                    table_exists = cursor.fetchone()[0]
+
+                    if table_exists:
+                        # Check if the table has an 'id' column
+                        cursor.execute(f"""
+                            SELECT column_name
+                            FROM information_schema.columns
+                            WHERE table_name = '{table_name}' AND column_name = 'id';
+                        """)
+                        if cursor.fetchone():
+                            try:
+                                cursor.execute(f"SELECT setval('{sequence_name}', (SELECT COALESCE(MAX(id), 1) FROM {table_name}) + 1);")
+                                self.stdout.write(self.style.SUCCESS(f"Reset sequence for {table_name}"))
+                            except Exception as e:
+                                self.stdout.write(self.style.ERROR(f"Failed to reset sequence for {table_name}: {str(e)}"))
+                        else:
+                            self.stdout.write(self.style.WARNING(f"Skipping {table_name}, no 'id' column found"))
+                    else:
+                        self.stdout.write(self.style.WARNING(f"Skipping {table_name}, table does not exist"))

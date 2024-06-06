@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getCandidates,
-  addNewCandidate,
+  addCandidate,
   updateCandidate,
 } from "store/actions";
 
@@ -100,7 +100,7 @@ export const CandidateModal = ({
           election_id: election_id,
           candidate_id: values["candidate_id"],
         };
-        dispatch(addNewCandidate(newCandidate));
+        dispatch(addCandidate(newCandidate));
       }
       validation.resetForm();
       toggle();
@@ -204,7 +204,7 @@ const AddCandidate = ({ election_id, dispatch }) => {
                   election_id: election_id,
                   candidate_id: candidate.id,
                 };
-                dispatch(addNewCandidate(newCandidate));
+                dispatch(addCandidate(newCandidate));
               }}
             >
               <div className="d-flex align-items-center">

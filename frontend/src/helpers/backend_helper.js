@@ -76,7 +76,7 @@ export const deleteElection = (election) => api.delete(url.DELETE_ELECTION + "/"
 // ElectionCandidates
 export const getElectionCandidates = (electionCandidate) => api.get(url.GET_ELECTION_CANDIDATES + "/" + electionCandidate.id);
 export const getElectionCandidateDetails = (electionCandidate) => api.get(url.GET_ELECTION_CANDIDATE_DETAILS + "/" + electionCandidate.id);
-export const addNewElectionCandidate = (electionCandidate) => api.create(url.ADD_NEW_ELECTION_CANDIDATE, electionCandidate);
+export const addElectionCandidate = (electionCandidate) => api.create(url.ADD_ELECTION_CANDIDATE, electionCandidate);
 export const updateElectionCandidate = (electionCandidate) => api.update(url.UPDATE_ELECTION_CANDIDATE + "/" + electionCandidate.id, electionCandidate);
 export const deleteElectionCandidate = (electionCandidate) => api.delete(url.DELETE_ELECTION_CANDIDATE + "/" + electionCandidate.id);
 
@@ -105,14 +105,14 @@ export const deleteElectionPartyCandidate = (electionPartyCandidate) => api.dele
 
 // ElectionAttendee
 export const getAllElectionAttendees = (electionAttendee) => api.get(url.GET_ELECTION_ATTENDEES, electionAttendee);
-export const addNewElectionAttendee = (electionAttendee) => api.create(url.ADD_NEW_ELECTION_ATTENDEE, electionAttendee);
+export const addElectionAttendee = (electionAttendee) => api.create(url.ADD_ELECTION_ATTENDEE, electionAttendee);
 export const updateElectionAttendee = (electionAttendee) => api.put(url.UPDATE_ELECTION_ATTENDEE, electionAttendee);
 export const deleteElectionAttendee = (electionAttendee) => api.delete(url.DELETE_ELECTION_ATTENDEE + "/" + electionAttendee.id);
 
 // Candidates
 export const getCandidates = () => api.get(url.GET_CANDIDATES);
 export const getCandidateDetails = (candidate) => api.get(url.GET_CANDIDATE_DETAILS + "/" + candidate);
-export const addNewCandidate = (candidate) => api.create(url.ADD_NEW_CANDIDATE, candidate);
+export const addCandidate = (candidate) => api.create(url.ADD_CANDIDATE, candidate);
 export const updateCandidate = (candidate) => api.update(url.UPDATE_CANDIDATE + "/" + candidate.get('id'), candidate);
 export const deleteCandidate = (candidate) => api.delete(url.DELETE_CANDIDATE + "/" + candidate.id);
 
@@ -144,7 +144,7 @@ export const getUserNotifications = () => api.get(url.GET_USER_NOTIFICATIONS);
 // Users
 export const getUsers = () => api.get(url.GET_USERS);
 export const getUserDetails = (user) => api.get(url.GET_USER_DETAILS + "/" + user.id);
-export const addNewUser = (user) => api.create(url.ADD_NEW_USER, user);
+export const addUser = (user) => api.create(url.ADD_USER, user);
 export const updateUser = (user) => api.update(url.UPDATE_USER + "/" + user.id, user);
 export const changeUserPassword = (user) => api.update(url.CHANGE_USER_PASSWORD + "/" + user.id, user);
 export const deleteUser = (user) => api.delete(url.DELETE_USER + "/" + user.id);
@@ -163,14 +163,14 @@ export const getCampaignSorters = () => api.get(url.GET_CAMPAIGN_SORTERS);
 
 // Groups
 export const getGroups = () => api.get(url.GET_GROUPS);
-export const addNewGroup = (group) => api.upload(url.ADD_NEW_GROUP, group);
+export const addGroup = (group) => api.upload(url.ADD_GROUP, group);
 export const updateGroup = (group) => api.update(url.UPDATE_GROUP + "/" + group.id, group);
 export const deleteGroup = (group) => api.delete(url.DELETE_GROUP + "/" + group);
 
 
 // GroupPermissions
 export const getGroupPermissions = () => api.get(url.GET_GROUP_PERMISSIONS);
-export const addNewGroupPermission = (groupPermission) => api.upload(url.ADD_NEW_GROUP_PERMISSION, groupPermission);
+export const addGroupPermission = (groupPermission) => api.upload(url.ADD_GROUP_PERMISSION, groupPermission);
 export const updateGroupPermission = (groupPermission) => api.update(url.UPDATE_GROUP_PERMISSION + "/" + groupPermission.id, groupPermission);
 export const deleteGroupPermission = (groupPermission) => api.delete(url.DELETE_GROUP_PERMISSION + "/" + groupPermission);
 
@@ -185,7 +185,7 @@ export const deleteImage = () => api.get(url.UPDATE_IMAGE);
 
 // Category
 export const getCategories = () => api.get(url.GET_CATEGORIES);
-export const addNewCategory = (category) => api.create(url.ADD_NEW_CATEGORY, category);
+export const addCategory = (category) => api.create(url.ADD_CATEGORY, category);
 export const updateCategory = (category) => api.update(url.UPDATE_CATEGORY + "/" + category.id, category);
 export const deleteCategory = (category) => api.delete(url.DELETE_CATEGORY + "/" + category);
 
@@ -205,7 +205,7 @@ export const deleteElectionSchema = (electionSlug) => api.delete(url.DELETE_ELEC
 // ElectionCommittees
 export const getElectionCommittees = (electionCommittee) => api.get(url.GET_ELECTION_COMMITTEES + "/" + electionCommittee.id);
 export const getElectionCommitteeDetails = (electionCommittee) => api.get(url.GET_ELECTION_COMMITTEE_DETAILS + "/" + electionCommittee.id);
-export const addNewElectionCommittee = (electionCommittee) => api.create(url.ADD_NEW_ELECTION_COMMITTEE, electionCommittee);
+export const addElectionCommittee = (electionCommittee) => api.create(url.ADD_ELECTION_COMMITTEE, electionCommittee);
 export const updateElectionCommittee = (electionCommittee) => api.update(url.UPDATE_ELECTION_COMMITTEE + "/" + electionCommittee.id, electionCommittee);
 export const deleteElectionCommittee = (electionCommittee) => api.delete(url.DELETE_ELECTION_COMMITTEE + "/" + electionCommittee);
 

@@ -7,12 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   GET_CANDIDATES,
   GET_CANDIDATE_DETAILS,
-  ADD_NEW_CANDIDATE,
+  ADD_CANDIDATE,
   DELETE_CANDIDATE,
   UPDATE_CANDIDATE,
 
   // Election Candidates
-  ADD_NEW_ELECTION_CANDIDATE,
+  ADD_ELECTION_CANDIDATE,
 
 } from "./actionType";
 
@@ -23,8 +23,8 @@ import {
   CandidateApiResponseError,
 
   // Candidates
-  addNewCandidateSuccess,
-  addNewCandidateFail,
+  addCandidateSuccess,
+  addCandidateFail,
   updateCandidateSuccess,
   updateCandidateFail,
   deleteCandidateSuccess,
@@ -42,7 +42,7 @@ import {
 import {
   getCandidates as getCandidatesApi,
   getCandidateDetails as getCandidateDetailsApi,
-  addNewCandidate,
+  addCandidate,
   updateCandidate,
   deleteCandidate,
 } from "helpers/backend_helper";
@@ -68,22 +68,22 @@ function* getCandidateDetails({ payload: candidate }) {
 
 function* onAddCandidate({ payload: candidate }) {
   try {
-    const response = yield call(addNewCandidate, candidate);
-    yield put(addNewCandidateSuccess(response));
+    const response = yield call(addCandidate, candidate);
+    yield put(addCandidateSuccess(response));
     toast.success("تم إضافة المرشح بنجاح", { autoClose: 2000 });
-    if (response.electionCandidate) {
-      // Assuming that candidate.electionCandidate is the election object
-      yield put(addToElectionAfterCandidateSuccess(response));
-      toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
-    }
-    if (response.electionPartyCandidate) {
-      // Assuming that candidate.electionCandidate is the election object
-      yield put(addToElectionAfterPartyCandidateSuccess(response));
-      toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
-    }
+    // if (response.electionCandidate) {
+    //   // Assuming that candidate.electionCandidate is the election object
+    //   // yield put(addToElectionAfterCandidateSuccess(response));
+    //   toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
+    // }
+    // if (response.electionPartyCandidate) {
+    //   // Assuming that candidate.electionCandidate is the election object
+    //   // yield put(addToElectionAfterPartyCandidateSuccess(response));
+    //   toast.success("تم إضافة مرشح الانتخابات بنجاح", { autoClose: 2000 });
+    // }
 
   } catch (error) {
-    yield put(addNewCandidateFail(error));
+    yield put(addCandidateFail(error));
     toast.error("خطأ في إضافة المرشح", { autoClose: 2000 });
   }
 }
@@ -119,7 +119,7 @@ export function* watchGetCandidates() {
 }
 
 export function* watchAddNewCandidate() {
-  yield takeEvery(ADD_NEW_CANDIDATE, onAddCandidate);
+  yield takeEvery(ADD_CANDIDATE, onAddCandidate);
 }
 
 export function* watchUpdateCandidate() {

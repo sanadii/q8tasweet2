@@ -1,7 +1,7 @@
 // React & Redux
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addNewCandidate, updateCandidate } from "store/actions";
+import { addCandidate, updateCandidate } from "store/actions";
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
@@ -88,7 +88,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
           priority: parseInt(values.priority, 10),
           // moderators: values.moderators,
         };
-        dispatch(addNewCandidate({ candidate: newCandidate, formData: formData }));
+        dispatch(addCandidate({ candidate: newCandidate, formData: formData }));
       }
 
       validation.resetForm();

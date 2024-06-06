@@ -6,9 +6,9 @@ import {
   // Groups
   GET_GROUPS,
   GET_MODERATOR_GROUPS,
-  ADD_NEW_GROUP,
-  ADD_NEW_GROUP_SUCCESS,
-  ADD_NEW_GROUP_FAIL,
+  ADD_GROUP,
+  ADD_GROUP_SUCCESS,
+  ADD_GROUP_FAIL,
   UPDATE_GROUP,
   UPDATE_GROUP_SUCCESS,
   UPDATE_GROUP_FAIL,
@@ -54,18 +54,18 @@ export const updateGroupFail = (error) => ({
 });
 
 // Add New Group
-export const addNewGroup = (group) => ({
-  type: ADD_NEW_GROUP,
+export const addGroup = (group) => ({
+  type: ADD_GROUP,
   payload: group,
 });
 
-export const addNewGroupSuccess = (group) => ({
-  type: ADD_NEW_GROUP_SUCCESS,
+export const addGroupSuccess = (group) => ({
+  type: ADD_GROUP_SUCCESS,
   payload: group,
 });
 
-export const addNewGroupFail = (error) => ({
-  type: ADD_NEW_GROUP_FAIL,
+export const addGroupFail = (error) => ({
+  type: ADD_GROUP_FAIL,
   payload: error,
 });
 

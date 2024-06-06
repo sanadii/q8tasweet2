@@ -23,7 +23,7 @@ export const DELETE_ELECTION = "/elections/deleteElection";
 // Election Candidate
 export const GET_ELECTION_CANDIDATES = "/elections/getElectionCandidates";
 export const GET_ELECTION_CANDIDATE_DETAILS = "/elections/getElectionCandidateDetails";
-export const ADD_NEW_ELECTION_CANDIDATE = "/elections/addNewElectionCandidate";
+export const ADD_ELECTION_CANDIDATE = "/elections/addElectionCandidate";
 export const UPDATE_ELECTION_CANDIDATE = "/elections/updateElectionCandidate";
 export const DELETE_ELECTION_CANDIDATE = "/elections/deleteElectionCandidate";
 export const UPDATE_ELECTION_CANDIDATE_VOTES = "/elections/updateElectionCandidateVotes";
@@ -48,7 +48,7 @@ export const UPDATE_ELECTION_PARTY_CANDIDATE_VOTES = "/elections/updateElectionP
 // Candidates
 export const GET_CANDIDATES = "/candidates/getCandidates";
 export const GET_CANDIDATE_DETAILS = "/candidates/getCandidateDetails";
-export const ADD_NEW_CANDIDATE = "/candidates/addNewCandidate";
+export const ADD_CANDIDATE = "/candidates/addCandidate";
 export const UPDATE_CANDIDATE = "/candidates/updateCandidate";
 export const DELETE_CANDIDATE = "/candidates/deleteCandidate";
 
@@ -78,7 +78,7 @@ export const GET_CAMPAIGN_MEMBER_DETAILS = "/campaigns/getCampaignMemberDetails"
 // USERS
 export const GET_USERS = "/auth/getUsers";
 export const GET_USER_DETAILS = "/auth/getUserDetails";
-export const ADD_NEW_USER = "/auth/addNewUser";
+export const ADD_USER = "/auth/addUser";
 export const UPDATE_USER = "/auth/updateUser";
 export const UPDATE_USER_PROFILE = "/auth/updateUserProfile";
 // export const UPDATE_USER_PROFILE = "/auth/update-profile";
@@ -99,7 +99,7 @@ export const GET_CAMPAIGN_SORTERS = "/auth/getCampaignSorters";
 // GROUPS
 export const GET_GROUPS = "/auth/getGroups";
 export const GET_GROUP_DETAILS = "/auth/getGroupDetails";
-export const ADD_NEW_GROUP = "/auth/addNewGroup";
+export const ADD_GROUP = "/auth/addGroup";
 export const UPDATE_GROUP = "/auth/updateGroup";
 export const DELETE_GROUP = "/auth/deleteGroup";
 
@@ -107,7 +107,7 @@ export const DELETE_GROUP = "/auth/deleteGroup";
 
 // GROUP_PERMISSIONS
 export const GET_GROUP_PERMISSIONS = "/auth/getGroupPermissions";
-export const ADD_NEW_GROUP_PERMISSION = "/auth/addNewPermission";
+export const ADD_GROUP_PERMISSION = "/auth/addPermission";
 export const UPDATE_GROUP_PERMISSION = "/auth/updatePermission";
 export const DELETE_GROUP_PERMISSION = "/auth/deletePermission";
 
@@ -126,14 +126,14 @@ export const DELETE_ELECTION_SCHEMA = "/schemas/deleteElectionSchema";
 // Election Committee
 export const GET_ELECTION_COMMITTEES = "/schemas/getElectionCommittees";
 export const GET_ELECTION_COMMITTEE_DETAILS = "/schemas/getElectionCommitteeDetails";
-export const ADD_NEW_ELECTION_COMMITTEE = "/schemas/addNewElectionCommittee";
+export const ADD_ELECTION_COMMITTEE = "/schemas/addElectionCommittee";
 export const UPDATE_ELECTION_COMMITTEE = "/schemas/updateElectionCommittee";
 export const DELETE_ELECTION_COMMITTEE = "/schemas/deleteElectionCommittee";
 
 // ElectionAttendee
 export const GET_ELECTION_ATTENDEES = "/schemas/getAllElectionAttendees";
 export const DELETE_ELECTION_ATTENDEE = "/schemas/deleteElectionAttendee";
-export const ADD_NEW_ELECTION_ATTENDEE = "/schemas/addNewElectionAttendee";
+export const ADD_ELECTION_ATTENDEE = "/schemas/addElectionAttendee";
 export const UPDATE_ELECTION_ATTENDEE = "/schemas/updateElectionAttendee";
 
 // Election Committee Results
@@ -191,12 +191,12 @@ export const UPDATE_IMAGE = "/media/uploadImage";
 // Category
 export const GET_CATEGORIES = "/elections/getCategories";
 export const DELETE_CATEGORY = "/elections/deleteCategory";
-export const ADD_NEW_CATEGORY = "/elections/addCategory";
+export const ADD_CATEGORY = "/elections/addCategory";
 export const UPDATE_CATEGORY = "/elections/updateCategory";
 
 // Voter
 export const GET_ALL_VOTERS = "/schemas/getAllvoters";
 export const GET_VOTERS = "/schemas/getvoters";
 export const DELETE_VOTER = "/schemas/deletevoter";
-export const ADD_NEW_VOTER = "/schemas/addvoter";
+export const ADD_VOTER = "/schemas/addvoter";
 export const UPDATE_VOTER = "/schemas/updatevoter";

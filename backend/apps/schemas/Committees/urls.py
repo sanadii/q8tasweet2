@@ -7,7 +7,7 @@ app_name = "committees"
 urlpatterns = [
     # Committees
     # path("getCommittees/<int:election_id>", GetCommittees.as_view(), name="getCommittees"),
-    path("addNewCommittee", AddCommittee.as_view(), name="AddNewCommittee"),
+    path("addCommittee", AddCommittee.as_view(), name="AddCommittee"),
     path("deleteCommittee/<int:id>", DeleteCommittee.as_view(), name="DeleteCommittee"),
     path("updateCommittee/<int:id>", UpdateCommittee.as_view(), name="UpdateCommittee"),
 

@@ -1,12 +1,13 @@
 // React & Redux core imports
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addNewCandidate, updateCandidate } from "store/actions";
+import { addCandidate } from "store/actions";
 import { electionSelector } from 'selectors';
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
 import { FormFields } from "shared/components";
+import { getOptionOptions } from "shared/utils";
 
 // UI & Utilities Components
 import { Col, Row, Form } from "reactstrap";
@@ -48,7 +49,7 @@ const AddElectionPartyCandidate = () => {
                 formData.append("image", values.image);
             }
 
-            dispatch(addNewCandidate(formData));
+            dispatch(addCandidate(formData));
 
             // Reset form and selected image after dispatch
             validation.resetForm();
@@ -77,11 +78,13 @@ const AddElectionPartyCandidate = () => {
             label: "النوع",
             type: "select",
             placeholder: "اختر النوع",
-            options: GenderOptions.map((gender) => ({
-                id: gender.id,
-                label: gender.name,
-                value: gender.id,
-            })),
+            // options: getOptionOptions("GenderOptions"),
+
+            // options: GenderOptions.map((gender) => ({
+            //     id: gender.id,
+            //     label: gender.name,
+            //     value: gender.id,
+            // })),
         },
     ];
 

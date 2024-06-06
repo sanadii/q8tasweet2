@@ -1,24 +1,57 @@
 // React & Redux core imports
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
-import { getCandidates, addNewElectionCandidate, addElectionPartyCandidate } from "store/actions";
+import { getCandidates, addElectionCandidate } from "store/actions";
 import { electionSelector, candidateSelector } from 'selectors';
 
 // UI Components & styling imports
 import { Input, Form } from "reactstrap";
 import SimpleBar from "simplebar-react";
 
+// Component for election candidate search
+const ElectionCandidateSearch = ({ value, onChange }) => (
+    <div className="search-box mb-3">
+        <Input
+            type="text"
+            className="form-control bg-light border-light"
+            placeholder="البحث عن المرشحين..."
+            value={value}
+            onChange={onChange}
+        />
+        <i className="ri-search-line search-icon"></i>
+    </div>
+);
+
+// Component for election party input field
+const ElectionPartyInputField = ({ value, onChange, parties }) => (
+    <select
+        id="id-field"
+        name="id"
+        onChange={onChange}
+        value={value}
+    >
+        <option key={0} value={null}>
+            - اختر القائمة -
+        </option>
+        {parties.map((item, index) => (
+            <option
+                key={index}
+                value={parseInt(item.id, 10)}>
+                {item.name}
+            </option>
+        ))}
+    </select>
+);
+
 const AddElectionCandidate = () => {
     const dispatch = useDispatch();
-    const { election, electionMethod, electionCandidates, electionParties } = useSelector(electionSelector);
+    const { electionId, electionMethod, electionCandidates, electionParties } = useSelector(electionSelector);
     const { candidates } = useSelector(candidateSelector);
-    const { parties } = useSelector(candidateSelector);
     const electionCandidateList = electionCandidates;
 
-
-    // Dispatch getCandidate TODO: MOVE TO ELECTION DETAILS
+    // Dispatch getCandidates TODO: MOVE TO ELECTION DETAILS
     useEffect(() => {
         if (candidates && !candidates.length) {
             dispatch(getCandidates());
@@ -28,14 +61,13 @@ const AddElectionCandidate = () => {
     // Add New ElectionCandidate Search & Filter
     const [searchCandidateInput, setSearchCandidateInput] = useState("");
     const [candidateList, setCandidateList] = useState(candidates);
-    // State for the selected party
-    const [selectedParty, setSelectedParty] = useState();
+    const [selectedParty, setSelectedParty] = useState(null);
 
     // Handler for when the selection changes
-    const setElectionParty = (event) => {
+    const setElectionParty = useCallback((event) => {
         setSelectedParty(event.target.value);
         // Additional actions can be performed here if needed
-    };
+    }, []);
 
     useEffect(() => {
         setCandidateList(
@@ -47,53 +79,26 @@ const AddElectionCandidate = () => {
         );
     }, [candidates, searchCandidateInput]);
 
-    const fields = [
-        {
-            id: "party-field",
-            name: "القائمة الإنتخابية",
-            type: "select",
-            placeholder: "اختر النوع",
-            options: candidates.map((item) => ({
-                id: item.id,
-                label: item.name,
-                value: item.id,
-            })),
-        },
-
-    ];
-
     return (
-        <>
-            <div className="search-box mb-3">
-                <Input
-                    type="text"
-                    className="form-control bg-light border-light"
-                    placeholder="Search here..."
-                    value={searchCandidateInput}
-                    onChange={(e) => setSearchCandidateInput(e.target.value)}
+        <React.Fragment>
+            <ElectionCandidateSearch
+                value={searchCandidateInput}
+                onChange={(e) => setSearchCandidateInput(e.target.value)}
+            />
+            {electionMethod !== "candidateOnly" && (
+                <ElectionPartyInputField
+                    value={selectedParty}
+                    onChange={setElectionParty}
+                    parties={electionParties}
                 />
-                <i className="ri-search-line search-icon"></i>
-            </div>
-            {electionMethod !== "candidateOnly" &&
-                <select id="id-field" name="id" onChange={setElectionParty} value={selectedParty}>
-                    {electionParties.map((item, index) => (
-                        <option
-                            key={index}
-                            value={parseInt(item.id, 10)}>
+            )}
 
-                            {item.name}
-                        </option>
-                    ))}
-                </select>
-            }
             <SimpleBar
                 className="mx-n4 px-4"
                 data-simplebar="init"
                 style={{ maxHeight: "225px" }}
             >
                 <div className="vstack gap-3">
-
-
                     {candidateList.map((candidate) => (
                         <Form
                             key={candidate.id}
@@ -101,18 +106,13 @@ const AddElectionCandidate = () => {
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 const newElectionCandidate = {
-                                    ...(electionMethod !== "candidateOnly") ? { electionParty: selectedParty } : { election: election.id },
+                                    ...(electionMethod !== "candidateOnly") && { electionParty: selectedParty ? parseInt(selectedParty, 10) : null },
                                     candidate: candidate.id,
+                                    election: electionId
                                 };
-                                if (electionMethod !== "candidateOnly") {
-                                    dispatch(addElectionPartyCandidate(newElectionCandidate));
-                                } else {
-                                    dispatch(addNewElectionCandidate(newElectionCandidate));
-                                }
+                                dispatch(addElectionCandidate(newElectionCandidate));
                             }}
                         >
-
-
                             <div className="d-flex align-items-center">
                                 <input
                                     type="hidden"
@@ -145,8 +145,8 @@ const AddElectionCandidate = () => {
                         </Form>
                     ))}
                 </div>
-            </SimpleBar >
-        </>
+            </SimpleBar>
+        </React.Fragment>
     );
 };
 

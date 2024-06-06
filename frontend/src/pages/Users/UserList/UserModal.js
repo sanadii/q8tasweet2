@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addNewUser, updateUser } from "store/actions";
+import { addUser, updateUser } from "store/actions";
 import "react-toastify/dist/ReactToastify.css";
 import { Col, Row, Form, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import * as Yup from "yup";
@@ -64,7 +64,7 @@ const UserModal = ({ isEdit, setModal, modal, toggle, user, userGroups }) => {
         dispatch(updateUser(updatedUser));
       } else {
         // Add new user
-        dispatch(addNewUser(updatedUser));
+        dispatch(addUser(updatedUser));
       }
 
       validation.resetForm();

@@ -3,13 +3,13 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Action & Selector imports
-import { addNewElectionCandidate, updateElectionCandidate } from "store/actions";
+import { addElectionCandidate, updateElectionCandidate } from "store/actions";
 import { electionSelector } from 'selectors';
 
 // Constants & Component imports
-import AddElectionCandidate from "./AddElectionCandidate";
-import AddNewCandidate from "./AddNewCandidate";
-import EditElectionCandidate from "./EditElectionCandidate";
+import AddElectionCandidate from "./Candidates/AddElectionCandidate";
+import AddNewCandidate from "./Candidates/AddNewCandidate";
+import EditElectionCandidate from "./Candidates/EditElectionCandidate";
 
 // Form & validation imports
 import { useFormik } from "formik";
@@ -80,7 +80,7 @@ export const ElectionPartyCandidateModal = ({
           election: election,
           candidate: values["candidate"],
         };
-        dispatch(addNewElectionCandidate(newElectionCandidate));
+        dispatch(addElectionCandidate(newElectionCandidate));
       }
       validation.resetForm();
       toggle();

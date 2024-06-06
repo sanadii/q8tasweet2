@@ -63,73 +63,64 @@ class GetCandidateDetails(APIView):
 
 
 
-class AddNewCandidate(APIView):
+class AddCandidate(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request):
-        serializer = CandidateSerializer(data=request.data, context={'request': request})
+        serializer = CandidateSerializer(data=request.data.dict(), context={'request': request})
         if serializer.is_valid():
             candidate = serializer.save()
-            if 'image' in request.FILES:
-                candidate.image = request.FILES['image']
-                candidate.save()
+            self._save_image_if_present(request, candidate)
 
-            # Check if the 'election' field exists in the request data
-            if 'election' in request.data:
-                election_id = request.data['election']
+            response_data = {"data": serializer.data, "count": 0, "code": 200}
 
-                # Create an ElectionCandidate entry linking the candidate to the election
-                election_candidate = ElectionCandidate.objects.create(
-                    election_id=election_id,
-                    candidate=candidate
-                )
-
-                # Serialize the election_candidate and add it to the response
-                election_candidate_serializer = ElectionCandidateSerializer(election_candidate)
-                response_data = {
-                    "data": serializer.data,
-                    "electionCandidate": election_candidate_serializer.data,
-                    "count": 0,
-                    "code": 200,
-                }
-
-                return Response(response_data, status=status.HTTP_201_CREATED)
-            
-        if 'electionParty' in request.data:
-            try:
-                election_party_id = int(request.data['electionParty'])
-            except (ValueError, TypeError):
-                return Response({"error": "Invalid 'electionParty' value. Must be an integer."}, 
-                                status=status.HTTP_400_BAD_REQUEST)
-
-            # Ensure election_party_id corresponds to a valid ElectionParty object
-            if not ElectionParty.objects.filter(id=election_party_id).exists():
-                return Response({"error": f"ElectionParty with id {election_party_id} does not exist."},
-                                status=status.HTTP_404_NOT_FOUND)
-
-            # Create an ElectionPartyCandidate entry linking the candidate to the election party
-            election_party_candidate = ElectionPartyCandidate.objects.create(
-                election_party_id=election_party_id,
-                candidate=candidate
-            )
-
-            # Serialize the election_party_candidate and add it to the response
-            election_party_candidate_serializer = ElectionPartyCandidateSerializer(election_party_candidate)
-            response_data = {
-                "data": serializer.data,
-                "electionPartyCandidate": election_party_candidate_serializer.data,
-                "count": 0,
-                "code": 200,
-            }
+            response_data = self._handle_election_related_data(request, candidate, response_data)
 
             return Response(response_data, status=status.HTTP_201_CREATED)
-
-
-            # If 'election' field is not provided, return a response without 'electionCandidate' field
-            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def _save_image_if_present(self, request, candidate):
+        if 'image' in request.FILES:
+            candidate.image = request.FILES['image']
+            candidate.save()
+
+    def _create_election_candidate(self, request, candidate):
+        election_id = request.data['election']
+        return ElectionCandidate.objects.create(election_id=election_id, candidate=candidate)
+
+    def _create_election_party_candidate(self, request, election_candidate):
+        try:
+            election_party_id = int(request.data['electionParty'])
+        except (ValueError, TypeError):
+            raise Response({"error": "Invalid 'electionParty' value. Must be an integer."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not ElectionParty.objects.filter(id=election_party_id).exists():
+            raise Response({"error": f"ElectionParty with id {election_party_id} does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        return ElectionPartyCandidate.objects.create(
+            election_party_id=election_party_id,
+            election_candidate=election_candidate
+        )
+
+    def _handle_election_related_data(self, request, candidate, response_data):
+        if 'election' in request.data:
+            election_candidate = self._create_election_candidate(request, candidate)
+            response_data.update({
+                "electionCandidate": ElectionCandidateSerializer(election_candidate).data
+            })
+
+            if 'electionParty' in request.data:
+                election_party_candidate = self._create_election_party_candidate(request, election_candidate)
+                if election_party_candidate:
+                    response_data.update({
+                        "electionPartyCandidate": ElectionPartyCandidateSerializer(election_party_candidate).data
+                    })
+
+        return response_data
+
+
 
 class UpdateCandidate(APIView):
     permission_classes = [IsAuthenticated]

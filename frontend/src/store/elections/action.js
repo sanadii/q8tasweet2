@@ -23,7 +23,7 @@ import {
 
   // Election Candidate
   GET_ELECTION_CANDIDATES,
-  ADD_NEW_ELECTION_CANDIDATE,
+  ADD_ELECTION_CANDIDATE,
   ADD_ELECTION_CANDIDATE_SUCCESS,
   ADD_TO_ELECTION_AFTER_CANDIDATE_SUCCESS,
   ADD_ELECTION_CANDIDATE_FAIL,
@@ -69,7 +69,7 @@ import {
 
   // Election Committee
   GET_ELECTION_COMMITTEES,
-  ADD_NEW_ELECTION_COMMITTEE,
+  ADD_ELECTION_COMMITTEE,
   ADD_ELECTION_COMMITTEE_SUCCESS,
   ADD_ELECTION_COMMITTEE_FAIL,
   UPDATE_ELECTION_COMMITTEE,
@@ -184,8 +184,8 @@ export const getElectionCandidates = (election) => ({
   payload: election,
 });
 
-export const addNewElectionCandidate = electionCandidate => ({
-  type: ADD_NEW_ELECTION_CANDIDATE,
+export const addElectionCandidate = electionCandidate => ({
+  type: ADD_ELECTION_CANDIDATE,
   payload: electionCandidate,
 });
 
@@ -407,8 +407,8 @@ export const updateElectionCommitteeFail = error => ({
   payload: error,
 });
 
-export const addNewElectionCommittee = electionCommittee => ({
-  type: ADD_NEW_ELECTION_COMMITTEE,
+export const addElectionCommittee = electionCommittee => ({
+  type: ADD_ELECTION_COMMITTEE,
   payload: electionCommittee,
 });
 

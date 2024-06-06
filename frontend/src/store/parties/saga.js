@@ -12,7 +12,7 @@ import {
   UPDATE_PARTY,
 
   // Election Parties
-  ADD_NEW_ELECTION_PARTY,
+  ADD_ELECTION_PARTY,
 
 } from "./actionType";
 
