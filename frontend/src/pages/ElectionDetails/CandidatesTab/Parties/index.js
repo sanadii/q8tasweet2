@@ -1,13 +1,48 @@
 // React imports
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { electionSelector } from 'selectors';
 import { Col, Row, Card, CardHeader } from "reactstrap";
 import { Loader, TableContainer } from "shared/components";
+import { deleteElectionCandidate, deleteElectionParty, deleteElectionPartyCandidate, addCampaign } from "store/actions";
+import { useDelete } from "shared/hooks";
 
-const Parties = ({ columns, electionPartyButtons }) => {
+const Parties = ({ columns, handleElectionPartyClicks, handleItemDeleteClick }) => {
+
   // State Management
   const { electionParties, electionCandidates, error } = useSelector(electionSelector);
+
+  const electionPartyButtons = useMemo(
+    () => [
+      {
+        Name: "تعديل",
+        action: (electionParty) =>
+          <button
+            to="#"
+            className="btn btn-sm btn-soft-info edit-list"
+            onClick={() => {
+              handleElectionPartyClicks(electionParty);
+            }}
+          >
+            <i className="ri-pencil-fill align-bottom" />
+          </button>
+      },
+      {
+        Name: "حذف",
+        action: (electionParty) => (
+          <button
+            className="btn btn-sm btn-soft-danger remove-list"
+            onClick={() => {
+              handleItemDeleteClick(electionParty);
+            }}
+          >
+            <i className="ri-delete-bin-5-fill align-bottom" />
+          </button>
+        )
+      }
+    ],
+    []
+  );
 
   // Get candidates for a specific party
   const getCandidatesForParty = (partyId) => {
@@ -67,7 +102,7 @@ const Parties = ({ columns, electionPartyButtons }) => {
                     thClass="table-light text-muted"
                   />
                 ) : (
-                  <Loader error={error} />
+                  <p className="m-2">لا يوجد مرشحين</p>
                 )}
               </Card>
             </Col>

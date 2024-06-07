@@ -17,8 +17,6 @@ from apps.schemas.committees.models import Committee
 # Apps Serializers
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from apps.campaigns.serializers import CampaignSerializer
-from apps.auths.serializers import UserSerializer
-from apps.schemas.committees.serializers import CommitteeSerializer
 from apps.schemas.committee_results.serializers import CommitteeResultCandidateSerializer
 from utils.schema import schema_context
 
@@ -33,6 +31,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     image = serializers.SerializerMethodField("get_candidate_image")
     campaign = serializers.SerializerMethodField("get_candidate_campaign")
     party = serializers.SerializerMethodField("get_candidate_party")
+    party_name = serializers.SerializerMethodField("get_candidate_party_name")
     # committee_results = serializers.SerializerMethodField("get_committee_results")
 
     class Meta:
@@ -50,6 +49,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "position",
             "campaign",
             "party",
+            "party_name",
             # "committee_results",
         ]
 
@@ -88,6 +88,15 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             return election_party.election_party.id  # Return only the party.id
         except ElectionPartyCandidate.DoesNotExist:
             return None
+     
+    def get_candidate_party_name(self, obj):
+        try:
+            election_party = candidate.
+            election_party = ElectionPartyCandidate.objects.get(election_candidate=obj.id)
+            return election_party.election_party.party.name  # Return only the party.id
+        except ElectionPartyCandidate.DoesNotExist:
+            return None   
+        
     def get_candidate_campaign(self, obj):
         try:
             campaign = Campaign.objects.get(election_candidate=obj.id)

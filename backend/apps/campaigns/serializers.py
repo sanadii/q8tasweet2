@@ -3,116 +3,25 @@ from rest_framework import serializers
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from django.conf import settings  # Import Django settings to access MEDIA_URL
 
-# Models
-from django.contrib.auth.models import Group, Permission
-from apps.campaigns.members.models import CampaignMember
-from apps.campaigns.models import (
-    Campaign,
-    # CampaignPartyMember,
-    # CampaignCommittee,
-    # CampaignCommitteeAttendee,
-    # CampaignCommitteeSorter,
-    # CampaignPartyGuarantee,
-    # CampaignGuarantee,
-    # CampaignGuaranteeGroup,
-    # CampaignAttendee,
-    # CampaignSorting,
-)
-
-from apps.elections.models import (
-    Election,
-    ElectionCategory,
-)
-
-from apps.elections.candidates.models import ElectionCandidate, ElectionParty
-from apps.schemas.committees.models import Committee
-from apps.candidates.models import Candidate, Party
-from apps.schemas.electors.models import Elector
-from django.contrib.contenttypes.models import ContentType
-
-# Serializers
-from apps.candidates.serializers import CandidateSerializer, PartySerializer
-
-# from apps.elections.serializers import ElectionSerializer
-
-
-from rest_framework import serializers
-from django.contrib.contenttypes.models import ContentType
+# App Models
 from apps.campaigns.models import Campaign
-from apps.elections.candidates.models import ElectionCandidate
+from apps.elections.candidates.models import ElectionPartyCandidate
+# Serializers
 from apps.elections.serializers import ElectionSerializer
-
-# class ElectionSerializer(serializers.ModelSerializer):
-#     # name = serializers.SerializerMethodField("get_election_name")
-#     # image = serializers.SerializerMethodField("get_election_image")
-#     due_date = serializers.DateField(
-#         format="%Y-%m-%d",
-#         input_formats=[
-#             "%Y-%m-%d",
-#         ],
-#         allow_null=True,
-#         required=False,
-#     )
-
-#     class Meta:
-#         model = Election
-#         fields = [
-#             "id",
-#             #   "name", "image",
-#             "due_date",
-#         ]
-
-
-# from django.db.utils import IntegrityError
-# from django.contrib.contenttypes.models import ContentType
-
-# # Verify ContentType
-# candidate_type = ContentType.objects.get(model='candidate')
-# party_type = ContentType.objects.get(model='party')
-# print(f"Candidate Type: {candidate_type}")
-# print(f"Party Type: {party_type}")
-
-# # Verify related object exists
-# candidate = ElectionCandidate.objects.get(id=11)
-# print(f"Candidate: {candidate}")
-
-
-# from django.contrib.contenttypes.models import ContentType
-
-# # Ensure ContentType entries exist
-# candidate_type = ContentType.objects.get(model='candidate')
-# party_type = ContentType.objects.get(model='party')
-
-# # Ensure related objects exist
-# candidate = ElectionCandidate.objects.get(id=11)
-# print(f"Candidate: {candidate}")
-
-# # Create a campaign and ensure it's linked
-# campaign = Campaign.objects.create(
-#     campaign_type=candidate_type,
-#     campaigner_id=11,
-#     description="Test Campaign"
-# )
-
-# campaign = Campaign.objects.get(id=campaign.id)
-# print(f"Campaign: {campaign}")
-# print(f"Content Object: {campaign.content_object}")
-
+# from apps.elections.candidates.serializers import ElectionPartySerializer
+from apps.candidates.serializers import CandidateSerializer, PartySerializer
 
 class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
     """Serializer for the Campaign model, using the generic foreign key."""
 
     admin_serializer_classes = (TrackMixin, TaskMixin)
 
-    # campaign_type = serializers.CharField(write_only=True)
-    # campaigner_id = serializers.IntegerField()
-    # name = serializers.SerializerMethodField()
-    # election = serializers.SerializerMethodField()
-    # election_candidate = serializers.SerializerMethodField()
+    party = serializers.SerializerMethodField()
+    # party_name = serializers.SerializerMethodField("get_candidate_party_name")
     election = ElectionSerializer(source="election_candidate.election", read_only=True)
-    candidate = CandidateSerializer(
-        source="election_candidate.candidate", read_only=True
-    )
+    candidate = CandidateSerializer(source="election_candidate.candidate", read_only=True)
+
+
 
     class Meta:
         model = Campaign
@@ -129,8 +38,24 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             # Election
             "election",
             "candidate",
-            "election_candidate",
+            "party",
         ]
+
+    def get_candidate_party_name(self, obj):
+        try:
+            election_party = ElectionPartyCandidate.objects.get(election_candidate=obj.id)
+            return election_party.election_party.party.name  # Return only the party.id
+        except ElectionPartyCandidate.DoesNotExist:
+            return None   
+
+    def get_party(self, obj):
+        try:
+            election_party_candidate = ElectionPartyCandidate.objects.get(election_candidate=obj.election_candidate)
+            election_party = election_party_candidate.election_party
+            from apps.elections.candidates.serializers import ElectionPartySerializer
+            return ElectionPartySerializer(election_party).data
+        except ElectionPartyCandidate.DoesNotExist:
+            return None
 
     # def get_name(self, obj):
     #     """Retrieve the name dynamically based on campaign_type."""

@@ -41,7 +41,7 @@ export const ElectionPartyModal = ({
 
   // Adding New Party From Scratch
 
-  const handleAddParty = useCallback(() => {
+  const handleAddPartyToggle = useCallback(() => {
     setIsAddParty((prev) => !prev);
     if (!modal) {
       setModal(true);
@@ -74,7 +74,6 @@ export const ElectionPartyModal = ({
         notes: values.notes,
       };
       dispatch(updateElectionParty(updatedElectionParty));
-      console.log("electionParty: ", electionParty)
       validation.resetForm();
       toggle();
     },
@@ -83,7 +82,7 @@ export const ElectionPartyModal = ({
     <Modal isOpen={modal} toggle={openModal} centered>
       <ModalHeader className="p-4 ps-4 bg-danger">
         <span className="text-white">
-          {!!isEdit ? "تعديل مرشح القائمة" : "إضافة القوائم"}
+          {!!isEdit ? "تعديل القائمة" : "إضافة قائمة"}
         </span>
       </ModalHeader>
       <ModalBody>
@@ -120,7 +119,7 @@ export const ElectionPartyModal = ({
               تعديل
             </Button>
           ) : (
-            <Button color="success" onClick={handleAddParty}>
+            <Button color="success" onClick={handleAddPartyToggle}>
               {isAddParty ? "القوائم الإنتخابية" : "إضافة قائمة جديدة"}
             </Button>
           )}

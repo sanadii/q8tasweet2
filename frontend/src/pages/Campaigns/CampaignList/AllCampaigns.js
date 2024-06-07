@@ -110,6 +110,7 @@ const AllCampaigns = () => {
             image={cellProps.row.original.candidate.image}
             slug={cellProps.row.original.slug}
             dirName="campaigns"
+            subTitle={cellProps.row.original.party?.name || null}
           />
       },
       {
@@ -131,21 +132,21 @@ const AllCampaigns = () => {
           return <DateTime date={cellProps.row.original.election.dueDate} />;
         },
       },
-      {
-        Header: "الحالة",
-        Cell: (cellProps) =>
-          <Badge
-            option="status"
-            value={cellProps.row.original.task.status} />
-      },
-      {
-        Header: "الأولية",
-        Cell: (cellProps) =>
-          <Badge
-            option="priority"
-            value={cellProps.row.original.task.priority}
-          />
-      },
+      // {
+      //   Header: "الحالة",
+      //   Cell: (cellProps) =>
+      //     <Badge
+      //       option="status"
+      //       value={cellProps.row.original.task.status} />
+      // },
+      // {
+      //   Header: "الأولية",
+      //   Cell: (cellProps) =>
+      //     <Badge
+      //       option="priority"
+      //       value={cellProps.row.original.task.priority}
+      //     />
+      // },
       // {
       //   Header: "Moderators",
       //   accessor: "moderators",
@@ -154,16 +155,16 @@ const AllCampaigns = () => {
       //     return <Moderators {...cell} />;
       //   },
       // },
-      {
-        Header: "Created By",
-        accessor: "createdBy",
-        filterable: false,
-        useFilters: true,
+      // {
+      //   Header: "Created By",
+      //   accessor: "createdBy",
+      //   filterable: false,
+      //   useFilters: true,
 
-        Cell: (cellProps) => {
-          return <CreateBy {...cellProps} />;
-        },
-      },
+      //   Cell: (cellProps) => {
+      //     return <CreateBy {...cellProps} />;
+      //   },
+      // },
       {
         Header: "إجراءات",
         accessor: "campaign",

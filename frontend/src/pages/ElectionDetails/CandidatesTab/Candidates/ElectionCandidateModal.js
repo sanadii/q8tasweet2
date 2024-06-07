@@ -30,14 +30,6 @@ export const ElectionCandidateModal = ({
   const { electionMethod, electionDetails } = useSelector(electionSelector);
   const election = electionDetails.id;
 
-  let updateAction;
-  
-  if (electionMethod !== "candidateOnly") {
-    updateAction = updateElectionPartyCandidate;
-  } else {
-    updateAction = updateElectionCandidate;
-  }
-
   const openModal = () => {
     setModal(!modal);
     setIsAddNewCandidate(false);
@@ -79,7 +71,7 @@ export const ElectionCandidateModal = ({
         id: electionCandidate ? electionCandidate.id : 0,
         notes: values.notes,
       };
-      dispatch(updateAction(updatedElectionCandidate));
+      dispatch(updateElectionCandidate(updatedElectionCandidate));
 
       validation.resetForm();
       toggle();
@@ -87,9 +79,9 @@ export const ElectionCandidateModal = ({
   });
   return (
     <Modal isOpen={modal} toggle={openModal} centered>
-      <ModalHeader className="p-4 ps-4 bg-danger">
+      <ModalHeader className="p-3 ps-3 bg-primary">
         <span className="text-white">
-          {!!isEdit ? "تعديل مرشح الإنتخابات" : "إضافة المرشحين"}
+          {!!isEdit ? "تعديل مرشح الإنتخابات" : "إضافة مرشح"}
         </span>
       </ModalHeader>
       <ModalBody>
@@ -117,10 +109,12 @@ export const ElectionCandidateModal = ({
           )}
       </ModalBody>
       <ModalFooter>
-        <div className="hstack gap-2 justify-content-end">
+        <div class="card-title mb-0 flex-grow-1">
           <Button color="light" onClick={() => { setModal(false); }}>
             أغلق
           </Button>
+        </div>
+        <div class="d-flex gap-1">
           {isEdit ? (
             <Button color="success" id="add-btn" onClick={handleButtonClick}>
               تعديل
@@ -132,7 +126,6 @@ export const ElectionCandidateModal = ({
           )}
         </div>
       </ModalFooter>
-
     </Modal>
   );
 };

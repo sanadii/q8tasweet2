@@ -18,7 +18,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AddNewCandidate = () => {
     const dispatch = useDispatch();
-
     const { election, electionId, electionParties } = useSelector(electionSelector);
 
     const initialValues = {
@@ -68,14 +67,15 @@ const AddNewCandidate = () => {
         {
             id: "name-field",
             name: "name",
-            label: "الاسم",
+            label: "اسم المرشح",
             type: "text",
-            placeholder: "ادخل الاسم المرشح",
+            placeholder: "ادخل اسم المرشح",
         },
         {
             id: "party-field",
             name: "electionParty",
             type: "select",
+            label: "القائمة الإنتخابية",
             placeholder: "اختر القائمة الإنتخابية",
             options: getFieldDynamicOptions(electionParties, "القوائم الانتخابية"),
             colSize: 12,

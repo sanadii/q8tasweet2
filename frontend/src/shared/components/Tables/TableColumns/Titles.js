@@ -36,7 +36,7 @@ const Title = (cellProps) => {
 };
 
 const NameAvatar = (cellProps) => {
-    const { id, name, gender, image, slug, dirName, handleClickedItem } = cellProps
+    const { id, name, subTitle, gender, image, slug, dirName, handleClickedItem } = cellProps
     const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
     // For other dirName values, render the link
@@ -55,6 +55,8 @@ const NameAvatar = (cellProps) => {
             <strong className="ps-2">
                 {name}
             </strong>
+            <br />
+            {subTitle && subTitle}
         </Link>
     );
 };

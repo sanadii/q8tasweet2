@@ -6,8 +6,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { getCandidates, addElectionCandidate } from "store/actions";
 import { electionSelector, candidateSelector } from 'selectors';
 
+// Components
+import { getFieldDynamicOptions } from "shared/hooks";
+
 // UI Components & styling imports
-import { Input, Form } from "reactstrap";
+import { Input, Form, Row, Col } from "reactstrap";
 import SimpleBar from "simplebar-react";
 
 // Component for election candidate search
@@ -25,25 +28,34 @@ const ElectionCandidateSearch = ({ value, onChange }) => (
 );
 
 // Component for election party input field
-const ElectionPartyInputField = ({ value, onChange, parties }) => (
-    <select
-        id="id-field"
-        name="id"
-        onChange={onChange}
-        value={value}
-    >
-        <option key={0} value={null}>
-            - اختر القائمة -
-        </option>
-        {parties.map((item, index) => (
-            <option
-                key={index}
-                value={parseInt(item.id, 10)}>
-                {item.name}
-            </option>
-        ))}
-    </select>
-);
+const ElectionPartyInputField = ({ value, onChange, electionParties }) => {
+    const electionPartyOptions = getFieldDynamicOptions(electionParties, "القوائم")
+
+    return (
+        <Row>
+            <Col lg={12}>
+                <select className="form-select mb-3" aria-label="Default select example"
+                    id="id-field"
+                    name="id"
+                    onChange={onChange}
+                    value={value}
+                >
+                    <option key={0} value={null}>
+                        -- القوائم الانتخابية --
+                    </option>
+                    {electionParties.map((item, index) => (
+                        <option
+                            key={index}
+                            value={parseInt(item.id, 10)}>
+                            {item.name}
+                        </option>
+                    ))
+                    }
+                </select >
+            </Col>
+        </Row>
+    )
+};
 
 const AddElectionCandidate = () => {
     const dispatch = useDispatch();
@@ -89,7 +101,7 @@ const AddElectionCandidate = () => {
                 <ElectionPartyInputField
                     value={selectedParty}
                     onChange={setElectionParty}
-                    parties={electionParties}
+                    electionParties={electionParties}
                 />
             )}
 

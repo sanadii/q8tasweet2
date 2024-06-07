@@ -2,10 +2,12 @@ import React from "react";
 import { Col, ModalBody, Label, Input, Form, FormFeedback } from "reactstrap";
 
 const EditElectionCandidate = ({ validation, electionCandidate }) => {
+  console.log("electionCandidate: ", electionCandidate)
   const candidateInfo = [
     { label: "رمز مرشح الإنتخابات", value: electionCandidate?.id },
     { label: "اسم المرشح", value: electionCandidate?.name || "" },
     { label: "رمز المرشح", value: electionCandidate?.candidate },
+    { label: "القائمة", value: electionCandidate?.party },
   ];
 
   return (
@@ -45,11 +47,7 @@ const EditElectionCandidate = ({ validation, electionCandidate }) => {
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.notes || ""}
-                invalid={
-                  validation.touched.notes && validation.errors.notes
-                    ? true
-                    : false
-                }
+                invalid={validation.touched.notes && validation.errors.notes ? true : false}
               />
               {validation.touched.notes && validation.errors.notes ? (
                 <FormFeedback type="invalid">
