@@ -37,6 +37,7 @@ class CampaignSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "website",
             # Election
             "election",
+            "election_candidate",
             "candidate",
             "party",
         ]

@@ -91,7 +91,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
      
     def get_candidate_party_name(self, obj):
         try:
-            election_party = candidate.
+            # election_party = candidate.
             election_party = ElectionPartyCandidate.objects.get(election_candidate=obj.id)
             return election_party.election_party.party.name  # Return only the party.id
         except ElectionPartyCandidate.DoesNotExist:

@@ -7,19 +7,14 @@ from rest_framework.permissions import IsAuthenticated
 
 # Apps
 from apps.elections.models import Election
-from apps.schemas.areas.models import Area
-from apps.schemas.committees.models import Committee, CommitteeSite
-from apps.schemas.committee_results.models import (
-    CommitteeResultCandidate,
-    CommitteeResultParty,
-    CommitteeResultPartyCandidate,
-)
-from apps.schemas.committee_members.models import MemberCommitteeSite, MemberCommittee
-from apps.schemas.electors.models import Elector
-from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
-from apps.schemas.campaign_attendees.models import CampaignAttendee
+
 
 from utils.schema import schema_context, table_exists
+from apps.schemas.views_helper import (
+    get_schema_models_to_add,
+    create_schema_tables,
+    get_election,
+)
 
 
 class AddElectionSchema(APIView):
@@ -51,73 +46,24 @@ class AddElectionSchema(APIView):
 class AddSchemaTables(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get_election(self, slug):
-        try:
-            return Election.objects.get(slug=slug)
-        except Election.DoesNotExist:
-            return None
-
-    def get_models_to_add(self, election):
-        models = [Area, Committee, CommitteeSite, Elector]
-        election_method = election.election_method
-        is_detailed_results = election.is_detailed_results
-
-        if is_detailed_results:
-            if election_method in ["candidateOnly", "partyCandidateOriented"]:
-                models.append(CommitteeResultCandidate)
-            if election_method == "partyPartyOriented":
-                models.append(CommitteeResultParty)
-            if election_method == "partyCandidateCombined":
-                models.append(CommitteeResultParty)
-                models.append(CommitteeResultPartyCandidate)
-
-            # if has campaigns
-            models.extend(
-                [
-                    CampaignGuarantee,
-                    CampaignGuaranteeGroup,
-                    MemberCommittee,
-                    MemberCommitteeSite,
-                    CampaignAttendee,
-                ]
-            )
-
-        return models
-
-    def create_tables(self, schema_editor, models):
-        results = {}
-        for Model in models:
-            try:
-                table_name = Model._meta.db_table
-                if not table_exists(table_name):
-                    schema_editor.create_model(Model)
-                    results[table_name] = "Created successfully"
-                else:
-                    results[table_name] = "Table already exists"
-            except Exception as e:
-                results[Model._meta.model_name] = f"Failed to create table: {str(e)}"
-        return results
-
     def get(self, request, *args, **kwargs):
         slug = kwargs.get("slug")
-        election = self.get_election(slug)
+        election = get_election(slug)
+
         if not election:
             return Response({"error": "Election not found"}, status=404)
 
-        models = self.get_models_to_add(election)
+        models = get_schema_models_to_add(election)
         election_category = election.category.id
 
         with schema_context(slug):
             with connection.schema_editor() as schema_editor:
-                results = self.create_tables(schema_editor, models)
-                
-                
-                # create a function for each model in models
-                # Manage dynamic fields within the models themselves
+                results = create_schema_tables(schema_editor, models)
+
                 for Model in models:
-                    if hasattr(Model, 'manage_dynamic_fields'):
+                    if hasattr(Model, "add_dynamic_fields"):
                         instance = Model()
-                        instance.manage_dynamic_fields(election_category, schema_editor)
+                        instance.add_dynamic_fields(election_category, schema_editor)
 
         return Response({"results": results}, status=200)
 

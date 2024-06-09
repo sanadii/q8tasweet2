@@ -41,23 +41,28 @@ const NameAvatar = (cellProps) => {
 
     // For other dirName values, render the link
     return (
-        <Link to={`/dashboard/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
-            {image &&
-                <div className="avatar-sm">
-                    <img
-                        src={imageUrl}
-                        alt={name}
-                        className="img-thumbnail rounded-circle"
-                    />
-                </div>
-            }
+        <>
+            <Link to={`/dashboard/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
+                {image &&
+                    <div className="avatar-sm">
+                        <img
+                            src={imageUrl}
+                            alt={name}
+                            className="img-thumbnail rounded-circle"
+                        />
+                    </div>
+                }
 
-            <strong className="ps-2">
-                {name}
-            </strong>
-            <br />
-            {subTitle && subTitle}
-        </Link>
+                <span className="ps-2">
+                    <strong>{name}</strong>
+                    <br />
+                    {subTitle && subTitle}
+                </span>
+
+
+            </Link>
+        </>
+
     );
 };
 

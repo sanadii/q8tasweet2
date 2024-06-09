@@ -19,7 +19,7 @@ class Command(BaseCommand):
         elections = Election.objects.filter(has_schema=True)
         for election in elections:
             self.create_schema(election.slug)
-            self.create_tables(election.slug)
+            self.create_schema_tables(election.slug)
 
     def create_schema(self, slug):
         schema_name = slug.replace("-", "_")
@@ -41,7 +41,7 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Error creating schema '{schema_name}': {str(e)}"))
 
-    def create_tables(self, slug):
+    def create_schema_tables(self, slug):
         schema_name = slug.replace("-", "_")
         model_definitions = [
             {"model_name": "Area", "app_label": "areas"},

@@ -1,8 +1,6 @@
 
-from django.db import models, connection
+from django.db import models
 from django.contrib.auth import get_user_model
-from django.core.exceptions import FieldDoesNotExist
-from django.utils.deconstruct import deconstructible
 
 # Models
 from apps.schemas.areas.models import Area
@@ -10,18 +8,7 @@ from utils.model_options import GenderOptions
 from apps.schemas.schemaModels import DynamicSchemaModel
 
 User = get_user_model()
-
-
      
-
-@deconstructible
-class DynamicFieldsMixin:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.election_category = None
-
-
-
 class CommitteeSite(DynamicSchemaModel):
     serial = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -53,9 +40,10 @@ class CommitteeSite(DynamicSchemaModel):
         return f"CommitteeSite {self.id}"
 
     def get_dynamic_fields(self):
-        return {
-            'test_site': self.election_category == 3000,
-        }
+        fields = {}
+        if self.election_category == 3000:
+            fields['test_site'] = models.IntegerField(blank=True, null=True)
+        return fields
 
 
 class Committee(DynamicSchemaModel):
@@ -81,9 +69,10 @@ class Committee(DynamicSchemaModel):
         return f"Committee {self.id}"
 
     def get_dynamic_fields(self):
-        return {
-            'test': self.election_category == 3000,
-        }
+        fields = {}
+        if self.election_category == 3000:
+            fields['testing'] = models.IntegerField(blank=True, null=True)
+        return fields
 
 
 

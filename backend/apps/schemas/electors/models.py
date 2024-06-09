@@ -31,7 +31,7 @@ class Elector(DynamicSchemaModel):
     # Elector Address
     address = models.TextField(blank=True, null=True)
     area = models.ForeignKey(
-        Area, on_delete=models.CASCADE, related_name="elector_areas"
+        Area, on_delete=models.CASCADE, related_name="elector_areas", blank=True, null=True
     )
     block = models.TextField(blank=True, null=True)
     street = models.TextField(blank=True, null=True)
@@ -46,8 +46,6 @@ class Elector(DynamicSchemaModel):
         on_delete=models.CASCADE,
         related_name="elector_committees",
     )
-    committee_name = models.TextField(blank=True, null=True)
-    letter = models.TextField(blank=True, null=True)
 
     # to be removed later
     area_name = models.TextField(blank=True, null=True)
@@ -64,21 +62,21 @@ class Elector(DynamicSchemaModel):
         return self.full_name
 
     def get_dynamic_fields(self):
-        dynamic_fields = {}
+        fields = {}
         if self.election_category == 1000:
-            dynamic_fields = {
-                "code_number": models.TextField(blank=True, null=True),
-                "status_code": models.TextField(blank=True, null=True),
-            }
+            fields['code_number'] = models.TextField(blank=True, null=True)
+            fields['status'] = models.TextField(blank=True, null=True)
+            fields['letter'] = models.TextField(blank=True, null=True)
+          
 
         if self.election_category == 3000:
-            dynamic_fields = {
-                "membership_number": models.IntegerField,
-                "box_number": models.IntegerField,
-                "civil_id": models.IntegerField,
-                "enrolment_date": models.DateField,
-            }
-        return dynamic_fields
+            fields['membership_number'] = models.IntegerField(blank=True, null=True)
+            fields['box_number'] = models.IntegerField(blank=True, null=True)
+            fields['civil_id'] = models.IntegerField(blank=True, null=True)
+            fields['enrollment_date'] = models.DateField(blank=True, null=True)
+
+        return fields
+
 
 
 # Note

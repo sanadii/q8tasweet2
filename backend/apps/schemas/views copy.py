@@ -48,13 +48,13 @@
 #                     else:
 #                         message = "Database already exists"
 
-#             create_tables_for_models(db_name)  # Create tables after ensuring the DB exists
+#             create_schema_tables_for_models(db_name)  # Create tables after ensuring the DB exists
 
 #             return Response({"message": message}, status=201)
 #         except Exception as e:
 #             return Response({"error": str(e)}, status=500)
 
-# def create_tables_for_models(db_name):
+# def create_schema_tables_for_models(db_name):
 #     # Ensure the database configuration is set up in Django's connection handler
 #     if db_name not in settings.DATABASES:
 #         settings.DATABASES[db_name] = {
@@ -152,7 +152,7 @@
 #     except Exception as e:
 #         return JsonResponse({"error": str(e)}, status=500)
 
-# def create_tables_for_models(db_name):
+# def create_schema_tables_for_models(db_name):
 #     # Ensure the database configuration is set up in Django's connection handler
 #     if db_name not in settings.DATABASES:
 #         settings.DATABASES[db_name] = {
@@ -211,7 +211,7 @@
 #             conn.close()
 
 #             # Call the function to create tables
-#             create_tables_for_models(db_name)
+#             create_schema_tables_for_models(db_name)
 
 #             return Response({"message": "Database created successfully"}, status=201)
 #         except Exception as e:
