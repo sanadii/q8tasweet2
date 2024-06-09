@@ -66,10 +66,11 @@ class Command(BaseCommand):
                 "work_sheet": "electors",
                 "required_data": [
                     "member",
-                    "elector",
-                    "phone",
+                    # "phone",
                     "notes",
                     "status",
+                    # "guarantee_group",
+                    "notes",
                 ],
             },
         }
@@ -90,15 +91,6 @@ class Command(BaseCommand):
             if df is None or not check_required_columns(df, required_data, self.stdout):
                 continue
 
-            # Print columns for debugging
-            self.stdout.write(f"Columns in the DataFrame: {df.columns.tolist()}\n")
-
-            # Check if 'elector' column exists
-            missing_columns = [col for col in required_data if col not in df.columns]
-            if missing_columns:
-                self.stdout.write(self.style.ERROR(f"Missing columns in DataFrame: {missing_columns}\n"))
-                continue
-
             # Filter the DataFrame to include only rows with a non-empty 'member' field
             df = df.dropna(subset=['member'])
 
@@ -116,25 +108,3 @@ class Command(BaseCommand):
             )
             self.stdout.write(self.style.SUCCESS(f"Created: {created_count} {key}"))
             self.stdout.write(self.style.SUCCESS(f"Updated: {updated_count} {key}"))
-
-            # Create CampaignGuarantee objects
-            for index, row in df.iterrows():
-                campaign_guarantee, created = CampaignGuarantee.objects.update_or_create(
-                    member_id=row['member'],
-                    elector_id=row['elector'],
-                    defaults={
-                        'notes': row['notes'],
-                        'status': row['status'],
-                        'phone': row['phone'],
-                    }
-                )
-                if created:
-                    created_count += 1
-                else:
-                    updated_count += 1
-
-            self.stdout.write(
-                self.style.SUCCESS(f"CampaignGuarantee creation summary:")
-            )
-            self.stdout.write(self.style.SUCCESS(f"Created: {created_count} CampaignGuarantee"))
-            self.stdout.write(self.style.SUCCESS(f"Updated: {updated_count} CampaignGuarantee"))

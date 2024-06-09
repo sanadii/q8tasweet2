@@ -35,16 +35,6 @@ class CampaignMember(TrackModel):
         blank=True,
         related_name="supervised_members",
     )
-    # committee = models.ForeignKey(
-    #     "committees.Committee",
-    #     on_delete=models.SET_NULL,
-    #     null=True,
-    #     blank=True,
-    #     related_name="campaign_committee_members",
-    # )
-    # civil = models.CharField(
-    #     max_length=12, blank=True, null=True, validators=[civil_validator]
-    # )
     phone = models.CharField(
         max_length=8, blank=True, null=True, validators=[phone_validator]
     )

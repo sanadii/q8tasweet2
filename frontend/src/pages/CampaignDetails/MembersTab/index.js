@@ -119,7 +119,7 @@ const MembersList = () => {
     },
     {
       Header: "الرتبة",
-      accessor: "role",
+      accessor: "roleId",
       // TabsToShow: ["campaignManagers", "all"],
       Cell: (cellProps) =>
         <Role
@@ -294,6 +294,10 @@ const MembersList = () => {
                     columns={columns}
                     data={campaignMemberList || []}
                     customPageSize={50}
+
+                    // Sorting---------
+                    sortBy="roleId"
+                    sortAsc={true}
 
                     // Styling----------
                     className="custom-header-css"

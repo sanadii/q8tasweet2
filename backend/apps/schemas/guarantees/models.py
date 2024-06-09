@@ -46,10 +46,6 @@ class CampaignGuarantee(DynamicSchemaModel):
         related_name="campaign_elector_guarantee_groups",
     )
 
-    # guarantee_groups = models.ManyToManyField(
-    #     "CampaignGuaranteeGroup", blank=True, related_name="campaign_guarantees"
-    # )
-
     class Meta:
         db_table = "campaign_guarantee"
         verbose_name = "المضامين"

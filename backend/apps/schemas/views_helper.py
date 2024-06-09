@@ -60,6 +60,7 @@ class AccessElectionSchemaMixin:
                 return request.response
             return view_func(request, *args, **kwargs)
 
+
 def get_election(slug):
     try:
         return Election.objects.get(slug=slug)
@@ -72,6 +73,8 @@ def get_schema_models_to_add(election):
               CommitteeSite, 
               Elector
               ]
+    
+    print("what is the election: ", election)
     election_method = election.election_method
     is_detailed_results = election.is_detailed_results
 

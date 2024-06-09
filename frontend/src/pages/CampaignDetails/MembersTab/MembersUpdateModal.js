@@ -107,12 +107,14 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
   const campaignAgentCommittees = useAgentMemberCommitteeSites(validation?.values?.supervisor, campaignMembers);
   const campaignAgentCommitteeOptions = useCommitteeOptions(campaignAgentCommittees);
 
+  console.log("campaignAgentCommitteeOptions: ", campaignAgentCommitteeOptions)
+
   // Form fields
   const fields = [
     {
       id: "role-field",
       name: "role",
-      label: "Role",
+      label: "الرتبة",
       type: "select",
       options: filteredRoleOptions,
       condition: isCurrentUserDifferentCampaignMember,
@@ -136,7 +138,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
     {
       id: "committee-field",
       name: "committee",
-      label: "Committee",
+      label: "اللجنة",
       type: "selectSingle",
       options: campaignAgentCommitteeOptions,
       condition: isDelegateMember,
@@ -144,13 +146,13 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
     {
       id: "phone-field",
       name: "phone",
-      label: "Phone",
+      label: "رقم الهاتف",
       type: "text",
     },
     {
       id: "notes-field",
       name: "notes",
-      label: "Notes",
+      label: "ملاحضات",
       type: "textarea",
     },
   ].filter(Boolean);
@@ -164,15 +166,17 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
       }}
     >
       <ModalHeader className="p-3 ps-4 bg-soft-success">
-        Update {campaignMember?.name}
+        تعديل عضوية: {campaignMember?.name}
       </ModalHeader>
       <ModalBody className="vstack gap-3">
         <input type="hidden" id="id-field" />
         <h5>
           <strong>
-            [{campaignMember?.id}] {campaignMember?.name}
+            <span className="pe-2">{campaignMember?.name} - {campaignMember?.roleName}</span>
+            <div className="badge bg-primary fs-12">
+              الرمز:  {campaignMember?.id}
+            </div>
           </strong>
-          <span>- {campaignMember?.roleName}</span>
         </h5>
         {fields.map(
           (field) =>

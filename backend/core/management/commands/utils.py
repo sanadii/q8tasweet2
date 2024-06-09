@@ -37,7 +37,7 @@ def read_excel_file(file_path, work_sheet, required_data, stdout):
             raise ValueError(f"Worksheet named '{work_sheet}' not found")
 
         df = pd.read_excel(file_path, sheet_name=work_sheet)
-        df = df[required_data]
+        df = df[required_data].fillna('')  # Replace NaN with empty string
         return df
     except Exception as e:
         stdout.write(f"Failed to read Excel file: {e}\n")
@@ -66,7 +66,7 @@ def process_row_fields(row, model, stdout, schema_name):
         # Check and handle ImageField dynamically
         if isinstance(field, models.ImageField) and field.name in defaults:
             field_value = defaults.get(field.name)
-            if pd.isna(field_value) or field_value == "":
+            if field_value == "":
                 defaults[field.name] = None  # Set field to None if empty
 
         # Check and handle CharField with max_length
@@ -80,7 +80,7 @@ def process_row_fields(row, model, stdout, schema_name):
             field_name = field.name + "_id"  # Get the name of the corresponding foreign key ID field
             field_value = defaults.get(field_name)
             stdout.write(f"Processing ForeignKey field: {field.name}, ID: {field_value}\n")
-            if pd.isna(field_value) or field_value == "":
+            if field_value == "":
                 stdout.write(f"Setting {field.name} to None due to empty or invalid value.\n")
                 defaults[field.name] = None  # Set the ForeignKey field to None if its corresponding ID field is empty
             else:
@@ -105,7 +105,7 @@ def process_row_fields(row, model, stdout, schema_name):
         # Handle DateField fields
         if isinstance(field, models.DateField):
             field_value = defaults.get(field.name)
-            if pd.isna(field_value) or field_value == "":
+            if field_value == "":
                 defaults[field.name] = None  # Set the DateField to None if it's empty
             else:
                 try:
@@ -117,7 +117,7 @@ def process_row_fields(row, model, stdout, schema_name):
 
         if isinstance(field, models.SlugField):
             field_value = defaults.get(field.name)
-            if pd.isna(field_value) or field_value == "":
+            if field_value == "":
                 defaults[field.name] = generate_random_slug()  # Generate a random slug if empty
 
     # Ensure non-nullable fields have values
@@ -184,4 +184,3 @@ def import_objects_from_df(df, model_name, stdout, schema_name=None):
                 stdout.write(f"Error occurred while importing or updating {model_name.__name__}: {e}\n")
 
     return created_count, updated_count, processed_candidates
-

@@ -11,7 +11,7 @@ const useMemberOptions = (campaignMembers, memberRole) => {
   return useMemo(() => {
     const options = memberGroup.map(item => ({
       id: item.id,
-      name: item.name,
+      label: item.name,
       value: parseInt(item.id, 10) // Ensure the value is an integer
     }));
 
@@ -47,7 +47,7 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
     // Convert roles to options
     const roleOptions = displayedRoles.map(role => ({
       id: role.id,
-      name: role.name,
+      label: role.name,
       value: role.id,
     }));
 
@@ -122,7 +122,7 @@ const useCommitteeOptions = (committeeSites) => {
       return acc;
     }, []);
 
-    setGroupedCommittees(groupedCommitteeList);
+    // setGroupedCommittees(groupedCommitteeList);
   }, [committeeSites]);
 
   return groupedCommittees;
