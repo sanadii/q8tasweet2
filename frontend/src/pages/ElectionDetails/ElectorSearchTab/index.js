@@ -9,7 +9,7 @@ import { electionSelector, campaignSelector, electorSelector } from 'selectors';
 import ElectorsModal from "./ElectorsModal";
 
 // Reactstrap (UI) imports
-import { Col, Row, Card, CardHeader, CardBody, Label, Input } from "reactstrap";
+import { Col, Row, Card, CardHeader, CardBody, } from "reactstrap";
 
 
 import ElectorSearchForm from "./ElectorSearchForm";

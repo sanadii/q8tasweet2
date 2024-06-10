@@ -13,7 +13,7 @@ import { usePermission } from 'shared/hooks';
 import { CheckboxHeader, CheckboxCell } from "./CheckBox"
 import { Title, NameAvatar, SimpleName, Name, ResultCandidateName } from "./Titles"
 
-import { CandidatePosition, CandidateVotes } from "./Numbers"
+import { SimpleNumber, CandidatePosition, CandidateVotes } from "./Numbers"
 import Actions from "./Actions"
 
 
@@ -311,6 +311,7 @@ export {
     // Election
 
     // Numbers
+    SimpleNumber,
     CandidatePosition,
     CandidateVotes,
 

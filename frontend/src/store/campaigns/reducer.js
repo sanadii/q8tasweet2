@@ -138,7 +138,7 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignCreated: false,
             isCampaignSuccess: true,
           };
-          
+
         case ADD_CAMPAIGN:
           return {
             ...state,
@@ -147,7 +147,7 @@ const Campaigns = (state = IntialState, action) => {
             isCampaignAdd: true,
             isCampaignAddFail: false,
           };
-          
+
         default:
           return { ...state };
       }
@@ -342,69 +342,6 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignMemberDeleteFail: true,
       };
 
-    // Campaign Guarantees
-    case GET_ALL_CAMPAIGN_GUARANTEES: {
-      return {
-        ...state,
-        error: action.payload.error,
-        isCampaignGuaranteeCreated: false,
-        isCampaignGuaranteeSuccess: true,
-      };
-    }
-
-    case ADD_CAMPAIGN_GUARANTEE_SUCCESS:
-      return {
-        ...state,
-        isCampaignGuaranteeCreated: true,
-        campaignGuarantees: [...state.campaignGuarantees, action.payload.data],
-        isCampaignGuaranteeAdd: true,
-        isCampaignGuaranteeAddFail: false,
-      };
-
-    case ADD_CAMPAIGN_GUARANTEE_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isCampaignGuaranteeAdd: false,
-        isCampaignGuaranteeAddFail: true,
-      };
-    case UPDATE_CAMPAIGN_GUARANTEE_SUCCESS:
-      return {
-        ...state,
-        campaignGuarantees: state.campaignGuarantees.map((campaignGuarantee) =>
-          campaignGuarantee.id.toString() === action.payload.data.id.toString()
-            ? { ...campaignGuarantee, ...action.payload.data }
-            : campaignGuarantee
-        ),
-        isCampaignGuaranteeUpdate: true,
-        isCampaignGuaranteeUpdateFail: false,
-      };
-    case UPDATE_CAMPAIGN_GUARANTEE_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isCampaignGuaranteeUpdate: false,
-        isCampaignGuaranteeUpdateFail: true,
-      };
-    case DELETE_CAMPAIGN_GUARANTEE_SUCCESS:
-      return {
-        ...state,
-        campaignGuarantees: state.campaignGuarantees.filter(
-          (campaignGuarantee) =>
-            campaignGuarantee.id.toString() !==
-            action.payload.campaignGuarantee.id.toString()
-        ),
-        isCampaignGuaranteeDelete: true,
-        isCampaignGuaranteeDeleteFail: false,
-      };
-    case DELETE_CAMPAIGN_GUARANTEE_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        isCampaignGuaranteeDelete: false,
-        isCampaignGuaranteeDeleteFail: true,
-      };
-
     // Campaign GuaranteeGroups
     case GET_ALL_CAMPAIGN_GUARANTEE_GROUPS: {
       return {
@@ -468,6 +405,69 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignGuaranteeGroupDeleteFail: true,
       };
 
+    // Campaign Guarantees
+    case GET_ALL_CAMPAIGN_GUARANTEES: {
+      return {
+        ...state,
+        error: action.payload.error,
+        isCampaignGuaranteeCreated: false,
+        isCampaignGuaranteeSuccess: true,
+      };
+    }
+
+    case ADD_CAMPAIGN_GUARANTEE_SUCCESS:
+      return {
+        ...state,
+        isCampaignGuaranteeCreated: true,
+        campaignGuarantees: [...state.campaignGuarantees, action.payload.data],
+        isCampaignGuaranteeAdd: true,
+        isCampaignGuaranteeAddFail: false,
+      };
+
+    case ADD_CAMPAIGN_GUARANTEE_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isCampaignGuaranteeAdd: false,
+        isCampaignGuaranteeAddFail: true,
+      };
+    case UPDATE_CAMPAIGN_GUARANTEE_SUCCESS:
+      return {
+        ...state,
+        campaignGuarantees: state.campaignGuarantees.map((campaignGuarantee) =>
+          campaignGuarantee.id.toString() === action.payload.data.id.toString()
+            ? { ...campaignGuarantee, ...action.payload.data }
+            : campaignGuarantee
+        ),
+        isCampaignGuaranteeUpdate: true,
+        isCampaignGuaranteeUpdateFail: false,
+      };
+    case UPDATE_CAMPAIGN_GUARANTEE_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isCampaignGuaranteeUpdate: false,
+        isCampaignGuaranteeUpdateFail: true,
+      };
+    case DELETE_CAMPAIGN_GUARANTEE_SUCCESS:
+      return {
+        ...state,
+        campaignGuarantees: state.campaignGuarantees.filter(
+          (campaignGuarantee) =>
+            campaignGuarantee.id.toString() !==
+            action.payload.campaignGuarantee.id.toString()
+        ),
+        isCampaignGuaranteeDelete: true,
+        isCampaignGuaranteeDeleteFail: false,
+      };
+    case DELETE_CAMPAIGN_GUARANTEE_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isCampaignGuaranteeDelete: false,
+        isCampaignGuaranteeDeleteFail: true,
+      };
+
     // Campaign Attendees
     case GET_CAMPAIGN_ATTENDEES: {
       return {
@@ -483,6 +483,12 @@ const Campaigns = (state = IntialState, action) => {
         ...state,
         isCampaignAttendeeCreated: true,
         campaignAttendees: [...state.campaignAttendees, action.payload.data],
+        campaignGuarantees: state.campaignGuarantees.map((campaignGuarantee) =>
+          campaignGuarantee.elector.toString() === action.payload.data.elector.toString()
+            ? { ...campaignGuarantee, ...action.payload.data.attended }
+            : campaignGuarantee
+        ),
+        
         isCampaignAttendeeAdd: true,
         isCampaignAttendeeAddFail: false,
       };

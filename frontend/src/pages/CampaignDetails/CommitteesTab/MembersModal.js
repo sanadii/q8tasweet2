@@ -46,7 +46,7 @@ const MembersModal = ({ modal, toggle, setModal, modalMode, campaignMember }) =>
             }}
             className="btn-light"
           >
-            إغلاق
+            اغلق
           </Button>
 
           {/* if ModalButtonText and ModalButtonText is not empty */}

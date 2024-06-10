@@ -40,7 +40,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"Updated: {updated_count} Users"))
 
         # Now update CampaignMember model
-        campaign_id = 14  # Static for now, you can modify as needed
+        campaign_id = 56  # Static for now, you can modify as needed
         election_created_count = 0
         election_updated_count = 0
         for user, row in zip(processed_users, df.itertuples(index=False)):

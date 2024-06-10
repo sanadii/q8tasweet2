@@ -20,7 +20,7 @@ class CommitteeResultCandidate(DynamicSchemaModel):
         managed = False
         db_table = "committee_result_candidate"
         verbose_name = "Committee Result Candidate"
-        verbose_name_plural = "Committee Result Candidates"
+        verbose_name_plural = "نتائج اللجان"
 
 
 class CommitteeResultParty(DynamicSchemaModel):

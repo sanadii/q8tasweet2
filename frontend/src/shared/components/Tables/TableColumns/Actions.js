@@ -85,7 +85,7 @@ const Actions = (cellProps) => {
                         member: campaignMember,
                         // committee: campaignCommittee.id,
                         elector: cell.row.original.id,
-                        status: 1,
+                        attended: true,
                     };
                     dispatch(addCampaignAttendee(newCampaignAttendee));
                 }}

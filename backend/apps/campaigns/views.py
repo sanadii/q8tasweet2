@@ -267,6 +267,20 @@ def get_campaign_schema_content(
 
         campaign_id = campaign.id if hasattr(campaign, "id") else campaign
 
+        # Fetch Campaign Election Committees
+        try:
+            election_committee_sites = CommitteeSite.objects.prefetch_related(
+                "committee_site_committees"
+            ).all()
+            if election_committee_sites.exists():
+                committees_data = CommitteeSiteSerializer(
+                    election_committee_sites, many=True, context=context
+                ).data
+                response_data["election_committee_sites"] = committees_data
+        except Exception as e:
+            response_data["committeeDataError"] = str(e)
+            
+            
         # Fetch Campaign Guarantee Groups
         try:
             campaign_guarantee_groups = CampaignGuaranteeGroup.objects.filter(
@@ -282,6 +296,20 @@ def get_campaign_schema_content(
         except Exception as e:
             response_data["campaignGuaranteeGroupDataError"] = str(e)
         
+        
+        # Fetch Campaign Guarantees
+        try:
+            campaign_guarantees = CampaignGuarantee.objects.all()
+            print("campaign_guarantees: ", campaign_guarantees)
+
+            if campaign_guarantees.exists():
+                campaign_guarantee_data = CampaignGuaranteeSerializer(
+                    campaign_guarantees, many=True, context=context
+                ).data
+                response_data["campaign_guarantees"] = campaign_guarantee_data
+        except Exception as e:
+            response_data["campaignGuaranteeDataError"] = str(e)
+
         # Fetch Campaign Attendees
         try:
             campaign_attendees = CampaignAttendee.objects.filter(
@@ -296,34 +324,10 @@ def get_campaign_schema_content(
         except Exception as e:
             response_data["campaignAttendeeDataError"] = str(e)
 
-        # Fetch Campaign Guarantees
-        try:
-            campaign_guarantees = CampaignGuarantee.objects.filter(
-                member__in=campaign_managed_members.values_list("id", flat=True)
-            )
-
-            if campaign_guarantees.exists():
-                campaign_guarantee_data = CampaignGuaranteeSerializer(
-                    campaign_guarantees, many=True, context=context
-                ).data
-                response_data["campaign_guarantees"] = campaign_guarantee_data
-        except Exception as e:
-            response_data["campaignGuaranteeDataError"] = str(e)
 
 
             
-        # Fetch Campaign Election Committees
-        try:
-            election_committee_sites = CommitteeSite.objects.prefetch_related(
-                "committee_site_committees"
-            ).all()
-            if election_committee_sites.exists():
-                committees_data = CommitteeSiteSerializer(
-                    election_committee_sites, many=True, context=context
-                ).data
-                response_data["election_committee_sites"] = committees_data
-        except Exception as e:
-            response_data["committeeDataError"] = str(e)
+
             
     return Response(response_data)
 
@@ -499,7 +503,6 @@ class AddCampaign(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        print("Incoming request data:", request.data)  # Log incoming request data
         serializer = CampaignSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()

@@ -19,12 +19,12 @@ class Command(BaseCommand):
         # # call_command('import_election_related_party_candidates')
 
         # # Schema: CommitteeSite, Committee, Elector
-        # call_command("create_election_related_schema", election)
-        # call_command("import_election_related_schema_data", election)
+        call_command("create_election_related_schema", election)
+        call_command("import_election_related_schema_data", election)
 
 
         # # Import Users, Members,
-        # call_command("import_election_related_members", election)
+        call_command("import_election_related_members", election)
         
         # Import Guarantees
         call_command("import_election_related_schema_guarantees", election)

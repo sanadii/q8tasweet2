@@ -9,12 +9,11 @@ import smallImage4 from "assets/images/small/img-4.jpg";
 
 import { getChartColorsArray } from "shared/components";
 
-const SimplePie = ({ dataColors }: any) => {
+const SimplePie = ({ dataColors, dataSeries }: any) => {
   var chartPieBasicColors = getChartColorsArray(dataColors);
-  const series = [44, 55];
   var options: any = {
     chart: {
-      height: 200,
+      height: 300,
       type: "pie",
     },
     labels: ["رجال", "نساء"],
@@ -29,7 +28,7 @@ const SimplePie = ({ dataColors }: any) => {
     colors: chartPieBasicColors,
   };
   return (
-    <ReactApexChart dir="ltr" className="apex-charts" series={series} options={options} type="pie" height={180} />
+    <ReactApexChart dir="ltr" className="apex-charts" series={dataSeries} options={options} type="pie" height={180} />
   );
 };
 

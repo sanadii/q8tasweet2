@@ -7,7 +7,7 @@ import { campaignSelector, electorSelector } from 'selectors';
 
 // Component imports
 import ElectorsModal from "./ElectorsModal";
-import { Title, Actions } from "shared/components";
+import { Title, SimpleNumber, Actions } from "shared/components";
 
 // Form
 import * as Yup from "yup";
@@ -39,8 +39,6 @@ const ElectorSearchDisplay = ({
     const [selectedGuaranteeGroup, setSelectedGuaranteeGroup] = useState("")
     const guaranteeGroupOptions = getFieldDynamicOptions(campaignGuaranteeGroups)
 
-    console.log("campaignGuaranteeGroupscampaignGuaranteeGroups: ", campaignGuaranteeGroups)
-
     const { electorsBySearch } = useSelector(electorSelector);
     const [electorList, setElectorList] = useState(electorsBySearch);
     useEffect(() => {
@@ -60,8 +58,10 @@ const ElectorSearchDisplay = ({
     });
 
 
+    const electorAddress = false
+    const electorCommittee = false
 
-    const columns = useMemo(
+    const columnsDefinition = useMemo(
         () => [
             {
                 Header: "الاسم",
@@ -71,6 +71,13 @@ const ElectorSearchDisplay = ({
                         title={cellProps.row.original.fullName}
                         subTitle={cellProps.row.original.id}
                         gender={cellProps.row.original.gender}
+                    />
+            },
+            {
+                Header: "العمر",
+                Cell: (cellProps) =>
+                    <SimpleNumber
+                        number={cellProps.row.original.age}
                     />
             },
             {
@@ -89,7 +96,8 @@ const ElectorSearchDisplay = ({
                             subTitle={`ق${address.block}, ش${address.street}, ج${address.lane}, م${address.house}`}
                         />
                     );
-                }
+                },
+                display: electorAddress
             },
 
             {
@@ -98,7 +106,9 @@ const ElectorSearchDisplay = ({
                     <Title
                         title={cellProps.row.original.committeeSiteName}
                         subTitle={`لجنة ${cellProps.row.original.committee} - ${cellProps.row.original.committeeType}`}
-                    />
+                    />,
+                display: electorCommittee
+
             },
             {
                 Header: "اجراءات",
@@ -132,9 +142,16 @@ const ElectorSearchDisplay = ({
             campaignDetails,
             currentCampaignMember,
             electionSchema,
+            electorAddress,
+            electorCommittee
         ]);
 
-
+    const columns = useMemo(() => {
+        return columnsDefinition.filter(column => {
+            if (column.display === false) return false;
+            return column;
+        });
+    }, [columnsDefinition]);
 
     return (
         <React.Fragment>

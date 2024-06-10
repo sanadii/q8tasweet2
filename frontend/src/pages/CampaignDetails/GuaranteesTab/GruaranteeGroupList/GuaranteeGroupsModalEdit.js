@@ -149,7 +149,7 @@ const GuaranteeGroupsModalEdit = ({
               }}
               className="btn-light"
             >
-              إغلاق
+              اغلق
             </Button>
             <Button type="submit" className="btn btn-success" id="add-btn">
               تحديث الإنتخابات

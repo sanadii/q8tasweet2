@@ -1,3 +1,8 @@
+const SimpleNumber = ({ number }) => {
+    return (
+        <strong>{number}</strong>
+    );
+};
 
 const CandidatePosition = ({ position }) => {
     return (
@@ -14,4 +19,4 @@ const CandidateVotes = ({ candidateVotes }) => {
 }
 
 
-export { CandidatePosition, CandidateVotes }
+export { SimpleNumber, CandidatePosition, CandidateVotes }

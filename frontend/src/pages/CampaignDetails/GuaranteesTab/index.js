@@ -193,6 +193,7 @@ const GuaranteesTab = () => {
         toggle={toggleCampaignGuaranteeGroup}
         modalMode={modalMode}
         campaignGuaranteeGroup={campaignGuaranteeGroup}
+        
       />
 
       <GuaranteesModal

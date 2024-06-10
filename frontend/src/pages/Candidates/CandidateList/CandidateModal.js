@@ -197,7 +197,7 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
               }}
               className="btn-light"
             >
-              اغلاق
+              اغلق
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
               {!!isEdit ? "تحديث" : "إضافة"}

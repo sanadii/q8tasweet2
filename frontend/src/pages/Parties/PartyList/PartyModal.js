@@ -180,7 +180,7 @@ const PartyModal = ({ isEdit, setModal, modal, toggle, party }) => {
               }}
               className="btn-light"
             >
-              اغلاق
+              اغلق
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
               {!!isEdit ? "تحديث" : "إضافة"}

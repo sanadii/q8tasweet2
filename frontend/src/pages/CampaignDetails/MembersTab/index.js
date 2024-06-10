@@ -196,7 +196,10 @@ const MembersList = () => {
     {
       Header: "الوكيل",
       TabsToShow: ["campaignGuarantor", "campaignAttendant", "campaignSorter"],
-      Cell: (cellProps) => <Supervisor campaignMembers={campaignMembers} cellProps={cellProps} />,
+      Cell: (cellProps) =>
+        <Supervisor
+          campaignMembers={campaignMembers} cellProps={cellProps}
+        />,
       show: canChangeCampaignSupervisor // Add this line
     },
     {

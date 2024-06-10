@@ -27,10 +27,11 @@ class CampaignGuarantee(DynamicSchemaModel):
     member = models.IntegerField(null=True, blank=True)
     elector = models.ForeignKey(
         Elector,
-        related_name="campaign_guarantee_electors",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
+        related_name="campaign_guarantee_electors",
+
     )
 
     phone = models.CharField(max_length=8, blank=True, null=True)

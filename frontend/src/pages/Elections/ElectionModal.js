@@ -290,7 +290,7 @@ const ElectionModal = ({ isEdit, setModal, modal, toggle, election }) => {
               }}
               className="btn-light"
             >
-              إغلاق
+              اغلق
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
               {!!isEdit ? " تحديث الإنتخابات" : "إضافة إنتخابات"}

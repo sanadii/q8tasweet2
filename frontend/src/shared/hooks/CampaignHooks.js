@@ -91,23 +91,23 @@ const getAllCommittees = (electionCommitteeSites) => {
 };
 
 
-
+// Function to get Agent Member Committee Sites
+const getAgentMemberCommitteeSites = (campaignAgentId, campaignMembers) => {
+  const campaignAgentMember = campaignMembers.find(member => member.id === parseInt(campaignAgentId, 10) || null);
+  const agentMemberCommitteeSite = campaignAgentMember?.committeeSites || []
+  return agentMemberCommitteeSite;
+};
 
 // Hook to get Committee Options
-const useCommitteeOptions = (committeeSites) => {
-  const [groupedCommittees, setGroupedCommittees] = useState([]);
+const getCommitteeOptions = (selectedSupervisor, campaignMembers, committeeSites) => {
+  const campaignAgentCommittees = getAgentMemberCommitteeSites(selectedSupervisor, campaignMembers);
 
-  useEffect(() => {
-    if (!committeeSites) {
-      setGroupedCommittees([]);
-      return;
-    }
-
-    const groupedCommitteeList = committeeSites.reduce((acc, committeeSite) => {
+  const groupedCommittees = campaignAgentCommittees.reduce((acc, committeeSite) => {
+    if (committeeSite && Array.isArray(committeeSite.committees)) {
       const label = committeeSite.name; // Use committeeSite name as the label
 
       // Create the committee option
-      const committeeOptions = committeeSite.committees.map(committee => ({
+      const committeeOptions = committeeSite.committees.map((committee) => ({
         id: committee.id,
         label: `${committeeSite.name} - ${committee.type} - ${committee.id}`,
         value: parseInt(committee.id, 10),
@@ -118,15 +118,15 @@ const useCommitteeOptions = (committeeSites) => {
         label: label,
         options: committeeOptions,
       });
+    }
 
-      return acc;
-    }, []);
-
-    // setGroupedCommittees(groupedCommitteeList);
-  }, [committeeSites]);
+    return acc;
+  }, []);
 
   return groupedCommittees;
 };
+
+
 
 // Deprecated: Get Supervisor Members
 const useSupervisorMembers = (campaignRoles, campaignMembers) => {
@@ -158,12 +158,7 @@ const isMemberRoleOption = (campaignRoles, roleCondition, roleId) => {
 
 
 // Get Campaign Agent Committees
-// Function to get Agent Member Committee Sites
-const useAgentMemberCommitteeSites = (campaignAgentId, campaignMembers) => {
-  const campaignAgentMember = campaignMembers.find(member => member.id === parseInt(campaignAgentId, 10));
-  const agentMemberCommitteeSite = campaignAgentMember?.committeeSites || []
-  return agentMemberCommitteeSite;
-};
+
 
 
 
@@ -174,8 +169,8 @@ export {
   getCampaignAgentMembers,
   getCommitteeSiteOptions,
   getAllCommittees,
-  useAgentMemberCommitteeSites,
-  useCommitteeOptions,
+  getAgentMemberCommitteeSites,
+  getCommitteeOptions,
   useSupervisorMembers, // Deprecated: Keep for backward compatibility if needed
   useCampaignRoleString,
   isMemberRoleOption,

@@ -6,6 +6,7 @@ import { campaignSelector } from 'selectors';
 
 // Component & Constants imports
 import { CampaignGuaranteeStatusOptions, GenderOptions } from "shared/constants";
+import { getFieldDynamicOptions } from "shared/hooks";
 
 // Form & Validation imports
 import * as Yup from "yup";
@@ -24,9 +25,9 @@ const GuaranteesModalEdit = ({
   const dispatch = useDispatch();
 
   const { electionSlug, campaignId, campaignMembers, campaignGuaranteeGroups, currentCampaignMember, campaignElectionCommittees } = useSelector(campaignSelector);
-  const GurantorOptions = campaignMembers.filter(
-    (member) => member.role === 31 || member.role === 32 || member.role === 33 || member.role === 34
-  );
+  // const GurantorOptions = campaignMembers.filter(
+  //   (member) => member.role === 31 || member.role === 32 || member.role === 33 || member.role === 34
+  // );
 
   const myCampaignGuaranteeGroups = campaignGuaranteeGroups && campaignGuaranteeGroups
     .filter((guaranteeGroup) => guaranteeGroup.member === currentCampaignMember.id)
@@ -35,7 +36,7 @@ const GuaranteesModalEdit = ({
       value: guaranteeGroup.id
     }));
 
-  const sortedGurantorOptions = GurantorOptions.sort((a, b) => a.role - b.role);
+  const sortedGurantorOptions = campaignMembers.sort((a, b) => a.role - b.role);
   const [isRelatedVoters, setToggleRelatedVoters] = useState(false);
 
   const setIsRelatedVoters = () => {
@@ -49,10 +50,10 @@ const GuaranteesModalEdit = ({
     initialValues: {
       schema: electionSlug,
       id: campaignGuarantee?.id || "",
-      guaranteeGroups: campaignGuarantee?.guaranteeGroups || [],
+      guaranteeGroup: campaignGuarantee?.guaranteeGroup || null,
       member: campaignGuarantee?.member || "",
       phone: campaignGuarantee?.phone || "",
-      status: campaignGuarantee?.status || 0,
+      status: campaignGuarantee?.status || 1,
       notes: campaignGuarantee?.notes || "",
     },
     validationSchema: Yup.object({
@@ -65,10 +66,11 @@ const GuaranteesModalEdit = ({
         id: campaignGuarantee ? campaignGuarantee.id : 0,
         member: parseInt(values.member, 10),
         phone: values.phone,
-        civil: values.civil,
-        guaranteeGroups: values.guaranteeGroups || [],
-        status: parseInt(values.status, 10),
+        status: values.status,
+        guaranteeGroup: values.guaranteeGroup || null,
         notes: values.notes,
+
+        civil: values.civil,
       };
       dispatch(updateCampaignGuarantee(updatedCampaignGuarantee));
       validation.resetForm();
@@ -79,29 +81,27 @@ const GuaranteesModalEdit = ({
 
   console.log("initialValues: ", validation.initialValues)
 
+  const guaranteeGender = (GenderOptions.find(g => g.id === campaignGuarantee?.gender) || {}).name || "غير محدد"
   const tableRows = [
     { label: "الاسم", value: campaignGuarantee?.fullName },
-    {
-      label: "النوع",
-      value: (GenderOptions.find(g => g.id === campaignGuarantee?.gender) || {}).name || "غير محدد"
-    },
+    { label: "النوع", value: guaranteeGender },
     { label: "الرقم المدني", value: campaignGuarantee?.civil },
     { label: "رقم الصندوق", value: campaignGuarantee?.boxNo },
     { label: "رقم الاشتراك", value: campaignGuarantee?.membershipNo },
     { label: "تاريخ الانتساب", value: campaignGuarantee?.enrollmentDate },
   ];
 
-
+  console.log("sortedGurantorOptions: ", sortedGurantorOptions)
   const guarantorOptions = sortedGurantorOptions.map((guarantor) => {
     let prefix = "";
     switch (guarantor.role) {
-      case 31:
+      case 3100:
         prefix = "🔵";
         break;
-      case 32:
+      case 3200:
         prefix = "🟡";
         break;
-      case 33:
+      case 3300:
         prefix = "🟢";
         break;
       default:
@@ -120,21 +120,15 @@ const GuaranteesModalEdit = ({
       id: "guarantor-field",
       name: "member",
       label: "الضامن",
-      type: "select",
+      type: "selectSingle",
       options: guarantorOptions,
     },
     {
       id: "guaranteeGroup-field",
-      name: "guaranteeGroups",
+      name: "guaranteeGroup",
       label: "المجموعات",
-      type: "selectMulti",
+      type: "selectSingle",
       options: myCampaignGuaranteeGroups,
-
-      // options: campaignGuaranteeGroups.map(item => ({
-      //   id: item.id,
-      //   label: item.name,
-      //   value: item.id
-      // })),
     },
     {
       id: "phone-field",
@@ -147,11 +141,7 @@ const GuaranteesModalEdit = ({
       name: "status",
       label: "الحالة",
       type: "select",
-      options: CampaignGuaranteeStatusOptions.map(item => ({
-        id: item.id,
-        label: item.name,
-        value: item.id
-      })),
+      options: getFieldDynamicOptions(CampaignGuaranteeStatusOptions),
     },
     {
       id: "notes-field",
@@ -242,7 +232,7 @@ const GuaranteesModalEdit = ({
             }}
             className="btn-light"
           >
-            إغلاق
+            اغلق
           </Button>
           <Button type="submit" className="btn btn-success" id="add-btn">
             تحديث الضمان

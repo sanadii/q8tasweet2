@@ -19,7 +19,7 @@ class MemberCommitteeSite(DynamicSchemaModel):
         managed = False
         db_table = "member_committee_site"
         verbose_name = "Member Committee Site"
-        verbose_name_plural = "Member Committee Sites"
+        verbose_name_plural = "وكلاء اللجان"
 
     def __str__(self):
         return f"MemberCommitteeSite {self.id}"  # Ensure this returns a string
@@ -39,7 +39,7 @@ class MemberCommittee(DynamicSchemaModel):
         managed = False
         db_table = "member_committee"
         verbose_name = "Member Committee"
-        verbose_name_plural = "Member Committees"
+        verbose_name_plural = "مناديب اللجان"
 
     def __str__(self):
         return f"MemberCommittee {self.id}"  # Ensure this returns a string

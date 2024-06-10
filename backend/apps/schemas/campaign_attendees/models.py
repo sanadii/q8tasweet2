@@ -26,7 +26,7 @@ class CampaignAttendee(DynamicSchemaModel):
         related_name="elector_attendees",
     )
     notes = models.TextField(blank=True, null=True)
-    status = models.IntegerField(blank=True, null=True)
+    attended = models.BooleanField(blank=True, null=True)
 
     class Meta:
         managed = False

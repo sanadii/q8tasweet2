@@ -42,12 +42,12 @@ const AttendeesModal = ({ modal, toggle, modalMode, campaignAttendee }) => {
     case "GuaranteeViewModal":
       ModalTitle = "مشاهدة تحضير ناخب";
       ModalContent = CampaignAttendeeViewModal;
-      ModalButtonText = "اغلاق";
+      ModalButtonText = "اغلق";
       break;
     default:
       ModalTitle = "Default Modal"; // A default title for other cases
       ModalContent = DefaultModalContent;
-      ModalButtonText = "اغلاق"; // A default button text
+      ModalButtonText = "اغلق"; // A default button text
   }
 
 
@@ -67,7 +67,7 @@ const AttendeesModal = ({ modal, toggle, modalMode, campaignAttendee }) => {
       </ModalBody>
       <ModalFooter>
         <div className="hstack gap-2 justify-content-end">
-          <Button color="light" onClick={() => toggle(false)}>اغلاق</Button>
+          <Button color="light" onClick={() => toggle(false)}>اغلق</Button>
 
           {/* if ModalButtonText and ModalButtonText is not empty */}
           {ModalButtonText && ModalButtonText.length > 0 &&

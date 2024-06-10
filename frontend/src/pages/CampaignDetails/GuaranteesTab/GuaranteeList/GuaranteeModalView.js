@@ -83,7 +83,7 @@ const GuaranteeModalView = ({
           }}
           className="btn-light"
         >
-          إغلاق
+          اغلق
         </Button>
       </ModalFooter>
     </React.Fragment>

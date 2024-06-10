@@ -6,7 +6,7 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'selectors';
 
 // Components
-import { useMemberOptions, useCampaignRoles, getCommitteeSiteOptions, useAgentMemberCommitteeSites, useCommitteeOptions, getCampaignAgentMembers, useCampaignRoleString, isMemberRoleOption } from "shared/hooks";
+import { useMemberOptions, useCampaignRoles, getCommitteeSiteOptions, getAgentMemberCommitteeSites, getCommitteeOptions, getCampaignAgentMembers, useCampaignRoleString, isMemberRoleOption } from "shared/hooks";
 import { FormFields } from "shared/components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -31,16 +31,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
   const campaignAgentRoles = ["campaignFieldAgent", "campaignDigitalAgent"];
   const campaignDelegateRoles = ["campaignFieldDelegate", "campaignDigitalDelegate"];
 
-  // Filtered Role Options based on Current Member Role
-  const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
 
-  // Get campaign Agent Options for Field and Digital
-  const campaignFieldAgentOptions = useMemberOptions(campaignMembers, "campaignFieldAgent");
-  const campaignDigitalAgentOptions = useMemberOptions(campaignMembers, "campaignDigitalAgent");
-
-  // Get CommitteeSite and Committee Options
-  const committeeSiteOptions = getCommitteeSiteOptions(electionCommitteeSites);
-  const committeeOptions = useCommitteeOptions(electionCommitteeSites);
 
   // Form Validation
   const validation = useFormik({
@@ -96,6 +87,13 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
   const isDelegateMember = campaignDelegateRoles.includes(useCampaignRoleString(validation.values.role, campaignRoles));
   const campaignMemberRoleCodename = useCampaignRoleString(validation.values.role, campaignRoles);
 
+  // Filtered Role Options based on Current Member Role
+  const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
+
+  // Get campaign Agent Options for Field and Digital
+  const campaignFieldAgentOptions = useMemberOptions(campaignMembers, "campaignFieldAgent");
+  const campaignDigitalAgentOptions = useMemberOptions(campaignMembers, "campaignDigitalAgent");
+
   const { options: campaignSupervisorOptions, label: campaignSupervisorLabel } =
     getCampaignAgentMembers(
       campaignMemberRoleCodename,
@@ -103,11 +101,10 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
       campaignDigitalAgentOptions
     );
 
-  // Memoized value for campaignAgentCommittees
-  const campaignAgentCommittees = useAgentMemberCommitteeSites(validation?.values?.supervisor, campaignMembers);
-  const campaignAgentCommitteeOptions = useCommitteeOptions(campaignAgentCommittees);
-
-  console.log("campaignAgentCommitteeOptions: ", campaignAgentCommitteeOptions)
+  // Get CommitteeSite and Committee Options
+  const selectedSupervisor = validation?.values?.supervisor || null
+  const committeeSiteOptions = getCommitteeSiteOptions(electionCommitteeSites);
+  const committeeOptions = getCommitteeOptions(selectedSupervisor, campaignMembers, committeeSiteOptions);
 
   // Form fields
   const fields = [
@@ -130,17 +127,17 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
     {
       id: "committeeSites-field",
       name: "committeeSites",
-      label: "Committee Sites",
+      label: "اللجان",
       type: "selectMulti",
       options: committeeSiteOptions,
       condition: isAgentMember,
     },
     {
       id: "committee-field",
-      name: "committee",
+      name: "اللجان",
       label: "اللجنة",
       type: "selectSingle",
-      options: campaignAgentCommitteeOptions,
+      options: committeeOptions,
       condition: isDelegateMember,
     },
     {
@@ -194,10 +191,10 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
             }}
             className="btn-light"
           >
-            Close
+            اغلق
           </Button>
           <Button color="success" id="add-btn" type="submit">
-            Update
+            تحديث
           </Button>
         </div>
       </ModalFooter>

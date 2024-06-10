@@ -188,7 +188,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'verbose_name': 'Member Committee',
-                'verbose_name_plural': 'Member Committees',
+                'verbose_name_plural': 'مناديب اللجان',
                 'db_table': 'member_committee',
                 'managed': False,
             },
@@ -201,7 +201,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'verbose_name': 'Member Committee Site',
-                'verbose_name_plural': 'Member Committee Sites',
+                'verbose_name_plural': 'وكلاء اللجان',
                 'db_table': 'member_committee_site',
                 'managed': False,
             },

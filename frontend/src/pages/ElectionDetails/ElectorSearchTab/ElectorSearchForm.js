@@ -37,6 +37,9 @@ const ElectorSearchForm = ({ electionSchema }) => {
     };
 
 
+    const electorAddress = false
+    const electorCommittee = false
+
     const validation = useFormik({
         // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
@@ -112,7 +115,7 @@ const ElectorSearchForm = ({ electionSchema }) => {
         },
     ];
 
-    const advancedFields = [
+    const advancedNameFields = [
         {
             id: "first-name-field",
             name: "firstName",
@@ -153,6 +156,10 @@ const ElectorSearchForm = ({ electionSchema }) => {
             placeholder: "اسم العائلة",
             colSize: "3",
         },
+    ];
+
+    const advancedAddressFields = [
+
         {
             id: "area-field",
             name: "area",
@@ -195,6 +202,8 @@ const ElectorSearchForm = ({ electionSchema }) => {
         },
     ];
 
+
+    const advancedFields = [...advancedNameFields, ...advancedAddressFields];
 
     const vottingStatusFields = [
         {
@@ -279,7 +288,8 @@ const ElectorSearchForm = ({ electionSchema }) => {
     ], [isAdvancedCommitteeSearch]);
 
 
-    const fieldsToDisplay = (searchType === "advanced" ? advancedFields : fields)
+    const fieldsToDisplay = (searchType === "advanced" ?
+        (electorAddress ? advancedFields : advancedNameFields) : fields)
     return (
         <React.Fragment>
 
@@ -291,8 +301,13 @@ const ElectorSearchForm = ({ electionSchema }) => {
                     return false;
                 }}
             >
+            
                 <Row className="mb-2 bg-light p-2">
-                    <Col lg={10}>
+                    <Col lg={12}>
+                        {renderButtonGroup(advancedSearchButtons, 'danger')}
+                        {electorAddress && searchType && renderButtonGroup(advancedCommitteeSearchButtons, 'info')}
+                    </Col>
+                    <Col lg={12}>
                         <div >
                             <Row>
                                 {fieldsToDisplay.map((field) => (
@@ -305,25 +320,27 @@ const ElectorSearchForm = ({ electionSchema }) => {
                                     />
                                 ))}
                             </Row>
-                            <Row>
-                                {vottingStatusFields.map((field) => (
-                                    <FormFields
-                                        key={field.id}
-                                        field={field}
-                                        validation={validation}
-                                        formStructure="inline"
-                                    />
-                                ))}
-                            </Row>
+                            {electorAddress &&
+                                <Row>
+                                    {vottingStatusFields.map((field) => (
+                                        <FormFields
+                                            key={field.id}
+                                            field={field}
+                                            validation={validation}
+                                            formStructure="inline"
+                                        />
+                                    ))}
+                                </Row>
+                            }
                         </div>
                     </Col>
+
                     <Col lg={2}>
-                        {renderButtonGroup(advancedSearchButtons, 'danger')}
-                        {searchType && renderButtonGroup(advancedCommitteeSearchButtons, 'info')}
-                        <button type="submit" className="btn btn-primary w-100">
+                        <button type="submit" className="btn btn-sm btn-primary w-100">
                             إبحث
                         </button>
                     </Col>
+
                 </Row>
             </Form>
             <div className="mb-2">

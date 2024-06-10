@@ -19,7 +19,7 @@ const HeaderVoteButton = ({
 
   // Determine the button text and class based on the editing state
   const buttonText = isColumnInEditMode[committeeId] ?
-    (isEditField[committeeId] ? 'حفظ' : 'اغلاق')
+    (isEditField[committeeId] ? 'حفظ' : 'اغلق')
     :
     (committee ? `${committee.id}` : `تعديل`);
 

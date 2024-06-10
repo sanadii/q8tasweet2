@@ -36,7 +36,7 @@ const MembersModal = ({ modal, toggle, modalMode, campaignMember }) => {
             onClick={toggle}
             className="btn-light"
           >
-            إغلاق
+            اغلق
           </Button>
           {modalButtonText && (
             <Button
