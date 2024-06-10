@@ -15,7 +15,9 @@ const SidebarFields = ({
 
 }) => {
     const dispatch = useDispatch();
-    const { electionSlug } = useSelector(electionSelector);
+    const { electionSlug, electionDetails } = useSelector(electionSelector);
+    const isElectorAddress = electionDetails?.isElectorAddress
+    const isElectorCommittee = electionDetails?.isElectorCommittee
 
     const {
         branchOptions, areaOptions, committeeOptions,
@@ -81,7 +83,7 @@ const SidebarFields = ({
                             classNamePrefix="select"
                         />
                     </div>
-                    {areaOptions &&
+                    {areaOptions && isElectorAddress &&
                         <div className="pb-3">
                             <Label for="areaSelect">المناطق</Label>
                             <Select
@@ -95,7 +97,7 @@ const SidebarFields = ({
                         </div>
                     }
 
-                    {committeeOptions &&
+                    {committeeOptions && isElectorCommittee &&
                         <div className="pb-3">
                             <Label for="areaSelect">اللجان</Label>
                             <Select

@@ -24,7 +24,7 @@ import AttendeesTab from "./AttendeesTab";
 import SortingTab from "./SortingTab";
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
-import ElectorSearchTab from "../ElectionDetails/ElectorSearchTab";
+import ElectorSearchTab from "../Electors/SearchTab";
 
 
 const Section = () => {

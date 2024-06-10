@@ -102,6 +102,8 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             # "status",
             "is_detailed_results",
             "is_sorting_results",
+            "is_elector_address",
+            "is_elector_committee",
             "has_schema",
         ]
 

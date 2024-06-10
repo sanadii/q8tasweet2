@@ -13,16 +13,16 @@ from django.db.models.functions import Concat
 # #
 # Elector Family Branches
 # #
-def restructure_electors_by_category(request):
+def restructure_electors_by_category(request, election):
     """Restructures elector data into a nested dictionary format using a DRY approach."""
 
     families = extract_query_params(request, "families")
     branches = extract_query_params(request, "branches")
-    areas = extract_query_params(request, "areas")
-    committees = extract_query_params(request, "committees")
+    areas = None
+    committees = None
 
     instances = {
-        # 
+        #
         # Filter By Family
         #
         # Filter By One Field
@@ -30,39 +30,10 @@ def restructure_electors_by_category(request):
             "filter_fields": {"families"},
             "data_fields": ["family"],
         },
-        "electorsByArea": {
-            "filter_fields": {"areas"},
-            "data_fields": ["area"],
-        },
         "electorsByBranch": {
             "filter_fields": {"branches"},
             "data_fields": {"branch"},
         },
-        "electorsByCommittee": {
-            "filter_fields": {"committees"},
-            "data_fields": {"committee_area"},
-        },
-        # 
-        # Filter By Two Field
-        "electorsByFamilyArea": {
-            "filter_fields": {"families", "areas"},
-            "data_fields": ["family", "area"],
-        },
-        "electorsByFamilyCommittee": {
-            "filter_fields": {"families", "committees"},
-            "data_fields": ["family", "committee_area"],
-        },
-        "electorsByBranchArea": {
-            "filter_fields": {"branches", "areas"},
-            "data_fields": {"branch", "area"},
-        },
-        "electorsByBranchCommittee": {
-            "filter_fields": {"branches", "committees"},
-            "data_fields": {"branch", "committee_area"},
-        },
-        
-        
-        
         # Combined Filter
         # "electorsByBranchArea": {
         #     "filter_fields": {"branches", "areas", "families"},
@@ -82,7 +53,71 @@ def restructure_electors_by_category(request):
         #     "data_fields": ["committee_area", "branch", "family"],
         # },
     }
+
     results = {}
+    results.update(
+        {
+            "branch_options": fetch_selection_options(families, "branch"),
+        }
+    )
+
+    is_elector_address = election.is_elector_address
+    is_elector_committee = election.is_elector_committee
+
+    if is_elector_address:
+        areas = extract_query_params(request, "areas")
+        area_options = (fetch_selection_options(families, "area", branches=branches),)
+        instances.update(
+            {
+                "electorsByArea": {
+                    "filter_fields": {"areas"},
+                    "data_fields": ["area"],
+                },
+                #
+                # Filter By Two Field
+                "electorsByFamilyArea": {
+                    "filter_fields": {"families", "areas"},
+                    "data_fields": ["family", "area"],
+                },
+                "electorsByBranchArea": {
+                    "filter_fields": {"branches", "areas"},
+                    "data_fields": {"branch", "area"},
+                },
+            }
+        )
+        results.update(
+            {
+                "area_options": area_options,
+            }
+        )
+
+    if is_elector_committee:
+        committees = extract_query_params(request, "committees")
+        committee_options = (
+            fetch_selection_options(families, "committee_area", committees=committees),
+        )
+        instances.update(
+            {
+                "electorsByCommittee": {
+                    "filter_fields": {"committees"},
+                    "data_fields": {"committee_area"},
+                },
+                # Filter By Two Field
+                "electorsByFamilyCommittee": {
+                    "filter_fields": {"families", "committees"},
+                    "data_fields": ["family", "committee_area"],
+                },
+                "electorsByBranchCommittee": {
+                    "filter_fields": {"branches", "committees"},
+                    "data_fields": {"branch", "committee_area"},
+                },
+            }
+        )
+        results.update(
+            {
+                "committee_options": committee_options,
+            }
+        )
 
     # Elector Data
     for key, params in instances.items():
@@ -94,19 +129,6 @@ def restructure_electors_by_category(request):
             params["filter_fields"],
             params["data_fields"],
         )
-
-    # Field Options
-    results.update(
-        {
-            "branch_options": fetch_selection_options(families, "branch"),
-            "area_options": fetch_selection_options(
-                families, "area", branches=branches
-            ),
-            "committee_options": fetch_selection_options(
-                families, "committee_area", committees=committees
-            ),
-        }
-    )
 
     return results
 

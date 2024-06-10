@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { ButtonGroup, Button, Label, Input, Row, Col } from "reactstrap";
+import { ButtonGroup, Button } from "reactstrap";
 import Select from "react-select";
+import { useSelector, useDispatch } from "react-redux";
+import { electionSelector, electorSelector } from 'selectors';
 
 
-import { getElectorsByCategory, getElectorsByFamilyDivision } from "store/actions";
-import ChartSideBarFamilyView from "./SidebarFields"
 
 const ChartSideBar = ({
     handleFamilyAreaChange,
     setViewState,
     viewState
 }) => {
+    const { electionSlug, electionDetails } = useSelector(electionSelector);
+    const isElectorAddress = electionDetails?.isElectorAddress
+    const isElectorCommittee = electionDetails?.isElectorCommittee
+
     const { selectionFilters, viewSettings } = viewState;
     const { displayAllElectors, familyBranchOption, areaCommitteeOption, reverseView, displayChartType } = viewSettings
 
@@ -108,19 +112,24 @@ const ChartSideBar = ({
                     text: "",
                     icon: areaCommitteeOption === "" ? "mdi mdi-mdi mdi-eye-off" : "mdi mdi-eye",
                     isActive: areaCommitteeOption === "",
-                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", "")
+                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", ""),
+                    display: isElectorAddress || isElectorCommittee,
+
                 },
                 {
                     text: "المناطق",
                     icon: areaCommitteeOption === "area" ? "mdi mdi-checkbox-marked-circle-outline" : "mdi mdi-checkbox-blank-circle-outline",
                     isActive: areaCommitteeOption === "area",
-                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", "area")
+                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", "area"),
+                    display: isElectorAddress,
+
                 },
                 {
                     text: "اللجان",
                     icon: areaCommitteeOption === "committee" ? "mdi mdi-checkbox-marked-circle-outline" : "mdi mdi-checkbox-blank-circle-outline",
                     isActive: areaCommitteeOption === "committee",
-                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", "committee")
+                    onClick: handleDisplayByOptionSelection("areaCommitteeOption", "committee"),
+                    display: isElectorCommittee,
                 },
             ]
         }
@@ -165,13 +174,13 @@ const ChartSideBar = ({
 
 
     const displayOptionButtons = useMemo(() => [
-
         {
             icon: "mdi mdi-swap-horizontal",
             color: "soft-danger",
             text: "تبديل",
             isActive: reverseView === true,
             onClick: handleDisplayViewOptionToggle("reverseView"),
+            display: isElectorAddress || isElectorCommittee,
         },
         {
             icon: "mdi mdi-gender-transgender",
@@ -185,43 +194,48 @@ const ChartSideBar = ({
     const renderButtonGroup = (buttonConfigs, color) => (
         <ButtonGroup className="w-100 pb-1">
             {buttonConfigs.map((btn, index) => (
-                <Button
-                    key={index}
-                    className={`${btn.text ? "btn-label" : "btn-icon"} btn-sm material-shadow-none ${btn.isActive ? `bg-${color} ` : `bg-light text-${color}`}`}
-                    onClick={btn.onClick}
-                    active={btn.isActive}
-                >
-                    {btn.text ?
-                        <>
-                            <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
-                            {btn.text}
-                        </>
-                        :
-                        <i className={`${btn.icon} label-icon align-middle fs-16`}></i>
-
-                    }
-                </Button>
+                (btn.display !== false) && (
+                    <Button
+                        key={index}
+                        className={`${btn.text ? "btn-label" : "btn-icon"} btn-sm material-shadow-none ${btn.isActive ? `bg-${color} ` : `bg-light text-${color}`}`}
+                        onClick={btn.onClick}
+                        active={btn.isActive}
+                    >
+                        {btn.text ? (
+                            <>
+                                <i className={`${btn.icon} label-icon align-middle fs-16 me-2`}></i>
+                                {btn.text}
+                            </>
+                        ) : (
+                            <i className={`${btn.icon} label-icon align-middle fs-16`}></i>
+                        )}
+                    </Button>
+                )
             ))}
         </ButtonGroup>
     );
 
+
     const renderChartButtonGroup = (buttonConfigs, isIconOnly = false) => (
         <ButtonGroup className="w-100 pb-1">
             {buttonConfigs.map((btn, index) => (
-                <Button
-                    key={index}
-                    color={btn.color}
-                    className={`btn-icon material-shadow-none"}`}
-                    onClick={btn.onClick}
-                    active={btn.isActive}
-                >
-                    <i className={`${btn.icon} label-icon align-middle fs-16 me-2
+                (btn.display !== false) && (
+
+                    <Button
+                        key={index}
+                        color={btn.color}
+                        className={`btn-icon material-shadow-none"}`}
+                        onClick={btn.onClick}
+                        active={btn.isActive}
+                    >
+                        <i className={`${btn.icon} label-icon align-middle fs-16 me-2
                     
                     `}></i>
-                    {btn.text}
-                </Button>
-
+                        {btn.text}
+                    </Button>
+                )
             ))}
+
         </ButtonGroup>
 
     );
@@ -233,11 +247,17 @@ const ChartSideBar = ({
                 {/* Add success color */}
                 {renderButtonGroup(displayBySelectionButtons, 'danger')}
 
-                {displayBySelectedOptions.map((optionGroup, index) => (
-                    <div key={index}>
-                        {renderButtonGroup(optionGroup.items, optionGroup.color)}
-                    </div>
-                ))}
+
+                {
+                    displayBySelectedOptions.map((optionGroup, index) => (
+                        <div key={index}>
+                            {
+                                renderButtonGroup(optionGroup.items, optionGroup.color)
+                            }
+                        </div>
+                    ))
+                }
+
 
                 {/* {renderButtonGroup(displayByAreaCommitteeButtons, 'primary')} */}
 

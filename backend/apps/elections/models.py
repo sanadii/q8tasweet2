@@ -68,6 +68,13 @@ class Election(TrackModel, TaskModel):
     is_sorting_results = models.BooleanField(
         default=False, verbose_name="Is Sorting Results?"
     )
+    
+    is_elector_address = models.BooleanField(
+        default=False, verbose_name="Is elector address avaiable?"
+    )
+    is_elector_committee = models.BooleanField(
+        default=False, verbose_name="Is elector committee avaiable?"
+    )
 
     elect_votes = models.PositiveIntegerField(blank=True, null=True)
     elect_seats = models.PositiveIntegerField(blank=True, null=True)

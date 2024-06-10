@@ -20,7 +20,12 @@ import classNames from 'classnames';
 const StatisticsTab = () => {
     const { electionStatistics, electorsByFamily, electorsByArea,
         electorsByCommittee, electorsByCategories,
-        electorsByBranchFamilies, electorsByFamilyBranch, electorsByFamilyBranchArea } = useSelector(electorSelector);
+        electorsByBranchFamilies, electorsByFamilyBranch, electorsByFamilyBranchArea
+    } = useSelector(electorSelector);
+
+    const { electionDetails } = useSelector(electionSelector);
+    const isElectorAddress = electionDetails?.isElectorAddress
+    const isElectorCommittee = electionDetails?.isElectorCommittee
 
     const [viewState, setViewState] = useState({
         selectionFilters: {
@@ -35,7 +40,7 @@ const StatisticsTab = () => {
 
             displayAllElectors: true,                         // options: true / false
             familyBranchOption: "branch",                      // Options:  branch, area, committee
-            areaCommitteeOption: "area",                      // Options:  branch, area, committee
+            areaCommitteeOption: isElectorAddress ? "area" : "",                      // Options:  branch, area, committee
 
             displayByGender: false,
             reverseView: false,

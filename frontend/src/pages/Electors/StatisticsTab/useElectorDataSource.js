@@ -9,7 +9,7 @@ const useElectorDataSource = (viewState) => {
     const getElectorsData = useCallback(() => {
         const familyBranchOptions = {
             "": {
-                "": displayAllElectors ? electors.electorsByAll.electorsByAllFamilies : electors.electorsByCategory.electorsByFamily,
+                "": displayAllElectors ? electors?.electorsByAll?.electorsByAllFamilies : electors?.electorsByCategory?.electorsByFamily,
                 "area": displayAllElectors ? electors.electorsByAll.electorsByAllAreas : electors.electorsByCategory.electorsByArea,
                 "committee": displayAllElectors ? electors.electorsByAll.electorsByAllCommittees : electors.electorsByCategory.electorsByCommittee,
             },

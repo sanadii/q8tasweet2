@@ -10,8 +10,8 @@ import { usePermission } from "shared/hooks"
 // Import Tabs & Widgets
 import SectionHeader from "./SectionHeader";
 import OverviewTab from "./OverviewTab";
-import StatisticsTab from "./StatisticsTab";
-import ElectorSearchTab from "./ElectorSearchTab";
+import StatisticsTab from "../Electors/StatisticsTab";
+import ElectorSearchTab from "../Electors/SearchTab";
 import ElectionDetailsWidget from "./OverviewTab/Widgets";
 import CandidatesTab from "./CandidatesTab";
 import CampaignsTab from "./CampaignsTab";

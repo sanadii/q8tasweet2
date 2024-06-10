@@ -1,16 +1,13 @@
 from apps.schemas.electors.models import Elector
 from apps.schemas.electors.serializers import ElectorDataByCategory
-from rest_framework import serializers
-from django.db import models
-from django.db.models import F, Value, Count
-from django.db.models.functions import Concat
+from django.db.models import Count
 
-
-def restructure_elector_by_all(request):
+def restructure_elector_by_all(request, election):
     """Restructures elector data into a nested dictionary format without applying filters."""
     
-    # families = extract_query_params(request, "families")
-
+    is_elector_address = election.is_elector_address
+    is_elector_committee = election.is_elector_committee
+      
     instances = {
         # Single Field
         "electorsByAllFamilies": {
@@ -19,31 +16,35 @@ def restructure_elector_by_all(request):
         "electorsByAllBranches": {
             "data_fields": ["branch"],
         },
-        "electorsByAllAreas": {
-            "data_fields": ["area"],
-        },
-        "electorsByAllCommittees": {
-            "data_fields": ["committee_area"],
-        },
-        # Two Fields
-        "electorsByAllFamilyAreas": {
-            "data_fields": ["family", "area"],
-        },
-        "electorsByAllFamilyCommittees": {
-            "data_fields": ["family", "committee_area"],
-        },
-        "electorsByAllBranchAreas": {
-            "data_fields": ["branch", "area"],
-        },
-        "electorsByAllBranchCommittees": {
-            "data_fields": ["branch", "committee_area"],
-        },
-        # Test
-        # "electorsByAllBranchCommittees": {
-        #     "primary_data_fields": {"branch", "committee_area" },
-        #     "secondary_data_fields": {"committee_area", "branch"},
-        # },
     }
+    
+    if is_elector_address:
+        instances.update({
+            "electorsByAllAreas": {
+                "data_fields": ["area"],
+            },
+            # Two Fields
+            "electorsByAllFamilyAreas": {
+                "data_fields": ["family", "area"],
+            },
+            "electorsByAllBranchAreas": {
+                "data_fields": ["branch", "area"],
+            },
+        })
+
+    if is_elector_committee:
+        instances.update({
+            "electorsByAllCommittees": {
+                "data_fields": ["committee_area"],
+            },
+            "electorsByAllFamilyCommittees": {
+                "data_fields": ["family", "committee_area"],
+            },
+            "electorsByAllBranchCommittees": {
+                "data_fields": ["branch", "committee_area"],
+            },
+        })
+
     results = {}
 
     # Processing elector data
@@ -54,6 +55,7 @@ def restructure_elector_by_all(request):
     results["family_options"] = all_families  # Add family names to the results
 
     return results
+
 
 def fetch_all_families():
     """
@@ -75,8 +77,6 @@ def fetch_all_families():
     return result
 
 
-
-
 def process_elector_data(data_fields):
     """Helper function to create a serializer instance and retrieve data without filters."""
     instance = {
@@ -92,21 +92,3 @@ def process_elector_data(data_fields):
     serializer = ElectorDataByCategory(instance)
     return serializer.to_representation(instance)
 
-
-class ElectorDataSeriesByGenderSerializer(serializers.BaseSerializer):
-    def to_representation(self, branch_data):
-        family_branch_categories = list(branch_data.keys())
-
-        # Calculate totals for each gender across all family branches
-        seriesFemale = [
-            sum(branch_data[div]["female"]) for div in family_branch_categories
-        ]
-        seriesMale = [sum(branch_data[div]["male"]) for div in family_branch_categories]
-
-        return [
-            {"name": "إناث", "data": seriesFemale},
-            {"name": "ذكور", "data": seriesMale},
-        ]
-
-
-# Assuming usage somewhere in views or API endpoints

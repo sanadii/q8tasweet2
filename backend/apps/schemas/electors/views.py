@@ -1,34 +1,37 @@
-import os
-from django.conf import settings
-from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.pagination import PageNumberPagination
-from django.db.models import Count
 
-# Models
+# App Models
 from apps.schemas.electors.models import Elector
 
-# Serializers
+# App Serializers
 from apps.schemas.electors.serializers import ElectorSerializer
 
-# Utils
+# App Utils
 from utils.schema import schema_context
+from utils.election import get_election_by_slug
 from apps.schemas.electors.electorsByCategory import restructure_electors_by_category
 from apps.schemas.electors.electorsByAll import restructure_elector_by_all
 from apps.schemas.electors.electorsBySearch import restructure_electors_by_search
-from apps.schemas.electors.electorRelatedElectors import restructure_elector_related_electors
+from apps.schemas.electors.electorRelatedElectors import (
+    restructure_elector_related_electors,
+)
+
+
 class GetElectorsByAll(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         schema = request.GET.get("schema")
+        election = get_election_by_slug(schema)     
+        
         with schema_context(schema):
             if hasattr(request, "response"):
                 return request.response
 
-            electors_by_category = restructure_elector_by_all(request)
+            electors_by_category = restructure_elector_by_all(request, election)
             if "error" in electors_by_category:
                 return Response({"error": electors_by_category["error"]}, status=400)
 
@@ -40,16 +43,17 @@ class GetElectorsByCategory(APIView):
 
     def get(self, request, *args, **kwargs):
         schema = request.GET.get("schema")
+        election = get_election_by_slug(schema)     
+
         with schema_context(schema):
             if hasattr(request, "response"):
                 return request.response
 
-            electors_by_category = restructure_electors_by_category(request)
+            electors_by_category = restructure_electors_by_category(request, election)
             if "error" in electors_by_category:
                 return Response({"error": electors_by_category["error"]}, status=400)
 
         return Response({"data": electors_by_category}, status=200)
-
 
 
 class GetElectorsBySearch(APIView):
@@ -75,11 +79,6 @@ class GetElectorRelatedElectors(APIView):
         with schema_context(schema):
             electors = restructure_elector_related_electors(request)
             return Response({"data": electors}, status=200)
-
-
-
-
-
 
 
 class StandardResultsSetPagination(PageNumberPagination):
