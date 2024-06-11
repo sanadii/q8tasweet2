@@ -1,35 +1,39 @@
+# core/management/commands/import_election_details.py
+
 from django.core.management.base import BaseCommand
-from django.core.management import call_command
+from apps.elections.models import Election
+from .utils import read_excel_file, check_required_columns, import_objects_from_df
 
 class Command(BaseCommand):
-    help = "Call the importUsers command located in the startup directory"
+    help = "Imports or updates Election data from an Excel file"
 
     def add_arguments(self, parser):
-        parser.add_argument("election", type=str, help="Election identifier")
+        parser.add_argument('election', type=str, help='The election identifier to construct the file path')
 
     def handle(self, *args, **options):
-        election = options["election"]
+        election = options['election']
+        file_path = f"core/management/data/{election}.xlsx"
+        work_sheet = "election"
+        required_data = [
+            "category_id", "sub_category_id", "due_date", "slug", 
+            "election_method", "is_detailed_results", "is_sorting_results",
+            "elect_votes", "elect_seats",
+            "attendee_count", "attendee_male_count", "attendee_female_count",
+            "elector_count", "elector_female_count", "elector_male_count", 
+            "status", "priority", 
+        ]
 
-        # Import Election
-        # call_command("import_election_details", election)
+        df = read_excel_file(file_path, work_sheet, required_data, self.stdout)
+        if df is None or not check_required_columns(df, required_data, self.stdout):
+            return
 
-        # Participants: Candidate, ElectionCandidate, Party, ElectionParty, ElectionPartyCandidate
-        # call_command("import_election_related_candidates", election)
-        # # call_command('import_election_related_parties')
-        # # call_command('import_election_related_party_candidates')
+        created_count, updated_count, created_objects = import_objects_from_df(df, Election, self.stdout)
 
-        # # Schema: CommitteeSite, Committee, Elector
-        call_command("create_election_related_schema", election)
-        call_command("import_election_related_schema_data", election)
+        self.stdout.write(self.style.SUCCESS(f"Import completed for {work_sheet}. Summary:"))
+        self.stdout.write(self.style.SUCCESS(f"Created: {created_count} Election"))
+        self.stdout.write(self.style.SUCCESS(f"Updated: {updated_count} Election"))
 
-
-        # # Import Users, Members,
-        call_command("import_election_related_members", election)
-        
-        # Import Guarantees
-        call_command("import_election_related_schema_guarantees", election)
-
-        self.stdout.write(
-            self.style.SUCCESS("setup Q8tasweet command called successfully.")
-        )
-
+        if created_objects:
+            return created_objects[0].id
+        else:
+            return None

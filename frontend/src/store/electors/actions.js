@@ -11,7 +11,7 @@ import {
 
 
   // ElectionStatistics
-  GET_ELECTOR_BY_ALL,
+  GET_ELECTORS_BY_ALL,
   GET_ELECTORS_BY_CATEGORY,
   GET_ELECTORS_BY_SEARCH,
   GET_ELECTOR_RELATED_ELECTORS,
@@ -52,10 +52,15 @@ export const ElectorApiResponseError = (actionType, error) => ({
 });
 
 // Get ElectionStatistics
-export const getElectorsByAll = (election) => ({
-  type: GET_ELECTOR_BY_ALL,
-  payload: election
-});
+// Get ElectionStatistics
+export const getElectorsByAll = (election) => {
+  console.log("getElectorsByAll called with:", election);
+  return {
+    type: GET_ELECTORS_BY_ALL,
+    payload: election
+  };
+};
+
 
 export const getElectorsByCategory = (elector) => ({
   type: GET_ELECTORS_BY_CATEGORY,

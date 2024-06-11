@@ -48,22 +48,23 @@ class ElectionCandidate(TrackModel):
         election = self.election
         if election and election.slug:
             slug = election.slug
-            with schema_context(slug):
-                with transaction.atomic():
-                    # Delete related CommitteeResultCandidate entries
-                    from apps.schemas.committee_results.models import CommitteeResultCandidate
+            if election.is_detailed_results:
+                with schema_context(slug):
+                    with transaction.atomic():
+                        # Delete related CommitteeResultCandidate entries
+                        from apps.schemas.committee_results.models import CommitteeResultCandidate
 
-                    related_entries = CommitteeResultCandidate.objects.filter(
-                        election_candidate=self.id
-                    )
+                        related_entries = CommitteeResultCandidate.objects.filter(
+                            election_candidate=self.id
+                        )
 
-                    # Print related entries before deletion
-                    for entry in related_entries:
-                        print(f"Deleting CommitteeResultCandidate: {entry}")
+                        # Print related entries before deletion
+                        for entry in related_entries:
+                            print(f"Deleting CommitteeResultCandidate: {entry}")
 
-                    related_entries.delete()
-            super(ElectionCandidate, self).delete(*args, **kwargs)
-            return
+                        related_entries.delete()
+                super(ElectionCandidate, self).delete(*args, **kwargs)
+                return
 
         super(ElectionCandidate, self).delete(*args, **kwargs)
 

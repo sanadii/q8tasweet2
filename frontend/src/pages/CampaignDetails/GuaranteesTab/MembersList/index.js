@@ -219,6 +219,7 @@ const MembersList = ({
   // Table Filters
   // 
   const { filteredData: campaignMemberList, filters, setFilters } = useFilter(campaignMembers);
+  console.log("MembersList ", campaignMembers)
 
   return (
     <React.Fragment>

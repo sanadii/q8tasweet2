@@ -6,6 +6,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 from utils.models import generate_random_slug
 
+
+
 class Candidate(TrackModel, TaskModel):
     # Basic Information
     name = models.CharField(max_length=255, blank=False, null=False)
@@ -34,8 +36,15 @@ class Candidate(TrackModel, TaskModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = generate_random_slug()
+            self.slug = self._generate_unique_slug()
         super().save(*args, **kwargs)
+
+    def _generate_unique_slug(self):
+        """Generate a unique slug."""
+        slug = generate_random_slug()
+        while Candidate.objects.filter(slug=slug).exists():
+            slug = generate_random_slug()
+        return slug
 
 
 class Party(TrackModel, TaskModel):

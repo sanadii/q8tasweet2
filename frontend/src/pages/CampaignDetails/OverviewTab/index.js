@@ -29,13 +29,8 @@ import { calculateCampaignData } from 'shared/hooks';
 import { Col, Row } from "reactstrap";
 
 
-const OverviewTab = () => {
+const OverviewTab = ({ campaign, campaignGuarantees, campaignMembers }) => {
   document.title = "Campaign Overview | Q8Tasweet";
-
-  const {
-    campaign,
-    campaignGuarantees,
-  } = useSelector(campaignSelector);
 
   const results = calculateCampaignData(campaign, campaignGuarantees);
 
@@ -53,16 +48,18 @@ const OverviewTab = () => {
     <React.Fragment>
       <div id="layout-wrapper">
         <OverviewCandidate />
-        <ChartMapWidgets />
+        {/* <ChartMapWidgets /> */}
 
         <CampaignWidgets />
-        <OverviewGuarantees
-          campaign={campaign}
-          campaignGuarantees={campaignGuarantees}
-        />
-
-
-        <OverviewNotifications />
+        {campaignMembers &&
+          <OverviewGuarantees
+            campaign={campaign}
+            campaignGuarantees={campaignGuarantees}
+            campaignMembers={campaignMembers}
+          />
+        }
+        {/*
+        <OverviewNotifications /> */}
 
 
       </div>

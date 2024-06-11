@@ -25,7 +25,7 @@ const OverviewCandidate = () => {
   // Get roles
   const campaignModerators = useCampaignMemberRoles('campaignModerator', campaignRoles, campaignMembers);
   const campaignCandidates = useCampaignMemberRoles('campaignCandidate', campaignRoles, campaignMembers);
-  const campaignCoordinators = useCampaignMemberRoles('campaignCoordinator', campaignRoles, campaignMembers);
+  const campaignAdmin = useCampaignMemberRoles('campaignAdmin', campaignRoles, campaignMembers);
   const currentMemberRole = useCurrentCampaignMemberRole(canChangeConfig, campaignRoles, campaignMembers);
 
   // Format role names
@@ -42,15 +42,15 @@ const OverviewCandidate = () => {
     },
     {
       name: 'المقاعد',
-      data: `${campaign.election.electSeats} مقعد`,
+      data: `${campaign?.election?.electSeats ? `${campaign.election.electSeats} مقعد` : "-"}`,
     },
     {
       name: 'الأصوات',
-      data: `${campaign.election.electVotes} صوت`,
+      data: `${campaign?.election?.electVotes ? `${campaign.election.electVotes} صوت` : "-"}`,
     },
     {
       name: 'اللجان',
-      data: `${campaignElectionCommittees?.length ?? 0} لجنة`,
+      data: `${campaignElectionCommittees?.length ? `${campaignElectionCommittees?.length} لجنة` : "-"}`,
     },
   ];
 
@@ -80,7 +80,7 @@ const OverviewCandidate = () => {
   const roles = [
     { label: 'المراقب', users: campaignModerators, formatter: formatRoleNames },
     { label: 'المرشح', users: campaignCandidates, formatter: formatRoleNames },
-    { label: 'المنسق', users: campaignCoordinators, formatter: formatRoleNames },
+    { label: 'المنسق', users: campaignAdmin, formatter: formatRoleNames },
     // Add more roles here if needed
   ];
 
@@ -104,8 +104,8 @@ const OverviewCandidate = () => {
         <Row className="g-0">
           <Col className="bg-primary" lg={4}>
             <div className="card-body d-flex flex-column justify-content-center align-items-center text-center" style={{ height: '100%' }}>
-              <h2 id="candidate-name" className="mb-0 text-white">{campaign.name}</h2>
-              <p id="candidate-position" className="text-white">{campaign.election.name}</p>
+              <h3 id="candidate-name" className="mb-0 text-white pb-1">{campaign?.candidate?.name}</h3>
+              <p id="candidate-position" className="text-white">{campaign?.election?.name}</p>
 
               <div className="d-flex gap-2 justify-content-center mb-3">
                 {candidateInfo.map(info => (

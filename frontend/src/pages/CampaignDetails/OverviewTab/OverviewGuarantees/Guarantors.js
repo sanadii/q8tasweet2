@@ -16,9 +16,8 @@ import {
 import { Card, CardBody, Col, Row } from "reactstrap";
 
 
-const Guarantors = () => {
+const Guarantors = ({ campaignGuarantees, campaignMembers }) => {
     // State management
-    const { campaignMembers, campaignGuarantees } = useSelector(campaignSelector);
     const guarantorData = getAggregatedGuarantorData(campaignGuarantees, campaignMembers);
     const statusColumns = constructStatusColumns(campaignGuarantees);
 

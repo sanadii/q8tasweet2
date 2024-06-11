@@ -29,19 +29,21 @@ const ElectionDetails = () => {
     isStaff,
   } = usePermission();
 
+  const newElectionSlug = slug && (electionSlug !== slug)
+  
   useEffect(() => {
     document.title = "الانتخابات | كويت تصويت";
-    if (slug && (electionSlug !== slug)) {
+    if (newElectionSlug) {
       dispatch(getElectionDetails(slug));
     }
-  }, [dispatch, electionSlug, slug]);
+  }, [newElectionSlug, slug, dispatch]);
 
   useEffect(() => {
-    if (election && electionSlug && schemaDetails) {
-      dispatch(getElectionSchemaDetails(electionSlug));
+    if (electionSlug && schemaDetails) {
+      // dispatch(getElectionSchemaDetails(electionSlug));
       dispatch(getElectorsByAll({ schema: electionSlug }));
     }
-  }, [election, electionSlug, schemaDetails]);
+  }, [electionSlug, schemaDetails, dispatch]);
 
 
 

@@ -1,15 +1,15 @@
 // Pages/CampaignDetails/index.js
 // React & Redux core
 import React, { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
-import classnames from "classnames";
 
 // Store & Selectors
+import { useSelector } from "react-redux";
 import { campaignSelector } from 'selectors';
 
 // UI & Utilities
 import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from "reactstrap";
 import SwiperCore, { Autoplay } from "swiper";
+import classnames from "classnames";
 
 // Components & Hooks
 import { usePermission } from 'shared/hooks';
@@ -49,44 +49,88 @@ const Section = () => {
     // canViewCampaignAttendees,
   } = usePermission();
 
-  // Tabs
-  const tabs = [
-    { tabId: 1, permission: 'canViewCampaign', href: '#overview', icon: 'ri-overview-line', title: 'الملخص' },
-    { tabId: 2, permission: 'canViewCampaignMember', href: '#members', icon: 'ri-list-unordered', title: 'فريق العمل' },
-    { tabId: 3, permission: 'canViewCampaignGuarantee', href: '#guarantees', icon: 'ri-shield-line', title: 'الضمانات' },
-    { tabId: 4, permission: 'canViewCampaignAttendee', href: '#attendees', icon: 'ri-group-line', title: 'الحضور' },
-    { tabId: 5, permission: 'canViewCampaign', href: '#sorting', icon: 'ri-sort-line', title: 'الفرز' },
-    { tabId: 6, permission: 'canViewElector', href: '#electors', icon: 'ri-user-voice-line', title: 'الناخبين' },
-    // { tabId: 6, permission: 'canViewElector', href: '#voters', icon: 'ri-user-voice-line', title: 'الناخبين' },
-    { tabId: 7, permission: 'canViewActivitie', href: '#activities', icon: 'ri-activity-line', title: 'الأنشطة' },
-    { tabId: 9, permission: 'canViewCampaign', href: '#edit', icon: 'ri-activity-line', title: 'تعديل' },
-  ];
-
-  const tabComponents = {
-    // 1: <OverviewTab />,
-    2: <MembersTab />,
-    3: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />,
-    4: <AttendeesTab />,
-    // 5: <SortingTab />,
-    6: <ElectorSearchTab electionSchema={electionSchema} />,
-    7: <ActivitiesTab />,
-    9: <EditTab />,
-    // ... add other tabs similarly if they require props
-  };
-
   const permissions = usePermission();
 
+  // Tabs
+  const tabs = useMemo(() => [
+    {
+      id: 1,
+      permission: 'canViewCampaign',
+      href: '#overview',
+      icon: 'ri-overview-line',
+      title: 'الملخص',
+      component: <OverviewTab
+        campaign={campaign}
+        campaignGuarantees={campaignGuarantees}
+        campaignMembers={campaignMembers}
+      />
+    },
+    {
+      id: 2,
+      permission: 'canViewCampaignMember',
+      href: '#members',
+      icon: 'ri-list-unordered',
+      title: 'فريق العمل',
+      component: <MembersTab />
+    },
+    {
+      id: 3,
+      permission: 'canViewCampaignGuarantee',
+      href: '#guarantees',
+      icon: 'ri-shield-line',
+      title: 'الضمانات',
+      component: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />
+    },
+    // {
+    //   id: 4,
+    //   permission: 'canViewCampaignAttendee',
+    //   href: '#attendees',
+    //   icon: 'ri-group-line',
+    //   title: 'الحضور',
+    //   component: <AttendeesTab />
+    // },
+    // {
+    //   id: 5,
+    //   permission: 'canViewCampaign',
+    //   href: '#sorting',
+    //   icon: 'ri-sort-line',
+    //   title: 'الفرز',
+    //   component: <SortingTab />
+    // },
+    {
+      id: 6,
+      permission: 'canViewElector',
+      href: '#electors',
+      icon: 'ri-user-voice-line',
+      title: 'الناخبين',
+      component: <ElectorSearchTab electionSchema={electionSchema} />
+    },
+    // {
+    //   id: 7,
+    //   permission: 'canViewActivitie',
+    //   href: '#activities',
+    //   icon: 'ri-activity-line',
+    //   title: 'الأنشطة',
+    //   component: <ActivitiesTab />
+    // },
+    {
+      id: 9,
+      permission: 'canViewCampaign',
+      href: '#edit',
+      icon: 'ri-edit-line',
+      title: 'تعديل',
+      component: <EditTab />
+    },
+  ], [campaignGuarantees, campaignMembers, electionSchema]);
+
+
   // Tabs & visibility
-  const visibleTabs = useMemo(() => tabs.filter(tab => !!permissions[tab.permission]), [tabs, permissions]);
 
-  const renderTabContent = (tabId) => {
-    return tabComponents[tabId] || null;
-  };
-  const [activeTab, setActiveTab] = useState(String(visibleTabs[0]?.tabId || 1));
-
+  const [activeTab, setActiveTab] = useState(1);
+  console.log("activeTab: ", activeTab)
   const toggleTab = (tab) => {
     if (activeTab !== tab) {
-      setActiveTab(String(tab));
+      setActiveTab(tab);
     }
   };
 
@@ -107,12 +151,12 @@ const Section = () => {
                 className="animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1"
                 role="tablist"
               >
-                {visibleTabs.map((tab) => (
-                  <NavItem key={tab.tabId}>
+                {tabs.map((tab) => (
+                  <NavItem key={tab.id}>
                     <NavLink
                       href={tab.href}
-                      className={classnames({ active: activeTab === tab.tabId })}
-                      onClick={() => toggleTab(tab.tabId)}
+                      className={classnames({ active: activeTab === tab.id })}
+                      onClick={() => toggleTab(tab.id)}
                     >
                       <i className={`${tab.icon} d-inline-block d-md-none`}></i>
                       <span className="d-none d-md-inline-block">{tab.title}</span>
@@ -141,9 +185,9 @@ const Section = () => {
 
             </div >
             <TabContent activeTab={activeTab} className="pt-4">
-              {tabs.map(tab => (
-                <TabPane key={tab.tabId} tabId={String(tab.tabId)}>
-                  {activeTab === String(tab.tabId) && renderTabContent(tab.tabId)}
+              {tabs.filter(tab => activeTab === tab.id).map((tab) => (
+                <TabPane tabId={tab.id} key={tab.id}>
+                  {tab.component}
                 </TabPane>
               ))}
             </TabContent>

@@ -1,18 +1,22 @@
+# utils.py
 import pandas as pd
 from django.db import models, connection
 from contextlib import contextmanager
 import random
 import string
 from django.utils import timezone
-
-def generate_random_id():
-    """Generate a random integer ID."""
-    return random.randint(1, 1000000)
+import numpy as np
 
 def generate_random_slug(length=6):
     """Generate a random slug of specified length."""
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(length))
+
+
+def isNaN(value):
+    """Check if a value is NaN."""
+    return value != value or (isinstance(value, float) and np.isnan(value))
+
 
 @contextmanager
 def set_search_path(schema_name):
@@ -37,7 +41,8 @@ def read_excel_file(file_path, work_sheet, required_data, stdout):
             raise ValueError(f"Worksheet named '{work_sheet}' not found")
 
         df = pd.read_excel(file_path, sheet_name=work_sheet)
-        df = df[required_data].fillna('')  # Replace NaN with empty string
+        df = df[required_data]  # Only select the required columns
+        df = df.replace({pd.NA: None})  # Replace NaN with None
         return df
     except Exception as e:
         stdout.write(f"Failed to read Excel file: {e}\n")
@@ -52,21 +57,22 @@ def check_required_columns(df, required_data, stdout):
         return False
     return True
 
+
 def process_row_fields(row, model, stdout, schema_name):
     # Extract the 'id' separately if it's always present
     object_id = row.get("id")
 
-    if pd.isna(object_id) or object_id == "":
+    if isNaN(object_id) or object_id == "":
         object_id = generate_unique_integer_id(model)
 
     # Prepare defaults excluding 'id'
-    defaults = {col: row[col] for col in row.index if col != "id"}
+    defaults = {col: (None if isNaN(row[col]) else row[col]) for col in row.index if col != "id"}
 
     for field in model._meta.fields:
         # Check and handle ImageField dynamically
         if isinstance(field, models.ImageField) and field.name in defaults:
             field_value = defaults.get(field.name)
-            if field_value == "":
+            if isNaN(field_value) or field_value == "":
                 defaults[field.name] = None  # Set field to None if empty
 
         # Check and handle CharField with max_length
@@ -80,7 +86,7 @@ def process_row_fields(row, model, stdout, schema_name):
             field_name = field.name + "_id"  # Get the name of the corresponding foreign key ID field
             field_value = defaults.get(field_name)
             stdout.write(f"Processing ForeignKey field: {field.name}, ID: {field_value}\n")
-            if field_value == "":
+            if isNaN(field_value) or field_value == "":
                 stdout.write(f"Setting {field.name} to None due to empty or invalid value.\n")
                 defaults[field.name] = None  # Set the ForeignKey field to None if its corresponding ID field is empty
             else:
@@ -105,7 +111,7 @@ def process_row_fields(row, model, stdout, schema_name):
         # Handle DateField fields
         if isinstance(field, models.DateField):
             field_value = defaults.get(field.name)
-            if field_value == "":
+            if isNaN(field_value) or field_value == "":
                 defaults[field.name] = None  # Set the DateField to None if it's empty
             else:
                 try:
@@ -115,10 +121,19 @@ def process_row_fields(row, model, stdout, schema_name):
                     stdout.write(f"Invalid date format for field {field.name}: {field_value}\n")
                     defaults[field.name] = None  # Assign None if the value is invalid
 
+        # Handle IntegerField and FloatField fields
+        if isinstance(field, (models.IntegerField, models.FloatField)):
+            field_value = defaults.get(field.name)
+            if isNaN(field_value) or field_value == "":
+                defaults[field.name] = None  # Set the field to None if it's empty
+
         if isinstance(field, models.SlugField):
             field_value = defaults.get(field.name)
-            if field_value == "":
-                defaults[field.name] = generate_random_slug()  # Generate a random slug if empty
+            if isNaN(field_value) or field_value == "":
+                generate_slug = generate_random_slug()
+                defaults[field.name] = generate_slug  # Generate a random slug if empty
+                stdout.write(f"field_value: {field_value}\n")
+                stdout.write(f"Generated slug: {generate_slug}\n")
 
     # Ensure non-nullable fields have values
     if 'date_joined' in [f.name for f in model._meta.get_fields()] and ('date_joined' not in defaults or defaults['date_joined'] is None):
@@ -126,6 +141,7 @@ def process_row_fields(row, model, stdout, schema_name):
 
     stdout.write(f"Defaults after processing: {defaults}\n")
     return object_id, defaults
+
 
 def generate_unique_integer_id(model):
     """

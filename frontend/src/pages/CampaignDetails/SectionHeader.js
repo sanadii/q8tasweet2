@@ -9,7 +9,6 @@ import { layoutSelector, userSelector, campaignSelector } from 'selectors';
 
 const SectionHeader = ({ campaign, electionDetails, campaignMembers, campaignGuarantees }) => {
     const { activeCampaign, userCampaigns } = useSelector(userSelector);
-
     const currentCampaign = campaign || activeCampaign;
 
     // Permissions
@@ -25,16 +24,18 @@ const SectionHeader = ({ campaign, electionDetails, campaignMembers, campaignGua
             <p>loading</p>
         )
     }
-    
+
     const campaignId = currentCampaign?.id;
     const campaignName = currentCampaign?.candidate?.name;
     const campaignImage = currentCampaign?.candidate?.image;
     const electionName = electionDetails.name;
     const electionDueDate = electionDetails.dueDate;
+    const electionImage = electionDetails.image
+
 
     return (
         <React.Fragment>
-            <SectionBackagroundImage imagePath={campaignImage} />
+            <SectionBackagroundImage imagePath={electionImage} />
             <div className="pt-4 mb-4 mb-lg-3 pb-lg-2 profile-wrapper">
                 <Row className="g-4">
                     <div className="col-auto">

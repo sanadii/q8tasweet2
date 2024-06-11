@@ -2,12 +2,37 @@ import React from 'react';
 import { Card, CardBody, Col, Row } from 'reactstrap';
 import CountUp from "react-countup";
 
+// Store & Selectors
+import { useSelector } from "react-redux";
+import { campaignSelector } from 'selectors';
+
+
 const CampaignWidgets = () => {
 
+    const {
+        campaign,
+        electionDetails,
+        campaignMembers,
+        campaignRoles,
+        campaignGuarantees,
+        campaignAttendees,
+    } = useSelector(campaignSelector);
+
+    // const electionDetails = electionDetails
+
+    const campaignGuaranteeCount = campaignGuarantees.length
+    const campaignGuaranteeMaleCount = campaignGuarantees.filter(guarantee => guarantee.gender === "1").length;
+    const campaignGuaranteeFemaleCount = campaignGuarantees.filter(guarantee => guarantee.gender === "2").length;
+
+    const campaignAttendedGuaranteeCount = campaignGuarantees.filter(guarantee => guarantee.attended === true).length
+    const campaignAttendedGuaranteeMaleCount = campaignGuarantees.filter(guarantee => guarantee.gender === "1" && guarantee.attended === true).length;
+    const campaignAttendedGuaranteeFemaleCount = campaignGuarantees.filter(guarantee => guarantee.gender === "2" && guarantee.attended === true).length;
+
+    console.log("electionDetails: ",)
     const cardData = [
         {
             title: "ناخبين الدائرة",
-            count: 27659,
+            count: electionDetails?.electorCount,
             icon: "mdi-account-group-outline",
             trend: "up",
             trendPercentage: 7.05,
@@ -15,57 +40,73 @@ const CampaignWidgets = () => {
         },
         {
             title: "الناخبين الرجال",
-            count: 13232,
+            count: electionDetails?.electorMaleCount,
             icon: "mdi-face-man",
             text: "نسبة التصويت",
 
         },
         {
             title: "الناخبين النساء",
-            count: 14427,
+            count: electionDetails?.electorFemaleCount,
             icon: "mdi-face-woman",
             text: "نسبة التصويت",
         },
         {
             title: "ضماناتي الانتخابية",
-            count: 120,
+            count: campaignGuaranteeCount,
             icon: "mdi-vote-outline",
         },
         {
-            title: "تم التصويت",
+            title: "ضماناتي الانتخابية - رجال",
+            count: campaignGuaranteeMaleCount,
+            icon: "mdi-vote-outline",
+        },
+        {
+            title: "ضماناتي الانتخابية - نساء",
+            count: campaignGuaranteeFemaleCount,
+            icon: "mdi-vote-outline",
+        },
+        {
+            title: "تصويت المضامين",
             subtitle: "عدد : 13",
-            count: 103,
+            count: campaignAttendedGuaranteeCount,
             extra: "نسبة : 100%",
             icon: "mdi-clipboard-check-outline",
 
         },
         {
-            title: "لم يتم التصويت",
+            title: "تصويت الرجال",
             subtitle: "عدد : 5",
             extra: "نسبة : 27.78%",
-            count: 17,
-            icon: "mdi-clipboard-clock-outline",
+            count: campaignAttendedGuaranteeMaleCount,
+            icon: "mdi-clipboard-check-outline",
         },
         {
-            title: "مندوب اللجان",
-            count: 30,
-            icon: "mdi-trophy-variant",
-            trend: "up",
-            trendPercentage: 7.05,
+            title: "تصويت النساء",
+            subtitle: "عدد : 5",
+            extra: "نسبة : 27.78%",
+            count: campaignAttendedGuaranteeFemaleCount,
+            icon: "mdi-clipboard-check-outline",
         },
-        {
-            title: "مصوتين رجال",
-            subtitle: "عدد : 6",
-            extra: "نسبة : 75% من الرجال",
-            icon: "mdi-vote-outline",
-        },
-        {
-            title: "مصوتين نساء",
-            subtitle: "عدد : 7",
-            extra: "نسبة : 70% من النساء",
-            icon: "mdi-vote-outline",
-
-        },
+        // {
+        //     title: "مندوبي اللجان",
+        //     count: 30,
+        //     icon: "mdi-trophy-variant",
+        //     trend: "up",
+        //     trendPercentage: 7.05,
+        // },
+        // {
+        //     title: "تصويت االرجال",
+        //     subtitle: "عدد : 6",
+        //     extra: "نسبة : 75% من الرجال",
+        //     icon: "mdi-vote-outline",
+        // },
+        // {
+        //     title: "تصويت النساء",
+        //     subtitle: "عدد : 7",
+        //     extra: "نسبة : 70% من النساء",
+        //     icon: "mdi-vote-outline",
+        // },
 
 
         // ... Add more card data here
@@ -86,7 +127,7 @@ const CampaignWidgets = () => {
                             <CardBody>
                                 <div className="d-flex justify-content-between">
                                     <div>
-                                        <p className="fw-medium text-muted mb-0">{card.title}</p>
+                                        <p className="fw-medium text-muted mb-0"><strong>{card.title}</strong></p>
                                         <h2 className="mt-4 ff-secondary fw-semibold">
                                             <span className="counter-value">
                                                 <CountUp start={0} end={card.count} duration={2} />
@@ -94,9 +135,9 @@ const CampaignWidgets = () => {
                                             </span>
                                         </h2>
                                         <p className="mb-0 text-muted">
-                                            <span className={`badge bg-light text-${card.trend === "up" ? "success" : "danger"} mb-0`}>
+                                            {/* <span className={`badge bg-light text-${card.trend === "up" ? "success" : "danger"} mb-0`}>
                                                 <i className={`ri-arrow-${card.trend}-line align-middle`}></i> {card.trendPercentage} %
-                                            </span> vs. previous month
+                                            </span> vs. previous month */}
                                         </p>
                                     </div>
                                     <div>

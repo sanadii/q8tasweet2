@@ -8,13 +8,14 @@ import { Nav, NavItem, NavLink } from "reactstrap";
 const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
     const { campaignRoles, campaignMembers, currentCampaignMember } = useSelector(campaignSelector);
 
+    console.log("campaignRoles: ", campaignRoles)
     // Get the IDs of roles that are in the managerial category
     const campaignManagerRoles = useMemo(() => {
         return campaignRoles
             .filter(role =>
-                ["campaignModerator", "campaignCandidate", "campaignCoordinator", "campaignSupervisor"].includes(role.name)
+                ["campaignModerator", "campaignCandidate", "campaignAdmin", "campaignFieldAdmin", "campaignDigitalAdmin"].includes(role.codename)
             )
-            .map(role => role.id);
+            .map(role => role.id) || [];
     }, [campaignRoles]);
 
     // Compute the count of members with managerial roles
@@ -60,18 +61,19 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
         <React.Fragment>
             <div>
                 <Nav
-                    className="nav-tabs-custom card-header-tabs border-bottom-0"
+                    className="animation-nav profile-nav gap-1 gap-lg-2 flex-grow-1 fs-12"
                     role="tablist"
                 >
                     <NavItem>
                         <NavLink
                             className={classnames(
                                 { active: activeTab === "all" },
-                                "fw-semibold"
+                                "fw-semibold p-1"
                             )}
                             onClick={(e) => ChangeCampaignRole(e, "all", campaignManagerRoles)}
                             href="#"
                         >
+                            <i className="mdi mdi-account-multiple-outline me-1 align-bottom"></i>{" "}
                             الكل
                         </NavLink>
                     </NavItem>
@@ -80,13 +82,15 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
                         <NavLink
                             className={classnames(
                                 { active: activeTab === "campaignManagers" },
-                                "fw-semibold"
+                                "fw-semibold p-1"
                             )}
                             onClick={(e) => ChangeCampaignRole(e, "campaignManagers", campaignManagerRoles)}
                             href="#"
                         >
+                            <i className="mdi mdi-account-multiple-outline me-1 align-bottom"></i>{" "}
+
                             الإدارة
-                            <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
+                            <span className="badge bg-light text-primary align-middle ms-1">
                                 {managerCounts}
                             </span>
                         </NavLink>
@@ -98,13 +102,15 @@ const MemberRoleFilter = ({ filters, setFilters, activeTab, setActiveTab }) => {
                                 <NavLink
                                     className={classnames(
                                         { active: activeTab === role.name.toString() },
-                                        "fw-semibold"
+                                        "fw-semibold p-1"
                                     )}
                                     onClick={(e) => ChangeCampaignRole(e, role.name.toString(), role.id)}
                                     href="#"
                                 >
+                                    <i className="mdi mdi-account-multiple-outline me-1 align-bottom"></i>{" "}
+
                                     {role.name}
-                                    <span className="badge badge-soft-danger align-middle rounded-pill ms-1">
+                                    <span className="badge bg-light text-primary align-middle ms-1">
                                         {roleCounts[role.id]}
                                     </span>
                                 </NavLink>

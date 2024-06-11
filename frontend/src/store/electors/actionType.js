@@ -12,7 +12,7 @@ export const ADD_ELECTOR_FAIL = "ADD_ELECTOR_FAIL";
 
 
 // Get ElectionStatistics
-export const GET_ELECTOR_BY_ALL = "GET_ELECTOR_BY_ALL";
+export const GET_ELECTORS_BY_ALL = "GET_ELECTORS_BY_ALL";
 export const GET_ELECTORS_BY_CATEGORY = "GET_ELECTORS_BY_CATEGORY";
 
 

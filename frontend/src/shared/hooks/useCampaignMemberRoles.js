@@ -4,7 +4,7 @@ function useCampaignMemberRoles(roleName, campaignRoles = [], campaignMembers = 
     const [membersWithRole, setMembersWithRole] = useState([]);
 
     useEffect(() => {
-        const foundRole = campaignRoles.find(roleObj => roleObj.name === roleName);
+        const foundRole = campaignRoles.find(roleObj => roleObj.codename === roleName);
         const members = foundRole ? campaignMembers.filter(member => member.role === foundRole.id) : [];
         setMembersWithRole(members);
     }, [roleName, campaignRoles, campaignMembers]);

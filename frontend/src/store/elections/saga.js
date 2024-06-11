@@ -48,7 +48,7 @@ import {
 } from "./actionType";
 
 import {
-  // getElections, getElectionDetails, 
+  // getElectionDetails, 
   // API Response
   ElectionApiResponseSuccess,
   ElectionApiResponseError,

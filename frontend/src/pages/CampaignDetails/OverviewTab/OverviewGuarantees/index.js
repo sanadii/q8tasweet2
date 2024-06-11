@@ -11,7 +11,7 @@ import { usePermission } from 'shared/hooks';
 import { Col, Row } from "reactstrap";
 
 
-const OverviewGuarantees = ({ campaign, campaignGuarantees }) => {
+const OverviewGuarantees = ({ campaign, campaignGuarantees, campaignMembers }) => {
 
     const results = calculateCampaignData(campaign, campaignGuarantees);
 
@@ -28,7 +28,7 @@ const OverviewGuarantees = ({ campaign, campaignGuarantees }) => {
     return (
         <React.Fragment>
             {/* Guarantees */}
-            {canViewCampaignGuarantee && campaign.election.previousElections &&
+            {canViewCampaignGuarantee && campaign?.electionDetails?.previousElections &&
                 <GuaranteeTargetBar
                     campaign={campaign}
                     results={results}
@@ -59,7 +59,10 @@ const OverviewGuarantees = ({ campaign, campaignGuarantees }) => {
             </Row>
 
             {canViewCampaignGuarantee &&
-                <Guarantors />}
+                <Guarantors
+                    campaignMembers={campaignMembers}
+                    campaignGuarantees={campaignGuarantees}
+                />}
         </React.Fragment>
     );
 };

@@ -49,7 +49,6 @@ export default function* rootSaga() {
     fork(candidatesSaga),
     fork(partiesSaga),
     fork(campaignsSaga),
-    fork(electorSaga),
     // fork(guaranteeSaga),
     // fork(attendeeSaga),
 

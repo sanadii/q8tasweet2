@@ -144,12 +144,6 @@ const setAuthorization = (token) => {
 };
 
 
-const getLoggedinUser = () => {
-  const user = localStorage.getItem("authUser");
-  return user ? JSON.parse(user) : null;
-};
-
-
 // Create a function here called getToken
 // Utility function to get the access token
 const getToken = () => {
@@ -157,4 +151,4 @@ const getToken = () => {
   return authUser ? JSON.parse(authUser).refreshToken : null;
 };
 
-export { APIClient, setAuthorization, getLoggedinUser, getToken, getCookie };
+export { APIClient, setAuthorization, getToken, getCookie };

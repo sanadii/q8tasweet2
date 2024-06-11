@@ -81,7 +81,6 @@ class CampaignGuaranteeSerializer(serializers.ModelSerializer):
 
     def get_attended(self, obj):
         attended = CampaignAttendee.objects.filter(elector=obj.elector).exists()
-        print("attended???? ", attended)
         return attended
 
 

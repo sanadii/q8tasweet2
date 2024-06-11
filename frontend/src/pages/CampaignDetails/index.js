@@ -29,6 +29,13 @@ const CampaignDetails = () => {
     }
   }, [dispatch, slug]);
 
+  if (!campaign) {
+    return (
+      <div>لست مصرح بمعاينة الحملة الإنتخابية.</div>
+
+    )
+  }
+
 
   return (
     <div className="page-content">

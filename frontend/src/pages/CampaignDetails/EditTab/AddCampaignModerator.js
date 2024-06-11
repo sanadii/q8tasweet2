@@ -25,11 +25,11 @@ const AddCampaignModerator = () => {
 
 
     // Fetch Data
-    useEffect(() => {
-        if (campaignModerators && !campaignModerators.length) {
-            dispatch(getCampaignModerators());
-        }
-    }, [dispatch, campaignModerators]);
+    // useEffect(() => {
+    //     if (campaignModerators && !campaignModerators.length) {
+    //         dispatch(getCampaignModerators());
+    //     }
+    // }, [dispatch, campaignModerators]);
 
     const {
         handleDeleteItem,
@@ -46,7 +46,7 @@ const AddCampaignModerator = () => {
                 onDeleteClick={handleDeleteItem}
                 onCloseClick={() => setDeleteModal(false)}
             />
-            <Card>
+            {/* <Card>
                 <CardBody>
                     <h5>إضافة وكيل للحملة</h5>
                     <SimpleBar className="mx-n4 px-4" data-simplebar="init" style={{ maxHeight: "225px" }}>
@@ -103,7 +103,7 @@ const AddCampaignModerator = () => {
                         </div>
                     </SimpleBar>
                 </CardBody>
-            </Card>
+            </Card> */}
         </React.Fragment>
     );
 

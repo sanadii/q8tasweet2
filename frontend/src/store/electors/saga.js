@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 // ElectionStatistic Redux States
 import {
   ADD_ELECTOR,
-  GET_ELECTOR_BY_ALL,
+  GET_ELECTORS_BY_ALL,
   GET_ELECTORS_BY_CATEGORY,
   GET_ELECTORS_BY_SEARCH,
   GET_ELECTOR_RELATED_ELECTORS,
@@ -23,7 +23,7 @@ import {
 import {
   addElector as AddElectorApi,
   getElectorsByCategory as getElectorsByCategoryApi,
-  getElectorsByAll as getElectorByAllApi,
+  getElectorsByAll as getElectorsByAllApi,
   getElectorsBySearch,
   getElectorRelatedElectors,
 } from "../../helpers/backend_helper";
@@ -32,11 +32,12 @@ import {
 
 // electorsByAll
 function* getElectorsByAll({ payload: elector }) {
+  console.log("getElectorsByAll saga called with")
   try {
-    const response = yield call(getElectorByAllApi, elector);
-    yield put(ElectorApiResponseSuccess(GET_ELECTOR_BY_ALL, response.data));
+    const response = yield call(getElectorsByAllApi, elector);
+    yield put(ElectorApiResponseSuccess(GET_ELECTORS_BY_ALL, response.data));
   } catch (error) {
-    yield put(ElectorApiResponseError(GET_ELECTOR_BY_ALL, error));
+    yield put(ElectorApiResponseError(GET_ELECTORS_BY_ALL, error));
   }
 }
 
@@ -85,7 +86,7 @@ function* addElector({ payload: elector }) {
 
 // Election Database
 export function* watchGetElectorsByAll() {
-  yield takeEvery(GET_ELECTOR_BY_ALL, getElectorsByAll);
+  yield takeEvery(GET_ELECTORS_BY_ALL, getElectorsByAll);
 }
 
 export function* watchGetElectorsByCategory() {

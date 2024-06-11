@@ -62,17 +62,17 @@ class Election(TrackModel, TaskModel):
     #     null=True,
     #     verbose_name="Election Result Type"
     # )
-    is_detailed_results = models.BooleanField(
+    is_detailed_results = models.BooleanField(blank=True, null=True,
         default=False, verbose_name="Is result in details (with committees)"
     )
-    is_sorting_results = models.BooleanField(
+    is_sorting_results = models.BooleanField(blank=True, null=True,
         default=False, verbose_name="Is Sorting Results?"
     )
     
-    is_elector_address = models.BooleanField(
+    is_elector_address = models.BooleanField(blank=True, null=True,
         default=False, verbose_name="Is elector address avaiable?"
     )
-    is_elector_committee = models.BooleanField(
+    is_elector_committee = models.BooleanField(blank=True, null=True,
         default=False, verbose_name="Is elector committee avaiable?"
     )
 

@@ -28,11 +28,11 @@ const EditTab = () => {
   const { campaignModerators } = useSelector(userSelector);
 
 
-  useEffect(() => {
-    if (campaignModerators && !campaignModerators.length) {
-      dispatch(getCampaignModerators());
-    }
-  }, [dispatch, campaignModerators]);
+  // useEffect(() => {
+  //   if (campaignModerators && !campaignModerators.length) {
+  //     dispatch(getCampaignModerators());
+  //   }
+  // }, [dispatch, campaignModerators]);
 
   // Form validation and submission
   const validation = useFormik({
@@ -115,10 +115,11 @@ const EditTab = () => {
         validation.handleSubmit();
       }}
     >
-      <Row>
-        <Col lg={3} md={12}>
-          <Card>
-            <CardBody>
+      <Card>
+        <CardBody>
+          <Row>
+            <Col lg={3} md={12}>
+
               <div className="d-flex align-items-center mb-4">
                 <h5 className="card-title mb-0 flex-grow-1">التواصل الإجتماعي</h5>
               </div>
@@ -129,14 +130,12 @@ const EditTab = () => {
                   validation={validation}
                 />
               ))}
-            </CardBody>
-          </Card>
-          <AddCampaignModerator />
-        </Col>
 
-        <Col lg={9} md={12}>
-          <Card>
-            <CardBody>
+              <AddCampaignModerator />
+            </Col>
+
+            <Col lg={9} md={12}>
+
               <div className="d-flex align-items-center mb-4">
                 <h5 className="card-title mb-0 flex-grow-1">تعديل الحملة الإنتخابية</h5>
               </div>
@@ -154,11 +153,12 @@ const EditTab = () => {
                   </Col>
                 </Row>
               </ModalFooter>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </Form>
+
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
+    </Form >
   );
 };
 
