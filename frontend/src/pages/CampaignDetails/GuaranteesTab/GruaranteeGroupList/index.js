@@ -8,9 +8,8 @@ import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader
 import {
     CheckboxHeader, CheckboxCell, Id, Name,
     SimpleName, DateTime, Badge, CreateBy, Actions,
-    Phone, Guarantor,
+    Phone, CampaignMember,
     Guarantees,
-    Attended,
     AttendedPercentage,
 } from "shared/components"
 
@@ -71,10 +70,76 @@ const GuaranteesGroupList = ({
     );
 
 
-    const memberName = (campaignMembers || []).reduce((acc, member) => {
-        acc[member.id] = member;
-        return acc;
-    }, {});
+    // Take the guarantee Group
+    // we have for now 3 groups
+    // and take the guarantees, we have so many, each guarantee has a group
+    // sort the guarantee by
+    // group Name:, if there is no group Name put member and find his name from guaranteeMembers
+    // and put how many guarantee in each group
+    // and console log the result
+
+
+    const [guaranteeGroups, setGuaranteeGroups] = useState([]);
+
+    useEffect(() => {
+        // Check if guarantees and groups are successfully loaded
+        if (isCampaignGuaranteeSuccess) {
+            // Map campaignMembers by their id for quick access
+            const memberMap = campaignMembers.reduce((acc, member) => {
+                acc[member.id] = member.name;
+                return acc;
+            }, {});
+
+            // Map campaignGuaranteeGroups by their id for quick access
+            const groupMap = campaignGuaranteeGroups.reduce((acc, group) => {
+                acc[group.id] = group.name;
+                return acc;
+            }, {});
+
+            // Initialize a result object to store the count of guarantees in each group
+            const result = {};
+
+            campaignGuarantees.forEach((guarantee) => {
+                // Determine the group name or member name
+                const groupName =
+                    groupMap[guarantee.group] || memberMap[guarantee.member] || "Unknown";
+
+                // Initialize the group in result if not already present
+                if (!result[groupName]) {
+                    result[groupName] = {
+                        memberName: memberMap[guarantee.member] || "Unknown",
+                        count: 0,
+                    };
+                }
+
+                // Increment the count for the group
+                result[groupName].count++;
+            });
+
+            // Convert result to an array of objects for returning and setting state
+            const sortedResult = Object.keys(result)
+                .map((groupName) => ({
+                    groupName,
+                    memberName: result[groupName].memberName,
+                    count: result[groupName].count,
+                }))
+                .sort((a, b) => a.groupName.localeCompare(b.groupName));
+
+            // Log the sorted result
+            console.log("sortedResult: ", sortedResult);
+
+            // Update state with sorted result
+            setGuaranteeGroups(sortedResult);
+        }
+    }, [
+        campaignGuarantees,
+        campaignGuaranteeGroups,
+        campaignMembers,
+        isCampaignGuaranteeSuccess,
+    ]);
+
+
+
     const columns = useMemo(
         () => [
             {
@@ -101,8 +166,8 @@ const GuaranteesGroupList = ({
                 Header: "الضامن",
                 filterable: false,
                 Cell: (cellProps) =>
-                    <Guarantor
-                        cellProps={cellProps}
+                    <CampaignMember
+                        memberId={cellProps.row.original.member}
                         campaignMembers={campaignMembers}
                     />
             },
@@ -122,14 +187,34 @@ const GuaranteesGroupList = ({
             //         />
             // },
             {
+                Header: "المضامين",
+                accessor: "guarantees",
+                Cell: (cellProps) =>
+                    <Guarantees
+                        memberId={cellProps.row.original.member}
+                        campaignGuarantees={campaignGuarantees}
+                        count="guarantees"
+
+                    />
+            },
+            {
                 Header: "الحضور",
                 accessor: "guaranteesAttended",
-                Cell: (cellProps) => <Attended {...cellProps} />
+                Cell: (cellProps) =>
+                    <Guarantees
+                        memberId={cellProps.row.original.member}
+                        campaignGuarantees={campaignGuarantees}
+                        count="attendees"
+                    />
             },
             {
                 Header: "نسبة التصويت",
-                filterable: false,
-                Cell: (cellProps) => <AttendedPercentage {...cellProps} />
+                Cell: (cellProps) =>
+                    <Guarantees
+                        memberId={cellProps.row.original.member}
+                        campaignGuarantees={campaignGuarantees}
+                        count="percentage"
+                    />
             },
             {
                 Header: "إجراءات",

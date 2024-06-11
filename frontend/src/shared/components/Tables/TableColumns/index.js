@@ -162,8 +162,7 @@ const Team = ({ cellProps, campaignMembers }) => {
     );
 };
 
-const Guarantor = ({ cellProps, campaignMembers }) => {
-    const memberId = cellProps.row.original.member;
+const CampaignMember = ({ memberId, campaignMembers }) => {
 
     if (memberId === null) {
         return (
@@ -184,31 +183,57 @@ const Guarantor = ({ cellProps, campaignMembers }) => {
 }
 
 
-const Guarantees = (cellProps) => {
-    const { memberId, memberRole, campaignGuarantees, campaignRoles } = cellProps;
+const Guarantees = ({ memberId, campaignGuarantees, count }) => {
 
-    // Permission Hook
-    const {
-        canChangeCampaignModerator,
-        canChangeCampaignCoordinator,
-        canChangeCampaignSupervisor,
-        canChangeCampaignMember,
-        canChangeCampaign,
-    } = usePermission();
+    let guaranteeCountForMember;
 
-    // const memberId = cell.row.original.id;
-    const guaranteeCountForMember = campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
-    // const campaignMemberId = cellProps.row.original.role;
-    const campaignRole = campaignRoles.find((option) => option.id === memberRole);
-    const campaignMemberRole = campaignRole?.name;
+    if (count === "percentage") {
+        const totalGuarantees = campaignGuarantees.filter(
+            guarantee => guarantee?.member === memberId
+        ).length || 0;
+        const attendedGuarantees = campaignGuarantees.filter(
+            guarantee => guarantee?.member === memberId && guarantee?.attended === true
+        ).length || 0;
+
+        guaranteeCountForMember = totalGuarantees ? (attendedGuarantees / totalGuarantees * 100).toFixed(2) + '%' : '0%';
+    } else {
+        guaranteeCountForMember = campaignGuarantees.filter(
+            guarantee => guarantee?.member === memberId && (count === "attendees" ? guarantee?.attended === true : true)
+        ).length || 0;
+    }
+
     return (
-        (!canChangeCampaignCoordinator &&
-            !["campaignModerator", "campaignCandidate", "campaignCoordinator"].includes(campaignMemberRole))
-            || canChangeCampaignSupervisor
-            ? <span>{guaranteeCountForMember}</span>
-            : <span>-</span>
+        <span><strong>{guaranteeCountForMember}</strong></span>
     );
 }
+
+
+
+// const Guarantees = (cellProps) => {
+//     const { memberId, memberRole, campaignGuarantees, campaignRoles } = cellProps;
+
+//     // Permission Hook
+//     const {
+//         canChangeCampaignModerator,
+//         canChangeCampaignCoordinator,
+//         canChangeCampaignSupervisor,
+//         canChangeCampaignMember,
+//         canChangeCampaign,
+//     } = usePermission();
+
+//     // const memberId = cell.row.original.id;
+//     const guaranteeCountForMember = campaignGuarantees.filter(guarantee => guarantee.member === memberId).length;
+//     // const campaignMemberId = cellProps.row.original.role;
+//     const campaignRole = campaignRoles.find((option) => option.id === memberRole);
+//     const campaignMemberRole = campaignRole?.name;
+//     return (
+//         (!canChangeCampaignCoordinator &&
+//             !["campaignModerator", "campaignCandidate", "campaignCoordinator"].includes(campaignMemberRole))
+//             || canChangeCampaignSupervisor
+//             ? <span>{guaranteeCountForMember}</span>
+//             : <span>-</span>
+//     );
+// }
 
 const Attendees = ({ cellProps, campaignAttendees }) => {
     const userId = cellProps.row.original.user;
@@ -320,7 +345,7 @@ export {
 
     // Guarantees
     GuaranteeGroups,
-    Guarantor,
+    CampaignMember,
     Phone,
     Attended,
     AttendedPercentage,

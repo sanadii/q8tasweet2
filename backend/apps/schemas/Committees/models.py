@@ -24,8 +24,7 @@ class CommitteeSite(DynamicSchemaModel):
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    voter_count = models.IntegerField(blank=True, null=True)
-    committee_count = models.IntegerField(blank=True, null=True)
+    elector_count = models.IntegerField(blank=True, null=True)
     tags = models.TextField(blank=True, null=True)
     election = models.IntegerField(null=True, blank=True)
 

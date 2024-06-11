@@ -29,8 +29,19 @@ import { calculateCampaignData } from 'shared/hooks';
 import { Col, Row } from "reactstrap";
 
 
-const OverviewTab = ({ campaign, campaignGuarantees, campaignMembers }) => {
+const OverviewTab = () => {
   document.title = "Campaign Overview | Q8Tasweet";
+
+  // States
+  const {
+    campaign,
+    electionSlug,
+    campaignGuarantees,
+    campaignMembers,
+    campaignGuaranteeGroups,
+    isCampaignGuaranteeSuccess,
+    error
+  } = useSelector(campaignSelector);
 
   const results = calculateCampaignData(campaign, campaignGuarantees);
 
@@ -43,6 +54,7 @@ const OverviewTab = ({ campaign, campaignGuarantees, campaignMembers }) => {
   } = usePermission();
 
 
+  console.log("campaignMembers: ", campaignMembers)
 
   return (
     <React.Fragment>
@@ -51,13 +63,12 @@ const OverviewTab = ({ campaign, campaignGuarantees, campaignMembers }) => {
         {/* <ChartMapWidgets /> */}
 
         <CampaignWidgets />
-        {campaignMembers &&
-          <OverviewGuarantees
-            campaign={campaign}
-            campaignGuarantees={campaignGuarantees}
-            campaignMembers={campaignMembers}
-          />
-        }
+        <OverviewGuarantees
+          campaign={campaign}
+          campaignGuarantees={campaignGuarantees}
+          campaignMembers={campaignMembers}
+        />
+
         {/*
         <OverviewNotifications /> */}
 

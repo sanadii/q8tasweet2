@@ -112,7 +112,7 @@ const Header = ({ onChangeLayoutMode, setCurrentCampaign, layoutModeType, header
                             </Dropdown> */}
 
                             {/* WebAppsDropdown */}
-                            <WebAppsDropdown />
+                            {/* <WebAppsDropdown /> */}
                             <CampaignDropdown setCurrentCampaign={setCurrentCampaign} />
 
                             {/* MyCartDropdwon */}

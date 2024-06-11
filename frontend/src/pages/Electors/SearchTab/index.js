@@ -15,9 +15,22 @@ import { Col, Row, Card, CardHeader, CardBody, } from "reactstrap";
 import ElectorSearchForm from "./ElectorSearchForm";
 import ElectorSearchDisplay from "./ElectorSearchDisplay";
 
-export const ElectorSearchTab = ({ electionSchema }) => {
+export const ElectorSearchTab = ({ schema }) => {
+
   const dispatch = useDispatch();
   // Modal Constants
+
+  const {
+    currentCampaignMember,
+    campaignDetails,
+    campaignMembers,
+    campaignGuarantees,
+    campaignAttendees,
+  } = useSelector(campaignSelector);
+
+  const electionSlug = campaignDetails.election.slug
+  const electionSchema = schema ? schema : electionSlug;
+
   const [modal, setModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -30,13 +43,7 @@ export const ElectorSearchTab = ({ electionSchema }) => {
     setIsModalVisible(prevIsModalVisible => !prevIsModalVisible);
   }, []);
 
-  const {
-    currentCampaignMember,
-    campaignDetails,
-    campaignMembers,
-    campaignGuarantees,
-    campaignAttendees,
-  } = useSelector(campaignSelector);
+
 
   const [campaignGuaranteeList, setCampaignGuaranteeList] = useState(campaignGuarantees);
   const [campaignAttendeeList, setCampaignAttendeeList] = useState(campaignAttendees);

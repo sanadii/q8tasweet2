@@ -10,10 +10,8 @@ import {
   SimpleName, DateTime, Badge, CreateBy, Actions,
   Phone,
   GuaranteeGroups,
-  Guarantor,
-  Guarantees,
+  CampaignMember,
   Attended,
-  AttendedPercentage,
 } from "shared/components"
 
 
@@ -105,8 +103,8 @@ const GuaranteeList = ({
         Header: "الضامن",
         filterable: false,
         Cell: (cellProps) =>
-          <Guarantor
-            cellProps={cellProps}
+          <CampaignMember
+            memberId={cellProps.row.original.member}
             campaignMembers={campaignMembers}
           />
       },

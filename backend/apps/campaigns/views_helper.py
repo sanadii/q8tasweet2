@@ -105,19 +105,17 @@ def get_current_campaign_member(campaign_id, user_id, context):
 # CAMPAIGNS MEMBERS
 def get_campaign_members_by_role(campaign, user_role, current_campaign_member):
     HIGHER_PRIVILAGE_ROLES = {"higherPrivilage"}
-    MANAGER_ROLES = {"campaignModerator", "campaignCandidate", "partyAdmin", "CampaignAdmin"}
-    SUPERVISOR_ROLES = {"CampaignFieldAdmin", "CampaignDigitalAdmin", "CampaignFieldAgent", "CampaignDigitalAgent"}
+    MANAGER_ROLES = {"campaignModerator", "campaignCandidate", "partyAdmin", "campaignAdmin"}
+    SUPERVISOR_ROLES = {"campaignFieldAdmin", "campaignDigitalAdmin", "campaignFieldAgent", "campaignDigitalAgent"}
     print("get_campaign_members_by_role: ", "campaign: ", campaign, "user_role: ", user_role, "current_campaign_member: ", current_campaign_member)
 
     if user_role in HIGHER_PRIVILAGE_ROLES:
         campaign_members = CampaignMember.objects.filter(campaign=campaign)
         campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
-        print("campaign_members XXX: ", campaign_members)
 
     elif user_role in MANAGER_ROLES:
         campaign_members = CampaignMember.objects.filter(campaign=campaign)
         campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
-        print("campaign_members XXX: ", campaign_members)
 
     elif user_role in SUPERVISOR_ROLES:
         campaign_managers = get_campaign_managers(campaign)

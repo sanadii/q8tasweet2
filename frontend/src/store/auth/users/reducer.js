@@ -26,7 +26,7 @@ import {
 const IntialState = {
   users: [],
   moderators: [],
-  currentUser: [],
+  currentUser: null,
   userDetails: [],
   campaignModerators: [],
 };

@@ -65,9 +65,9 @@ const Public = () => {
     const randomCandidates = shuffleArray([...candidates]).slice(0, 5);
 
 
-    if (token) {
-        navigate('/dashboard')
-    }
+    // if (token) {
+    //     navigate('/dashboard')
+    // }
     return (
         <React.Fragment>
             <div className="page-content">

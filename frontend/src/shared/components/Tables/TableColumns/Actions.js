@@ -31,6 +31,10 @@ const Actions = (cellProps) => {
         itemData = cell.row.original
     }
 
+
+    // Checking members vs committees
+    const isCommitteeDelegate = !!currentCampaignMember?.committee;
+
     // if user is not a member (eg Admin, SuperAdmin), to open a model to assign the Guarantor / Attendand (+ Committee)
     let campaignMember = currentCampaignMember ? currentCampaignMember.id : null;
     let campaignUser = currentCampaignMember ? currentCampaignMember.user : null;
@@ -155,7 +159,8 @@ const Actions = (cellProps) => {
                 )}
 
                 {/* AddAttendee */}
-                {options.includes("addAttendee") && (
+
+                {options.includes("addAttendee") && isCommitteeDelegate && (
                     <div className="flex-shrink-0">
                         {renderElectorAttendeeButton()}
                     </div>

@@ -149,34 +149,33 @@ const MembersList = () => {
     },
     {
       Header: "المضامين",
-      // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
-      Cell: (cellProps) => (
+      accessor: "guarantees",
+      Cell: (cellProps) =>
         <Guarantees
           memberId={cellProps.row.original.id}
-          memberRole={cellProps.row.original.role}
           campaignGuarantees={campaignGuarantees}
-          campaignRoles={campaignRoles}
+          count="guarantees"
+
         />
-      )
     },
     {
       Header: "الحضور",
-      // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
-      Cell: (cellProps) => (
+      accessor: "guaranteesAttended",
+      Cell: (cellProps) =>
         <Guarantees
           memberId={cellProps.row.original.id}
-          memberRole={cellProps.row.original.role}
           campaignGuarantees={campaignGuarantees}
-          campaignRoles={campaignRoles}
+          count="attendees"
         />
-      )
     },
     {
-      Header: "نسبة الحضور",
-      // TabsToShow: ["campaignCandidate", "campaigaignManager", "campaignSupervisor", "campaignGuarantor", "campaignManagers"],
-      Cell: (cellProps) => (
-        <span>60 %</span>
-      )
+      Header: "نسبة التصويت",
+      Cell: (cellProps) =>
+        <Guarantees
+          memberId={cellProps.row.original.id}
+          campaignGuarantees={campaignGuarantees}
+          count="percentage"
+        />
     },
     {
       Header: "اللجنة",

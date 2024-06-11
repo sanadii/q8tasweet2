@@ -14,15 +14,22 @@ import { useProfile } from "shared/hooks";
 
 const ProfileDropdown = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector(userSelector);
+  const { currentUser } = useSelector(userSelector);
   const { token } = useProfile();
 
-  const isStaff = user.isStaff
+  const isStaff = currentUser?.isStaff
   //Dropdown Toggle
   const [isProfileDropdown, setIsProfileDropdown] = useState(false);
   const toggleProfileDropdown = () => {
     setIsProfileDropdown(!isProfileDropdown);
   };
+
+
+  const handleLogoutClick = () => {
+    dispatch(logoutUser())
+  }
+
+
   return (
     <React.Fragment>
       <div>
@@ -40,10 +47,10 @@ const ProfileDropdown = () => {
               />
               <span className="text-start ms-xl-2">
                 <span className="d-none d-xl-inline-block ms-1 fw-medium user-userId-text">
-                  {user.lastName}
+                  {currentUser?.lastName}
                 </span>
                 <span className="d-none d-xl-block ms-1 fs-12 text-muted user-userId-sub-text">
-                  {user.firstName}
+                  {currentUser?.firstName}
                 </span>
               </span>
             </span>
@@ -113,9 +120,9 @@ const ProfileDropdown = () => {
             </DropdownItem>
 
             {
-              user?.id && (
+              currentUser && (
                 <DropdownItem
-                  href={process.env.REACT_APP_PUBLIC_URL + "/logout"}
+                  onClick={handleLogoutClick}
                 >
                   <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
                   <span className="align-middle" data-key="t-logout">

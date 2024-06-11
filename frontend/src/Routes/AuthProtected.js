@@ -24,7 +24,7 @@ const AuthProtected = (props) => {
     }
   }, [token, loading, dispatch, user, userProfile]);
 
-  console.log("token: ", token, "user: ", user, "userProfile: ", userProfile)
+  // console.log("token: ", token, "user: ", user, "userProfile: ", userProfile)
 
   if (!token) {
     return (

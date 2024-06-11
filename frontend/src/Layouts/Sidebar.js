@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SimpleBar from "simplebar-react";
 //import logo
 import logoSm from "../assets/images/logo-sm.png";
@@ -12,7 +12,19 @@ import TwoColumnLayout from "./TwoColumnLayout";
 import { Container } from "reactstrap";
 import HorizontalLayout from "./HorizontalLayout";
 
+import { userSelector } from 'selectors';
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "store/actions";
+
+//import images
+import avatar1 from "assets/images/users/avatar-1.jpg";
+import { useProfile } from "shared/hooks";
+
+
 const Sidebar = ({ layoutType }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { currentUser } = useSelector(userSelector);
 
   useEffect(() => {
     var verticalOverlay = document.getElementsByClassName("vertical-overlay");
@@ -32,6 +44,11 @@ const Sidebar = ({ layoutType }) => {
     } else {
       document.documentElement.setAttribute('data-sidebar-size', 'sm-hover');
     }
+  };
+
+  const handleLogoutClick = () => {
+    dispatch(logoutUser("/"));
+    navigate("/");
   };
 
   return (
@@ -76,13 +93,25 @@ const Sidebar = ({ layoutType }) => {
                   </ul>
                 </div>
                 <div className="d-flex align-items-center">
-                  <Link to="/login" className="logo logo-dark">
-                    <button
-                      className="btn btn-success me-2"
-                    >
-                      <i className="ri-user-line align-bottom pe-2"></i> دخول
-                    </button>
-                  </Link>
+                  {currentUser ?
+                    <Link to="/login" className="logo logo-dark">
+                      <button
+                        className="btn btn-sm btn-success me-2"
+                        onClick={handleLogoutClick}
+                      >
+                        <i className="ri-user-line align-bottom pe-2"></i> تسجيل خروج
+                      </button>
+                    </Link>
+                    :
+                    <Link to="/login" className="logo logo-dark">
+                      <button
+                        className="btn btn-sm btn-success me-2"
+                      >
+                        <i className="ri-user-line align-bottom pe-2"></i> دخول
+                      </button>
+                    </Link>
+                  }
+
                   <Link to="/register" className="logo logo-dark">
                     <i className="ri-user-line align-bottom pe-2"></i> <span>اشتراك</span>
                   </Link>

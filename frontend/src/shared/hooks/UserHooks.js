@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import { getLoggedinUser } from "../../helpers/api_helper";
 
 const getLoggedinUser = () => {
   const user = localStorage.getItem("authUser");
@@ -14,12 +13,18 @@ const useProfile = () => {
   const [userProfile, setUserProfile] = useState(
     userProfileSession ? userProfileSession : null
   );
-  console.log("How many times? useProfile")
+
 
   useEffect(() => {
+    const userProfileSession = getLoggedinUser();
+    var token =
+      userProfileSession &&
+      userProfileSession["refreshToken"];
     setUserProfile(userProfileSession ? userProfileSession : null);
     setLoading(token ? false : true);
-  }, [token]);
+  }, []);
+
+  // console.log("userProfile:",  userProfile, "loading:", loading, "token: ", token )
 
   return { userProfile, loading, token };
 };

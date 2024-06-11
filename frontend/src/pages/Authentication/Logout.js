@@ -2,11 +2,9 @@ import PropTypes from "prop-types";
 import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
-import { logoutUser } from "../../store/actions";
-
 //redux
 import { useSelector, useDispatch } from "react-redux";
-
+import { logoutUser } from "store/actions";
 import { withRouter } from "shared/components";
 
 const Logout = (props) => {
@@ -21,7 +19,7 @@ const Logout = (props) => {
   }, [dispatch]);
 
   if (isUserLogout) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
   return <></>;
 };

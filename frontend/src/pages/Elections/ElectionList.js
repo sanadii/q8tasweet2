@@ -131,7 +131,7 @@ const ElectionList = () => {
         Cell: (cellProps) =>
           <Badge
             option="status"
-            value={cellProps.row.original.task.status}
+            value={cellProps.row.original.task?.status}
           />
       },
       {
@@ -140,7 +140,7 @@ const ElectionList = () => {
         Cell: (cellProps) =>
           <Badge
             option="priority"
-            value={cellProps.row.original.task.priority}
+            value={cellProps.row.original.task?.priority}
           />
       },
       {

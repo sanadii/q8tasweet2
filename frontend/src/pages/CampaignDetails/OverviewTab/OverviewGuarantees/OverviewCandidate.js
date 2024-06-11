@@ -78,7 +78,7 @@ const OverviewCandidate = () => {
   ];
 
   const roles = [
-    { label: 'المراقب', users: campaignModerators, formatter: formatRoleNames },
+    { label: 'المشرف', users: campaignModerators, formatter: formatRoleNames },
     { label: 'المرشح', users: campaignCandidates, formatter: formatRoleNames },
     { label: 'المنسق', users: campaignAdmin, formatter: formatRoleNames },
     // Add more roles here if needed
@@ -140,9 +140,7 @@ const OverviewCandidate = () => {
                     <div key={index} class="d-flex align-items-center">
                       <i class="ri-stop-fill align-middle fs-18 text-primary me-2"></i>
                       <p class="text-truncate mb-0">
-                        {campaignModerators.length > 0 && (
-                          <span> {detail.name}: <strong className="text-info">{detail.data}</strong></span>
-                        )}
+                        <span> {detail.name}: <strong className="text-info">{detail.data}</strong></span>
                       </p>
                     </div>
                   ))}

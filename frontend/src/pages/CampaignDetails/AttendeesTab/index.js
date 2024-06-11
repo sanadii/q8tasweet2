@@ -9,7 +9,7 @@ import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader
 import { useDelete, useFilter, useUserRoles } from "shared/hooks";
 
 import AttendeesModal from "./AttendeesModal";
-import { Id, Name, Attendant, Actions } from "./AttendeesCol";
+import { Id, Name, CampaignMember, Actions } from "shared/components";
 
 // Utility imports
 import { Col, Row, Card, CardBody } from "reactstrap";
@@ -151,12 +151,12 @@ const AttendeesList = () => {
     return member?.user?.name || "User not found";
   }, [campaignMembers]); // campaignMembers as dependency
 
-  const findCommitteeById = useCallback((committeeId) => {
-    const committee = campaignElectionCommittees.find(
-      (committee) => committee && committee.id === committeeId
-    );
-    return committee?.name || "لا يوجد";
-  }, [campaignElectionCommittees]); // campaignElectionCommittees as dependency
+  // const findCommitteeById = useCallback((committeeId) => {
+  //   const committee = campaignElectionCommittees.find(
+  //     (committee) => committee && committee.id === committeeId
+  //   );
+  //   return committee?.name || "لا يوجد";
+  // }, [campaignElectionCommittees]); // campaignElectionCommittees as dependency
 
   const columns = useMemo(() => [
     // {
@@ -186,40 +186,58 @@ const AttendeesList = () => {
     },
     {
       Header: "الاسم",
-      accessor: row => ({ fullName: row.fullName, gender: row.gender }),
-      Cell: (cellProps) => <Name {...cellProps} />
+      Cell: (cellProps) =>
+        <Name
+          {...cellProps}
+          name={cellProps.row.original.fullName}
+          gender={cellProps.row.original.gender}
+        />
     },
-    {
-      Header: "اللجنة",
-      accessor: "committee",
-      Cell: (cellProps) => {
-        const committeeId = cellProps.row.original.committee; // Directly access the user ID from original data
-        const committeeName = findCommitteeById(committeeId);
-        return <p>{committeeName}</p>;
-      },
-    },
+    // {
+    //   Header: "اللجنة",
+    //   accessor: "committee",
+    //   Cell: (cellProps) => {
+    //     const committeeId = cellProps.row.original.committee; // Directly access the user ID from original data
+    //     const committeeName = findCommitteeById(committeeId);
+    //     return <p>{committeeName}</p>;
+    //   },
+    // },
+
     {
       Header: "المحضر",
-      accessor: "user",
-      Cell: (cellProps) => {
-        return <p>{cellProps.row.original.user}</p>;
-      },
+      filterable: false,
+      Cell: (cellProps) =>
+        <CampaignMember
+          memberId={cellProps.row.original.member}
+          campaignMembers={campaignMembers}
+        />
     },
     // Only for Attendants
     {
       Header: "إجراءات",
       Cell: (cellProps) =>
         <Actions
-          cellProps={cellProps}
-          handleCampaignAttendeeClick={handleCampaignAttendeeClick}
-          onDeleteCheckBoxClick={onDeleteCheckBoxClick}
-          isAdmin={isAdmin}
-          isAttendant={isAttendant}
+          options={["view", "update"]}
+          cell={cellProps}
+          handleItemClicks={handleCampaignAttendeeClick}
         />
     },
+
+    // {
+    //   Header: "إجراءات",
+    //   Cell: (cellProps) =>
+    //     <Actions
+    //       cellProps={cellProps}
+    //       handleCampaignAttendeeClick={handleCampaignAttendeeClick}
+    //       onDeleteCheckBoxClick={onDeleteCheckBoxClick}
+    //       isAdmin={isAdmin}
+    //       isAttendant={isAttendant}
+    //     />
+    // },
   ],
     // [handleCampaignAttendeeClick, checkedAll, findCommitteeById, findUserById, isAdmin, isAttendant]
-    [handleCampaignAttendeeClick, findCommitteeById, findUserById, isAdmin, isAttendant]
+    [handleCampaignAttendeeClick, findUserById, isAdmin, isAttendant]
+    // [handleCampaignAttendeeClick, findCommitteeById, findUserById, isAdmin, isAttendant]
   );
 
   // Filters
@@ -267,16 +285,16 @@ const AttendeesList = () => {
                 />
 
                 <TableFilters
-                  isGlobalFilter={true}
-                  preGlobalFilteredRows={true}
-                  isGenderFilter={true}
-                  isAttendeeStatusFilter={true}
-                  isCommitteeFilter={true}
-                  isResetFilters={true}
+                  // isGlobalFilter={true}
+                  // preGlobalFilteredRows={true}
+                  // // isGenderFilter={true}
+                  // isAttendeeStatusFilter={true}
+                  // // isCommitteeFilter={true}
+                  // isResetFilters={true}
 
                   // Settings
-                  filters={filters}
-                  setFilters={setFilters}
+                  // filters={filters}
+                  // setFilters={setFilters}
                   SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
                 />
 

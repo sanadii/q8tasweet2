@@ -82,7 +82,10 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
     },
   });
 
-  const isCurrentUserDifferentCampaignMember = campaignMember && currentUser.id !== campaignMember.userId;
+  const isCurrentCampaignMember = campaignMember && currentCampaignMember.id === campaignMember.id;
+  // console.log("111 currentCampaignMember: ", currentCampaignMember)
+  // console.log("111 campaignMember: ", campaignMember)
+  console.log("111 isCurrentCampaignMember: ", isCurrentCampaignMember)
   const isAgentMember = campaignAgentRoles.includes(useCampaignRoleString(validation.values.role, campaignRoles));
   const isDelegateMember = campaignDelegateRoles.includes(useCampaignRoleString(validation.values.role, campaignRoles));
   const campaignMemberRoleCodename = useCampaignRoleString(validation.values.role, campaignRoles);
@@ -114,7 +117,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
       label: "الرتبة",
       type: "select",
       options: filteredRoleOptions,
-      condition: isCurrentUserDifferentCampaignMember,
+      condition: !isCurrentCampaignMember,
     },
     {
       id: "supervisor-field",

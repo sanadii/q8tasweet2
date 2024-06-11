@@ -28,9 +28,9 @@ const SectionHeader = ({ campaign, electionDetails, campaignMembers, campaignGua
     const campaignId = currentCampaign?.id;
     const campaignName = currentCampaign?.candidate?.name;
     const campaignImage = currentCampaign?.candidate?.image;
-    const electionName = electionDetails.name;
-    const electionDueDate = electionDetails.dueDate;
-    const electionImage = electionDetails.image
+    const electionName = electionDetails?.name;
+    const electionDueDate = electionDetails?.dueDate;
+    const electionImage = electionDetails?.image
 
 
     return (

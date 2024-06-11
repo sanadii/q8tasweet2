@@ -41,6 +41,7 @@ const Section = () => {
 
   const electionSchema = electionDetails?.slug
 
+  console.log("campaignMembers: ", campaignMembers)
   // Permissions
   const {
     canChangeCampaign,
@@ -79,7 +80,7 @@ const Section = () => {
       href: '#guarantees',
       icon: 'ri-shield-line',
       title: 'الضمانات',
-      component: <GuaranteesTab campaignGuarantees={campaignGuarantees} campaignMembers={campaignMembers} />
+      component: <GuaranteesTab />
     },
     // {
     //   id: 4,

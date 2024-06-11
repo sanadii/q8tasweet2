@@ -1,84 +1,74 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Row, Col, Card, CardBody } from 'reactstrap';
-import FeatherIcon from 'feather-icons-react';
 import CountUp from 'react-countup';
-import { electionSelector } from 'selectors';
+import { electionSelector, campaignSelector } from 'selectors';
 import { DashboardCharts } from './DashboardCharts';
 
-
-import { GenderOptions } from "shared/constants"
-
-const GenderColorAvatar = ({ genderId }) => {
-  const gender = Object.values(GenderOptions).find(g => g.id === genderId);
+// Helper component for Committee Details
+const CommitteeSiteDetails = ({ committeeSite }) => {
+  console.log("committeeSite: ", committeeSite);
 
   return (
-    <span className={`avatar-title rounded-circle text-white bg-${gender.color}`}>
-      {/* Display ID or gender symbol here */}
-    </span>
-  );
-};
-
-// Helper component for Committee Details
-const CommitteeSiteDetails = ({ committeeSite }) => (
-
-  <>
-    <div class="mini-stats-wid d-flex align-items-center mt-3">
-      <div class="flex-shrink-0 avatar-sm">
-        <span className={`mini-stat-icon avatar-title rounded-circle text-white bg-${committeeSite.gender === "1" ? 'info' : 'pink'}`}>
-          {committeeSite.id}
-        </span>
-      </div>
-      <div class="flex-grow-1 ms-3">
-        <b><span className={`text-${committeeSite.gender === "1" ? 'info' : 'pink'}`}>{committeeSite.areaName} - {committeeSite.gender === "1" ? 'ذكور' : 'إناث'}</span></b>
-        <h6 class="mb-1">{committeeSite.name}</h6>
-      </div>
-      <div class="flex-shrink-0">
-      </div>
-    </div>
-    <div className="d-flex align-items-center">
-      <div className="flex-grow-1 overflow-hidden">
-
-        <h4 className="fs-22 fw-semibold ff-secondary mb-0">
-          <span className="counter-value" data-target="36894">
-            {committeeSite.voterCount} ناخب
+    <>
+      <div class="mini-stats-wid d-flex align-items-center mt-3">
+        <div class="flex-shrink-0 avatar-sm">
+          <span className={`mini-stat-icon avatar-title rounded-circle text-white bg-${committeeSite.gender === 1 ? 'info' : 'pink'}`}>
+            {committeeSite.id}
           </span>
-        </h4>
-        <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
-          <span className="text-info">عدد اللجان: {committeeSite.committeeSiteCount}</span>
-        </p>
+        </div>
+        <div class="flex-grow-1 ms-3">
+          <b><span className={`text-${committeeSite.gender === 1 ? 'info' : 'pink'}`}>{committeeSite.areaName} - {committeeSite.gender === 1 ? 'ذكور' : 'إناث'}</span></b>
+          <h6 class="mb-1">{committeeSite.name}</h6>
+        </div>
+        <div class="flex-shrink-0">
+        </div>
       </div>
-      <DashboardCharts seriesData={committeeSite.series} colors={committeeSite.color} />
-    </div>
-  </>
-);
+      <div className="d-flex align-items-center">
+        <div className="flex-grow-1 overflow-hidden">
+
+          <h4 className="fs-22 fw-semibold ff-secondary mb-0">
+            <span className="counter-value" data-target="36894">
+              {committeeSite.electorCount} ناخب
+            </span>
+          </h4>
+          <p className="text-uppercase fw-medium text-muted text-truncate mb-3">
+            <span className="text-info">عدد اللجان: {committeeSite?.committees?.length}</span>
+          </p>
+        </div>
+        <DashboardCharts seriesData={committeeSite.series} colors={committeeSite.color} />
+      </div>
+    </>
+  )
+}
+  ;
 
 
 
 // Helper component for SubCommittee details
 const CommitteeDetails = ({ committeeSite, committee }) => (
   <Col xl={4}>
-    <Card className={`card-animate bg-soft-${committeeSite.gender === "1" ? 'info' : 'pink'}`}>
+    <Card className={`card-animate bg-soft-${committeeSite.gender === 1 ? 'info' : 'pink'}`}>
       <CardBody>
         <div className="d-flex justify-content-between">
           <div>
             <div className="d-flex align-items-center py-2">
               <div class="avatar-xs me-2">
-                <span class={`avatar-title rounded-circle bg-white text-${committeeSite.gender === "1" ? 'info' : 'pink'}`}>
+                <span class={`avatar-title rounded-circle bg-white text-${committeeSite.gender === 1 ? 'info' : 'pink'}`}>
                   {committee.id}
                 </span>
               </div>
               <span className="fw-medium fw-semibold text-black mb-0">
-                {committee.areaName} - {committee.type}
+                {committeeSite.areaName} - {committee.type}
               </span>
             </div>
             <h4 className="fw-semibold text-black">
               {committee.letters}
 
             </h4>
-            <p className="mb-0 text-muted"><span className="badge bg-light text-danger mb-0">
+            {/* <p className="mb-0 text-muted"><span className="badge bg-light text-danger mb-0">
               <i className="ri-arrow-down-line align-middle"></i> 0.24 %
-            </span> vs. previous month</p>
+            </span> vs. previous month</p> */}
           </div>
 
         </div>
@@ -98,8 +88,11 @@ const Counters = ({ duration, startValue, endValue }) => (
 
 const CommitteesTab = () => {
   const { electionCommitteeSites } = useSelector(electionSelector);
+  const { campaignElectionCommitteeSites } = useSelector(campaignSelector);
   const [selectedCommitteesite, setSelectedCommitteeSite] = useState(null);
 
+
+  const committeeSites = electionCommitteeSites.length > 0 ? electionCommitteeSites : campaignElectionCommitteeSites
   const toggleCommitteeSite = (committeeSiteId) => setSelectedCommitteeSite(
     prev => (prev === committeeSiteId ? null : committeeSiteId)
   );
@@ -108,7 +101,7 @@ const CommitteesTab = () => {
     <React.Fragment>
       <div className="d-flex flex-column h-100">
         <Row>
-          {electionCommitteeSites && electionCommitteeSites.map((committeeSite, index) => (
+          {committeeSites && committeeSites.map((committeeSite, index) => (
             <Col xl={selectedCommitteesite === committeeSite.id ? 12 : 3} md={6} key={index}>
               <Card
                 className={`card-animate overflow-hidden ${selectedCommitteesite === committeeSite.id ? "full-width-card" : ""}`}

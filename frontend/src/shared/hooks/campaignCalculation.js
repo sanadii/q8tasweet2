@@ -18,14 +18,14 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
         attendeesStatusCounts[option.value] = 0;
     });
 
-    let targetVotes = campaignDetails.targetVotes;
-    let totalGuarantees = campaignGuarantees.length || 0;
+    let targetVotes = campaignDetails?.targetVotes;
+    let totalGuarantees = campaignGuarantees?.length || 0;
     let totalContactedGuarantees = 0;
     let totalConfirmedGuarantees = 0; // Contacted + Confirmed
     let totalConfirmedAttendees = 0;
     let totalAttendees = 0;
 
-    campaignGuarantees.forEach(guarantee => {
+    campaignGuarantees?.forEach(guarantee => {
         const statusOption = CampaignGuaranteeStatusOptions.find(option => option.id === guarantee.status);
         if (statusOption) {
             statusCounts[statusOption.value]++;

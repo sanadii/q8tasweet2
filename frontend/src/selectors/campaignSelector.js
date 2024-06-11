@@ -15,7 +15,7 @@ export const campaignSelector = createSelector(
     campaignType: campaignsState.campaignDetails.campaignType,
 
     electionDetails: campaignsState.electionDetails,
-    campaignElectionCommitteeSites: campaignsState.campaignElectionCommitteeSites,
+    campaignElectionCommitteeSites: campaignsState.electionCommitteeSites,
     campaignElectionCandidates: campaignsState.campaignElectionCandidates,
 
     electionSlug: campaignsState.electionDetails?.slug,

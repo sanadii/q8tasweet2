@@ -215,6 +215,16 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
       }
     },
     {
+      id: "campaignTeam",
+      label: "فريق العمل",
+      icon: "ri-honour-line",
+      link: "/campaign/members",
+      click: (e) => {
+        e.preventDefault();
+        handleNavigation("campaignDashboard", "/campaign/members");
+      }
+    },
+    {
       id: "campaignGuarantees",
       label: "المجاميع والضمانات",
       icon: "ri-honour-line",
@@ -235,40 +245,41 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
         setIsCurrentState("campaignAttendance", "/campaign/attendees");
       },
     },
-    {
-      id: "campaignSorting",
-      label: "الفرز",
-      icon: "ri-honour-line",
-      link: "/campaign/sorting",
-      click: (e) => {
-        e.preventDefault();
-        handleNavigation("campaignSorting", "/campaign/sorting");
-      }
-    },
+    // {
+    //   id: "campaignSorting",
+    //   label: "الفرز",
+    //   icon: "ri-honour-line",
+    //   link: "/campaign/sorting",
+    //   click: (e) => {
+    //     e.preventDefault();
+    //     handleNavigation("campaignSorting", "/campaign/sorting");
+    //   }
+    // },
     {
       id: "campaignVoters",
       label: "البحث",
       icon: "ri-honour-line",
-      link: "/campaign/voters",
+      link: "/campaign/electors-search",
       click: (e) => {
         e.preventDefault();
         handleNavigation("campaignVoters", "/campaign/voters");
       }
     },
-    {
-      id: "campaignCandidates",
-      label: "المرشحين والنتائج",
-      icon: "ri-honour-line",
-      link: "/campaign/candidates",
-      click: (e) => {
-        e.preventDefault();
-        handleNavigation("campaignCandidates", "/campaign/candidates");
-      }
-    },
+    // {
+    //   id: "campaignCandidates",
+    //   label: "المرشحين والنتائج",
+    //   icon: "ri-honour-line",
+    //   link: "/campaign/candidates",
+    //   click: (e) => {
+    //     e.preventDefault();
+    //     handleNavigation("campaignCandidates", "/campaign/candidates");
+    //   }
+    // },
     {
       label: "الإدارة",
       isHeader: true,
     },
+
     {
       id: "campaignCommittees",
       label: "اللجان",
@@ -279,38 +290,28 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
         handleNavigation("campaignCommittees", "/campaign/committees");
       }
     },
-    {
-      id: "campaignTeam",
-      label: "فريق العمل",
-      icon: "ri-honour-line",
-      link: "/campaign/members",
-      click: (e) => {
-        e.preventDefault();
-        handleNavigation("campaignDashboard", "/campaign/members");
-      }
-    },
-    {
-      id: "campaignAddMember",
-      label: "إضافة مستخدم",
-      icon: "ri-honour-line",
-      link: "/campaign/add-member",
-      click: function (e) {
-        e.preventDefault();
-        setIsCurrentState("campaignAddMember", "/campaign/add-member");
+    // {
+    //   id: "campaignAddMember",
+    //   label: "إضافة مستخدم",
+    //   icon: "ri-honour-line",
+    //   link: "/campaign/add-member",
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsCurrentState("campaignAddMember", "/campaign/add-member");
 
-      },
-    },
-    {
-      id: "campaignEdit",
-      label: "تعديل الحملة",
-      icon: "ri-honour-line",
-      link: `/campaign/edit-campaign`,
-      click: function (e) {
-        e.preventDefault();
-        setIsCurrentState("campaignEdit", "/campaign/edit-campaign");
+    //   },
+    // },
+    // {
+    //   id: "campaignEdit",
+    //   label: "تعديل الحملة",
+    //   icon: "ri-honour-line",
+    //   link: `/campaign/edit-campaign`,
+    //   click: function (e) {
+    //     e.preventDefault();
+    //     setIsCurrentState("campaignEdit", "/campaign/edit-campaign");
 
-      },
-    },
+    //   },
+    // },
   ];
 }
 

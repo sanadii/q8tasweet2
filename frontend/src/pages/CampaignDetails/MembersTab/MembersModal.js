@@ -83,7 +83,7 @@ export default MembersModal;
 //     onClick={() => { toggle(); }}
 //     className="btn-light"
 //   >
-//     اغلق
+//     إغلاق
 //   </Button>
 
 //   {/* if modalButtonText and modalButtonText is not empty */}

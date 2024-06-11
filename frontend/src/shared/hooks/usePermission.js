@@ -38,7 +38,7 @@ const usePermission = () => {
 
     // Extract permissions based on the user's roles
     const getPermissions = () => {
-        const userPermissions = currentUser.permissions || [];
+        const userPermissions = currentUser?.permissions || [];
         const campaignPermissions = currentCampaignMember?.permissions || [];
         const combinedPermissions = [
             ...new Set([...userPermissions, ...campaignPermissions])
@@ -56,8 +56,8 @@ const usePermission = () => {
 
     return {
         ...specificPermissions,  // spread out the specific permissions
-        isActive: currentUser.isActive,  // add isActive flag
-        isStaff: currentUser.isStaff,    // add isStaff flag
+        isActive: currentUser?.isActive,  // add isActive flag
+        isStaff: currentUser?.isStaff,    // add isStaff flag
     };
 };
 

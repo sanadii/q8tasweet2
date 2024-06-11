@@ -9,14 +9,14 @@ import GuaranteesTab from "pages/CampaignDetails/GuaranteesTab";
 import AttendeesTab from "pages/CampaignDetails/AttendeesTab";
 import SortingTab from "pages/CampaignDetails/SortingTab";
 
-import CommitteesTab from "pages/CampaignDetails/CommitteesTab";
+import CommitteesTab from "pages/ElectionDetails/CommitteesTab";
 import EditTab from "pages/CampaignDetails/EditTab";
 
 import ActivitiesTab from "pages/CampaignDetails/ActivitiesTab";
 
 // Election
 import CandidatesTab from "pages/CampaignDetails/CandidatesTab";
-import VotersTab from "pages/CampaignDetails/VotersTab";
+import SearchTab from "pages/Electors/SearchTab";
 
 const CampaignRoutes = [
     // Campaign Special Dashboard
@@ -32,6 +32,6 @@ const CampaignRoutes = [
 
     // Election
     { path: "/campaign/candidates", component: <CandidatesTab /> },
-    { path: "/campaign/voters", component: <VotersTab /> },
+    { path: "/campaign/electors-search", component: <SearchTab /> },
 ]
 export default CampaignRoutes;
