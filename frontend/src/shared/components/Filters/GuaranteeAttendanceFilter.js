@@ -7,12 +7,12 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
     const campaignGuarantees = useSelector(campaignSelector);
 
     const AttendanceOptions = [
-        { id: 'true', name: "حضر" },
-        { id: 'false', name: "لم يحضر" },
+        { id: true, name: "حضر" },
+        { id: false, name: "لم يحضر" },
     ];
 
     const ChangeGuaranteeAttendance = (e) => {
-        const selectedAttendance = e === "true" ? true : e === "false" ? false : null;
+        const selectedAttendance = e === true ? true : false;
 
 
         // Update the filters
@@ -34,9 +34,11 @@ const GuaranteeAttendanceFilter = ({ filters, setFilters }) => {
                         onChange={(e) => ChangeGuaranteeAttendance(e.target.value)}
                         value={filters.attended === null ? '' : String(filters.attended)}
                     >
-                        <option value="">- الكل - </option>
+                        <option value={null}>- الكل - </option>
                         {AttendanceOptions.map((attendance) => (
-                            <option key={attendance.id} value={attendance.id}>
+                            <option
+                                key={attendance.id}
+                                value={attendance.id}>
                                 {attendance.name}
                             </option>
                         ))}

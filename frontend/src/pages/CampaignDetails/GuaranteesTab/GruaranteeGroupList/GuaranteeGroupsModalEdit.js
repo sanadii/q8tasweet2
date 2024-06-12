@@ -34,8 +34,6 @@ const GuaranteeGroupsModalEdit = ({
       value: guarantee.id
     }));
 
-  console.log("electionSlugelectionSlug: ", electionSlug)
-
   // Validation
   const validation = useFormik({
     enableReinitialize: true,
@@ -44,7 +42,7 @@ const GuaranteeGroupsModalEdit = ({
       name: campaignGuaranteeGroup?.name || "",
       election: electionSlug,
       member: campaignMembers?.id,
-      guarantees: campaignGuaranteeGroup?.guarantees || [],
+      guarantees: campaignGuaranteeGroup?.guarantees?.map((guarantee) => guarantee.id) || [],
       phone: campaignGuaranteeGroup?.phone || "",
       status: campaignGuaranteeGroup?.status || 0,
       note: campaignGuaranteeGroup?.note || "",

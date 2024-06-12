@@ -56,6 +56,11 @@ const OverviewTab = () => {
 
   console.log("campaignMembers: ", campaignMembers)
 
+  if (!campaign || !campaignMembers || !campaignGuarantees) {
+    return (
+      <p>waiting</p>
+    )
+  }
   return (
     <React.Fragment>
       <div id="layout-wrapper">
@@ -69,8 +74,7 @@ const OverviewTab = () => {
           campaignMembers={campaignMembers}
         />
 
-        {/*
-        <OverviewNotifications /> */}
+        {/* <OverviewNotifications />  */}
 
 
       </div>

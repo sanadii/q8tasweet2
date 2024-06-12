@@ -5,7 +5,7 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'selectors';
 
 // Component & Constants imports 
-import { useSupervisorMembers, useCampaignRoles } from "shared/hooks";
+import { useSupervisorMembers, useCampaignRoleOptions } from "shared/hooks";
 
 // Form validation imports
 import { FormFields } from "shared/components"
@@ -29,7 +29,7 @@ const MembersUpdateModal = ({ campaignMember, setOnModalSubmit, modalMode }) => 
 
   // Campaign Supervisor Options
   const supervisorOptions = useSupervisorMembers(campaignRoles, campaignMembers);
-  const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
+  const filteredRoleOptions = useCampaignRoleOptions(campaignRoles, currentCampaignMember);
   const [campaignCommitteeList, setCampaignCommitteeList] = useState(campaignElectionCommittees);
 
   useEffect(() => {

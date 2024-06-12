@@ -74,6 +74,8 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
 // Function to aggregate guarantors
 // Used in OverViewGuarantees to create a table for Guarantees Follow up
 export function aggregateGuarantors(guarantees, members) {
+    console.log("members: ", members)
+    console.log("guarantees: ", guarantees)
     const memberMap = members.reduce((map, member) => {
         map[member.id] = member.name;
         return map;

@@ -5,9 +5,7 @@ import { campaignSelector } from 'selectors';
 
 const GuarantorFilter = ({ filters, setFilters }) => {
     const { campaignMembers } = useSelector(campaignSelector);
-
     const [sortedGurantorOptions, setSortedGuarantorOptions] = useState([]);
-
 
     // TODO: make it more dymic, and remove the managers for the supervisor
     useEffect(() => {
@@ -15,7 +13,7 @@ const GuarantorFilter = ({ filters, setFilters }) => {
             (member) => member.role === 31 || member.role === 32 || member.role === 33 || member.role === 34
         );
 
-        setSortedGuarantorOptions(GurantorOptions.sort((a, b) => a.role - b.role));
+        setSortedGuarantorOptions(campaignMembers.sort((a, b) => a.roleId - b.roleId));
     }, [campaignMembers]);
 
 
@@ -45,7 +43,7 @@ const GuarantorFilter = ({ filters, setFilters }) => {
                         <option value="">- الكل - </option>
                         {sortedGurantorOptions.map((member) => (
                             <option key={member.id} value={member.id}>
-                                {member.fullName}
+                                {member.name}
                             </option>
                         ))}
                     </select>

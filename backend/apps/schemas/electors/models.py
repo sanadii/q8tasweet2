@@ -22,16 +22,18 @@ class Elector(DynamicSchemaModel):
     sect = models.TextField(blank=True, null=True)
 
     # Elector Details
-    gender = models.CharField(
-        max_length=1, choices=GENDER_CHOICES, blank=True, null=True
-    )
+    gender = models.IntegerField(choices=GENDER_CHOICES, blank=True, null=True)
     job = models.TextField(blank=True, null=True)
     age = models.PositiveIntegerField(blank=True, null=True)
 
     # Elector Address
     address = models.TextField(blank=True, null=True)
     area = models.ForeignKey(
-        Area, on_delete=models.CASCADE, related_name="elector_areas", blank=True, null=True
+        Area,
+        on_delete=models.CASCADE,
+        related_name="elector_areas",
+        blank=True,
+        null=True,
     )
     block = models.TextField(blank=True, null=True)
     street = models.TextField(blank=True, null=True)
@@ -64,19 +66,17 @@ class Elector(DynamicSchemaModel):
     def get_dynamic_fields(self):
         fields = {}
         if self.election_category == 1000:
-            fields['code_number'] = models.TextField(blank=True, null=True)
-            fields['status'] = models.TextField(blank=True, null=True)
-            fields['letter'] = models.TextField(blank=True, null=True)
-          
+            fields["code_number"] = models.TextField(blank=True, null=True)
+            fields["status"] = models.TextField(blank=True, null=True)
+            fields["letter"] = models.TextField(blank=True, null=True)
 
         if self.election_category == 3000:
-            fields['membership_number'] = models.IntegerField(blank=True, null=True)
-            fields['box_number'] = models.IntegerField(blank=True, null=True)
-            fields['civil_id'] = models.IntegerField(blank=True, null=True)
-            fields['enrollment_date'] = models.DateField(blank=True, null=True)
+            fields["membership_number"] = models.IntegerField(blank=True, null=True)
+            fields["box_number"] = models.IntegerField(blank=True, null=True)
+            fields["civil_id"] = models.IntegerField(blank=True, null=True)
+            fields["enrollment_date"] = models.DateField(blank=True, null=True)
 
         return fields
-
 
 
 # Note

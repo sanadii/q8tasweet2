@@ -21,28 +21,45 @@ const useMemberOptions = (campaignMembers, memberRole) => {
 };
 
 // Hook to get Campaign Roles based on permissions
-const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
-  const { canChangeConfig, canChangeCampaign, canChangeCampaignMember } = usePermission();
+const useCampaignRoleOptions = (campaignRoles, currentCampaignMember) => {
+  const roleGroups = {
+    managers: ["campaignModerator", "partyAdmin", "campaignCandidate", "campaignAdmin"],
+    fieldMembers: ["campaignFieldAdmin", "campaignFieldAgent", "campaignFieldDelegate"],
+    digitalMembers: ["campaignDigitalAdmin", "campaignDigitalAgent", "campaignDigitalDelegate"]
+  };
 
   return useMemo(() => {
-    const currentRoleId = currentCampaignMember?.role;
+    const currentRole = currentCampaignMember?.roleCodename;
+
     let excludedRoleStrings = ["campaignMember"]; // Excluded for all by default
 
-    switch (true) {
-      case canChangeConfig:
-        excludedRoleStrings = ["campaignMember"];
+    switch (currentRole) {
+      case "partyAdmin":
+        excludedRoleStrings = ["campaignModerator", "partyAdmin"];
         break;
-      case canChangeCampaign:
-        excludedRoleStrings = ["campaignMember", "campaignModerator", "campaignCandidate"];
+      case "campaignCandidate":
+        excludedRoleStrings = roleGroups.managers.filter(role => role !== "campaignAdmin");
         break;
-      case canChangeCampaignMember:
-        excludedRoleStrings = ["campaignMember", "campaignModerator", "campaignCoordinator", "campaignCandidate", "campaignSupervisor"];
+      case "campaignAdmin":
+        excludedRoleStrings = [...roleGroups.managers];
+        break;
+      case "campaignFieldAdmin":
+        excludedRoleStrings = [...roleGroups.managers, roleGroups.digitalMembers, "campaignFieldAdmin"];
+        break;
+      case "campaignFieldAgent":
+        excludedRoleStrings = [...roleGroups.managers, roleGroups.digitalMembers, "campaignFieldAdmin", "campaignFieldAgent"];
+        break;
+      case "campaignDigitalAdmin":
+        excludedRoleStrings = [...roleGroups.managers, roleGroups.fieldMembers, "campaignDigitalAdmin"];
+        break;
+      case "campaignDigitalAgent":
+        excludedRoleStrings = [...roleGroups.managers, roleGroups.fieldMembers, "campaignDigitalAdmin", "campaignDigitalAgent"];
         break;
       default:
         break;
     }
 
-    const displayedRoles = campaignRoles.filter(role => !excludedRoleStrings.includes(role.name));
+    const displayedRoles = campaignRoles.filter(role => !excludedRoleStrings.includes(role.codename));
 
     // Convert roles to options
     const roleOptions = displayedRoles.map(role => ({
@@ -52,8 +69,10 @@ const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
     }));
 
     return roleOptions;
-  }, [campaignRoles, currentCampaignMember, canChangeConfig, canChangeCampaign, canChangeCampaignMember]);
+  }, [campaignRoles, currentCampaignMember]);
 };
+
+
 
 // Get Campaign Agent Members
 const getCampaignAgentMembers = (campaignMemberRoleCodename, campaignFieldAgentOptions, campaignDigitalAgentOptions) => {
@@ -165,7 +184,7 @@ const isMemberRoleOption = (campaignRoles, roleCondition, roleId) => {
 
 export {
   useMemberOptions,
-  useCampaignRoles,
+  useCampaignRoleOptions,
   getCampaignAgentMembers,
   getCommitteeSiteOptions,
   getAllCommittees,

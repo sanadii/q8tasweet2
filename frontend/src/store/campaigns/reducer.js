@@ -368,18 +368,36 @@ const Campaigns = (state = IntialState, action) => {
         isCampaignGuaranteeGroupAdd: false,
         isCampaignGuaranteeGroupAddFail: true,
       };
-    case UPDATE_CAMPAIGN_GUARANTEE_GROUP_SUCCESS:
+
+
+    case UPDATE_CAMPAIGN_GUARANTEE_GROUP_SUCCESS: {
+      const campaignGuaranteeData = action.payload.data.guarantees;
+
+      const updatedCampaignGuaranteeGroups = state.campaignGuaranteeGroups.map((campaignGuaranteeGroup) =>
+        campaignGuaranteeGroup.id.toString() === action.payload.data.id.toString()
+          ? { ...campaignGuaranteeGroup, ...action.payload.data }
+          : campaignGuaranteeGroup
+      );
+
+      const updatedCampaignGuarantees = state.campaignGuarantees.map((campaignGuarantee) => {
+        const updatedGuarantee = campaignGuaranteeData.find(
+          (guarantee) => guarantee.id.toString() === campaignGuarantee.id.toString()
+        );
+        return updatedGuarantee ? { ...campaignGuarantee, ...updatedGuarantee } : campaignGuarantee;
+      });
+
       return {
         ...state,
-        campaignGuaranteeGroups: state.campaignGuaranteeGroups.map((campaignGuaranteeGroup) =>
-          campaignGuaranteeGroup.id.toString() === action.payload.data.id.toString()
-            ? { ...campaignGuaranteeGroup, ...action.payload.data }
-            : campaignGuaranteeGroup
-        ),
+        campaignGuaranteeGroups: updatedCampaignGuaranteeGroups,
+        campaignGuarantees: updatedCampaignGuarantees,
         isCampaignGuaranteeGroupUpdate: true,
         isCampaignGuaranteeGroupUpdateFail: false,
       };
+    }
+
+
     case UPDATE_CAMPAIGN_GUARANTEE_GROUP_FAIL:
+
       return {
         ...state,
         error: action.payload,
@@ -488,7 +506,7 @@ const Campaigns = (state = IntialState, action) => {
             ? { ...campaignGuarantee, ...action.payload.data.attended }
             : campaignGuarantee
         ),
-        
+
         isCampaignAttendeeAdd: true,
         isCampaignAttendeeAddFail: false,
       };

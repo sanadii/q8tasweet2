@@ -15,8 +15,8 @@ export const campaignSelector = createSelector(
     campaignType: campaignsState.campaignDetails.campaignType,
 
     electionDetails: campaignsState.electionDetails,
-    campaignElectionCommitteeSites: campaignsState.electionCommitteeSites,
-    campaignElectionCandidates: campaignsState.campaignElectionCandidates,
+    campaignElectionCommitteeSites: campaignsState.electionCommitteeSites || [],
+    campaignElectionCandidates: campaignsState.campaignElectionCandidates || [],
 
     electionSlug: campaignsState.electionDetails?.slug,
     campaignDetails: campaignsState.campaignDetails,
@@ -24,11 +24,11 @@ export const campaignSelector = createSelector(
 
     campaignGuarantees: campaignsState.campaignGuarantees || [],
     campaignGuaranteeGroups: campaignsState.campaignGuaranteeGroups || [],
-    campaignAttendees: campaignsState.campaignAttendees,
+    campaignAttendees: campaignsState.campaignAttendees || [],
     campaignNotifications: campaignsState.campaignNotifications,
 
     campaignSorting: campaignsState.campaignSorting,
-    electionCommitteeSites: campaignsState.electionCommitteeSites,
+    electionCommitteeSites: campaignsState.electionCommitteeSites || [],
 
     isCampaignSuccess: campaignsState.isCampaignSuccess,
     campaignError: campaignsState.error,

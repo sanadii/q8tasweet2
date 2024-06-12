@@ -236,14 +236,12 @@ const AttendeesList = () => {
     // },
   ],
     // [handleCampaignAttendeeClick, checkedAll, findCommitteeById, findUserById, isAdmin, isAttendant]
-    [handleCampaignAttendeeClick, findUserById, isAdmin, isAttendant]
+    [handleCampaignAttendeeClick, findUserById, campaignMembers, isAdmin, isAttendant]
     // [handleCampaignAttendeeClick, findCommitteeById, findUserById, isAdmin, isAttendant]
   );
 
   // Filters
   const { filteredData: campaignAttendeeList, filters, setFilters } = useFilter(campaignAttendees);
-  console.log("campaignAttendees: ", campaignAttendees)
-  console.log("campaignAttendeeList: ", campaignAttendeeList)
 
 
   return (
@@ -285,16 +283,15 @@ const AttendeesList = () => {
                 />
 
                 <TableFilters
-                  // isGlobalFilter={true}
-                  // preGlobalFilteredRows={true}
-                  // // isGenderFilter={true}
-                  // isAttendeeStatusFilter={true}
-                  // // isCommitteeFilter={true}
-                  // isResetFilters={true}
+                  isGlobalFilter={true}
+                  preGlobalFilteredRows={true}
+                  isGenderFilter={true}
+                  // isCommitteeFilter={true}
+                  isResetFilters={true}
 
                   // Settings
-                  // filters={filters}
-                  // setFilters={setFilters}
+                  filters={filters}
+                  setFilters={setFilters}
                   SearchPlaceholder="البحث بالاسم أو الرقم المدني..."
                 />
 

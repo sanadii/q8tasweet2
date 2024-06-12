@@ -20,6 +20,8 @@ const Actions = (cellProps) => {
 
     } = cellProps
 
+    const cellPropId = cell.row.original.id
+
     let itemData
     if (schema) {
         itemData = {
@@ -105,7 +107,7 @@ const Actions = (cellProps) => {
             <div className="list-inline hstack gap-1 mb-0">
 
                 {/* View Item*/}
-                {options.includes("view") && (
+                {options.includes("view") &&  (
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-warning edit-list"
@@ -116,7 +118,7 @@ const Actions = (cellProps) => {
                 )}
 
                 {/* Update Item*/}
-                {options.includes("update") && (
+                {options.includes("update") && cellPropId &&(
 
                     <button
                         to="#"
@@ -128,8 +130,7 @@ const Actions = (cellProps) => {
                 )}
 
                 {/* Delete Item */}
-                {options.includes("delete") && (
-
+                {options.includes("delete") && cellPropId &&(
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-danger remove-list"

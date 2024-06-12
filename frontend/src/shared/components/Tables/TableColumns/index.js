@@ -183,29 +183,64 @@ const CampaignMember = ({ memberId, campaignMembers }) => {
 }
 
 
-const Guarantees = ({ memberId, campaignGuarantees, count }) => {
+const Guarantees = (cellProps) => {
+    const { memberId, guaranteeGroupId, groupMemberId, campaignGuarantees, count } = cellProps;
+    console.log("groups.... guaranteeGroupId: ", guaranteeGroupId, "groupMemberId: ", groupMemberId, "memberId: ", memberId)
 
-    let guaranteeCountForMember;
+    let guaranteeCountForMember = 0;
 
     if (count === "percentage") {
-        const totalGuarantees = campaignGuarantees.filter(
-            guarantee => guarantee?.member === memberId
-        ).length || 0;
-        const attendedGuarantees = campaignGuarantees.filter(
-            guarantee => guarantee?.member === memberId && guarantee?.attended === true
-        ).length || 0;
+        let totalGuarantees = 0;
+        let attendedGuarantees = 0;
+
+        if (memberId && !guaranteeGroupId) {
+            totalGuarantees = campaignGuarantees.filter(
+                guarantee => guarantee?.member === memberId
+            ).length || 0;
+
+            attendedGuarantees = campaignGuarantees.filter(
+                guarantee => guarantee?.member === memberId && guarantee?.attended === true
+            ).length || 0;
+        } else if (!memberId && guaranteeGroupId) {
+            totalGuarantees = campaignGuarantees.filter(
+                guarantee => guarantee?.guaranteeGroup === guaranteeGroupId
+            ).length || 0;
+
+            attendedGuarantees = campaignGuarantees.filter(
+                guarantee => guarantee?.guaranteeGroup === guaranteeGroupId && guarantee?.attended === true
+            ).length || 0;
+
+        } else if (memberId && guaranteeGroupId) {
+            console.log("The memberId: ", groupMemberId || "")
+
+            totalGuarantees = campaignGuarantees.filter(
+                guarantee => guarantee?.member === groupMemberId
+            ).length || 0;
+
+            attendedGuarantees = campaignGuarantees.filter(
+                guarantee => guarantee?.member === groupMemberId && guarantee?.attended === true
+            ).length || 0;
+
+        }
 
         guaranteeCountForMember = totalGuarantees ? (attendedGuarantees / totalGuarantees * 100).toFixed(2) + '%' : '0%';
     } else {
-        guaranteeCountForMember = campaignGuarantees.filter(
-            guarantee => guarantee?.member === memberId && (count === "attendees" ? guarantee?.attended === true : true)
-        ).length || 0;
+        if (memberId) {
+            guaranteeCountForMember = campaignGuarantees.filter(
+                guarantee => guarantee?.member === memberId && (count === "attendees" ? guarantee?.attended === true : true)
+            ).length || 0;
+        } else if (guaranteeGroupId) {
+            guaranteeCountForMember = campaignGuarantees.filter(
+                guarantee => guarantee?.guaranteeGroup === guaranteeGroupId && (count === "attendees" ? guarantee?.attended === true : true)
+            ).length || 0;
+        }
     }
 
     return (
         <span><strong>{guaranteeCountForMember}</strong></span>
     );
-}
+};
+
 
 
 

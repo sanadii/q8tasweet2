@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Row, Col, ModalBody } from "reactstrap";
 import { userSelector, campaignSelector } from 'selectors';
 
-import { useSupervisorMembers, useCampaignRoles } from "shared/hooks";
+import { useSupervisorMembers, useCampaignRoleOptions } from "shared/hooks";
 
 const MembersViewModal = ({ campaignMember }) => {
 
@@ -16,7 +16,7 @@ const MembersViewModal = ({ campaignMember }) => {
   } = useSelector(campaignSelector);
 
   const campaignSupervisors = useSupervisorMembers(campaignRoles, campaignMembers);
-  // const electionCommittees = useCampaignRoles(campaignElectionCommittees, campaignMembers);
+  // const electionCommittees = useCampaignRoleOptions(campaignElectionCommittees, campaignMembers);
 
   const displayField = (label, value) => {
     if (!value) return null;

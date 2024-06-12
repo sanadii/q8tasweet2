@@ -6,7 +6,7 @@ import { updateCampaignMember } from "store/actions";
 import { userSelector, campaignSelector } from 'selectors';
 
 // Components
-import { useMemberOptions, useCampaignRoles, getCommitteeSiteOptions, getAgentMemberCommitteeSites, getCommitteeOptions, getCampaignAgentMembers, useCampaignRoleString, isMemberRoleOption } from "shared/hooks";
+import { useMemberOptions, useCampaignRoleOptions, getCommitteeSiteOptions, getAgentMemberCommitteeSites, getCommitteeOptions, getCampaignAgentMembers, useCampaignRoleString, isMemberRoleOption } from "shared/hooks";
 import { FormFields } from "shared/components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -21,17 +21,15 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
   const { currentUser } = useSelector(userSelector);
   const {
     currentCampaignMember,
-    campaignMembers,
     campaignRoles,
-    electionCommitteeSites,
+    campaignMembers,
+    campaignElectionCommitteeSites,
   } = useSelector(campaignSelector);
 
   // Campaign Role Dictionary
   const campaignManagerRoles = ["campaignCandidate", "campaignAdmin", "campaignFieldAdmin", "CampainDigitalAdmin"];
   const campaignAgentRoles = ["campaignFieldAgent", "campaignDigitalAgent"];
   const campaignDelegateRoles = ["campaignFieldDelegate", "campaignDigitalDelegate"];
-
-
 
   // Form Validation
   const validation = useFormik({
@@ -83,15 +81,12 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
   });
 
   const isCurrentCampaignMember = campaignMember && currentCampaignMember.id === campaignMember.id;
-  // console.log("111 currentCampaignMember: ", currentCampaignMember)
-  // console.log("111 campaignMember: ", campaignMember)
-  console.log("111 isCurrentCampaignMember: ", isCurrentCampaignMember)
   const isAgentMember = campaignAgentRoles.includes(useCampaignRoleString(validation.values.role, campaignRoles));
   const isDelegateMember = campaignDelegateRoles.includes(useCampaignRoleString(validation.values.role, campaignRoles));
   const campaignMemberRoleCodename = useCampaignRoleString(validation.values.role, campaignRoles);
 
   // Filtered Role Options based on Current Member Role
-  const filteredRoleOptions = useCampaignRoles(campaignRoles, currentCampaignMember);
+  const filteredRoleOptions = useCampaignRoleOptions(campaignRoles, currentCampaignMember);
 
   // Get campaign Agent Options for Field and Digital
   const campaignFieldAgentOptions = useMemberOptions(campaignMembers, "campaignFieldAgent");
@@ -106,7 +101,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
 
   // Get CommitteeSite and Committee Options
   const selectedSupervisor = validation?.values?.supervisor || null
-  const committeeSiteOptions = getCommitteeSiteOptions(electionCommitteeSites);
+  const committeeSiteOptions = getCommitteeSiteOptions(campaignElectionCommitteeSites);
   const committeeOptions = getCommitteeOptions(selectedSupervisor, campaignMembers, committeeSiteOptions);
 
   // Form fields

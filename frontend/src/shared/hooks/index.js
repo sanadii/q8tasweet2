@@ -26,7 +26,7 @@ export { useElectorDataSource } from "./useElectorDataSource"
 export {
     useMemberOptions,
     useSupervisorMembers,
-    useCampaignRoles,
+    useCampaignRoleOptions,
     getCommitteeSiteOptions,
     getAllCommittees,
     getAgentMemberCommitteeSites,

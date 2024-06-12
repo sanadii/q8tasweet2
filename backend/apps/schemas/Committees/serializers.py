@@ -39,7 +39,7 @@ class CommitteeSiteSerializer(serializers.ModelSerializer):
             "gender",
             "description",
             "address",
-            "elector_count",
+            # "elector_count",
             "tags",
             "election",
             "committees",

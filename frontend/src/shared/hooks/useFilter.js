@@ -10,6 +10,9 @@ const useFilter = (data, initialFilters) => {
         committee: null,
         member: null,
         role: null,
+
+        // Guarantee
+        guaranteeStatus: null,
     });
 
     const globalSearchFilter = useCallback(({ name, fullName, civil }) => {
@@ -61,6 +64,15 @@ const useFilter = (data, initialFilters) => {
         return selectedCommittee === null || committee === selectedCommittee;
     }, [filters]);
 
+
+    // Guarantees
+    const filterByGuaranteeStatus = useCallback(({ status }) => {
+        const { guaranteeStatus: selectedStatus } = filters;
+        return selectedStatus === null || status === selectedStatus;
+    }, [filters]);
+
+
+    
     const filteredData = useMemo(() => {
         return data.filter(item => {
             return (
@@ -71,7 +83,8 @@ const useFilter = (data, initialFilters) => {
                 filterByPriority(item) &&
                 filterByRole(item) &&
                 filterByMember(item) &&
-                filterByCommittee(item)
+                filterByCommittee(item) &&
+                filterByGuaranteeStatus(item)
             );
         });
     }, [data, filterByCategory, globalSearchFilter, filterByGender, filterByStatus, filterByPriority, filterByRole, filterByMember, filterByCommittee]);

@@ -78,59 +78,82 @@ const GuaranteesGroupList = ({
     // and put how many guarantee in each group
     // and console log the result
 
-
     const [guaranteeGroups, setGuaranteeGroups] = useState([]);
 
     useEffect(() => {
-        // Check if guarantees and groups are successfully loaded
-        if (isCampaignGuaranteeSuccess) {
-            // Map campaignMembers by their id for quick access
-            const memberMap = campaignMembers.reduce((acc, member) => {
-                acc[member.id] = member.name;
-                return acc;
-            }, {});
+        // Map campaignMembers by their id for quick access
+        const memberMap = campaignMembers.reduce((acc, member) => {
+            acc[member.id] = "لا يوجد";
+            return acc;
+        }, {});
 
-            // Map campaignGuaranteeGroups by their id for quick access
-            const groupMap = campaignGuaranteeGroups.reduce((acc, group) => {
-                acc[group.id] = group.name;
-                return acc;
-            }, {});
+        // Map campaignGuaranteeGroups by their id for quick access
+        const groupMap = campaignGuaranteeGroups.reduce((acc, group) => {
+            acc[group.id] = group.name;
+            return acc;
+        }, {});
 
-            // Initialize a result object to store the count of guarantees in each group
-            const result = {};
+        // Initialize a result object to store the count of guarantees in each group
+        const result = {};
 
-            campaignGuarantees.forEach((guarantee) => {
-                // Determine the group name or member name
-                const groupName =
-                    groupMap[guarantee.group] || memberMap[guarantee.member] || "Unknown";
+        campaignGuarantees.forEach((guarantee) => {
+            // Determine the group name or member name
+            const groupName =
+                groupMap[guarantee.group] || memberMap[guarantee.member] || "Unknown";
 
-                // Initialize the group in result if not already present
-                if (!result[groupName]) {
-                    result[groupName] = {
-                        memberName: memberMap[guarantee.member] || "Unknown",
-                        count: 0,
-                    };
-                }
+            // Initialize the group in result if not already present
+            if (!result[groupName]) {
+                result[groupName] = {
+                    memberName: memberMap[guarantee.member] || "Unknown",
+                    count: 0,
+                };
+            }
 
-                // Increment the count for the group
-                result[groupName].count++;
-            });
+            // Increment the count for the group
+            result[groupName].count++;
+        });
 
-            // Convert result to an array of objects for returning and setting state
-            const sortedResult = Object.keys(result)
-                .map((groupName) => ({
-                    groupName,
-                    memberName: result[groupName].memberName,
-                    count: result[groupName].count,
-                }))
-                .sort((a, b) => a.groupName.localeCompare(b.groupName));
+        // Convert result to an array of objects for returning and setting state
+        const sortedResult = Object.keys(result)
+            .map((groupName) => ({
+                groupName,
+                memberName: result[groupName].memberName,
+                count: result[groupName].count,
+            }))
+            .sort((a, b) => a.groupName.localeCompare(b.groupName));
 
-            // Log the sorted result
-            console.log("sortedResult: ", sortedResult);
+        // Log the sorted result
+        console.log("sortedResult: ", sortedResult);
 
-            // Update state with sorted result
-            setGuaranteeGroups(sortedResult);
-        }
+        // Update state with sorted result
+        setGuaranteeGroups(sortedResult);
+
+        // Create new guarantee groups for guarantees without a guaranteeGroup
+        const newGuaranteeGroups = campaignGuarantees
+            .filter((guarantee) => !guarantee.group)
+            .map((guarantee) => ({
+                id: null,
+                name: memberMap[guarantee.member],
+                member: guarantee.member,
+                phone: "", // Add phone if available
+                note: "", // Add note if available
+            }));
+
+        // Remove duplicates from newGuaranteeGroups based on member
+        const uniqueNewGuaranteeGroups = newGuaranteeGroups.filter(
+            (group, index, self) =>
+                index === self.findIndex((g) => g.member === group.member)
+        );
+
+        // Log the new guarantee groups
+        console.log("newGuaranteeGroups: ", uniqueNewGuaranteeGroups);
+
+        // Update state with new guarantee groups
+        setGuaranteeGroups((prevGroups) => [
+            ...uniqueNewGuaranteeGroups,
+            ...campaignGuaranteeGroups,
+        ]);
+
     }, [
         campaignGuarantees,
         campaignGuaranteeGroups,
@@ -138,6 +161,7 @@ const GuaranteesGroupList = ({
         isCampaignGuaranteeSuccess,
     ]);
 
+    console.log("guaranteeGroups: ", guaranteeGroups);
 
 
     const columns = useMemo(
@@ -153,7 +177,6 @@ const GuaranteesGroupList = ({
             },
             {
                 Header: "المجموعة",
-                accessor: "name",
                 Cell: (cellProps) => (
                     <Name
                         id={cellProps.row.original.id}
@@ -191,9 +214,10 @@ const GuaranteesGroupList = ({
                 accessor: "guarantees",
                 Cell: (cellProps) =>
                     <Guarantees
+                        guaranteeGroupId={cellProps.row.original.id}
                         memberId={cellProps.row.original.member}
                         campaignGuarantees={campaignGuarantees}
-                        count="guarantees"
+                        count="guaranteeGroups"
 
                     />
             },
@@ -202,7 +226,7 @@ const GuaranteesGroupList = ({
                 accessor: "guaranteesAttended",
                 Cell: (cellProps) =>
                     <Guarantees
-                        memberId={cellProps.row.original.member}
+                        guaranteeGroupId={cellProps.row.original.committeeGroup}
                         campaignGuarantees={campaignGuarantees}
                         count="attendees"
                     />
@@ -227,16 +251,10 @@ const GuaranteesGroupList = ({
                         handleItemDeleteClick={handleItemDeleteClick}
                     />
             },
-        ], [handleSelectCampaignGuaranteeGroup, electionSlug, handleCheckAllClick, handleCheckCellClick, handleItemDeleteClick, handleCampaignGuaranteeGroupClick, campaignMembers]);
+        ], [handleSelectCampaignGuaranteeGroup, electionSlug, campaignGuarantees, handleCheckAllClick, handleCheckCellClick, handleItemDeleteClick, handleCampaignGuaranteeGroupClick, campaignMembers]);
 
     // Assuming useFilter returns an object with a property named filteredData
-    const filterResult = useFilter(campaignGuaranteeGroups);
-
-    // Now, if campaignGuaranteeGroups is truthy, we destructure filteredData from it
-    const campaignGuaranteeGroupList = campaignGuaranteeGroups ? filterResult.filteredData : [];
-
-    // Destructuring other properties directly as they are not dependent on campaignGuaranteeGroups
-    const { filters, setFilters } = filterResult || [];
+    const { filteredData: campaignGuaranteeGroupList, filters, setFilters } = useFilter(guaranteeGroups);
 
     useEffect(() => {
         // Check if selectedCampaignMember and its id exist
