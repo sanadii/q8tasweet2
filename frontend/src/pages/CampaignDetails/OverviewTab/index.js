@@ -17,10 +17,10 @@ import ChartMapWidgets from "./ChartMapWidgets"
 import OverviewGuarantees from "./OverviewGuarantees"
 
 import GuaranteeCals from "./OverviewGuarantees/GuaranteeCals"
-import GuaranteeChart from "./OverviewGuarantees/GuaranteeChart"
-import GuaranteeTarget from "./OverviewGuarantees/GuaranteeRadialBar"
-import GuaranteeRadialBar from "./OverviewGuarantees/GuaranteeRadialBar"
-import GuaranteeTargetBar from "./OverviewGuarantees/GuaranteeTargetBar"
+import GuaranteeChart from "./OverviewGuarantees/Charts/GuaranteeChart"
+import GuaranteeTarget from "./OverviewGuarantees/Charts/GuaranteeRadialBar"
+import GuaranteeRadialBar from "./OverviewGuarantees/Charts/GuaranteeRadialBar"
+import GuaranteeTargetBar from "./OverviewGuarantees/Charts/GuaranteeTargetBar"
 
 import OverviewNotifications from "./OverViewNotifications";
 import { calculateCampaignData } from 'shared/hooks';
@@ -36,6 +36,7 @@ const OverviewTab = () => {
   const {
     campaign,
     electionSlug,
+    previousElection,
     campaignGuarantees,
     campaignMembers,
     campaignGuaranteeGroups,
@@ -67,11 +68,12 @@ const OverviewTab = () => {
         <OverviewCandidate />
         {/* <ChartMapWidgets /> */}
 
-        <CampaignWidgets />
+        {/* <CampaignWidgets /> */}
         <OverviewGuarantees
           campaign={campaign}
           campaignGuarantees={campaignGuarantees}
           campaignMembers={campaignMembers}
+          previousElection={previousElection}
         />
 
         {/* <OverviewNotifications />  */}

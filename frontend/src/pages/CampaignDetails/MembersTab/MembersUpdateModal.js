@@ -86,7 +86,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
   const campaignMemberRoleCodename = useCampaignRoleString(validation.values.role, campaignRoles);
 
   // Filtered Role Options based on Current Member Role
-  const filteredRoleOptions = useCampaignRoleOptions(campaignRoles, currentCampaignMember);
+  const campaignRoleOptions = useCampaignRoleOptions(campaignRoles, currentCampaignMember);
 
   // Get campaign Agent Options for Field and Digital
   const campaignFieldAgentOptions = useMemberOptions(campaignMembers, "campaignFieldAgent");
@@ -111,7 +111,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
       name: "role",
       label: "الرتبة",
       type: "select",
-      options: filteredRoleOptions,
+      options: campaignRoleOptions,
       condition: !isCurrentCampaignMember,
     },
     {

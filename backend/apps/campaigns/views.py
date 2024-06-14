@@ -70,7 +70,10 @@ from apps.schemas.guarantees.serializers import (
 
 # from apps.notifications.models import CampaignNotification, CampaignPartyNotification
 from apps.elections.candidates.serializers import ElectionCandidateSerializer
-from apps.schemas.committees.serializers import CommitteeSerializer, CommitteeSiteSerializer
+from apps.schemas.committees.serializers import (
+    CommitteeSerializer,
+    CommitteeSiteSerializer,
+)
 from apps.auths.serializers import GroupSerializer
 
 # from apps.notifications.serializers import CampaignNotificationSerializer
@@ -84,6 +87,7 @@ from apps.campaigns.views_helper import (
 )
 
 from utils.schema import schema_context
+
 # from django.db import ElectorsByGender
 
 
@@ -152,228 +156,6 @@ def get_campaign_related_object(obj):
         raise ValueError("Campaign object is missing campaign_type or campaigner_id")
 
 
-class GetCampaignDetails(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, slug):
-
-        context = {"request": request}
-        user_id = context["request"].user.id
-        campaign = get_object_or_404(Campaign, slug=slug)
-
-        # Election
-        # related_object = get_campaign_related_object(campaign)
-        election = campaign.election_candidate.election
-        election_slug = election.slug
-
-        # Get Campaign Roles
-        campaign_roles = get_campaign_roles(context)
-
-        # get campaign members
-        current_campaign_member = get_current_campaign_member(
-            campaign.id, user_id, context
-        )
-
-        # Does User have Higher Privilage? Admin? Moderator?
-        user_role = determine_user_role(campaign.id, user_id, campaign_roles, context)
-
-        # Fetch campaign members based on user/member role
-        campaign_members, campaign_managed_members = get_campaign_members_by_role(
-            campaign, user_role, current_campaign_member
-        )
-
-        # election = campaign.election_candidate.election
-        election_candidates = ElectionCandidate.objects.filter(
-            election=election
-        ).select_related("election")
-        # election_committee_groups = Committee.objects.filter(
-        #     election=election
-        # ).select_related("election")
-        # campaign_attendees = CampaignAttendee.objects.filter(
-        #     election=election
-        # ).select_related("election")
-        # campaign_notifications = CampaignNotification.objects.filter(
-        #     campaign=campaign
-        # ).select_related("campaign")
-
-        # # Initialize dictionaries to store attendees and sorters for each committee
-        # campaign_committee_attendees = {}
-        # campaign_committee_sorters = {}
-
-        # # Iterate over each committee and fetch its attendees and sorters
-        # for committee in election_committee_groups:
-        #     attendees = CampaignCommitteeAttendee.objects.filter(committee=committee)
-        #     sorters = CampaignCommitteeSorter.objects.filter(committee=committee)
-
-        #     # Serialize and store the data
-        #     campaign_committee_attendees[committee.id] = (
-        #         CampaignCommitteeAttendeeSerializer(
-        #             attendees, many=True, context=context
-        #         ).data
-        #     )
-        #     campaign_committee_sorters[committee.id] = (
-        #         CampaignCommitteeSorterSerializer(
-        #             sorters, many=True, context=context
-        #         ).data
-        #     )
-
-        # ... rest of your view logic ...
-
-        # Prepare data for each election candidate
-        election_candidates_data = []
-        for candidate in election_candidates:
-            candidate_data = ElectionCandidateSerializer(
-                candidate, context=context
-            ).data
-            # candidate_sorting = CampaignSorting.objects.filter(
-            #     election_candidate=candidate
-            # )
-            # candidate_data["sorting"] = CampaignSortingSerializer(
-            #     candidate_sorting, many=True, context=context
-            # ).data
-            election_candidates_data.append(candidate_data)
-
-        response_data = {
-            "currentCampaignMember": current_campaign_member,
-            "campaignDetails": CampaignSerializer(campaign, context=context).data,
-            "electionDetails": ElectionSerializer(election, context=context).data,
-            "campaignMembers": CampaignMemberSerializer(
-                campaign_members, many=True, context=context
-            ).data,
-            "campaignElectionCandidates": ElectionCandidateSerializer(
-                election_candidates, many=True, context=context
-            ).data,
-            "campaign_roles": campaign_roles,
-        }
-
-        get_campaign_schema_content(
-            context, election_slug, campaign, campaign_managed_members, response_data
-        )
-
-        # Further processing, returning response or any other operations can continue here...
-        return Response({"data": response_data, "code": 200})
-
-
-def get_campaign_schema_content(
-    context, election_slug, campaign, campaign_managed_members, response_data
-):
-    # Ensure response_data is a dictionary
-    if not isinstance(response_data, dict):
-        response_data = {}
-
-    with schema_context(election_slug) as election:
-        if isinstance(election, Response):
-            return election
-
-        campaign_id = campaign.id if hasattr(campaign, "id") else campaign
-
-        # Fetch Campaign Election Committees
-        try:
-            election_committee_sites = CommitteeSite.objects.prefetch_related(
-                "committee_site_committees"
-            ).all()
-            if election_committee_sites.exists():
-                committees_data = CommitteeSiteSerializer(
-                    election_committee_sites, many=True, context=context
-                ).data
-                response_data["election_committee_sites"] = committees_data
-        except Exception as e:
-            response_data["committeeDataError"] = str(e)
-            
-            
-        # Fetch Campaign Guarantee Groups
-        try:
-            campaign_guarantee_groups = CampaignGuaranteeGroup.objects.filter(
-                member__in=campaign_managed_members.values_list("id", flat=True)
-            )
-            if campaign_guarantee_groups.exists():
-                campaign_guarantee_group_data = CampaignGuaranteeGroupSerializer(
-                    campaign_guarantee_groups, many=True, context=context
-                ).data
-                response_data["campaign_guarantee_groups"] = (
-                    campaign_guarantee_group_data
-                )
-        except Exception as e:
-            response_data["campaignGuaranteeGroupDataError"] = str(e)
-        
-        
-        # Fetch Campaign Guarantees
-        try:
-            campaign_guarantees = CampaignGuarantee.objects.all()
-            print("campaign_guarantees: ", campaign_guarantees)
-
-            if campaign_guarantees.exists():
-                campaign_guarantee_data = CampaignGuaranteeSerializer(
-                    campaign_guarantees, many=True, context=context
-                ).data
-                response_data["campaign_guarantees"] = campaign_guarantee_data
-        except Exception as e:
-            response_data["campaignGuaranteeDataError"] = str(e)
-
-        # Fetch Campaign Attendees
-        try:
-            campaign_attendees = CampaignAttendee.objects.filter(
-                member__in=campaign_managed_members.values_list("id", flat=True)
-            )
-
-            if campaign_attendees.exists():
-                campaign_attendee_data = CampaignAttendeeSerializer(
-                    campaign_attendees, many=True, context=context
-                ).data
-                response_data["campaign_attendees"] = campaign_attendee_data
-        except Exception as e:
-            response_data["campaignAttendeeDataError"] = str(e)
-
-
-
-            
-
-            
-    return Response(response_data)
-
-    
-    # "committees": CommitteeSerializer(
-    #     election_committee_groups, many=True, context=context
-    # ).data,
-    # "campaignCommittees": CampaignCommitteeSerializer(campaign_committees, many=True, context=context).data,
-    # "campaignCommitteeAttendees": campaign_committee_attendees,
-    # "campaignCommitteeSorters": campaign_committee_sorters,
-
-    # campaign_guarantee_groups = CampaignGuaranteeGroup.objects.all()
-    # #     member__user__id__in=campaign_managed_members.values_list('user__id', flat=True)
-    # # ).select_related('campaign')
-
-    # # Extract user ids from campaign_managed_members to further filter guarantees based on member's user
-    # campaign_guarantees = CampaignGuarantee.objects.filter(
-    #     campaign=campaign,
-    #     member__user__id__in=campaign_managed_members.values_list(
-    #         "user__id", flat=True
-    #     ),
-    # ).select_related("campaign")
-
-    # Get info from Schema
-    # # Extract user ids from campaign_managed_members to further filter guarantees based on member's user
-    # campaign_guarantees = CampaignGuarantee.objects.all()
-    # print("campaign_guarantees: ", campaign_guarantees)
-    # campaign_guarantee_groups = CampaignGuaranteeGroup.objects.all()
-    # #     member__user__id__in=campaign_managed_members.values_list('user__id', flat=True)
-    # # ).select_related('campaign')
-
-    # "campaignGuarantees": CampaignGuaranteeSerializer(
-    #     campaign_guarantees, many=True, context=context
-    # ).data,
-    # "campaignGuaranteeGroups": CampaignGuaranteeGroupSerializer(
-    #     campaign_guarantee_groups, many=True, context=context
-    # ).data,
-    # "campaignAttendees": CampaignAttendeeSerializer(
-    #     campaign_attendees, many=True, context=context
-    # ).data,
-    # "campaignNotifications": CampaignNotificationSerializer(
-    #     campaign_notifications, many=True, context=context
-    # ).data,
-
-
-
 # class GetCampaignDetails(APIView):
 #     permission_classes = [IsAuthenticated]
 
@@ -383,68 +165,32 @@ def get_campaign_schema_content(
 #         user_id = context["request"].user.id
 #         campaign = get_object_or_404(Campaign, slug=slug)
 
-#         # Does User have Higher Privilage? Admin? Moderator?
+#         # Election
+#         # related_object = get_campaign_related_object(campaign)
+#         election = campaign.election_candidate.election
+#         election_slug = election.slug
+#         previous_election = get_previous_election(election)
 
-#         user_role = determine_user_role(campaign.id, user_id, context)
+#         # Get Campaign Roles
+#         campaign_roles = get_campaign_roles(context)
+
+#         # get campaign members
 #         current_campaign_member = get_current_campaign_member(
 #             campaign.id, user_id, context
 #         )
+
+#         # Does User have Higher Privilage? Admin? Moderator?
+#         user_role = determine_user_role(campaign.id, user_id, campaign_roles, context)
 
 #         # Fetch campaign members based on user/member role
 #         campaign_members, campaign_managed_members = get_campaign_members_by_role(
 #             campaign, user_role, current_campaign_member
 #         )
 
-#         # Fetch related object
-#         related_object = get_campaign_related_object(campaign)
-#         election = related_object.election
-
-#         print("content_objectcontent_object: ", campaign.content_object)
-
-
-#         # campaigner = campaign_type.get_object_for_this_type(id=campaigner_id)
-
-#         # election = related_object.election
-
-#         # if type is candidate, model is Candidate
-#         # if type is party, model is party
-
-#         # election = campaign.campaigner_id.election
+#         # election = campaign.election_candidate.election
 #         election_candidates = ElectionCandidate.objects.filter(
 #             election=election
 #         ).select_related("election")
-#         # election_committee_groups = Committee.objects.filter(
-#         #     election=election
-#         # ).select_related("election")
-#         # campaign_attendees = CampaignAttendee.objects.filter(
-#         #     election=election
-#         # ).select_related("election")
-#         # campaign_notifications = CampaignNotification.objects.filter(
-#         #     campaign=campaign
-#         # ).select_related("campaign")
-
-#         # # Initialize dictionaries to store attendees and sorters for each committee
-#         # campaign_committee_attendees = {}
-#         # campaign_committee_sorters = {}
-
-#         # # Iterate over each committee and fetch its attendees and sorters
-#         # for committee in election_committee_groups:
-#         #     attendees = CampaignCommitteeAttendee.objects.filter(committee=committee)
-#         #     sorters = CampaignCommitteeSorter.objects.filter(committee=committee)
-
-#         #     # Serialize and store the data
-#         #     campaign_committee_attendees[committee.id] = (
-#         #         CampaignCommitteeAttendeeSerializer(
-#         #             attendees, many=True, context=context
-#         #         ).data
-#         #     )
-#         #     campaign_committee_sorters[committee.id] = (
-#         #         CampaignCommitteeSorterSerializer(
-#         #             sorters, many=True, context=context
-#         #         ).data
-#         #     )
-
-#         # ... rest of your view logic ...
 
 #         # Prepare data for each election candidate
 #         election_candidates_data = []
@@ -460,44 +206,197 @@ def get_campaign_schema_content(
 #             # ).data
 #             election_candidates_data.append(candidate_data)
 
-#         # Further processing, returning response or any other operations can continue here...
-#         return Response(
-#             {
-#                 "data": {
-#                     "currentCampaignMember": current_campaign_member,
-#                     "campaignDetails": CampaignSerializer(
-#                         campaign, context=context
-#                     ).data,
-#                     "campaignMembers": CampaignMemberSerializer(
-#                         campaign_members, many=True, context=context
-#                     ).data,
-#                     # "campaignGuarantees": CampaignGuaranteeSerializer(
-#                     #     campaign_guarantees, many=True, context=context
-#                     # ).data,
-#                     # "campaignGuaranteeGroups": CampaignGuaranteeGroupSerializer(
-#                     #     campaign_guarantee_groups, many=True, context=context
-#                     # ).data,
-#                     # "campaignAttendees": CampaignAttendeeSerializer(
-#                     #     campaign_attendees, many=True, context=context
-#                     # ).data,
-#                     # "campaignNotifications": CampaignNotificationSerializer(
-#                     #     campaign_notifications, many=True, context=context
-#                     # ).data,
-#                     "campaignElectionCandidates": ElectionCandidateSerializer(
-#                         election_candidates, many=True, context=context
-#                     ).data,
-#                     # "committees": CommitteeSerializer(
-#                     #     election_committee_groups, many=True, context=context
-#                     # ).data,
-#                     # "campaignCommittees": CampaignCommitteeSerializer(campaign_committees, many=True, context=context).data,
-#                     # "campaignCommitteeAttendees": campaign_committee_attendees,
-#                     # "campaignCommitteeSorters": campaign_committee_sorters,
-#                     "campaign_roles": get_campaign_roles(context),
-#                 },
-#                 "code": 200,
-#             }
+#         election_details = CampaignSerializer(campaign, context=context).data
+#         election_candidatess = ElectionCandidateSerializer(
+#             election_candidates, many=True, context=context
+#         ).data
+
+#         response_data = {
+#             "currentCampaignMember": current_campaign_member,
+#             "campaignDetails": election_details,
+#             "previousElection": ElectionSerializer(
+#                 previous_election, context=context
+#             ).data,
+#             "campaignMembers": CampaignMemberSerializer(
+#                 campaign_members, many=True, context=context
+#             ).data,
+#             "campaignElectionCandidates": election_candidates,
+#             "campaign_roles": campaign_roles,
+#         }
+
+#         get_campaign_schema_content(
+#             context, election_slug, campaign, campaign_managed_members, response_data
 #         )
 
+#         # Further processing, returning response or any other operations can continue here...
+#         return Response({"data": response_data, "code": 200})
+
+
+class GetCampaignDetails(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, slug):
+        context = {"request": request}
+        user_id = context["request"].user.id
+        campaign = get_object_or_404(Campaign, slug=slug)
+
+        # Get Campaign Roles
+        campaign_roles = get_campaign_roles(context)
+
+        # Get current campaign member
+        current_campaign_member = get_current_campaign_member(
+            campaign.id, user_id, context
+        )
+
+        # Determine the user's role
+        user_role = determine_user_role(campaign.id, user_id, campaign_roles, context)
+
+        # Fetch campaign members based on user/member role
+        campaign_members, campaign_managed_members = get_campaign_members_by_role(
+            campaign, user_role, current_campaign_member
+        )
+
+        # Serialize campaign details
+        campaign_details = CampaignSerializer(campaign, context=context).data
+
+        response_data = {
+            "currentCampaignMember": current_campaign_member,
+            "campaignDetails": campaign_details,
+            "campaignMembers": CampaignMemberSerializer(
+                campaign_members, many=True, context=context
+            ).data,
+            "campaign_roles": campaign_roles,
+        }
+
+        # Get the related election details
+        election = campaign.election_candidate.election
+        election_slug = election.slug
+        election_details_data = get_election_details(election, context)
+
+        # Add election details to the response
+        response_data.update(election_details_data)
+
+        get_campaign_schema_content(
+            context, election_slug, campaign, campaign_managed_members, response_data
+        )
+
+        return Response({"data": response_data, "code": 200})
+
+
+def get_election_details(election, context):
+    previous_election = get_previous_election(election)
+
+    # Get current election candidates
+    current_election_candidates = ElectionCandidate.objects.filter(
+        election=election
+    ).select_related("election")
+
+    current_election_candidates_data = [
+        ElectionCandidateSerializer(candidate, context=context).data
+        for candidate in current_election_candidates
+    ]
+
+    # Prepare current election details
+    current_election = {
+        "election_details": ElectionSerializer(election, context=context).data,
+        "election_candidates": current_election_candidates_data
+    }
+
+    # Prepare previous election details if available
+    previous_election_data = {}
+    if previous_election:
+        previous_election_candidates = ElectionCandidate.objects.filter(
+            election=previous_election
+        ).select_related("election")
+
+        previous_election_candidates_data = [
+            ElectionCandidateSerializer(candidate, context=context).data
+            for candidate in previous_election_candidates
+        ]
+
+        previous_election_data = {
+            "election_details": ElectionSerializer(previous_election, context=context).data,
+            "election_candidates": previous_election_candidates_data
+        }
+
+    return {
+        "current_election": current_election,
+        "previous_election": previous_election_data
+    }
+
+
+def get_previous_election(election):
+    previous_election = (
+        Election.objects.filter(
+            sub_category=election.sub_category, due_date__lt=election.due_date
+        )
+        .order_by("-due_date")
+        .first()
+    )
+
+    if previous_election:
+        return previous_election
+    return None
+
+
+def get_campaign_schema_content(
+    context, election_slug, campaign, campaign_managed_members, response_data
+):
+    if not isinstance(response_data, dict):
+        response_data = {}
+
+    with schema_context(election_slug):
+        campaign_id = campaign.id if hasattr(campaign, "id") else campaign
+
+        try:
+            election_committee_sites = CommitteeSite.objects.prefetch_related(
+                "committee_site_committees"
+            ).all()
+            if election_committee_sites.exists():
+                committees_data = CommitteeSiteSerializer(
+                    election_committee_sites, many=True, context=context
+                ).data
+                response_data["election_committee_sites"] = committees_data
+        except Exception as e:
+            response_data["committeeDataError"] = str(e)
+
+        try:
+            campaign_guarantee_groups = CampaignGuaranteeGroup.objects.filter(
+                member__in=campaign_managed_members.values_list("id", flat=True)
+            )
+            if campaign_guarantee_groups.exists():
+                campaign_guarantee_group_data = CampaignGuaranteeGroupSerializer(
+                    campaign_guarantee_groups, many=True, context=context
+                ).data
+                response_data["campaign_guarantee_groups"] = campaign_guarantee_group_data
+        except Exception as e:
+            response_data["campaignGuaranteeGroupDataError"] = str(e)
+
+        try:
+            campaign_guarantees = CampaignGuarantee.objects.filter(
+                member__in=campaign_managed_members.values_list("id", flat=True)
+            )
+            if campaign_guarantees.exists():
+                campaign_guarantee_data = CampaignGuaranteeSerializer(
+                    campaign_guarantees, many=True, context=context
+                ).data
+                response_data["campaign_guarantees"] = campaign_guarantee_data
+        except Exception as e:
+            response_data["campaignGuaranteeDataError"] = str(e)
+
+        try:
+            campaign_attendees = CampaignAttendee.objects.filter(
+                member__in=campaign_managed_members.values_list("id", flat=True)
+            )
+            if campaign_attendees.exists():
+                campaign_attendee_data = CampaignAttendeeSerializer(
+                    campaign_attendees, many=True, context=context
+                ).data
+                response_data["campaign_attendees"] = campaign_attendee_data
+        except Exception as e:
+            response_data["campaignAttendeeDataError"] = str(e)
+
+    return Response(response_data)
 
 class AddCampaign(APIView):
     permission_classes = [IsAuthenticated]
@@ -549,8 +448,6 @@ class DeleteCampaign(APIView):
             return JsonResponse(
                 {"data": "Campaign not found", "count": 0, "code": 404}, safe=False
             )
-
-
 
 
 class GetAllCampaignSorting(APIView):

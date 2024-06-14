@@ -1,17 +1,20 @@
 import React from "react";
 
 import GuaranteeCals from "./GuaranteeCals"
-import GuaranteeChart from "./GuaranteeChart"
-import GuaranteeTarget from "./GuaranteeRadialBar"
-import GuaranteeRadialBar from "./GuaranteeRadialBar"
-import GuaranteeTargetBar from "./GuaranteeTargetBar"
 import Guarantors from "./Guarantors";
+
+// Charts
+import GuaranteeChart from "./Charts/GuaranteeChart"
+import GuaranteeTarget from "./Charts/GuaranteeRadialBar"
+import GuaranteeRadialBar from "./Charts/GuaranteeRadialBar"
+import GuaranteeTargetBar from "./Charts/GuaranteeTargetBar"
+
 import { calculateCampaignData } from 'shared/hooks';
 import { usePermission } from 'shared/hooks';
 import { Col, Row } from "reactstrap";
 
 
-const OverviewGuarantees = ({ campaign, campaignGuarantees, campaignMembers }) => {
+const OverviewGuarantees = ({ campaign, campaignGuarantees, campaignMembers, previousElection }) => {
 
     const results = calculateCampaignData(campaign, campaignGuarantees);
 
@@ -28,12 +31,19 @@ const OverviewGuarantees = ({ campaign, campaignGuarantees, campaignMembers }) =
     return (
         <React.Fragment>
             {/* Guarantees */}
-            {canViewCampaignGuarantee && campaign?.electionDetails?.previousElections &&
+            {/* {canViewCampaignGuarantee && campaign?.electionDetails?.previousElections &&
                 <GuaranteeTargetBar
                     campaign={campaign}
                     results={results}
                 />
-            }
+            } */}
+
+            <GuaranteeTargetBar
+                campaign={campaign}
+                results={results}
+                previousElection={previousElection}
+            />
+
             <Row>
                 <Col sm={6}>
                     <GuaranteeChart

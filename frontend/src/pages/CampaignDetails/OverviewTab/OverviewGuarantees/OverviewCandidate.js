@@ -10,14 +10,15 @@ const OverviewCandidate = () => {
 
   const {
     campaign,
-    currentCampaignMember,
+    currentElection,
     campaignMembers,
     campaignRoles,
-    campaignElectionCandidates,
     campaignElectionCommittees,
   } = useSelector(campaignSelector);
   const { currentUser } = useSelector(userSelector);
 
+
+  console.log("what is the current currentElection: ", currentElection)
   // Permissions
   const { canChangeConfig } = usePermission();
 
@@ -31,22 +32,25 @@ const OverviewCandidate = () => {
   // Format role names
   const formatRoleNames = (members) => members.map(member => member.name).join(' | ');
 
-  const electionDetails = [
+  const electionDetails = currentElection?.electionDetails
+  console.log("electionDetailselectionDetails: ", electionDetails)
+
+  const currentElectionInfo = [
     // {
     //   name: 'الانتخابات',
     //   data: campaign.election.name,
     // },
     {
       name: 'المرشحين',
-      data: `${campaignElectionCandidates?.length ?? 0} مرشح`,
+      data: `${currentElection?.electionCandidates?.length ?? 0} مرشح`,
     },
     {
       name: 'المقاعد',
-      data: `${campaign?.election?.electSeats ? `${campaign.election.electSeats} مقعد` : "-"}`,
+      data: `${currentElection?.electionDetails?.electSeats ? `${currentElection?.electionDetails?.electSeats} مقعد` : "-"}`,
     },
     {
       name: 'الأصوات',
-      data: `${campaign?.election?.electVotes ? `${campaign.election.electVotes} صوت` : "-"}`,
+      data: `${currentElection?.electionDetails?.electVotes ? `${currentElection?.electionDetails?.electVotes} صوت` : "-"}`,
     },
     {
       name: 'اللجان',
@@ -135,7 +139,7 @@ const OverviewCandidate = () => {
               <Row>
                 <Col lg={6}>
                   <h5><strong>الإنتخابات</strong></h5>
-                  {electionDetails.map((detail, index) => (
+                  {currentElectionInfo.map((detail, index) => (
 
                     <div key={index} class="d-flex align-items-center">
                       <i class="ri-stop-fill align-middle fs-18 text-primary me-2"></i>

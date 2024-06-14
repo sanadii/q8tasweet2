@@ -1,40 +1,15 @@
-import warnings
-from datetime import datetime, timedelta
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
-
-import django
-from django.contrib.auth import get_permission_codename
-from django.core.paginator import EmptyPage, InvalidPage, Paginator
-from django.forms import EmailField, Textarea, URLField
-from django.template import RequestContext
-from django.template.response import TemplateResponse
 from django.utils.translation import gettext as _
-
-# import mezzanine
-# from mezzanine.conf import settings
-# from utils.deprecation import is_authenticated
-# from utils.importing import import_dotted_path
-# from utils.sites import has_site_permission
-from apps.auths.models import Group, User
 from django.db.models import Q
 
-from apps.campaigns.models import Campaign
+
+# App Models
+from apps.auths.models import Group, User
 from apps.campaigns.members.models import CampaignMember
-# from apps.campaigns.models import Campaign, CampaignParty, CampaignMember, CampaignPartyMember
-from apps.campaigns.members.serializers import CampaignMemberSerializer
+
+# App Serializers
 from apps.auths.serializers import GroupSerializer
+from apps.campaigns.members.serializers import CampaignMemberSerializer
 
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
-
-from apps.auths.models import User
-# from apps.campaigns.models import CampaignMember
-from apps.auths.serializers import UserSerializer
-# from apps.campaigns.serializers import  CampaignSerializer
 
 
 def get_campaign_roles(context):
@@ -52,7 +27,7 @@ def get_campaign_roles(context):
 
 def determine_user_role(campaign_id, user_id, campaign_roles, context):
     """
-    Determines the role of a user within a campaign or if has higher privilege. 
+    Determines the role of a user within a campaign or if has higher privilege.
     Parameters: campaign_id (the identifier of the campaign), user_id (the identifier of the user), and context (for serialization).
     It first checks if the user has admin or superAdmin privileges.
     If not, it attempts to find the user's role within the campaign.
@@ -63,7 +38,7 @@ def determine_user_role(campaign_id, user_id, campaign_roles, context):
     # Check if user is admin or superAdmin first
     if is_higher_privilege(user_id):
         return "higherPrivilage"
-    print("campaign_rolescampaign_roles: ", campaign_roles)
+    # print("campaign_rolescampaign_roles: ", campaign_roles)
     # Convert campaign_roles to a dictionary for faster lookup
     # role_lookup = {id: role.id for role in campaign_roles}
     # print("role_lookup: ", role_lookup)
@@ -85,6 +60,34 @@ def is_higher_privilege(user_id):
     """    
     return User.objects.filter(pk=user_id, groups__codename__in=["admin", "superAdmin"]).exists()
 
+def get_campaign_managed_members(campaign, current_campaign_member, user_role):
+    """Get members managed by the given supervisor."""
+    campaign_member_id = current_campaign_member.get('id')
+    current_campaign_member_qs = CampaignMember.objects.filter(id=campaign_member_id)
+
+
+    print("get_campaign_members_by_role: ", "user_role: ", user_role)
+
+    # If supervisor, get the member managed by supervisor together with current member (supervisor)
+    if user_role == "campaignFieldAgent":
+        campaign_supervised_members = CampaignMember.objects.filter(supervisor_id=campaign_member_id)
+        campaign_managed_members = current_campaign_member_qs | campaign_supervised_members
+
+    elif user_role == "campaignFieldAdmin":
+        field_roles = ["campaignFieldAgent", "campaignFieldDelegate"]
+        # campaign_supervised_members = CampaignMember.objects.all()
+
+        campaign_supervised_members = CampaignMember.objects.filter(campaign=campaign, role__codename__in=field_roles)
+        campaign_managed_members = current_campaign_member_qs | campaign_supervised_members
+        
+    elif user_role == "campaignDigitalAdmin":
+        digital_roles = ["campaignDigitalAgent", "campaignDigitalDelegate"]
+        campaign_supervised_members = CampaignMember.objects.filter(role__name__in=digital_roles)
+        campaign_managed_members = current_campaign_member_qs | campaign_supervised_members
+    else:
+        campaign_managed_members = current_campaign_member_qs
+
+    return campaign_managed_members
 
 def get_current_campaign_member(campaign_id, user_id, context):
     """
@@ -102,48 +105,6 @@ def get_current_campaign_member(campaign_id, user_id, context):
         return CampaignMemberSerializer(current_campaign_member, context=context).data
     return None
 
-# CAMPAIGNS MEMBERS
-def get_campaign_members_by_role(campaign, user_role, current_campaign_member):
-    HIGHER_PRIVILAGE_ROLES = {"higherPrivilage"}
-    MANAGER_ROLES = {"campaignModerator", "campaignCandidate", "partyAdmin", "campaignAdmin"}
-    SUPERVISOR_ROLES = {"campaignFieldAdmin", "campaignDigitalAdmin", "campaignFieldAgent", "campaignDigitalAgent"}
-    print("get_campaign_members_by_role: ", "campaign: ", campaign, "user_role: ", user_role, "current_campaign_member: ", current_campaign_member)
-
-    if user_role in HIGHER_PRIVILAGE_ROLES:
-        campaign_members = CampaignMember.objects.filter(campaign=campaign)
-        campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
-
-    elif user_role in MANAGER_ROLES:
-        campaign_members = CampaignMember.objects.filter(campaign=campaign)
-        campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
-
-    elif user_role in SUPERVISOR_ROLES:
-        campaign_managers = get_campaign_managers(campaign)
-        campaign_managed_members = get_campaign_managed_members(current_campaign_member, user_role)
-        campaign_members = campaign_managers | campaign_managed_members
-
-    else:
-        campaign_managed_members = CampaignMember.objects.none()
-        campaign_members = campaign_managed_members
-    
-    return campaign_members, campaign_managed_members
-
-
-def get_campaign_managed_members(current_campaign_member, user_role):
-    """Get members managed by the given supervisor."""
-    campaign_member_id = current_campaign_member.get('id')
-    current_campaign_member = CampaignMember.objects.filter(id=campaign_member_id)
-
-    # if supervisor, get the member managed by supervisor together with current member (supervisor)
-    if user_role == "campaignSupervisor":
-        campaign_supervised_members = CampaignMember.objects.filter(supervisor_id=campaign_member_id)
-        campaign_managed_members = current_campaign_member | campaign_supervised_members
-    else:
-        campaign_managed_members = current_campaign_member
-
-    return campaign_managed_members
-
-
 def get_campaign_managers(campaign):
     """Get members with managerial roles in the campaign."""
     
@@ -156,3 +117,28 @@ def get_campaign_managers(campaign):
     )
     
     return campaign_managers
+
+# CAMPAIGNS MEMBERS
+def get_campaign_members_by_role(campaign, user_role, current_campaign_member):
+    HIGHER_PRIVILEGE_ROLES = {"higherPrivilege"}
+    MANAGER_ROLES = {"campaignModerator", "campaignCandidate", "partyAdmin", "campaignAdmin"}
+    SUPERVISOR_ROLES = {"campaignFieldAdmin", "campaignDigitalAdmin", "campaignFieldAgent", "campaignDigitalAgent"}
+
+    if user_role in HIGHER_PRIVILEGE_ROLES:
+        campaign_members = CampaignMember.objects.filter(campaign=campaign)
+        campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
+
+    elif user_role in MANAGER_ROLES:
+        campaign_members = CampaignMember.objects.filter(campaign=campaign)
+        campaign_managed_members = campaign_members  # For these roles, all campaign members are considered "managed"
+
+    elif user_role in SUPERVISOR_ROLES:
+        campaign_managers = get_campaign_managers(campaign)
+        campaign_managed_members = get_campaign_managed_members(campaign, current_campaign_member, user_role)
+        campaign_members = campaign_managers | campaign_managed_members
+
+    else:
+        campaign_managed_members = CampaignMember.objects.none()
+        campaign_members = campaign_managed_members
+    
+    return campaign_members, campaign_managed_members

@@ -44,16 +44,16 @@ const useCampaignRoleOptions = (campaignRoles, currentCampaignMember) => {
         excludedRoleStrings = [...roleGroups.managers];
         break;
       case "campaignFieldAdmin":
-        excludedRoleStrings = [...roleGroups.managers, roleGroups.digitalMembers, "campaignFieldAdmin"];
+        excludedRoleStrings = [...roleGroups.managers, ...roleGroups.digitalMembers, "campaignFieldAdmin"];
         break;
       case "campaignFieldAgent":
-        excludedRoleStrings = [...roleGroups.managers, roleGroups.digitalMembers, "campaignFieldAdmin", "campaignFieldAgent"];
+        excludedRoleStrings = [...roleGroups.managers, ...roleGroups.digitalMembers, "campaignFieldAdmin", "campaignFieldAgent"];
         break;
       case "campaignDigitalAdmin":
-        excludedRoleStrings = [...roleGroups.managers, roleGroups.fieldMembers, "campaignDigitalAdmin"];
+        excludedRoleStrings = [...roleGroups.managers, ...roleGroups.fieldMembers, "campaignDigitalAdmin"];
         break;
       case "campaignDigitalAgent":
-        excludedRoleStrings = [...roleGroups.managers, roleGroups.fieldMembers, "campaignDigitalAdmin", "campaignDigitalAgent"];
+        excludedRoleStrings = [...roleGroups.managers, ...roleGroups.fieldMembers, "campaignDigitalAdmin", "campaignDigitalAgent"];
         break;
       default:
         break;

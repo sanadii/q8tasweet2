@@ -10,7 +10,7 @@ const OverviewSidebar = () => {
         currentCampaignMember,
         campaignMembers,
         campaignRoles,
-        campaignElectionCandidates,
+        currentElection,
         campaignElectionCommittees,
     } = useSelector(campaignSelector);
     const { currentUser } = useSelector(userSelector);
@@ -29,14 +29,14 @@ const OverviewSidebar = () => {
     const formatRoleNames = (members) => members.map(member => member.name).join(' | ');
 
 
-    const electionDetails = [
+    const currentElectionInfo = [
         {
             name: 'الانتخابات',
             data: campaign.election.name,
         },
         {
             name: 'المرشحين',
-            data: `${campaignElectionCandidates?.length ?? 0} مرشح`,
+            data: `${currentElection?.electionCandidates?.length ?? 0} مرشح`,
         },
         {
             name: 'المقاعد',
@@ -58,7 +58,7 @@ const OverviewSidebar = () => {
                 <CardBody>
                     <h5 className="card-title mb-3"><strong>الإنتخابات</strong></h5>
                     <ul>
-                        {electionDetails.map((detail, index) => (
+                        {currentElectionInfo.map((detail, index) => (
                             <li key={index}>{detail.name}: <strong className="text-info">{detail.data}</strong></li>
                         ))}
                     </ul>

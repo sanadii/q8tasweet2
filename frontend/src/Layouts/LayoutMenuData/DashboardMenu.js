@@ -167,20 +167,20 @@ export function useUserMenu(isCurrentState, setIsCurrentState) {
   }
 
   return [
-    {
-      label: "الملف الشخصي",
-      isHeader: true,
-    },
-    {
-      id: "userProfile",
-      label: "الملف الشخصي",
-      icon: "mdi mdi-account-circle",
-      link: "/dashboard/profile",
-      click: (e) => {
-        e.preventDefault();
-        handleNavigation("userProfile", "/dashboard/profile");
-      },
-    },
+    // {
+    //   label: "الملف الشخصي",
+    //   isHeader: true,
+    // },
+    // {
+    //   id: "userProfile",
+    //   label: "الملف الشخصي",
+    //   icon: "mdi mdi-account-circle",
+    //   link: "/dashboard/profile",
+    //   click: (e) => {
+    //     e.preventDefault();
+    //     handleNavigation("userProfile", "/dashboard/profile");
+    //   },
+    // },
   ];
 }
 
@@ -276,7 +276,7 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
     //   }
     // },
     {
-      label: "الإدارة",
+      label: "الانتخابات",
       isHeader: true,
     },
 

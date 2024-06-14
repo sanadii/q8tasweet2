@@ -60,8 +60,10 @@ const IntialState = {
   currentCampaignMember: [],
 
   campaigns: [],
-  electionDetails: [],
+  currentElection: [],
+  previousElection: [],
   campaignDetails: [],
+  campaignMembers: [],
   campaignGuarantees: [],
   campaignGuaranteeGroups: [],
   campaignAttendees: [],
@@ -96,7 +98,8 @@ const Campaigns = (state = IntialState, action) => {
             campaignAttendees: action.payload.data.campaignAttendees,
             campaignNotifications: action.payload.data.campaignNotifications,
 
-            electionDetails: action.payload.data.electionDetails,
+            currentElection: action.payload.data.currentElection,
+            previousElection: action.payload.data.previousElection,
             campaignElectionCandidates: action.payload.data.campaignElectionCandidates,
             electionCommitteeSites: action.payload.data.electionCommitteeSites,
 

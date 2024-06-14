@@ -12,6 +12,7 @@ from apps.elections.models import (
 )
 
 
+# Apps Models
 from apps.elections.candidates.models import (
     ElectionCandidate,
     ElectionParty,
@@ -19,12 +20,14 @@ from apps.elections.candidates.models import (
 )
 from apps.schemas.committee_results.models import CommitteeResultCandidate
 from apps.schemas.committees.models import Committee
-from apps.auths.serializers import UserSerializer
-from apps.schemas.committees.serializers import CommitteeSerializer
 from apps.schemas.committee_results.serializers import CommitteeResultCandidateSerializer
 from utils.schema import schema_context
 
 
+# Apps Serializers
+from apps.auths.serializers import UserSerializer
+# from apps.elections.candidates.serializers import ElectionCandidateSerializer
+# from apps.schemas.committees.serializers import CommitteeSerializer
 class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ElectionCategory
@@ -106,6 +109,11 @@ class ElectionSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "is_elector_committee",
             "has_schema",
         ]
+
+
+    # # Calculations // TODO: Can be calculated on campaign creation
+    # first_winner_votes = models.PositiveIntegerField(blank=True, null=True)
+    # last_winner_votes = models.PositiveIntegerField(blank=True, null=True)
 
     def get_election_name(self, obj):
         sub_category = getattr(obj, "sub_category", None)

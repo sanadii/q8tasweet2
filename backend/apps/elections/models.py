@@ -1,29 +1,17 @@
 # Election Model
 import os
-import uuid
 from django.db import models
 from django.db import connections
-from django.db.models import Sum
-from django.db.models.signals import post_save, post_delete
 from django.contrib.auth import get_user_model
-from django.dispatch import receiver
-from django_extensions.db.fields import AutoSlugField, SlugField
 from django.utils.text import slugify
 
 from apps.settings.models import TrackModel, TaskModel
-from apps.schemas.areas.models import Area
 
-from utils.model_options import (
-    ElectionMethodOptions,
-    GenderOptions,
-)
+from utils.model_options import ElectionMethodOptions, GenderOptions
 from utils.models_permission_manager import (
     ModelsPermissionManager,
     CustomPermissionManager,
 )
-from utils.schema import schema_context
-# from django.contrib.postgres.fields import ArrayField
-from django.db import transaction
 
 User = get_user_model()
 
@@ -55,56 +43,23 @@ class Election(TrackModel, TaskModel):
         verbose_name="Election Type",
     )
 
-    # election_result = models.TextField(
-    #     max_length=150,
-    #     choices=ElectionResultsOptions.choices,
-    #     blank=True,
-    #     null=True,
-    #     verbose_name="Election Result Type"
-    # )
-    is_detailed_results = models.BooleanField(blank=True, null=True,
-        default=False, verbose_name="Is result in details (with committees)"
-    )
-    is_sorting_results = models.BooleanField(blank=True, null=True,
-        default=False, verbose_name="Is Sorting Results?"
-    )
-    
-    is_elector_address = models.BooleanField(blank=True, null=True,
-        default=False, verbose_name="Is elector address avaiable?"
-    )
-    is_elector_committee = models.BooleanField(blank=True, null=True,
-        default=False, verbose_name="Is elector committee avaiable?"
-    )
+    is_detailed_results = models.BooleanField(blank=True, null=True, default=False)
+    is_sorting_results = models.BooleanField(blank=True, null=True, default=False)
+    is_elector_address = models.BooleanField(blank=True, null=True, default=False)
+    is_elector_committee = models.BooleanField(blank=True, null=True, default=False)
 
     elect_votes = models.PositiveIntegerField(blank=True, null=True)
     elect_seats = models.PositiveIntegerField(blank=True, null=True)
 
-    # # Calculations // TODO: Can be calculated on campaign creation
-    # first_winner_votes = models.PositiveIntegerField(blank=True, null=True)
-    # last_winner_votes = models.PositiveIntegerField(blank=True, null=True)
-
     # TODO: create ElectionSummary Model for both voters & attendees
     # Voter // This can go to another table TODO: Move to another table called ElectionVoters or ElectionNumbers
-    elector_count = models.PositiveIntegerField(
-        default=0
-    )  # Always set a value, no nulls
-    elector_male_count = models.PositiveIntegerField(
-        default=0
-    )  # Always set a value, no nulls
-    elector_female_count = models.PositiveIntegerField(
-        default=0
-    )  # Always set a value, no nulls
-
+    elector_count = models.PositiveIntegerField(default=0)
+    elector_male_count = models.PositiveIntegerField(default=0)
+    elector_female_count = models.PositiveIntegerField(default=0)
     # Attendees
-    attendee_count = models.PositiveIntegerField(
-        default=0
-    )  # Always set a value, no nulls
-    attendee_male_count = models.PositiveIntegerField(
-        default=0
-    )  # Always set a value, no nulls
-    attendee_female_count = models.PositiveIntegerField(
-        default=0
-    )  # Always set a value, no nulls
+    attendee_count = models.PositiveIntegerField(default=0)
+    attendee_male_count = models.PositiveIntegerField(default=0)
+    attendee_female_count = models.PositiveIntegerField(default=0)
 
     # Database
     has_schema = models.BooleanField(
@@ -187,4 +142,3 @@ class ElectionCategory(models.Model):
 
     def __str__(self):
         return self.name
-

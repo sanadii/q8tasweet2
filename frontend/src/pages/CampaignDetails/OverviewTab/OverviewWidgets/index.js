@@ -11,14 +11,14 @@ const CampaignWidgets = () => {
 
     const {
         campaign,
-        electionDetails,
+        currentElection,
         campaignMembers,
         campaignRoles,
         campaignGuarantees,
         campaignAttendees,
     } = useSelector(campaignSelector);
 
-    // const electionDetails = electionDetails
+    // const currentElection = currentElection
 
     const campaignGuaranteeCount = campaignGuarantees.length
     const campaignGuaranteeMaleCount = campaignGuarantees.filter(guarantee => guarantee.gender === "1").length;
@@ -28,11 +28,11 @@ const CampaignWidgets = () => {
     const campaignAttendedGuaranteeMaleCount = campaignGuarantees.filter(guarantee => guarantee.gender === "1" && guarantee.attended === true).length;
     const campaignAttendedGuaranteeFemaleCount = campaignGuarantees.filter(guarantee => guarantee.gender === "2" && guarantee.attended === true).length;
 
-    console.log("electionDetails: ",)
+    console.log("currentElection: ",)
     const cardData = [
         {
             title: "ناخبين الدائرة",
-            count: electionDetails?.electorCount,
+            count: currentElection?.electionDetails?.electorCount,
             icon: "mdi-account-group-outline",
             trend: "up",
             trendPercentage: 7.05,
@@ -40,14 +40,14 @@ const CampaignWidgets = () => {
         },
         {
             title: "الناخبين الرجال",
-            count: electionDetails?.electorMaleCount,
+            count: currentElection?.electionDetails?.electorMaleCount,
             icon: "mdi-face-man",
             text: "نسبة التصويت",
 
         },
         {
             title: "الناخبين النساء",
-            count: electionDetails?.electorFemaleCount,
+            count: currentElection?.electionDetails?.electorFemaleCount,
             icon: "mdi-face-woman",
             text: "نسبة التصويت",
         },
