@@ -3,9 +3,15 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getCandidates,
+<<<<<<< HEAD
   addNewElectionCampaign,
   updateCandidateCampaign,
 } from "../../../../store/actions";
+=======
+  addCampaign,
+  updateCandidateCampaign,
+} from "store/actions";
+>>>>>>> sanad
 
 import { ImageCircle } from "../../../../shared/components";
 // Form validation imports
@@ -101,7 +107,11 @@ export const CandidateCampaignModal = ({
   //           id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
   //           candidate_id: values["candidate_id"],
   //         };
+<<<<<<< HEAD
   //         dispatch(addNewElectionCampaign(newElectionCampaign));
+=======
+  //         dispatch(addCampaign(newElectionCampaign));
+>>>>>>> sanad
   //       }
   //       validation.resetForm();
   //       toggle();
@@ -206,7 +216,11 @@ const AddCandidateCampaignModal = ({ election_id, dispatch }) => {
                   id: (Math.floor(Math.random() * (100 - 20)) + 20).toString(),
                   election_candidate: Candidate.id,
                 };
+<<<<<<< HEAD
                 dispatch(addNewElectionCampaign(newElectionCampaign));
+=======
+                dispatch(addCampaign(newElectionCampaign));
+>>>>>>> sanad
               }}
             >
               <div className="d-flex align-items-center">

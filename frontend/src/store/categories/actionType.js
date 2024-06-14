@@ -4,7 +4,11 @@ export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 
 // Add Category
+<<<<<<< HEAD
 export const ADD_NEW_CATEGORY = "ADD_NEW_CATEGORY";
+=======
+export const ADD_CATEGORY = "ADD_CATEGORY";
+>>>>>>> sanad
 export const ADD_CATEGORY_SUCCESS = "ADD_CATEGORY_SUCCESS";
 export const ADD_CATEGORY_FAIL = "ADD_CATEGORY_FAIL";
 

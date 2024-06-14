@@ -6,8 +6,13 @@ import {
   // Group s
   GET_GROUPS,
 
+<<<<<<< HEAD
   ADD_NEW_GROUP_SUCCESS,
   ADD_NEW_GROUP_FAIL,
+=======
+  ADD_GROUP_SUCCESS,
+  ADD_GROUP_FAIL,
+>>>>>>> sanad
   UPDATE_GROUP_SUCCESS,
   UPDATE_GROUP_FAIL,
   DELETE_GROUP_SUCCESS,
@@ -59,7 +64,11 @@ const Groups = (state = IntialState, action) => {
       };
     }
 
+<<<<<<< HEAD
     case ADD_NEW_GROUP_SUCCESS:
+=======
+    case ADD_GROUP_SUCCESS:
+>>>>>>> sanad
       return {
         ...state,
         isGroupCreated: true,
@@ -67,7 +76,11 @@ const Groups = (state = IntialState, action) => {
         isGroupAdd: true,
         isGroupAddFail: false,
       };
+<<<<<<< HEAD
     case ADD_NEW_GROUP_FAIL:
+=======
+    case ADD_GROUP_FAIL:
+>>>>>>> sanad
       return {
         ...state,
         error: action.payload,
@@ -96,7 +109,11 @@ const Groups = (state = IntialState, action) => {
       return {
         ...state,
         groups: state.groups.filter(
+<<<<<<< HEAD
           (group) => group.id.toString() !== action.payload.group.toString()
+=======
+          (group) => group.id.toString() !== action.payload.group.id.toString()
+>>>>>>> sanad
         ),
         isGroupDelete: true,
         isGroupDeleteFail: false,

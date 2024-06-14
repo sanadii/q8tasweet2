@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import { useNavigate, Link } from 'react-router-dom';
 import { Collapse } from 'reactstrap';
+<<<<<<< HEAD
 import { layoutSelector } from 'selectors/layoutSelector';
 
 // Import Data
@@ -124,6 +125,22 @@ const VerticalLayout = (props) => {
     const navData = DashboardMenuData().props.children;
     const path = props.router.location.pathname;
     const [selectedCampaign, setSelectedCampaign] = useState("")
+=======
+
+// Import Data
+import LayoutMenuData from "../LayoutMenuData";
+import { withRouter, ImageLarge } from 'shared/components';
+
+// Redux
+import { useSelector } from "react-redux";
+import { layoutSelector } from 'selectors';
+
+const VerticalLayout = (props) => {
+
+    const path = props.router.location.pathname;
+    const navData = LayoutMenuData({ currentCampaign: props.currentCampaign, setCurrentCampaign: props.setCurrentCampaign }).props.children;
+
+>>>>>>> sanad
 
     /*
     layout settings
@@ -241,6 +258,7 @@ const VerticalLayout = (props) => {
         });
     };
 
+<<<<<<< HEAD
     // Filter navData based on selected campaign
     const filteredNavData = navData.filter(item =>
         !item.isCampaign || (item.isCampaign && item.id === selectedCampaign)
@@ -257,6 +275,11 @@ const VerticalLayout = (props) => {
 
             {/* menu Items */}
             {filteredNavData.map((item, key) => (
+=======
+    return (
+        <React.Fragment>
+            {navData.map((item, key) => (
+>>>>>>> sanad
                 <React.Fragment key={key}>
                     <Menu item={item} />
                 </React.Fragment>
@@ -273,3 +296,86 @@ VerticalLayout.propTypes = {
 };
 
 export default withRouter(VerticalLayout);
+<<<<<<< HEAD
+=======
+
+
+
+const Menu = ({ item }) => (
+    item.isHeader ? (
+        <li className="menu-title"><span data-key="t-menu">{item.label}</span></li>
+    ) : item.isCampaign ? (
+        <div className="text-center">
+            <div className="profile-user position-relative d-inline-block mx-auto mb-4">
+                <ImageLarge imagePath={item.image} />
+            </div>
+            <h5 className="menu-title fs-16 mb-1">{item.label}</h5>
+            <p className="text-white fs-16 mb-1">{item.name}</p>
+        </div>
+
+
+    ) : item.subItems ? (
+        <CollapsibleMenuItem item={item} />
+    ) : (
+        <MenuItem item={item} />
+    )
+);
+
+const MenuItem = ({ item }) => (
+    <li className="nav-item">
+        <Link
+            className="nav-link menu-link"
+            to={item.link ? item.link : "/#"}
+        >
+            <i className={item.icon}></i> <span>{item.label}</span>
+            {item.badgeName && (
+                <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
+            )}
+        </Link>
+    </li>
+);
+
+const CollapsibleMenuItem = ({ item }) => (
+    <li className="nav-item">
+        <Link
+            onClick={item.click}
+            className="nav-link menu-link"
+            to={item.link ? item.link : "/#"}
+            data-bs-toggle="collapse"
+        >
+            <i className={item.icon}></i>
+            <span data-key="t-apps">{item.label}</span>
+            {item.badgeName && (
+                <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
+            )}
+        </Link>
+        <Collapse
+            className="menu-dropdown"
+            isOpen={item.stateVariables}
+            id="sidebarApps"
+        >
+            <ul className="nav nav-sm flex-column test">
+                {item.subItems && item.subItems.map((subItem, key) => (
+                    <SubItem key={key} subItem={subItem} />
+                ))}
+            </ul>
+        </Collapse>
+    </li>
+);
+
+const SubItem = ({ subItem }) => (
+    <li className="nav-item">
+        <Link
+            to={subItem.link ? subItem.link : "/#"}
+            className="nav-link"
+            onClick={subItem.click}
+        >
+            {subItem.label}
+            {subItem.badgeName && (
+                <span className={"badge badge-pill bg-" + subItem.badgeColor} data-key="t-new">{subItem.badgeName}</span>
+            )}
+        </Link>
+    </li>
+);
+
+>>>>>>> sanad

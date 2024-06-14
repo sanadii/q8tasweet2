@@ -23,7 +23,11 @@ import {
 
   // Election Candidate
   GET_ELECTION_CANDIDATES,
+<<<<<<< HEAD
   ADD_NEW_ELECTION_CANDIDATE,
+=======
+  ADD_ELECTION_CANDIDATE,
+>>>>>>> sanad
   ADD_ELECTION_CANDIDATE_SUCCESS,
   ADD_TO_ELECTION_AFTER_CANDIDATE_SUCCESS,
   ADD_ELECTION_CANDIDATE_FAIL,
@@ -69,7 +73,11 @@ import {
 
   // Election Committee
   GET_ELECTION_COMMITTEES,
+<<<<<<< HEAD
   ADD_NEW_ELECTION_COMMITTEE,
+=======
+  ADD_ELECTION_COMMITTEE,
+>>>>>>> sanad
   ADD_ELECTION_COMMITTEE_SUCCESS,
   ADD_ELECTION_COMMITTEE_FAIL,
   UPDATE_ELECTION_COMMITTEE,
@@ -86,7 +94,11 @@ import {
 
   // Election Campaign
   GET_ELECTION_CAMPAIGNS,
+<<<<<<< HEAD
   ADD_NEW_ELECTION_CAMPAIGN,
+=======
+  ADD_CAMPAIGN,
+>>>>>>> sanad
   ADD_ELECTION_CAMPAIGN_SUCCESS,
   ADD_ELECTION_CAMPAIGN_FAIL,
   UPDATE_ELECTION_CAMPAIGN,
@@ -184,8 +196,13 @@ export const getElectionCandidates = (election) => ({
   payload: election,
 });
 
+<<<<<<< HEAD
 export const addNewElectionCandidate = electionCandidate => ({
   type: ADD_NEW_ELECTION_CANDIDATE,
+=======
+export const addElectionCandidate = electionCandidate => ({
+  type: ADD_ELECTION_CANDIDATE,
+>>>>>>> sanad
   payload: electionCandidate,
 });
 
@@ -207,7 +224,11 @@ export const updateElectionCandidate = electionCandidate => ({
   type: UPDATE_ELECTION_CANDIDATE,
   payload: electionCandidate,
 });
+<<<<<<< HEAD
 export const updateElectionCandidateSuccess = electionCandidate => ({
+=======
+export const updateElectionCandidateSuccess = (electionCandidate) => ({
+>>>>>>> sanad
   type: UPDATE_ELECTION_CANDIDATE_SUCCESS,
   payload: electionCandidate,
 });
@@ -407,8 +428,13 @@ export const updateElectionCommitteeFail = error => ({
   payload: error,
 });
 
+<<<<<<< HEAD
 export const addNewElectionCommittee = electionCommittee => ({
   type: ADD_NEW_ELECTION_COMMITTEE,
+=======
+export const addElectionCommittee = electionCommittee => ({
+  type: ADD_ELECTION_COMMITTEE,
+>>>>>>> sanad
   payload: electionCommittee,
 });
 
@@ -451,6 +477,7 @@ export const updateElectionResultsFail = error => ({
   payload: error,
 });
 
+<<<<<<< HEAD
 
 // Election Campaigns
 export const getElectionCampaigns = (election) => ({
@@ -502,3 +529,5 @@ export const deleteElectionCampaignFail = error => ({
   type: DELETE_ELECTION_CAMPAIGN_FAIL,
   payload: error,
 });
+=======
+>>>>>>> sanad

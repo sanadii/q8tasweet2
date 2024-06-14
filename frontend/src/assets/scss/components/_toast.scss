@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //
 // toast.scss
 //
@@ -21,4 +22,29 @@
     .toast-border-#{$color} {
         @include toast-border-variant($value);
     }
+=======
+//
+// toast.scss
+//
+
+
+// toast
+.toast { 
+    &:not(:last-child) {
+      margin-bottom: $toast-padding-x;
+    }
+}
+
+@mixin toast-border-variant($bg) {
+    .toast-body{
+        color: $bg;
+        border-bottom: 3px solid $bg;
+    }
+}
+
+@each $color, $value in $theme-colors {
+    .toast-border-#{$color} {
+        @include toast-border-variant($value);
+    }
+>>>>>>> sanad
 }

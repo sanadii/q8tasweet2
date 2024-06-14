@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { api } from "config";
 
+<<<<<<< HEAD
 const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
+=======
+const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
+>>>>>>> sanad
 
 const AvatarImage = ({ imagePath }) => {
   const [imageData, setImageData] = useState(null);

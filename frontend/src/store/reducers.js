@@ -11,17 +11,33 @@ import Profile from "./auth/profile/reducer";
 import Users from "./auth/users/reducer";
 import Groups from "./groups/reducer";
 import GroupPermissions from "./groupPermissions/reducer";
+<<<<<<< HEAD
+=======
+import ResetPassword from "./auth/resetpassword/reducer";
+>>>>>>> sanad
 
 
 // Elections
 import Elections from "./elections/reducer";
+<<<<<<< HEAD
+=======
+import ElectionSchema from "./electionSchema/reducer";
+import Electors from "./electors/reducer";
+
+
+>>>>>>> sanad
 import Candidates from "./candidates/reducer";
 import Parties from "./parties/reducer";
 import Campaigns from "./campaigns/reducer";
 // import ElectionCandidates from "./electionCandidate/reducer";
 
+<<<<<<< HEAD
 // Electors
 import Electors from "./electors/reducer";
+=======
+// Voters
+// import Voters from "./voters/reducer";
+>>>>>>> sanad
 // import Guarantees from "./guarantees/reducer";
 // import Attendees from "./attendees/reducer";
 
@@ -49,6 +65,7 @@ const rootReducer = combineReducers({
     Users,
     Groups,
     GroupPermissions,
+<<<<<<< HEAD
     
     // Project
     Elections,
@@ -59,6 +76,22 @@ const rootReducer = combineReducers({
     // Guarantees,
     // Attendees,
     
+=======
+    ResetPassword,
+
+    // Project
+    Elections,
+
+    // Schema & Related Apps
+    ElectionSchema,
+    Electors,
+    Candidates,
+    Parties,
+    Campaigns,
+    // Guarantees,
+    // Attendees,
+
+>>>>>>> sanad
     // System / Settings
     UploadImage,
     Categories,

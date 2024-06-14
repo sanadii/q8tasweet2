@@ -8,9 +8,15 @@ import { Card, CardBody, Col, Row, Table, Label, Input, Form, FormFeedback, Moda
 // -Components & Constants imports-
 import PartyModalUpdate from "./PartyModalUpdate";
 import PartyModalAdd from "./PartyModalAdd";
+<<<<<<< HEAD
 import { GuaranteeStatusOptions } from "../../../../Components/Constants";
 
 const PartyModal = ({ modal, toggle, modalMode, elector }) => {
+=======
+import { CampaignGuaranteeStatusOptions } from "../../../../Components/Constants";
+
+const PartyModal = ({ modal, toggle, modalMode, voter }) => {
+>>>>>>> sanad
   const { campaignMembers } = useSelector(campaignSelector);
 
   const [modalSubmit, setModalSubmit] = useState(null);

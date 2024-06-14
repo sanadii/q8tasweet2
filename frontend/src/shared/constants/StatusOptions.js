@@ -48,9 +48,23 @@ const StatusOptions = [
     role: "Admin",
   },
   {
+<<<<<<< HEAD
     id: 9,
     name: "محذوف",
     value: "deleted",
+=======
+    id: 7,
+    name: "تجريبي",
+    value: "demo",
+    badgeClass: "badge bg-pink",
+    description: "منشور تجريبي.",
+    role: "Admin",
+  },
+  {
+    id: 9,
+    name: "محذوف",
+    value: "is_deleted",
+>>>>>>> sanad
     badgeClass: "badge bg-dark",
     description: "المنشور في سلة المحذوفات ولا يمكن مشاهدته للعامة.",
     role: "Admin, Moderator",
@@ -58,17 +72,34 @@ const StatusOptions = [
 ];
 
 
+<<<<<<< HEAD
 const StatusBadge = ({ status }) => {
+=======
+const getStatusOptions = () => {
+  return StatusOptions.map(item => ({
+    id: item.id,
+    label: item.name,
+    value: item.id
+  }));
+}
+
+const getStatusBadge = (status) => {
+>>>>>>> sanad
   const entryStatus = StatusOptions.find(option => option.id === status);
   if (!entryStatus) return null;
 
   return (
+<<<<<<< HEAD
     <div className={`badge rounded-pill ${entryStatus.badgeClass} fs-12`}>
+=======
+    <div className={`${entryStatus.badgeClass} fs-10`}>
+>>>>>>> sanad
       {entryStatus.name}
     </div>
   );
 };
 
+<<<<<<< HEAD
 // switch (status) {
 //   case 1:
 //     statusName = "Published";
@@ -108,4 +139,11 @@ export {
   StatusBadge,
   StatusOptions,
 
+=======
+
+export {
+  getStatusBadge,
+  StatusOptions,
+  getStatusOptions,
+>>>>>>> sanad
 };

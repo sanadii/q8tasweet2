@@ -10,6 +10,7 @@ export const campaignSelector = createSelector(
     // Campaign Selectors
     campaigns: campaignsState.campaigns,
     campaign: campaignsState.campaignDetails,
+<<<<<<< HEAD
     campaignId: campaignsState.campaignDetails.id,
     campaignType: campaignsState.campaignDetails.campaignType,
 
@@ -22,6 +23,28 @@ export const campaignSelector = createSelector(
     campaignSorting: campaignsState.campaignSorting,
     campaignElectionCommittees: campaignsState.campaignElectionCommittees,
     campaignElectionCandidates: campaignsState.campaignElectionCandidates,
+=======
+    activeCampaign: campaignsState.campaignDetails,
+    campaignId: campaignsState.campaignDetails.id,
+    campaignType: campaignsState.campaignDetails.campaignType,
+
+    previousElection: campaignsState.previousElection,
+    currentElection: campaignsState.currentElection,
+    campaignElectionCommitteeSites: campaignsState.electionCommitteeSites || [],
+    campaignElectionCandidates: campaignsState.campaignElectionCandidates || [],
+
+    electionSlug: campaignsState.electionDetails?.slug,
+    campaignDetails: campaignsState.campaignDetails,
+    campaignMembers: campaignsState.campaignMembers,
+
+    campaignGuarantees: campaignsState.campaignGuarantees || [],
+    campaignGuaranteeGroups: campaignsState.campaignGuaranteeGroups || [],
+    campaignAttendees: campaignsState.campaignAttendees || [],
+    campaignNotifications: campaignsState.campaignNotifications,
+
+    campaignSorting: campaignsState.campaignSorting,
+    electionCommitteeSites: campaignsState.electionCommitteeSites || [],
+>>>>>>> sanad
 
     isCampaignSuccess: campaignsState.isCampaignSuccess,
     campaignError: campaignsState.error,
@@ -29,7 +52,11 @@ export const campaignSelector = createSelector(
     // CurrentCampaignMember
     currentCampaignMember: campaignsState.currentCampaignMember,
     // currentCampaignMemberCommittee: campaignsState.currentCampaignMember.committee,
+<<<<<<< HEAD
     electors: campaignsState.electors,
+=======
+    voters: campaignsState.voters,
+>>>>>>> sanad
 
     campaignRoles: campaignsState.campaignRoles,
 

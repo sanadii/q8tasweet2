@@ -12,12 +12,21 @@ export const electionSelector = createSelector(
     futureElections: electionsState.futureElections,
 
     election: electionsState.electionDetails,
+<<<<<<< HEAD
+=======
+    electionId: electionsState.electionDetails.id,
+    electionSlug: electionsState.electionDetails?.slug,
+>>>>>>> sanad
     electionMethod: electionsState.electionDetails.electionMethod,
 
     electionDetails: electionsState.electionDetails,
     previousElection: electionsState.electionDetails.previousElection,
+<<<<<<< HEAD
     electionId: electionsState.electionDetails.id,
     electionCommittees: electionsState.electionCommittees,
+=======
+
+>>>>>>> sanad
 
     electionCandidates: electionsState.electionCandidates,
     electionParties: electionsState.electionParties,
@@ -35,6 +44,17 @@ export const electionSelector = createSelector(
 
 
     electionSorters: electionsState.electionSorters,
+<<<<<<< HEAD
+=======
+
+
+    // From Schema
+    electionAreas: electionsState.electionAreas,
+    electionCommitteeSites: electionsState.electionCommitteeSites,
+    schemaDetails: electionsState.schemaDetails,
+    
+    // Success / Error
+>>>>>>> sanad
     isElectionSuccess: electionsState.isElectionSuccess,
     error: electionsState.error,
 

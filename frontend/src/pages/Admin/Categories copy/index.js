@@ -19,7 +19,11 @@ import {
   getCategories as onGetCategories,
   updateCategory as onUpdateCategory,
   deleteCategory as onDeleteCategory,
+<<<<<<< HEAD
   addNewCategory as onAddNewCategory,
+=======
+  addCategory as onAddNewCategory,
+>>>>>>> sanad
 } from "../../../store/actions";
 
 const Categories = () => {
@@ -574,7 +578,11 @@ const Categories = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
+<<<<<<< HEAD
                 id="addNewCategory"
+=======
+                id="addCategory"
+>>>>>>> sanad
               >
                 {!!isEdit ? "Save" : "Add Category"}
               </button>

@@ -26,6 +26,7 @@ function* forgetUser({ payload: { user, history } }) {
         );
       }
     } else if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
+<<<<<<< HEAD
       const response = yield call(postJwtForgetPwd, "/jwt-forget-pwd", {
         email: user.email,
       });
@@ -35,6 +36,14 @@ function* forgetUser({ payload: { user, history } }) {
             "Reset link are sended to your mailbox, check there first"
           )
         );
+=======
+      // const response = yield call(postJwtForgetPwd, "/jwt-forget-pwd", {
+      const response = yield call(postJwtForgetPwd, {
+        email: user.email,
+      });
+      if (response) {
+        yield put(userForgetPasswordSuccess("Reset link are sended to your mailbox, check there first"));
+>>>>>>> sanad
       }
     } else if (process.env.REACT_APP_API_URL) {
       const response = yield call(postFakeForgetPwd, user);

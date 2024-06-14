@@ -41,6 +41,7 @@ const UserProfile = () => {
   }));
 
   useEffect(() => {
+<<<<<<< HEAD
     if (sessionStorage.getItem("authUser")) {
       const obj = JSON.parse(sessionStorage.getItem("authUser"));
 
@@ -48,6 +49,15 @@ const UserProfile = () => {
         obj.data.firstName = user.firstName;
         sessionStorage.removeItem("authUser");
         sessionStorage.setItem("authUser", JSON.stringify(obj));
+=======
+    if (localStorage.getItem("authUser")) {
+      const obj = JSON.parse(localStorage.getItem("authUser"));
+
+      if (!isEmpty(user)) {
+        obj.data.firstName = user.firstName;
+        localStorage.removeItem("authUser");
+        localStorage.setItem("authUser", JSON.stringify(obj));
+>>>>>>> sanad
       }
 
       setUserName(obj.data.firstName);

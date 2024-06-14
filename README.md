@@ -48,7 +48,58 @@ NOTE: This is only needed in case you copy this code to a new project. If you on
 
 ## Installation
 
+<<<<<<< HEAD
 You have two ways of running this project: Using the Dockers scripts or running directly in the console.
+=======
+**Clone the repository:**
+
+git clone https://github.com/sanadii/q8tasweet.git
+
+
+## Backend
+** create and activate Virtual Environment**
+
+For Windows:
+python -m venv venv
+venv\Scripts\activate
+
+For Unix/Linux/MacOS:
+python3 -m venv venv
+source venv/bin/activate
+
+
+** Install Django Requirments**
+
+pip install -r requirments.txt
+cd backend
+pip install -r requirements.txt
+
+**Do migration**
+python manage.py makemigrations
+python manage.py migrate
+
+
+**Run the backend server**
+once migrations is done
+
+py manage.py runserver
+
+
+## Frontend
+
+Open new terminal to run the frontend
+Navigate to the project directory:
+cd..
+cd frontend
+yarn install
+
+
+Once the installation is complete, start the frontend server:
+
+yarn start
+
+
+>>>>>>> sanad
 
 ### Running NO DOCKER
 

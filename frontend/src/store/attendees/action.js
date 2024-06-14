@@ -6,7 +6,11 @@ import {
   UPDATE_ATTENDEE,
   UPDATE_ATTENDEE_SUCCESS,
   UPDATE_ATTENDEE_FAIL,
+<<<<<<< HEAD
   ADD_NEW_ATTENDEE,
+=======
+  ADD_ATTENDEE,
+>>>>>>> sanad
   ADD_ATTENDEE_SUCCESS,
   ADD_ATTENDEE_FAIL,
   DELETE_ATTENDEE,
@@ -45,8 +49,13 @@ export const updateAttendeeFail = error => ({
   payload: error,
 });
 
+<<<<<<< HEAD
 export const addNewAttendee = attendee => ({
   type: ADD_NEW_ATTENDEE,
+=======
+export const addAttendee = attendee => ({
+  type: ADD_ATTENDEE,
+>>>>>>> sanad
   payload: attendee,
 });
 

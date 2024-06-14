@@ -1,6 +1,10 @@
 // campaignCalculation.js
 
+<<<<<<< HEAD
 import { GuaranteeStatusOptions, STATUS_MAP } from "shared/constants";
+=======
+import { CampaignGuaranteeStatusOptions, STATUS_MAP } from "shared/constants";
+>>>>>>> sanad
 
 // Helper function to calculate percentage
 export const calculatePercentage = (count, total) => {
@@ -13,20 +17,34 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
     const statusCounts = {};
     const attendeesStatusCounts = {};
 
+<<<<<<< HEAD
     GuaranteeStatusOptions.forEach(option => {
+=======
+    CampaignGuaranteeStatusOptions.forEach(option => {
+>>>>>>> sanad
         statusCounts[option.value] = 0;
         attendeesStatusCounts[option.value] = 0;
     });
 
+<<<<<<< HEAD
     let targetVotes = campaignDetails.targetVotes;
     let totalGuarantees = campaignGuarantees.length;
+=======
+    let targetVotes = campaignDetails?.targetVotes;
+    let totalGuarantees = campaignGuarantees?.length || 0;
+>>>>>>> sanad
     let totalContactedGuarantees = 0;
     let totalConfirmedGuarantees = 0; // Contacted + Confirmed
     let totalConfirmedAttendees = 0;
     let totalAttendees = 0;
 
+<<<<<<< HEAD
     campaignGuarantees.forEach(guarantee => {
         const statusOption = GuaranteeStatusOptions.find(option => option.id === guarantee.status);
+=======
+    campaignGuarantees?.forEach(guarantee => {
+        const statusOption = CampaignGuaranteeStatusOptions.find(option => option.id === guarantee.status);
+>>>>>>> sanad
         if (statusOption) {
             statusCounts[statusOption.value]++;
             if (guarantee.attended) {
@@ -74,6 +92,11 @@ export const calculateCampaignData = (campaignDetails, campaignGuarantees) => {
 // Function to aggregate guarantors
 // Used in OverViewGuarantees to create a table for Guarantees Follow up
 export function aggregateGuarantors(guarantees, members) {
+<<<<<<< HEAD
+=======
+    console.log("members: ", members)
+    console.log("guarantees: ", guarantees)
+>>>>>>> sanad
     const memberMap = members.reduce((map, member) => {
         map[member.id] = member.name;
         return map;
@@ -117,7 +140,11 @@ export function getAggregatedGuarantorData(campaignGuarantees, campaignMembers) 
 
 // Function to construct status columns
 export function constructStatusColumns(campaignGuarantees) {
+<<<<<<< HEAD
     return GuaranteeStatusOptions.map(statusOption => ({
+=======
+    return CampaignGuaranteeStatusOptions.map(statusOption => ({
+>>>>>>> sanad
         Header: statusOption.name,
         accessor: (rowData) => {
             const memberId = rowData.id;
@@ -128,7 +155,11 @@ export function constructStatusColumns(campaignGuarantees) {
 
 // Table: Get background class based on status option
 export function getBgClassForStatus(columnIndex) {
+<<<<<<< HEAD
     const statusOption = GuaranteeStatusOptions.find(option => option.id === columnIndex - 2);
+=======
+    const statusOption = CampaignGuaranteeStatusOptions.find(option => option.id === columnIndex - 2);
+>>>>>>> sanad
     return statusOption ? statusOption.bgClass : '';
 }
 

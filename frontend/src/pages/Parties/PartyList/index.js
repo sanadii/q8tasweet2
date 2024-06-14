@@ -4,7 +4,11 @@ import { BreadCrumb } from "shared/components";
 import AllParties from "./AllParties";
 import Widgets from "./Widgets";
 
+<<<<<<< HEAD
 const ElectionList = () => {
+=======
+const Elections = () => {
+>>>>>>> sanad
   document.title = "قائمة الإنتخابات | كويت تصويت";
   return (
     <React.Fragment>
@@ -18,4 +22,8 @@ const ElectionList = () => {
   );
 };
 
+<<<<<<< HEAD
 export default ElectionList;
+=======
+export default Elections;
+>>>>>>> sanad

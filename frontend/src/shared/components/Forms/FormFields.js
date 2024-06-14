@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
 import { Row, Col, Label, Input, FormFeedback } from "reactstrap";
 import Flatpickr from "react-flatpickr";
 import defaultAvatar from 'assets/images/users/default.jpg';
@@ -12,6 +13,29 @@ const FormFields = ({ field, validation, inLineStyle }) => {
     const imageValue = validation?.values.image;
     const [imageSrc, setImageSrc] = useState(defaultAvatar);
     const [passwordShow, setPasswordShow] = useState(false);
+=======
+import { Col, Label, Input, FormFeedback } from "reactstrap";
+import Flatpickr from "react-flatpickr";
+import defaultAvatar from 'assets/images/users/default.jpg';
+import { api } from "config";
+
+import SearchDropDown from "./SearchDropDown";
+import SelectField from "./SelectField";
+
+import FormStructureRenderer from "./FormStructureRenderer";
+import { FormTextField } from "./FormTextField"
+
+const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL : `${api.MEDIA_URL}`; // Ensure mediaUrl ends with '/'
+
+const FormFields = ({ field, validation, formStructure, formStyle }) => {
+    const { id, label, name, type, colSize, icon, iconBg, onChange, prefix, suffix } = field;
+    const imageValue = validation.values.image;
+    const [imageSrc, setImageSrc] = useState(defaultAvatar);
+
+
+    const onChangeHandler = (onChange && onChange) || validation.handleChange;
+
+>>>>>>> sanad
 
     useEffect(() => {
         if (imageValue) {
@@ -51,6 +75,7 @@ const FormFields = ({ field, validation, inLineStyle }) => {
         validation.setFieldValue(name, formattedDate);
     };
 
+<<<<<<< HEAD
     //Dropzone file upload
     const [selectedFiles, setselectedFiles] = useState([]);
     const [files, setFiles] = useState([]);
@@ -84,10 +109,16 @@ const FormFields = ({ field, validation, inLineStyle }) => {
             case 'title':
                 return <h4>{label}</h4>;
 
+=======
+
+    const renderInputFields = () => {
+        switch (type) {
+>>>>>>> sanad
             case 'text':
             case 'tel':
             case 'email':
             case 'social':
+<<<<<<< HEAD
                 return (
                     <div className="d-flex">
                         {icon && (
@@ -110,31 +141,70 @@ const FormFields = ({ field, validation, inLineStyle }) => {
                         />
                     </div>
                 );
+=======
+                return (<FormTextField field={field} validation={validation} />);
+>>>>>>> sanad
             case 'number':
                 return (
                     <Input
                         type="number"
                         id={id}
                         name={name}
+<<<<<<< HEAD
                         placeholder={`اكتب ${label}`}
                         value={validation.values[name] || 0}
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                     ></Input>
                 )
+=======
+                        placeholder={label}
+                        value={validation.values[name] || 0}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        invalid={validation.touched[name] && validation.errors[name]}
+                    ></Input>
+                )
+            case 'checkBox':
+                return (
+                    <div className="form-check form-check-success mb-3">
+                        <Input
+                            className="form-check-input"
+                            type="checkbox"
+                            id={id}
+                            name={name}
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            checked={validation.values[name] || false}
+                            invalid={validation.touched[name] && validation.errors[name]}
+                        />
+                        <Label className="form-check-label" for={id}>
+                            {label}
+                        </Label>
+                    </div>
+                );
+
+>>>>>>> sanad
             case 'textarea':
                 return (
                     <Input
                         type="textarea"
+<<<<<<< HEAD
                         id={id}
                         name={name}
                         placeholder={`اكتب ${label}`}
+=======
+                        name={name}
+                        id={id}
+                        placeholder={label}
+>>>>>>> sanad
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values[name] || ""}
                         invalid={validation.touched[name] && validation.errors[name]}
                     />
                 );
+<<<<<<< HEAD
             case 'select':
                 return (
                     <Input
@@ -157,6 +227,8 @@ const FormFields = ({ field, validation, inLineStyle }) => {
                             ))}
                     </Input>
                 );
+=======
+>>>>>>> sanad
             case "image":
                 return (
                     <div className="profile-user position-relative d-inline-block mx-auto mb-4">
@@ -191,6 +263,7 @@ const FormFields = ({ field, validation, inLineStyle }) => {
                 );
             case 'password':
                 return (
+<<<<<<< HEAD
                     <div className="position-relative auth-pass-inputgroup mb-3">
 
                         <Input
@@ -234,10 +307,56 @@ const FormFields = ({ field, validation, inLineStyle }) => {
                     />
                 );
             // ... other cases
+=======
+                    <Input
+                        type="password"
+                        name={name}
+                        id={id}
+                        placeholder={`ادخل ${label}`}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values[name] || ""}
+                        invalid={validation.touched[name] && validation.errors[name]}
+                    />
+                );
+            case 'select':
+                return (
+                    <Input
+                        type="select"
+                        className="form-select"
+                        name={name}
+                        id={id}
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values[name] || ""}
+                        invalid={validation.touched[name] && validation.errors[name]}
+                    >
+                        {/* <option value="">-- اختر --</option> */}
+                        {field.options &&
+                            field.options.map((option) => (
+                                <option
+                                    key={option.id}
+                                    value={option.value}
+                                >
+                                    {option.label}
+                                </option>
+                            ))}
+                    </Input>
+                );
+
+            case 'selectSingle':
+            case 'selectMulti':
+                return <SelectField validation={validation} field={field} onChangeHandler={onChangeHandler} />
+
+            case "searchDropdown":
+                return <SearchDropDown validation={validation} field={field} onChangeHandler={onChangeHandler} />;
+
+>>>>>>> sanad
             default:
                 return null;
         }
     };
+<<<<<<< HEAD
     return (
         <FormFieldLayout inLineStyle={inLineStyle} label={label} id={id} colSize={colSize} type={type}>
             {renderInput()}
@@ -274,4 +393,64 @@ const FormFieldLayout = ({ inLineStyle, label, id, children, colSize, type }) =>
 };
 
 
+=======
+
+
+
+    return (
+        <React.Fragment>
+            {/* <Col lg={colSize} className="input-group input-group-sm"> */}
+            <Col lg={colSize} >
+                {generatePrefixSuffix(prefix)}
+
+                <FormStructureRenderer
+                    formStructure={formStructure} // Pass the formStructure prop
+                    renderInputFields={renderInputFields} // Pass the renderInputFields function
+                    validation={validation} // Pass the validation prop
+                    // colSize={colSize} // Pass any other props you need
+                    type={type}
+                    icon={icon}
+                    id={id}
+                    label={label}
+                    name={name}
+                // formStyle={formStyle}
+                />
+                {suffix && <span className="input-group-text">{suffix.text}</span>}
+            </Col>
+        </React.Fragment>
+
+
+        // <Col lg={colSize} className="mb-3">
+        //     {!icon &&
+        //         <Label htmlFor={id} className="form-label">{label}</Label>
+        //     }
+        //     {renderInputFields()}
+        //     {validation.touched[name] && validation.errors[name] && (
+        //         <FormFeedback type="invalid">
+        //             {validation.errors[name]}
+        //         </FormFeedback>
+        //     )}
+        // </Col>
+    );
+};
+
+const generatePrefixSuffix = (prefix) => {
+    if (!prefix) return null;
+
+    if (prefix.type === "icon") {
+        return (
+            <div className="avatar-xs d-block flex-shrink-0 me-3">
+                <span className={`avatar-title rounded-circle fs-16 ${prefix.iconBg}`}>
+                    <i className={prefix.icon}></i>
+                </span>
+            </div>
+        );
+    } else if (prefix.type === "text") {
+        return <span className="input-group-text">{prefix.text}</span>;
+    }
+
+    return null;
+};
+
+>>>>>>> sanad
 export default FormFields;

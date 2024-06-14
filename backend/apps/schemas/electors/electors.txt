@@ -1,0 +1,28 @@
+✅✔✓☑🗹
+
+views
+1) electorsByFamily
+>> electorsByFamilyArea / 
+☐ 
+☐ 
+☐ 
+
+>> electorsByFamilyBranch
+☐ electorsByFamilyBranches
+☐ electorsByFamilyBranchAreas
+☐ 
+☐ 
+
+
+
+
+electorsByArea
+☐ 
+☐ 
+☐ 
+☐ 
+
+electorsByCommittee
+☐ 
+☐ 
+☐ 

@@ -7,12 +7,20 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   GET_CANDIDATES,
   GET_CANDIDATE_DETAILS,
+<<<<<<< HEAD
   ADD_NEW_CANDIDATE,
+=======
+  ADD_CANDIDATE,
+>>>>>>> sanad
   DELETE_CANDIDATE,
   UPDATE_CANDIDATE,
 
   // Election Candidates
+<<<<<<< HEAD
   ADD_NEW_ELECTION_CANDIDATE,
+=======
+  ADD_ELECTION_CANDIDATE,
+>>>>>>> sanad
 
 } from "./actionType";
 
@@ -23,8 +31,13 @@ import {
   CandidateApiResponseError,
 
   // Candidates
+<<<<<<< HEAD
   addNewCandidateSuccess,
   addNewCandidateFail,
+=======
+  addCandidateSuccess,
+  addCandidateFail,
+>>>>>>> sanad
   updateCandidateSuccess,
   updateCandidateFail,
   deleteCandidateSuccess,
@@ -33,6 +46,13 @@ import {
 } from "./action";
 
 import {
+<<<<<<< HEAD
+=======
+  addElectionCandidateSuccess,
+} from "../elections/action"
+
+import {
+>>>>>>> sanad
   // Election Candidates
   addToElectionAfterCandidateSuccess,
   addToElectionAfterPartyCandidateSuccess,
@@ -42,7 +62,11 @@ import {
 import {
   getCandidates as getCandidatesApi,
   getCandidateDetails as getCandidateDetailsApi,
+<<<<<<< HEAD
   addNewCandidate,
+=======
+  addCandidate,
+>>>>>>> sanad
   updateCandidate,
   deleteCandidate,
 } from "helpers/backend_helper";
@@ -68,6 +92,7 @@ function* getCandidateDetails({ payload: candidate }) {
 
 function* onAddCandidate({ payload: candidate }) {
   try {
+<<<<<<< HEAD
     const response = yield call(addNewCandidate, candidate);
     yield put(addNewCandidateSuccess(response));
     toast.success("تم إضافة المرشح بنجاح", { autoClose: 2000 });
@@ -84,6 +109,21 @@ function* onAddCandidate({ payload: candidate }) {
 
   } catch (error) {
     yield put(addNewCandidateFail(error));
+=======
+    const response = yield call(addCandidate, candidate);
+    yield put(addCandidateSuccess(response));
+    toast.success("تم إضافة المرشح بنجاح", { autoClose: 2000 });
+    
+    if (response.electionCandidate) {
+      const electionCandidateResponse = {
+        data: response.electionCandidate
+      }
+      yield put(addElectionCandidateSuccess(electionCandidateResponse));
+    }
+
+  } catch (error) {
+    yield put(addCandidateFail(error));
+>>>>>>> sanad
     toast.error("خطأ في إضافة المرشح", { autoClose: 2000 });
   }
 }
@@ -119,7 +159,11 @@ export function* watchGetCandidates() {
 }
 
 export function* watchAddNewCandidate() {
+<<<<<<< HEAD
   yield takeEvery(ADD_NEW_CANDIDATE, onAddCandidate);
+=======
+  yield takeEvery(ADD_CANDIDATE, onAddCandidate);
+>>>>>>> sanad
 }
 
 export function* watchUpdateCandidate() {

@@ -11,9 +11,15 @@ class FirebaseAuthBackend {
       firebase.initializeApp(firebaseConfig);
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
+<<<<<<< HEAD
           sessionStorage.setItem("authUser", JSON.stringify(user));
         } else {
           sessionStorage.removeItem("authUser");
+=======
+          localStorage.setItem("authUser", JSON.stringify(user));
+        } else {
+          localStorage.removeItem("authUser");
+>>>>>>> sanad
         }
       });
     }
@@ -133,7 +139,11 @@ class FirebaseAuthBackend {
     }
   };
 
+<<<<<<< HEAD
   addNewUserToFirestore = (user) => {
+=======
+  addUserToFirestore = (user) => {
+>>>>>>> sanad
     const collection = firebase.firestore().collection("users");
     const { profile } = user.additionalUserInfo;
     const details = {
@@ -150,15 +160,24 @@ class FirebaseAuthBackend {
   };
 
   setLoggeedInUser = user => {
+<<<<<<< HEAD
     sessionStorage.setItem("authUser", JSON.stringify(user));
+=======
+    localStorage.setItem("authUser", JSON.stringify(user));
+>>>>>>> sanad
   };
 
   /**
    * Returns the authenticated user
    */
   getAuthenticatedUser = () => {
+<<<<<<< HEAD
     if (!sessionStorage.getItem("authUser")) return null;
     return JSON.parse(sessionStorage.getItem("authUser"));
+=======
+    if (!localStorage.getItem("authUser")) return null;
+    return JSON.parse(localStorage.getItem("authUser"));
+>>>>>>> sanad
   };
 
   /**

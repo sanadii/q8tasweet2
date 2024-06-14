@@ -1,0 +1,46 @@
+#Virtual Environment
+python -m venv venv
+venv\Scripts\activate
+
+
+# Django
+py manage.py 
+pip install -r requirements.txt
+pip install django-cors-headers
+
+
+py manage.py makemigrations --dry-run --verbosity 3
+py manage.py migrate
+
+py manage.py createsuperuser 
+py manage.py runserver
+
+#################################################
+
+## Django Packages
+pip install djangorestframework djangorestframework-simplejwt django-cors-headers django-oauth2-provider social-auth-app-django drf_social_oauth2 coreapi Pillow
+
+DEPRECATION: django-oauth2-provider is being installed using the legacy 'setup.py install' method, because it does not have a 'pyproject.toml' and the 'wheel' package is not installed. pip 23.1 will enforce this behaviour change. A possible replacement is to enable the '--use-pep517' option. Discussion can be found at https://github.com/pypa/pip/issues/8559
+
+
+#################################################
+
+pip install coverage
+coverage run --omit='*/venv/*' manage.py test
+coverage html
+
+# React
+yarn cache clean
+yarn update
+
+yarn install
+yarn add react-scripts
+
+npx create-react-app blogapi .
+cd blogapi
+yarn start
+yarn add react-router-dom @material-ui/core
+
+Info:
+Strict Mode
+StrictMode is a tool for highlighting potential problems in an application. Like Fragment , StrictMode does not render. React StrictMode is a feature added in version 16.3 and aimed to help us in finding potential problems in an application.

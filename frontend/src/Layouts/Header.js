@@ -9,12 +9,20 @@ import logoDark from "../assets/images/logo-dark.png";
 import logoLight from "../assets/images/logo-light.png";
 
 //import Components
+<<<<<<< HEAD
 import {SearchOption, WebAppsDropdown, MyCartDropdown, FullScreenDropdown, NotificationDropdown, ProfileDropdown, LightDark} from 'shared/components';
+=======
+import { SearchOption, WebAppsDropdown, CampaignDropdown, MyCartDropdown, FullScreenDropdown, NotificationDropdown, ProfileDropdown, LightDark } from 'shared/components';
+>>>>>>> sanad
 
 import { changeSidebarVisibility } from '../store/actions';
 import { useSelector, useDispatch } from "react-redux";
 
+<<<<<<< HEAD
 const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
+=======
+const Header = ({ onChangeLayoutMode, setCurrentCampaign, layoutModeType, headerClass }) => {
+>>>>>>> sanad
     const [search, setSearch] = useState(false);
     const toogleSearch = () => {
         setSearch(!search);
@@ -89,14 +97,21 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                     <span></span>
                                 </span>
                             </button>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> sanad
                             <SearchOption />
                         </div>
 
                         <div className="d-flex align-items-center">
+<<<<<<< HEAD
 
                             <Dropdown isOpen={search} toggle={toogleSearch} className="d-md-none topbar-head-dropdown header-item">
+=======
+                            {/* <Dropdown isOpen={search} toggle={toogleSearch} className="d-md-none topbar-head-dropdown header-item">
+>>>>>>> sanad
                                 <DropdownToggle type="button" tag="button" className="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle">
                                     <i className="bx bx-search fs-22"></i>
                                 </DropdownToggle>
@@ -112,10 +127,18 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                         </div>
                                     </Form>
                                 </DropdownMenu>
+<<<<<<< HEAD
                             </Dropdown>
 
                             {/* WebAppsDropdown */}
                             {/* <WebAppsDropdown /> */}
+=======
+                            </Dropdown> */}
+
+                            {/* WebAppsDropdown */}
+                            {/* <WebAppsDropdown /> */}
+                            <CampaignDropdown setCurrentCampaign={setCurrentCampaign} />
+>>>>>>> sanad
 
                             {/* MyCartDropdwon */}
                             {/* <MyCartDropdown /> */}

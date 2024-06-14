@@ -5,7 +5,11 @@ import { addParty, updateParty } from "store/actions";
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
+<<<<<<< HEAD
 import { FieldComponent } from "shared/components";
+=======
+import { FormFields } from "shared/components";
+>>>>>>> sanad
 
 // UI & Utilities Components
 import { Col, Row, Form, Modal, ModalHeader, ModalBody, Button } from "reactstrap";
@@ -161,7 +165,11 @@ const PartyModal = ({ isEdit, setModal, modal, toggle, party }) => {
                   {row.cols.map((col, colIndex) => (
                     <Col md={col.colSize} key={colIndex}>
                       {col.fields.map(field => (
+<<<<<<< HEAD
                         <FieldComponent field={field} validation={validation} key={field.id} />
+=======
+                        <FormFields field={field} validation={validation} key={field.id} />
+>>>>>>> sanad
                       ))}
                     </Col>
                   ))}
@@ -180,7 +188,11 @@ const PartyModal = ({ isEdit, setModal, modal, toggle, party }) => {
               }}
               className="btn-light"
             >
+<<<<<<< HEAD
               اغلاق
+=======
+              اغلق
+>>>>>>> sanad
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
               {!!isEdit ? "تحديث" : "إضافة"}

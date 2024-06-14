@@ -16,6 +16,7 @@ from django.utils.translation import gettext as _
 # from utils.deprecation import is_authenticated
 # from utils.importing import import_dotted_path
 # from utils.sites import has_site_permission
+<<<<<<< HEAD
 from apps.auths.models import Group, User
 from django.db.models import Q
 
@@ -167,6 +168,9 @@ def get_campaign_managers(campaign):
     )
     
     return campaign_managers
+=======
+
+>>>>>>> sanad
 
 
 
@@ -319,7 +323,11 @@ def render(request, templates, dictionary=None, context_instance=None, **kwargs)
 
     dictionary = dictionary or {}
     if context_instance:
+<<<<<<< HEAD
         context_instance.update(dictionary)
+=======
+        context_instance.update(dictionary) 
+>>>>>>> sanad
     else:
         context_instance = RequestContext(request, dictionary)
     return TemplateResponse(request, templates, context_instance, **kwargs)

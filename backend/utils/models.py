@@ -1,9 +1,18 @@
 import warnings
+<<<<<<< HEAD
 
+=======
+import secrets
+import string
+from slugify import slugify
+
+from django.apps import apps
+>>>>>>> sanad
 from django.conf import settings
 from django.contrib.auth import get_user_model as django_get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Field, Model
+<<<<<<< HEAD
 from django.utils.html import format_html
 from slugify import slugify
 
@@ -11,6 +20,19 @@ from django.apps import apps
 from utils.importing import import_dotted_path
 
 
+=======
+from django.utils.text import slugify
+from django.utils.html import format_html
+from utils.importing import import_dotted_path
+
+
+
+GENDER_CHOICES = [
+    (1, "Male"),
+    (2, "Female"),
+]
+
+>>>>>>> sanad
 def get_current_user(request):
     return request.user if request.user.is_authenticated else None
 
@@ -40,6 +62,14 @@ def generate_slug(value):
 
     return new_slug
 
+<<<<<<< HEAD
+=======
+def generate_random_slug(length=6):
+    characters = string.ascii_letters + string.digits  # Letters and digits
+    random_slug = ''.join(secrets.choice(characters) for _ in range(length))
+    return random_slug
+
+>>>>>>> sanad
 def get_user_model():
     warnings.warn(
         "Mezzanine's get_user_model() is deprecated and will be removed in a "

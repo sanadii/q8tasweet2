@@ -12,7 +12,11 @@ import {
   UPDATE_PARTY,
 
   // Election Parties
+<<<<<<< HEAD
   ADD_NEW_ELECTION_PARTY,
+=======
+  ADD_ELECTION_PARTY,
+>>>>>>> sanad
 
 } from "./actionType";
 

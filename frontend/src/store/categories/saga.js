@@ -6,7 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 // Invoice Redux States
 import {
   GET_CATEGORIES,
+<<<<<<< HEAD
   ADD_NEW_CATEGORY,
+=======
+  ADD_CATEGORY,
+>>>>>>> sanad
   DELETE_CATEGORY,
   UPDATE_CATEGORY,
 } from "./actionType";
@@ -36,7 +40,11 @@ import { uploadNewImage } from "../uploadImage/action";
 //Include Both Helper Category with needed methods
 import {
   getCategories as getCategoriesApi,
+<<<<<<< HEAD
   addNewCategory,
+=======
+  addCategory,
+>>>>>>> sanad
   updateCategory,
   deleteCategory,
 } from "../../helpers/backend_helper";
@@ -54,7 +62,11 @@ function* getCategories() {
 function* onAddNewCategory({ payload: category }) {
 
   try {
+<<<<<<< HEAD
     const response = yield call(addNewCategory, category);
+=======
+    const response = yield call(addCategory, category);
+>>>>>>> sanad
     yield put(addCategorySuccess(response));
     toast.success("Category Added Successfully", { autoClose: 3000 });
   } catch (error) {
@@ -135,7 +147,11 @@ export function* watchDeleteCategory() {
 }
 
 export function* watchAddNewCategory() {
+<<<<<<< HEAD
   yield takeEvery(ADD_NEW_CATEGORY, onAddNewCategory);
+=======
+  yield takeEvery(ADD_CATEGORY, onAddNewCategory);
+>>>>>>> sanad
 }
 
 function* CategoryManager() {

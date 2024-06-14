@@ -5,7 +5,11 @@ import "react-toastify/dist/ReactToastify.css";
 // GroupPermission Redux States
 import {
   GET_GROUP_PERMISSIONS,
+<<<<<<< HEAD
   ADD_NEW_GROUP_PERMISSION,
+=======
+  ADD_GROUP_PERMISSION,
+>>>>>>> sanad
   DELETE_GROUP_PERMISSION,
   UPDATE_GROUP_PERMISSION,
 } from "./actionType";
@@ -22,8 +26,13 @@ import {
   GroupPermissionApiResponseError,
 
   // GroupPermissions
+<<<<<<< HEAD
   addNewGroupPermissionSuccess,
   addNewGroupPermissionFail,
+=======
+  addGroupPermissionSuccess,
+  addGroupPermissionFail,
+>>>>>>> sanad
   updateGroupPermissionSuccess,
   updateGroupPermissionFail,
   deleteGroupPermissionSuccess,
@@ -36,7 +45,11 @@ import { uploadNewImage } from "../uploadImage/action";
 //Include Both Helper File with needed methods
 import {
   getGroupPermissions as getGroupPermissionsApi,
+<<<<<<< HEAD
   addNewGroupPermission,
+=======
+  addGroupPermission,
+>>>>>>> sanad
   updateGroupPermission,
   deleteGroupPermission,
 } from "helpers/backend_helper";
@@ -53,6 +66,7 @@ function* getGroupPermissions() {
 
 function* onAddNewGroupPermission({ payload: { groupPermission, formData } }) {
   try {
+<<<<<<< HEAD
     // Call the API function to add a new groupPermission & Dispatch the addNewGroupPermissionSuccess action with the received data
     const addNewGroupPermissionResponse = yield call(addNewGroupPermission, formData);
     yield put(addNewGroupPermissionSuccess(addNewGroupPermissionResponse));
@@ -60,6 +74,15 @@ function* onAddNewGroupPermission({ payload: { groupPermission, formData } }) {
     toast.success("GroupPermission Added Successfully", { autoClose: 2000 });
   } catch (error) {
     yield put(addNewGroupPermissionFail(error));
+=======
+    // Call the API function to add a new groupPermission & Dispatch the addGroupPermissionSuccess action with the received data
+    const addGroupPermissionResponse = yield call(addGroupPermission, formData);
+    yield put(addGroupPermissionSuccess(addGroupPermissionResponse));
+
+    toast.success("GroupPermission Added Successfully", { autoClose: 2000 });
+  } catch (error) {
+    yield put(addGroupPermissionFail(error));
+>>>>>>> sanad
     toast.error("GroupPermission Added Failed", { autoClose: 2000 });
   }
 }
@@ -114,7 +137,11 @@ export function* watchGetGroupPermissions() {
   yield takeEvery(GET_GROUP_PERMISSIONS, getGroupPermissions);
 }
 export function* watchAddNewGroupPermission() {
+<<<<<<< HEAD
   yield takeEvery(ADD_NEW_GROUP_PERMISSION, onAddNewGroupPermission);
+=======
+  yield takeEvery(ADD_GROUP_PERMISSION, onAddNewGroupPermission);
+>>>>>>> sanad
 }
 export function* watchUpdateGroupPermission() {
   yield takeEvery(UPDATE_GROUP_PERMISSION, onUpdateGroupPermission);

@@ -1,6 +1,10 @@
 # Election Urls: elections/urls.py
 from django.urls import path
 from apps.elections.views import *
+<<<<<<< HEAD
+=======
+from apps.elections.candidates.views import *
+>>>>>>> sanad
 
 # from .views.candidates import *
 from rest_framework.routers import DefaultRouter
@@ -21,7 +25,11 @@ urlpatterns = [
 
     # Election Candidate
     # path("getElectionCandidates/<int:election_id>", GetElectionCandidates.as_view(), name="getElectionCandidates"),
+<<<<<<< HEAD
     path("addNewElectionCandidate", AddNewElectionCandidate.as_view(), name="AddNewElectionCandidate"),
+=======
+    path("addElectionCandidate", AddElectionCandidate.as_view(), name="AddElectionCandidate"),
+>>>>>>> sanad
     path("deleteElectionCandidate/<int:id>", DeleteElectionCandidate.as_view(), name="DeleteElectionCandidate"),
     path("updateElectionCandidate/<int:id>", UpdateElectionCandidate.as_view(), name="UpdateElectionCandidate"),
     path("updateElectionCandidate/<int:id>", UpdateElectionCandidate.as_view(), name="UpdateElectionCandidate"),
@@ -41,6 +49,7 @@ urlpatterns = [
     path("updateElectionPartyCandidate/<int:id>", UpdateElectionPartyCandidate.as_view(), name="UpdateElectionPartyCandidate"),
     path("updateElectionPartyCandidate/<int:id>", UpdateElectionPartyCandidate.as_view(), name="UpdateElectionPartyCandidate"),
 
+<<<<<<< HEAD
     # Election Committees
     # path("getElectionCommittees/<int:election_id>", GetElectionCommittees.as_view(), name="getElectionCommittees"),
     path("addNewElectionCommittee", AddNewElectionCommittee.as_view(), name="AddNewElectionCommittee"),
@@ -50,6 +59,8 @@ urlpatterns = [
     # Election Results
     path("updateElectionResults/<int:id>", UpdateElectionResults.as_view(), name="UpdateElectionResults"),
 
+=======
+>>>>>>> sanad
     # Public
     path("getPublicElections", GetPublicElections.as_view(), name="GetPublicElections"),
     path("getPublicElectionDetails", GetPublicElectionDetails.as_view(), name="GetPublicElectionDetails"),

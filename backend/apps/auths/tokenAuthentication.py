@@ -9,7 +9,10 @@ from datetime import datetime, timedelta
 User = get_user_model()
 
 class JWTAuthentication(BaseAuthentication):
+<<<<<<< HEAD
 
+=======
+>>>>>>> sanad
     def authenticate(self, request):
         token = self.extract_token(request=request)
         if token is None:

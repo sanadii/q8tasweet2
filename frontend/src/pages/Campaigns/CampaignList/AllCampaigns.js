@@ -8,9 +8,16 @@ import { getCampaigns, deleteCampaign } from "store/actions";
 
 // Constants & Component imports
 import { Loader, DeleteModal, TableContainer, TableContainerHeader } from "shared/components";
+<<<<<<< HEAD
 import CampaignModal from "./CampaignModal";
 import { Id, Name, DueDate, Status, Priority, CreateBy, Actions } from "./CampaignListCol";
 
+=======
+import { CheckboxHeader, CheckboxCell, Id, NameAvatar, SimpleName, DateTime, Badge, CreateBy, Actions } from "shared/components"
+
+import { useDelete, useFilter } from "shared/hooks"
+import CampaignModal from "./CampaignModal";
+>>>>>>> sanad
 // UI Components & styling imports
 import { Col, Row, Card, CardBody } from "reactstrap";
 import { toast, ToastContainer } from "react-toastify";
@@ -21,10 +28,37 @@ const AllCampaigns = () => {
 
   // State Management
   const { campaigns, isCampaignSuccess, error } = useSelector(campaignSelector);
+<<<<<<< HEAD
+=======
+  const [modal, setModal] = useState(false);
+>>>>>>> sanad
   const [campaignList, setCampaignList] = useState(campaigns);
   const [campaign, setCampaign] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
 
+<<<<<<< HEAD
+=======
+  // Delete Hook
+  const {
+    // Delete Modal
+    handleDeleteItem,
+    deleteModal,
+    setDeleteModal,
+    deleteModalMulti,
+    handleDeleteMultiple,
+
+    // Table Header
+    isMultiDeleteButton,
+    setDeleteModalMulti,
+
+    // Column Actions
+    handleItemDeleteClick,
+    handleCheckAllClick,
+    handleCheckCellClick,
+  } = useDelete(deleteCampaign);
+
+
+>>>>>>> sanad
   // Campaign Data
   useEffect(() => {
     if (campaigns && !campaigns.length) {
@@ -32,17 +66,21 @@ const AllCampaigns = () => {
     }
   }, [dispatch, campaigns]);
 
+<<<<<<< HEAD
   // Delete Campaign
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModalMulti, setDeleteModalMulti] = useState(false);
   const [modal, setModal] = useState(false);
 
+=======
+>>>>>>> sanad
   const toggle = useCallback(() => {
     if (modal) {
       setModal(false);
       setCampaign(null);
     } else {
       setModal(true);
+<<<<<<< HEAD
       // setDate(defaultdate());
     }
   }, [modal]);
@@ -80,6 +118,15 @@ const AllCampaigns = () => {
         priority: campaign.priority,
       });
 
+=======
+    }
+  }, [modal]);
+
+  // Update Data
+  const handleCampaignClick = useCallback(
+    (campaignData) => {
+      setCampaign(campaignData);
+>>>>>>> sanad
       setIsEdit(true);
       toggle();
     },
@@ -93,6 +140,7 @@ const AllCampaigns = () => {
     toggle();
   };
 
+<<<<<<< HEAD
   // Checked All
   const checkedAll = useCallback(() => {
     const checkall = document.getElementById("checkBoxAll");
@@ -133,10 +181,13 @@ const AllCampaigns = () => {
       : setIsMultiDeleteButton(false);
     setSelectedCheckBoxDelete(checkedEntry);
   };
+=======
+>>>>>>> sanad
 
   const columns = useMemo(
     () => [
       {
+<<<<<<< HEAD
         Header: (
           <input
             type="checkbox"
@@ -161,6 +212,21 @@ const AllCampaigns = () => {
         Header: "ID",
         accessor: "id",
         filterable: false,
+=======
+        Header: () =>
+          <CheckboxHeader
+            handleCheckAllClick={handleCheckAllClick}
+          />,
+        accessor: "id",
+        Cell: (cellProps) =>
+          <CheckboxCell
+            {...cellProps}
+            handleCheckCellClick={handleCheckCellClick}
+          />,
+      },
+      {
+        Header: "م.",
+>>>>>>> sanad
         Cell: (cellProps) => {
           return <Id {...cellProps} />;
         },
@@ -168,6 +234,7 @@ const AllCampaigns = () => {
       {
         Header: "الحملة",
         accessor: "name",
+<<<<<<< HEAD
         filterable: false,
         Cell: (cellProps) => {
           return <Name {...cellProps} />;
@@ -180,6 +247,26 @@ const AllCampaigns = () => {
         Cell: (cellProps) => {
           return <Name {...cellProps} />;
         },
+=======
+        Cell: (cellProps) =>
+          <NameAvatar
+            name={cellProps.row.original.candidate.name}
+            image={cellProps.row.original.candidate.image}
+            slug={cellProps.row.original.slug}
+            dirName="campaigns"
+            subTitle={cellProps.row.original.party?.name || null}
+          />
+      },
+      {
+        Header: "الانتخابات",
+        Cell: (cellProps) =>
+          <SimpleName
+            name={cellProps.row.original.election.name}
+            slug={cellProps.row.original.election.slug}
+            urlDir="elections"
+
+          />
+>>>>>>> sanad
       },
 
       {
@@ -187,6 +274,7 @@ const AllCampaigns = () => {
         accessor: "election.dueDate",
         filterable: false,
         Cell: (cellProps) => {
+<<<<<<< HEAD
           return <DueDate {...cellProps} />;
         },
       },
@@ -209,6 +297,27 @@ const AllCampaigns = () => {
         },
       },
       // {
+=======
+          return <DateTime date={cellProps.row.original.election.dueDate} />;
+        },
+      },
+      // {
+      //   Header: "الحالة",
+      //   Cell: (cellProps) =>
+      //     <Badge
+      //       option="status"
+      //       value={cellProps.row.original.task.status} />
+      // },
+      // {
+      //   Header: "الأولية",
+      //   Cell: (cellProps) =>
+      //     <Badge
+      //       option="priority"
+      //       value={cellProps.row.original.task.priority}
+      //     />
+      // },
+      // {
+>>>>>>> sanad
       //   Header: "Moderators",
       //   accessor: "moderators",
       //   filterable: false,
@@ -216,6 +325,7 @@ const AllCampaigns = () => {
       //     return <Moderators {...cell} />;
       //   },
       // },
+<<<<<<< HEAD
       {
         Header: "Created By",
         accessor: "createdBy",
@@ -242,11 +352,37 @@ const AllCampaigns = () => {
       },
     ],
     [handleCampaignClick, checkedAll]
+=======
+      // {
+      //   Header: "Created By",
+      //   accessor: "createdBy",
+      //   filterable: false,
+      //   useFilters: true,
+
+      //   Cell: (cellProps) => {
+      //     return <CreateBy {...cellProps} />;
+      //   },
+      // },
+      {
+        Header: "إجراءات",
+        accessor: "campaign",
+        Cell: (cellProps) =>
+          <Actions
+            options={["view", "update", "delete"]}
+            cell={cellProps}
+            handleItemClicks={handleCampaignClick}
+            handleItemDeleteClick={handleItemDeleteClick}
+          />
+      },
+    ],
+    [handleCheckCellClick, handleCheckAllClick, handleCampaignClick, handleItemDeleteClick]
+>>>>>>> sanad
   );
   return (
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
+<<<<<<< HEAD
         onDeleteClick={handleDeleteCampaign}
         onCloseClick={() => setDeleteModal(false)}
       />
@@ -254,6 +390,16 @@ const AllCampaigns = () => {
         show={deleteModalMulti}
         onDeleteClick={() => {
           deleteMultiple();
+=======
+        onDeleteClick={() => handleDeleteItem()}
+        onCloseClick={() => setDeleteModal(false)}
+      />
+
+      <DeleteModal
+        show={deleteModalMulti}
+        onDeleteClick={() => {
+          handleDeleteMultiple();
+>>>>>>> sanad
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}

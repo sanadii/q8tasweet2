@@ -7,7 +7,11 @@ import { Row, Col, Card, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Badge } from 'reactstrap'; // Or your preferred UI library if not using reactstrap
 
+<<<<<<< HEAD
 const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL.slice(0, -1) : api.MEDIA_URL;
+=======
+const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL.slice(0, -1) : api.MEDIA_URL;
+>>>>>>> sanad
 const defaultImagePath = '/media/candidates/default.jpg';
 
 const defaultCandidatePath = '/media/candidates/default.jpg';
@@ -52,9 +56,59 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
   );
 };
 
+<<<<<<< HEAD
 export const AvatarList = ({ dirName, row }) => {
   const { id, name, image, slug } = row.original;
 
+=======
+
+
+// export const ResultCandidateName = ({ dirName, cellProps }) => {
+//   const { id, name, image, gender, slug, imagePath, result } = cellProps.row.original;
+
+//   // Define result statuses
+//   const isWinner = result === "فاز";
+//   const isEliminated = result === "مشطوب";
+//   const isSteppedDown = result === "تنازل";
+
+//   const imageUrl = image ? `${process.env.REACT_APP_MEDIA_URL}${image}` : `${process.env.REACT_APP_MEDIA_URL}${defaultImagePath}`;
+
+//   return (
+//     <Link to={`/dashboard/${dirName}/${slug}`} className="d-flex align-items-center link-primary">
+//       <div className="avatar-sm">
+//         <img
+//           src={imageUrl}
+//           alt={name}
+//           className="img-thumbnail rounded-circle"
+//         />
+//       </div>
+//       <div className="ms-2">
+//         <strong>{name}</strong>
+//         {isWinner && (
+//           <Badge color="success" className="ms-2">
+//             فائز
+//           </Badge>
+//         )}
+//         {isEliminated && (
+//           <Badge color="danger" className="ms-2">
+//             مشطوب
+//           </Badge>
+//         )}
+//         {isSteppedDown && (
+//           <Badge color="warning" className="ms-2">
+//             تنازل
+//           </Badge>
+//         )}
+//       </div>
+//     </Link>
+//   );
+// };
+
+
+
+
+export const AvatarList = ({ dirName, name, image, slug }) => {
+>>>>>>> sanad
   const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
   // For other dirName values, render the link
@@ -98,7 +152,11 @@ export const ImageMedium = ({ imagePath }) => {
 };
 
 export const ImageLarge = ({ imagePath }) => {
+<<<<<<< HEAD
   const imageUrl = imagePath ? `${imagePath}` : `${mediaUrl}${defaultImagePath}`;
+=======
+  const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
+>>>>>>> sanad
 
   return (
     <React.Fragment>

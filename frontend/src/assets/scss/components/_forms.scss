@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //
 // forms.scss
 //
@@ -7,3 +8,14 @@
         text-align: left /*rtl: right*/;
     }
 }
+=======
+//
+// forms.scss
+//
+
+:is([type="tel"], [type="url"], [type="email"], [type="number"]){
+    &::placeholder {
+        text-align: left /*rtl: right*/;
+    }
+}
+>>>>>>> sanad

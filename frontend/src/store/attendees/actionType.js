@@ -4,7 +4,11 @@ export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
 export const GET_ALL_ATTENDEES = "GET_ALL_ATTENDEES";
 
 // Add Attendee
+<<<<<<< HEAD
 export const ADD_NEW_ATTENDEE = "ADD_NEW_ATTENDEE";
+=======
+export const ADD_ATTENDEE = "ADD_ATTENDEE";
+>>>>>>> sanad
 export const ADD_ATTENDEE_SUCCESS = "ADD_ATTENDEE_SUCCESS";
 export const ADD_ATTENDEE_FAIL = "ADD_ATTENDEE_FAIL";
 

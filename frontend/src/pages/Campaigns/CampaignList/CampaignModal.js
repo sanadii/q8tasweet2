@@ -5,7 +5,11 @@ import { Link } from "react-router-dom";
 import { userSelector, campaignSelector } from 'selectors';
 
 // ------------ Import Actions ------------
+<<<<<<< HEAD
 import { addNewCampaign, updateCampaign } from "../../../store/actions";
+=======
+import { addCampaign, updateCampaign } from "../../../store/actions";
+>>>>>>> sanad
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "react-toastify/dist/ReactToastify.css";
@@ -78,7 +82,11 @@ const CampaignModal = ({ isEdit, setModal, modal, toggle, campaign }) => {
           priority: values.priority,
           moderators: values.moderators,
         };
+<<<<<<< HEAD
         dispatch(addNewCampaign(newCampaign));
+=======
+        dispatch(addCampaign(newCampaign));
+>>>>>>> sanad
       }
 
       validation.resetForm();

@@ -31,7 +31,11 @@ function* loginUser({ payload: { user, history } }) {
         email: user.email,
         password: user.password,
       });
+<<<<<<< HEAD
       sessionStorage.setItem("authUser", JSON.stringify(response));
+=======
+      localStorage.setItem("authUser", JSON.stringify(response));
+>>>>>>> sanad
       if (response) {
         yield put(loginSuccess(response));
         history('/dashboard');
@@ -41,7 +45,11 @@ function* loginUser({ payload: { user, history } }) {
       if (response.status === "success") {
         yield put(loginSuccess(response));
         history('/dashboard');
+<<<<<<< HEAD
         sessionStorage.setItem("authUser", JSON.stringify(response));
+=======
+        localStorage.setItem("authUser", JSON.stringify(response));
+>>>>>>> sanad
       } else {
         yield put(apiError(response));
       }
@@ -53,7 +61,11 @@ function* loginUser({ payload: { user, history } }) {
 
 function* logoutUser() {
   try {
+<<<<<<< HEAD
     sessionStorage.removeItem("authUser");
+=======
+    localStorage.removeItem("authUser");
+>>>>>>> sanad
     if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
       const fireBaseBackend = getFirebaseBackend();
       const response = yield call(fireBaseBackend.logout);
@@ -76,11 +88,19 @@ function* socialLogin({ payload: { data, history, type } }) {
       } else {
         history("/login");
       }
+<<<<<<< HEAD
       sessionStorage.setItem("authUser", JSON.stringify(response));
       yield put(loginSuccess(response));
     } else {
       const response = yield call(postSocialLogin, data);
       sessionStorage.setItem("authUser", JSON.stringify(response));
+=======
+      localStorage.setItem("authUser", JSON.stringify(response));
+      yield put(loginSuccess(response));
+    } else {
+      const response = yield call(postSocialLogin, data);
+      localStorage.setItem("authUser", JSON.stringify(response));
+>>>>>>> sanad
       yield put(loginSuccess(response));
     }
     history('/dashboard');

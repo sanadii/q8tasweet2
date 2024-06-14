@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Actions
 export const API_RESPONSE_SUCCESS = "API_RESPONSE_SUCCESS";
 export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
@@ -22,4 +23,30 @@ export const UPDATE_IMAGE_FAIL = "UPDATE_IMAGE_FAIL";
  */
 export const DELETE_IMAGE = "DELETE_IMAGE";
 export const DELETE_IMAGE_SUCCESS = "DELETE_IMAGE_SUCCESS";
+=======
+// Actions
+export const API_RESPONSE_SUCCESS = "API_RESPONSE_SUCCESS";
+export const API_RESPONSE_ERROR = "API_RESPONSE_ERROR";
+export const GET_IMAGE_s = "GET_IMAGE_s";
+
+/**
+* Add IMAGE
+*/
+export const UPLOAD_NEW_IMAGE = "UPLOAD_NEW_IMAGE";
+export const UPLOAD_IMAGE_SUCCESS = "UPLOAD_IMAGE_SUCCESS";
+export const UPLOAD_IMAGE_FAIL = "UPLOAD_IMAGE_FAIL";
+
+/***
+ * Edit IMAGE
+ */
+export const UPDATE_IMAGE = "UPDATE_IMAGE";
+export const UPDATE_IMAGE_SUCCESS = "UPDATE_IMAGE_SUCCESS";
+export const UPDATE_IMAGE_FAIL = "UPDATE_IMAGE_FAIL";
+
+/**
+ * Delete IMAGE
+ */
+export const DELETE_IMAGE = "DELETE_IMAGE";
+export const DELETE_IMAGE_SUCCESS = "DELETE_IMAGE_SUCCESS";
+>>>>>>> sanad
 export const DELETE_IMAGE_FAIL = "DELETE_IMAGE_FAIL";

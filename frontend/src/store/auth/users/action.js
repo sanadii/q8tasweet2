@@ -6,9 +6,15 @@ import {
   // Users
   GET_USERS,
   GET_USER_DETAILS,
+<<<<<<< HEAD
   ADD_NEW_USER,
   ADD_NEW_USER_SUCCESS,
   ADD_NEW_USER_FAIL,
+=======
+  ADD_USER,
+  ADD_USER_SUCCESS,
+  ADD_USER_FAIL,
+>>>>>>> sanad
   UPDATE_USER_PROFILE,
   UPDATE_USER_PROFILE_SUCCESS,
   UPDATE_USER_PROFILE_FAIL,
@@ -86,6 +92,7 @@ export const changeUserPasswordFail = (error) => ({
 });
 
 // Add New User
+<<<<<<< HEAD
 export const addNewUser = (user) => ({
   type: ADD_NEW_USER,
   payload: user,
@@ -98,6 +105,20 @@ export const addNewUserSuccess = (user) => ({
 
 export const addNewUserFail = (error) => ({
   type: ADD_NEW_USER_FAIL,
+=======
+export const addUser = (user) => ({
+  type: ADD_USER,
+  payload: user,
+});
+
+export const addUserSuccess = (user) => ({
+  type: ADD_USER_SUCCESS,
+  payload: user,
+});
+
+export const addUserFail = (error) => ({
+  type: ADD_USER_FAIL,
+>>>>>>> sanad
   payload: error,
 });
 

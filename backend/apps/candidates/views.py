@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.http.response import JsonResponse
+<<<<<<< HEAD
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 
@@ -13,18 +14,43 @@ from apps.candidates.models import Candidate, Party
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
 
 from apps.elections.models import(
+=======
+from django.shortcuts import render, get_object_or_404
+
+from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+# Tasweet Apps
+
+from apps.candidates.models import Candidate, Party
+from apps.candidates.serializers import CandidateSerializer, PartySerializer
+
+from apps.elections.candidates.models import(
+>>>>>>> sanad
     ElectionCandidate,
     ElectionParty,
     ElectionPartyCandidate,
     )
+<<<<<<< HEAD
 from apps.elections.serializers import (
+=======
+from apps.elections.candidates.serializers import (
+>>>>>>> sanad
     ElectionCandidateSerializer,
     ElectionPartySerializer,
     ElectionPartyCandidateSerializer,
 )
+<<<<<<< HEAD
 from helper.views_helper import CustomPagination
 
 from rest_framework.parsers import MultiPartParser, FormParser
+=======
+from utils.views_helper import CustomPagination
+
+>>>>>>> sanad
 
 
 def index(request):
@@ -63,7 +89,11 @@ class GetCandidateDetails(APIView):
 
 
 
+<<<<<<< HEAD
 class AddNewCandidate(APIView):
+=======
+class AddCandidate(APIView):
+>>>>>>> sanad
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
@@ -71,6 +101,7 @@ class AddNewCandidate(APIView):
         serializer = CandidateSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             candidate = serializer.save()
+<<<<<<< HEAD
             if 'image' in request.FILES:
                 candidate.image = request.FILES['image']
                 candidate.save()
@@ -131,6 +162,55 @@ class AddNewCandidate(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+=======
+            self._save_image_if_present(request, candidate)
+
+            response_data = {"data": serializer.data, "count": 0, "code": 200}
+
+            response_data = self._handle_election_related_data(request, candidate, response_data)
+
+            return Response(response_data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def _save_image_if_present(self, request, candidate):
+        if 'image' in request.FILES:
+            candidate.image = request.FILES['image']
+            candidate.save()
+
+    def _create_election_candidate(self, request, candidate):
+        election_id = request.data['election']
+        return ElectionCandidate.objects.create(election_id=election_id, candidate=candidate)
+
+    def _create_election_party_candidate(self, request, election_candidate):
+        try:
+            election_party_id = int(request.data['electionParty'])
+        except (ValueError, TypeError):
+            raise Response({"error": "Invalid 'electionParty' value. Must be an integer."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not ElectionParty.objects.filter(id=election_party_id).exists():
+            raise Response({"error": f"ElectionParty with id {election_party_id} does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        return ElectionPartyCandidate.objects.create(
+            election_party_id=election_party_id,
+            election_candidate=election_candidate
+        )
+
+    def _handle_election_related_data(self, request, candidate, response_data):
+        if 'election' in request.data:
+            election_candidate = self._create_election_candidate(request, candidate)
+           
+            if 'electionParty' in request.data:
+                self._create_election_party_candidate(request, election_candidate)
+           
+        response_data.update({
+            "electionCandidate": ElectionCandidateSerializer(election_candidate).data
+        })
+        return response_data
+
+
+
+>>>>>>> sanad
 class UpdateCandidate(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
@@ -161,7 +241,11 @@ class DeleteCandidate(APIView):
         try:
             candidate = Candidate.objects.get(id=id)
             candidate.delete()
+<<<<<<< HEAD
             return JsonResponse({"data": "Candidate deleted successfully", "count": 1, "code": 200}, safe=False)
+=======
+            return JsonResponse({"data": "Candidate is deleted successfully", "count": 1, "code": 200}, safe=False)
+>>>>>>> sanad
         except Candidate.DoesNotExist:
             return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)
 
@@ -268,6 +352,10 @@ class DeleteParty(APIView):
         try:
             party = Party.objects.get(id=id)
             party.delete()
+<<<<<<< HEAD
             return JsonResponse({"data": "Party deleted successfully", "count": 1, "code": 200}, safe=False)
+=======
+            return JsonResponse({"data": "Party is deleted successfully", "count": 1, "code": 200}, safe=False)
+>>>>>>> sanad
         except Party.DoesNotExist:
             return JsonResponse({"data": "Party not found", "count": 0, "code": 404}, safe=False)

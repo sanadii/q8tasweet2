@@ -6,9 +6,15 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUserManager
 from django.core.validators import MaxValueValidator
 
+<<<<<<< HEAD
 from apps.configs.models import TrackModel
 from helper.models_helper import GenderOptions
 from helper.validators import today, civil_validator, phone_validator  
+=======
+from apps.settings.models import TrackModel
+from utils.model_options import GenderOptions
+from utils.validators import today, civil_validator, phone_validator  
+>>>>>>> sanad
 
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, username, first_name, password, **other_fields):
@@ -49,7 +55,16 @@ class User(TrackModel, AbstractUser):
     
     # User Information
     civil = models.CharField(max_length=12, null=True, blank=True, validators=[civil_validator])
+<<<<<<< HEAD
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
+=======
+    gender = models.IntegerField(
+        choices=GenderOptions.choices, 
+        null=True, 
+        blank=True, 
+        default=GenderOptions.MALE  # Set default as MALE
+    )
+>>>>>>> sanad
     date_of_birth = models.DateField(null=True, blank=True, validators=[MaxValueValidator(limit_value=today)])
     description = models.TextField(_('description'), blank=True)
 
@@ -57,6 +72,12 @@ class User(TrackModel, AbstractUser):
     phone = models.CharField(max_length=8, blank=True, null=True, validators=[phone_validator])
     twitter = models.CharField(max_length=150, blank=True)  # New
     instagram = models.CharField(max_length=150, blank=True)  # New
+<<<<<<< HEAD
+=======
+
+    token = models.CharField(max_length=150, null=True, blank=True)  # New 29/03/24
+    token_expiry = models.DateTimeField(blank=True, null=True)
+>>>>>>> sanad
     
     # User Permissions
     is_staff = models.BooleanField(default=False)
@@ -138,7 +159,11 @@ group_category_field = models.IntegerField(choices=GroupCategories.choices, defa
 group_display_name_field = models.CharField(max_length=255, null=True, blank=True)
 
 Group.add_to_class('category', group_category_field)
+<<<<<<< HEAD
 Group.add_to_class('display_name', group_display_name_field)
+=======
+Group.add_to_class('codename', group_display_name_field)
+>>>>>>> sanad
 
 
 

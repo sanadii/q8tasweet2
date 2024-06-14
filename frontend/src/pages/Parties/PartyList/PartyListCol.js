@@ -82,7 +82,11 @@ const CreateBy = (cell) => {
 };
 
 const Actions = (props) => {
+<<<<<<< HEAD
   const { cell, handlePartyClick, onClickDelete } = props;
+=======
+  const { cell, handlePartyClick, onDeleteCheckBoxClick } = props;
+>>>>>>> sanad
   return (
     <React.Fragment>
       <div className="d-flex">
@@ -103,7 +107,11 @@ const Actions = (props) => {
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
               const partyData = cell.row.original;
+<<<<<<< HEAD
               onClickDelete(partyData);
+=======
+              onDeleteCheckBoxClick(partyData);
+>>>>>>> sanad
             }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />

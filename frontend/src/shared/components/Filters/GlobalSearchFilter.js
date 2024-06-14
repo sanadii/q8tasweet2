@@ -403,12 +403,20 @@ const NFTRoleingGlobalFilter = () => {
 };
 
 
+<<<<<<< HEAD
 const LeadsGlobalFilter = ({ onClickDelete }) => {
+=======
+const LeadsGlobalFilter = ({ onDeleteCheckBoxClick }) => {
+>>>>>>> sanad
     return (
         <React.Fragment>
             <div className="col-sm-auto ms-auto">
                 <div className="hstack gap-2">
+<<<<<<< HEAD
                     <button className="btn btn-soft-danger" onClick={onClickDelete}
+=======
+                    <button className="btn btn-soft-danger" onClick={onDeleteCheckBoxClick}
+>>>>>>> sanad
                     ><i className="ri-delete-bin-2-line"></i></button>
                     <button type="button" className="btn btn-info"
                     //  onClick={toggleInfo}

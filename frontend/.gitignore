@@ -6,9 +6,15 @@
 #------------------------
 
 # Node modules and related
+<<<<<<< HEAD
 # /node_modules
 # /.pnp
 # .pnp.js
+=======
+/node_modules
+/.pnp
+.pnp.js
+>>>>>>> sanad
 
 # Python dependencies
 # If you're using virtual environments, you might consider ignoring them

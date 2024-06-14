@@ -189,6 +189,10 @@ const TableContainerFilters = ({
                     <div className="flex-shrink-0">
                         {isResetFilters && (
                             <ResetFilters
+<<<<<<< HEAD
+=======
+                                filters={filters}
+>>>>>>> sanad
                                 setFilters={setFilters}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}

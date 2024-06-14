@@ -11,7 +11,10 @@ import CoverPasswReset from "pages/AuthenticationInner/PasswordReset/CoverPasswR
 
 import BasicLockScreen from "pages/AuthenticationInner/LockScreen/BasicLockScr";
 import CoverLockScreen from "pages/AuthenticationInner/LockScreen/CoverLockScr";
+<<<<<<< HEAD
 
+=======
+>>>>>>> sanad
 import BasicLogout from "pages/AuthenticationInner/Logout/BasicLogout";
 import CoverLogout from "pages/AuthenticationInner/Logout/CoverLogout";
 
@@ -44,6 +47,10 @@ import Login from "pages/Authentication/Login";
 import ForgetPasswordPage from "pages/Authentication/ForgetPassword";
 import Logout from "pages/Authentication/Logout";
 import Register from "pages/Authentication/Register";
+<<<<<<< HEAD
+=======
+import ResetPasswordScreen from "pages/Authentication/ResetPassword";
+>>>>>>> sanad
 
 
 const PublicRoutes = [
@@ -62,6 +69,10 @@ const PublicRoutes = [
     { path: "/login", component: <Login /> },
     { path: "/forgot-password", component: <ForgetPasswordPage /> },
     { path: "/register", component: <Register /> },
+<<<<<<< HEAD
+=======
+    { path: "/reset-password/:token", component: <ResetPasswordScreen /> },
+>>>>>>> sanad
 
 
     //AuthenticationInner pages

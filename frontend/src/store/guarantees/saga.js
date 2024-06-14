@@ -7,7 +7,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
 
   GET_ALL_CAMPAIGN_GUARANTEES,
+<<<<<<< HEAD
   ADD_NEW_CAMPAIGN_GUARANTEE,
+=======
+  ADD_CAMPAIGN_GUARANTEE,
+>>>>>>> sanad
   DELETE_CAMPAIGN_GUARANTEE,
   UPDATE_CAMPAIGN_GUARANTEE,
 } from "./actionType";
@@ -15,8 +19,13 @@ import {
 import {
   campaignCampaignGuaranteesApiResponseSuccess,
   campaignCampaignGuaranteesApiResponseError,
+<<<<<<< HEAD
   addNewCampaignGuaranteeSuccess,
   addNewCampaignGuaranteeFail,
+=======
+  addCampaignGuaranteeSuccess,
+  addCampaignGuaranteeFail,
+>>>>>>> sanad
   updateCampaignGuaranteeSuccess,
   updateCampaignGuaranteeFail,
   deleteCampaignGuaranteeSuccess,
@@ -26,7 +35,11 @@ import {
 //Include Both Helper CampaignGuarantee with needed methods
 import {
   getAllCampaignGuarantees as getAllCampaignGuaranteesApi,
+<<<<<<< HEAD
   addNewCampaignGuarantee,
+=======
+  addCampaignGuarantee,
+>>>>>>> sanad
   updateCampaignGuarantee,
   deleteCampaignGuarantee,
 } from "../../helpers/backend_helper";
@@ -44,11 +57,19 @@ function* getAllCampaignGuarantees() {
 function* onAddNewCampaignGuarantee({ payload: campaignCampaignGuarantee }) {
 
   try {
+<<<<<<< HEAD
     const response = yield call(addNewCampaignGuarantee, campaignCampaignGuarantee);
     yield put(addNewCampaignGuaranteeSuccess(response));
     toast.success("CampaignGuarantee Added Successfully", { autoClose: 3000 });
   } catch (error) {
     yield put(addNewCampaignGuaranteeFail(error));
+=======
+    const response = yield call(addCampaignGuarantee, campaignCampaignGuarantee);
+    yield put(addCampaignGuaranteeSuccess(response));
+    toast.success("CampaignGuarantee Added Successfully", { autoClose: 3000 });
+  } catch (error) {
+    yield put(addCampaignGuaranteeFail(error));
+>>>>>>> sanad
     toast.error("CampaignGuarantee Added Failed", { autoClose: 3000 });
   }
 }
@@ -91,7 +112,11 @@ export function* watchDeleteCampaignGuarantee() {
 }
 
 export function* watchAddNewCampaignGuarantee() {
+<<<<<<< HEAD
   yield takeEvery(ADD_NEW_CAMPAIGN_GUARANTEE, onAddNewCampaignGuarantee);
+=======
+  yield takeEvery(ADD_CAMPAIGN_GUARANTEE, onAddNewCampaignGuarantee);
+>>>>>>> sanad
 }
 
 function* CampaignGuaranteeManager() {

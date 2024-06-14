@@ -69,7 +69,11 @@ const CandidatesTab = () => {
     }
   };
 
+<<<<<<< HEAD
   const onClickDelete = (Candidate) => {
+=======
+  const onDeleteCheckBoxClick = (Candidate) => {
+>>>>>>> sanad
     setCandidate(Candidate);
     setDeleteModal(true);
   };
@@ -269,7 +273,11 @@ const CandidatesTab = () => {
                 className="btn btn-sm btn-soft-danger remove-list"
                 onClick={() => {
                   const Candidate = cellProps.row.original;
+<<<<<<< HEAD
                   onClickDelete(Candidate);
+=======
+                  onDeleteCheckBoxClick(Candidate);
+>>>>>>> sanad
                 }}
               >
                 <i className="ri-delete-bin-5-fill align-bottom" />

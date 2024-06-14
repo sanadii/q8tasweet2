@@ -7,7 +7,10 @@ import Layout from "../Layouts";
 // Routes
 import { AuthProtectedRoutes, DashboardRoutes, CampaignRoutes, PublicRoutes } from "./AllRoutes";
 import { AuthProtected } from './AuthProtected';
+<<<<<<< HEAD
 // import {CampaignContext} from '/shared/contexts'
+=======
+>>>>>>> sanad
 
 const routeConfig = [
     {
@@ -34,6 +37,10 @@ const routeConfig = [
 ];
 
 const Index = () => {
+<<<<<<< HEAD
+=======
+      
+>>>>>>> sanad
     return (
         <React.Fragment>
             <Routes>
@@ -67,6 +74,7 @@ const Index = () => {
 };
 
 export default Index;
+<<<<<<< HEAD
 
 //     return (
 //         <React.Fragment>
@@ -98,3 +106,5 @@ export default Index;
 // };
 
 // export default Index;
+=======
+>>>>>>> sanad

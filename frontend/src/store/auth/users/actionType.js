@@ -7,9 +7,15 @@ export const GET_USERS = "GET_USERS";
 export const GET_USER_DETAILS = "GET_USER_DETAILS";
 
 // Add User
+<<<<<<< HEAD
 export const ADD_NEW_USER = "ADD_NEW_USER";
 export const ADD_NEW_USER_SUCCESS = "ADD_NEW_USER_SUCCESS";
 export const ADD_NEW_USER_FAIL = "ADD_NEW_USER_FAIL";
+=======
+export const ADD_USER = "ADD_USER";
+export const ADD_USER_SUCCESS = "ADD_USER_SUCCESS";
+export const ADD_USER_FAIL = "ADD_USER_FAIL";
+>>>>>>> sanad
 
 // Edit User
 export const UPDATE_USER_PROFILE = "UPDATE_USER_PROFILE";

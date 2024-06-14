@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
+<<<<<<< HEAD
       "shared/components/*": ["src/shared/components/*"],
       "shared/constants/*": ["src/shared/constants/*"],
       "shared/contexts/*": ["src/shared/contexts/*"],
@@ -9,6 +10,17 @@
       "store/*": ["src/store/*"],
       "selector/*": ["src/selector/*"],
       "assets/*": ["src/assets/*"],
+=======
+      "shared/*": ["shared/*"],
+      "shared/components/*": ["shared/components/*"],
+      "shared/constants/*": ["shared/constants/*"],
+      "shared/contexts/*": ["shared/contexts/*"],
+      "shared/hooks/*": ["shared/hooks/*"],
+      "shared/data/*": ["shared/data/*"],
+      "store/*": ["store/*"],
+      "selector/*": ["selector/*"],
+      "assets/*": ["assets/*"],
+>>>>>>> sanad
       "@/*": ["./*"]
 
     }

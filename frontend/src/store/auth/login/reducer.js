@@ -30,16 +30,32 @@ const login = (state = initialState, action) => {
       };
       break;
     case LOGOUT_USER:
+<<<<<<< HEAD
       state = { ...state, isUserLogout: false };
       break;
     case LOGOUT_USER_SUCCESS:
       state = { ...state, isUserLogout: true };
+=======
+      state = {
+        ...state,
+        loading: true,
+        error: false,
+      };
+      break;
+    case LOGOUT_USER_SUCCESS:
+      state = { ...state, isUserLogout: false };
+>>>>>>> sanad
       break;
     case API_ERROR:
       state = {
         ...state,
+<<<<<<< HEAD
         errorMsg: action.payload.data,
         loading: true,
+=======
+        errorMsg: action.payload,
+        loading: false,
+>>>>>>> sanad
         error: true,
         isUserLogout: false,
       };
