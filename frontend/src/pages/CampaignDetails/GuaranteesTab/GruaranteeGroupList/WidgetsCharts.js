@@ -2,7 +2,7 @@ import React from 'react';
 import ReactApexChart from "react-apexcharts";
 import { getChartColorsArray } from "shared/components";
 
-const AudiencesMetricsCharts = ({ dataColors }: any) => {
+const AudiencesMetricsCharts = ({ dataColors }) => {
     var chartAudienceColumnChartsColors = getChartColorsArray(dataColors);
     const series = [{
         name: 'Last Year',
@@ -11,7 +11,7 @@ const AudiencesMetricsCharts = ({ dataColors }: any) => {
         name: 'Current Year',
         data: [36.2, 22.4, 38.2, 30.5, 26.4, 30.4, 20.2, 29.6, 10.9, 36.2, 22.4, 38.2]
     }];
-    var options: any = {
+    var options = {
         chart: {
             type: 'bar',
             height: 309,
@@ -87,10 +87,10 @@ const AudiencesMetricsCharts = ({ dataColors }: any) => {
     );
 };
 
-const MyPortfolioCharts = ({ dataColors }: any) => {
+const MyPortfolioCharts = ({ dataColors }) => {
     var donutchartportfolioColors = getChartColorsArray(dataColors);
     const series = [19405, 40552, 15824, 30635];
-    var options: any = {
+    var options = {
         labels: ["Bitcoin", "Ethereum", "Litecoin", "Dash"],
         chart: {
             type: "donut",
@@ -117,7 +117,7 @@ const MyPortfolioCharts = ({ dataColors }: any) => {
                             color: '#343a40',
                             fontWeight: 500,
                             offsetY: 5,
-                            formatter: function (val: any) {
+                            formatter: function (val) {
                                 return "$" + val;
                             }
                         },
@@ -127,8 +127,8 @@ const MyPortfolioCharts = ({ dataColors }: any) => {
                             label: 'Total value',
                             color: '#9599ad',
                             fontWeight: 500,
-                            formatter: function (w: any) {
-                                return "$" + w.globals.seriesTotals.reduce(function (a: any, b: any) {
+                            formatter: function (w) {
+                                return "$" + w.globals.seriesTotals.reduce(function (a, b) {
                                     return a + b;
                                 }, 0);
                             }
@@ -145,7 +145,7 @@ const MyPortfolioCharts = ({ dataColors }: any) => {
         },
         yaxis: {
             labels: {
-                formatter: function (value: any) {
+                formatter: function (value) {
                     return "$" + value;
                 }
             }
@@ -169,13 +169,13 @@ const MyPortfolioCharts = ({ dataColors }: any) => {
     );
 };
 
-const SessionsByCountriesCharts = ({ dataColors }: any) => {
+const SessionsByCountriesCharts = ({ dataColors }) => {
     var barchartCountriesColors = getChartColorsArray(dataColors);
     const series = [{
         data: [1010, 1640, 490, 1255, 1050, 689, 800, 420, 1085, 589],
         name: 'Sessions',
     }];
-    var options: any = {
+    var options = {
         chart: {
             type: 'bar',
             height: 436,
@@ -227,10 +227,10 @@ const SessionsByCountriesCharts = ({ dataColors }: any) => {
     );
 };
 
-const TopReferralsPagesCharts = ({ dataColors }: any) => {
+const TopReferralsPagesCharts = ({ dataColors }) => {
     var chartHeatMapColors = getChartColorsArray(dataColors);
 
-    function generateData(count: any, yrange: any) {
+    function generateData(count, yrange) {
         var i = 0;
         var series = [];
         while (i < count) {
@@ -246,7 +246,7 @@ const TopReferralsPagesCharts = ({ dataColors }: any) => {
         return series;
     }
 
-    const dataChart: any = {
+    const dataChart = {
         series: [{
             name: 'Jan',
             data: generateData(20, {
@@ -384,9 +384,9 @@ const TopReferralsPagesCharts = ({ dataColors }: any) => {
     );
 };
 
-const OtherWidgetsCharts = ({ dataColors, seriesData }: any) => {
+const OtherWidgetsCharts = ({ dataColors, seriesData }) => {
     var areachartbitcoinColors = getChartColorsArray(dataColors);
-    var options: any = {
+    var options = {
         chart: {
             width: 140,
             type: "area",

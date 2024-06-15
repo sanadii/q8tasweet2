@@ -39,7 +39,7 @@ class Command(BaseCommand):
                     'position': row["position"],  # Use actual data from DataFrame
                     'result': row["result"],      # Use actual data from DataFrame
                     'votes': row["votes"],        # Use actual data from DataFrame
-                    'note': row.get('note', '')   # Use actual data from DataFrame, or provide a default value
+                    'notes': row.get('notes', '')   # Use actual data from DataFrame, or provide a default value
                 }
             )
             action = "Created" if created else "Updated"

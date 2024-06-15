@@ -44,7 +44,7 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "gender",
             "image",
             "votes",
-            "note",
+            "notes",
             "result",
             "position",
             "campaign",
@@ -126,7 +126,7 @@ class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
             "name",
             "image",
             "votes",
-            "note",
+            "notes",
             # "committee_results",
             # "committee_sorting"
         ]
@@ -169,7 +169,7 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
             "gender",
             "image",
             "votes",
-            "note",
+            "notes",
             # "committee_results",
             # "committee_sorting"
         ]

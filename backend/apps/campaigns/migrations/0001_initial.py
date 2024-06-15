@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 ('deleted_at', models.DateTimeField(blank=True, null=True)),
                 ('is_deleted', models.BooleanField(default=False)),
                 ('phone', models.CharField(blank=True, max_length=8, null=True, validators=[django.core.validators.RegexValidator(message='phone must be exactly 8 digits.', regex='^\\d{8}$')])),
-                ('note', models.TextField(blank=True, null=True)),
+                # ('notes', models.TextField(blank=True, null=True)),
                 ('status', models.IntegerField(blank=True, choices=[(1, 'جديد'), (2, 'تم التواصل'), (3, 'تم التأكيد'), (4, 'غير مؤكد'), (5, 'غير معروف')], null=True)),
                 ('campaign', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='campaign_members', to='campaigns.campaign')),
                 ('created_by', models.ForeignKey(blank=True, help_text='The user who created this object.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='%(class)s_created', to=settings.AUTH_USER_MODEL, verbose_name='Created by')),

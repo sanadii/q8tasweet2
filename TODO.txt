@@ -1,3 +1,6 @@
+npm i; pip install -r requirements.txt; cd frontend; npm i
+
+
 issues fix
 week 1
 

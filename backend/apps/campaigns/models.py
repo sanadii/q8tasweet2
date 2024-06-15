@@ -118,38 +118,3 @@ class Campaign(TrackModel, TaskModel):
 
 #         super().save(*args, **kwargs)  # Call the "real" save() method
 
-
-# class CampaignPartyMember(TrackModel):
-#     user = models.ForeignKey('auths.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_users')
-#     campaign = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_members')
-#     role = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_role_members')
-#     supervisor = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='supervised_members')
-#     committee = models.ForeignKey('committees.Committee', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_committee_members')
-#     civil = models.CharField(max_length=12, blank=True, null=True, validators=[civil_validator])
-#     phone = models.CharField(max_length=8, blank=True, null=True, validators=[phone_validator])
-#     notes = models.TextField(blank=True, null=True)
-#     status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)
-
-#     class Meta:
-#         db_table = 'campaign_party_member'
-#         verbose_name = "Campaign Party Member"
-#         verbose_name_plural = "Campaign Party Members"
-#         default_permissions = []
-#         permissions  = []
-
-
-# class CampaignPartyGuarantee(TrackModel):
-#     campaign = models.ForeignKey('CampaignParty', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantees')
-#     member = models.ForeignKey('CampaignPartyMember', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_guarantee_guarantors')
-#     civil = models.ForeignKey('electors.Elector', on_delete=models.SET_NULL, null=True, blank=True, related_name='campaign_party_voter_guarantees')
-#     phone = models.CharField(max_length=8, blank=True, null=True)  # or any other field type suitable for your requirements
-#     notes = models.TextField(blank=True, null=True)
-#     status = models.IntegerField(choices=GuaranteeStatusOptions.choices, blank=True, null=True)
-
-#     class Meta:
-#         db_table = 'campaign_party_guarantee'
-#         verbose_name = "Campaign Party Guarantee"
-#         verbose_name_plural = "Campaign Party Guarantees"
-#         default_permissions = []
-#         permissions  = []
-

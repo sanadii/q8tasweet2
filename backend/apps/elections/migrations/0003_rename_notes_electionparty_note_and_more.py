@@ -12,12 +12,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RenameField(
             model_name='electionparty',
-            old_name='note',
-            new_name='note',
+            old_name='notes',
+            new_name='notes',
         ),
         migrations.RenameField(
             model_name='electionpartycandidate',
-            old_name='note',
-            new_name='note',
+            old_name='notes',
+            new_name='notes',
         ),
     ]

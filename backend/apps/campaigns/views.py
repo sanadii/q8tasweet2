@@ -303,7 +303,7 @@ def get_election_details(election, context):
     }
 
     # Prepare previous election details if available
-    previous_election_data = {}
+    previous_election_data = None
     if previous_election:
         previous_election_candidates = ElectionCandidate.objects.filter(
             election=previous_election

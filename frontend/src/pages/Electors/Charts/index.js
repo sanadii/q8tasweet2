@@ -72,7 +72,7 @@ const VoterAttendanceChart = () => {
 
     ];
 
-    var options: any = {
+    var options = {
         chart: {
             height: 350,
             type: 'bar',
@@ -113,7 +113,7 @@ const VoterAttendanceChart = () => {
         },
         tooltip: {
             y: {
-                formatter: function (val: any) {
+                formatter: function (val) {
                     return "$ " + val + " thousands";
                 }
             }

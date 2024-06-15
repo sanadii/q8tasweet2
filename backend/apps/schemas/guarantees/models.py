@@ -12,7 +12,7 @@ class CampaignGuaranteeGroup(DynamicSchemaModel):
     name = models.CharField(max_length=150, blank=True)
     member = models.IntegerField(null=True, blank=True)
     phone = models.CharField(max_length=8, blank=True, null=True)
-    note = models.CharField(max_length=250, blank=True)
+    notes = models.CharField(max_length=250, blank=True)
 
     class Meta:
         managed = False
@@ -48,6 +48,7 @@ class CampaignGuarantee(DynamicSchemaModel):
     )
 
     class Meta:
+        managed = False
         db_table = "campaign_guarantee"
         verbose_name = "المضامين"
         verbose_name_plural = "المضامين"

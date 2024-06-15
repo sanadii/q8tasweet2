@@ -14,7 +14,7 @@ class CommitteeResultCandidate(DynamicSchemaModel):
         related_name="committee_result_candidates",
     )
     votes = models.PositiveIntegerField(default=0)
-    note = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -33,7 +33,7 @@ class CommitteeResultParty(DynamicSchemaModel):
         related_name="committee_result_parties",
     )
     votes = models.PositiveIntegerField(default=0)
-    note = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -52,7 +52,7 @@ class CommitteeResultPartyCandidate(DynamicSchemaModel):
         related_name="committee_result_party_candidates",
     )
     votes = models.PositiveIntegerField(default=0)
-    note = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False

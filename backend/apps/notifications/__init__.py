@@ -1,1 +1,1 @@
-default_app_config = 'electors.apps.ElectorConfig'
+default_app_config = 'notifications.apps.NotificationConfig'

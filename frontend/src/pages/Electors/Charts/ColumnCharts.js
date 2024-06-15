@@ -3,7 +3,7 @@ import ReactApexChart from "react-apexcharts";
 
 import getChartColorsArray from "../../../../Components/Common/ChartsDynamicColor";
 
-const BasicColumn = ({ dataColors } : any) => {
+const BasicColumn = ({ dataColors } ) => {
     var chartColumnColors = getChartColorsArray(dataColors);
     const series = [
         {
@@ -20,7 +20,7 @@ const BasicColumn = ({ dataColors } : any) => {
         },
     ];
 
-    var options : any = {
+    var options  = {
         chart: {
             height: 350,
             type: 'bar',
@@ -61,7 +61,7 @@ const BasicColumn = ({ dataColors } : any) => {
         },
         tooltip: {
             y: {
-                formatter: function (val : any) {
+                formatter: function (val ) {
                     return "$ " + val + " thousands";
                 }
             }
@@ -79,7 +79,7 @@ const BasicColumn = ({ dataColors } : any) => {
     );
 };
 
-const ColumnWithLable = ({ dataColors } : any) => {
+const ColumnWithLable = ({ dataColors } ) => {
     var chartColumnDatatalabelColors = getChartColorsArray(dataColors);
     const series = [
         {
@@ -88,7 +88,7 @@ const ColumnWithLable = ({ dataColors } : any) => {
         },
     ];
 
-    const options : any = {
+    const options  = {
         chart: {
             toolbar: {
                 show: !1,
@@ -103,7 +103,7 @@ const ColumnWithLable = ({ dataColors } : any) => {
         },
         dataLabels: {
             enabled: !0,
-            formatter: function (val : any) {
+            formatter: function (val ) {
                 return val + "%";
             },
             offsetY: -20,
@@ -179,7 +179,7 @@ const ColumnWithLable = ({ dataColors } : any) => {
             },
             labels: {
                 show: !1,
-                formatter: function (val : any) {
+                formatter: function (val ) {
                     return val + "%";
                 },
             },
@@ -201,7 +201,7 @@ const ColumnWithLable = ({ dataColors } : any) => {
     );
 };
 
-const StackedColumn = ({ dataColors } : any) => {
+const StackedColumn = ({ dataColors } ) => {
     var chartColumnStackedColors = getChartColorsArray(dataColors);
     const series = [
         {
@@ -222,7 +222,7 @@ const StackedColumn = ({ dataColors } : any) => {
         },
     ];
 
-    const options : any = {
+    const options  = {
         chart: {
             stacked: !0,
             toolbar: {
@@ -273,7 +273,7 @@ const StackedColumn = ({ dataColors } : any) => {
     return <ReactApexChart dir="ltr" className="apex-charts" series={series} options={options} type="bar" height={350} />;
 };
 
-const StackedColumn2 = ({ dataColors } : any) => {
+const StackedColumn2 = ({ dataColors } ) => {
     var chartColumnStacked100Colors = getChartColorsArray(dataColors);
     const series = [
         {
@@ -290,7 +290,7 @@ const StackedColumn2 = ({ dataColors } : any) => {
         },
     ];
 
-    const options : any = {
+    const options  = {
 
         chart: {
             stacked: !0,
@@ -337,7 +337,7 @@ const StackedColumn2 = ({ dataColors } : any) => {
     return <ReactApexChart dir="ltr" className="apex-charts" series={series} options={options} type="bar" height={350} />;
 };
 
-const ColumnMarker = ({ dataColors } : any) => {
+const ColumnMarker = ({ dataColors } ) => {
     var chartColumnMarkersColors = getChartColorsArray(dataColors);
     const series = [
         {
@@ -442,7 +442,7 @@ const ColumnMarker = ({ dataColors } : any) => {
             ],
         },
     ];
-    const options : any = {
+    const options  = {
         chart: {
             toolbar: {
                 show: !1,
@@ -471,13 +471,13 @@ const ColumnMarker = ({ dataColors } : any) => {
     );
 };
 
-const RotateLable = ({ dataColors } : any) => {
+const RotateLable = ({ dataColors } ) => {
     var chartColumnRotateLabelsColors = getChartColorsArray(dataColors);
     const series = [{
         name: 'Servings',
         data: [44, 55, 41, 67, 22, 43, 21, 33, 45, 31, 87, 65, 35]
     }];
-    var options : any = {
+    var options  = {
         annotations: {
             points: [{
                 x: 'Bananas',
@@ -547,7 +547,7 @@ const RotateLable = ({ dataColors } : any) => {
     );
 };
 
-const NagetiveLable = ({ dataColors } : any) => {
+const NagetiveLable = ({ dataColors } ) => {
     var chartNagetiveValuesColors = getChartColorsArray(dataColors);
     const series = [
         {
@@ -559,7 +559,7 @@ const NagetiveLable = ({ dataColors } : any) => {
             ],
         },
     ];
-    var options : any = {
+    var options  = {
         chart: {
             type: 'bar',
             height: 350,
@@ -592,7 +592,7 @@ const NagetiveLable = ({ dataColors } : any) => {
                 text: 'Growth',
             },
             labels: {
-                formatter: function (y : any) {
+                formatter: function (y ) {
                     return y.toFixed(0) + "%";
                 }
             }
@@ -618,7 +618,7 @@ const NagetiveLable = ({ dataColors } : any) => {
     );
 };
 
-const RangeColumn = ({ dataColors } : any) => {
+const RangeColumn = ({ dataColors } ) => {
     var chartRangeColors = getChartColorsArray(dataColors);
     const series = [
         {
@@ -662,7 +662,7 @@ const RangeColumn = ({ dataColors } : any) => {
             ],
         },
     ];
-    var options : any = {
+    var options  = {
         chart: {
             type: "rangeBar",
             height: 335,
@@ -694,10 +694,10 @@ const RangeColumn = ({ dataColors } : any) => {
     );
 };
 
-const DynamicColumn = ({ dataColors } : any) => {
+const DynamicColumn = ({ dataColors } ) => {
     var chartColumnColors = getChartColorsArray(dataColors);
     const colors = chartColumnColors;
-    const shuffleArray = (array1 : any) => {
+    const shuffleArray = (array1 ) => {
         for (var i = array1.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
             var temp = array1[i];
@@ -881,7 +881,7 @@ const DynamicColumn = ({ dataColors } : any) => {
         return dataYearSeries;
     };
 
-    const updateQuarterChart = (sourceChart : any, destChartIDToUpdate : any) => {
+    const updateQuarterChart = (sourceChart , destChartIDToUpdate ) => {
         var series = [];
         var seriesIndex = 0;
         var colors = [];
@@ -921,14 +921,14 @@ const DynamicColumn = ({ dataColors } : any) => {
         },
     ];
 
-    const options : any = {
+    const options  = {
 
         chart: {
             id: "barYear",
             height: 330,
             width: "100%",
             events: {
-                dataPointSelection: function (e : any, chart : any, opts : any) {
+                dataPointSelection: function (e , chart , opts ) {
                     const quarterChartEl = document.querySelector("#chart-quarter");
                     const yearChartEl = document.querySelector("#chart-year");
 
@@ -957,7 +957,7 @@ const DynamicColumn = ({ dataColors } : any) => {
                         }
                     }
                 },
-                updated: function (chart : any) {
+                updated: function (chart ) {
                     updateQuarterChart(chart, "barQuarter");
                 },
             },
@@ -978,7 +978,7 @@ const DynamicColumn = ({ dataColors } : any) => {
             style: {
                 colors: ["#fff"],
             },
-            formatter: function (val : any, opt : any) {
+            formatter: function (val , opt ) {
                 return opt.w.globals.labels[opt.dataPointIndex];
             },
             offsetX: 0,
@@ -1009,7 +1009,7 @@ const DynamicColumn = ({ dataColors } : any) => {
             },
             y: {
                 title: {
-                    formatter: function (val : any, opts : any) {
+                    formatter: function (val , opts ) {
                         return opts.w.globals.labels[opts.dataPointIndex];
                     },
                 },
@@ -1044,7 +1044,7 @@ const Quarter = () => {
         },
     ];
 
-    var optionsQuarter : any = {
+    var optionsQuarter  = {
         chart: {
             id: 'barQuarter',
             height: 330,
@@ -1087,13 +1087,13 @@ const Quarter = () => {
         },
         tooltip: {
             x: {
-                formatter: function (val : any, opts : any) {
+                formatter: function (val , opts ) {
                     return opts.w.globals.seriesNames[opts.seriesIndex];
                 }
             },
             y: {
                 title: {
-                    formatter: function (val : any, opts : any) {
+                    formatter: function (val , opts ) {
                         return opts.w.globals.labels[opts.dataPointIndex];
                     }
                 }
@@ -1111,17 +1111,17 @@ const Quarter = () => {
     );
 };
 
-const DistributedColumn = ({ dataColors } : any) => {
+const DistributedColumn = ({ dataColors } ) => {
     var chartColumnDistributedColors = getChartColorsArray(dataColors);
     const series = [{
         data: [21, 22, 10, 28, 16, 21, 13, 30]
     }];
-    var options : any = {
+    var options  = {
         chart: {
             height: 350,
             type: 'bar',
             events: {
-                click: function (chart : any, w : any, e : any) {
+                click: function (chart , w , e ) {
                 }
             }
         },
@@ -1170,7 +1170,7 @@ const DistributedColumn = ({ dataColors } : any) => {
 
 
 
-const ColumnGroupLabels = ({ dataColors } : any) => {
+const ColumnGroupLabels = ({ dataColors } ) => {
     var chartColumnDistributedColors = getChartColorsArray(dataColors);
     // dayjs.extend(window.dayjs_plugin_quarterOfYear)
     const series = [{
@@ -1201,7 +1201,7 @@ const ColumnGroupLabels = ({ dataColors } : any) => {
             y: 690
         }]
     }];
-    var options : any = {
+    var options  = {
         chart: {
             height: 350,
             type: 'bar',
@@ -1258,7 +1258,7 @@ const ColumnGroupLabels = ({ dataColors } : any) => {
     return <ReactApexChart dir="ltr" className="apex-charts" series={series} options={options} type="bar" height={350} />;
 };
 
-const StackedColumnColors = ({ dataColors } : any) => {
+const StackedColumnColors = ({ dataColors } ) => {
     var groupedStackedColors = getChartColorsArray(dataColors);
     const series = [{
         name: 'Q1 Budget',
@@ -1280,7 +1280,7 @@ const StackedColumnColors = ({ dataColors } : any) => {
                 group: 'actual',
                 data: [20000, 40000, 25000, 10000, 12000, 28000]
     }];
-    var options : any = {
+    var options  = {
         chart: {
             type: 'bar',
             height: 350,
@@ -1291,7 +1291,7 @@ const StackedColumnColors = ({ dataColors } : any) => {
             colors: ['#fff']
         },
         dataLabels: {
-            formatter: (val : any) => {
+            formatter: (val ) => {
                 return val / 1000 + 'K'
             }
         },
@@ -1316,7 +1316,7 @@ const StackedColumnColors = ({ dataColors } : any) => {
         colors: groupedStackedColors,
         yaxis: {
             labels: {
-                formatter: (val : any) => {
+                formatter: (val ) => {
                     return val / 1000 + 'K'
                 }
             }
@@ -1329,7 +1329,7 @@ const StackedColumnColors = ({ dataColors } : any) => {
     return <ReactApexChart dir="ltr" className="apex-charts"  series={series} options={options} type="bar" height={350} />;
 };
 
-const DumbBell = ({ dataColors } : any) => {
+const DumbBell = ({ dataColors } ) => {
     var dumbbellChartColors = getChartColorsArray(dataColors);
     const series = [{
         data: [
@@ -1364,7 +1364,7 @@ const DumbBell = ({ dataColors } : any) => {
         ]
     }
 ];
-var options : any = {
+var options  = {
     chart: {
         height: 350,
         type: 'rangeBar',

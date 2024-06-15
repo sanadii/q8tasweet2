@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 defaults={
                     'role': None,  # Replace with actual data if available
                     'phone': user.phone,  # Using phone from user
-                    'note': ''  # Replace with actual data if available
+                    'notes': ''  # Replace with actual data if available
                 }
             )
             if created:

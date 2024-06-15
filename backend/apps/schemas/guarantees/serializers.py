@@ -19,7 +19,7 @@ class CampaignGuaranteeGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignGuaranteeGroup
-        fields = ["id", "name", "member", "phone", "note", "guarantees"]
+        fields = ["id", "name", "member", "phone", "notes", "guarantees"]
 
     def get_guarantees(self, obj):
         # Query CampaignGuarantee to get related objects

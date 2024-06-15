@@ -37,13 +37,13 @@ const OverviewGuarantees = ({ campaign, campaignGuarantees, campaignMembers, pre
                     results={results}
                 />
             } */}
-
-            <GuaranteeTargetBar
-                campaign={campaign}
-                results={results}
-                previousElection={previousElection}
-            />
-
+            {previousElection &&
+                <GuaranteeTargetBar
+                    campaign={campaign}
+                    results={results}
+                    previousElection={previousElection}
+                />
+            }
             <Row>
                 <Col sm={6}>
                     <GuaranteeChart

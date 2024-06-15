@@ -40,7 +40,7 @@ class Command(BaseCommand):
                     'position': None,  # Replace with actual data if available
                     'result': None,    # Replace with actual data if available
                     'votes': 0,        # Replace with actual data if available
-                    'note': ''         # Replace with actual data if available
+                    'notes': ''         # Replace with actual data if available
                 }
             )
             if created:

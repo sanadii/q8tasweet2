@@ -9,9 +9,9 @@ import smallImage4 from "assets/images/small/img-4.jpg";
 
 import { getChartColorsArray } from "shared/components";
 
-const SimplePie = ({ dataColors, dataSeries }: any) => {
+const SimplePie = ({ dataColors, dataSeries }) => {
   var chartPieBasicColors = getChartColorsArray(dataColors);
-  var options: any = {
+  var options = {
     chart: {
       height: 300,
       type: "pie",
@@ -32,10 +32,10 @@ const SimplePie = ({ dataColors, dataSeries }: any) => {
   );
 };
 
-const SimpleDonut = ({ dataColors }: any) => {
+const SimpleDonut = ({ dataColors }) => {
   var chartDonutBasicColors = getChartColorsArray(dataColors);
   const series = [44, 55, 41, 17, 15];
-  var options: any = {
+  var options ={
     chart: {
       height: 300,
       type: "donut",
@@ -55,10 +55,10 @@ const SimpleDonut = ({ dataColors }: any) => {
   );
 };
 
-const UpdateDonut = ({ dataColors }: any) => {
+const UpdateDonut = ({ dataColors }) => {
   var chartDonutupdatingColors = getChartColorsArray(dataColors);
   const series = [44, 55, 13, 33];
-  var options: any = {
+  var options = {
     chart: {
       height: 280,
       type: "donut",
@@ -78,7 +78,7 @@ const UpdateDonut = ({ dataColors }: any) => {
 
 const MonochromePie = () => {
   const series = [25, 15, 44, 55, 41, 17];
-  var options: any = {
+  var options = {
     chart: {
       height: 300,
       type: "pie",
@@ -107,7 +107,7 @@ const MonochromePie = () => {
       },
     },
     dataLabels: {
-      formatter: function (val: any, opts: any) {
+      formatter: function (val, opts) {
         var name = opts.w.globals.labels[opts.seriesIndex];
         return [name, val.toFixed(1) + "%"];
       },
@@ -124,10 +124,10 @@ const MonochromePie = () => {
   );
 };
 
-const GradientDonut = ({ dataColors }: any) => {
+const GradientDonut = ({ dataColors }) => {
   var chartPieGradientColors = getChartColorsArray(dataColors);
   const series = [44, 55, 41, 17, 15];
-  var options: any = {
+  var options = {
     chart: {
       height: 300,
       type: "donut",
@@ -146,7 +146,7 @@ const GradientDonut = ({ dataColors }: any) => {
     },
     legend: {
       position: "bottom",
-      formatter: function (val: any, opts: any) {
+      formatter: function (val, opts) {
         return val + " - " + opts.w.globals.series[opts.seriesIndex];
       },
     },
@@ -163,10 +163,10 @@ const GradientDonut = ({ dataColors }: any) => {
   );
 };
 
-const PatternedDonut = ({ dataColors }: any) => {
+const PatternedDonut = ({ dataColors }) => {
   var chartPiePatternColors = getChartColorsArray(dataColors);
   const series = [44, 55, 41, 17, 15];
-  var options: any = {
+  var options = {
     chart: {
       height: 300,
       type: "donut",
@@ -234,10 +234,10 @@ const PatternedDonut = ({ dataColors }: any) => {
   );
 };
 
-const ImagePieChart = ({ dataColors }: any) => {
+const ImagePieChart = ({ dataColors }) => {
   var chartPieImageColors = getChartColorsArray(dataColors);
   const series = [44, 33, 54, 45];
-  const options: any = {
+  const options = {
     chart: {
       width: 380,
       type: "pie",

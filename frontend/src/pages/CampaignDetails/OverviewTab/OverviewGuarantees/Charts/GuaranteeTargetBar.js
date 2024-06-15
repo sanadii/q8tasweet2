@@ -27,9 +27,9 @@ const Marker = ({ percentage, color, label, total, height }) => {
 };
 
 const usePreviousElection = (previousElectionDetails, previousElectionCandidates) => {
-    const [firstWinnerVotes, setFirstWinnerVotes] = useState(null);
-    const [medianWinnerVotes, setMedianWinnerVotes] = useState(null);
-    const [lastWinnerVotes, setLastWinnerVotes] = useState(null);
+    const [firstWinnerVotes, setFirstWinnerVotes] = useState(0);
+    const [medianWinnerVotes, setMedianWinnerVotes] = useState(0);
+    const [lastWinnerVotes, setLastWinnerVotes] = useState(0);
 
     useEffect(() => {
         if (previousElectionDetails && previousElectionCandidates) {
@@ -39,13 +39,13 @@ const usePreviousElection = (previousElectionDetails, previousElectionCandidates
 
             if (sortedCandidates.length > 0) {
                 const firstWinner = sortedCandidates[0];
-                const lastWinner = seats > 0 ? sortedCandidates[seats - 1] : null;
+                const lastWinner = seats > 0 ? sortedCandidates[seats - 1] : 0;
                 const medianWinnerVotes = seats > 0
                     ? Math.floor(sortedCandidates.slice(0, seats).reduce((acc, candidate) => acc + candidate.votes, 0) / seats)
-                    : null;
+                    : 0;
 
                 setFirstWinnerVotes(firstWinner.votes);
-                setLastWinnerVotes(lastWinner ? lastWinner.votes : null);
+                setLastWinnerVotes(lastWinner ? lastWinner.votes : 0);
                 setMedianWinnerVotes(medianWinnerVotes);
             }
         }

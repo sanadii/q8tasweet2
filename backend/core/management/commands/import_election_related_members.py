@@ -52,7 +52,7 @@ class Command(BaseCommand):
                     defaults={
                         'role': role,  # Use the Group instance
                         'phone': user.phone,  # Using phone from user
-                        'note': ''  # Replace with actual data if available
+                        'notes': ''  # Replace with actual data if available
                     }
                 )
                 if created:

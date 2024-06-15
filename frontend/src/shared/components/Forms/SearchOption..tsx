@@ -12,7 +12,7 @@ import image5 from "../../assets/images/users/avatar-5.jpg";
 
 const SearchOption = () => {
     const [value, setValue] = useState<any>("");
-    const onChangeData = (value : any) => {
+    const onChangeData = (value ) => {
         setValue(value);
     };
 
@@ -49,7 +49,7 @@ const SearchOption = () => {
             searchOptions.classList.add("d-none");
         });
 
-        document.body.addEventListener("click", function (e : any) {
+        document.body.addEventListener("click", function (e ) {
             if (e.target.getAttribute('id') !== "search-options") {
                 dropdown.classList.remove("show");
                 searchOptions.classList.add("d-none");
