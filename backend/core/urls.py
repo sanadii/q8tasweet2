@@ -14,7 +14,11 @@ from rest_framework.documentation import include_docs_urls
 #     candidate_admin_site,
 #     election_admin_site,
 #     campaign_admin_site,
+<<<<<<< HEAD
+#     elector_admin_site,
+=======
 #     voter_admin_site,
+>>>>>>> sanad
 #     category_admin_site,
 #     user_admin_site,
 #     )
@@ -22,15 +26,38 @@ from rest_framework.documentation import include_docs_urls
 urlpatterns = [
     # Django Admin
     path("admin/", admin.site.urls),
+<<<<<<< HEAD
+    # path('admin/elections/', election_admin_site.urls, name='election-admin'),
+    # path('admin/candidates/', candidate_admin_site.urls, name='candidate-admin'),
+    # path('admin/campaigns/', campaign_admin_site.urls, name='campaign-admin'),
+    # path('admin/electors/', elector_admin_site.urls, name='elector-admin'),
+    # path('admin/categories/', category_admin_site.urls, name='category-admin'),
+    # path('admin/users/', user_admin_site.urls, name='user-admin'),
+
+    # Setting Apps
+    path('Config/', include('apps.configs.urls')),
+    # path('media/', include('apps.media.urls')),
+=======
 
     # Setting Apps
     path('Config/', include('apps.settings.urls')),
     # path('media/', include('apps.media.urls')),
     path('auth/', include('apps.auths.urls')),
+>>>>>>> sanad
 
     # Main Apps
     path('campaigns/', include('apps.campaigns.urls')),
     path('candidates/', include('apps.candidates.urls')),
+<<<<<<< HEAD
+    path('categories/', include('apps.categories.urls')),
+    path('elections/', include('apps.elections.urls')),
+    path('electors/', include('apps.electors.urls')),
+    path('auth/', include('apps.auths.urls')),
+
+    # Schema & Documentation
+    path("docs/", include_docs_urls(title="WorkspaceAPI")),
+    path("schema", get_schema_view(title="WorkspaceAPI", description="API for the WorkspaceAPI", version="1.0.0"), name="openapi-schema"),
+=======
     path('tags/', include('apps.tags.urls')),
     path('elections/', include('apps.elections.urls')),
     
@@ -51,6 +78,7 @@ urlpatterns = [
     # path('admin/users/', user_admin_site.urls, name='user-admin'),
 
 
+>>>>>>> sanad
 ]
 
 # Serve media files in development

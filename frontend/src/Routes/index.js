@@ -7,6 +7,10 @@ import Layout from "../Layouts";
 // Routes
 import { AuthProtectedRoutes, DashboardRoutes, CampaignRoutes, PublicRoutes } from "./AllRoutes";
 import { AuthProtected } from './AuthProtected';
+<<<<<<< HEAD
+// import {CampaignContext} from '/shared/contexts'
+=======
+>>>>>>> sanad
 
 const routeConfig = [
     {
@@ -33,7 +37,10 @@ const routeConfig = [
 ];
 
 const Index = () => {
+<<<<<<< HEAD
+=======
       
+>>>>>>> sanad
     return (
         <React.Fragment>
             <Routes>
@@ -67,3 +74,37 @@ const Index = () => {
 };
 
 export default Index;
+<<<<<<< HEAD
+
+//     return (
+//         <React.Fragment>
+//             <Routes>
+//                 {routeConfig.map(({ routes, layout, Wrapper }, idx) => (
+//                     <Route key={idx}>
+//                         {routes.map((route, routeIdx) => (
+//                             <Route
+//                                 path={route.path}
+//                                 element={
+//                                     Wrapper ? (
+//                                         <AuthProtected>
+//                                             {layout ? <Layout defaultLayout={layout}>{route.component}</Layout> : route.component}
+//                                         </AuthProtected>
+//                                     ) : (
+//                                         layout ? <Layout defaultLayout={layout}>{route.component}</Layout> : route.component
+//                                     )
+//                                 }
+//                                 key={routeIdx}
+//                                 exact={true}
+//                             />
+//                         ))}
+//                     </Route>
+//                 ))}
+
+//             </Routes>
+//         </React.Fragment>
+//     );
+// };
+
+// export default Index;
+=======
+>>>>>>> sanad

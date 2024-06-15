@@ -7,6 +7,18 @@ from rest_framework_simplejwt.views import (
 )
 
 app_name = "users"
+<<<<<<< HEAD
+
+urlpatterns = [
+    # Authentication
+    path("userLogin", UserLogin.as_view(), name="UserLogin"),
+    path("userRegister", UserRegister.as_view(), name="UserRegister"),
+
+    
+    path("postProfile/", UserProfileUpdateAPIView.as_view(), name="user_profile_update"),
+    # path("user/", UserCreate.as_view(), name="listpost"),
+    path("auth/", include("rest_framework.urls", namespace="rest_framework")),
+=======
  
 urlpatterns = [ 
     # Authentication
@@ -22,10 +34,21 @@ urlpatterns = [
     # path('uploadImage',UpdateProfileImage.as_view(),name="uploadImage"),
     # path("user/", UserCreate.as_view(), name="listpost"),
     # path("auths/", include("auths.urls", namespace="rest_framework")),
+>>>>>>> sanad
 
     # path("user/", include("users.urls", namespace="users")),
     # path("create/", UserCreate.as_view(), name="create_user"),
     # path("logout/blacklist/", BlacklistTokenUpdateView.as_view(), name="blacklist"),
+<<<<<<< HEAD
+    
+
+    # Users
+    path("getUsers", GetUsers.as_view(), name="GetUsers"),
+    path('addNewUser', AddNewUser.as_view(), name="AddNewUser"),
+    path('updateUser/<int:id>', UpdateUser.as_view(), name="UpdateUser"),
+    path('deleteUser/<int:id>', DeleteUser.as_view(), name="DeleteUser"),
+    path('changeUserPassword/<int:id>', ChangeUserPassword.as_view(), name="ChangeUserPassword"),
+=======
     path('updateUserProfile', UpdateUserProfile.as_view(), name="UpdateUser"),
     
     #------ Forgot password ------
@@ -43,6 +66,7 @@ urlpatterns = [
     path('addUser', AddUser.as_view(), name="AddUser"),
     path('updateUser/<int:id>', UpdateUser.as_view(), name="UpdateUser"),
     path('deleteUser/<int:id>', DeleteUser.as_view(), name="DeleteUser"),
+>>>>>>> sanad
 
 
     # Specific Users
@@ -54,6 +78,15 @@ urlpatterns = [
 
     # Groups
     path("getGroups", GetGroups.as_view(), name="GetGroups"),
+<<<<<<< HEAD
+    path('addNewGroup', AddNewGroup.as_view(), name="AddNewGroup"),
+    path('updateGroup', UpdateGroup.as_view(), name="UpdateGroup"),
+    path('deleteGroup/<int:id>', DeleteGroup.as_view(), name="DeleteGroup"),
+
+    # Permissions
+    path("getGroupPermissions", GetGroupPermissions.as_view(), name="GetGroupPermissions"),
+    path('addNewGroup', AddNewGroup.as_view(), name="AddNewGroup"),
+=======
     path('addGroup', AddGroup.as_view(), name="AddGroup"),
     path('updateGroup', UpdateGroup.as_view(), name="UpdateGroup"),
     path('deleteGroup/<int:id>', DeleteGroup.as_view(), name="DeleteGroup"),
@@ -62,6 +95,7 @@ urlpatterns = [
     # Permissions
     path("getGroupPermissions", GetGroupPermissions.as_view(), name="GetGroupPermissions"),
     path('addGroup', AddGroup.as_view(), name="AddGroup"),
+>>>>>>> sanad
     path('updateGroup', UpdateGroup.as_view(), name="UpdateGroup"),
     path('deleteGroup/<int:id>', DeleteGroup.as_view(), name="DeleteGroup"),
 
@@ -71,6 +105,9 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> sanad
 ]

@@ -7,8 +7,13 @@ import {
   GET_USERS,
   GET_USER_DETAILS,
 
+<<<<<<< HEAD
+  ADD_NEW_USER_SUCCESS,
+  ADD_NEW_USER_FAIL,
+=======
   ADD_USER_SUCCESS,
   ADD_USER_FAIL,
+>>>>>>> sanad
   UPDATE_USER_PROFILE_SUCCESS,
   UPDATE_USER_PROFILE_FAIL,
   CHANGE_USER_PASSWORD_SUCCESS,
@@ -26,7 +31,11 @@ import {
 const IntialState = {
   users: [],
   moderators: [],
+<<<<<<< HEAD
+  currentUser: [],
+=======
   currentUser: null,
+>>>>>>> sanad
   userDetails: [],
   campaignModerators: [],
 };
@@ -147,7 +156,11 @@ const Users = (state = IntialState, action) => {
         isUserCreated: false,
       };
     }
+<<<<<<< HEAD
+    case ADD_NEW_USER_SUCCESS:
+=======
     case ADD_USER_SUCCESS:
+>>>>>>> sanad
       return {
         ...state,
         isUserCreated: true,
@@ -155,7 +168,11 @@ const Users = (state = IntialState, action) => {
         isUserAdd: true,
         isUserAddFail: false,
       };
+<<<<<<< HEAD
+    case ADD_NEW_USER_FAIL:
+=======
     case ADD_USER_FAIL:
+>>>>>>> sanad
       return {
         ...state,
         error: action.payload,
@@ -203,7 +220,11 @@ const Users = (state = IntialState, action) => {
       return {
         ...state,
         users: state.users.filter(
+<<<<<<< HEAD
+          (user) => user.id.toString() !== action.payload.user.toString()
+=======
           (user) => user.id.toString() !== action.payload.user.id.toString()
+>>>>>>> sanad
         ),
         isUserDelete: true,
         isUserDeleteFail: false,

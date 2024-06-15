@@ -6,9 +6,15 @@ import {
   // GroupPermissions
   GET_GROUP_PERMISSIONS,
   GET_MODERATOR_GROUP_PERMISSIONS,
+<<<<<<< HEAD
+  ADD_NEW_GROUP_PERMISSION,
+  ADD_NEW_GROUP_PERMISSION_SUCCESS,
+  ADD_NEW_GROUP_PERMISSION_FAIL,
+=======
   ADD_GROUP_PERMISSION,
   ADD_GROUP_PERMISSION_SUCCESS,
   ADD_GROUP_PERMISSION_FAIL,
+>>>>>>> sanad
   UPDATE_GROUP_PERMISSION,
   UPDATE_GROUP_PERMISSION_SUCCESS,
   UPDATE_GROUP_PERMISSION_FAIL,
@@ -55,6 +61,20 @@ export const updateGroupPermissionFail = (error) => ({
 });
 
 // Add New GroupPermission
+<<<<<<< HEAD
+export const addNewGroupPermission = (groupPermission) => ({
+  type: ADD_NEW_GROUP_PERMISSION,
+  payload: groupPermission,
+});
+
+export const addNewGroupPermissionSuccess = (groupPermission) => ({
+  type: ADD_NEW_GROUP_PERMISSION_SUCCESS,
+  payload: groupPermission,
+});
+
+export const addNewGroupPermissionFail = (error) => ({
+  type: ADD_NEW_GROUP_PERMISSION_FAIL,
+=======
 export const addGroupPermission = (groupPermission) => ({
   type: ADD_GROUP_PERMISSION,
   payload: groupPermission,
@@ -67,6 +87,7 @@ export const addGroupPermissionSuccess = (groupPermission) => ({
 
 export const addGroupPermissionFail = (error) => ({
   type: ADD_GROUP_PERMISSION_FAIL,
+>>>>>>> sanad
   payload: error,
 });
 

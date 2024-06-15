@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 from .routers import request_cfg
 from django.db import connections, connection
 from django.utils.deprecation import MiddlewareMixin
@@ -34,6 +36,7 @@ class SchemaMiddleware(MiddlewareMixin):
 #             cursor.execute(f"SET search_path TO {schema_name}")
 
 
+>>>>>>> sanad
 class MyMiddleware:
 
     def __init__(self, get_response):
@@ -41,6 +44,13 @@ class MyMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
+<<<<<<< HEAD
+        response['X-My-Header'] = {
+            'Content-Tyupe': "application/json"
+        }
+        response['Content-Type'] = "application/json"
+=======
         response["X-My-Header"] = {"Content-Tyupe": "application/json"}
         response["Content-Type"] = "application/json"
+>>>>>>> sanad
         return response

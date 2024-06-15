@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+from unidecode import unidecode
+from django.db import models
+from django.utils.text import slugify
+import uuid
+import secrets
+import string
+
+from apps.configs.models import TrackModel, TaskModel
+from helper.models_helper import GenderOptions
+
+def generate_random_slug(length=6):
+    characters = string.ascii_letters + string.digits  # Letters and digits
+    random_slug = ''.join(secrets.choice(characters) for _ in range(length))
+    return random_slug
+=======
 #  Models
 from django.db import models
 from apps.settings.models import TrackModel, TaskModel
@@ -6,6 +22,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 from utils.models import generate_random_slug
 
+>>>>>>> sanad
 
 
 class Candidate(TrackModel, TaskModel):
@@ -15,9 +32,12 @@ class Candidate(TrackModel, TaskModel):
     gender = models.IntegerField(choices=GenderOptions.choices, null=True, blank=True)
     image = models.ImageField(upload_to="candidates/", blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True, null=True)
+<<<<<<< HEAD
+=======
     family = models.CharField(max_length=25, blank=True, null=True)
     tribe = models.CharField(max_length=25, blank=True, null=True)
     denomination = models.CharField(max_length=25, blank=True, null=True)
+>>>>>>> sanad
 
     class Meta:
         db_table = "candidate"
@@ -36,6 +56,11 @@ class Candidate(TrackModel, TaskModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
+<<<<<<< HEAD
+            self.slug = generate_random_slug()
+        super().save(*args, **kwargs)
+
+=======
             self.slug = self._generate_unique_slug()
         super().save(*args, **kwargs)
 
@@ -46,13 +71,17 @@ class Candidate(TrackModel, TaskModel):
             slug = generate_random_slug()
         return slug
 
+>>>>>>> sanad
 
 class Party(TrackModel, TaskModel):
     name = models.CharField(max_length=255, blank=False, null=False)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     image = models.ImageField(upload_to="parties/", blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True, null=True)
+<<<<<<< HEAD
+=======
     campaigns = GenericRelation('campaigns.Campaign')  # Correct app label
+>>>>>>> sanad
 
     class Meta:
         db_table = "party"

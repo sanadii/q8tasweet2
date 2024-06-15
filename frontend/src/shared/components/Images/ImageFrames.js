@@ -7,7 +7,11 @@ import { Row, Col, Card, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Badge } from 'reactstrap'; // Or your preferred UI library if not using reactstrap
 
+<<<<<<< HEAD
+const mediaUrl = api.MEDIA_URL.endsWith('/') ? api.MEDIA_URL.slice(0, -1) : api.MEDIA_URL;
+=======
 const mediaUrl = api?.MEDIA_URL?.endsWith('/') ? api.MEDIA_URL.slice(0, -1) : api.MEDIA_URL;
+>>>>>>> sanad
 const defaultImagePath = '/media/candidates/default.jpg';
 
 const defaultCandidatePath = '/media/candidates/default.jpg';
@@ -52,6 +56,11 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
   );
 };
 
+<<<<<<< HEAD
+export const AvatarList = ({ dirName, row }) => {
+  const { id, name, image, slug } = row.original;
+
+=======
 
 
 // export const ResultCandidateName = ({ dirName, cellProps }) => {
@@ -99,6 +108,7 @@ export const ImageGenderCircle = ({ imagePath, genderValue }) => {
 
 
 export const AvatarList = ({ dirName, name, image, slug }) => {
+>>>>>>> sanad
   const imageUrl = image ? `${mediaUrl}${image}` : `${mediaUrl}${defaultImagePath}`;
 
   // For other dirName values, render the link
@@ -142,7 +152,11 @@ export const ImageMedium = ({ imagePath }) => {
 };
 
 export const ImageLarge = ({ imagePath }) => {
+<<<<<<< HEAD
+  const imageUrl = imagePath ? `${imagePath}` : `${mediaUrl}${defaultImagePath}`;
+=======
   const imageUrl = imagePath ? `${mediaUrl}${imagePath}` : `${mediaUrl}${defaultImagePath}`;
+>>>>>>> sanad
 
   return (
     <React.Fragment>

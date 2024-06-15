@@ -48,6 +48,9 @@ NOTE: This is only needed in case you copy this code to a new project. If you on
 
 ## Installation
 
+<<<<<<< HEAD
+You have two ways of running this project: Using the Dockers scripts or running directly in the console.
+=======
 **Clone the repository:**
 
 git clone https://github.com/sanadii/q8tasweet.git
@@ -96,6 +99,7 @@ Once the installation is complete, start the frontend server:
 yarn start
 
 
+>>>>>>> sanad
 
 ### Running NO DOCKER
 

@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
 import React from "react";
+<<<<<<< HEAD
+import { Row, Col, Alert, Card, CardBody, Container, FormFeedback, Input, Label, Form } from "reactstrap";
+=======
 import { Row, Col, Alert, Card, CardBody, Container, FormFeedback, Input, Label, Form, Spinner } from "reactstrap";
+>>>>>>> sanad
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
@@ -22,6 +26,35 @@ import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import { withRouter } from "shared/components";
 
 const ForgetPasswordPage = props => {
+<<<<<<< HEAD
+  const dispatch = useDispatch();
+
+  const validation = useFormik({
+    // enableReinitialize : use this flag when initial values needs to be changed
+    enableReinitialize: true,
+
+    initialValues: {
+      email: '',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().required("Please Enter Your Email"),
+    }),
+    onSubmit: (values) => {
+      dispatch(userForgetPassword(values, props.history));
+    }
+  });
+
+  const { forgetError, forgetSuccessMsg } = useSelector(state => ({
+    forgetError: state.ForgetPassword.forgetError,
+    forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
+  }));
+
+  document.title = "Reset Password | Q8Tasweet - React Admin & Dashboard Template";
+  return (
+    <ParticlesAuth>
+      <div className="auth-page-content">
+
+=======
   document.title = "Reset Password | Q8Tasweet - React Admin & Dashboard Template";
 
   const dispatch = useDispatch();
@@ -38,6 +71,7 @@ const ForgetPasswordPage = props => {
   return (
     <ParticlesAuth>
       <div className="auth-page-content">
+>>>>>>> sanad
         <Container>
           <Row>
             <Col lg={12}>
@@ -113,17 +147,29 @@ const ForgetPasswordPage = props => {
                       </div>
 
                       <div className="text-center mt-4">
+<<<<<<< HEAD
+                        <button className="btn btn-success w-100" type="submit">Send Reset Link</button>
+=======
                         <button className="btn btn-success w-100" type="submit">
                           {loading ? <Spinner size="sm" color="me-2" /> : 'Send Reset Link'}
                         </button>
+>>>>>>> sanad
                       </div>
                     </Form>
                   </div>
                 </CardBody>
               </Card>
+<<<<<<< HEAD
+
               <div className="mt-4 text-center">
                 <p className="mb-0">Wait, I remember my password... <Link to="/login" className="fw-semibold text-primary text-decoration-underline"> Click here </Link> </p>
               </div>
+
+=======
+              <div className="mt-4 text-center">
+                <p className="mb-0">Wait, I remember my password... <Link to="/login" className="fw-semibold text-primary text-decoration-underline"> Click here </Link> </p>
+              </div>
+>>>>>>> sanad
             </Col>
           </Row>
         </Container>

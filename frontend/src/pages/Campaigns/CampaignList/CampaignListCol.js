@@ -9,6 +9,8 @@ const handleValidDate = (duedate) => {
   return formattedDate;
 };
 
+<<<<<<< HEAD
+=======
 const CheckboxHeader = ({ handleCheckAllClick }) => (
   <input
     type="checkbox"
@@ -27,6 +29,7 @@ const CheckboxCell = ({ row, handleCheckCellClick }) => (
   />
 );
 
+>>>>>>> sanad
 const Id = (cell) => {
   return (
     <React.Fragment>
@@ -40,6 +43,16 @@ const Id = (cell) => {
   );
 };
 
+<<<<<<< HEAD
+const Name = (cell) => {
+  return (
+    <React.Fragment>
+      <Link
+        to={`/dashboard/campaigns/${cell.row.original.slug}`}
+        className="fw-medium link-primary"
+      >
+        {cell.value}
+=======
 const Name = ({ name, slug, urlDir, }) => {
   return (
     <React.Fragment>
@@ -48,6 +61,7 @@ const Name = ({ name, slug, urlDir, }) => {
         className="fw-medium link-primary"
       >
         {name}
+>>>>>>> sanad
       </Link>{" "}
     </React.Fragment>
   );
@@ -61,7 +75,11 @@ const CandidateCount = (cell) => {
   );
 };
 
+<<<<<<< HEAD
+const DueDate = (cell) => {
+=======
 const DateTime = (cell) => {
+>>>>>>> sanad
   return <React.Fragment>{handleValidDate(cell.value)}</React.Fragment>;
 };
 
@@ -175,25 +193,39 @@ const CreateBy = (cell) => {
 };
 
 const Actions = (props) => {
+<<<<<<< HEAD
+  const { cell, handleCampaignClick, onClickDelete } = props;
+=======
   const { cell, handleCampaignClick, handleItemDeleteClick } = props;
   const campaignData = cell.row.original;
 
+>>>>>>> sanad
   return (
     <React.Fragment>
       <div className="d-flex">
         <div className="flex-grow-1 campaigns_name">{cell.value}</div>
         <div className="hstack gap-2">
+<<<<<<< HEAD
+=======
 
           {/* View */}
+>>>>>>> sanad
           <button
             to="#"
             className="btn btn-sm btn-soft-info edit-list"
             onClick={() => {
+<<<<<<< HEAD
+              const campaignData = cell.row.original;
+              handleCampaignClick(campaignData);
+=======
               handleCampaignClick(campaignData, "viewGuaranteeGroup");
+>>>>>>> sanad
             }}
           >
             <i className="ri-pencil-fill align-bottom" />
           </button>
+<<<<<<< HEAD
+=======
 
           {/* Update */}
           <button
@@ -206,11 +238,17 @@ const Actions = (props) => {
             <i className="ri-pencil-fill align-bottom" />
           </button>
           {/* Delete */}
+>>>>>>> sanad
           <button
             to="#"
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
+<<<<<<< HEAD
+              const campaignData = cell.row.original;
+              onClickDelete(campaignData);
+=======
               handleItemDeleteClick(campaignData);
+>>>>>>> sanad
             }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />
@@ -221,12 +259,19 @@ const Actions = (props) => {
   );
 };
 export {
+<<<<<<< HEAD
+  Id,
+  Name,
+  CandidateCount,
+  DueDate,
+=======
   CheckboxHeader,
   CheckboxCell,
   Id,
   Name,
   CandidateCount,
   DateTime,
+>>>>>>> sanad
   Status,
   Priority,
   Category,

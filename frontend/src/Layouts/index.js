@@ -1,4 +1,13 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
+import PropTypes from "prop-types";
+import { withRouter } from 'shared/components';
+import { layoutSelector, campaignSelector } from 'selectors';
+import SectionHeader from "pages/Campaigns/CampaignDetails/SectionHeader"
+import { Container } from "reactstrap";
+
+//import Components
+=======
 import { useNavigate } from 'react-router-dom';
 
 import PropTypes from "prop-types";
@@ -11,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { layoutSelector, userSelector, campaignSelector } from 'selectors';
 
 // Components
+>>>>>>> sanad
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
@@ -33,6 +43,17 @@ import {
     getCampaignDetails,
 } from "../store/actions";
 
+<<<<<<< HEAD
+//redux
+import { useSelector, useDispatch } from "react-redux";
+
+const Layout = (props) => {
+    const [headerClass, setHeaderClass] = useState("");
+    const defaultLayout = props.defaultLayout;
+    const style = props.style;
+
+    const dispatch = useDispatch();
+=======
 
 const Layout = (props) => {
     const dispatch = useDispatch();
@@ -42,6 +63,7 @@ const Layout = (props) => {
     const defaultLayout = props.defaultLayout;
     const style = props.style;
 
+>>>>>>> sanad
     const {
         layoutType,
         leftSidebarType,
@@ -63,7 +85,10 @@ const Layout = (props) => {
         campaignGuarantees,
         campaignAttendees,
     } = useSelector(campaignSelector);
+<<<<<<< HEAD
+=======
 
+>>>>>>> sanad
     /*
     layout settings
     */
@@ -115,6 +140,8 @@ const Layout = (props) => {
     /*
     call dark/light mode
     */
+<<<<<<< HEAD
+=======
     const onChangeCampaign = (userCampaign) => {
         // setCurrentCampaign(userCampaign)
         // console.log("dispatching: ", currentCampaign)
@@ -122,6 +149,7 @@ const Layout = (props) => {
         // navigate(`/campaigns/${currentCampaign.slug}`);
     };
 
+>>>>>>> sanad
     const onChangeLayoutMode = (value) => {
         if (changeLayoutMode) {
             dispatch(changeLayoutMode(value));
@@ -148,6 +176,25 @@ const Layout = (props) => {
                 <Header
                     headerClass={headerClass}
                     layoutModeType={layoutModeType}
+<<<<<<< HEAD
+                    onChangeLayoutMode={onChangeLayoutMode} />
+                <Sidebar
+                    layoutType={layoutType}
+                />
+                <div className="main-content ">
+                    {props.style === "campaign" &&
+                        <div className="page-content">
+                            <Container fluid>
+                                <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
+                            </Container>
+                        </div>
+                    }
+                    <div className="p-3">
+                        {props.children}
+                    </div>
+                    <Footer />
+                </div>
+=======
                     onChangeLayoutMode={onChangeLayoutMode}
                     setCurrentCampaign={props.setCurrentCampaign}
                 />
@@ -185,6 +232,7 @@ const Layout = (props) => {
                     <Footer />
                 </div>
 
+>>>>>>> sanad
             </div>
             {/* <RightSidebar /> */}
         </React.Fragment >

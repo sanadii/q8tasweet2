@@ -7,23 +7,42 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   GET_CAMPAIGNS,
   GET_CAMPAIGN_DETAILS,
+<<<<<<< HEAD
+  ADD_NEW_CAMPAIGN,
+  DELETE_CAMPAIGN,
+  UPDATE_CAMPAIGN,
+
+  // Campaign Members
+  GET_ALL_CAMPAIGN_MEMBERS,
+  ADD_NEW_CAMPAIGN_MEMBER,
+=======
   ADD_CAMPAIGN,
   DELETE_CAMPAIGN,
   UPDATE_CAMPAIGN,
   // Campaign Members
   GET_ALL_CAMPAIGN_MEMBERS,
   ADD_CAMPAIGN_MEMBER,
+>>>>>>> sanad
   DELETE_CAMPAIGN_MEMBER,
   UPDATE_CAMPAIGN_MEMBER,
   GET_CAMPAIGN_MEMBER_DETAILS,
 
   // Campaign Guarantees
   GET_ALL_CAMPAIGN_GUARANTEES,
+<<<<<<< HEAD
+  ADD_NEW_CAMPAIGN_GUARANTEE,
+=======
   ADD_CAMPAIGN_GUARANTEE,
+>>>>>>> sanad
   DELETE_CAMPAIGN_GUARANTEE,
   UPDATE_CAMPAIGN_GUARANTEE,
   GET_CAMPAIGN_GUARANTEE_DETAILS,
 
+<<<<<<< HEAD
+  // Campaign Attendees
+  GET_CAMPAIGN_ATTENDEES,
+  ADD_NEW_CAMPAIGN_ATTENDEE,
+=======
   // Campaign GuaranteeGroups
   GET_ALL_CAMPAIGN_GUARANTEE_GROUPS,
   ADD_CAMPAIGN_GUARANTEE_GROUP,
@@ -34,6 +53,7 @@ import {
   // Campaign Attendees
   GET_CAMPAIGN_ATTENDEES,
   ADD_CAMPAIGN_ATTENDEE,
+>>>>>>> sanad
   DELETE_CAMPAIGN_ATTENDEE,
   UPDATE_CAMPAIGN_ATTENDEE,
   GET_CAMPAIGN_ATTENDEE_DETAILS,
@@ -43,7 +63,10 @@ import {
   GET_CAMPAIGN_COMMITTEE_SORTING,
 } from "./actionType";
 
+<<<<<<< HEAD
+=======
 import { UPDATE_ELECTION_CANDIDATE_SUCCESS, UPDATE_ELECTION_CANDIDATE_FAIL } from "../elections/actionType";
+>>>>>>> sanad
 
 import {
   // getCampaigns, getCampaignDetails,
@@ -52,29 +75,49 @@ import {
   CampaignApiResponseError,
 
   // Campaigns
+<<<<<<< HEAD
+  addNewCampaignSuccess,
+  addNewCampaignFail,
+=======
   addCampaignSuccess,
   addCampaignFail,
+>>>>>>> sanad
   updateCampaignSuccess,
   updateCampaignFail,
   deleteCampaignSuccess,
   deleteCampaignFail,
 
   // Campaign Members
+<<<<<<< HEAD
+  addNewCampaignMemberSuccess,
+  addNewCampaignMemberFail,
+=======
   addCampaignMemberSuccess,
   addCampaignMemberFail,
+>>>>>>> sanad
   updateCampaignMemberSuccess,
   updateCampaignMemberFail,
   deleteCampaignMemberSuccess,
   deleteCampaignMemberFail,
 
   // Campaign Guarantees
+<<<<<<< HEAD
+  addNewCampaignGuaranteeSuccess,
+  addNewCampaignGuaranteeFail,
+=======
   addCampaignGuaranteeSuccess,
   addCampaignGuaranteeFail,
+>>>>>>> sanad
   updateCampaignGuaranteeSuccess,
   updateCampaignGuaranteeFail,
   deleteCampaignGuaranteeSuccess,
   deleteCampaignGuaranteeFail,
 
+<<<<<<< HEAD
+  // Campaign Attendees
+  addNewCampaignAttendeeSuccess,
+  addNewCampaignAttendeeFail,
+=======
   // Campaign GuaranteeGroups
   addCampaignGuaranteeGroupSuccess,
   addCampaignGuaranteeGroupFail,
@@ -86,6 +129,7 @@ import {
   // Campaign Attendees
   addCampaignAttendeeSuccess,
   addCampaignAttendeeFail,
+>>>>>>> sanad
   updateCampaignAttendeeSuccess,
   updateCampaignAttendeeFail,
   deleteCampaignAttendeeSuccess,
@@ -98,27 +142,47 @@ import {
   getCampaignCommitteeSortingFail,
 } from "./action";
 
+<<<<<<< HEAD
+=======
 import {
   updateElectionCandidateSuccess,
   updateElectionCandidateFail
 } from "../elections/action"
 
+>>>>>>> sanad
 //Include Both Helper File with needed methods
 import {
   getCampaigns as getCampaignsApi,
   getCampaignDetails as getCampaignDetailsApi,
+<<<<<<< HEAD
+  addNewCampaign,
+=======
   addCampaign as addCampaignApi,
+>>>>>>> sanad
   updateCampaign,
   deleteCampaign,
 
   // Campaign Members
   getAllCampaignMembers as getAllCampaignMembersApi,
+<<<<<<< HEAD
+  addNewCampaignMember,
+=======
   addCampaignMember,
+>>>>>>> sanad
   updateCampaignMember,
   deleteCampaignMember,
 
   // Campaign Guarantees
   getAllCampaignGuarantees as getAllCampaignGuaranteesApi,
+<<<<<<< HEAD
+  addNewCampaignGuarantee,
+  updateCampaignGuarantee,
+  deleteCampaignGuarantee,
+
+  // Campaign Attendees
+  getAllCampaignAttendees as getAllCampaignAttendeesApi,
+  addNewCampaignAttendee,
+=======
   addCampaignGuarantee,
   updateCampaignGuarantee,
   deleteCampaignGuarantee,
@@ -133,6 +197,7 @@ import {
   // Campaign Attendees
   getAllCampaignAttendees as getAllCampaignAttendeesApi,
   addCampaignAttendee,
+>>>>>>> sanad
   updateCampaignAttendee,
   deleteCampaignAttendee,
 
@@ -174,6 +239,15 @@ function* getAllCampaignMembers({ payload: campaign }) {
 }
 
 
+<<<<<<< HEAD
+function* onAddNewCampaign({ payload: campaign }) {
+  try {
+    const response = yield call(addNewCampaign, campaign);
+    yield put(addNewCampaignSuccess(response));
+    toast.success("تم إضافة الحملة الإنتخابية بنجاح", { autoClose: 2000 });
+  } catch (error) {
+    yield put(addNewCampaignFail(error));
+=======
 function* onAddCampaign({ payload: campaign }) {
   try {
     const response = yield call(addCampaignApi, campaign);
@@ -190,11 +264,14 @@ function* onAddCampaign({ payload: campaign }) {
   } catch (error) {
     yield put(CampaignApiResponseError(ADD_CAMPAIGN, error));
     yield put(updateElectionCandidateFail(error));
+>>>>>>> sanad
     toast.error("خطأ في إضافة الحملة الإنتخابية", { autoClose: 2000 });
   }
 }
 
 
+<<<<<<< HEAD
+=======
 
 
 // function* onAddCampaign({ payload: campaign }) {
@@ -209,6 +286,7 @@ function* onAddCampaign({ payload: campaign }) {
 //   }
 // }
 
+>>>>>>> sanad
 function* onDeleteCampaign({ payload: campaign }) {
   try {
     const response = yield call(deleteCampaign, campaign);
@@ -233,6 +311,28 @@ function* onUpdateCampaign({ payload: campaign }) {
   }
 }
 
+<<<<<<< HEAD
+
+// CampaignGuarantees
+function* getAllCampaignGuarantees({ payload: campaign }) {
+  try {
+    const response = yield call(getAllCampaignGuaranteesApi, campaign);
+    yield put(
+      CampaignApiResponseSuccess(GET_ALL_CAMPAIGN_GUARANTEES, response.data)
+    );
+  } catch (error) {
+    yield put(CampaignApiResponseError(GET_ALL_CAMPAIGN_GUARANTEES, error));
+  }
+}
+
+function* onAddNewCampaignMember({ payload: campaignMember }) {
+  try {
+    const response = yield call(addNewCampaignMember, campaignMember);
+    yield put(addNewCampaignMemberSuccess(response));
+    toast.success("تم إضافة عضو للحملة الإنتخابية بنجاح", { autoClose: 2000 });
+  } catch (error) {
+    yield put(addNewCampaignMemberFail(error));
+=======
 function* onAddCampaignMember({ payload: campaignMember }) {
   try {
     const response = yield call(addCampaignMember, campaignMember);
@@ -240,6 +340,7 @@ function* onAddCampaignMember({ payload: campaignMember }) {
     toast.success("تم إضافة عضو للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
     yield put(addCampaignMemberFail(error));
+>>>>>>> sanad
     toast.error("خطأ في إضافة عضو للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
@@ -267,6 +368,19 @@ function* onDeleteCampaignMember({ payload: campaignMember }) {
     toast.error("خطأ في حذف عضو للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
+<<<<<<< HEAD
+function* onAddNewCampaignGuarantee({ payload: campaignGuarantee }) {
+  try {
+    const response = yield call(addNewCampaignGuarantee, campaignGuarantee);
+    yield put(addNewCampaignGuaranteeSuccess(response));
+    toast.success("تم إضافة المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
+  } catch (error) {
+    yield put(addNewCampaignGuaranteeFail(error));
+    toast.error("خطأ في إضافة المضمون للحملة الإنتخابية", { autoClose: 2000 });
+  }
+}
+
+=======
 
 // CampaignGuarantees
 function* getAllCampaignGuarantees({ payload: campaign }) {
@@ -290,23 +404,41 @@ function* onAddCampaignGuarantee({ payload: campaignGuarantee }) {
     toast.error("خطأ في إضافة الضمان للحملة الإنتخابية", { autoClose: 2000 });
   }
 }
+>>>>>>> sanad
 
 function* onUpdateCampaignGuarantee({ payload: campaignGuarantee }) {
   try {
     const response = yield call(updateCampaignGuarantee, campaignGuarantee);
     yield put(updateCampaignGuaranteeSuccess(response));
+<<<<<<< HEAD
+    toast.success("تم تحديث المضمون للحملة الإنتخابية بنجاح", {
+=======
     toast.success("تم تحديث الضمان للحملة الإنتخابية بنجاح", {
+>>>>>>> sanad
       autoClose: 2000,
     });
   } catch (error) {
     yield put(updateCampaignGuaranteeFail(error));
+<<<<<<< HEAD
+    toast.error("خطأ في تحديث المضمون للحملة الإنتخابية", { autoClose: 2000 });
+=======
     toast.error("خطأ في تحديث الضمان للحملة الإنتخابية", { autoClose: 2000 });
+>>>>>>> sanad
   }
 }
 
 function* onDeleteCampaignGuarantee({ payload: campaignGuarantee }) {
   try {
     const response = yield call(deleteCampaignGuarantee, campaignGuarantee);
+<<<<<<< HEAD
+    yield put(
+      deleteCampaignGuaranteeSuccess({ campaignGuarantee, ...response })
+    );
+    toast.success("تم حذف المضمون للحملة الإنتخابية بنجاح", { autoClose: 2000 });
+  } catch (error) {
+    yield put(deleteCampaignGuaranteeFail(error));
+    toast.error("خطأ في حذف المضمون للحملة الإنتخابية", { autoClose: 2000 });
+=======
     yield put(deleteCampaignGuaranteeSuccess({ campaignGuarantee, ...response }));
     toast.success("تم حذف الضمان للحملة الإنتخابية بنجاح", { autoClose: 2000 });
   } catch (error) {
@@ -363,6 +495,7 @@ function* onDeleteCampaignGuaranteeGroup({ payload: campaignGuaranteeGroup }) {
   } catch (error) {
     yield put(deleteCampaignGuaranteeGroupFail(error));
     toast.error("خطأ في حذف الضمان للحملة الإنتخابية", { autoClose: 2000 });
+>>>>>>> sanad
   }
 }
 
@@ -379,6 +512,15 @@ function* getAllCampaignAttendees({ payload: campaign }) {
   }
 }
 
+<<<<<<< HEAD
+function* onAddNewCampaignAttendee({ payload: campaignAttendee }) {
+  try {
+    const response = yield call(addNewCampaignAttendee, campaignAttendee);
+    yield put(addNewCampaignAttendeeSuccess(response));
+    // toast.success("CampaignAttendee Added Successfully", { autoClose: 2000 });
+  } catch (error) {
+    yield put(addNewCampaignAttendeeFail(error));
+=======
 function* onAddCampaignAttendee({ payload: campaignAttendee }) {
   try {
     const response = yield call(addCampaignAttendee, campaignAttendee);
@@ -386,6 +528,7 @@ function* onAddCampaignAttendee({ payload: campaignAttendee }) {
     // toast.success("CampaignAttendee Added Successfully", { autoClose: 2000 });
   } catch (error) {
     yield put(addCampaignAttendeeFail(error));
+>>>>>>> sanad
     // toast.error("CampaignAttendee Added Failed", { autoClose: 2000 });
   }
 }
@@ -428,7 +571,11 @@ function* getAllCampaignSorting() {
   }
 }
 
+<<<<<<< HEAD
+function* getCampaignCommitteeSorting(){
+=======
 function* getCampaignCommitteeSorting() {
+>>>>>>> sanad
   try {
     const response = yield call(getCampaignCommitteeSortingApi);
     yield put(
@@ -450,8 +597,13 @@ export function* watchGetCampaignDetails() {
   yield takeEvery(GET_CAMPAIGN_DETAILS, getCampaignDetails);
 }
 
+<<<<<<< HEAD
+export function* watchAddNewCampaign() {
+  yield takeEvery(ADD_NEW_CAMPAIGN, onAddNewCampaign);
+=======
 export function* watchAddCampaign() {
   yield takeEvery(ADD_CAMPAIGN, onAddCampaign);
+>>>>>>> sanad
 }
 
 export function* watchUpdateCampaign() {
@@ -467,8 +619,13 @@ export function* watchGetAllCampaignMembers() {
   yield takeEvery(GET_ALL_CAMPAIGN_MEMBERS, getAllCampaignMembers);
 }
 
+<<<<<<< HEAD
+export function* watchAddNewCampaignMember() {
+  yield takeEvery(ADD_NEW_CAMPAIGN_MEMBER, onAddNewCampaignMember);
+=======
 export function* watchAddCampaignMember() {
   yield takeEvery(ADD_CAMPAIGN_MEMBER, onAddCampaignMember);
+>>>>>>> sanad
 }
 
 export function* watchUpdateCampaignMember() {
@@ -484,8 +641,13 @@ export function* watchGetAllCampaignGuarantees() {
   yield takeEvery(GET_ALL_CAMPAIGN_GUARANTEES, getAllCampaignGuarantees);
 }
 
+<<<<<<< HEAD
+export function* watchAddNewCampaignGuarantee() {
+  yield takeEvery(ADD_NEW_CAMPAIGN_GUARANTEE, onAddNewCampaignGuarantee);
+=======
 export function* watchAddCampaignGuarantee() {
   yield takeEvery(ADD_CAMPAIGN_GUARANTEE, onAddCampaignGuarantee);
+>>>>>>> sanad
 }
 
 export function* watchUpdateCampaignGuarantee() {
@@ -496,6 +658,8 @@ export function* watchDeleteCampaignGuarantee() {
   yield takeEvery(DELETE_CAMPAIGN_GUARANTEE, onDeleteCampaignGuarantee);
 }
 
+<<<<<<< HEAD
+=======
 // CampaignGuaranteeGroups Watchers
 export function* watchGetAllCampaignGuaranteeGroups() {
   yield takeEvery(GET_ALL_CAMPAIGN_GUARANTEE_GROUPS, getAllCampaignGuaranteeGroups);
@@ -514,13 +678,19 @@ export function* watchDeleteCampaignGuaranteeGroup() {
 }
 
 
+>>>>>>> sanad
 // CampaignAttendees Watchers
 export function* watchGetAllCampaignAttendees() {
   yield takeEvery(GET_CAMPAIGN_ATTENDEES, getAllCampaignAttendees);
 }
 
+<<<<<<< HEAD
+export function* watchAddNewCampaignAttendee() {
+  yield takeEvery(ADD_NEW_CAMPAIGN_ATTENDEE, onAddNewCampaignAttendee);
+=======
 export function* watchAddCampaignAttendee() {
   yield takeEvery(ADD_CAMPAIGN_ATTENDEE, onAddCampaignAttendee);
+>>>>>>> sanad
 }
 
 export function* watchUpdateCampaignAttendee() {
@@ -545,20 +715,42 @@ function* campaignSaga() {
     // Campaigns
     fork(watchGetCampaigns),
     fork(watchGetCampaignDetails),
+<<<<<<< HEAD
+    fork(watchAddNewCampaign),
+=======
     fork(watchAddCampaign),
+>>>>>>> sanad
     fork(watchUpdateCampaign),
     fork(watchDeleteCampaign),
 
     // Campaign Members
     fork(watchGetAllCampaignMembers),
     // fork(watchGetCampaignMemberDetails),
+<<<<<<< HEAD
+    fork(watchAddNewCampaignMember),
+=======
     fork(watchAddCampaignMember),
+>>>>>>> sanad
     fork(watchUpdateCampaignMember),
     fork(watchDeleteCampaignMember),
 
     // CampaignGuarantees
     fork(watchGetAllCampaignGuarantees),
     // fork(watchGetCampaignGuaranteeDetails),
+<<<<<<< HEAD
+    fork(watchAddNewCampaignGuarantee),
+    fork(watchUpdateCampaignGuarantee),
+    fork(watchDeleteCampaignGuarantee),
+
+    // CampaignAttendees
+    fork(watchGetAllCampaignAttendees),
+    // fork(watchGetCampaignAttendeeDetails),
+    fork(watchAddNewCampaignAttendee),
+    fork(watchUpdateCampaignAttendee),
+    fork(watchDeleteCampaignAttendee),
+
+// Campaign Sorting
+=======
     fork(watchAddCampaignGuarantee),
     fork(watchUpdateCampaignGuarantee),
     fork(watchDeleteCampaignGuarantee),
@@ -578,6 +770,7 @@ function* campaignSaga() {
     fork(watchDeleteCampaignAttendee),
 
     // Campaign Sorting
+>>>>>>> sanad
     fork(watchGetAllCampaignSorting),
     fork(watchGetCampaignCommitteeSorting),
   ]);

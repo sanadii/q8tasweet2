@@ -1,4 +1,10 @@
 // hooks/CampaignHooks.js
+<<<<<<< HEAD
+import { useMemo } from 'react';
+import { usePermission } from 'shared/hooks';
+
+
+=======
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { usePermission } from 'shared/hooks';
 
@@ -148,6 +154,7 @@ const getCommitteeOptions = (selectedSupervisor, campaignMembers, committeeSites
 
 
 // Deprecated: Get Supervisor Members
+>>>>>>> sanad
 const useSupervisorMembers = (campaignRoles, campaignMembers) => {
   const supervisorRoleId = useMemo(() => {
     return campaignRoles.find(role => role.name === "campaignSupervisor")?.id;
@@ -160,6 +167,52 @@ const useSupervisorMembers = (campaignRoles, campaignMembers) => {
   return supervisorMembers;
 };
 
+<<<<<<< HEAD
+
+const useCampaignRoles = (campaignRoles, currentCampaignMember) => {
+  // Permissions
+  const {
+    canChangeConfig,
+    canChangeCampaign,
+    canChangeMember,
+    canChangeCampaignMember,
+  } = usePermission();
+
+
+  return useMemo(() => {
+    const currentRoleId = currentCampaignMember?.role;
+    let excludedRoleStrings = ["campaignMember"]; // Excluded for all by default
+
+    switch (true) {
+      case canChangeConfig:
+        excludedRoleStrings = ["campaignMember"];
+        break;
+      case canChangeCampaign:
+        excludedRoleStrings = ["campaignMember", "campaignModerator", "campaignCandidate"];
+        break;
+      case canChangeCampaignMember:
+        excludedRoleStrings = ["campaignMember", "campaignModerator", "campaignCoordinator", "campaignCandidate", "campaignSupervisor"];
+        break;
+      default:
+        break;
+    }
+
+    const displayedRoles = campaignRoles.filter((role) => {
+      const isExcluded = excludedRoleStrings.includes(role.name);
+      if (isExcluded) {
+        console.log("Excluding role:", role.name);
+      }
+      return !isExcluded;
+    });
+
+    return displayedRoles;
+  }, [campaignRoles, currentCampaignMember, canChangeConfig, canChangeCampaign, canChangeMember]);
+};
+
+export {
+  useSupervisorMembers,
+  useCampaignRoles
+=======
 // Helper function to Show form fields based on selected role
 const useCampaignRoleString = (roleId, roles) => {
   if (roleId == null) return null;
@@ -193,4 +246,5 @@ export {
   useSupervisorMembers, // Deprecated: Keep for backward compatibility if needed
   useCampaignRoleString,
   isMemberRoleOption,
+>>>>>>> sanad
 };

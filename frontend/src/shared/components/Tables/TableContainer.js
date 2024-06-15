@@ -5,6 +5,12 @@ import { Table, Row, Col, Button, Input, CardBody, CardFooter } from "reactstrap
 import { DefaultColumnFilter } from "../Filters";
 import { TableContainerFooter } from "shared/components";
 
+<<<<<<< HEAD
+const TableContainer = ({
+  // Settings
+  customPageSize,
+
+=======
 
 const defaultSortMethod = (rowA, rowB, columnId, desc) => {
   const valA = rowA.values[columnId];
@@ -29,6 +35,7 @@ const TableContainer = ({
   // Settings
   customPageSize,
   ExpandedComponent,
+>>>>>>> sanad
   // Actions
   onTabChange,
   getBgClassForStatus,
@@ -36,6 +43,10 @@ const TableContainer = ({
   // Data & Columns----------
   columns,
   data,
+<<<<<<< HEAD
+
+=======
+>>>>>>> sanad
   // Table Sorting ----------
   sortBy,
   sortAsc,
@@ -74,7 +85,10 @@ const TableContainer = ({
 
     // Table Options
     isSorting,
+<<<<<<< HEAD
+=======
     visibleColumns,
+>>>>>>> sanad
 
   } = useTable(
     {
@@ -87,15 +101,22 @@ const TableContainer = ({
         selectedRowIds: 0,
         sortBy: [
           {
+<<<<<<< HEAD
+            id: sortBy, // replace with the actual column ID or accessor for the due date
+=======
             id: sortBy,
+>>>>>>> sanad
             asc: sortAsc,
             desc: sortDesc,
           },
         ],
+<<<<<<< HEAD
+=======
 
       },
       sortTypes: {
         alphanumeric: defaultSortMethod,
+>>>>>>> sanad
       },
     },
     useGlobalFilter,
@@ -142,12 +163,21 @@ const TableContainer = ({
       {/* <Filter column={column} /> */}
     </th>
   );
+<<<<<<< HEAD
+  
+  
+=======
 
 
+>>>>>>> sanad
 
   return (
     <Fragment>
       <CardBody>
+<<<<<<< HEAD
+
+=======
+>>>>>>> sanad
         <div className={divClass}>
           <Table hover {...getTableProps()} className={tableClass}>
             <thead className={theadClass}>
@@ -162,7 +192,10 @@ const TableContainer = ({
                       key={column.id}
                       className={thClass}
                       {...(isSorting ? column.getSortByToggleProps() : {})}
+<<<<<<< HEAD
+=======
                       {...column.getHeaderProps()}
+>>>>>>> sanad
                     >
 
                       {column.render("Header")}
@@ -174,8 +207,11 @@ const TableContainer = ({
               ))}
             </thead>
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> sanad
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
                 prepareRow(row);
@@ -201,6 +237,8 @@ const TableContainer = ({
                         );
                       })}
                     </tr>
+<<<<<<< HEAD
+=======
 
                     {/* Expanded */}
                     {/* Below the row, check if it's expanded and render additional content */}
@@ -212,12 +250,16 @@ const TableContainer = ({
                       </tr>
                     }
 
+>>>>>>> sanad
                   </Fragment>
                 );
               })}
             </tbody>
+<<<<<<< HEAD
+=======
 
             {/* Table Footer */}
+>>>>>>> sanad
             {isTableFooter &&
               <tfoot>
                 {footerGroups.map((footerGroup) => (
@@ -240,9 +282,14 @@ const TableContainer = ({
           </Table>
         </div>
 
+<<<<<<< HEAD
+        {isTablePagination !== false &&
+
+=======
         {/* {isTablePagination !== false && */}
 
         {rows.length > customPageSize &&
+>>>>>>> sanad
           <Row className="justify-content-md-end justify-content-center align-items-center p-2">
             <Col className="col-md-auto">
               <div className="d-flex gap-1">
@@ -297,4 +344,7 @@ TableContainer.propTypes = {
 };
 
 export default TableContainer;
+<<<<<<< HEAD
+=======
 
+>>>>>>> sanad
