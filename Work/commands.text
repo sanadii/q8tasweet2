@@ -1,0 +1,106 @@
+
+### 1. Digital Ocean Setup:
+
+**Setting Up Digital Ocean Droplet:**
+(You did this on Digital Ocean's website.)
+
+### 2. Initial Server Setup:
+
+**Update the system:**
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+**Set up a new user with sudo privileges:**
+```bash
+sudo adduser <username>
+sudo usermod -aG sudo <username>
+```
+
+**Secure the server using UFW (Uncomplicated Firewall):**
+```bash
+sudo ufw allow OpenSSH
+sudo ufw enable
+```
+
+### 3. GitHub Setup:
+
+**Install Git:**
+```bash
+sudo apt install git
+```
+
+**Configure Git (Optional but Recommended):**
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "youremail@domain.com"
+```
+
+**Clone your repository:**
+```bash
+git clone <your-repository-link>
+```
+
+### 4. Django Backend Setup:
+
+**Install system dependencies:**
+```bash
+sudo apt install python3 python3-pip python3-venv libpq-dev
+```
+
+**Create a virtual environment and activate it:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+**Navigate to your Django project directory and install Python dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+**Run migrations:**
+```bash
+python3 manage.py migrate
+```
+
+**Run the server:**
+```bash
+python3 manage.py runserver
+```
+
+**Dependencies added to `requirements.txt`:**
+```
+django
+djangorestframework
+django-cors-headers
+django-rest-framework-simplejwt
+coreapi
+Pillow
+```
+
+### 5. React Frontend Setup:
+
+**Install Node.js and Yarn (if not already installed):**
+```bash
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt install nodejs
+sudo npm install -g yarn
+```
+
+**Navigate to React project directory and install dependencies:**
+```bash
+yarn install
+```
+
+**Run the React app:**
+```bash
+yarn start
+```
+
+**Install missing react-scripts:**
+```bash
+yarn add react-scripts
+```
+
+/////////

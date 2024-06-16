@@ -43,6 +43,22 @@ class UserAdminConfig(UserAdmin):
          ),
     )
 
+<<<<<<< HEAD
+
+
+# # AdminSites
+# admin.site.register(User, UserAdminConfig)
+
+# class AuthAdminSite(AdminSite):
+#     site_header = 'Authentication Administration'
+#     site_title = 'Authentication Admin'
+#     index_title = 'Authentication Admin'
+
+# auth_admin_site = AuthAdminSite(name='authentication')
+# auth_admin_site.register(User, UserAdminConfig)
+
+=======
+>>>>>>> sanad
 admin.site.register(User, UserAdminConfig)
 
 class UserAdminSite(admin.AdminSite):

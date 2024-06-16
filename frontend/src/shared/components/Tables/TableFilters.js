@@ -104,6 +104,30 @@ const TableFilters = ({
         (showFilters || !isMobile) && (
 
           <div>
+<<<<<<< HEAD
+            <Row className="g-4 mb-4">
+              <div className="d-flex align-items-center ">
+                <div className="col">
+                  {isElectionCategoryFilter && (
+                    <ElectionCategoryFilter
+                      setFilters={setFilters}
+                      activeTab={activeTab}
+                      setActiveTab={setActiveTab}
+                    />
+                  )}
+                  {isMemberRoleFilter && (
+                    <MemberRoleFilter
+                      setFilters={setFilters}
+                      activeTab={activeTab}
+                      setActiveTab={setActiveTab}
+                    />
+                  )}
+                </div>
+                <div className="flex-shrink-0"></div>
+              </div>
+            </Row>
+
+=======
             {(isElectionCategoryFilter || isMemberRoleFilter) &&
               <Row className="g-4 mb-4">
                 <div className="d-flex align-items-center ">
@@ -127,6 +151,7 @@ const TableFilters = ({
                 </div>
               </Row>
             }
+>>>>>>> sanad
             <Row className="g-4 mb-4">
               <div className="d-flex align-items-center ">
                 <div className="col d-flex g-2 row">
@@ -212,7 +237,10 @@ const TableFilters = ({
                 <div className="flex-shrink-0">
                   {isResetFilters && (
                     <ResetFilters
+<<<<<<< HEAD
+=======
                       filters={filters}
+>>>>>>> sanad
                       setFilters={setFilters}
                       activeTab={activeTab}
                       setActiveTab={setActiveTab}

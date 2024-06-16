@@ -1,7 +1,11 @@
 // React & Redux
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+<<<<<<< HEAD
+import { addNewCandidate, updateCandidate } from "store/actions";
+=======
 import { addCandidate, updateCandidate } from "store/actions";
+>>>>>>> sanad
 
 // Custom Components & ConstantsImports
 import { GenderOptions, PriorityOptions, StatusOptions } from "shared/constants";
@@ -88,7 +92,11 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
           priority: parseInt(values.priority, 10),
           // moderators: values.moderators,
         };
+<<<<<<< HEAD
+        dispatch(addNewCandidate({ candidate: newCandidate, formData: formData }));
+=======
         dispatch(addCandidate({ candidate: newCandidate, formData: formData }));
+>>>>>>> sanad
       }
 
       validation.resetForm();
@@ -434,7 +442,11 @@ const CandidateModal = ({ isEdit, setModal, modal, toggle, candidate }) => {
               }}
               className="btn-light"
             >
+<<<<<<< HEAD
+              اغلاق
+=======
               اغلق
+>>>>>>> sanad
             </Button>
             <button type="submit" className="btn btn-success" id="add-btn">
               {!!isEdit ? "تحديث" : "إضافة"}

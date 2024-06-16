@@ -1,6 +1,11 @@
 from django.db import models
+<<<<<<< HEAD
+from apps.configs.models import TrackModel
+from apps.campaigns.models import Campaign, CampaignParty
+=======
 from apps.settings.models import TrackModel
 from apps.campaigns.models import Campaign
+>>>>>>> sanad
 from apps.elections.models import Election
 
 USER_GROUP_CHOICES = [

@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+<<<<<<< HEAD
+import { configureStore } from "./store";
+=======
 import { configureAppStore } from "./store";
+>>>>>>> sanad
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -9,7 +13,11 @@ import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+<<<<<<< HEAD
+  <Provider store={configureStore({})}>
+=======
   <Provider store={configureAppStore({})}>
+>>>>>>> sanad
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <App />
     </BrowserRouter>

@@ -1,5 +1,20 @@
 from django.http import JsonResponse
 from django.http.response import JsonResponse
+<<<<<<< HEAD
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
+
+# Tasweet Apps
+from apps.candidates.models import Candidate, Party
+from apps.candidates.serializers import CandidateSerializer, PartySerializer
+
+from apps.elections.models import(
+=======
 from django.shortcuts import render, get_object_or_404
 
 from rest_framework import status
@@ -14,17 +29,28 @@ from apps.candidates.models import Candidate, Party
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
 
 from apps.elections.candidates.models import(
+>>>>>>> sanad
     ElectionCandidate,
     ElectionParty,
     ElectionPartyCandidate,
     )
+<<<<<<< HEAD
+from apps.elections.serializers import (
+=======
 from apps.elections.candidates.serializers import (
+>>>>>>> sanad
     ElectionCandidateSerializer,
     ElectionPartySerializer,
     ElectionPartyCandidateSerializer,
 )
+<<<<<<< HEAD
+from helper.views_helper import CustomPagination
+
+from rest_framework.parsers import MultiPartParser, FormParser
+=======
 from utils.views_helper import CustomPagination
 
+>>>>>>> sanad
 
 
 def index(request):
@@ -63,7 +89,11 @@ class GetCandidateDetails(APIView):
 
 
 
+<<<<<<< HEAD
+class AddNewCandidate(APIView):
+=======
 class AddCandidate(APIView):
+>>>>>>> sanad
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
@@ -71,6 +101,68 @@ class AddCandidate(APIView):
         serializer = CandidateSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             candidate = serializer.save()
+<<<<<<< HEAD
+            if 'image' in request.FILES:
+                candidate.image = request.FILES['image']
+                candidate.save()
+
+            # Check if the 'election' field exists in the request data
+            if 'election' in request.data:
+                election_id = request.data['election']
+
+                # Create an ElectionCandidate entry linking the candidate to the election
+                election_candidate = ElectionCandidate.objects.create(
+                    election_id=election_id,
+                    candidate=candidate
+                )
+
+                # Serialize the election_candidate and add it to the response
+                election_candidate_serializer = ElectionCandidateSerializer(election_candidate)
+                response_data = {
+                    "data": serializer.data,
+                    "electionCandidate": election_candidate_serializer.data,
+                    "count": 0,
+                    "code": 200,
+                }
+
+                return Response(response_data, status=status.HTTP_201_CREATED)
+            
+        if 'electionParty' in request.data:
+            try:
+                election_party_id = int(request.data['electionParty'])
+            except (ValueError, TypeError):
+                return Response({"error": "Invalid 'electionParty' value. Must be an integer."}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            # Ensure election_party_id corresponds to a valid ElectionParty object
+            if not ElectionParty.objects.filter(id=election_party_id).exists():
+                return Response({"error": f"ElectionParty with id {election_party_id} does not exist."},
+                                status=status.HTTP_404_NOT_FOUND)
+
+            # Create an ElectionPartyCandidate entry linking the candidate to the election party
+            election_party_candidate = ElectionPartyCandidate.objects.create(
+                election_party_id=election_party_id,
+                candidate=candidate
+            )
+
+            # Serialize the election_party_candidate and add it to the response
+            election_party_candidate_serializer = ElectionPartyCandidateSerializer(election_party_candidate)
+            response_data = {
+                "data": serializer.data,
+                "electionPartyCandidate": election_party_candidate_serializer.data,
+                "count": 0,
+                "code": 200,
+            }
+
+            return Response(response_data, status=status.HTTP_201_CREATED)
+
+
+            # If 'election' field is not provided, return a response without 'electionCandidate' field
+            return Response({"data": serializer.data, "count": 0, "code": 200}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+=======
             self._save_image_if_present(request, candidate)
 
             response_data = {"data": serializer.data, "count": 0, "code": 200}
@@ -118,6 +210,7 @@ class AddCandidate(APIView):
 
 
 
+>>>>>>> sanad
 class UpdateCandidate(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
@@ -148,7 +241,11 @@ class DeleteCandidate(APIView):
         try:
             candidate = Candidate.objects.get(id=id)
             candidate.delete()
+<<<<<<< HEAD
+            return JsonResponse({"data": "Candidate deleted successfully", "count": 1, "code": 200}, safe=False)
+=======
             return JsonResponse({"data": "Candidate is deleted successfully", "count": 1, "code": 200}, safe=False)
+>>>>>>> sanad
         except Candidate.DoesNotExist:
             return JsonResponse({"data": "Candidate not found", "count": 0, "code": 404}, safe=False)
 
@@ -255,6 +352,10 @@ class DeleteParty(APIView):
         try:
             party = Party.objects.get(id=id)
             party.delete()
+<<<<<<< HEAD
+            return JsonResponse({"data": "Party deleted successfully", "count": 1, "code": 200}, safe=False)
+=======
             return JsonResponse({"data": "Party is deleted successfully", "count": 1, "code": 200}, safe=False)
+>>>>>>> sanad
         except Party.DoesNotExist:
             return JsonResponse({"data": "Party not found", "count": 0, "code": 404}, safe=False)

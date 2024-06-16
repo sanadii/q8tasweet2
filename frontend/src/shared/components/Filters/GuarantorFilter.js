@@ -5,15 +5,26 @@ import { campaignSelector } from 'selectors';
 
 const GuarantorFilter = ({ filters, setFilters }) => {
     const { campaignMembers } = useSelector(campaignSelector);
+<<<<<<< HEAD
+
     const [sortedGurantorOptions, setSortedGuarantorOptions] = useState([]);
 
+
+=======
+    const [sortedGurantorOptions, setSortedGuarantorOptions] = useState([]);
+
+>>>>>>> sanad
     // TODO: make it more dymic, and remove the managers for the supervisor
     useEffect(() => {
         const GurantorOptions = campaignMembers.filter(
             (member) => member.role === 31 || member.role === 32 || member.role === 33 || member.role === 34
         );
 
+<<<<<<< HEAD
+        setSortedGuarantorOptions(GurantorOptions.sort((a, b) => a.role - b.role));
+=======
         setSortedGuarantorOptions(campaignMembers.sort((a, b) => a.roleId - b.roleId));
+>>>>>>> sanad
     }, [campaignMembers]);
 
 
@@ -30,7 +41,11 @@ const GuarantorFilter = ({ filters, setFilters }) => {
 
     return (
         <React.Fragment>
+<<<<<<< HEAD
+            <div className="col-lg-3 col-sm-2">
+=======
             <div className="col-lg-2 col-sm-2">
+>>>>>>> sanad
                 <strong>الضامن</strong>
                 <div className="input-light">
                     <select
@@ -43,7 +58,11 @@ const GuarantorFilter = ({ filters, setFilters }) => {
                         <option value="">- الكل - </option>
                         {sortedGurantorOptions.map((member) => (
                             <option key={member.id} value={member.id}>
+<<<<<<< HEAD
+                                {member.fullName}
+=======
                                 {member.name}
+>>>>>>> sanad
                             </option>
                         ))}
                     </select>

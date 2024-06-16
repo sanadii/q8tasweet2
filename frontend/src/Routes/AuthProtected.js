@@ -24,15 +24,21 @@ const AuthProtected = (props) => {
     }
   }, [token, loading, dispatch, user, userProfile]);
 
+<<<<<<< HEAD
+=======
   // console.log("token: ", token, "user: ", user, "userProfile: ", userProfile)
 
+>>>>>>> sanad
   if (!token) {
     return (
       <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
     );
   }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> sanad
   if (!user || user.length === 0) {
     return <div>Loading...</div>;
   }

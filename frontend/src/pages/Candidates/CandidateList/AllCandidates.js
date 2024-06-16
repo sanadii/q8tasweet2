@@ -3,14 +3,23 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Store & Selectors
+<<<<<<< HEAD
+import { getCandidates, deleteCandidate, getModeratorUsers } from "store/actions";
+=======
 import { getCandidates, deleteCandidate } from "store/actions";
+>>>>>>> sanad
 import { candidateSelector } from 'selectors';
 
 // Custom Components, Constants & Hooks Imports
 import CandidateModal from "./CandidateModal"
+<<<<<<< HEAD
+import { Id, CheckboxHeader, CheckboxCell, Name, Status, Priority, CreateBy, Actions } from "./CandidateListCol";
+import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
+=======
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader } from "shared/components";
 import { CheckboxHeader, CheckboxCell, Id, NameAvatar, Badge, CreateBy, Actions } from "shared/components"
 
+>>>>>>> sanad
 import { useDelete, useFilter } from "shared/hooks"
 
 // Toast & Styles
@@ -23,6 +32,21 @@ const AllCandidates = () => {
 
   // State Management
   const { candidates, isCandidateSuccess, error } = useSelector(candidateSelector);
+<<<<<<< HEAD
+
+  // Delete Hook
+  const {
+    handleDeleteItem,
+    onClickDelete,
+    deleteModal,
+    setDeleteModal,
+    checkedAll,
+    deleteCheckbox,
+    isMultiDeleteButton,
+    deleteModalMulti,
+    setDeleteModalMulti,
+    deleteMultiple,
+=======
   const [candidate, setCandidate] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -44,6 +68,7 @@ const AllCandidates = () => {
     handleItemDeleteClick,
     handleCheckAllClick,
     handleCheckCellClick,
+>>>>>>> sanad
   } = useDelete(deleteCandidate);
 
   // Candidate Data
@@ -53,6 +78,14 @@ const AllCandidates = () => {
     }
   }, [dispatch, candidates]);
 
+<<<<<<< HEAD
+  // Model & Toggle Function
+  const [candidate, setCandidate] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
+=======
+>>>>>>> sanad
   const toggle = useCallback(() => {
     if (modal) {
       setModal(false);
@@ -65,8 +98,26 @@ const AllCandidates = () => {
 
   // Update Data
   const handleCandidateClick = useCallback(
+<<<<<<< HEAD
+    (arg) => {
+      const candidate = arg;
+
+      setCandidate({
+        id: candidate.id,
+        image: candidate.image,
+        name: candidate.name,
+        gender: candidate.gender,
+        description: candidate.description,
+
+        // Admin
+        status: candidate.task.status,
+        priority: candidate.task.priority,
+      });
+
+=======
     (candidate) => {
       setCandidate(candidate);
+>>>>>>> sanad
       setIsEdit(true);
       toggle();
     },
@@ -83,6 +134,11 @@ const AllCandidates = () => {
   const columns = useMemo(
     () => [
       {
+<<<<<<< HEAD
+        Header: () => <CheckboxHeader checkedAll={checkedAll} />,
+        accessor: "id",
+        Cell: (cellProps) => <CheckboxCell {...cellProps} deleteCheckbox={deleteCheckbox} />,
+=======
         Header: () =>
           <CheckboxHeader
             handleCheckAllClick={handleCheckAllClick}
@@ -93,6 +149,7 @@ const AllCandidates = () => {
             {...cellProps}
             handleCheckCellClick={handleCheckCellClick}
           />,
+>>>>>>> sanad
       },
       {
         Header: "م.",
@@ -101,6 +158,21 @@ const AllCandidates = () => {
       {
         Header: "المرشح",
         accessor: "name",
+<<<<<<< HEAD
+        Cell: Name,
+      },
+      {
+        Header: "الحالة",
+        Cell: (cellProps) => <Status {...cellProps} />
+      },
+      {
+        Header: "الأولية",
+        Cell: (cellProps) => <Priority {...cellProps} />
+      },
+      {
+        Header: "بواسطة",
+        Cell: (cellProps) => <CreateBy {...cellProps} />
+=======
         Cell: (cellProps) =>
           <NameAvatar
             name={cellProps.row.original.name}
@@ -129,6 +201,7 @@ const AllCandidates = () => {
         Header: "بواسطة",
         Cell: (cellProps) =>
           <CreateBy {...cellProps} />
+>>>>>>> sanad
       },
       {
         Header: "إجراءات",
@@ -137,25 +210,50 @@ const AllCandidates = () => {
         Cell: (cellProps) => {
           return (
             <Actions
+<<<<<<< HEAD
+              {...cellProps}
+              handleCandidateClick={handleCandidateClick}
+              onClickDelete={onClickDelete}
+=======
               options={["view", "update", "delete"]}
               cell={cellProps}
               handleItemClicks={handleCandidateClick}
               handleItemDeleteClick={handleItemDeleteClick}
+>>>>>>> sanad
             />
           );
         },
       },
     ],
+<<<<<<< HEAD
+    [handleCandidateClick, checkedAll]
+=======
     [handleCheckCellClick, handleCheckAllClick, handleCandidateClick, handleItemDeleteClick]
+>>>>>>> sanad
   );
 
   // Filters
   const { filteredData: candidateList, filters, setFilters } = useFilter(candidates);
 
+<<<<<<< HEAD
+  console.log("filters: ", filters);
+  console.log("filters: candidateList: ", candidateList);
+
+=======
+>>>>>>> sanad
   return (
     <React.Fragment>
       <DeleteModal
         show={deleteModal}
+<<<<<<< HEAD
+        onDeleteClick={handleDeleteItem}
+        onCloseClick={() => setDeleteModal(false)}
+      />
+      <DeleteModal
+        show={deleteModalMulti}
+        onDeleteClick={() => {
+          deleteMultiple();
+=======
         onDeleteClick={() => handleDeleteItem()}
         onCloseClick={() => setDeleteModal(false)}
       />
@@ -164,6 +262,7 @@ const AllCandidates = () => {
         show={deleteModalMulti}
         onDeleteClick={() => {
           handleDeleteMultiple();
+>>>>>>> sanad
           setDeleteModalMulti(false);
         }}
         onCloseClick={() => setDeleteModalMulti(false)}
@@ -214,7 +313,11 @@ const AllCandidates = () => {
                   // Table Data
                   columns={columns}
                   data={candidateList || []}
+<<<<<<< HEAD
+                  customPageSize={20}
+=======
                   customPageSize={200}
+>>>>>>> sanad
 
                   // useFilters={true}
                   className="custom-header-css"

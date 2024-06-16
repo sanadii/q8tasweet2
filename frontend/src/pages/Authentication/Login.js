@@ -1,7 +1,11 @@
 // React & Redux core
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+<<<<<<< HEAD
+import { Link } from "react-router-dom";
+=======
 import { Link, useNavigate } from "react-router-dom";
+>>>>>>> sanad
 
 // Store & Selectors
 import { loginUser, socialLogin, resetLoginFlag } from "store/actions";
@@ -18,6 +22,26 @@ import { withRouter, FormFields } from "shared/components";
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
+<<<<<<< HEAD
+
+const Login = (props) => {
+  const dispatch = useDispatch();
+
+  const selectLayoutState = (state) => state.Account;
+  const selectLayoutProperties = createSelector(
+    selectLayoutState,
+    (layout) => ({
+      user: layout.user,
+      errorMsg: layout.errorMsg,
+      loading: layout.loading,
+      error: layout.error,
+    })
+  );
+  // Inside your component
+  const { user, errorMsg, loading, error } = useSelector(selectLayoutProperties);
+  const [userLogin, setUserLogin] = useState([]);
+  const [passwordShow, setPasswordShow] = useState(false);
+=======
 import { useProfile } from "shared/hooks";
 
 const Login = (props) => {
@@ -35,20 +59,35 @@ const Login = (props) => {
     { id: "email-field", name: "email", label: "الإيميل", type: "email", },
     { id: "password-field", name: "password", label: "كلمة المرور", type: "password", },
   ]
+>>>>>>> sanad
 
   useEffect(() => {
     if (user && user) {
       const updatedUserData =
         process.env.REACT_APP_DEFAULTAUTH === "firebase"
+<<<<<<< HEAD
+          ? user.multiFactor.user.email
+          : user.user.email;
+      setUserLogin({
+        email: updatedUserData,
+        password: user.user.confirm_password ? user.user.confirm_password : "",
+=======
           ? user?.multiFactor?.user?.email
           : user?.user?.email;
       setUserLogin({
         email: updatedUserData,
         password: user?.user?.confirm_password ? user?.user?.confirm_password : "",
+>>>>>>> sanad
       });
     }
   }, [user]);
 
+<<<<<<< HEAD
+  const validation = useFormik({
+    // enableReinitialize : use this flag when initial values needs to be changed
+    enableReinitialize: true,
+
+=======
   useEffect(() => {
     if (error) {
       setTimeout(() => {
@@ -60,6 +99,7 @@ const Login = (props) => {
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
+>>>>>>> sanad
     initialValues: {
       email: userLogin.email || "",
       password: userLogin.password || "",
@@ -73,9 +113,50 @@ const Login = (props) => {
       dispatch(loginUser(values, props.router.navigate));
     },
   });
+<<<<<<< HEAD
+
+  const signIn = (type) => {
+    dispatch(socialLogin(type, props.router.navigate));
+  };
+
+  //for facebook and google authentication
+  const socialResponse = (type) => {
+    signIn(type);
+  };
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        dispatch(resetLoginFlag());
+      }, 3000);
+    }
+  }, [dispatch, error]);
+
+
+  const fields = [
+    // Existing fields
+    {
+      id: "email-field",
+      name: "email",
+      label: "الإيميل",
+      type: "email",
+      // colSize: 12,
+    },
+    {
+      id: "password-field",
+      name: "password",
+      label: "كلمة المرور",
+      type: "password",
+      // colSize: 12,
+    },
+  ]
+
+  document.title = "تسجيل الدخول | كويت تصويت";
+=======
   if (token) {
     navigate('/dashboard')
   }
+>>>>>>> sanad
   return (
     <React.Fragment>
       <ParticlesAuth>
@@ -154,12 +235,26 @@ const Login = (props) => {
 
                         <div className="mt-4">
                           <Button
+<<<<<<< HEAD
+                            disabled={error ? null : loading ? true : false}
+=======
                             disabled={loading ? true : false}
+>>>>>>> sanad
                             color="success"
                             className="btn btn-success w-100"
                             type="submit"
                           >
+<<<<<<< HEAD
+                            {error ? null : loading ? (
+                              <Spinner size="sm" className="me-2">
+                                {" "}
+                                تحميل...{" "}
+                              </Spinner>
+                            ) : null}
+                            تسجيل دخول
+=======
                             {loading ? <Spinner size="sm" className="me-2" /> : 'تسجيل دخول'}
+>>>>>>> sanad
                           </Button>
                         </div>
                       </Form>

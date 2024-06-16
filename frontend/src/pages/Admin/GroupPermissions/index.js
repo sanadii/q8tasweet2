@@ -62,11 +62,19 @@ const Permissions = () => {
       },
       {
         Header: "المجموعة",
+<<<<<<< HEAD
+        accessor: "displayName"
+      },
+      {
+        Header: "Code",
+        accessor: "name"
+=======
         accessor: "name"
       },
       {
         Header: "Code",
         accessor: "codename"
+>>>>>>> sanad
       }
     ];
 

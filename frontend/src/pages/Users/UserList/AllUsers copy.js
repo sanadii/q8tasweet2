@@ -53,7 +53,11 @@ const Name = (cellProps) => (
 const CandidateCount = (cell) => { <b>{cell.value}</b> };
 
 
+<<<<<<< HEAD
+const DueDate = (cellProps) => (handleValidDate(cellProps.row.original.dueDate));
+=======
 const DateTime = (cellProps) => (handleValidDate(cellProps.row.original.dueDate));
+>>>>>>> sanad
 
 const Category = ({ category }) => {
   const { categories } = useSelector(categorySelector);
@@ -132,7 +136,11 @@ const CreateBy = (cell) => {
 };
 
 const Actions = (props) => {
+<<<<<<< HEAD
+  const { cell, handleUserClick, onClickDelete } = props;
+=======
   const { cell, handleUserClick, onDeleteCheckBoxClick } = props;
+>>>>>>> sanad
   return (
     <React.Fragment>
       <div className="d-flex">
@@ -153,7 +161,11 @@ const Actions = (props) => {
             className="btn btn-sm btn-soft-danger remove-list"
             onClick={() => {
               const userData = cell.row.original;
+<<<<<<< HEAD
+              onClickDelete(userData);
+=======
               onDeleteCheckBoxClick(userData);
+>>>>>>> sanad
             }}
           >
             <i className="ri-delete-bin-5-fill align-bottom" />
@@ -169,7 +181,11 @@ export {
   CheckboxCell,
   Name,
   CandidateCount,
+<<<<<<< HEAD
+  DueDate,
+=======
   DateTime,
+>>>>>>> sanad
   Status,
   Priority,
   Category,

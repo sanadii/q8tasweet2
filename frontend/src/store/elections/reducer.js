@@ -21,10 +21,17 @@ import {
   ADD_ELECTION_CANDIDATE_FAIL,
   UPDATE_ELECTION_CANDIDATE_SUCCESS,
   UPDATE_ELECTION_CANDIDATE_FAIL,
+<<<<<<< HEAD
+  DELETE_ELECTION_CANDIDATE_SUCCESS,
+  DELETE_ELECTION_CANDIDATE_FAIL,
+  UPDATE_ELECTION_CANDIDATE_VOTES_SUCCESS,
+  UPDATE_ELECTION_CANDIDATE_VOTES_FAIL,
+=======
   UPDATE_ELECTION_CANDIDATE_VOTES_SUCCESS,
   UPDATE_ELECTION_CANDIDATE_VOTES_FAIL,
   DELETE_ELECTION_CANDIDATE_SUCCESS,
   DELETE_ELECTION_CANDIDATE_FAIL,
+>>>>>>> sanad
 
 
   // Election Parties
@@ -64,6 +71,19 @@ import {
   // Election Committee Results-
   UPDATE_ELECTION_RESULTS_SUCCESS,
   UPDATE_ELECTION_RESULTS_FAIL,
+<<<<<<< HEAD
+
+
+  // Election Campaigns
+  GET_ELECTION_CAMPAIGNS,
+  ADD_ELECTION_CAMPAIGN_SUCCESS,
+  ADD_ELECTION_CAMPAIGN_FAIL,
+  UPDATE_ELECTION_CAMPAIGN_SUCCESS,
+  UPDATE_ELECTION_CAMPAIGN_FAIL,
+  DELETE_ELECTION_CAMPAIGN_SUCCESS,
+  DELETE_ELECTION_CAMPAIGN_FAIL,
+=======
+>>>>>>> sanad
 } from "./actionType";
 
 const IntialState = {
@@ -75,6 +95,11 @@ const IntialState = {
   electionParties: [],
   electionPartyCandidates: [],
   electionCampaigns: [],
+<<<<<<< HEAD
+  electionCommittees: [],
+  electionResults: [],
+  electionSorters: [],
+=======
   electionResults: [],
   electionSorters: [],
 
@@ -82,12 +107,16 @@ const IntialState = {
   schemaDetails: [],
   electionCommitteeSites: [],
   electionAreas: [],
+>>>>>>> sanad
 };
 
 const Elections = (state = IntialState, action) => {
   switch (action.type) {
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> sanad
     case API_RESPONSE_SUCCESS:
       switch (action.payload.actionType) {
         case GET_ELECTIONS: {
@@ -120,6 +149,11 @@ const Elections = (state = IntialState, action) => {
             electionPartyCandidates: action.payload.data.electionPartyCandidates,
             electionCandidates: action.payload.data.electionCandidates,
             electionCampaigns: action.payload.data.electionCampaigns,
+<<<<<<< HEAD
+            electionCommittees: action.payload.data.electionCommittees,
+            electionResults: action.payload.data.electionResults,
+            electionSorters: action.payload.data.electionSorters,
+=======
             electionResults: action.payload.data.electionResults,
             electionSorters: action.payload.data.electionSorters,
 
@@ -128,6 +162,7 @@ const Elections = (state = IntialState, action) => {
             electionAreas: action.payload.data.electionAreas,
             schemaDetails: action.payload.data.schemaDetails,
 
+>>>>>>> sanad
             isElectionCreated: false,
             isElectionSuccess: true,
           };
@@ -169,6 +204,16 @@ const Elections = (state = IntialState, action) => {
             isElectionCommitteeCreated: false,
             isElectionCommitteeSuccess: true,
           };
+<<<<<<< HEAD
+        case GET_ELECTION_CAMPAIGNS:
+          return {
+            ...state,
+            electionCampaigns: action.payload.data,
+            isElectionCampaignCreated: false,
+            isElectionCampaignSuccess: true,
+          };
+=======
+>>>>>>> sanad
 
         default:
           return { ...state };
@@ -215,6 +260,17 @@ const Elections = (state = IntialState, action) => {
           };
         }
 
+<<<<<<< HEAD
+        case GET_ELECTION_CAMPAIGNS: {
+          return {
+            ...state,
+            error: action.payload.error,
+            isElectionCampaignCreated: false,
+            isElectionCampaignSuccess: true,
+          };
+        }
+=======
+>>>>>>> sanad
         default:
           return { ...state };
       }
@@ -293,7 +349,11 @@ const Elections = (state = IntialState, action) => {
         ...state,
         elections: state.elections.filter(
           (election) =>
+<<<<<<< HEAD
+            election.id.toString() !== action.payload.election.toString()
+=======
             election.id.toString() !== action.payload.election.id.toString()
+>>>>>>> sanad
         ),
         isElectionDelete: true,
         isElectionDeleteFail: false,
@@ -353,7 +413,10 @@ const Elections = (state = IntialState, action) => {
         isElectionCandidateUpdate: true,
         isElectionCandidateUpdateFail: false,
       };
+<<<<<<< HEAD
+=======
 
+>>>>>>> sanad
     case UPDATE_ELECTION_CANDIDATE_FAIL:
       return {
         ...state,
@@ -361,6 +424,9 @@ const Elections = (state = IntialState, action) => {
         isElectionCandidateUpdate: false,
         isElectionCandidateUpdateFail: true,
       };
+<<<<<<< HEAD
+    case DELETE_ELECTION_CANDIDATE_SUCCESS:
+=======
     // case DELETE_ELECTION_CANDIDATE_SUCCESS:
     //   console.log("action.payload: ", action.payload)
     //   return {
@@ -375,18 +441,27 @@ const Elections = (state = IntialState, action) => {
 
     case DELETE_ELECTION_CANDIDATE_SUCCESS:
       console.log("action.payload: ", action.payload)
+>>>>>>> sanad
       return {
         ...state,
         electionCandidates: state.electionCandidates.filter(
           (electionCandidate) =>
+<<<<<<< HEAD
+            electionCandidate.id.toString() !==
+            action.payload.electionCandidate.toString()
+=======
             electionCandidate.id.toString() !== action.payload.electionCandidate.id.toString()
+>>>>>>> sanad
         ),
         isElectionCandidateDelete: true,
         isElectionCandidateDeleteFail: false,
       };
+<<<<<<< HEAD
+=======
 
 
 
+>>>>>>> sanad
     case DELETE_ELECTION_CANDIDATE_FAIL:
       return {
         ...state,
@@ -487,7 +562,11 @@ const Elections = (state = IntialState, action) => {
         electionParties: state.electionParties.filter(
           (electionParty) =>
             electionParty.id.toString() !==
+<<<<<<< HEAD
+            action.payload.electionParty.toString()
+=======
             action.payload.electionParty.id.toString()
+>>>>>>> sanad
         ),
         isElectionPartyDelete: true,
         isElectionPartyDeleteFail: false,
@@ -564,7 +643,11 @@ const Elections = (state = IntialState, action) => {
         electionPartyCandidates: state.electionPartyCandidates.filter(
           (electionPartyCandidate) =>
             electionPartyCandidate.id.toString() !==
+<<<<<<< HEAD
+            action.payload.electionPartyCandidate.toString()
+=======
             action.payload.electionPartyCandidate.id.toString()
+>>>>>>> sanad
         ),
         isElectionPartyCandidateDelete: true,
         isElectionPartyCandidateDeleteFail: false,
@@ -649,7 +732,11 @@ const Elections = (state = IntialState, action) => {
         electionCommittees: state.electionCommittees.filter(
           (electionCommittee) =>
             electionCommittee.id.toString() !==
+<<<<<<< HEAD
+            action.payload.electionCommittee.toString()
+=======
             action.payload.electionCommittee.id.toString()
+>>>>>>> sanad
         ),
         isElectionCommitteeDelete: true,
         isElectionCommitteeDeleteFail: false,
@@ -663,13 +750,30 @@ const Elections = (state = IntialState, action) => {
       };
 
 
+<<<<<<< HEAD
+    // We need to update electionCandidates.candidate.committeeVotes with the new value
+=======
     // We need to update electionCandidates.candidate.committeeResults with the new value
+>>>>>>> sanad
 
 
 
 
     // Election Party Results
     case UPDATE_ELECTION_RESULTS_SUCCESS: {
+<<<<<<< HEAD
+      const { data, resultType } = action.payload;
+      const committeeIdStr = Object.keys(data)[0];
+      const committeeId = parseInt(committeeIdStr, 10);
+
+      let resultState;
+      if (resultType === "parties") {
+        resultState = state.electionParties;
+      } else if (resultType === "candidates") {
+        resultState = state.electionCandidates;
+      } else if (resultType === "partyCandidates") {
+        resultState = state.electionPartyCandidates;
+=======
       const { data, electionMethod, isDetailedResults } = action.payload;
       const committeeIdStr = Object.keys(data)[0];
       const committeeId = parseInt(committeeIdStr, 10);
@@ -681,6 +785,7 @@ const Elections = (state = IntialState, action) => {
         participantState = state.electionParties;
       } else if (electionMethod === "partyCandidates") {
         participantState = state.electionPartyCandidates;
+>>>>>>> sanad
       }
 
 
@@ -688,22 +793,37 @@ const Elections = (state = IntialState, action) => {
       // If committeeIdStr is not present, or it's not a number, or data[committeeIdStr] is not present, return the current state.
       if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
 
+<<<<<<< HEAD
+      const updatedCandidateResult = resultState.map(candidate => {
+        // Update votes directly on the candidate if committeeId is 0
+        if (committeeId === 0) {
+          console.log("committeeIdStr", committeeIdStr, "updating candidate votes");
+=======
       const updatedCandidateResult = participantState.map(candidate => {
         // Update votes directly on the candidate if committeeId is 0
         if (isDetailedResults === false) {
           // console.log("committeeIdStr", committeeIdStr, "updating candidate votes");
+>>>>>>> sanad
           return {
             ...candidate,
             votes: data[committeeIdStr][candidate.id.toString()] || candidate.votes,
           };
         }
 
+<<<<<<< HEAD
+        // If candidate has committeeVotes and committeeId is not 0, update committeeVotes
+        if (candidate.committeeVotes) {
+          console.log("committeeIdStr", committeeIdStr, "updating committee");
+          const updatedVotes = candidate.committeeVotes.map(committeeVote => {
+            if (committeeVote.electionCommittee === committeeId) {
+=======
         // If candidate has committeeResults and committeeId is not 0, update committeeResults
         if (isDetailedResults === true) {
           // console.log("committeeIdStr", committeeIdStr, "updating committee", "Participant: ", candidate, "data: ", data);
 
           const updatedVotes = candidate.committeeResults.map(committeeVote => {
             if (committeeVote.committee === committeeId) {
+>>>>>>> sanad
               return {
                 ...committeeVote,
                 votes: data[committeeIdStr][candidate.id.toString()] || committeeVote.votes,
@@ -714,7 +834,11 @@ const Elections = (state = IntialState, action) => {
 
           return {
             ...candidate,
+<<<<<<< HEAD
+            committeeVotes: updatedVotes,
+=======
             committeeResults: updatedVotes,
+>>>>>>> sanad
           };
         }
 
@@ -723,11 +847,19 @@ const Elections = (state = IntialState, action) => {
 
       return {
         ...state,
+<<<<<<< HEAD
+        ...(resultType === "parties"
+          ? { electionParties: updatedCandidateResult }
+          : resultType === "candidates"
+            ? { electionCandidates: updatedCandidateResult }
+            : resultType === "partyCandidates"
+=======
         ...(electionMethod === "parties"
           ? { electionParties: updatedCandidateResult }
           : electionMethod === "candidateOnly"
             ? { electionCandidates: updatedCandidateResult }
             : electionMethod === "partyCandidates"
+>>>>>>> sanad
               ? { electionPartyCandidates: updatedCandidateResult }
               : {}),
         isElectionPartyCandidateResultUpdate: true,
@@ -744,6 +876,80 @@ const Elections = (state = IntialState, action) => {
         isElectionCommitteeResultUpdatedFail: true,
       };
 
+<<<<<<< HEAD
+
+    // Election Campaigns
+    case GET_ELECTION_CAMPAIGNS: {
+      return {
+        ...state,
+        error: action.payload.error,
+        isElectionCampaignCreated: false,
+        isElectionCampaignSuccess: true,
+      };
+    }
+
+    case ADD_ELECTION_CAMPAIGN_SUCCESS:
+      return {
+        ...state,
+        isElectionCampaignCreated: true,
+        electionCampaigns: [
+          ...state.electionCampaigns,
+          action.payload.data,
+        ],
+        isElectionCampaignAdd: true,
+        isElectionCampaignAddFail: false,
+      };
+
+    case ADD_ELECTION_CAMPAIGN_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionCampaignAdd: false,
+        isElectionCampaignAddFail: true,
+      };
+    case UPDATE_ELECTION_CAMPAIGN_SUCCESS:
+      return {
+        ...state,
+        electionCampaigns: state.electionCampaigns.map(
+          (electionCampaign) =>
+            electionCampaign.id.toString() ===
+              action.payload.data.id.toString()
+              ? { ...electionCampaign, ...action.payload.data }
+              : electionCampaign
+        ),
+        isElectionCampaignUpdate: true,
+        isElectionCampaignUpdateFail: false,
+      };
+    case UPDATE_ELECTION_CAMPAIGN_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionCampaignUpdate: false,
+        isElectionCampaignUpdateFail: true,
+      };
+    case DELETE_ELECTION_CAMPAIGN_SUCCESS:
+      return {
+        ...state,
+        electionCampaigns: state.electionCampaigns.filter(
+          (electionCampaign) =>
+            electionCampaign.id.toString() !==
+            action.payload.electionCampaign.toString()
+        ),
+        isElectionCampaignDelete: true,
+        isElectionCampaignDeleteFail: false,
+      };
+    case DELETE_ELECTION_CAMPAIGN_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        isElectionCampaignDelete: false,
+        isElectionCampaignDeleteFail: true,
+      };
+
+
+
+=======
+>>>>>>> sanad
     default:
       return { ...state };
   }

@@ -6,9 +6,15 @@ import {
   UPDATE_CAMPAIGN_GUARANTEE,
   UPDATE_CAMPAIGN_GUARANTEE_SUCCESS,
   UPDATE_CAMPAIGN_GUARANTEE_FAIL,
+<<<<<<< HEAD
+  ADD_NEW_CAMPAIGN_GUARANTEE,
+  ADD_NEW_CAMPAIGN_GUARANTEEN_SUCCESS,
+  ADD_NEW_CAMPAIGN_GUARANTEEN_FAIL,
+=======
   ADD_CAMPAIGN_GUARANTEE,
   ADD_CAMPAIGN_GUARANTEEN_SUCCESS,
   ADD_CAMPAIGN_GUARANTEEN_FAIL,
+>>>>>>> sanad
   DELETE_CAMPAIGN_GUARANTEE,
   DELETE_CAMPAIGN_GUARANTEE_SUCCESS,
   DELETE_CAMPAIGN_GUARANTEE_FAIL,
@@ -45,6 +51,20 @@ export const updateCampaignGuaranteeFail = error => ({
   payload: error,
 });
 
+<<<<<<< HEAD
+export const addNewCampaignGuarantee = campaignCampaignGuarantee => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEE,
+  payload: campaignCampaignGuarantee,
+});
+
+export const addNewCampaignGuaranteeSuccess = campaignCampaignGuarantee => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEEN_SUCCESS,
+  payload: campaignCampaignGuarantee,
+});
+
+export const addNewCampaignGuaranteeFail = error => ({
+  type: ADD_NEW_CAMPAIGN_GUARANTEEN_FAIL,
+=======
 export const addCampaignGuarantee = campaignCampaignGuarantee => ({
   type: ADD_CAMPAIGN_GUARANTEE,
   payload: campaignCampaignGuarantee,
@@ -57,6 +77,7 @@ export const addCampaignGuaranteeSuccess = campaignCampaignGuarantee => ({
 
 export const addCampaignGuaranteeFail = error => ({
   type: ADD_CAMPAIGN_GUARANTEEN_FAIL,
+>>>>>>> sanad
   payload: error,
 });
 

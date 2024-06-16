@@ -1,7 +1,11 @@
 # Campaign Serializers
 from rest_framework import serializers
 from apps.notifications.models import UserNotification, CampaignNotification, ElectionNotification
+<<<<<<< HEAD
+from helper.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+=======
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
+>>>>>>> sanad
 from django.contrib.auth import get_user_model
 
 

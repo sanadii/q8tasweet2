@@ -2,7 +2,11 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from apps.candidates.models import Candidate
+<<<<<<< HEAD
+from helper.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
+=======
 from utils.admin_helper import TaskAdminFields, TrackAdminFields, ReadOnlyTrackFields
+>>>>>>> sanad
 
 class CandidatesAdmin(admin.ModelAdmin):
     list_display = ['name', 'gender', 'status', 'priority']

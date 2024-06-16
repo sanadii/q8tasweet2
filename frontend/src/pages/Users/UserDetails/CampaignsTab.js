@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+<<<<<<< HEAD
+  deleteElectionCampaign,
+  addNewElectionCampaign,
+=======
   deleteCampaign,
   addCampaign,
+>>>>>>> sanad
 } from "../../../store/actions";
 import { Link } from "react-router-dom";
 
@@ -72,12 +77,20 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
   // Delete Data
   const handleDeleteElectionCampaign = () => {
     if (electionCampaign) {
+<<<<<<< HEAD
+      dispatch(deleteElectionCampaign(electionCampaign.id));
+=======
       dispatch(deleteCampaign(electionCampaign.id));
+>>>>>>> sanad
       setDeleteModal(false);
     }
   };
 
+<<<<<<< HEAD
+  const onClickDelete = (electionCampaign) => {
+=======
   const onDeleteCheckBoxClick = (electionCampaign) => {
+>>>>>>> sanad
     setElectionCampaign(electionCampaign);
     setDeleteModal(true);
   };
@@ -159,7 +172,11 @@ const CampaignsTab = ({ toggleProfileView, viewedProfileId }) => {
                             <li>
                               <DropdownItem
                                 className="d-flex align-items-center"
+<<<<<<< HEAD
+                                onClick={() => onClickDelete(campaign)}
+=======
                                 onClick={() => onDeleteCheckBoxClick(campaign)}
+>>>>>>> sanad
                               >
                                 <i className="ri-delete-bin-5-fill text-muted me-2"></i>
                                 Delete

@@ -1,6 +1,10 @@
 {
   "dependencies": {
+<<<<<<< HEAD
+    "postcss": "^8.1.0"
+=======
     "postcss": "^8.1.0",
     "react-bootstrap": "^2.10.2"
+>>>>>>> sanad
   }
 }

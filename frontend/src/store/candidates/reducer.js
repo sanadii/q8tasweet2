@@ -6,8 +6,13 @@ import {
   // Candidate
   GET_CANDIDATES,
   GET_CANDIDATE_DETAILS,
+<<<<<<< HEAD
+  ADD_NEW_CANDIDATE_SUCCESS,
+  ADD_NEW_CANDIDATE_FAIL,
+=======
   ADD_CANDIDATE_SUCCESS,
   ADD_CANDIDATE_FAIL,
+>>>>>>> sanad
   UPDATE_CANDIDATE_SUCCESS,
   UPDATE_CANDIDATE_FAIL,
   DELETE_CANDIDATE_SUCCESS,
@@ -82,7 +87,11 @@ const Candidates = (state = IntialState, action) => {
       };
     }
 
+<<<<<<< HEAD
+    case ADD_NEW_CANDIDATE_SUCCESS:
+=======
     case ADD_CANDIDATE_SUCCESS:
+>>>>>>> sanad
       return {
         ...state,
         isCandidateCreated: true,
@@ -90,7 +99,11 @@ const Candidates = (state = IntialState, action) => {
         isCandidateAdd: true,
         isCandidateAddFail: false,
       };
+<<<<<<< HEAD
+    case ADD_NEW_CANDIDATE_FAIL:
+=======
     case ADD_CANDIDATE_FAIL:
+>>>>>>> sanad
       return {
         ...state,
         error: action.payload,

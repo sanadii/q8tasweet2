@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardHeader, CardBody, Col, Container, Row } from "reactstrap";
+<<<<<<< HEAD
+import { Link } from "react-router-dom";
+import { getCandidates, getElections } from "../../store/actions";
+import Countdown from "react-countdown";
+import { candidateSelector, electionSelector } from 'selectors';
+=======
 import { Link, useNavigate } from "react-router-dom";
 import { getCandidates, getElections } from "../../store/actions";
 import Countdown from "react-countdown";
 import { candidateSelector, electionSelector } from 'selectors';
 import { useProfile } from "shared/hooks";
+>>>>>>> sanad
 
 const MEDIA_URL = process.env.REACT_APP_MEDIA_URL;
 
 const Public = () => {
     const dispatch = useDispatch();
+<<<<<<< HEAD
+=======
     const { token } = useProfile();
     const navigate = useNavigate();
+>>>>>>> sanad
 
     document.title = "الرئيسية - كويت تصويت";
     const [displayCategory, setCategory] = useState("All");
@@ -20,6 +30,10 @@ const Public = () => {
     const [election, setElection] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> sanad
     // Candidate Data
     useEffect(() => {
         if (!isCandidateSuccess) {
@@ -65,9 +79,12 @@ const Public = () => {
     const randomCandidates = shuffleArray([...candidates]).slice(0, 5);
 
 
+<<<<<<< HEAD
+=======
     // if (token) {
     //     navigate('/dashboard')
     // }
+>>>>>>> sanad
     return (
         <React.Fragment>
             <div className="page-content">

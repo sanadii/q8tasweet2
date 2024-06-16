@@ -12,7 +12,11 @@ import { Form } from "reactstrap";
 
 import { UncontrolledAlert } from 'reactstrap';
 import { dataGroup, messageTypes, dataTypes, userGroups } from "shared/constants";
+<<<<<<< HEAD
+import { useWebSocketContext } from 'utils/WebSocketContext';
+=======
 import { useWebSocketContext } from 'shared/utils';
+>>>>>>> sanad
 
 const READY_STATE_OPEN = 1;
 

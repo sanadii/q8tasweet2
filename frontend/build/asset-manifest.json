@@ -1,8 +1,18 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.css": "/static/css/main.5ab8c23c.css",
     "main.js": "/static/js/main.e73b76c5.js",
     "static/js/522.5a036a8b.chunk.js": "/static/js/522.5a036a8b.chunk.js",
+=======
+    "main.css": "/static/css/main.b4b84248.css",
+<<<<<<< HEAD
+    "main.js": "/static/js/main.b64af473.js",
+=======
+    "main.js": "/static/js/main.194e7603.js",
+>>>>>>> 836ca04c6f9bf2ebe36b72fbe2e19539cdde086a
+    "static/js/522.963fa583.chunk.js": "/static/js/522.963fa583.chunk.js",
+>>>>>>> b8f542d5e774864905c059891f0ccbdc03cf3b39
     "static/media/kuwait-bg.png": "/static/media/kuwait-bg.859ab5d5fe5a98c8520d.png",
     "static/media/remixicon.svg?t=1590207869815": "/static/media/remixicon.1664a258a7e7714f6f8d.svg",
     "static/media/boxicons.svg": "/static/media/boxicons.f80cc694af79b88fde78.svg",
@@ -17,7 +27,11 @@
     "static/media/materialdesignicons-webfont.woff2?v=6.5.95": "/static/media/materialdesignicons-webfont.606b16427a59a5a97afb.woff2",
     "static/media/boxicons.woff": "/static/media/boxicons.1a7e2e2bf3a855e674d4.woff",
     "static/media/boxicons.ttf": "/static/media/boxicons.22afc8ee5cfc540cddff.ttf",
+<<<<<<< HEAD
     "static/media/img-1.jpg": "/static/media/img-1.53d0bcae9922629289e7.jpg",
+=======
+    "static/media/img-1.jpg": "/static/media/img-1.5dc71661fee626dd920b.jpg",
+>>>>>>> b8f542d5e774864905c059891f0ccbdc03cf3b39
     "static/media/img-3.jpg": "/static/media/img-3.1c0b562c2ed3d35bd905.jpg",
     "static/media/la-solid-900.eot": "/static/media/la-solid-900.4184d740eae2fb727bfe.eot",
     "static/media/la-solid-900.ttf": "/static/media/la-solid-900.279f38601f1d1655255f.ttf",
@@ -74,6 +88,7 @@
     "static/media/avatar-3.jpg": "/static/media/avatar-3.36fbb9e4e257ecafc0da.jpg",
     "static/media/error.svg": "/static/media/error.bc754a5b8a10c14e55a192ab1196a76d.svg",
     "static/media/bell.svg": "/static/media/bell.bb6565fedee4ebe7d4402bd4a5ef0619.svg",
+<<<<<<< HEAD
     "static/media/btc.svg": "/static/media/btc.0a74ea3b5676029550b7407ce518a67a.svg",
     "index.html": "/index.html",
     "static/media/dash.svg": "/static/media/dash.0a88c68a2e0e412135648038867b7303.svg",
@@ -82,6 +97,21 @@
   },
   "entrypoints": [
     "static/css/main.5ab8c23c.css",
+<<<<<<< HEAD
     "static/js/main.e73b76c5.js"
+=======
+    "static/js/main.22206555.js"
+=======
+    "index.html": "/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.b4b84248.css",
+<<<<<<< HEAD
+    "static/js/main.b64af473.js"
+=======
+    "static/js/main.194e7603.js"
+>>>>>>> 836ca04c6f9bf2ebe36b72fbe2e19539cdde086a
+>>>>>>> b8f542d5e774864905c059891f0ccbdc03cf3b39
+>>>>>>> 1efd1eccf592b3121945130e38a50c6e0db2db64
   ]
 }

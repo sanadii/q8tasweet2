@@ -5,9 +5,15 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getCandidates,
+<<<<<<< HEAD
+  addNewCandidate,
+  updateCandidate,
+} from "../../../../store/actions";
+=======
   addCandidate,
   updateCandidate,
 } from "store/actions";
+>>>>>>> sanad
 
 // Form validation imports
 import * as Yup from "yup";
@@ -100,7 +106,11 @@ export const CandidateModal = ({
           election_id: election_id,
           candidate_id: values["candidate_id"],
         };
+<<<<<<< HEAD
+        dispatch(addNewCandidate(newCandidate));
+=======
         dispatch(addCandidate(newCandidate));
+>>>>>>> sanad
       }
       validation.resetForm();
       toggle();
@@ -204,7 +214,11 @@ const AddCandidate = ({ election_id, dispatch }) => {
                   election_id: election_id,
                   candidate_id: candidate.id,
                 };
+<<<<<<< HEAD
+                dispatch(addNewCandidate(newCandidate));
+=======
                 dispatch(addCandidate(newCandidate));
+>>>>>>> sanad
               }}
             >
               <div className="d-flex align-items-center">

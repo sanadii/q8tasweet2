@@ -9,7 +9,11 @@ import { Col, Container, Form, FormFeedback, Input, Modal, ModalBody, ModalHeade
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
+<<<<<<< HEAD
+import { getGroups, updateGroup, deleteGroup, addNewGroup } from "store/actions";
+=======
 import { getGroups, updateGroup, deleteGroup, addGroup } from "store/actions";
+>>>>>>> sanad
 
 import { authSelector } from 'selectors';
 
@@ -133,7 +137,11 @@ const Groups = () => {
           category: values.category,
         };
         // save new Folder
+<<<<<<< HEAD
+        dispatch(addNewGroup(newCategory));
+=======
         dispatch(addGroup(newCategory));
+>>>>>>> sanad
         validation.resetForm();
       }
       toggle();
@@ -443,7 +451,11 @@ const Groups = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
+<<<<<<< HEAD
+                id="addNewCategory"
+=======
                 id="addCategory"
+>>>>>>> sanad
               >
                 {!!isEdit ? "Save" : "Add Category"}
               </button>
