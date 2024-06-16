@@ -95,7 +95,7 @@ class ElectionParty(TrackModel):
         permissions = []
 
     def __str__(self):
-        return f"{self.party.name} in {self.election.title}"
+        return f"{self.party.name} in {self.election}"
 
     def delete(self, *args, **kwargs):
         request = kwargs.pop("request", None)
@@ -156,4 +156,4 @@ class ElectionPartyCandidate(TrackModel):
         permissions = []
 
     def __str__(self):
-        return f"{self.candidate.name} for {self.election_party.party.name} in {self.election_party.election.title}"
+        return f"{self.candidate.name} for {self.election_party.party.name} in {self.election_party.election}"

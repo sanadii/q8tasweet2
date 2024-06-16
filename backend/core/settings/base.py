@@ -27,7 +27,7 @@ DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = os.environ.get("DB_PORT")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECURITY WARNING: Secret keys are kept outside in a .env file!
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -81,13 +81,16 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_extensions",
     "core",
+    
+    # Q8Tasweet Apps
     "apps.auths",
     "apps.settings",
     "apps.tags",
     "apps.elections",
     "apps.candidates",
-    "apps.schemas",
     "apps.campaigns",
+    "apps.schemas",
+
 ]
 
 # Middleware configuration
@@ -106,6 +109,10 @@ MIDDLEWARE = [
 ROOT_URLCONF = "core.urls"
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 CORS_ALLOW_CREDENTIALS = True
+
+FRONTEND = os.path.join(BASE_DIR, "../frontend/build")
+print("BASE_DIR: ", BASE_DIR)
+
 
 # Template configuration
 TEMPLATES = [
@@ -225,3 +232,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "shankar.wxit@gmail.com"
 EMAIL_HOST_PASSWORD = "mehynnlprcmqilwn"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+print("SECRET_KEY:", os.environ.get("SECRET_KEY"))
+print("DB_NAME:", os.environ.get("DB_NAME"))
+print("DB_USER:", os.environ.get("DB_USER"))
+print("DB_PASSWORD:", os.environ.get("DB_PASSWORD"))
+print("DB_HOST:", os.environ.get("DB_HOST"))
+print("DB_PORT:", os.environ.get("DB_PORT"))

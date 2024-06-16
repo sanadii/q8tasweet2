@@ -1,0 +1,84 @@
+# etc/ngnix/sites-enabled/q8tasweet
+
+# New
+server {
+    listen 80;
+    server_name q8tasweet.com www.q8tasweet.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;  # Forward requests to Gunicorn
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /static/ {
+        alias /root/q8tasweet/frontend/build/static/;
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+    }
+
+    location /media/ {
+        alias /root/q8tasweet/backend/media/;
+    }
+
+    # Add other location blocks or SSL settings as needed
+}
+
+
+# Old 
+server {
+    listen 80;
+    server_name q8tasweet.com www.q8tasweet.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;  # Forward requests to Gunicorn
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /static/ {
+        alias /root/q8tasweet/frontend/build/static/;
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+        
+        types {
+            text/css css;
+            application/javascript js;
+        }
+    }
+
+
+    location /media/ {
+        alias /root/q8tasweet/backend/media/;
+    }
+
+    # Add other location blocks or SSL settings as needed
+}
+
+
+
+# Nginx Config
+server {
+    listen 80;
+    server_name q8tasweet.com www.q8tasweet.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;  # Forward requests to Gunicorn
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /static/ {
+        alias /root/q8tasweet/backend/core/static/;
+    }
+
+    location /media/ {
+        alias /root/q8tasweet/backend/media/;
+    }
+}
