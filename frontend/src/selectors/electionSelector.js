@@ -6,6 +6,7 @@ const selectElectionsState = state => state.Elections;
 export const electionSelector = createSelector(
   selectElectionsState,
   (electionsState) => ({
+    
     // Election Selectors
     elections: electionsState.elections || [],
     recentElections: electionsState.recentElections || [],
