@@ -1,8 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from apps.campaigns.models import CampaignSorting
-from apps.elections.models import ElectionCommittee, ElectionSorting
+from apps.schemas.campaign_sorting.models import CampaignSorting, ElectionSorting
+from apps.schemas.committees.models import Committee
 
 class CampaignConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -50,7 +50,7 @@ class CampaignConsumer(AsyncWebsocketConsumer):
         )
         
         # print(f"CampaignConsumer: Received electionSorting message from CampaignConsumer: {data}")
-        # Check if user is in ElectionCommittee
+        # Check if user is in Committee
         is_user_in_election_committee = await self.is_user_in_election_committee(data)
         print("Is user in committee:", is_user_in_election_committee)
 
@@ -112,7 +112,7 @@ class CampaignConsumer(AsyncWebsocketConsumer):
         electionCommitteeId = data.get('electionCommitteeId')
         electionId = data.get('electionId')
         print("user: ", userId, "electionId: ", electionId, "committeeId: ", electionCommitteeId)
-        return ElectionCommittee.objects.filter(id=electionCommitteeId, sorter=userId, election=electionId).exists()
+        return Committee.objects.filter(id=electionCommitteeId, sorter=userId, election=electionId).exists()
 
     async def campaign_message(self, event):
         response_message = json.dumps(event['message'])

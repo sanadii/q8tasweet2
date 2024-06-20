@@ -5,7 +5,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils.timesince import timesince
 
 from apps.auths.models import User
-from apps.campaigns.models import Campaign, CampaignSorting
+from apps.campaigns.models import Campaign
+from apps.schemas.campaign_sorting.models import CampaignSorting
 
 
 class ElectionConsumer(AsyncWebsocketConsumer):

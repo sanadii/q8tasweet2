@@ -1,17 +1,17 @@
 from django.urls import path, re_path
 from channels.routing import ProtocolTypeRouter, URLRouter, ChannelNameRouter
 
-# from webSocket.consumers.ElectionConsumer import ElectionConsumer
-# from webSocket.consumers.CampaignConsumer import CampaignConsumer, CampaignConsumer
+from webSocket.consumers.ElectionConsumer import ElectionConsumer
+from webSocket.consumers.CampaignConsumer import CampaignConsumer, CampaignConsumer
 # from webSocket.consumers.NotificationConsumer import NotificationConsumer
-# from webSocket.consumers.GlobalConsumer import GlobalConsumer
+from webSocket.consumers.GlobalConsumer import GlobalConsumer
 
 # from .consumers import consumers
 
 websocket_urlpatterns = [
     
     # Global Channel
-    # path('ws/Global/', GlobalConsumer.as_asgi()),
+    path('ws/Global/', GlobalConsumer.as_asgi()),
 
     # path('ws/election/<str:slug>/', ElectionConsumer.as_asgi()),
     # path('ws/campaigns/<str:slug>/', CampaignConsumer.as_asgi()),

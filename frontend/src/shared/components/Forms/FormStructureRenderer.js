@@ -26,11 +26,13 @@ const FormStructureRenderer = ({
     default:
       return (
         <Col lg={colSize} className="mb-2">
-          {(!icon  && (type !== "checkBox")) &&(
-            <Label htmlFor={id} className="form-label">
-              {label}
-            </Label>
-          )}
+          {label &&
+
+            (!icon && (type !== "checkBox")) && (
+              <Label htmlFor={id} className="form-label">
+                {label}
+              </Label>
+            )}
           {renderInputFields()}
           {validation.touched[name] && validation.errors[name] && (
             <FormFeedback type="invalid">{validation.errors[name]}</FormFeedback>

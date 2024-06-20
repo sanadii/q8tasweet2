@@ -17,6 +17,7 @@ import ActivitiesTab from "pages/CampaignDetails/ActivitiesTab";
 // Election
 import CandidatesTab from "pages/CampaignDetails/CandidatesTab";
 import SearchTab from "pages/Electors/SearchTab";
+import ElectorAttendance from "pages/Electors/ElectorAttendance";
 
 const CampaignRoutes = [
     // Campaign Special Dashboard
@@ -33,5 +34,7 @@ const CampaignRoutes = [
     // Election
     { path: "/campaign/candidates", component: <CandidatesTab /> },
     { path: "/campaign/electors-search", component: <SearchTab /> },
+    { path: "/campaign/electors-attendance", component: <ElectorAttendance /> },
+    
 ]
 export default CampaignRoutes;

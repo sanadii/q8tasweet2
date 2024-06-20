@@ -10,7 +10,10 @@ import { layoutSelector, campaignSelector } from 'selectors';
 import { getCampaignDetails } from "store/actions";
 
 // Menus
-import { useAdminMenu, useCampaignMenu, useContributorMenu, useModeratorMenu, useEditorMenu, useSettingsMenu, useUserMenu } from './DashboardMenu';
+
+import { useContributorMenu, useModeratorMenu, useEditorMenu, useSettingsMenu, useUserMenu } from './DashboardMenu';
+import { useAdminMenu } from "./useAdminMenu"
+import { useCampaignMenu } from "./useCampaignMenu"
 import { usePublicMenu } from './PublicMenu';
 
 

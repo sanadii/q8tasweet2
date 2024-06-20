@@ -383,10 +383,10 @@ function* onAddCampaignAttendee({ payload: campaignAttendee }) {
   try {
     const response = yield call(addCampaignAttendee, campaignAttendee);
     yield put(addCampaignAttendeeSuccess(response));
-    // toast.success("CampaignAttendee Added Successfully", { autoClose: 2000 });
+    toast.success("CampaignAttendee Added Successfully", { autoClose: 2000 });
   } catch (error) {
     yield put(addCampaignAttendeeFail(error));
-    // toast.error("CampaignAttendee Added Failed", { autoClose: 2000 });
+    toast.error("CampaignAttendee Added Failed", { autoClose: 2000 });
   }
 }
 

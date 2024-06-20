@@ -17,10 +17,17 @@ from apps.schemas.areas.serializers import AreaSerializer
 # Serializers
 class CommitteeSerializer(serializers.ModelSerializer):
     """Serializer for the Committee model."""
+    name = serializers.SerializerMethodField("get_committee_name")
 
     class Meta:
         model = Committee
-        fields = ["id", "type", "letters", "area_name", "committee_site"]
+        fields = ["id", "type", "letters", "area_name", "committee_site", "name"]
+
+    def get_committee_name(self, obj):
+        committee_site_name = obj.committee_site.name
+        committee_type = obj.type
+        committee_id = obj.id
+        return f"{committee_site_name} - {committee_type} {committee_id}"
 
 
 class CommitteeSiteSerializer(serializers.ModelSerializer):

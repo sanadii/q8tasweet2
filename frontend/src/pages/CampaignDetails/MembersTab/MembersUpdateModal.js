@@ -133,7 +133,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
     },
     {
       id: "committee-field",
-      name: "اللجان",
+      name: "committee",
       label: "اللجنة",
       type: "selectSingle",
       options: committeeOptions,

@@ -74,51 +74,13 @@ const ElectorSearchDisplay = ({
                     />
             },
             {
-                Header: "العمر",
-                Cell: (cellProps) =>
-                    <SimpleNumber
-                        number={cellProps.row.original.age}
-                    />
-            },
-            {
-                Header: "المنطقة",
-                Cell: (cellProps) => {
-                    const address = {
-                        block: cellProps.row.original.block,
-                        street: cellProps.row.original.street,
-                        lane: cellProps.row.original.lane,
-                        house: cellProps.row.original.house,
-                    };
-
-                    return (
-                        <Title
-                            title={cellProps.row.original.areaName}
-                            subTitle={`ق${address.block}, ش${address.street}, ج${address.lane}, م${address.house}`}
-                        />
-                    );
-                },
-                display: electorAddress
-            },
-
-            {
-                Header: "اللجنة",
-                Cell: (cellProps) =>
-                    <Title
-                        title={cellProps.row.original.committeeSiteName}
-                        subTitle={`لجنة ${cellProps.row.original.committee} - ${cellProps.row.original.committeeType}`}
-                    />,
-                display: electorCommittee
-
-            },
-            {
                 Header: "اجراءات",
                 Cell: (cellProps) =>
                     <Actions
-                        options={["view", "addGuarantee", "addAttendee"]}
+                        options={["addAttendee", "deleteAttendee", "updateAttendee"]}
                         cell={cellProps}
                         schema={electionSchema}
                         handleItemClicks={handleElectorClick}
-                        // handleItemDeleteClick={handleItemDeleteClick}
                         selectedGuaranteeGroup={selectedGuaranteeGroup}
 
                         // cellProps={cellProps}
@@ -155,24 +117,7 @@ const ElectorSearchDisplay = ({
 
     return (
         <React.Fragment>
-            <Row>
-                <Input
-                    type="select"
-                    className="form-select"
-                    name="guaranteeGroup"
-                    id="guaranteeGroup-field"
-                    onChange={(e) => setSelectedGuaranteeGroup(e.target.value)}
-                    value={selectedGuaranteeGroup}
-                >
-                    {guaranteeGroupOptions.map(group => (
-                        <option key={group.id} value={group.value}>
-                            {group.label}
-                        </option>
-                    ))}
-
-                </Input>
-            </Row>
-
+    
             {
                 electorList && electorList.length ? (
                     <TableContainer

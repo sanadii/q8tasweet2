@@ -25,8 +25,8 @@ class GetElectorsByAll(APIView):
 
     def get(self, request, *args, **kwargs):
         schema = request.GET.get("schema")
-        election = get_election_by_slug(schema)     
-        
+        election = get_election_by_slug(schema)
+
         with schema_context(schema):
             if hasattr(request, "response"):
                 return request.response
@@ -43,7 +43,7 @@ class GetElectorsByCategory(APIView):
 
     def get(self, request, *args, **kwargs):
         schema = request.GET.get("schema")
-        election = get_election_by_slug(schema)     
+        election = get_election_by_slug(schema)
 
         with schema_context(schema):
             if hasattr(request, "response"):
@@ -65,7 +65,6 @@ class GetElectorsBySearch(APIView):
         with schema_context(schema):
             electors = restructure_electors_by_search(request)
             serializer = ElectorSerializer(electors, many=True)
-            print("electors: ", electors)
 
             return Response({"data": serializer.data}, status=200)
 

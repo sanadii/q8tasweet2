@@ -51,18 +51,18 @@ class CampaignNotification(BaseNotification):
     def __str__(self):
         return f"{self.message}"
 
-class CampaignPartyNotification(BaseNotification):
-    campaign = models.ForeignKey(CampaignParty, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_campaign_partiess")
+# class CampaignPartyNotification(BaseNotification):
+#     campaign = models.ForeignKey(CampaignParty, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_campaign_partiess")
 
-    class Meta:
-        db_table = "campaign_party_notification"
-        verbose_name = "Campaign Party Notification"
-        verbose_name_plural = "Campaign Party Notifications"
-        default_permissions = []
-        permissions = []
+#     class Meta:
+#         db_table = "campaign_party_notification"
+#         verbose_name = "Campaign Party Notification"
+#         verbose_name_plural = "Campaign Party Notifications"
+#         default_permissions = []
+#         permissions = []
 
-    def __str__(self):
-        return f"{self.message}"
+#     def __str__(self):
+#         return f"{self.message}"
 
 class UserNotification(BaseNotification):
     user_group = models.CharField(max_length=50, choices=USER_GROUP_CHOICES)

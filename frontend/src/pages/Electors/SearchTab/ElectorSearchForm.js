@@ -35,8 +35,6 @@ const ElectorSearchForm = ({ electionSchema }) => {
         };
         dispatch(getElectorsBySearch(searchParameters));
     };
-
-
     const electorAddress = false
     const electorCommittee = false
 

@@ -93,9 +93,11 @@ const FormFields = ({ field, validation, formStructure, formStyle }) => {
                             checked={validation.values[name] || false}
                             invalid={validation.touched[name] && validation.errors[name]}
                         />
-                        <Label className="form-check-label" for={id}>
-                            {label}
-                        </Label>
+                        {label &&
+                            <Label className="form-check-label" for={id}>
+                                {label}
+                            </Label>
+                        }
                     </div>
                 );
 

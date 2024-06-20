@@ -178,6 +178,33 @@ const isMemberRoleOption = (campaignRoles, roleCondition, roleId) => {
 
 // Get Campaign Agent Committees
 
+const useCampaignMenuCondition = (currentCampaignMember) => {
+  const currentCampaignMemberRole = currentCampaignMember ? currentCampaignMember?.roleCodename : "";
+
+  const roleGroups = {
+    campaignManagers: ["campaignModerator", "partyAdmin", "campaignCandidate", "campaignAdmin"],
+    campaignAdmins: ["campaignFieldAdmin", "campaignDigitalAdmin"],
+    campaignAgents: ["campaignFieldAgent", "campaignDigitalAgent"],
+    campaignDelegates: ["campaignFieldDelegate", "campaignDigitalDelegate"]
+  };
+
+  // Function to find the group name of the campaign role
+  const getRoleGroupName = (roleCodename) => {
+    for (const [groupName, roles] of Object.entries(roleGroups)) {
+      if (roles.includes(roleCodename)) {
+        return groupName;
+      }
+    }
+    return null; // If no group matches the role
+  };
+
+  // Get the group name for the current campaign member's role
+  const currentCampaignMemberGroup = getRoleGroupName(currentCampaignMemberRole);
+
+  return currentCampaignMemberGroup;
+};
+
+
 
 
 
@@ -193,4 +220,5 @@ export {
   useSupervisorMembers, // Deprecated: Keep for backward compatibility if needed
   useCampaignRoleString,
   isMemberRoleOption,
+  useCampaignMenuCondition,
 };

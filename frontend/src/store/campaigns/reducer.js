@@ -500,15 +500,16 @@ const Campaigns = (state = IntialState, action) => {
     }
 
     case ADD_CAMPAIGN_ATTENDEE_SUCCESS:
+      console.log("we are calling inside the ADD_CAMPAIGN_ATTENDEE_SUCCESS: ", action.payload.data)
       return {
         ...state,
         isCampaignAttendeeCreated: true,
         campaignAttendees: [...state.campaignAttendees, action.payload.data],
-        campaignGuarantees: state.campaignGuarantees.map((campaignGuarantee) =>
-          campaignGuarantee.elector.toString() === action.payload.data.elector.toString()
-            ? { ...campaignGuarantee, ...action.payload.data.attended }
-            : campaignGuarantee
-        ),
+        // campaignGuarantees: state.campaignGuarantees.map((campaignGuarantee) =>
+        //   campaignGuarantee.elector.toString() === action.payload.data.elector.toString()
+        //     ? { ...campaignGuarantee, ...action.payload.data.attended }
+        //     : campaignGuarantee
+        // ),
 
         isCampaignAttendeeAdd: true,
         isCampaignAttendeeAddFail: false,

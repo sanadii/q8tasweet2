@@ -82,6 +82,10 @@ INSTALLED_APPS = [
     "django_extensions",
     "core",
     
+    # WebSocket and related apps
+    "webSocket",
+    "apps.notifications",
+    
     # Q8Tasweet Apps
     "apps.auths",
     "apps.settings",
@@ -90,8 +94,9 @@ INSTALLED_APPS = [
     "apps.candidates",
     "apps.campaigns",
     "apps.schemas",
-
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Middleware configuration
 MIDDLEWARE = [

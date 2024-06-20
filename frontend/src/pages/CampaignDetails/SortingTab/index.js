@@ -5,27 +5,25 @@ import { TableContainer } from 'shared/components';
 import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
 import { useWebSocketContext } from 'shared/utils';
 
-
 const SortingTab = () => {
-  const { campaign, campaignElectionCandidates, campaignElectionCommittees, currentCampaignMember } = useSelector(campaignSelector);
+  const { campaign, currentElection, currentCampaignMember } = useSelector(campaignSelector);
   const { userId } = useSelector(userSelector);
-
-  const committeeId = currentCampaignMember.committee;
-  const committee = campaignElectionCommittees.find(c => c.id === committeeId);
-  const committeeName = committee?.name || 'Unknown Committee';
+  const committee = currentCampaignMember?.committee || {};
+  const committeeId = committee.id || null;
+  const committeeName = committee.name || 'Unknown Committee';
+  const electionId = campaign?.election?.id;
 
   const [candidatesSorting, setCandidatesSorting] = useState([]);
-  const electionId = campaign.election.id;
 
   useEffect(() => {
-    const initialSortingData = campaignElectionCandidates.map(candidate => ({
+    const initialSortingData = currentElection?.electionCandidates.map(candidate => ({
       electionId: electionId,
       candidateId: candidate.id,
       name: candidate.name,
-      committeeVote: candidate.committeeSorting.find(cs => cs.electionCommittee === committeeId)?.votes || 0
+      committeeVote: candidate?.committeeSorting?.find(cs => cs.electionCommittee === committeeId)?.votes || 0
     }));
     setCandidatesSorting(initialSortingData);
-  }, [campaignElectionCandidates, electionId, committeeId]);
+  }, [currentElection, electionId, committeeId]);
 
   const { sendMessage, lastMessage } = useWebSocketContext();
 
@@ -85,11 +83,11 @@ const SortingTab = () => {
       {
         Header: 'اسم المرشح',
         Cell: ({ row }) => (
-          <VoteButton 
-          candidateId={row.original.candidateId} 
-          increment={incrementVotes} 
-          decrement ={decrementVotes} 
-          name={row.original.name} 
+          <VoteButton
+            candidateId={row.original.candidateId}
+            increment={incrementVotes}
+            decrement={decrementVotes}
+            name={row.original.name}
           />
         ),
       },
@@ -97,7 +95,7 @@ const SortingTab = () => {
         Header: 'الأصوات',
         Cell: ({ row }) => <span className="nowrap">{row.original.committeeVote}</span>,
       },
-     
+
     ];
   }, [incrementVotes, decrementVotes]);
 
@@ -129,7 +127,6 @@ const SortingTab = () => {
 };
 
 export default SortingTab;
-
 
 const VoteButton = ({ candidateId, increment, decrement, name }) => (
   <>

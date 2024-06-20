@@ -33,6 +33,8 @@ const Actions = (cellProps) => {
 
     // Checking members vs committees
     const isCommitteeDelegate = !!currentCampaignMember?.committee;
+    const currentCampaignMemberCommittee = currentCampaignMember ? currentCampaignMember?.committee?.id : {};
+    console.log("currentCampaignMemberCommittee: ", currentCampaignMemberCommittee)
 
     // if user is not a member (eg Admin, SuperAdmin), to open a model to assign the Guarantor / Attendand (+ Committee)
     let campaignMember = currentCampaignMember ? currentCampaignMember.id : null;
@@ -110,7 +112,7 @@ const Actions = (cellProps) => {
                     const newCampaignAttendee = {
                         schema: schema,
                         member: campaignMember,
-                        // committee: campaignCommittee.id,
+                        committee: currentCampaignMemberCommittee,
                         elector: cell.row.original.id,
                         attended: true,
                     };

@@ -156,7 +156,9 @@ export default withRouter(VerticalLayout);
 
 
 const Menu = ({ item }) => (
-    item.isHeader ? (
+    (item.condition !== false &&
+
+        item.isHeader ? (
         <li className="menu-title"><span data-key="t-menu">{item.label}</span></li>
     ) : item.isCampaign ? (
         <div className="text-center">
@@ -173,20 +175,23 @@ const Menu = ({ item }) => (
     ) : (
         <MenuItem item={item} />
     )
+    )
 );
 
 const MenuItem = ({ item }) => (
-    <li className="nav-item">
-        <Link
-            className="nav-link menu-link"
-            to={item.link ? item.link : "/#"}
-        >
-            <i className={item.icon}></i> <span>{item.label}</span>
-            {item.badgeName && (
-                <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
-            )}
-        </Link>
-    </li>
+    (item.condition !== false &&
+        < li className="nav-item" >
+            <Link
+                className="nav-link menu-link"
+                to={item.link ? item.link : "/#"}
+            >
+                <i className={item.icon}></i> <span>{item.label}</span>
+                {item.badgeName && (
+                    <span className={"badge badge-pill bg-" + item.badgeColor} data-key="t-new">{item.badgeName}</span>
+                )}
+            </Link>
+        </li >
+    )
 );
 
 const CollapsibleMenuItem = ({ item }) => (
