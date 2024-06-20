@@ -65,6 +65,7 @@ const MembersList = () => {
   const [isEdit, setIsEdit] = useState(false);
   const activeRole = activeTab;
 
+  const isSuperiorCampaignMember = campaignMember && currentCampaignMember.roleId < campaignMember.roleId;
 
   const toggle = useCallback(() => {
     if (modal) {
@@ -212,11 +213,12 @@ const MembersList = () => {
           canChangeConfig={canChangeConfig}
           campaignMembers={campaignMembers}
           campaignRoles={campaignRoles}
+          currentCampaignMember={currentCampaignMember}
         />
       )
     }
   ], [handleCheckCellClick, handleItemDeleteClick, handleCheckAllClick,
-    campaignAttendees, campaignElectionCommittees, campaignGuarantees, campaignMembers, campaignRoles, canChangeCampaignSupervisor, canChangeConfig, handleCampaignMemberClicks
+    currentCampaignMember, campaignAttendees, campaignElectionCommittees, campaignGuarantees, campaignMembers, campaignRoles, canChangeCampaignSupervisor, canChangeConfig, handleCampaignMemberClicks
 
   ]);
 

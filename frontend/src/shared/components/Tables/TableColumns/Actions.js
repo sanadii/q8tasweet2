@@ -10,17 +10,14 @@ const Actions = (cellProps) => {
         cell, handleItemClicks, handleItemDeleteClick, options, schema,
 
         // guarantee
-        selectedGuaranteeGroup,
-        currentCampaignMember,
-        campaignGuarantees,
-        campaignAttendees,
+        selectedGuaranteeGroup, currentCampaignMember, campaignGuarantees, campaignAttendees,
         // campaignDetails,
         // electors,
-
 
     } = cellProps
 
     const cellPropId = cell.row.original.id
+
 
     let itemData
     if (schema) {
@@ -43,6 +40,30 @@ const Actions = (cellProps) => {
     let campaignCommittee = currentCampaignMember ? currentCampaignMember.committee : null;
     const isElectorInGuarantees = campaignGuarantees && campaignGuarantees.some(item => item.elector === cell.row.original.id);
     const isElectorInAttendees = campaignAttendees && campaignAttendees.some(item => item.elector === cell.row.original.id);
+
+
+    // Conditional Display
+    const isSuperiorCampaignMember = currentCampaignMember ?
+        cell.row.original?.roleId < currentCampaignMember?.roleId : false;
+
+    const isActualCampaignMember = currentCampaignMember ?
+        cell.row.original.roleId === currentCampaignMember.roleId : false;
+
+    let conditionalEditDisplay = true;
+    let conditionalDeleteDisplay = true;
+    if (campaignMember) {
+        if (isSuperiorCampaignMember && !isActualCampaignMember) {
+            conditionalEditDisplay = false;
+            conditionalDeleteDisplay = false
+        } else if (isActualCampaignMember) {
+            conditionalEditDisplay = true;
+            conditionalDeleteDisplay = false
+        } else {
+            conditionalEditDisplay = true;
+            conditionalDeleteDisplay = true
+        }
+    }
+
 
     // const electionCandidateHasCampaign = 
 
@@ -107,7 +128,7 @@ const Actions = (cellProps) => {
             <div className="list-inline hstack gap-1 mb-0">
 
                 {/* View Item*/}
-                {options.includes("view") &&  (
+                {options.includes("view") && (
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-warning edit-list"
@@ -118,7 +139,7 @@ const Actions = (cellProps) => {
                 )}
 
                 {/* Update Item*/}
-                {options.includes("update") && cellPropId &&(
+                {options.includes("update") && cellPropId && conditionalEditDisplay && (
 
                     <button
                         to="#"
@@ -130,7 +151,7 @@ const Actions = (cellProps) => {
                 )}
 
                 {/* Delete Item */}
-                {options.includes("delete") && cellPropId &&(
+                {options.includes("delete") && cellPropId && conditionalDeleteDisplay && (
                     <button
                         to="#"
                         className="btn btn-sm btn-soft-danger remove-list"

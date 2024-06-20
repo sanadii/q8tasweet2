@@ -82,14 +82,14 @@ const Section = () => {
       title: 'الضمانات',
       component: <GuaranteesTab />
     },
-    // {
-    //   id: 4,
-    //   permission: 'canViewCampaignAttendee',
-    //   href: '#attendees',
-    //   icon: 'ri-group-line',
-    //   title: 'الحضور',
-    //   component: <AttendeesTab />
-    // },
+    {
+      id: 4,
+      permission: 'canViewCampaignAttendee',
+      href: '#attendees',
+      icon: 'ri-group-line',
+      title: 'الحضور',
+      component: <AttendeesTab />
+    },
     // {
     //   id: 5,
     //   permission: 'canViewCampaign',

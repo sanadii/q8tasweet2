@@ -225,7 +225,7 @@ const Guarantees = (cellProps) => {
 
         guaranteeCountForMember = totalGuarantees ? (attendedGuarantees / totalGuarantees * 100).toFixed(2) + '%' : '0%';
     } else {
-        if (memberId) {
+        if (memberId && !guaranteeGroupId) {
             guaranteeCountForMember = campaignGuarantees.filter(
                 guarantee => guarantee?.member === memberId && (count === "attendees" ? guarantee?.attended === true : true)
             ).length || 0;

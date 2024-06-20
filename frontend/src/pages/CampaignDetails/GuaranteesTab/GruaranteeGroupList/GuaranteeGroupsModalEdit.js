@@ -45,7 +45,7 @@ const GuaranteeGroupsModalEdit = ({
       guarantees: campaignGuaranteeGroup?.guarantees?.map((guarantee) => guarantee.id) || [],
       phone: campaignGuaranteeGroup?.phone || "",
       status: campaignGuaranteeGroup?.status || 0,
-      note: campaignGuaranteeGroup?.note || "",
+      notes: campaignGuaranteeGroup?.notes || "",
     },
 
     validationSchema: Yup.object({
@@ -59,7 +59,7 @@ const GuaranteeGroupsModalEdit = ({
           name: values.name || "",
           member: values.member || campaignGuaranteeGroup.member || currentCampaignMember?.id,
           phone: values.phone || "",
-          note: values.note || "",
+          notes: values.notes || "",
           guarantees: values.guarantees || [],
         };
 
@@ -72,7 +72,7 @@ const GuaranteeGroupsModalEdit = ({
           name: values.name || "",
           member: currentCampaignMember.id,
           phone: values.phone || "",
-          note: values.note || "",
+          notes: values.notes || "",
           guarantees: values.guarantees || [],
         };
         dispatch(addCampaignGuaranteeGroup(newCampaignGuaranteeGroup));
@@ -100,8 +100,8 @@ const GuaranteeGroupsModalEdit = ({
     },
 
     {
-      id: "note-field",
-      name: "note",
+      id: "notes-field",
+      name: "notes",
       label: "ملاحظات",
       type: "textarea",
       colSize: 12,

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, } from "reactstrap";
 import SwiperCore, { Autoplay } from "swiper";
 import { createSelector } from 'reselect';
+import { Link, useNavigate } from "react-router-dom";
 
 // Store & Selectors
 import { userSelector } from 'selectors';
@@ -14,6 +15,8 @@ import { useProfile } from "shared/hooks";
 
 const ProfileDropdown = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { currentUser } = useSelector(userSelector);
   const { token } = useProfile();
 
@@ -27,6 +30,8 @@ const ProfileDropdown = () => {
 
   const handleLogoutClick = () => {
     dispatch(logoutUser())
+    navigate("/");
+
   }
 
 

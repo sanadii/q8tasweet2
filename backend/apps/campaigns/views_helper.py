@@ -109,11 +109,12 @@ def get_campaign_managers(campaign):
     """Get members with managerial roles in the campaign."""
     
     # Define the roles for campaign managers
-    manager_roles = ["campaignModerator", "campaignCandidate", "campaignCoordinator" ]
+    # TODO: if fieldAgent, add fieldAdmin, if digitalAgent, add digitalAdmin + add supervisor
+    manager_roles = ["campaignModerator", "campaignCandidate", "campaignAdmin", "campaignFieldAdmin" ]
     
     campaign_managers = CampaignMember.objects.select_related('role').filter(
         campaign=campaign,
-        role__name__in=manager_roles
+        role__codename__in=manager_roles
     )
     
     return campaign_managers

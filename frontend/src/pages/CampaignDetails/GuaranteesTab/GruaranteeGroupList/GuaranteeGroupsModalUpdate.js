@@ -34,7 +34,7 @@ const GuaranteeGroupsModalUpdate = ({
       member: campaignGuaranteeGroup?.member || "",
       phone: campaignGuaranteeGroup?.phone || "",
       status: campaignGuaranteeGroup?.status || 0,
-      note: campaignGuaranteeGroup?.note || "",
+      notes: campaignGuaranteeGroup?.notes || "",
     },
 
     validationSchema: Yup.object({
@@ -49,7 +49,7 @@ const GuaranteeGroupsModalUpdate = ({
           name: values.name || "",
           phone: values.phone || "",
           voters: values.voters || "",
-          note: values.note || "",
+          notes: values.notes || "",
         };
 
         // Update election
@@ -61,7 +61,7 @@ const GuaranteeGroupsModalUpdate = ({
           name: values.name || "",
           phone: values.phone || "",
           voters: values.voters || "",
-          note: values.note || "",
+          notes: values.notes || "",
         };
         dispatch(addCampaignGuaranteeGroup(updatedCampaignGuaranteeGroup));
       }
@@ -107,8 +107,8 @@ const GuaranteeGroupsModalUpdate = ({
       colSize: 12,
     },
     {
-      id: "note-field",
-      name: "note",
+      id: "notes-field",
+      name: "notes",
       label: "ملاحظات",
       type: "textarea",
       colSize: 12,

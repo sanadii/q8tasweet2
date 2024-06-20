@@ -38,7 +38,7 @@ class CampaignMember(TrackModel):
     phone = models.CharField(
         max_length=8, blank=True, null=True, validators=[phone_validator]
     )
-    # notes = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
     status = models.IntegerField(
         choices=GuaranteeStatusOptions.choices, blank=True, null=True
     )

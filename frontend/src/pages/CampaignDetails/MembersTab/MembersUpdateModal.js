@@ -85,6 +85,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
   const isDelegateMember = campaignDelegateRoles.includes(useCampaignRoleString(validation.values.role, campaignRoles));
   const campaignMemberRoleCodename = useCampaignRoleString(validation.values.role, campaignRoles);
 
+
   // Filtered Role Options based on Current Member Role
   const campaignRoleOptions = useCampaignRoleOptions(campaignRoles, currentCampaignMember);
 
@@ -128,7 +129,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
       label: "اللجان",
       type: "selectMulti",
       options: committeeSiteOptions,
-      condition: isAgentMember,
+      condition: isAgentMember && !isCurrentCampaignMember,
     },
     {
       id: "committee-field",
@@ -136,7 +137,7 @@ const MembersUpdateModal = ({ campaignMember, toggle }) => {
       label: "اللجنة",
       type: "selectSingle",
       options: committeeOptions,
-      condition: isDelegateMember,
+      condition: isDelegateMember && !isCurrentCampaignMember,
     },
     {
       id: "phone-field",

@@ -6,11 +6,8 @@ import { campaignSelector } from 'selectors';
 // Shared imports
 import { Loader, DeleteModal, TableContainer, TableFilters, TableContainerHeader, TableContainerFilter } from "shared/components";
 import {
-    CheckboxHeader, CheckboxCell, Id, Name,
-    SimpleName, DateTime, Badge, CreateBy, Actions,
-    Phone, CampaignMember,
-    Guarantees,
-    AttendedPercentage,
+    CheckboxHeader, CheckboxCell, Id, Name, Actions,
+    Phone, CampaignMember, Guarantees, AttendedPercentage,
 } from "shared/components"
 
 // import { CheckboxHeader, CheckboxCell, Id, Name, Phone, Guarantees, Attended, AttendedPercentage, Guarantor, Actions } from "./GuaranteeGroupsCol";
@@ -136,7 +133,7 @@ const GuaranteesGroupList = ({
                 name: memberMap[guarantee.member],
                 member: guarantee.member,
                 phone: "", // Add phone if available
-                note: "", // Add note if available
+                notes: "", // Add notes if available
             }));
 
         // Remove duplicates from newGuaranteeGroups based on member

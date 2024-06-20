@@ -1,6 +1,11 @@
 // Layouts/Menus/AdminMenu.js
 import { useNavigate } from "react-router-dom";
 
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { userSelector, campaignSelector } from 'selectors';
+
+
 export function useAdminMenu(isCurrentState, setIsCurrentState) {
   const history = useNavigate();
 
@@ -186,12 +191,25 @@ export function useUserMenu(isCurrentState, setIsCurrentState) {
 
 export function useCampaignMenu(setIsCurrentState, currentCampaign) {
   const history = useNavigate();
+  const {
+    currentCampaignMember,
+    campaignRoles,
+    campaignMembers,
+    campaignElectionCommitteeSites,
+  } = useSelector(campaignSelector);
+
+  const currentCampaignRole = currentCampaignMember?.roleCodename || ""
+  console.log("currentCampaignRole: ", currentCampaignRole)
+
+
 
   const handleNavigation = (state, path) => {
     setIsCurrentState(state);
     history(path);
     document.body.classList.add("twocolumn-panel");
   }
+
+
 
   return [
     {
@@ -204,6 +222,8 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
       label: "الحملة الإنتخابية",
       isHeader: true,
     },
+
+    // Display For Managers and Agents
     {
       id: "campaignDashboard",
       label: "الرئيسية",
@@ -214,6 +234,8 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
         handleNavigation("campaignDashboard", "/campaign/overview");
       }
     },
+
+    // Display For Managers and Agents
     {
       id: "campaignTeam",
       label: "فريق العمل",
@@ -224,6 +246,8 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
         handleNavigation("campaignDashboard", "/campaign/members");
       }
     },
+
+    // Display For All
     {
       id: "campaignGuarantees",
       label: "المجاميع والضمانات",
@@ -235,6 +259,8 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
 
       },
     },
+
+    // Display For Managers
     {
       id: "campaignAttendance",
       label: "الحضور",
@@ -256,13 +282,26 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
     //   }
     // },
     {
-      id: "campaignVoters",
+      id: "campaignElectors",
       label: "البحث",
       icon: "ri-honour-line",
       link: "/campaign/electors-search",
       click: (e) => {
         e.preventDefault();
-        handleNavigation("campaignVoters", "/campaign/voters");
+        handleNavigation("campaignElectors", "/campaign/electors");
+      },
+    },
+
+
+    // Display For CampaignFieldDelegate
+    {
+      id: "campaignAttendance",
+      label: "التحضير",
+      icon: "ri-honour-line",
+      link: "/campaign/attendance",
+      click: (e) => {
+        e.preventDefault();
+        handleNavigation("campaignElectors", "/campaign/attendance");
       }
     },
     // {
@@ -275,6 +314,8 @@ export function useCampaignMenu(setIsCurrentState, currentCampaign) {
     //     handleNavigation("campaignCandidates", "/campaign/candidates");
     //   }
     // },
+
+    // Display For Managers
     {
       label: "الانتخابات",
       isHeader: true,
