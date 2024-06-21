@@ -675,7 +675,7 @@ const Elections = (state = IntialState, action) => {
       const committeeId = parseInt(committeeIdStr, 10);
 
       let participantState;
-      if (electionMethod === "candidateOnly") {
+      if (electionMethod === "candidateOnly" || electionMethod === "partyCandidateOriented") {
         participantState = state.electionCandidates;
       } else if (electionMethod === "parties") {
         participantState = state.electionParties;
@@ -683,59 +683,64 @@ const Elections = (state = IntialState, action) => {
         participantState = state.electionPartyCandidates;
       }
 
-
-
       // If committeeIdStr is not present, or it's not a number, or data[committeeIdStr] is not present, return the current state.
       if (!committeeIdStr || isNaN(committeeId) || !data[committeeIdStr]) return state;
 
-      const updatedCandidateResult = participantState.map(candidate => {
-        // Update votes directly on the candidate if committeeId is 0
+      const updatedParticipantState = participantState.map(participant => {
+        // Update votes directly on the participant if committeeId is 0
         if (isDetailedResults === false) {
-          // console.log("committeeIdStr", committeeIdStr, "updating candidate votes");
           return {
-            ...candidate,
-            votes: data[committeeIdStr][candidate.id.toString()] || candidate.votes,
+            ...participant,
+            votes: data[committeeIdStr][participant.id.toString()] || participant.votes,
           };
         }
 
-        // If candidate has committeeResults and committeeId is not 0, update committeeResults
+        // If participant has committeeResults and committeeId is not 0, update committeeResults
         if (isDetailedResults === true) {
-          // console.log("committeeIdStr", committeeIdStr, "updating committee", "Participant: ", candidate, "data: ", data);
+          console.log("committeeIdStr", committeeIdStr, "updating committee", "Participant: ", participant, "data: ", data);
 
-          const updatedVotes = candidate.committeeResults.map(committeeVote => {
+          const updatedVotes = participant.committeeResults.map(committeeVote => {
             if (committeeVote.committee === committeeId) {
               return {
                 ...committeeVote,
-                votes: data[committeeIdStr][candidate.id.toString()] || committeeVote.votes,
+                votes: data[committeeIdStr][participant.id.toString()] || committeeVote.votes,
               };
             }
             return committeeVote;
           });
 
+          // Handle case where committeeResults might be empty or not found
+          const newVotes = data[committeeIdStr][participant.id.toString()];
+          if (newVotes !== undefined && !updatedVotes.some(vote => vote.committee === committeeId)) {
+            updatedVotes.push({
+              committee: committeeId,
+              votes: newVotes
+            });
+          }
+
           return {
-            ...candidate,
+            ...participant,
             committeeResults: updatedVotes,
           };
         }
 
-        return candidate;
+        return participant;
       });
 
       return {
         ...state,
         ...(electionMethod === "parties"
-          ? { electionParties: updatedCandidateResult }
-          : electionMethod === "candidateOnly"
-            ? { electionCandidates: updatedCandidateResult }
+          ? { electionParties: updatedParticipantState }
+          : electionMethod === "candidateOnly" || electionMethod === "partyCandidateOriented"
+            ? { electionCandidates: updatedParticipantState }
             : electionMethod === "partyCandidates"
-              ? { electionPartyCandidates: updatedCandidateResult }
+              ? { electionPartyCandidates: updatedParticipantState }
               : {}),
         isElectionPartyCandidateResultUpdate: true,
         isElectionPartyCandidateResultUpdateFail: false,
       };
-
-
     }
+
     case UPDATE_ELECTION_RESULTS_FAIL:
       return {
         ...state,

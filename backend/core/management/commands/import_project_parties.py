@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from apps.candidates.models import Party
-from .utils import read_excel_file, check_required_columns, import_objects_from_df
+from .utils.helper import read_excel_file, check_required_columns, import_objects_from_df
 
 class Command(BaseCommand):
     help = "Imports or updates Party data from an Excel file"

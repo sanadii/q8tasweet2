@@ -33,7 +33,7 @@ const CampaignDropdown = () => {
         dispatch(getCampaignDetails(userCampaign.slug));
     };
 
-
+console.log("currentUserCampaigns: ", currentUserCampaigns)
     return (
         <React.Fragment>
             {currentUserCampaigns && currentUserCampaigns.map((userCampaign, key) => (
@@ -43,8 +43,8 @@ const CampaignDropdown = () => {
                     onClick={onCampaignSelection(userCampaign)}
                     className="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle topbar-head-dropdown ms-1 header-item"
                 >
-                    {userCampaign.image
-                        ? <img src={`${MEDIA_URL}${userCampaign.image}`} alt={userCampaign.name} className="rounded-circle" style={{ width: '22px', height: '22px' }} />
+                    {userCampaign?.candidate?.image
+                        ? <img src={`${MEDIA_URL}${userCampaign?.candidate?.image}`} alt={userCampaign?.candidate?.name} className="rounded-circle" style={{ width: '22px', height: '22px' }} />
                         : <i className='mdi mdi-account-convert fs-22'></i> // Fallback icon
                     }
                 </span>

@@ -12,12 +12,17 @@ from apps.elections.candidates.models import (
 from apps.campaigns.models import Campaign
 from apps.schemas.committee_results.models import CommitteeResultCandidate
 from apps.schemas.committees.models import Committee
+from apps.schemas.campaign_sorting.models import SortingCampaign, SortingElection
 
 
 # Apps Serializers
 from utils.base_serializer import TrackMixin, TaskMixin, AdminFieldMixin
 from apps.campaigns.serializers import CampaignSerializer
-from apps.schemas.committee_results.serializers import CommitteeResultCandidateSerializer
+from apps.schemas.committee_results.serializers import (
+    CommitteeResultCandidateSerializer,
+)
+from apps.schemas.campaign_sorting.serializers import CampaignSortingSerializer
+
 from utils.schema import schema_context
 
 
@@ -32,7 +37,8 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
     campaign = serializers.SerializerMethodField("get_candidate_campaign")
     party = serializers.SerializerMethodField("get_candidate_party")
     party_name = serializers.SerializerMethodField("get_candidate_party_name")
-    # committee_results = serializers.SerializerMethodField("get_committee_results")
+    committee_results = serializers.SerializerMethodField("get_committee_results")
+    campaign_sorting = serializers.SerializerMethodField("get_campaign_sorting")
 
     class Meta:
         model = ElectionCandidate
@@ -50,59 +56,73 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
             "campaign",
             "party",
             "party_name",
-            # "committee_results",
+            "committee_results",
+            "campaign_sorting",
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        is_current = self.context.get("is_current", True)
+        if not is_current:
+            self.fields.pop("committee_results")
+            self.fields.pop("campaign_sorting")
 
     def get_candidate_image(self, obj):
         if obj.candidate and obj.candidate.image:
             return obj.candidate.image.url
         return None
 
-    def get_committee_results(self, obj):
-        request = self.context.get("request")
-        schema = request.resolver_match.kwargs.get("slug") if request else None
-
-        if not schema:
-            return None
-
-        try:
-            with schema_context(schema):
-                # Fetch all committee results from the custom schema
-                committee_result_candidate = CommitteeResultCandidate.objects.filter(
-                    election_candidate=obj.id
-                )
-                committee_result_candidate_serialized = (
-                    CommitteeResultCandidateSerializer(
-                        committee_result_candidate, many=True
-                    ).data
-                )
-
-                return committee_result_candidate_serialized
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            return None
-
     def get_candidate_party(self, obj):
         try:
             election_party = ElectionPartyCandidate.objects.get(election_candidate=obj.id)
-            return election_party.election_party.id  # Return only the party.id
+            return election_party.election_party.id
         except ElectionPartyCandidate.DoesNotExist:
             return None
-     
+
     def get_candidate_party_name(self, obj):
         try:
-            # election_party = candidate.
             election_party = ElectionPartyCandidate.objects.get(election_candidate=obj.id)
-            return election_party.election_party.party.name  # Return only the party.id
+            return election_party.election_party.party.name
         except ElectionPartyCandidate.DoesNotExist:
-            return None   
-        
+            return None
+
     def get_candidate_campaign(self, obj):
         try:
             campaign = Campaign.objects.get(election_candidate=obj.id)
             return CampaignSerializer(campaign).data
-        except Exception as e:
+        except Exception:
             return None
+
+    def get_committee_results(self, obj):
+        request = self.context.get("request")
+        election = obj.election
+        schema = election.slug if election else None
+
+        if not schema:
+            return None
+
+        with schema_context(schema):
+            committee_results = CommitteeResultCandidate.objects.filter(election_candidate=obj.id)
+            return CommitteeResultCandidateSerializer(committee_results, many=True).data
+
+    def get_campaign_sorting(self, obj):
+        request = self.context.get("request")
+        election = obj.election
+        schema = election.slug if election else None
+
+        if not schema:
+            return None
+
+        with schema_context(schema):
+            sorting_data = self.get_sorting_data_from_source(obj)
+            return CampaignSortingSerializer(sorting_data, many=True, read_only=True).data
+
+    def get_sorting_data_from_source(self, obj):
+        request = self.context.get("request")
+        if request and "GetElectionDetails" in request.resolver_match.url_name:
+            return SortingElection.objects.filter(election_candidate=obj.id)
+        else:
+            return SortingCampaign.objects.filter(election_candidate=obj.id)
 
 
 class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
@@ -151,8 +171,12 @@ class ElectionPartyCandidateSerializer(AdminFieldMixin, serializers.ModelSeriali
 
     admin_serializer_classes = (TrackMixin,)
 
-    name = serializers.CharField(source="election_candidate.candidate.name", read_only=True)
-    gender = serializers.IntegerField(source="election_candidate.candidate.gender", read_only=True)
+    name = serializers.CharField(
+        source="election_candidate.candidate.name", read_only=True
+    )
+    gender = serializers.IntegerField(
+        source="election_candidate.candidate.gender", read_only=True
+    )
     image = serializers.SerializerMethodField("get_candidate_image")
     # committee_results = ElectionPartyCandidateCommitteeResultSerializer(
     #     source="party_candidate_committee_result_candidates", many=True, read_only=True

@@ -91,7 +91,7 @@ const GuaranteeTargetBar = ({ campaign, results, previousElection }) => {
     //     const percentage = (total / endOfBar) * 100;
     //     return percentage > 100 ? 100 : percentage.toFixed(2);
     // };
-    
+
     return (
         <React.Fragment>
             <Card>
@@ -154,7 +154,7 @@ const GuaranteeTargetBar = ({ campaign, results, previousElection }) => {
                                         <tr>
                                             <td className="d-flex align-items-center">
                                                 <i className="mdi mdi-circle align-middle me-2 text-danger"></i>
-                                                <span>{getArabicOrdinal(previousElectionDetails.electSeats)}</span>
+                                                <span>{getArabicOrdinal(previousElectionDetails?.electSeats || 0)}</span>
                                             </td>
                                             <td>{lastWinnerVotes}</td>
                                         </tr>

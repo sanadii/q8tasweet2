@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { campaignSelector, userSelector } from 'selectors';
 import { TableContainer } from 'shared/components';
-import { Card, CardHeader, CardBody, Button, Row, Col } from "reactstrap";
+import { Card, CardHeader, CardBody, Button, ButtonGroup, Row, Col } from "reactstrap";
 import { useWebSocketContext } from 'shared/utils';
 
 const SortingTab = () => {
@@ -15,15 +15,21 @@ const SortingTab = () => {
 
   const [candidatesSorting, setCandidatesSorting] = useState([]);
 
+  console.log("committeeId: ", committeeId)
+
+  let initialSortingData;
   useEffect(() => {
     const initialSortingData = currentElection?.electionCandidates.map(candidate => ({
       electionId: electionId,
       candidateId: candidate.id,
       name: candidate.name,
-      committeeVote: candidate?.committeeSorting?.find(cs => cs.electionCommittee === committeeId)?.votes || 0
+      committeeVote: candidate?.campaignSorting?.find(cs => cs.committee === committeeId)?.votes || 0
     }));
     setCandidatesSorting(initialSortingData);
   }, [currentElection, electionId, committeeId]);
+
+  console.log("initialSortingData: ", initialSortingData)
+
 
   const { sendMessage, lastMessage } = useWebSocketContext();
 
@@ -76,10 +82,10 @@ const SortingTab = () => {
   // Define columns for the table
   const columns = useMemo(() => {
     return [
-      {
-        Header: 'candidateId',
-        Cell: ({ row }) => <span className="nowrap">{row.original.candidateId}</span>,
-      },
+      // {
+      //   Header: 'candidateId',
+      //   Cell: ({ row }) => <span className="nowrap">{row.original.candidateId}</span>,
+      // },
       {
         Header: 'اسم المرشح',
         Cell: ({ row }) => (
@@ -93,7 +99,7 @@ const SortingTab = () => {
       },
       {
         Header: 'الأصوات',
-        Cell: ({ row }) => <span className="nowrap">{row.original.committeeVote}</span>,
+        Cell: ({ row }) => <span className="nowrap fs-16"><strong>{row.original.committeeVote}</strong></span>,
       },
 
     ];
@@ -129,13 +135,15 @@ const SortingTab = () => {
 export default SortingTab;
 
 const VoteButton = ({ candidateId, increment, decrement, name }) => (
-  <>
-    <Button color="success" className="btn-label w-50" onClick={() => increment(candidateId)}>
+  <ButtonGroup className="pb-1 pe-2 w-100">
+    <Button color="success" className="btn-label w-100" onClick={() => increment(candidateId)}>
       <i className="ri-add-line label-icon align-middle fs-16 me-2"></i>
       {name}
     </Button>
     <Button color="danger" className="btn-icon" outline onClick={() => decrement(candidateId)}>
       <i className="ri-subtract-line" />
     </Button>
-  </>
+  </ButtonGroup>
 );
+
+

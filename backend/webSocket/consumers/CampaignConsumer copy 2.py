@@ -1,9 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-
-# Apps Models
-from apps.elections.models import Election
 from apps.schemas.campaign_sorting.models import SortingCampaign, SortingElection
 from apps.schemas.committees.models import Committee
 from apps.schemas.schema import schema_context
@@ -42,16 +39,18 @@ class CampaignConsumer(AsyncWebsocketConsumer):
         election_candidate = data['electionCandidateId']
         new_votes = data['votes']
         committee_id = data['electionCommitteeId']
-        election_id = data['electionId']
 
-        election_schema = await self.get_election_schema_slug(election_id)
+        election_schema = await self.get_election_schema(election_candidate)
 
         await self.update_campaign_sorting_db(election_candidate, new_votes, committee_id, election_schema)
         await self.send_group_message(data)
         
-    async def get_election_schema_slug(self, election_id):
-        election = await sync_to_async(Election.objects.filter(id=election_id).first)()
-        return election.slug if election else None
+        if await self.is_user_in_election_committee(data):
+            await self.forward_to_global_channel(data, election_candidate, new_votes, committee_id, election_schema)
+
+    async def get_election_schema(self, election_candidate_id):
+        election = await sync_to_async(lambda: SortingCampaign.objects.filter(election_candidate=election_candidate_id).select_related('election').first())()
+        return election.election.schema.slug if election else None
 
     async def send_group_message(self, data):
         await self.channel_layer.group_send(
@@ -106,6 +105,15 @@ class CampaignConsumer(AsyncWebsocketConsumer):
             except SortingElection.DoesNotExist:
                 SortingElection.objects.create(election_candidate=election_candidate, votes=new_votes, committee_id=committee_id)
                 print(f"New SortingElection entry created for candidate {election_candidate} in committee {committee_id} with votes {new_votes}")
+
+    @sync_to_async
+    def is_user_in_election_committee(self, data):
+        user = self.scope["user"]
+        user_id = user.id
+        election_committee_id = data.get('electionCommitteeId')
+        election_id = data.get('electionId')
+        print("user: ", user_id, "electionId: ", election_id, "committeeId: ", election_committee_id)
+        return Committee.objects.filter(id=election_committee_id, sorter=user_id, election=election_id).exists()
 
     async def campaign_message(self, event):
         response_message = json.dumps(event['message'])

@@ -8,7 +8,6 @@ import { Container } from "reactstrap";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { layoutSelector, userSelector, campaignSelector } from 'selectors';
 
 // Components
 import Header from './Header';
@@ -16,7 +15,9 @@ import Sidebar from './Sidebar';
 import Footer from './Footer';
 // import RightSidebar from '../Components/Common/RightSidebar';
 
-//import actions
+// Redux and Selectors
+import { layoutSelector, userSelector, campaignSelector } from 'selectors';
+
 import {
     changeLayout,
     changeSidebarTheme,
@@ -33,6 +34,8 @@ import {
     getCampaignDetails,
 } from "../store/actions";
 
+// Hooks & Utils
+import { WebSocketProvider } from 'shared/utils';
 
 const Layout = (props) => {
     const dispatch = useDispatch();
@@ -159,8 +162,10 @@ const Layout = (props) => {
                         campaign && campaign.election ? (
                             <div className="page-content">
                                 <Container fluid>
-                                    <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
-                                    {props.children}
+                                    <WebSocketProvider channel="campaigns" slug={campaign.slug}>
+                                        <SectionHeader campaign={campaign} campaignMembers={campaignMembers} campaignGuarantees={campaignGuarantees} />
+                                        {props.children}
+                                    </WebSocketProvider>
                                 </Container>
                             </div>
 

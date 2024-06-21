@@ -22,6 +22,9 @@ import MembersTab from "./MembersTab";
 import GuaranteesTab from "./GuaranteesTab";
 import AttendeesTab from "./AttendeesTab";
 import SortingTab from "./SortingTab";
+// import CandidatesTab from "./CandidatesTab";
+import CandidatesTab from "../ElectionDetails/ResultsTab";
+
 import ActivitiesTab from "./ActivitiesTab";
 import EditTab from "./EditTab";
 import ElectorSearchTab from "../Electors/SearchTab";
@@ -89,6 +92,14 @@ const Section = () => {
       icon: 'ri-group-line',
       title: 'الحضور',
       component: <AttendeesTab />
+    },
+    {
+      id: 5,
+      permission: 'canViewCampaign',
+      href: '#candidates',
+      icon: 'ri-sort-line',
+      title: 'النتائج',
+      component: <CandidatesTab />
     },
     // {
     //   id: 5,

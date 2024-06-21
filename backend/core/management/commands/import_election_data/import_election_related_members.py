@@ -4,7 +4,7 @@ from django.utils import timezone
 from apps.auths.models import User
 from apps.campaigns.members.models import CampaignMember
 from django.contrib.auth.models import Group
-from .utils import read_excel_file, check_required_columns, import_objects_from_df
+from ..utils.helper import read_excel_file, check_required_columns, import_objects_from_df
 
 class Command(BaseCommand):
     help = "Imports or updates users from an Excel file into the database based on the specified schema"

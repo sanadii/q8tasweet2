@@ -31,16 +31,6 @@ DATABASES = {
     },
 }
 
-
-# # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY="apuvicmef^(!j8gx&clu0u(!8m0r^etok^l0)kc!---#(i5=dt"
-# JWT_SECRET_KEY="a23b8ac92bba1d38510e45332780f4a65ac33f4a5a6efa17ecd38330e9a3e29f"
-# DB_NAME=q8tasweet
-# DB_USER=postgres
-# DB_PASSWORD="KWT11782"
-# DB_HOST=localhost
-# DB_PORT=5432
-
 DEBUG = True
 
 

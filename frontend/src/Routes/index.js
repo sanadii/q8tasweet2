@@ -11,7 +11,6 @@ import { AuthProtected } from './AuthProtected';
 const routeConfig = [
     {
         routes: PublicRoutes,
-        // layout: "horizontal",
         isAuthProtected: false,
     },
     {
@@ -21,46 +20,53 @@ const routeConfig = [
     },
     {
         routes: AuthProtectedRoutes,
-        layout: null,
         isAuthProtected: true,
     },
     {
         routes: CampaignRoutes,
         layout: "vertical",
         isAuthProtected: true,
-        style: "campaign"
+        style: "campaign",
     },
 ];
 
+const renderRoute = ({ routes, layout, isAuthProtected, style }, idx) => (
+    <React.Fragment key={idx}>
+        {routes.map((route, routeIdx) => (
+            <Route
+                key={routeIdx}
+                path={route.path}
+                element={
+                    isAuthProtected ? (
+                        <AuthProtected>
+                            {layout ? (
+                                <Layout defaultLayout={layout} style={style}>
+                                    {route.component}
+                                </Layout>
+                            ) : (
+                                route.component
+                            )}
+                        </AuthProtected>
+                    ) : (
+                        layout ? (
+                            <Layout defaultLayout={layout}>
+                                {route.component}
+                            </Layout>
+                        ) : (
+                            route.component
+                        )
+                    )
+                }
+            />
+        ))}
+    </React.Fragment>
+);
+
 const Index = () => {
-      
     return (
         <React.Fragment>
             <Routes>
-                {routeConfig.map(({ routes, layout, isAuthProtected, style }, idx) => (
-                    <React.Fragment key={idx}>
-                        {routes.map((route, routeIdx) => (
-                            <Route
-                                key={routeIdx}
-                                path={route.path}
-                                element={
-                                    isAuthProtected ? (
-                                        <AuthProtected>
-                                            {
-                                                layout ?
-                                                    <Layout defaultLayout={layout} style={style}>{route.component}</Layout>
-                                                    :
-                                                    route.component
-                                            }
-                                        </AuthProtected>
-                                    ) : (
-                                        layout ? <Layout defaultLayout={layout}>{route.component}</Layout> : route.component
-                                    )
-                                }
-                            />
-                        ))}
-                    </React.Fragment>
-                ))}
+                {routeConfig.map(renderRoute)}
             </Routes>
         </React.Fragment>
     );

@@ -17,7 +17,7 @@ def get_election_details(context, election, response_data):
     previous_election_data = None
 
     if previous_election:
-        previous_election_data = get_election_data(previous_election, context)
+        previous_election_data = get_election_data(previous_election, context, is_current=False)
 
     election_details_data = {
         "current_election": current_election,
@@ -37,7 +37,7 @@ def get_current_election(election, context):
     Returns:
     - Dictionary with election details and candidates.
     """
-    current_election_data = get_election_data(election, context)
+    current_election_data = get_election_data(election, context, is_current=True)
     return current_election_data
 
 def get_previous_election(election):
@@ -58,13 +58,14 @@ def get_previous_election(election):
         .first()
     )
 
-def get_election_data(election, context):
+def get_election_data(election, context, is_current):
     """
     Get details and candidates of a given election.
 
     Parameters:
     - election: Election instance.
     - context: Serialization context.
+    - is_current: Boolean indicating if the election is current or previous.
     
     Returns:
     - Dictionary with election details and candidates.
@@ -74,7 +75,7 @@ def get_election_data(election, context):
     ).select_related("election")
 
     candidates_data = [
-        ElectionCandidateSerializer(candidate, context=context).data
+        ElectionCandidateSerializer(candidate, context={**context, 'is_current': is_current}).data
         for candidate in candidates
     ]
 

@@ -23,11 +23,11 @@ class CampaignSortingSerializer(serializers.ModelSerializer):
 
 # For CampaignGuaranteeSerializer and CampaignAttendeeSerializer,
 # you could have a method like this to avoid repeating the same logic
-def get_field_or_not_found(self, obj, field_name):
-    try:
-        return getattr(obj, field_name) if obj else None
-    except Elector.DoesNotExist:
-        return "Not Found"
+# def get_field_or_not_found(self, obj, field_name):
+#     try:
+#         return getattr(obj, field_name) if obj else None
+#     except Elector.DoesNotExist:
+#         return "Not Found"
 
 
 class CampaignPartySerializer(AdminFieldMixin, serializers.ModelSerializer):

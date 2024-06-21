@@ -3,7 +3,7 @@ from django.utils import timezone
 from datetime import datetime
 from apps.schemas.guarantees.models import CampaignGuarantee, Elector
 from django.db import connection
-from .utils import read_excel_file, check_required_columns
+from ..utils.helper import read_excel_file, check_required_columns, import_objects_from_df
 import pandas as pd
 
 # Define a naive datetime object

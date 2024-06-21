@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from apps.auths.models import User
-from .utils import read_excel_file, check_required_columns, import_objects_from_df
+from .utils.helper import read_excel_file, check_required_columns, import_objects_from_df
 
 class Command(BaseCommand):
     help = "Imports or updates users from an Excel file into the database based on the specified schema"
@@ -22,11 +22,12 @@ class Command(BaseCommand):
             "gender",
         ]
 
-        df = read_excel_file(file_path, work_sheet, required_data, self.stdout)
-        if df is None or not check_required_columns(df, required_data, self.stdout):
+        df = read_excel_file(file_path, work_sheet, required_data, self)
+        
+        if df is None or not check_required_columns(df, required_data, self):
             return
 
-        created_count, updated_count, processed_candidates = import_objects_from_df(df, User, self.stdout)
+        created_count, updated_count, processed_candidates = import_objects_from_df(df, User, self)
 
         # Print summary
         self.stdout.write(self.style.SUCCESS(f"Import completed. Summary:"))

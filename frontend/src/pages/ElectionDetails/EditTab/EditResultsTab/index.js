@@ -17,7 +17,8 @@ const ResultsTab = () => {
   const { electionMethod, isDetailedResults, isSortingResults } = election
 
   // Based on electionMethod we will decide candidates vs parties
-  const candidates = electionMethod === "candidateOnly" ? electionCandidates : electionPartyCandidates;
+  const candidates = electionMethod === "candidateOnly" ? electionCandidates : electionCandidates;
+  console.log("electionCommitteeSiteselectionCommitteeSites: ", electionCommitteeSites)
   const parties = electionMethod !== "candidateOnly" ? electionParties : electionParties;
   const partyCommitteeVoteList = usePartyCommitteeVotes(electionParties);
 
@@ -27,7 +28,7 @@ const ResultsTab = () => {
   const [isColumnInEditMode, SetIsColumnInEditMode] = useState({});
   const [isEditField, setIsEditField] = useState(false);
   const [editedVoteFieldsData, setVoteFieldEditedData] = useState({});
-  const [committeeSiteDisplay, setCommitteeSiteDisplay] = useState(electionCommitteeSites[0])
+  // const [committeeSiteDisplay, setCommitteeSiteDisplay] = useState(electionCommitteeSites[0])
 
   // Toggle Vote Column To Name / Edit / Save / Close Mode
   const toggleColumnEditMode = useCallback((committeeId) => {
@@ -84,7 +85,11 @@ const ResultsTab = () => {
     ), [candidates, electionCommitteeSites, isColumnInEditMode, onVoteFieldChange, election, resultsDisplayType, partyCommitteeVoteList]
   );
 
-  console.log("transformedCandidateData:: ", transformedCandidateData)
+
+  // Function to determine the background color based on gender
+  const getBackgroundColor = (gender) => {
+    return gender === 1 ? 'info' : 'pink';
+  };
 
   // Handle Save Committee Results 
   const handleSaveResults = useCommitteeResultSaver(
@@ -102,7 +107,7 @@ const ResultsTab = () => {
     const totalVoteHeader = electionMethod !== "partyOnly" ? 'مفرق' : 'المجموع';
     const isPartyOriented = electionMethod === "partyOnly";
     const isCandidateOriented = electionMethod === "candidateOnly";
-    const isPartyCandidateOriented = electionMethod === "partyCandidateCombined";
+    const isPartyCandidateOriented = electionMethod === "partyCandidateOriented";
     const isTotalViewCandidateOnly = !isDetailedResults && electionMethod === "candidateOnly";
     const isDetailedView = isDetailedResults;
 
@@ -110,9 +115,9 @@ const ResultsTab = () => {
     // Base column header
     const baseColumnHeader = () => (
       <div className="d-flex justify-content-between align-items-center">
-        <Button color="danger" className="btn-icon btn-sm material-shadow-none"> <i className="ri-arrow-right-s-line" /> </Button>
+        {/* <Button color="danger" className="btn-icon btn-sm material-shadow-none"> <i className="ri-arrow-right-s-line" /> </Button> */}
         اللجان
-        <Button color="danger" className="btn-icon btn-sm material-shadow-none"> <i className="ri-arrow-left-s-line" /> </Button>
+        {/* <Button color="danger" className="btn-icon btn-sm material-shadow-none"> <i className="ri-arrow-left-s-line" /> </Button> */}
       </div>
     );
 
@@ -133,10 +138,14 @@ const ResultsTab = () => {
     const sumPartysingleCommitteeColumn = [{ Header: 'الالتزام', accessor: 'sumPartyVote' }];
 
     // Generating Committee Column Table Header
-    const committeeHeaderVoteButton = (committee = { id: '0', committee: 0 }) => {
+    const committeeHeaderVoteButton = (committee = { id: '0', committee: 0 }, committeeSiteGender) => {
+      const textColorByGender = getBackgroundColor(committeeSiteGender);
+
+
       return (
         <HeaderVoteButton
           committee={committee}
+          textColorByGender={textColorByGender}
           isColumnInEditMode={isColumnInEditMode}
           isEditField={isEditField}
           handleSaveResults={handleSaveResults}
@@ -154,27 +163,33 @@ const ResultsTab = () => {
     ];
 
 
-    // Function to determine the background color based on gender
-    const getBackgroundColor = (gender) => {
-      return gender === "1" ? 'bg-info' : 'bg-pink';
-    };
+
 
     // Generating Columns for multiple Committees
-    const committeeColumnHeader = (committeeSite, index) => (
-      <div key={`header-${index}`} className="d-flex justify-content-between align-items-center">
-        {committeeSite.areaName}
-      </div>
-    );
+    const committeeColumnHeader = (committeeSite, index) => {
+      const textColorByGender = getBackgroundColor(committeeSite?.gender);
 
+      return (
+        <div
+          key={`header-${index}`}
+          className={`d-flex justify-content-center align-items-center text-${textColorByGender} text-center`}
+        >
+          {committeeSite.name}
+        </div>
+      );
+    };
+
+
+    console.log("electionCommitteeSiteselectionCommitteeSites: ", electionCommitteeSites)
     // Generating Rows for multiple Committees
     const multiCommitteeColumns = electionCommitteeSites.map((committeeSite, index) => ({
-      Header: () => committeeColumnHeader(committeeSiteDisplay, index),
+      Header: () => committeeColumnHeader(committeeSite, index),
       accessor: `committeeSite_${committeeSite.id}`,
 
       columns: committeeSite.committees.map((committee, subIndex) => ({
         Header: (
           <div key={`subheader-${subIndex}`}>
-            {committeeHeaderVoteButton(committee)}
+            {committeeHeaderVoteButton(committee, committeeSite.gender)}
           </div>
         ),
         accessor: `committee_${committee.id}`, // Ensure unique accessor for each committee
@@ -190,7 +205,7 @@ const ResultsTab = () => {
     // 
     const determineColumnsBasedOnElectionMethod = () => {
       let additionalColumns = [];
-      if (electionMethod === "candidateOnly") {
+      if (electionMethod === "partyCandidateOriented") {
         additionalColumns = isDetailedResults ? [...aggregatedCandidateVotes, ...multiCommitteeColumns] : [...singleCommitteeColumn];
       } else {
         if (isPartyOriented) {
@@ -231,9 +246,10 @@ const ResultsTab = () => {
     generateResultColumns,
   ]);
 
+  console.log("transformedCandidateData: ", transformedCandidateData)
 
   const displayElectionResults = () => {
-    if (electionMethod === "candidateOnly") {
+    if (electionMethod === "candidateOnly" || electionMethod === "partyCandidateOriented") {
       return (
         <Candidates
           columns={columns}

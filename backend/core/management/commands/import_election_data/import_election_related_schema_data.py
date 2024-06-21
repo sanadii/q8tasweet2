@@ -5,7 +5,7 @@ from apps.schemas.areas.models import Area
 from apps.schemas.committees.models import CommitteeSite, Committee
 from apps.schemas.electors.models import Elector
 from django.db import connection
-from .utils import read_excel_file, check_required_columns, import_objects_from_df
+from ..utils.helper import read_excel_file, check_required_columns, import_objects_from_df
 
 # Define a naive datetime object
 naive_datetime = datetime(2022, 1, 1, 12, 0, 0)

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from apps.schemas.guarantees.models import CampaignGuarantee
 from django.db import connection
-from .utils import read_excel_file, check_required_columns, import_objects_from_df
+from .utils.helper import read_excel_file, check_required_columns, import_objects_from_df
 
 # Define a naive datetime object
 class Command(BaseCommand):

@@ -35,6 +35,7 @@ const Section = () => {
     campaignRoles,
     campaignGuarantees,
     campaignAttendees,
+    currentElection,
   } = useSelector(campaignSelector);
 
   // Permissions
@@ -102,9 +103,8 @@ const Section = () => {
               <div className="hstack text-white gap-1">
                 <div className="me-2">
                   <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
-                  التاريخ: <strong >{campaign.election.dueDate}</strong>
+                  التاريخ: <strong >{currentElection?.electionDetails?.dueDate}</strong>
                 </div>
-
               </div>
 
             </div>

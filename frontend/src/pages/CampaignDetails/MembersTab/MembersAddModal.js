@@ -57,7 +57,7 @@ const MembersAddModal = () => {
         <Input
           type="text"
           className="form-control bg-light border-light"
-          placeholder="Search here..."
+          placeholder="البحث..."
           value={searchUserInput}
           onChange={(e) => setSearchUserInput(e.target.value)}
         />

@@ -9,13 +9,16 @@ import { updateElectionResults, updateElectionPartyResults, updateElectionPartyC
 
 const HeaderVoteButton = ({
   committee,
+  textColorByGender,
   isColumnInEditMode,
   isEditField,
   handleSaveResults,
   toggleColumnEditMode,
 }) => {
 
+  console.log("committeecommitteecommittee: ", committee)
   const committeeId = committee?.id;
+  console.log("committeeId: ", committeeId)
 
   // Determine the button text and class based on the editing state
   const buttonText = isColumnInEditMode[committeeId] ?
@@ -24,7 +27,7 @@ const HeaderVoteButton = ({
     (committee ? `${committee.id}` : `تعديل`);
 
   const buttonClass = isColumnInEditMode[committeeId] ?
-    (isEditField[committeeId] ? 'btn-success' : 'btn-danger') : 'btn-info';
+    (isEditField[committeeId] ? 'btn-success' : 'btn-danger') : `btn-${textColorByGender}`;
 
   const handleClick = () => {
     if (isEditField[committeeId]) {
@@ -38,6 +41,7 @@ const HeaderVoteButton = ({
 
   return (
     <button onClick={handleClick} className={`btn btn-sm ml-2 ${buttonClass}`} title={committee.type}>
+      <i className="mdi mdi-note-edit-outline p-2"></i> 
       {buttonText}
     </button>
   );

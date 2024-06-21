@@ -173,17 +173,3 @@ class DeleteCampaign(APIView):
             return JsonResponse(
                 {"data": "Campaign not found", "count": 0, "code": 404}, safe=False
             )
-
-
-class GetAllCampaignSorting(APIView):
-    def get(self, request, format=None):
-        sortings = SortingCampaign.objects.all()
-        serializer = CampaignSortingSerializer(sortings, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class GetCampaignCommitteeSorting(APIView):
-    def get(self, request, format=None):
-        sortings = SortingCampaign.objects.all()
-        serializer = CampaignSortingSerializer(sortings, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)

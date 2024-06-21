@@ -8,7 +8,7 @@ import GuaranteesTab from "pages/CampaignDetails/GuaranteesTab";
 
 import AttendeesTab from "pages/CampaignDetails/AttendeesTab";
 import SortingTab from "pages/CampaignDetails/SortingTab";
-
+import ResultsTab from "pages/ElectionDetails/ResultsTab";
 import CommitteesTab from "pages/ElectionDetails/CommitteesTab";
 import EditTab from "pages/CampaignDetails/EditTab";
 
@@ -26,6 +26,7 @@ const CampaignRoutes = [
     { path: "/campaign/guarantees", component: <GuaranteesTab /> },
     { path: "/campaign/attendees", component: <AttendeesTab /> },
     { path: "/campaign/sorting", component: <SortingTab /> },
+    { path: "/campaign/results", component: <ResultsTab /> },
 
     { path: "/campaign/committees", component: <CommitteesTab /> },
     { path: "/campaign/members", component: <MembersTab /> },
@@ -35,6 +36,6 @@ const CampaignRoutes = [
     { path: "/campaign/candidates", component: <CandidatesTab /> },
     { path: "/campaign/electors-search", component: <SearchTab /> },
     { path: "/campaign/electors-attendance", component: <ElectorAttendance /> },
-    
+
 ]
 export default CampaignRoutes;

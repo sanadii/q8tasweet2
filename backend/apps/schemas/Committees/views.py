@@ -147,10 +147,10 @@ class UpdateElectionResults(APIView):
         committee_id = id
         output = {"0": {}} if committee_id == 0 else {}
 
-        if election_method == "candidateOnly":
+        if election_method in ["candidateOnly", "partyCandidateOriented"]:
             participant_model = ElectionCandidate
             committeeResultModel = CommitteeResultCandidate
-            participant_id = "election_candidate_id"
+            participant_id = "election_candidate"
 
         # # elif result_type == "parties":
         # #     participant_model = ElectionParty
@@ -229,7 +229,6 @@ def update_participant_total_votes(request, participant_model, output):
                 status=400,
             )
 
-
 def update_committee_results(
     request, schema, committeeResultModel, participant_id, output, committee_id
 ):
@@ -240,7 +239,7 @@ def update_committee_results(
                 "committee_id": committee_id,
                 participant_id: candidate_id,  # Use the dynamic participant_id
             }
-            defaults = {"votes": votes, "updated_by": request.user}
+            defaults = {"votes": votes}
             obj, created = committeeResultModel.objects.update_or_create(
                 **kwargs, defaults=defaults
             )
@@ -294,3 +293,70 @@ def update_participant_committee_aggregated_votes(
                 )
 
     print("update_participant_committee_aggregated_votes completed")
+
+
+
+# def update_committee_results(
+#     request, schema, committeeResultModel, participant_id, output, committee_id
+# ):
+#     with schema_context(schema):
+#         # For all other ids, perform the usual update_or_create operation
+#         for candidate_id, votes in request.data.get("data", {}).items():
+#             kwargs = {
+#                 "committee_id": committee_id,
+#                 participant_id: candidate_id,  # Use the dynamic participant_id
+#             }
+#             defaults = {"votes": votes, "updated_by": request.user}
+#             obj, created = committeeResultModel.objects.update_or_create(
+#                 **kwargs, defaults=defaults
+#             )
+
+#             # Add the candidate's votes to the output
+#             committee_id_str = str(obj.committee_id)
+#             if committee_id_str not in output:
+#                 output[committee_id_str] = {}
+#             output[committee_id_str][str(candidate_id)] = votes
+
+#         results = committeeResultModel.objects.filter(committee=committee_id)
+#         # Update the output with the actual results
+#         for result in results:
+#             committee_id_str = str(result.committee_id)
+#             candidate_id_str = str(getattr(result, participant_id))
+#             if committee_id_str not in output:
+#                 output[committee_id_str] = {}
+#             output[committee_id_str][candidate_id_str] = result.votes
+
+
+# def update_participant_committee_aggregated_votes(
+#     request,
+#     schema,
+#     committeeResultModel,
+#     participant_model,
+#     committee_id,
+#     participant_id,
+# ):
+#     with schema_context(schema):
+#         # Step 1: Retrieve all committeeResultModel instances
+#         committee_results = committeeResultModel.objects.all()
+
+#         # Step 2: Aggregate the votes for each participant_id
+#         aggregated_votes = committee_results.values(participant_id).annotate(
+#             total_votes=Sum("votes")
+#         )
+
+#         # Step 3: Update the corresponding participant_model instance with the aggregated vote count
+#         for result in aggregated_votes:
+#             try:
+#                 participant_instance = participant_model.objects.get(
+#                     id=result[participant_id]
+#                 )
+#                 participant_instance.votes = result["total_votes"]
+#                 participant_instance.save()
+#             except participant_model.DoesNotExist:
+#                 print(f"Participant with id {result[participant_id]} does not exist.")
+#             except Exception as e:
+#                 print(
+#                     f"An error occurred while updating votes for participant {result[participant_id]}: {e}"
+#                 )
+
+#     print("update_participant_committee_aggregated_votes completed")

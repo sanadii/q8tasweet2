@@ -8,9 +8,11 @@ import { getCampaignDetails } from "store/actions";
 // Components
 import Section from "./Section";
 import { Loader } from "shared/components";
-import { usePermission } from 'shared/hooks';
 import { Container } from "reactstrap";
 import { isEmpty } from "lodash";
+
+// Hooks & Utils
+import { usePermission } from 'shared/hooks';
 import { WebSocketProvider } from 'shared/utils';
 
 const CampaignDetails = () => {

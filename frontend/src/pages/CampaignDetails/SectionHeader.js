@@ -9,6 +9,10 @@ import { layoutSelector, userSelector, campaignSelector } from 'selectors';
 
 const SectionHeader = ({ campaign, electionDetails, campaignMembers, campaignGuarantees }) => {
     const { activeCampaign, userCampaigns } = useSelector(userSelector);
+    const {
+        currentElection,
+    } = useSelector(campaignSelector);
+
     const currentCampaign = campaign || activeCampaign;
 
     // Permissions
@@ -28,9 +32,9 @@ const SectionHeader = ({ campaign, electionDetails, campaignMembers, campaignGua
     const campaignId = currentCampaign?.id;
     const campaignName = currentCampaign?.candidate?.name;
     const campaignImage = currentCampaign?.candidate?.image;
-    const electionName = electionDetails?.name;
-    const electionDueDate = electionDetails?.dueDate;
-    const electionImage = electionDetails?.image
+    const electionName = currentElection?.electionDetails?.name;
+    const electionDueDate = currentElection?.electionDetails?.dueDate;
+    const electionImage = currentElection?.electionDetails?.image
 
 
     return (
@@ -49,7 +53,7 @@ const SectionHeader = ({ campaign, electionDetails, campaignMembers, campaignGua
                             <div className="hstack text-white gap-1">
                                 <div className="me-2">
                                     <i className="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
-                                    التاريخ: <strong> {electionDueDate}</strong>
+                                    التاريخ: <strong >{electionDueDate}</strong>
                                 </div>
                             </div>
                         </div>
