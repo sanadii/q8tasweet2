@@ -173,7 +173,7 @@ PERMISSIONS = {
     #         'campaignAttendant', 'campaignSorter'
     #     ],
     # },
-    # 'CampaignSorting': {
+    # 'SortingCampaign': {
     #     'canViewCampaignSorting': ['superAdmin', 'admin', 'campaignSorter'],
     #     'canAddCampaignSorting': ['superAdmin', 'admin', 'campaignSorter'],
     #     'canChangeCampaignSorting': ['superAdmin', 'admin', 'campaignSorter'],

@@ -24,12 +24,12 @@ class BaseNotification(TrackModel):
     class Meta:
         abstract = True  # Mark as an abstract base model
 
-class ElectionNotification(BaseNotification):
+class NotificationElection(BaseNotification):
     election = models.ForeignKey(Election, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_elections")
 
     class Meta:
         # managed = False
-        db_table = "election_notification"
+        db_table = "notification_election"
         verbose_name = "Election Notification"
         verbose_name_plural = "Election Notifications"
         default_permissions = []
@@ -38,11 +38,11 @@ class ElectionNotification(BaseNotification):
     def __str__(self):
         return f"{self.message}"
     
-class CampaignNotification(BaseNotification):
+class NotificationCampaign(BaseNotification):
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True, blank=True, related_name="notification_campaigns")
 
     class Meta:
-        db_table = "campaign_notification"
+        db_table = "notification_campaign"
         verbose_name = "Campaign Notification"
         verbose_name_plural = "Campaign Notifications"
         default_permissions = []
@@ -64,11 +64,11 @@ class CampaignNotification(BaseNotification):
 #     def __str__(self):
 #         return f"{self.message}"
 
-class UserNotification(BaseNotification):
+class NotificationUser(BaseNotification):
     user_group = models.CharField(max_length=50, choices=USER_GROUP_CHOICES)
 
     class Meta:
-        db_table = "user_notification"
+        db_table = "notification_user"
         verbose_name = "User Notification"
         verbose_name_plural = "User Notifications"
         default_permissions = []

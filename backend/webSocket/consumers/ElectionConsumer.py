@@ -6,7 +6,7 @@ from django.utils.timesince import timesince
 
 from apps.auths.models import User
 from apps.campaigns.models import Campaign
-from apps.schemas.campaign_sorting.models import CampaignSorting
+from apps.schemas.campaign_sorting.models import SortingCampaign
 
 
 class ElectionConsumer(AsyncWebsocketConsumer):

@@ -11,10 +11,12 @@ import { getCampaignDetails } from "store/actions";
 
 // Menus
 
-import { useContributorMenu, useModeratorMenu, useEditorMenu, useSettingsMenu, useUserMenu } from './DashboardMenu';
+import { useContributorMenu, useModeratorMenu, useEditorMenu } from './DashboardMenu';
 import { useAdminMenu } from "./useAdminMenu"
 import { useCampaignMenu } from "./useCampaignMenu"
 import { usePublicMenu } from './PublicMenu';
+import { useSettingsMenu } from './useSettingsMenu';
+import { useUserMenu } from './useUserMenu';
 
 
 const LayoutMenuData = () => {

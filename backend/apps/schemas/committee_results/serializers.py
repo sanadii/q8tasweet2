@@ -46,5 +46,5 @@ class CommitteeResultPartySerializer(serializers.ModelSerializer):
 # class CampaignSortingSerializer(serializers.ModelSerializer):
 
 #     class Meta:
-#         model = CampaignSorting
+#         model = SortingCampaign
 #         fields = "__all__"

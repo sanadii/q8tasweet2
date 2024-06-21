@@ -5,7 +5,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils.timesince import timesince
 
 from apps.auths.models import User
-from apps.campaigns.models import Campaign, CampaignSorting
+from apps.campaigns.models import Campaign, SortingCampaign
 
 class CampaignConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -71,14 +71,14 @@ class CampaignConsumer(AsyncWebsocketConsumer):
     def update_vote_count(self, election_candidate_id, new_votes, election_committee_id):
         try:
             # Updated to filter by both candidate ID and committee ID
-            sorting_entry = CampaignSorting.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
+            sorting_entry = SortingCampaign.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
             sorting_entry.votes = new_votes
             sorting_entry.save()
             print(f"Vote count updated for candidate {election_candidate_id} in committee {election_committee_id} to {new_votes}")
-        except CampaignSorting.DoesNotExist:
+        except SortingCampaign.DoesNotExist:
             # Create a new entry if it doesn't exist
-            sorting_entry = CampaignSorting.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
-            print(f"New CampaignSorting entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
+            sorting_entry = SortingCampaign.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
+            print(f"New SortingCampaign entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
 
 
     async def campaign_message(self, event):
@@ -147,12 +147,12 @@ class SortingConsumer(AsyncWebsocketConsumer):
     def update_vote_count(self, election_candidate_id, new_votes, election_committee_id):
         try:
             # Updated to filter by both candidate ID and committee ID
-            sorting_entry = CampaignSorting.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
+            sorting_entry = SortingCampaign.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
             sorting_entry.votes = new_votes
             sorting_entry.save()
             print(f"Vote count updated for candidate {election_candidate_id} in committee {election_committee_id} to {new_votes}")
-        except CampaignSorting.DoesNotExist:
+        except SortingCampaign.DoesNotExist:
             # Create a new entry if it doesn't exist
-            sorting_entry = CampaignSorting.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
-            print(f"New CampaignSorting entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
+            sorting_entry = SortingCampaign.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
+            print(f"New SortingCampaign entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
 

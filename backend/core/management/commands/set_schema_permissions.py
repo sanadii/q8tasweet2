@@ -37,12 +37,12 @@ UNMANAGED_PERMISSIONS = {
         ('canChangeCampaignSorting', 'Can Change Campaign Sorting'),
         ('canDeleteCampaignSorting', 'Can Delete Campaign Sorting'),
     ],
-    'campaigncommitteesorter': [
-        ('canViewCampaignCommitteeSorter', 'Can View Campaign Committee Sorter'),
-        ('canAddCampaignCommitteeSorter', 'Can Add Campaign Committee Sorter'),
-        ('canChangeCampaignCommitteeSorter', 'Can Change Campaign Committee Sorter'),
-        ('canDeleteCampaignCommitteeSorter', 'Can Delete Campaign Committee Sorter'),
-    ],
+    # 'campaigncommitteesorter': [
+    #     ('canViewCampaignCommitteeSorter', 'Can View Campaign Committee Sorter'),
+    #     ('canAddCampaignCommitteeSorter', 'Can Add Campaign Committee Sorter'),
+    #     ('canChangeCampaignCommitteeSorter', 'Can Change Campaign Committee Sorter'),
+    #     ('canDeleteCampaignCommitteeSorter', 'Can Delete Campaign Committee Sorter'),
+    # ],
     
         #     permissions = [
         #     ("canViewCampaignAttendee", "Can View Election Attendee"),

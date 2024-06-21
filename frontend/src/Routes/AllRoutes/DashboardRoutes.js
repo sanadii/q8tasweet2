@@ -37,6 +37,10 @@ import CampaignDetails from "pages/CampaignDetails";
 // User Pages
 import UserList from "pages/Users/UserList";
 
+
+// Control Pannel
+import NotificationPanel from "pages/ControlPanel/NotificationPanel";
+
 // Test Pages
 import Test1 from "pages/Tests/Test1";
 import Test2 from "pages/Tests/Test2";
@@ -64,6 +68,10 @@ const DashboardRoutes = [
     { path: "/dashboard/campaigns/:slug", component: <CampaignDetails /> },
 
     { path: "/dashboard/users/", component: <UserList /> },
+
+
+    // Control Pannel
+    { path: "/dashboard/control/notifications", component: <NotificationPanel /> },
 
     // Settings / Options
     { path: "/dashboard/categories", component: <Categories /> },

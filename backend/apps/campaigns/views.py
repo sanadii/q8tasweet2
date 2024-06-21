@@ -177,13 +177,13 @@ class DeleteCampaign(APIView):
 
 class GetAllCampaignSorting(APIView):
     def get(self, request, format=None):
-        sortings = CampaignSorting.objects.all()
+        sortings = SortingCampaign.objects.all()
         serializer = CampaignSortingSerializer(sortings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class GetCampaignCommitteeSorting(APIView):
     def get(self, request, format=None):
-        sortings = CampaignSorting.objects.all()
+        sortings = SortingCampaign.objects.all()
         serializer = CampaignSortingSerializer(sortings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

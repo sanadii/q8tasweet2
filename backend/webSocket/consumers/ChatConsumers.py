@@ -5,7 +5,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils.timesince import timesince
 
 from apps.auths.models import User
-from apps.campaigns.models import Campaign, CampaignSorting
+from apps.campaigns.models import Campaign, SortingCampaign
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):

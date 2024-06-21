@@ -3,128 +3,119 @@ from django.db import models
 
 # Apps
 from apps.schemas.schemaModels import DynamicSchemaModel
+from apps.schemas.committees.models import Committee
 
 
-class CampaignCommitteeSorter(DynamicSchemaModel):
-    user = models.ForeignKey(
-        "auths.User",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="campaign_committee_sorter_users",
-    )
-    campaign = models.ForeignKey(
-        "Campaign",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="campaign_committee_sorter_campaigns",
-    )
-    committee = models.ForeignKey(
-        "committees.Committee",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="election_committee_sorter_committees",
-    )
+# class CampaignCommitteeSorter(DynamicSchemaModel):
+#     user = models.ForeignKey(
+#         "auths.User",
+#         on_delete=models.SET_NULL,
+#         null=True,
+#         blank=True,
+#         related_name="campaign_committee_sorter_users",
+#     )
+#     campaign = models.ForeignKey(
+#         "Campaign",
+#         on_delete=models.SET_NULL,
+#         null=True,
+#         blank=True,
+#         related_name="campaign_committee_sorter_campaigns",
+#     )
+#     committee = models.ForeignKey(
+#         "committees.Committee",
+#         on_delete=models.SET_NULL,
+#         null=True,
+#         blank=True,
+#         related_name="election_committee_sorter_committees",
+#     )
 
-    class Meta:
-        managed = False
-        db_table = "campaign_committee_sorter"
-        verbose_name = "Campaign Committee Sorter"
-        verbose_name_plural = "Campaign Committee Sorters"
+#     class Meta:
+#         managed = False
+#         db_table = "campaign_committee_sorter"
+#         verbose_name = "Campaign Committee Sorter"
+#         verbose_name_plural = "Campaign Committee Sorters"
 
 
 # Campaign Sorting Starting here
 
 
-class BaseCampaignSorting(DynamicSchemaModel):
-    user = models.ForeignKey(
-        "auths.User",
+class BaseCampaignSorting(models.Model):
+    member = models.IntegerField(null=True, blank=True)
+    committee = models.ForeignKey(
+        Committee,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="%(class)s_users",
-    )
-    election_committee = models.ForeignKey(
-        "committees.Committee",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="%(class)s_election_committees",
+        related_name="campaign_sorting_committees",
     )
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
 
     class Meta:
+        abstract = True
         managed = False
 
 
-class CampaignSorting(BaseCampaignSorting):
-    election_candidate = models.ForeignKey(
-        "elections.ElectionCandidate",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="campaign_candidate_sortings",
-    )
+class SortingCampaign(BaseCampaignSorting, DynamicSchemaModel):
+    election_candidate = models.IntegerField(null=True, blank=True)
 
-    class Meta(BaseCampaignSorting.Meta):
+    class Meta:
         managed = False
-        db_table = "campaign_sorting"
-        verbose_name = "Campaign Sorting"
-        verbose_name_plural = "Campaign Sortings"
+        db_table = "sorting_campaign"
+        verbose_name = "Sorting Campaign"
+        verbose_name_plural = "فرز الحملة"
 
 
-class CampaignPartySorting(BaseCampaignSorting):
-    election_party = models.ForeignKey(
-        "elections.ElectionParty",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="campaign_party_sortings",
-    )
+# class CampaignPartySorting(BaseCampaignSorting):
+#     election_party = models.ForeignKey(
+#         "elections.ElectionParty",
+#         on_delete=models.SET_NULL,
+#         null=True,
+#         blank=True,
+#         related_name="campaign_party_sortings",
+#     )
 
-    class Meta(BaseCampaignSorting.Meta):
-        managed = False
-        db_table = "campaign_party_sorting"
-        verbose_name = "Campaign Party Sorting"
-        verbose_name_plural = "Campaign Party Sortings"
+#     class Meta(BaseCampaignSorting.Meta):
+#         managed = False
+#         db_table = "campaign_party_sorting"
+#         verbose_name = "Campaign Party Sorting"
+#         verbose_name_plural = "Campaign Party Sortings"
 
 
-class CampaignPartyCandidateSorting(BaseCampaignSorting):
-    election_party_candidate = models.ForeignKey(
-        "elections.ElectionPartyCandidate",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="campaign_party_candidate_sortings",
-    )
+# class CampaignPartyCandidateSorting(BaseCampaignSorting):
+#     election_party_candidate = models.ForeignKey(
+#         "elections.ElectionPartyCandidate",
+#         on_delete=models.SET_NULL,
+#         null=True,
+#         blank=True,
+#         related_name="campaign_party_candidate_sortings",
+#     )
 
-    class Meta(BaseCampaignSorting.Meta):
-        managed = False
-        db_table = "campaign_party_candidate_sorting"
-        verbose_name = "Campaign Party Candidate Sorting"
-        verbose_name_plural = "Campaign Party Candidate Sortings"
+#     class Meta(BaseCampaignSorting.Meta):
+#         managed = False
+#         db_table = "campaign_party_candidate_sorting"
+#         verbose_name = "Campaign Party Candidate Sorting"
+#         verbose_name_plural = "Campaign Party Candidate Sortings"
 
 
 #  Election Sorting Starting here
 
 
-class BaseElectionSorting(DynamicSchemaModel):
-    user = models.ForeignKey(
-        "auths.User",
+class BaseElectionSorting(models.Model):
+    # user = models.ForeignKey(
+    #     "auths.User",
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    #     blank=True,
+    #     related_name="%(class)s_users",
+    # )
+    member = models.IntegerField(null=True, blank=True)
+    committee = models.ForeignKey(
+        Committee,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="%(class)s_users",
-    )
-    election_committee = models.ForeignKey(
-        "elections.ElectionCommittee",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="%(class)s_election_committees",
+        related_name="election_sorting_committees",
     )
     votes = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
@@ -140,52 +131,45 @@ class BaseElectionSorting(DynamicSchemaModel):
         ]
 
 
-class ElectionSorting(BaseElectionSorting):
-    election_candidate = models.ForeignKey(
-        "elections.ElectionCandidate",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="election_candidate_sortings",
-    )
-
-    class Meta(BaseElectionSorting.Meta):
+class SortingElection(BaseElectionSorting, DynamicSchemaModel):
+    election_candidate = models.IntegerField(null=True, blank=True)
+    class Meta:
         managed = False
-        db_table = "election_sorting"
-        verbose_name = "Election Sorting"
-        verbose_name_plural = "Election Sortings"
+        db_table = "sorting_election"
+        verbose_name = "Sorting Election"
+        verbose_name_plural = "فرز الانتخابات"
 
 
-class ElectionPartySorting(BaseElectionSorting):
-    election_party = models.ForeignKey(
-        "elections.ElectionParty",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="election_party_sortings",
-    )
+# class ElectionPartySorting(BaseElectionSorting):
+#     election_party = models.ForeignKey(
+#         "elections.ElectionParty",
+#         on_delete=models.SET_NULL,
+#         null=True,
+#         blank=True,
+#         related_name="election_party_sortings",
+#     )
 
-    class Meta(BaseElectionSorting.Meta):
-        managed = False
-        db_table = "election_party_sorting"
-        verbose_name = "Election Party Sorting"
-        verbose_name_plural = "Election Party Sortings"
+#     class Meta(BaseElectionSorting.Meta):
+#         managed = False
+#         db_table = "election_party_sorting"
+#         verbose_name = "Election Party Sorting"
+#         verbose_name_plural = "Election Party Sortings"
 
 
-class ElectionPartyCandidateSorting(BaseElectionSorting):
-    election_party_candidate = models.ForeignKey(
-        "elections.ElectionPartyCandidate",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="election_party_candidate_sortings",
-    )
+# class ElectionPartyCandidateSorting(BaseElectionSorting):
+#     election_party_candidate = models.ForeignKey(
+#         "elections.ElectionPartyCandidate",
+#         on_delete=models.SET_NULL,
+#         null=True,
+#         blank=True,
+#         related_name="election_party_candidate_sortings",
+#     )
 
-    class Meta(BaseElectionSorting.Meta):
-        managed = False
-        db_table = "election_party_candidate_sorting"
-        verbose_name = "Election Party Candidate Sorting"
-        verbose_name_plural = "Election Party Candidate  Sortings"
+#     class Meta(BaseElectionSorting.Meta):
+#         managed = False
+#         db_table = "election_party_candidate_sorting"
+#         verbose_name = "Election Party Candidate Sorting"
+#         verbose_name_plural = "Election Party Candidate  Sortings"
 
 
 # class ElectionCommitteeSorter(TrackModel, TaskModel):

@@ -26,7 +26,7 @@ from apps.candidates.models import Candidate, Party
 from apps.campaigns.models import (
     Campaign,
     # CampaignAttendee,
-    # CampaignSorting,
+    # SortingCampaign,
     # CampaignPartyMember,
     # CampaignPartyMember,
     # CampaignCommittee,
@@ -68,7 +68,7 @@ from apps.schemas.guarantees.serializers import (
 )
 
 
-# from apps.notifications.models import CampaignNotification, CampaignPartyNotification
+# from apps.notifications.models import NotificationCampaign, CampaignPartyNotification
 from apps.elections.candidates.serializers import ElectionCandidateSerializer
 from apps.schemas.committees.serializers import (
     CommitteeSerializer,
@@ -76,7 +76,7 @@ from apps.schemas.committees.serializers import (
 )
 from apps.auths.serializers import GroupSerializer
 
-# from apps.notifications.serializers import CampaignNotificationSerializer
+# from apps.notifications.serializers import NotificationCampaignSerializer
 
 from utils.views_helper import CustomPagination
 from apps.campaigns.views_helper import (
@@ -199,7 +199,7 @@ def get_campaign_related_object(obj):
 #             candidate_data = ElectionCandidateSerializer(
 #                 candidate, context=context
 #             ).data
-#             # candidate_sorting = CampaignSorting.objects.filter(
+#             # candidate_sorting = SortingCampaign.objects.filter(
 #             #     election_candidate=candidate
 #             # )
 #             # candidate_data["sorting"] = CampaignSortingSerializer(
@@ -399,13 +399,13 @@ class DeleteCampaign(APIView):
 
 class GetAllCampaignSorting(APIView):
     def get(self, request, format=None):
-        sortings = CampaignSorting.objects.all()
+        sortings = SortingCampaign.objects.all()
         serializer = CampaignSortingSerializer(sortings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class GetCampaignCommitteeSorting(APIView):
     def get(self, request, format=None):
-        sortings = CampaignSorting.objects.all()
+        sortings = SortingCampaign.objects.all()
         serializer = CampaignSortingSerializer(sortings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

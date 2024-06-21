@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from enum import Enum
 from urllib.parse import parse_qs
 from apps.campaigns.models import Campaign
-from apps.notifications.models import UserNotification, CampaignNotification, ElectionNotification
+from apps.notifications.models import NotificationUser, NotificationCampaign, NotificationElection
 from asgiref.sync import sync_to_async
 
 
@@ -39,12 +39,18 @@ class GlobalConsumer(AsyncWebsocketConsumer):
         dataGroup = data.get('dataGroup')
         channel = data.get('channel')
         
+        if dataGroup == "users":
+            await self.send_notification_to_users(data)
+
         if dataGroup == 'campaigns':
             await self.send_notification_to_campaigns(data)
+        
         elif dataGroup == 'elections':
             await self.send_notification_to_elections(data)
+        
         elif channel == 'campaign':
             await self.handle_campaign_message(data)
+        
         else:
             print(f"Invalid group or channel: {dataGroup}, {channel}")
 
@@ -58,7 +64,7 @@ class GlobalConsumer(AsyncWebsocketConsumer):
             pass
 
     def save_notification(self, data):
-        notification = UserNotification(
+        notification = NotificationUser(
             user_group=data.get('userGroup'),
             message_type=data.get('messageType'),
             message=data.get('message')
@@ -66,23 +72,23 @@ class GlobalConsumer(AsyncWebsocketConsumer):
         notification.save()
 
 
-    # async def send_notification_to_users(self, data):
-    #     userGroup = data.get('userGroup')
-    #     # user = self.scope["user"]
-    #     # if not user.is_authenticated or (userGroup == 'adminUsers' and not user.is_staff) or \
-    #     #    (userGroup == 'nonAdminUsers' and user.is_staff):
-    #         # return
+    async def send_notification_to_users(self, data):
+        userGroup = data.get('userGroup')
+        # user = self.scope["user"]
+        # if not user.is_authenticated or (userGroup == 'adminUsers' and not user.is_staff) or \
+        #    (userGroup == 'nonAdminUsers' and user.is_staff):
+            # return
 
-    #     # Use sync_to_async to save the notification
-    #     await sync_to_async(self.save_notification)(data)
+        # Use sync_to_async to save the notification
+        await sync_to_async(self.save_notification)(data)
 
-    #     await self.channel_layer.group_send(
-    #         self.room_group_name,
-    #         {
-    #             'type': 'broadcast_message',
-    #             'message': data
-    #         }
-    #     )
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'broadcast_message',
+                'message': data
+            }
+        )
 
     async def send_notification_to_campaigns(self, data):
         campaign_slug = data.get('campaign')
@@ -126,7 +132,7 @@ class GlobalConsumer(AsyncWebsocketConsumer):
     def save_campaign_notification(self, data, campaign_slug):
         try:
             campaign = Campaign.objects.get(slug=campaign_slug)
-            campaign_notification = CampaignNotification(
+            campaign_notification = NotificationCampaign(
                 campaign=campaign,
                 message_type=data.get('messageType'),
                 message=data.get('message')
@@ -136,7 +142,7 @@ class GlobalConsumer(AsyncWebsocketConsumer):
             print(f"Campaign with slug '{campaign_slug}' does not exist.")
 
     def save_election_notification(self, data):
-        election_notification = ElectionNotification(
+        election_notification = NotificationElection(
             election_id=data.get('election'),
             message_type=data.get('messageType'),
             message=data.get('message')

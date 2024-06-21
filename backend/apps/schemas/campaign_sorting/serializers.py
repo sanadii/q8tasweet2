@@ -10,14 +10,14 @@ from apps.elections.candidates.models import ElectionPartyCandidate
 from apps.elections.serializers import ElectionSerializer
 # from apps.elections.candidates.serializers import ElectionPartySerializer
 from apps.candidates.serializers import CandidateSerializer, PartySerializer
-from apps.schemas.campaign_sorting.models import CampaignSorting
+from apps.schemas.campaign_sorting.models import SortingCampaign
 #
 # Campaign Sorting Serializers
 #
 class CampaignSortingSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CampaignSorting
+        model = SortingCampaign
         fields = "__all__"
 
 

@@ -15,7 +15,7 @@ from apps.schemas.guarantees.serializers import (
     CampaignGuaranteeGroupSerializer,
 )
 
-# from apps.notifications.serializers import CampaignNotificationSerializer
+# from apps.notifications.serializers import NotificationCampaignSerializer
 from apps.schemas.views_helper import AccessElectionSchemaMixin
 
 

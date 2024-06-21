@@ -14,7 +14,7 @@ websocket_urlpatterns = [
     path('ws/Global/', GlobalConsumer.as_asgi()),
 
     # path('ws/election/<str:slug>/', ElectionConsumer.as_asgi()),
-    # path('ws/campaigns/<str:slug>/', CampaignConsumer.as_asgi()),
+    path('ws/campaigns/<str:slug>/', CampaignConsumer.as_asgi()),
     # path('ws/sorting/<str:slug>/', CampaignConsumer.as_asgi()),
     # path('ws/notifications/', NotificationConsumer.as_asgi()),
 

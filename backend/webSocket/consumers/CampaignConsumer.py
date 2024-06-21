@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-from apps.schemas.campaign_sorting.models import CampaignSorting, ElectionSorting
+from apps.schemas.campaign_sorting.models import SortingCampaign, SortingElection
 from apps.schemas.committees.models import Committee
 
 class CampaignConsumer(AsyncWebsocketConsumer):
@@ -81,27 +81,27 @@ class CampaignConsumer(AsyncWebsocketConsumer):
     @sync_to_async
     def update_campaign_sorting_db(self, election_candidate_id, new_votes, election_committee_id):
         try:
-            sorting_entry = CampaignSorting.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
+            sorting_entry = SortingCampaign.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
             sorting_entry.votes = new_votes
             sorting_entry.save()
             print(f"Vote count updated for candidate {election_candidate_id} in committee {election_committee_id} to {new_votes}")
 
-        except CampaignSorting.DoesNotExist:
-            sorting_entry = CampaignSorting.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
-            print(f"New CampaignSorting entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
+        except SortingCampaign.DoesNotExist:
+            sorting_entry = SortingCampaign.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
+            print(f"New SortingCampaign entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
 
 
     @sync_to_async
     def update_election_sorting_db(self, election_candidate_id, new_votes, election_committee_id):
         try:
-            sorting_entry = ElectionSorting.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
+            sorting_entry = SortingElection.objects.get(election_candidate_id=election_candidate_id, election_committee_id=election_committee_id)
             sorting_entry.votes = new_votes
             sorting_entry.save()
             print(f"Vote count updated for candidate {election_candidate_id} in committee {election_committee_id} to {new_votes}")
             
-        except ElectionSorting.DoesNotExist:
-            sorting_entry = ElectionSorting.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
-            print(f"New ElectionSorting entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
+        except SortingElection.DoesNotExist:
+            sorting_entry = SortingElection.objects.create(election_candidate_id=election_candidate_id, votes=new_votes, election_committee_id=election_committee_id)
+            print(f"New SortingElection entry created for candidate {election_candidate_id} in committee {election_committee_id} with votes {new_votes}")
 
 
     # Check if the campaignSorter is an electionSorter to decide on sending the msg to the Global Channel or not

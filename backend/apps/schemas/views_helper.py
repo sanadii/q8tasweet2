@@ -15,6 +15,7 @@ from apps.schemas.committee_members.models import MemberCommitteeSite, MemberCom
 from apps.schemas.electors.models import Elector
 from apps.schemas.guarantees.models import CampaignGuarantee, CampaignGuaranteeGroup
 from apps.schemas.campaign_attendees.models import CampaignAttendee
+from apps.schemas.campaign_sorting.models import SortingCampaign, SortingElection
 
 from utils.schema import schema_context, table_exists
 
@@ -44,35 +45,38 @@ def get_election(slug):
         return None
         
 def get_schema_models_to_add(election):
-    models = [Area,
-              Committee, 
-              CommitteeSite, 
-              Elector
-              ]
+    models = [Area, Committee,  CommitteeSite,  Elector]
     
-    print("what is the election: ", election)
     election_method = election.election_method
     is_detailed_results = election.is_detailed_results
+    is_sorting_results = election.is_sorting_results
 
     if is_detailed_results:
         if election_method in ["candidateOnly", "partyCandidateOriented"]:
             models.append(CommitteeResultCandidate)
+            # models.append(SortingCampaign)
+
         if election_method == "partyPartyOriented":
             models.append(CommitteeResultParty)
+            
         if election_method == "partyCandidateCombined":
             models.append(CommitteeResultParty)
             models.append(CommitteeResultPartyCandidate)
 
-        # if has campaigns
-        models.extend(
-            [
-                CampaignGuarantee,
-                CampaignGuaranteeGroup,
-                MemberCommittee,
-                MemberCommitteeSite,
-                CampaignAttendee,
-            ]
-        )
+    if is_sorting_results:
+        models.append(SortingCampaign)
+        models.append(SortingElection)
+
+    # if has campaigns
+    models.extend(
+        [
+            CampaignGuarantee,
+            CampaignGuaranteeGroup,
+            MemberCommittee,
+            MemberCommitteeSite,
+            CampaignAttendee,
+        ]
+    )
 
     return models
 
