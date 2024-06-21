@@ -11,11 +11,11 @@ class Command(BaseCommand):
         # Call the importUsers command directly
         # call_command('import_project_users')
         # call_command('import_project_groups')
-        call_command('import_project_permissions')
+        # call_command('import_project_permissions')
 
 
         # # Elections
-        # call_command('import_project_election_categories')
+        call_command('import_project_election_categories')
         # call_command('import_project_elections')
 
         # # Participants
