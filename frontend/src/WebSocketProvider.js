@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { api } from "config";
+
+const socketUrl = `ws://${process.env.REACT_APP_PUBLIC_URL}/ws/sorting/UmUXPn8A/`;
 
 const WebSocketContext = createContext(null);
 
@@ -7,7 +10,6 @@ export const WebSocketProvider = ({ children }) => {
 
     useEffect(() => {
         // Define the WebSocket URL
-        const socketUrl = `ws://127.0.0.1:8000/ws/sorting/UmUXPn8A/`;
 
         // Create a new WebSocket connection
         const newSocket = new WebSocket(socketUrl);

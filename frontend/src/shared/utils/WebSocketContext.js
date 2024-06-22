@@ -3,6 +3,7 @@ import useWebSocket from 'react-use-websocket';
 import { getToken } from 'helpers/api_helper';
 
 const WebSocketContext = createContext(null);
+const socketUrl = `ws://${process.env.REACT_APP_PUBLIC_URL}/ws`;
 
 export const useWebSocketContext = () => useContext(WebSocketContext);
 
@@ -12,23 +13,23 @@ export const WebSocketProvider = ({ children, channel, slug, uuid }) => {
     const [messageHistory, setMessageHistory] = useState([]);
 
     useEffect(() => {
-        const baseUrl = 'ws://127.0.0.1:8000/ws';
+        const socketUrl = 'ws://127.0.0.1:8000/ws';
         if (token) {
             if (channel === 'campaigns') {
-                setSocketUrl(`${baseUrl}/${channel}/${slug}/?token=${token}`);
+                setSocketUrl(`${socketUrl}/${channel}/${slug}/?token=${token}`);
 
             } else if (channel === 'chat') {
-                setSocketUrl(`${baseUrl}/${channel}/${uuid}/?token=${token}`);
+                setSocketUrl(`${socketUrl}/${channel}/${uuid}/?token=${token}`);
 
             } else if (channel === 'global') {
-                setSocketUrl(`${baseUrl}/${channel}/?token=${token}`);
+                setSocketUrl(`${socketUrl}/${channel}/?token=${token}`);
 
             } else {
                 // Default case if neither slug nor uuid is provided
-                setSocketUrl(`${baseUrl}/${channel}/?token=${token}`);
+                setSocketUrl(`${socketUrl}/${channel}/?token=${token}`);
             }
         } else {
-            setSocketUrl(`${baseUrl}/${channel}/`);
+            setSocketUrl(`${socketUrl}/${channel}/`);
         }
     }, [channel, slug, uuid, token]);
 
