@@ -111,7 +111,7 @@ MIDDLEWARE = [
 ]
 
 # URL configuration
-ROOT_URLCONF = "core.urls"
+ROOT_URLCONF = 'core.urls'
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -238,6 +238,28 @@ EMAIL_HOST_USER = "shankar.wxit@gmail.com"
 EMAIL_HOST_PASSWORD = "mehynnlprcmqilwn"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
+<<<<<<< HEAD
+=======
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+import os
 print("SECRET_KEY:", os.environ.get("SECRET_KEY"))
 print("DB_NAME:", os.environ.get("DB_NAME"))
 print("DB_USER:", os.environ.get("DB_USER"))

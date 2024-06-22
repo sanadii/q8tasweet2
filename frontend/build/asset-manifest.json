@@ -1,15 +1,20 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.css": "/static/css/main.5ab8c23c.css",
     "main.js": "/static/js/main.e73b76c5.js",
+=======
+    "main.css": "/static/css/main.03e77e0a.css",
+    "main.js": "/static/js/main.1ff923af.js",
+>>>>>>> recovery-branch
     "static/js/522.5a036a8b.chunk.js": "/static/js/522.5a036a8b.chunk.js",
     "static/media/kuwait-bg.png": "/static/media/kuwait-bg.859ab5d5fe5a98c8520d.png",
-    "static/media/remixicon.svg?t=1590207869815": "/static/media/remixicon.1664a258a7e7714f6f8d.svg",
-    "static/media/boxicons.svg": "/static/media/boxicons.f80cc694af79b88fde78.svg",
+    "static/media/remixicon.svg?t=1590207869815": "/static/media/remixicon.9cedd2150922ead84869.svg",
+    "static/media/boxicons.svg": "/static/media/boxicons.17f6cb4eef77f07f2caa.svg",
     "static/media/materialdesignicons-webfont.eot": "/static/media/materialdesignicons-webfont.e044ed23c047e571c550.eot",
     "static/media/materialdesignicons-webfont.ttf?v=6.5.95": "/static/media/materialdesignicons-webfont.5d42b4e60858731e7b65.ttf",
-    "static/media/la-brands-400.svg": "/static/media/la-brands-400.331115337bc9be66667a.svg",
-    "static/media/la-solid-900.svg": "/static/media/la-solid-900.0f874d69730f8631d632.svg",
+    "static/media/la-brands-400.svg": "/static/media/la-brands-400.928495fae14841a0d610.svg",
+    "static/media/la-solid-900.svg": "/static/media/la-solid-900.a813034654b4ff0a0bac.svg",
     "static/media/materialdesignicons-webfont.woff?v=6.5.95": "/static/media/materialdesignicons-webfont.5dff34d5fed607519dcb.woff",
     "static/media/remixicon.eot?t=1590207869815": "/static/media/remixicon.5cb99e6cba5a4619063f.eot",
     "static/media/remixicon.ttf?t=1590207869815": "/static/media/remixicon.f2616f597cf98f38d234.ttf",
@@ -36,7 +41,7 @@
     "static/media/la-solid-900.woff": "/static/media/la-solid-900.893634871a6cbff72157.woff",
     "static/media/remixicon.woff2?t=1590207869815": "/static/media/remixicon.90668f6f9b3c2c18a090.woff2",
     "static/media/boxicons.woff2": "/static/media/boxicons.60f603cccbdff82a523c.woff2",
-    "static/media/la-regular-400.svg": "/static/media/la-regular-400.5b8ad6f4ffe812a4eb26.svg",
+    "static/media/la-regular-400.svg": "/static/media/la-regular-400.86128b71644abd479cfb.svg",
     "static/media/bg-pattern.png": "/static/media/bg-pattern.d84a545991260916b9c9.png",
     "static/media/img-7.jpg": "/static/media/img-7.0cb45fe1a0c3f41f947f.jpg",
     "static/media/img-1.png": "/static/media/img-1.f546083dc67f04468e82.png",
@@ -65,7 +70,7 @@
     "static/media/avatar-7.jpg": "/static/media/avatar-7.a991bb8ecd885f209314.jpg",
     "static/media/cover-pattern.png": "/static/media/cover-pattern.181df191d9b702006e4b.png",
     "static/media/avatar-2.jpg": "/static/media/avatar-2.58874a6f667b9b04ce55.jpg",
-    "static/media/us.svg": "/static/media/us.1fdd166125432c58f589.svg",
+    "static/media/us.svg": "/static/media/us.32c036a7edc8a389a763.svg",
     "static/media/la-regular-400.woff": "/static/media/la-regular-400.aa859c0d08b8193d6586.woff",
     "static/media/avatar-10.jpg": "/static/media/avatar-10.4d8cdbb1be43d9993ae7.jpg",
     "static/media/la-regular-400.woff2": "/static/media/la-regular-400.8dc1cedf1f4987f82b72.woff2",
@@ -73,7 +78,7 @@
     "static/media/avatar-5.jpg": "/static/media/avatar-5.20d06b6d9ea7045fca9f.jpg",
     "static/media/avatar-3.jpg": "/static/media/avatar-3.36fbb9e4e257ecafc0da.jpg",
     "static/media/error.svg": "/static/media/error.bc754a5b8a10c14e55a192ab1196a76d.svg",
-    "static/media/bell.svg": "/static/media/bell.bb6565fedee4ebe7d4402bd4a5ef0619.svg",
+    "static/media/bell.svg": "/static/media/bell.5d2f6a0df9d2b222611a259c9735cb2a.svg",
     "static/media/btc.svg": "/static/media/btc.0a74ea3b5676029550b7407ce518a67a.svg",
     "index.html": "/index.html",
     "static/media/dash.svg": "/static/media/dash.0a88c68a2e0e412135648038867b7303.svg",
@@ -81,7 +86,12 @@
     "static/media/ltc.svg": "/static/media/ltc.838ffb04fe9522fc1ce01a1982ef4ce6.svg"
   },
   "entrypoints": [
+<<<<<<< HEAD
     "static/css/main.5ab8c23c.css",
     "static/js/main.e73b76c5.js"
+=======
+    "static/css/main.03e77e0a.css",
+    "static/js/main.1ff923af.js"
+>>>>>>> recovery-branch
   ]
 }
