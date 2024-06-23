@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from datetime import datetime
 from django.utils import timezone
 from apps.candidates.models import Candidate
+from .utils.helper import read_excel_file, check_required_columns, import_objects_from_df
 
 class Command(BaseCommand):
     help = "Imports or updates Candidate data from an Excel file"
@@ -16,11 +17,11 @@ class Command(BaseCommand):
             # "created_at", "updated_at", "deleted_at"
         ]
 
-        df = read_excel_file(file_path, work_sheet, required_data, self.stdout)
-        if df is None or not check_required_columns(df, required_data, self.stdout):
+        df = read_excel_file(file_path, work_sheet, required_data, self)
+        if df is None or not check_required_columns(df, required_data, self):
             return
 
-        created_count, updated_count = import_objects_from_df(df, Candidate, self.stdout)
+        created_count, updated_count, nothing = import_objects_from_df(df, Candidate, self)
 
         self.stdout.write(self.style.SUCCESS(f"Import completed for {work_sheet}. Summary:"))
         self.stdout.write(self.style.SUCCESS(f"Created: {created_count} Candidate"))

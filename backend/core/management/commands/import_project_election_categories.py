@@ -9,14 +9,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         file_path = "core/management/data/electionCandidates.xlsx"
-        work_sheet = "election_category"
+        work_sheet = "election_categories"
         required_data = ["id", "slug", "image", "name", "parent_id", "is_active"]
 
         df = read_excel_file(file_path, work_sheet, required_data, self)
         if df is None or not check_required_columns(df, required_data, self):
             return
 
-        created_count, updated_count = import_objects_from_df(df, ElectionCategory, self)
+        created_count, updated_count, nothing = import_objects_from_df(df, ElectionCategory, self)
 
         self.stdout.write(self.style.SUCCESS(f"Import completed for {work_sheet}. Summary:"))
         self.stdout.write(self.style.SUCCESS(f"Created: {created_count} ElectionCategory"))

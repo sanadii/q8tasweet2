@@ -20,11 +20,11 @@ class Command(BaseCommand):
             # "created_at", "updated_at", "deleted_at"
         ]
 
-        df = read_excel_file(file_path, work_sheet, required_data, self.stdout)
-        if df is None or not check_required_columns(df, required_data, self.stdout):
+        df = read_excel_file(file_path, work_sheet, required_data, self)
+        if df is None or not check_required_columns(df, required_data, self):
             return
 
-        created_count, updated_count = import_objects_from_df(df, Election, self.stdout)
+        created_count, updated_count, nothing = import_objects_from_df(df, Election, self)
 
         self.stdout.write(self.style.SUCCESS(f"Import completed for {work_sheet}. Summary:"))
         self.stdout.write(self.style.SUCCESS(f"Created: {created_count} Election"))

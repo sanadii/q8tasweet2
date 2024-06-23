@@ -15,8 +15,8 @@ class Command(BaseCommand):
 
 
         # # Elections
-        call_command('import_project_election_categories')
-        # call_command('import_project_elections')
+        # call_command('import_project_election_categories')
+        call_command('import_project_elections')
 
         # # Participants
         # call_command('import_project_candidates')

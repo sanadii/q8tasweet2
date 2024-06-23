@@ -42,15 +42,15 @@ const CampaignDetails = () => {
   return (
     <div className="page-content">
       <Container fluid>
-        {canViewCampaign ? (
-          campaign ?
+        {/* {canViewCampaign ? (
+          campaign ? */}
             <WebSocketProvider channel="campaigns" slug={slug}>
               <Section />
             </WebSocketProvider>
-            : <Loader />
+            {/* : <Loader />
         ) : (
           <div>لست مصرح بمعاينة الحملة الإنتخابية.</div>
-        )}
+        )} */}
       </Container>
     </div>
   );

@@ -13,11 +13,11 @@ class Command(BaseCommand):
         work_sheet = "election_candidates"
         required_data = ["id", "election_id", "candidate_id", "position", "result", "votes", "notes"]
 
-        df = read_excel_file(file_path, work_sheet, required_data, self.stdout)
-        if df is None or not check_required_columns(df, required_data, self.stdout):
+        df = read_excel_file(file_path, work_sheet, required_data, self)
+        if df is None or not check_required_columns(df, required_data, self):
             return
 
-        created_count, updated_count = import_objects_from_df(df, ElectionCandidate, self.stdout)
+        created_count, updated_count, nothing = import_objects_from_df(df, ElectionCandidate, self)
 
         self.stdout.write(self.style.SUCCESS(f"Import completed for {work_sheet}. Summary:"))
         self.stdout.write(self.style.SUCCESS(f"Created: {created_count} Candidates"))

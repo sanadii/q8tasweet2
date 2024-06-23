@@ -6,6 +6,7 @@ import string
 from django.utils import timezone
 import numpy as np
 from apps.auths.models import User
+from django.contrib.auth.hashers import make_password
 
 def isNaN(value):
     """Check if a value is NaN."""
@@ -106,7 +107,7 @@ def process_row_fields(row, model, stdout, schema_name):
             field_name = field.name + "_id"  # Get the name of the corresponding foreign key ID field
             field_value = defaults.get(field_name)
             stdout.write(f"Processing ForeignKey field: {field.name}, ID: {field_value}\n")
-            if field_value == "":
+            if isNaN(field_value) or field_value == "":
                 stdout.write(f"Setting {field.name} to None due to empty or invalid value.\n")
                 defaults[field.name] = None  # Set the ForeignKey field to None if its corresponding ID field is empty
             else:
@@ -127,6 +128,12 @@ def process_row_fields(row, model, stdout, schema_name):
                     defaults[field.name] = None  # Assign None if related object doesn't exist
             # Remove the corresponding ID field from defaults since it's handled
             defaults.pop(field_name, None)
+
+        # Handle Password fields
+        if field.name == "password":
+            field_value = defaults.get(field.name)
+            if field_value and not field_value.startswith("pbkdf2_sha256$"):
+                defaults[field.name] = make_password(field_value)
 
         # Handle DateField fields
         if isinstance(field, models.DateField):

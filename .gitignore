@@ -15,6 +15,10 @@ __pycache__/
 *.pyc
 *.pyo
 
+# Ignore Django migration files
+**/migrations/
+
+
 # Database
 # db.sqlite3
 # backend/media/

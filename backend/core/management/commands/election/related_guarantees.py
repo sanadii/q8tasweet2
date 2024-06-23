@@ -92,6 +92,7 @@ def process_guarantees(file_path, schema_name, member, command):
 
 def import_election_related_guarantees(file_name, file_path, first_member, command):
     schema_name = file_name.replace("-", "_")
+    campaign_member_id = first_member.id
     command.stdout.write(f"Starting import process for election: {file_name}")
 
     if not set_database_schema(schema_name, command):
@@ -105,7 +106,7 @@ def import_election_related_guarantees(file_name, file_path, first_member, comma
         "work_sheet": "guarantee_groups",
         "required_data": ["id", "name"],
     }
-    process_worksheet(file_path, data_guarantee_group["work_sheet"], data_guarantee_group["required_data"], data_guarantee_group["model"], schema_name, first_member.id, command)
+    process_worksheet(file_path, data_guarantee_group["work_sheet"], data_guarantee_group["required_data"], data_guarantee_group["model"], schema_name, campaign_member_id, command)
 
     # Process Elector and CampaignGuarantee
     data_elector = {
@@ -117,12 +118,12 @@ def import_election_related_guarantees(file_name, file_path, first_member, comma
             'fifth_name', 'sixth_name', 'last_name', 'family', 'branch', 'gender'
         ],
     }
-    process_worksheet(file_path, data_elector["work_sheet"], data_elector["required_data"], data_elector["model"], schema_name, first_member.id, command)
+    process_worksheet(file_path, data_elector["work_sheet"], data_elector["required_data"], data_elector["model"], schema_name, campaign_member_id, command)
 
     # Process CampaignGuarantee
-    process_guarantees(file_path, schema_name, first_member.id, command)
+    process_guarantees(file_path, schema_name, campaign_member_id, command)
 
-    campaign_guarantee_groups = CampaignGuaranteeGroup.objects.filter(member=first_member.id)
-    campaign_guarantees = CampaignGuarantee.objects.filter(member=first_member.id)
+    campaign_guarantee_groups = CampaignGuaranteeGroup.objects.filter(member=campaign_member_id)
+    campaign_guarantees = CampaignGuarantee.objects.filter(member=campaign_member_id)
     
     return list(campaign_guarantee_groups), list(campaign_guarantees)

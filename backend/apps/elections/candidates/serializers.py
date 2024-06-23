@@ -23,7 +23,7 @@ from apps.schemas.committee_results.serializers import (
 )
 from apps.schemas.campaign_sorting.serializers import CampaignSortingSerializer
 
-from utils.schema import schema_context
+from utils.schema import schema_context, table_exists
 
 
 class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
@@ -97,33 +97,40 @@ class ElectionCandidateSerializer(AdminFieldMixin, serializers.ModelSerializer):
         request = self.context.get("request")
         election = obj.election
         schema = election.slug if election else None
-
-        if not schema:
+        
+        if table_exists(schema):
+            with schema_context(schema):
+                committee_results = CommitteeResultCandidate.objects.filter(election_candidate=obj.id)
+                return CommitteeResultCandidateSerializer(committee_results, many=True).data
+        else:
             return None
 
-        with schema_context(schema):
-            committee_results = CommitteeResultCandidate.objects.filter(election_candidate=obj.id)
-            return CommitteeResultCandidateSerializer(committee_results, many=True).data
 
     def get_campaign_sorting(self, obj):
         request = self.context.get("request")
         election = obj.election
         schema = election.slug if election else None
+        if table_exists(schema):
+            with schema_context(schema):
+                sorting_data = self.get_sorting_data_from_source(obj)
+                return CampaignSortingSerializer(sorting_data, many=True, read_only=True).data
 
-        if not schema:
+        else:
             return None
 
-        with schema_context(schema):
-            sorting_data = self.get_sorting_data_from_source(obj)
-            return CampaignSortingSerializer(sorting_data, many=True, read_only=True).data
 
     def get_sorting_data_from_source(self, obj):
         request = self.context.get("request")
-        if request and "GetElectionDetails" in request.resolver_match.url_name:
-            return SortingElection.objects.filter(election_candidate=obj.id)
-        else:
-            return SortingCampaign.objects.filter(election_candidate=obj.id)
+        election = obj.election
+        schema = election.slug if election else None
+        if table_exists(schema):
 
+            if request and "GetElectionDetails" in request.resolver_match.url_name:
+                return SortingElection.objects.filter(election_candidate=obj.id)
+            else:
+                return SortingCampaign.objects.filter(election_candidate=obj.id)
+        else:
+            return None
 
 class ElectionPartySerializer(AdminFieldMixin, serializers.ModelSerializer):
     """Serializer for the ElectionParty model."""

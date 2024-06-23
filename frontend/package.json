@@ -171,6 +171,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
-    "babel-plugin-prismjs": "^2.1.0"
+    "babel-plugin-prismjs": "^2.1.0",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }
