@@ -13,7 +13,7 @@ from decouple import config
 dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECURITY WARNING: Secret keys is kept outsdide in a .env!
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -104,7 +104,7 @@ MIDDLEWARE = [
 ]
 
 
-ROOT_URLCONF = "core.urls"
+ROOT_URLCONF = 'core.urls'
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -224,7 +224,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")  # Adjust the path as needed
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "../frontend/build/static")]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "../frontend/build/static")
+    ]
 
 # Email Configuration 29/03/24
 EMAIL_HOST = "smtp.gmail.com"
