@@ -1,0 +1,52 @@
+# GitHub documentation for ignoring files
+# https://help.github.com/articles/ignoring-files/
+
+# Environment variables
+.env
+
+# Dependency directories
+frontend/node_modules/
+frontend/node_modules/.cache/
+frontend/build/
+venv/
+
+# Dependency files
+venv/Lib/site-packages/_cffi_backend.cp312-win_amd64.pyd
+
+# Python dependencies
+__pycache__/
+*.pyc
+*.pyo
+
+# Django migration files
+**/migrations/
+
+# Database files
+# Uncomment if using these
+# db.sqlite3
+# backend/db.sqlite3
+
+# Custom database files
+backend/database/national-assembly-5-2024.sqlite3
+
+# Media files
+# Uncomment if using these
+# backend/media/
+
+# Excel and CSV data files
+backend/apps/electionStatistics/management/data/nationalAssembly5-2024.xlsx
+backend/core/management/data/na_5_2024_electors.xlsx
+backend/core/management/data/na_5_2024_electorsx.csv
+backend/core/management/data/national_assembly_5_2024.xlsx
+backend/core/management/data/nationalAssembly5-2024\ copy.xlsx
+backend/core/management/data/~$na_5_2024_electors.xlsx
+
+# Caches and logs
+.pytest_cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional: Uncomment these if you are using yarn 2
+# /.pnp
+# .pnp.js

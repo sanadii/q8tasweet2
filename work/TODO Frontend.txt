@@ -1,0 +1,5 @@
+1) election, profile background image
+- create a box and within the header
+
+
+2) Sharing Buttons elections

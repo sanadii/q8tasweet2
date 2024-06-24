@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "shared/*": ["shared/*"],
+      "shared/components/*": ["shared/components/*"],
+      "shared/constants/*": ["shared/constants/*"],
+      "shared/contexts/*": ["shared/contexts/*"],
+      "shared/hooks/*": ["shared/hooks/*"],
+      "shared/data/*": ["shared/data/*"],
+      "store/*": ["store/*"],
+      "selector/*": ["selector/*"],
+      "assets/*": ["assets/*"],
+      "@/*": ["./*"]
+
+    }
+  },
+  "include": ["src"]
+}

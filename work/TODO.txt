@@ -1,0 +1,49 @@
+npm i; pip install -r requirements.txt; cd frontend; npm i
+
+
+issues fix
+week 1
+
+1) CRF token
+- Setting, Adding: "csrf_token": csrf_token,
+
+
+2) Logout & redirections
+Logout, takes u to /dashboard
+Routing issues: - should be to index page
+
+
+3) codes like this are not acceptable
+msg = f'Click the link to reset your password: http://127.0.0.1:8001/reset-password/{token}'
+
+3) Registration and email Template
+<<<<<<< TODO
+Registration
+received email from the server
+
+
+# To by done By Sanad
+- setup email for the domain
+- Put the email in the settings / .venv
+
+email template
+- Make html content in the frontend & link it
+- adjust the dir for email template in settings
+- 
+=======
+
+4) Access token
+- "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+
+frontend
+Issue with frontend
+
+1) Logout
+no proper Logout, current user in redux is still showing an active user
+
+unnessesary adding 
+onClick={() => dispatch(logoutUser())}
+
+
+REACT_APP_PUBLIC_URL ??
+REACT_APP_ROUTE_URL ??
